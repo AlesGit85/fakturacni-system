@@ -1,0 +1,70 @@
+{block content}
+<h2>Správa odběratelů</h2>
+<h3>Přidat nového odběratele</h3>
+
+{form odberatelForm}
+    <h4 class="section-title">Firemní údaje</h4>
+    
+    <div class="form-group">
+        <label n:name="nazev" class="required">Název společnosti / Jméno a příjmení</label>
+        <input n:name="nazev">
+    </div>
+    
+    <div class="form-group">
+        <label n:name="adresa" class="required">Adresa</label>
+        <textarea n:name="adresa"></textarea>
+        <div class="tip">Každý řádek adresy oddělte klávesou Enter</div>
+    </div>
+    
+    <div class="form-row">
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="ico" class="required">IČO</label>
+                <input n:name="ico">
+            </div>
+        </div>
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="dic">DIČ</label>
+                <input n:name="dic">
+            </div>
+        </div>
+    </div>
+    
+    <h4 class="section-title">Kontaktní osoba</h4>
+    <div class="tip" style="margin-top: -10px; margin-bottom: 15px;">
+        Tato sekce je nepovinná a slouží pouze pro interní účely. Údaje o kontaktní osobě se na faktuře nezobrazí.
+    </div>
+    
+    <div class="form-group">
+        <label n:name="kontakt_jmeno">Jméno a příjmení</label>
+        <input n:name="kontakt_jmeno">
+    </div>
+    
+    <div class="form-row">
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="kontakt_telefon">Telefon</label>
+                <input n:name="kontakt_telefon">
+            </div>
+        </div>
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="kontakt_email">E-mail</label>
+                <input n:name="kontakt_email">
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group" style="margin-top: 20px;">
+        <button n:name="save" class="action-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Přidat odběratele
+        </button>
+        <a n:href="default" style="margin-left: 10px; text-decoration: none;">Zrušit</a>
+    </div>
+{/form}
+{/block}

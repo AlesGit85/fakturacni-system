@@ -1,0 +1,96 @@
+{block content}
+<h2>Nastavení údajů dodavatele</h2>
+
+{form dodavatelForm}
+    <div class="form-group">
+        <label n:name="nazev" class="required">Jméno a příjmení / Název společnosti</label>
+        <input n:name="nazev">
+    </div>
+
+    <div class="form-group">
+        <label n:name="adresa" class="required">Adresa</label>
+        <textarea n:name="adresa"></textarea>
+    </div>
+
+    <!-- IČO a DIČ na jednom řádku -->
+    <div class="form-row">
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="ico" class="required">IČO</label>
+                <input n:name="ico">
+            </div>
+        </div>
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="dic">DIČ</label>
+                <input n:name="dic">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group checkbox-field">
+        <input n:name="platce_dph"> <label n:name="platce_dph">Jsem plátce DPH</label>
+    </div>
+
+    <!-- Číslo účtu a název banky na jednom řádku -->
+    <div class="form-row">
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="ucet" class="required">Číslo účtu (ve formátu číslo/kód_banky)</label>
+                <input n:name="ucet">
+            </div>
+        </div>
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="banka">Název banky</label>
+                <input n:name="banka">
+            </div>
+        </div>
+    </div>
+
+    <!-- BIC/SWIFT a IBAN na jednom řádku -->
+    <div class="form-row">
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="swift">BIC/SWIFT</label>
+                <input n:name="swift">
+            </div>
+        </div>
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="iban">IBAN</label>
+                <input n:name="iban">
+            </div>
+        </div>
+    </div>
+
+    <!-- Telefon a email na jednom řádku -->
+    <div class="form-row">
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="telefon">Telefon</label>
+                <input n:name="telefon">
+            </div>
+        </div>
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="email">Email</label>
+                <input n:name="email">
+            </div>
+        </div>
+    </div>
+
+    <!-- Živnostenský úřad -->
+    <div class="form-group">
+        <label n:name="zivnost_1">§ citace</label>
+        <input n:name="zivnost_1">
+    </div>
+
+    <div class="form-group">
+        <label n:name="zivnost_2">Živnostenský úřad</label>
+        <input n:name="zivnost_2">
+    </div>
+
+    <button n:name="save">Uložit údaje</button>
+{/form}
+{/block}

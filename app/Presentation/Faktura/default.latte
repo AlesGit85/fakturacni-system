@@ -1,0 +1,79 @@
+{block content}
+<h2>Generování faktur</h2>
+
+<div class="info">
+    Tento generátor vytváří faktury s moderním designem a QR kódem pro platby.
+</div>
+
+{form fakturaForm}
+    {if isset($dodavatel['logo']) && !empty($dodavatel['logo']) && file_exists("../www/{$dodavatel['logo']}")}
+    <div class="form-group checkbox-field logo-option">
+        <input n:name="pridat_logo"> <label n:name="pridat_logo">Přidat logo na fakturu</label>
+    </div>
+    {/if}
+
+    <div class="odberatel-selector">
+        <div class="selector-group">
+            <label n:name="odberatel_id">Vyberte odběratele:</label>
+            <select n:name="odberatel_id" class="odberatel-dropdown" style="flex-grow: 1;"></select>
+        </div>
+
+        <div class="manual-toggle">
+            <label class="toggle-switch">
+                <input n:name="manual_toggle">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Zadat odběratele ručně</span>
+        </div>
+    </div>
+
+    <div class="form-group" id="odberatel-manual-group">
+        <label n:name="odberatel">Odběratel (název a adresa):</label>
+        <textarea n:name="odberatel" rows="6"></textarea>
+        <div class="tip">Pro každý řádek adresy stiskněte Enter. K dispozici je až 6 řádků.</div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="castka">Částka (Kč):</label>
+                <input n:name="castka">
+            </div>
+        </div>
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="vs">Variabilní symbol:</label>
+                <input n:name="vs">
+                <div class="tip">Pouze číslice, např. číslo faktury</div>
+            </div>
+        </div>
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="splatnost">Datum splatnosti:</label>
+                <input n:name="splatnost">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label n:name="predmet1">Předmět fakturace 1:</label>
+        <input n:name="predmet1">
+    </div>
+
+    <div class="form-group">
+        <label n:name="predmet2">Předmět fakturace 2 (volitelné):</label>
+        <input n:name="predmet2">
+    </div>
+
+    <div class="form-group">
+        <label n:name="predmet3">Předmět fakturace 3 (volitelné):</label>
+        <input n:name="predmet3">
+    </div>
+
+    <button n:name="generate">Vygenerovat fakturu (PDF)</button>
+{/form}
+{/block}
+
+{block scripts}
+<script src="{$basePath}/js/section-generovani.js"></script>
+{/block}

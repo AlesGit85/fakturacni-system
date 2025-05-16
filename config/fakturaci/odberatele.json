@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "nazev": "Stovkomat s.r.o.",
+        "adresa": "Antala Staška 1009\/31, Krč, 14000 Praha 4",
+        "ico": "03082989",
+        "dic": "CZ03082989",
+        "kontakt": {
+            "jmeno": "Denisa Rejnová",
+            "telefon": "",
+            "email": "ahoj@stovkomat.cz"
+        }
+    }
+]

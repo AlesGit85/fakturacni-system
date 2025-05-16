@@ -1,0 +1,96 @@
+{block content}
+<h2>Správa odběratelů</h2>
+
+<div class="action-bar">
+    <a n:href="add" class="action-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Přidat nového odběratele
+    </a>
+    
+    <form class="search-form" method="GET" action="{link default}">
+        <button type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </button>
+        <input type="text" name="search" placeholder="Hledat odběratele..." value="{$searchTerm ?? ''}">
+    </form>
+</div>
+
+{if empty($odberatele)}
+    <div class="empty-state">
+        {if isset($searchTerm) && !empty($searchTerm)}
+            <p>Pro hledaný výraz "{$searchTerm}" nebyli nalezeni žádní odběratelé.</p>
+            <a n:href="default" class="action-button">Zobrazit všechny odběratele</a>
+        {else}
+            <p>Zatím nemáte přidané žádné odběratele.</p>
+            <a n:href="add" class="action-button">Přidat prvního odběratele</a>
+        {/if}
+    </div>
+{else}
+    <div class="card-container">
+        {foreach $odberatele as $odberatel}
+            <div class="odberatel-card">
+                <div class="card-header">
+                    <h3 class="card-title">{$odberatel['nazev']}</h3>
+                </div>
+                
+                <div class="card-body">
+                    <div class="card-info">
+                        <span class="card-info-label">Adresa:</span>
+                        <span class="card-info-value">{nl2br($odberatel['adresa'])|noescape}</span>
+                    </div>
+                    
+                    <div class="card-info">
+                        <span class="card-info-label">IČO:</span>
+                        <span class="card-info-value">{$odberatel['ico']}</span>
+                    </div>
+                    
+                    {if !empty($odberatel['dic'])}
+                    <div class="card-info">
+                        <span class="card-info-label">DIČ:</span>
+                        <span class="card-info-value">{$odberatel['dic']}</span>
+                    </div>
+                    {/if}
+                </div>
+                
+                {if !empty($odberatel['kontakt']['jmeno']) || !empty($odberatel['kontakt']['telefon']) || !empty($odberatel['kontakt']['email'])}
+                    <div class="card-contact">
+                        {if !empty($odberatel['kontakt']['jmeno'])}
+                            <div><strong>{$odberatel['kontakt']['jmeno']}</strong></div>
+                        {/if}
+                        
+                        {if !empty($odberatel['kontakt']['telefon'])}
+                            <div style="margin-top: 5px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 5px;">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                {$odberatel['kontakt']['telefon']}
+                            </div>
+                        {/if}
+                        
+                        {if !empty($odberatel['kontakt']['email'])}
+                            <div style="margin-top: 5px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 5px;">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                {$odberatel['kontakt']['email']}
+                            </div>
+                        {/if}
+                    </div>
+                {/if}
+                
+                <div class="card-actions">
+                    <a n:href="edit, $odberatel['id']" class="card-btn edit">Upravit</a>
+                    <a n:href="delete, $odberatel['id']" class="card-btn delete" onclick="return confirm('Opravdu chcete smazat tohoto odběratele?');">Smazat</a>
+                </div>
+            </div>
+        {/foreach}
+    </div>
+{/if}
+{/block}

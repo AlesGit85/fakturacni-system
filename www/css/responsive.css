@@ -1,0 +1,159 @@
+/*
+ * responsive.css - Responzivní styly pro všechny velikosti obrazovek
+ */
+
+/* Styly pro tablety a menší obrazovky */
+@media (max-width: 992px) {
+    body {
+        padding: 15px;
+    }
+    
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 28px;
+    }
+    
+    h2 {
+        font-size: 22px;
+    }
+}
+
+/* Styly pro mobilní zaøízení */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 15px;
+        border-radius: 8px;
+    }
+    
+    h1 {
+        font-size: 24px;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    
+    h2 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
+    /* Vertikální navigace pro mobily */
+    nav {
+        flex-direction: column;
+        border-radius: 8px;
+    }
+    
+    nav a {
+        border-bottom: 1px solid #ddd;
+        padding: 15px;
+    }
+    
+    nav a:last-child {
+        border-bottom: none;
+    }
+    
+    nav a.active {
+        border-radius: 0;
+    }
+    
+    nav a:first-child {
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+    
+    nav a:last-child {
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+    
+    /* Formuláøe na mobilech */
+    .form-column {
+        flex: 100%;
+        margin-bottom: 10px;
+    }
+    
+    label {
+        margin-bottom: 4px;
+    }
+    
+    input[type="text"], 
+    input[type="number"], 
+    input[type="date"], 
+    input[type="email"], 
+    input[type="tel"], 
+    textarea, 
+    select {
+        font-size: 16px; /* Pøedejde pøibližování na iOS */
+        padding: 10px;
+    }
+    
+    button {
+        width: 100%;
+        padding: 12px;
+    }
+    
+    .btn, .action-button {
+        width: 100%;
+        display: block;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+    
+    /* Vyhledávání na mobilech */
+    .search-form {
+        min-width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    /* Karty odbìratelù */
+    .card-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-info-label, .card-info-value {
+        font-size: 14px;
+    }
+}
+
+/* Velmi malé displeje */
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+    
+    .container {
+        padding: 12px;
+    }
+    
+    h1 {
+        font-size: 22px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .odberatel-selector {
+        gap: 10px;
+    }
+    
+    .selector-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .selector-group label {
+        margin-bottom: 5px;
+    }
+}

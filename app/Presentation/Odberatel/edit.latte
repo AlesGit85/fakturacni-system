@@ -1,0 +1,73 @@
+{block content}
+<h2>Správa odběratelů</h2>
+<h3>Upravit odběratele</h3>
+
+{form odberatelForm}
+    <input n:name="edit_id" value="{$editData['id']}">
+    
+    <h4 class="section-title">Firemní údaje</h4>
+    
+    <div class="form-group">
+        <label n:name="nazev" class="required">Název společnosti / Jméno a příjmení</label>
+        <input n:name="nazev">
+    </div>
+    
+    <div class="form-group">
+        <label n:name="adresa" class="required">Adresa</label>
+        <textarea n:name="adresa"></textarea>
+        <div class="tip">Každý řádek adresy oddělte klávesou Enter</div>
+    </div>
+    
+    <div class="form-row">
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="ico" class="required">IČO</label>
+                <input n:name="ico">
+            </div>
+        </div>
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="dic">DIČ</label>
+                <input n:name="dic">
+            </div>
+        </div>
+    </div>
+    
+    <h4 class="section-title">Kontaktní osoba</h4>
+    <div class="tip" style="margin-top: -10px; margin-bottom: 15px;">
+        Tato sekce je nepovinná a slouží pouze pro interní účely. Údaje o kontaktní osobě se na faktuře nezobrazí.
+    </div>
+    
+    <div class="form-group">
+        <label n:name="kontakt_jmeno">Jméno a příjmení</label>
+        <input n:name="kontakt_jmeno">
+    </div>
+    
+    <div class="form-row">
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="kontakt_telefon">Telefon</label>
+                <input n:name="kontakt_telefon">
+            </div>
+        </div>
+        <div class="form-column">
+            <div class="form-group">
+                <label n:name="kontakt_email">E-mail</label>
+                <input n:name="kontakt_email">
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group" style="margin-top: 20px;">
+        <button n:name="save" class="action-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            Uložit změny
+        </button>
+        <a n:href="default" style="margin-left: 10px; text-decoration: none;">Zrušit</a>
+    </div>
+{/form}
+{/block}

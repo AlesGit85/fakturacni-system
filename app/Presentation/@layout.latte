@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Fakturační systém</title>
+    <link rel="stylesheet" href="{$basePath}/css/style.css">
+    <link rel="stylesheet" href="{$basePath}/css/forms.css">
+    <link rel="stylesheet" href="{$basePath}/css/responsive.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Fakturační systém</h1>
+            <nav>
+                <a n:href="Faktura:" class="{$presenter->isLinkCurrent('Faktura:*') ? 'active' : ''}">Faktury</a>
+                <a n:href="Dodavatel:" class="{$presenter->isLinkCurrent('Dodavatel:*') ? 'active' : ''}">Dodavatel</a>
+                <a n:href="Odberatel:" class="{$presenter->isLinkCurrent('Odberatel:*') ? 'active' : ''}">Odběratelé</a>
+            </nav>
+        </header>
+        <main>
+            <div n:foreach="$flashes as $flash" class="{$flash->type}">{$flash->message}</div>
+            {include content}
+        </main>
+    </div>
+    <script src="{$basePath}/js/scripts.js"></script>
+    {block scripts}{/block}
+</body>
+</html>
