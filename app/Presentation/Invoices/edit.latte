@@ -96,9 +96,27 @@
                                 {input payment_method class => 'form-control'}
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3 form-check mt-4">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">Možnosti zobrazení</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3 form-check">
                                 {input qr_payment} {label qr_payment /}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3 form-check">
+                                {input show_logo} {label show_logo /}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3 form-check">
+                                {input show_signature} {label show_signature /}
                             </div>
                         </div>
                     </div>

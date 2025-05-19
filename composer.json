@@ -19,9 +19,7 @@
 		"nette/utils": "^4.0",
 		"latte/latte": "^3.0",
 		"tracy/tracy": "^2.10",
-		"tecnickcom/tcpdf": "^6.9",
-		"endroid/qr-code": "^6.0",
-		"rikudou/czqrpayment": "^5.3"
+		"tecnickcom/tcpdf": "^6.9"
 	},
 	"require-dev": {
 		"nette/tester": "^2.5",

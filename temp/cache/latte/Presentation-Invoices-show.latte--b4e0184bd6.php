@@ -317,34 +317,7 @@ final class Template_b4e0184bd6 extends Latte\Runtime\Template
                 </div>
             </div>
         </div>
-        
-';
-		if ($invoice->qr_payment && $company->bank_account) /* line 156 */ {
-			echo '            <div class="row mb-4">
-                <div class="col-md-8">
-                 <h5>Platební údaje</h5>
-                  <p>
-                        Bankovní účet: <strong>';
-			echo LR\Filters::escapeHtmlText($company->bank_account) /* line 161 */;
-			echo '</strong><br>
-                       Variabilní symbol: <strong>';
-			echo LR\Filters::escapeHtmlText(str_replace('/', '', $invoice->number)) /* line 162 */;
-			echo '</strong><br>
-                        Částka: <strong>';
-			echo LR\Filters::escapeHtmlText(($this->filters->number)($invoice->total, 2, ',', ' ')) /* line 163 */;
-			echo ' Kč</strong>
-                  </p>
-                </div>
-            <div class="col-md-4 text-center">
-                   <img src="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('showQrCode!', ['id' => $invoice->id])) /* line 167 */;
-			echo '" alt="QR kód pro platbu" class="img-fluid bg-white p-2 border" style="max-width: 150px;">
-                   <p class="mt-2"><small>Naskenujte QR kód pro rychlou platbu</small></p>
-              </div>
-            </div>
-';
-		}
-		echo '    </div>
+    </div>
 </div>
 ';
 	}

@@ -214,12 +214,38 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
 		echo '
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3 form-check mt-4">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">Možnosti zobrazení</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3 form-check">
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('qr_payment', $this->global)->getControl() /* line 101 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('qr_payment', $this->global)->getControl() /* line 109 */;
 		echo ' ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('qr_payment', $this->global)->getLabel()) /* line 101 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('qr_payment', $this->global)->getLabel()) /* line 109 */;
+		echo '
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3 form-check">
+                                ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('show_logo', $this->global)->getControl() /* line 114 */;
+		echo ' ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('show_logo', $this->global)->getLabel()) /* line 114 */;
+		echo '
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3 form-check">
+                                ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('show_signature', $this->global)->getControl() /* line 119 */;
+		echo ' ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('show_signature', $this->global)->getLabel()) /* line 119 */;
 		echo '
                             </div>
                         </div>
@@ -228,7 +254,7 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
             </div>
             
 ';
-		if ($isVatPayer) /* line 108 */ {
+		if ($isVatPayer) /* line 126 */ {
 			echo '            <!-- Formulář pro plátce DPH - s položkami a DPH -->
             <div class="card mb-4">
                 <div class="card-header">
@@ -281,7 +307,7 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
                 </div>
             </div>
 ';
-		} else /* line 160 */ {
+		} else /* line 178 */ {
 			echo '            <!-- Formulář pro neplátce DPH - zjednodušený bez DPH -->
             <div class="card mb-4">
                 <div class="card-header">
@@ -314,7 +340,7 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
                 <div class="card-body">
                     <div class="mb-3">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('note', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 191 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('note', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 209 */;
 		echo '
                     </div>
                 </div>
@@ -322,14 +348,14 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
             
             <div class="mb-3">
                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary']) /* line 197 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary']) /* line 215 */;
 		echo '
                 <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 198 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 216 */;
 		echo '" class="btn btn-secondary">Zpět na seznam faktur</a>
             </div>
         ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 200 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 218 */;
 
 		echo '
     </div>

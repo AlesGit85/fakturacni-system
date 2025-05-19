@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Nette;
+use DateTime;
 
 class InvoicesManager
 {
@@ -17,21 +18,23 @@ class InvoicesManager
     }
 
     /**
-     * Získá všechny faktury s informacemi o klientech
+     * Získá všechny faktury, řazené podle čísla sestupně
+     * 
+     * @param string|null $search Hledaný výraz
+     * @return Nette\Database\Table\Selection
      */
-    public function getAll()
+    public function getAll($search = null)
     {
-        return $this->database->table('invoices')
-            ->order('id DESC');
-    }
-
-    // Pokud by výše uvedená metoda nefungovala, můžeš použít alternativní verzi:
-    public function getAllAlternative()
-    {
-        $invoices = $this->database->table('invoices')->order('id DESC');
-        // Data klientů lze pak v presenteru získat pomocí related()
-        // Např.: $invoice->ref('client_id')
-        return $invoices;
+        $query = $this->database->table('invoices');
+        
+        // Aplikujeme vyhledávání, pokud je zadáno
+        if ($search) {
+            $query->where('number LIKE ? OR client_name LIKE ? OR total LIKE ?', 
+                "%$search%", "%$search%", "%$search%");
+        }
+        
+        // Řazení podle čísla faktury sestupně (nejnovější první)
+        return $query->order('number DESC');
     }
 
     /**
@@ -167,5 +170,69 @@ class InvoicesManager
     public function deleteInvoiceItems($invoiceId)
     {
         return $this->database->table('invoice_items')->where('invoice_id', $invoiceId)->delete();
+    }
+
+    /**
+     * Aktualizuje stav faktury
+     * 
+     * @param int $id ID faktury
+     * @param string $status Nový stav ('created', 'paid', 'overdue')
+     * @param string|null $paymentDate Datum zaplacení (pro stav 'paid')
+     * @return bool
+     */
+    public function updateStatus($id, $status, $paymentDate = null)
+    {
+        $data = ['status' => $status];
+        
+        if ($status === 'paid' && $paymentDate) {
+            $data['payment_date'] = $paymentDate;
+        } elseif ($status !== 'paid') {
+            // Při změně stavu na jiný než 'paid' vymažeme datum platby
+            $data['payment_date'] = null;
+        }
+        
+        return $this->database->table('invoices')
+            ->where('id', $id)
+            ->update($data);
+    }
+
+    /**
+     * Kontroluje a aktualizuje stav faktur po splatnosti
+     * 
+     * @return int Počet aktualizovaných faktur
+     */
+    public function checkOverdueDates()
+    {
+        $today = new DateTime();
+        
+        // Najdeme faktury, které jsou po splatnosti a nejsou označeny jako 'overdue' nebo 'paid'
+        $result = $this->database->table('invoices')
+            ->where('due_date < ?', $today->format('Y-m-d'))
+            ->where('status', 'created')
+            ->update(['status' => 'overdue']);
+            
+        return $result;
+    }
+    
+    /**
+     * Získá statistiky faktur
+     * 
+     * @return array Statistiky faktur
+     */
+    public function getStatistics()
+    {
+        $total = $this->database->table('invoices')->count();
+        $paid = $this->database->table('invoices')->where('status', 'paid')->count();
+        $overdue = $this->database->table('invoices')->where('status', 'overdue')->count();
+        $unpaidAmount = $this->database->table('invoices')
+            ->where('status != ?', 'paid')
+            ->sum('total') ?? 0;
+        
+        return [
+            'totalCount' => $total,
+            'paidCount' => $paid,
+            'overdueCount' => $overdue,
+            'unpaidAmount' => $unpaidAmount
+        ];
     }
 }

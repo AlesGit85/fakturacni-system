@@ -36,11 +36,6 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $this->qrPaymentService = $qrPaymentService;
     }
 
-    public function renderDefault(): void
-    {
-        $this->template->invoices = $this->invoicesManager->getAll();
-    }
-
     public function renderAdd(): void
     {
         $company = $this->companyManager->getCompanyInfo();
@@ -144,18 +139,18 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         // ZÁHLAVÍ FAKTURY
         // ------------------------------------------------
 
-        // Logo společnosti
-        if ($company->logo && file_exists(WWW_DIR . '/uploads/logo/' . $company->logo)) {
-            $pdf->Image(WWW_DIR . '/uploads/logo/' . $company->logo, 15, 15, 40);
-            $headerStartY = 15;
-        } else {
-            // Pokud logo neexistuje, zobrazíme název společnosti stylizovaně
-            $pdf->SetFont('dejavusans', 'B', 20);
-            $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-            $pdf->Cell(0, 10, $company->name, 0, 1, 'L');
-            $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-            $headerStartY = 25;
-        }
+// Logo společnosti
+if ($company->logo && file_exists(WWW_DIR . '/uploads/logo/' . $company->logo) && $invoice->show_logo) {
+    $pdf->Image(WWW_DIR . '/uploads/logo/' . $company->logo, 15, 15, 40);
+    $headerStartY = 15;
+} else {
+    // Pokud logo neexistuje nebo nemá být zobrazeno, zobrazíme název společnosti stylizovaně
+    $pdf->SetFont('dejavusans', 'B', 20);
+    $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
+    $pdf->Cell(0, 10, $company->name, 0, 1, 'L');
+    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+    $headerStartY = 25;
+}
 
         // Informace o faktuře
         $pdf->SetXY(120, $headerStartY);
@@ -369,14 +364,14 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $variableSymbol = str_replace('/', '', $invoice->number);
         $pdf->Cell(0, 5, 'Variabilní symbol: ' . $variableSymbol, 0, 1);
 
-        // Podpis
-        if ($company->signature && file_exists(WWW_DIR . '/uploads/signature/' . $company->signature)) {
-            $pdf->Image(WWW_DIR . '/uploads/signature/' . $company->signature, 15, $footerStartY + 25, 40);
-
-            $pdf->SetXY(15, $footerStartY + 45);
-            $pdf->SetFont('dejavusans', '', 8);
-            $pdf->Cell(40, 5, 'Podpis dodavatele', 0, 1, 'C');
-        }
+// Podpis
+if ($company->signature && file_exists(WWW_DIR . '/uploads/signature/' . $company->signature) && $invoice->show_signature) {
+    $pdf->Image(WWW_DIR . '/uploads/signature/' . $company->signature, 15, $footerStartY + 25, 40);
+    
+    $pdf->SetXY(15, $footerStartY + 45);
+    $pdf->SetFont('dejavusans', '', 8);
+    $pdf->Cell(40, 5, 'Podpis dodavatele', 0, 1, 'C');
+}
 
         // Generování QR kódu pro platbu, pokud je požadován
         if ($invoice->qr_payment && $company->bank_account) {
@@ -500,7 +495,14 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         ])
             ->setRequired('Vyberte způsob platby');
 
+        // Možnosti zobrazení - všechny checkboxy na jednom místě
         $form->addCheckbox('qr_payment', 'Generovat QR kód pro platbu')
+            ->setDefaultValue(true);
+
+        $form->addCheckbox('show_logo', 'Zobrazit logo na faktuře')
+            ->setDefaultValue(true);
+
+        $form->addCheckbox('show_signature', 'Zobrazit podpis na faktuře')
             ->setDefaultValue(true);
 
         $form->addTextArea('note', 'Poznámka:')
@@ -536,6 +538,8 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
             'due_date' => $data->due_date,
             'payment_method' => $data->payment_method,
             'qr_payment' => $data->qr_payment,
+            'show_logo' => $data->show_logo, // Nová položka
+            'show_signature' => $data->show_signature, // Nová položka
             'note' => $data->note,
             'user_id' => $data->user_id,
             'manual_client' => ($data->client_type === 'manual'),
@@ -618,41 +622,56 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $this->redirect('edit', $invoiceId);
     }
 
-/**
- * Akce pro zobrazení QR kódu jako obrázku
- * @param int $id ID faktury
- */
-public function handleShowQrCode(int $id): void
-{
-    $invoice = $this->invoicesManager->getById($id);
-    if (!$invoice) {
-        $this->error('Faktura nebyla nalezena');
+    public function renderDefault(?string $search = null): void
+    {
+        // Kontrola faktur po splatnosti
+        $this->invoicesManager->checkOverdueDates();
+
+        // Získání faktur (případně filtrovaných)
+        $this->template->invoices = $this->invoicesManager->getAll($search);
+        $this->template->search = $search;
     }
-    
-    $company = $this->companyManager->getCompanyInfo();
-    if (!$company || !$company->bank_account) {
-        $this->flashMessage('Pro generování QR kódu je nutné mít nastavený bankovní účet.', 'warning');
-        $this->redirect('show', $id);
+
+    /**
+     * Akce pro označení faktury jako zaplacené
+     * @param int $id ID faktury
+     */
+    public function handleMarkAsPaid(int $id): void
+    {
+        $today = new \DateTime();
+
+        $this->invoicesManager->updateStatus($id, 'paid', $today->format('Y-m-d'));
+        $this->flashMessage('Faktura byla označena jako zaplacená', 'success');
+        $this->redirect('this');
     }
-    
-    // Variabilní symbol je číslo faktury bez lomítek
-    $variableSymbol = str_replace('/', '', $invoice->number);
-    
-    // Generování QR kódu
-    $qrImage = $this->qrPaymentService->generateQrCodeImage(
-        $company->bank_account,
-        $invoice->total,
-        $variableSymbol,
-        'Faktura ' . $invoice->number
-    );
-    
-    // Odeslání obrázku přímo v odpovědi
-    $httpResponse = $this->getHttpResponse();
-    $httpResponse->setHeader('Content-Type', 'image/png');
-    $httpResponse->setHeader('Content-Length', strlen($qrImage));
-    echo $qrImage;
-    
-    // Ukončení běhu aplikace
-    $this->terminate();
-}
+
+    /**
+     * Akce pro označení faktury jako vystavené (reset stavu)
+     * @param int $id ID faktury
+     */
+    public function handleMarkAsCreated(int $id): void
+    {
+        $this->invoicesManager->updateStatus($id, 'created');
+        $this->flashMessage('Faktura byla označena jako vystavená', 'success');
+        $this->redirect('this');
+    }
+
+    /**
+     * Formulář pro vyhledávání
+     */
+    protected function createComponentSearchForm(): Nette\Application\UI\Form
+    {
+        $form = new Nette\Application\UI\Form;
+
+        $form->addText('search', 'Hledat:')
+            ->setHtmlAttribute('placeholder', 'Číslo faktury, klient, částka...');
+
+        $form->addSubmit('send', 'Vyhledat');
+
+        $form->onSuccess[] = function (Nette\Application\UI\Form $form, \stdClass $values) {
+            $this->redirect('default', $values->search);
+        };
+
+        return $form;
+    }
 }
