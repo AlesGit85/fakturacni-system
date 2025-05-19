@@ -1,0 +1,53 @@
+{block content}
+<h1>Faktury</h1>
+
+<p><a n:href="add" class="btn btn-success">Vytvořit novou fakturu</a></p>
+
+{if $invoices->count() > 0}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Číslo faktury</th>
+                <th>Klient</th>
+                <th>Vystaveno</th>
+                <th>Splatnost</th>
+                <th>Částka</th>
+                <th>Stav</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $invoices as $invoice}
+            <tr>
+                <td>{$invoice->number}</td>
+                <td>{$invoice->ref('client_id')->name}</td>
+                <td>{$invoice->issue_date|date:'d.m.Y'}</td>
+                <td>{$invoice->due_date|date:'d.m.Y'}</td>
+                <td>{$invoice->total|number(2, ',', ' ')} Kč</td>
+                <td>
+                    {if $invoice->status == 'created'}
+                        <span class="badge bg-warning">Vystavena</span>
+                    {elseif $invoice->status == 'paid'}
+                        <span class="badge bg-success">Zaplacena</span>
+                    {elseif $invoice->status == 'overdue'}
+                        <span class="badge bg-danger">Po splatnosti</span>
+                    {/if}
+                </td>
+                <td class="table-actions">
+                    <a n:href="show $invoice->id" class="btn btn-primary btn-sm">Detail</a>
+                    <a n:href="edit $invoice->id" class="btn btn-warning btn-sm">Upravit</a>
+                    <a n:href="pdf $invoice->id" class="btn btn-info btn-sm">PDF</a>
+                    <a n:href="delete $invoice->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat tuto fakturu?')">Smazat</a>
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+</div>
+{else}
+<div class="alert alert-info">
+    Zatím nebyla vytvořena žádná faktura.
+</div>
+{/if}
+{/block}

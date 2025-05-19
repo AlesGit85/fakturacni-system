@@ -1,0 +1,58 @@
+{block content}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12 text-center mb-4">
+            <h1>Fakturační systém</h1>
+            <p class="lead">Jednoduchý systém pro správu faktur a klientů</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h3 class="card-title">Klienti</h3>
+                    <p class="card-text">Správa vašich klientů a jejich kontaktních údajů.</p>
+                    <a n:href="Clients:default" class="btn btn-primary">Zobrazit klienty</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h3 class="card-title">Faktury</h3>
+                    <p class="card-text">Vytváření a správa faktur pro vaše klienty.</p>
+                    <a n:href="Invoices:default" class="btn btn-primary">Zobrazit faktury</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h3 class="card-title">Nastavení</h3>
+                    <p class="card-text">Úprava firemních údajů a nastavení systému.</p>
+                    <a n:href="Settings:default" class="btn btn-primary">Upravit nastavení</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Začínáme</h4>
+                    <p>Pro začátek práce s fakturačním systémem doporučujeme:</p>
+                    <ol>
+                        <li>Nejprve nastavte vaše firemní údaje v sekci <a n:href="Settings:default">Nastavení</a>.</li>
+                        <li>Přidejte vaše klienty v sekci <a n:href="Clients:default">Klienti</a>.</li>
+                        <li>Poté můžete začít vytvářet faktury v sekci <a n:href="Invoices:default">Faktury</a>.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

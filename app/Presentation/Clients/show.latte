@@ -1,0 +1,39 @@
+{block content}
+<h1>{$client->name}</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Kontaktní údaje
+            </div>
+            <div class="card-body">
+                <p><strong>Adresa:</strong> {$client->address}</p>
+                <p><strong>Město:</strong> {$client->city}</p>
+                <p><strong>PSČ:</strong> {$client->zip}</p>
+                <p><strong>Země:</strong> {$client->country}</p>
+                <p><strong>E-mail:</strong> {$client->email}</p>
+                <p><strong>Telefon:</strong> {$client->phone}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Fakturační údaje
+            </div>
+            <div class="card-body">
+                <p><strong>IČ:</strong> {$client->ic}</p>
+                <p><strong>DIČ:</strong> {$client->dic}</p>
+                <p><strong>Bankovní účet:</strong> {$client->bank_account}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a n:href="edit $client->id" class="btn btn-warning">Upravit</a>
+    <a n:href="default" class="btn btn-secondary">Zpět na seznam klientů</a>
+</div>
+{/block}

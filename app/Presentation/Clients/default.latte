@@ -1,0 +1,42 @@
+{block content}
+<h1>Klienti</h1>
+
+<p><a n:href="add" class="btn btn-success">Přidat nového klienta</a></p>
+
+{if $clients->count() > 0}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Název</th>
+                <th>IČ</th>
+                <th>DIČ</th>
+                <th>E-mail</th>
+                <th>Telefon</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $clients as $client}
+            <tr>
+                <td>{$client->name}</td>
+                <td>{$client->ic}</td>
+                <td>{$client->dic}</td>
+                <td>{$client->email}</td>
+                <td>{$client->phone}</td>
+                <td>
+                    <a n:href="show $client->id" class="btn btn-primary btn-sm">Detail</a>
+                    <a n:href="edit $client->id" class="btn btn-warning btn-sm">Upravit</a>
+                    <a n:href="delete $client->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')">Smazat</a>
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+</div>
+{else}
+<div class="alert alert-info">
+    Zatím nebyl přidán žádný klient.
+</div>
+{/if}
+{/block}

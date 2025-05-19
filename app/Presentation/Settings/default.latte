@@ -1,0 +1,203 @@
+{block content}
+<h1>Nastavení</h1>
+
+{if $company}
+<div class="card mb-4">
+    <div class="card-header">
+        Aktuální firemní údaje
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <dl>
+                    <dt>Název společnosti</dt>
+                    <dd>{$company->name}</dd>
+                    
+                    <dt>Adresa</dt>
+                    <dd>{$company->address}, {$company->zip} {$company->city}, {$company->country}</dd>
+                    
+                    <dt>IČ</dt>
+                    <dd>{$company->ic}</dd>
+                    
+                    {if $company->dic}
+                    <dt>DIČ</dt>
+                    <dd>{$company->dic}</dd>
+                    {/if}
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl>
+                    <dt>Kontaktní údaje</dt>
+                    <dd>E-mail: {$company->email}</dd>
+                    <dd>Telefon: {$company->phone}</dd>
+                    
+                    <dt>Bankovní údaje</dt>
+                    <dd>Účet: {$company->bank_account}</dd>
+                    <dd>Banka: {$company->bank_name}</dd>
+                </dl>
+                
+                {if $company->logo}
+                <dt>Logo</dt>
+                <dd>
+                    <img src="{$basePath}/uploads/logo/{$company->logo}" alt="Logo" style="max-height: 100px;" class="mb-2">
+                </dd>
+                {/if}
+                
+                {if $company->signature}
+                <dt>Podpis</dt>
+                <dd>
+                    <img src="{$basePath}/uploads/signature/{$company->signature}" alt="Podpis" style="max-height: 100px;">
+                </dd>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
+
+<div class="card mb-4">
+    <div class="card-header">
+        Upravit firemní údaje
+    </div>
+    <div class="card-body">
+        {form companyForm class => 'row g-3'}
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {label name /}
+                    {input name class => 'form-control'}
+                </div>
+                
+                <div class="mb-3">
+                    {label address /}
+                    {input address class => 'form-control'}
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {label city /}
+                            {input city class => 'form-control'}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            {label zip /}
+                            {input zip class => 'form-control'}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            {label country /}
+                            {input country class => 'form-control'}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {label ic /}
+                            {input ic class => 'form-control'}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" id="vat-payer-checkbox" class="form-check-input" name="vat_payer" value="1" {if $company && $company->vat_payer}checked{/if}> Jsem plátce DPH
+                    </label>
+                </div>
+                
+                <div id="dic-container" class="mb-3" style="display: none;">
+                    {label dic /}
+                    {input dic class => 'form-control', id => 'dic-field'}
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {label email /}
+                            {input email class => 'form-control'}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {label phone /}
+                            {input phone class => 'form-control'}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {label bank_account /}
+                            {input bank_account class => 'form-control'}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {label bank_name /}
+                            {input bank_name class => 'form-control'}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    {label logo /}
+                    {input logo class => 'form-control'}
+                    {if $company && $company->logo}
+                        <div class="mt-2 d-flex align-items-center">
+                            <img src="{$basePath}/uploads/logo/{$company->logo}" alt="Logo" style="max-height: 100px; margin-right: 10px;">
+                            <a n:href="deleteLogo!" class="btn btn-sm btn-danger" onclick="return confirm('Opravdu chcete smazat logo?')">Smazat logo</a>
+                        </div>
+                    {/if}
+                </div>
+                
+                <div class="mb-3">
+                    {label signature /}
+                    {input signature class => 'form-control'}
+                    {if $company && $company->signature}
+                        <div class="mt-2 d-flex align-items-center">
+                            <img src="{$basePath}/uploads/signature/{$company->signature}" alt="Podpis" style="max-height: 100px; margin-right: 10px;">
+                            <a n:href="deleteSignature!" class="btn btn-sm btn-danger" onclick="return confirm('Opravdu chcete smazat podpis?')">Smazat podpis</a>
+                        </div>
+                    {/if}
+                </div>
+            </div>
+            
+            <div class="col-12">
+                <div class="mb-3">
+                    {input send class => 'btn btn-primary'}
+                </div>
+            </div>
+        {/form}
+    </div>
+</div>
+
+<script>
+// Spustí se po načtení stránky
+document.addEventListener('DOMContentLoaded', function() {
+    const vatPayerCheckbox = document.getElementById('vat-payer-checkbox');
+    const dicContainer = document.getElementById('dic-container');
+    
+    // Funkce pro zobrazení/skrytí pole DIČ
+    function toggleDicField() {
+        if (vatPayerCheckbox.checked) {
+            dicContainer.style.display = 'block';
+        } else {
+            dicContainer.style.display = 'none';
+            document.getElementById('dic-field').value = '';
+        }
+    }
+    
+    // Přidání posluchače události na změnu checkboxu
+    vatPayerCheckbox.addEventListener('change', toggleDicField);
+    
+    // Inicializace stavu při načtení stránky
+    toggleDicField();
+});
+</script>
+{/block}

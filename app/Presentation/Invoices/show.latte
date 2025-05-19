@@ -1,0 +1,170 @@
+{block content}
+<div class="mb-4">
+    <a n:href="default" class="btn btn-secondary">Zpět na seznam faktur</a>
+    <a n:href="edit $invoice->id" class="btn btn-warning">Upravit fakturu</a>
+    <a n:href="pdf $invoice->id" class="btn btn-primary">Stáhnout PDF</a>
+</div>
+
+{var $isVatPayer = $company && $company->vat_payer}
+
+<div class="card">
+    <div class="card-body">
+        <div class="invoice-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="invoice-title">
+                        <h2>Faktura {$invoice->number}</h2>
+                        <div>Vystaveno: {$invoice->issue_date|date('d.m.Y')}</div>
+                        <div>Splatnost: {$invoice->due_date|date('d.m.Y')}</div>
+                        <div>Způsob platby: {$invoice->payment_method}</div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h2>Stav: 
+                        {if $invoice->status == 'created'}
+                            <span class="badge bg-warning">Vystavena</span>
+                        {elseif $invoice->status == 'paid'}
+                            <span class="badge bg-success">Zaplacena</span>
+                        {elseif $invoice->status == 'overdue'}
+                            <span class="badge bg-danger">Po splatnosti</span>
+                        {/if}
+                    </h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row invoice-details mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Dodavatel</div>
+                    <div class="card-body">
+                        <h5>{$company->name}</h5>
+                        <p>
+                            {$company->address}<br>
+                            {$company->zip} {$company->city}<br>
+                            {$company->country}
+                        </p>
+                        <p>
+                            IČ: {$company->ic}<br>
+                            {if $company->dic}DIČ: {$company->dic}{/if}
+                        </p>
+                        <p>
+                            E-mail: {$company->email}<br>
+                            Telefon: {$company->phone}
+                        </p>
+                        <p>
+                            Bankovní účet: {$company->bank_account}<br>
+                            Banka: {$company->bank_name}
+                        </p>
+                        {if !$isVatPayer}
+                        <p class="text-muted">
+                            <em>Dodavatel není plátcem DPH.</em>
+                        </p>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Odběratel</div>
+                    <div class="card-body">
+                        <h5>{$client->name}</h5>
+                        <p>
+                            {$client->address}<br>
+                            {$client->zip} {$client->city}<br>
+                            {$client->country}
+                        </p>
+                        {if $client->ic || $client->dic}
+                        <p>
+                            {if $client->ic}IČ: {$client->ic}<br>{/if}
+                            {if $client->dic}DIČ: {$client->dic}{/if}
+                        </p>
+                        {/if}
+                        {if $client->email || $client->phone}
+                        <p>
+                            {if $client->email}E-mail: {$client->email}<br>{/if}
+                            {if $client->phone}Telefon: {$client->phone}{/if}
+                        </p>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="invoice-items">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            {if $isVatPayer}
+                                <th>Položka</th>
+                                <th>Popis</th>
+                                <th class="text-center">Množství</th>
+                                <th class="text-center">Jednotka</th>
+                                <th class="text-end">Cena/jedn. bez DPH</th>
+                                <th class="text-center">DPH %</th>
+                                <th class="text-end">Celkem s DPH</th>
+                            {else}
+                                <th>Předmět fakturace</th>
+                                <th class="text-end">Částka</th>
+                            {/if}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $invoiceItems as $item}
+                        <tr>
+                            {if $isVatPayer}
+                                <td>{$item->name}</td>
+                                <td>{$item->description}</td>
+                                <td class="text-center">{$item->quantity}</td>
+                                <td class="text-center">{$item->unit}</td>
+                                <td class="text-end">{$item->price|number(2, ',', ' ')} Kč</td>
+                                <td class="text-center">{$item->vat} %</td>
+                                <td class="text-end">{$item->total|number(2, ',', ' ')} Kč</td>
+                            {else}
+                                <td>{$item->name}</td>
+                                <td class="text-end">{$item->total|number(2, ',', ' ')} Kč</td>
+                            {/if}
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="invoice-total mb-4">
+            <div class="row">
+                <div class="col-md-8">
+                    {if $invoice->note}
+                    <div class="invoice-note">
+                        <strong>Poznámka:</strong> {$invoice->note}
+                    </div>
+                    {/if}
+                </div>
+                <div class="col-md-4">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Celkem k úhradě:</th>
+                            <td class="text-end"><strong>{$invoice->total|number(2, ',', ' ')} Kč</strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        {if $invoice->qr_payment && $company->bank_account}
+        <div class="row mb-4">
+            <div class="col-md-12 text-center">
+                <h5>Platební údaje</h5>
+                <p>
+                    Bankovní účet: <strong>{$company->bank_account}</strong><br>
+                    Variabilní symbol: <strong>{str_replace('/', '', $invoice->number)}</strong><br>
+                    Částka: <strong>{$invoice->total|number(2, ',', ' ')} Kč</strong>
+                </p>
+            </div>
+        </div>
+        {/if}
+    </div>
+</div>
+{/block}

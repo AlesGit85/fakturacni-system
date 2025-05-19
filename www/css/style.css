@@ -1,0 +1,56 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.required label::after {
+    content: " *";
+    color: red;
+}
+
+.table-actions {
+    white-space: nowrap;
+}
+
+/* Invoice styles */
+.invoice-header {
+    margin-bottom: 30px;
+}
+
+.invoice-header .row {
+    margin-bottom: 20px;
+}
+
+.invoice-title h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.invoice-details {
+    margin-bottom: 20px;
+}
+
+.invoice-items {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.invoice-total {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.invoice-note {
+    margin-top: 30px;
+    font-style: italic;
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+}
