@@ -25,7 +25,12 @@ return array (
     'App\\Model\\InvoicesManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\InvoicesManager.php',
-      1 => 1747644144,
+      1 => 1747646893,
+    ),
+    'App\\Model\\QrPaymentService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\QrPaymentService.php',
+      1 => 1747657759,
     ),
     'App\\Model\\UserManager' => 
     array (
@@ -60,7 +65,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1747646343,
+      1 => 1747657876,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (

@@ -64,7 +64,8 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'Nette\Security\IAuthenticator' => [['03']],
 		'App\Model\UserManager' => [['03']],
 		'App\Model\CompanyManager' => [['04']],
-		'Nette\Routing\Router' => [['05']],
+		'App\Model\QrPaymentService' => [['05']],
+		'Nette\Routing\Router' => [['06']],
 		'Nette\Application\UI\Presenter' => [
 			2 => ['application.1', 'application.2', 'application.4', 'application.5', 'application.6'],
 		],
@@ -116,7 +117,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'App\Presentation\Settings\SettingsPresenter' => [2 => ['application.6']],
 		'NetteModule\ErrorPresenter' => [2 => ['application.7']],
 		'NetteModule\MicroPresenter' => [2 => ['application.8']],
-		'App\Core\RouterFactory' => [['06']],
+		'App\Core\RouterFactory' => [['07']],
 	];
 
 
@@ -150,13 +151,19 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	}
 
 
-	public function createService05(): Nette\Routing\Router
+	public function createService05(): App\Model\QrPaymentService
+	{
+		return new App\Model\QrPaymentService;
+	}
+
+
+	public function createService06(): Nette\Routing\Router
 	{
 		return App\Core\RouterFactory::createRouter();
 	}
 
 
-	public function createService06(): App\Core\RouterFactory
+	public function createService07(): App\Core\RouterFactory
 	{
 		return new App\Core\RouterFactory;
 	}
@@ -169,7 +176,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('06'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
@@ -186,7 +193,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('06'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
@@ -209,7 +216,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('06'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
@@ -225,12 +232,13 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('02'),
 			$this->getService('01'),
 			$this->getService('04'),
+			$this->getService('05'),
 		);
 		$service->injectPrimary(
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('06'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
@@ -247,7 +255,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('06'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
@@ -265,7 +273,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 
 	public function createServiceApplication__8(): NetteModule\MicroPresenter
 	{
-		return new NetteModule\MicroPresenter($this, $this->getService('http.request'), $this->getService('05'));
+		return new NetteModule\MicroPresenter($this, $this->getService('http.request'), $this->getService('06'));
 	}
 
 
@@ -273,7 +281,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	{
 		$service = new Nette\Application\Application(
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('06'),
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 		);
@@ -282,7 +290,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$service,
 		);
 		$this->getService('tracy.bar')->addPanel(new Nette\Bridges\ApplicationTracy\RoutingPanel(
-			$this->getService('05'),
+			$this->getService('06'),
 			$this->getService('http.request'),
 			$this->getService('application.presenterFactory'),
 		));
@@ -293,7 +301,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	public function createServiceApplication__linkGenerator(): Nette\Application\LinkGenerator
 	{
 		return new Nette\Application\LinkGenerator(
-			$this->getService('05'),
+			$this->getService('06'),
 			$this->getService('http.request')->getUrl()->withoutUserInfo(),
 			$this->getService('application.presenterFactory'),
 		);

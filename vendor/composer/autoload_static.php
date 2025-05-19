@@ -11,9 +11,20 @@ class ComposerStaticInit9c49a418f02ffb235919088891200a26
     );
 
     public static $prefixLengthsPsr4 = array (
+        'r' => 
+        array (
+            'rikudou\\CzQrPayment\\' => 20,
+        ),
         'S' => 
         array (
             'Symfony\\Thanks\\' => 15,
+        ),
+        'R' => 
+        array (
+            'Rikudou\\QrPayment\\' => 18,
+            'Rikudou\\QrPaymentQrCodeProvider\\' => 32,
+            'Rikudou\\Iban\\' => 13,
+            'Rikudou\\CzQrPayment\\' => 20,
         ),
         'E' => 
         array (
@@ -34,9 +45,29 @@ class ComposerStaticInit9c49a418f02ffb235919088891200a26
     );
 
     public static $prefixDirsPsr4 = array (
+        'rikudou\\CzQrPayment\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rikudou/czqrpayment/src',
+        ),
         'Symfony\\Thanks\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/thanks/src',
+        ),
+        'Rikudou\\QrPayment\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rikudou/qr-payment-interface/src',
+        ),
+        'Rikudou\\QrPaymentQrCodeProvider\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rikudou/qr-payment-qr-code-provider/src',
+        ),
+        'Rikudou\\Iban\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rikudou/iban/src',
+        ),
+        'Rikudou\\CzQrPayment\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rikudou/czqrpayment/src',
         ),
         'Endroid\\QrCode\\' => 
         array (

@@ -20,6 +20,8 @@ services:
 	- App\Model\InvoicesManager
 	- App\Model\UserManager
 	- App\Model\CompanyManager
+	- App\Model\QrPaymentService
+
 
 
 latte:

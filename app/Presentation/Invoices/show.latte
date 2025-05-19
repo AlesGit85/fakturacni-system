@@ -154,16 +154,20 @@
         </div>
         
         {if $invoice->qr_payment && $company->bank_account}
-        <div class="row mb-4">
-            <div class="col-md-12 text-center">
-                <h5>Platební údaje</h5>
-                <p>
-                    Bankovní účet: <strong>{$company->bank_account}</strong><br>
-                    Variabilní symbol: <strong>{str_replace('/', '', $invoice->number)}</strong><br>
-                    Částka: <strong>{$invoice->total|number(2, ',', ' ')} Kč</strong>
-                </p>
+            <div class="row mb-4">
+                <div class="col-md-8">
+                 <h5>Platební údaje</h5>
+                  <p>
+                        Bankovní účet: <strong>{$company->bank_account}</strong><br>
+                       Variabilní symbol: <strong>{str_replace('/', '', $invoice->number)}</strong><br>
+                        Částka: <strong>{$invoice->total|number(2, ',', ' ')} Kč</strong>
+                  </p>
+                </div>
+            <div class="col-md-4 text-center">
+                   <img src="{link showQrCode!, id => $invoice->id}" alt="QR kód pro platbu" class="img-fluid bg-white p-2 border" style="max-width: 150px;">
+                   <p class="mt-2"><small>Naskenujte QR kód pro rychlou platbu</small></p>
+              </div>
             </div>
-        </div>
         {/if}
     </div>
 </div>
