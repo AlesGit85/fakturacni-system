@@ -80,346 +80,391 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $this->redirect('default');
     }
 
-    public function actionPdf(int $id): void
-    {
-        $invoice = $this->invoicesManager->getById($id);
+public function actionPdf(int $id): void
+{
+    $invoice = $this->invoicesManager->getById($id);
 
-        if (!$invoice) {
-            $this->error('Faktura nebyla nalezena');
-        }
+    if (!$invoice) {
+        $this->error('Faktura nebyla nalezena');
+    }
 
-        // Získání údajů o klientovi - buď z databáze, nebo z faktury pro ručně zadané
-        if (!$invoice->manual_client) {
-            $client = $this->clientsManager->getById($invoice->client_id);
-        } else {
-            // Pro ručně zadaného klienta vytvoříme objekt s údaji z faktury
-            $client = new \stdClass();
-            $client->name = $invoice->client_name;
-            $client->address = $invoice->client_address;
-            $client->city = $invoice->client_city;
-            $client->zip = $invoice->client_zip;
-            $client->country = $invoice->client_country;
-            $client->ic = $invoice->client_ic;
-            $client->dic = $invoice->client_dic;
-        }
+    // Získání údajů o klientovi - buď z databáze, nebo z faktury pro ručně zadané
+    if (!$invoice->manual_client) {
+        $client = $this->clientsManager->getById($invoice->client_id);
+    } else {
+        // Pro ručně zadaného klienta vytvoříme objekt s údaji z faktury
+        $client = new \stdClass();
+        $client->name = $invoice->client_name;
+        $client->address = $invoice->client_address;
+        $client->city = $invoice->client_city;
+        $client->zip = $invoice->client_zip;
+        $client->country = $invoice->client_country;
+        $client->ic = $invoice->client_ic;
+        $client->dic = $invoice->client_dic;
+    }
 
-        $invoiceItems = $this->invoicesManager->getInvoiceItems($id);
-        $company = $this->companyManager->getCompanyInfo();
-        $isVatPayer = $company ? $company->vat_payer : false;
+    $invoiceItems = $this->invoicesManager->getInvoiceItems($id);
+    $company = $this->companyManager->getCompanyInfo();
+    $isVatPayer = $company ? $company->vat_payer : false;
 
-        // Vytvoření PDF
-        $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+    // Vytvoření PDF
+    $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 
-        // Nastavení PDF dokumentu
-        $pdf->SetCreator($company->name);
-        $pdf->SetAuthor($company->name);
-        $pdf->SetTitle('Faktura ' . $invoice->number);
-        $pdf->SetSubject('Faktura ' . $invoice->number);
+    // Nastavení PDF dokumentu
+    $pdf->SetCreator($company->name);
+    $pdf->SetAuthor($company->name);
+    $pdf->SetTitle('Faktura ' . $invoice->number);
+    $pdf->SetSubject('Faktura ' . $invoice->number);
 
-        // Odstranění hlavičky a patičky
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
+    // Odstranění hlavičky a patičky
+    $pdf->setPrintHeader(false);
+    $pdf->setPrintFooter(false);
 
-        // Přidání stránky
-        $pdf->AddPage();
+    // Přidání stránky
+    $pdf->AddPage();
 
-        // Nastavení okrajů
-        $pdf->SetMargins(15, 15, 15);
+    // Nastavení okrajů
+    $pdf->SetMargins(15, 15, 15);
 
-        // Nastavení barev
-        $primaryColor = array(70, 130, 180); // Steel Blue
-        $secondaryColor = array(230, 230, 230); // Light Gray
-        $textColor = array(50, 50, 50); // Dark Gray
+    // Definice barev
+    $greyColor = array(202, 202, 202); // #cacaca
+    $footerColor = array(57, 59, 65);  // #393b41
+    $textColor = array(50, 50, 50);    // Tmavě šedá pro text
 
-        // Nastavení fontu
-        $pdf->SetFont('dejavusans', '', 10);
-        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+    // Nastavení fontu
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
 
-        // ------------------------------------------------
-        // ZÁHLAVÍ FAKTURY
-        // ------------------------------------------------
+// ------------------------------------------------
+// ZÁHLAVÍ FAKTURY - lichoběžník
+// ------------------------------------------------
+    
+// Zvětšení mezery mezi horním okrajem a obsahem
+$headerStartY = 20; // Zvýšeno z 15 na 20mm pro více prostoru nahoře
 
-// Logo společnosti
+// Šířka a výška faktura textu pro výpočet centrování loga
+$fakturaTextHeight = 10; // Výška textu "FAKTURA"
+
+// Logo společnosti - nyní vertikálně vycentrované
 if ($company->logo && file_exists(WWW_DIR . '/uploads/logo/' . $company->logo) && $invoice->show_logo) {
-    $pdf->Image(WWW_DIR . '/uploads/logo/' . $company->logo, 15, 15, 40);
-    $headerStartY = 15;
+    // Získáme rozměry loga
+    $logoInfo = getimagesize(WWW_DIR . '/uploads/logo/' . $company->logo);
+    $logoWidth = 40; // Šířka loga v mm
+    $logoHeight = 15; // Předpokládaná výška loga v mm
+    
+    if ($logoInfo) {
+        // Výpočet poměru stran a skutečné výšky pro zachování poměru stran
+        $logoRatio = $logoInfo[1] / $logoInfo[0];
+        $logoHeight = $logoWidth * $logoRatio;
+    }
+    
+    // Výpočet Y pozice pro vertikální centrování loga s textem "FAKTURA"
+    $logoY = $headerStartY + ($fakturaTextHeight - $logoHeight) / 2;
+    
+    // Vykreslení loga vycentrovaného vertikálně
+    $pdf->Image(WWW_DIR . '/uploads/logo/' . $company->logo, 15, $logoY, $logoWidth);
 } else {
     // Pokud logo neexistuje nebo nemá být zobrazeno, zobrazíme název společnosti stylizovaně
     $pdf->SetFont('dejavusans', 'B', 20);
-    $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
+    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
     $pdf->Cell(0, 10, $company->name, 0, 1, 'L');
     $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-    $headerStartY = 25;
 }
 
-        // Informace o faktuře
-        $pdf->SetXY(120, $headerStartY);
-        $pdf->SetFont('dejavusans', 'B', 18);
-        $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-        $pdf->Cell(0, 10, 'FAKTURA ' . $invoice->number, 0, 1, 'R');
-        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+// Nadpis FAKTURA s číslem
+$pageWidth = 180; // dostupná šířka po odečtení okrajů
+$fakturaText = 'FAKTURA';
+$fakturaWidth = 50;
+$vsWidth = 60;
+$emptyWidth = $pageWidth - $fakturaWidth - $vsWidth;
 
-        $pdf->SetFont('dejavusans', '', 10);
-        $pdf->SetXY(120, $headerStartY + 12);
-        $pdf->Cell(0, 6, 'Datum vystavení: ' . date('d.m.Y', strtotime($invoice->issue_date)), 0, 1, 'R');
-        $pdf->SetXY(120, $headerStartY + 18);
-        $pdf->Cell(0, 6, 'Datum splatnosti: ' . date('d.m.Y', strtotime($invoice->due_date)), 0, 1, 'R');
-        $pdf->SetXY(120, $headerStartY + 24);
-        $pdf->Cell(0, 6, 'Forma úhrady: ' . $invoice->payment_method, 0, 1, 'R');
+// Nastavení Y pozice pro text "FAKTURA" - stejná jako headerStartY
+$pdf->SetY($headerStartY);
+$pdf->SetX(15);
 
-        // Stav faktury
-        $pdf->SetXY(120, $headerStartY + 30);
-        $pdf->SetFont('dejavusans', 'B', 10);
-        $pdf->Cell(30, 6, 'Stav faktury:', 0, 0, 'R');
+$pdf->SetFont('dejavusans', '', 24);
+$pdf->SetTextColor($greyColor[0], $greyColor[1], $greyColor[2]);
+$pdf->Cell($emptyWidth, 10, '', 0, 0, 'L');
+$pdf->Cell($fakturaWidth, 10, $fakturaText, 0, 0, 'R');
 
-        // Nastavení barvy podle stavu faktury
-        if ($invoice->status == 'paid') {
-            $pdf->SetTextColor(0, 128, 0); // Zelená pro zaplacenou fakturu
-            $statusText = 'ZAPLACENO';
-        } elseif ($invoice->status == 'overdue') {
-            $pdf->SetTextColor(255, 0, 0); // Červená pro fakturu po splatnosti
-            $statusText = 'PO SPLATNOSTI';
-        } else {
-            $pdf->SetTextColor(255, 165, 0); // Oranžová pro vystavenou fakturu
-            $statusText = 'VYSTAVENO';
-        }
-
-        $pdf->Cell(40, 6, $statusText, 0, 1, 'R');
-        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-
-        // ------------------------------------------------
-        // SEKCE S ADRESAMI
-        // ------------------------------------------------
-        $boxStartY = $headerStartY + 45;
-
-        // Nastavení pozadí pro adresní boxy
-        $pdf->SetFillColor($secondaryColor[0], $secondaryColor[1], $secondaryColor[2]);
-
-        // Box pro dodavatele
-        $pdf->RoundedRect(15, $boxStartY, 80, 40, 2, '1111', 'DF', array(), $secondaryColor);
-
-        // Box pro odběratele
-        $pdf->RoundedRect(105, $boxStartY, 80, 40, 2, '1111', 'DF', array(), $secondaryColor);
-
-        // Nadpisy boxů
-        $pdf->SetFont('dejavusans', 'B', 12);
-        $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-
-        $pdf->SetXY(15, $boxStartY + 2);
-        $pdf->Cell(80, 6, 'DODAVATEL', 0, 0, 'C');
-
-        $pdf->SetXY(105, $boxStartY + 2);
-        $pdf->Cell(80, 6, 'ODBĚRATEL', 0, 1, 'C');
-
-        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-        $pdf->SetFont('dejavusans', '', 9);
-
-        // Informace o dodavateli
-        $pdf->SetXY(18, $boxStartY + 10);
-        $pdf->SetFont('dejavusans', 'B', 10);
-        $pdf->Cell(0, 5, $company->name, 0, 1);
-        $pdf->SetFont('dejavusans', '', 9);
-
-        $pdf->SetXY(18, $boxStartY + 15);
-        $pdf->MultiCell(75, 4, $company->address . "\n" . $company->zip . ' ' . $company->city . "\n" . $company->country, 0, 'L');
-
-        $pdf->SetXY(18, $boxStartY + 28);
-        $pdf->Cell(0, 4, 'IČ: ' . $company->ic, 0, 1);
-
-        if ($company->dic) {
-            $pdf->SetXY(18, $boxStartY + 32);
-            $pdf->Cell(0, 4, 'DIČ: ' . $company->dic, 0, 1);
-        }
-
-        // Informace o odběrateli
-        $pdf->SetXY(108, $boxStartY + 10);
-        $pdf->SetFont('dejavusans', 'B', 10);
-        $pdf->Cell(0, 5, $client->name, 0, 1);
-        $pdf->SetFont('dejavusans', '', 9);
-
-        $pdf->SetXY(108, $boxStartY + 15);
-        $pdf->MultiCell(75, 4, $client->address . "\n" . $client->zip . ' ' . $client->city . "\n" . $client->country, 0, 'L');
-
-        if ($client->ic) {
-            $pdf->SetXY(108, $boxStartY + 28);
-            $pdf->Cell(0, 4, 'IČ: ' . $client->ic, 0, 1);
-        }
-
-        if ($client->dic) {
-            $pdf->SetXY(108, $boxStartY + 32);
-            $pdf->Cell(0, 4, 'DIČ: ' . $client->dic, 0, 1);
-        }
-
-        // ------------------------------------------------
-        // SEKCE S POLOŽKAMI FAKTURY
-        // ------------------------------------------------
-        $itemsStartY = $boxStartY + 50;
-
-        // Nadpis sekce
-        $pdf->SetFont('dejavusans', 'B', 12);
-        $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-        $pdf->SetXY(15, $itemsStartY);
-        $pdf->Cell(0, 10, 'POLOŽKY FAKTURY', 0, 1, 'L');
-        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-
-        // Hlavička tabulky
-        $pdf->SetFillColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-        $pdf->SetTextColor(255, 255, 255);
-        $pdf->SetFont('dejavusans', 'B', 9);
-
-        $pdf->SetXY(15, $itemsStartY + 12);
-
-        if ($isVatPayer) {
-            // Plátce DPH - zobrazení včetně DPH
-            $pdf->Cell(80, 7, 'Položka', 1, 0, 'C', true);
-            $pdf->Cell(20, 7, 'Množství', 1, 0, 'C', true);
-            $pdf->Cell(25, 7, 'Cena/jedn.', 1, 0, 'C', true);
-            $pdf->Cell(15, 7, 'DPH %', 1, 0, 'C', true);
-            $pdf->Cell(30, 7, 'Celkem s DPH', 1, 1, 'C', true);
-        } else {
-            // Neplátce DPH - zjednodušené zobrazení bez DPH
-            $pdf->Cell(145, 7, 'Předmět fakturace', 1, 0, 'C', true);
-            $pdf->Cell(30, 7, 'Částka', 1, 1, 'C', true);
-        }
-
-        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-        $pdf->SetFont('dejavusans', '', 9);
-
-        $y = $itemsStartY + 19;
-        $totalAmount = 0;
-        $rowCounter = 0;
-
-        foreach ($invoiceItems as $item) {
-            // Střídání barvy pozadí pro lepší čitelnost
-            if ($rowCounter % 2 == 0) {
-                $pdf->SetFillColor(245, 245, 245);
-            } else {
-                $pdf->SetFillColor(255, 255, 255);
-            }
-
-            if ($isVatPayer) {
-                $pdf->SetXY(15, $y);
-                $pdf->Cell(80, 6, $item->name, 1, 0, 'L', true);
-                $pdf->Cell(20, 6, $item->quantity . ' ' . $item->unit, 1, 0, 'C', true);
-                $pdf->Cell(25, 6, number_format($item->price, 2, ',', ' ') . ' Kč', 1, 0, 'R', true);
-                $pdf->Cell(15, 6, $item->vat . ' %', 1, 0, 'C', true);
-                $pdf->Cell(30, 6, number_format($item->total, 2, ',', ' ') . ' Kč', 1, 1, 'R', true);
-            } else {
-                $pdf->SetXY(15, $y);
-                $pdf->Cell(145, 6, $item->name, 1, 0, 'L', true);
-                $pdf->Cell(30, 6, number_format($item->total, 2, ',', ' ') . ' Kč', 1, 1, 'R', true);
-            }
-
-            $y += 6;
-            $totalAmount += $item->total;
-            $rowCounter++;
-        }
-
-        // Celková částka k úhradě
-        $pdf->SetFont('dejavusans', 'B', 11);
-        $pdf->SetXY(110, $y + 5);
-        $pdf->Cell(50, 8, 'Celkem k úhradě:', 0, 0, 'R');
-        $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-        $pdf->Cell(30, 8, number_format($totalAmount, 2, ',', ' ') . ' Kč', 0, 1, 'R');
-        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-
-        // ------------------------------------------------
-        // SEKCE S DODATEČNÝMI INFORMACEMI
-        // ------------------------------------------------
-        $footerStartY = $y + 20;
-
-        // Dodavatel je/není plátce DPH
-        if (!$isVatPayer) {
-            $pdf->SetXY(15, $footerStartY);
-            $pdf->SetFont('dejavusans', 'I', 9);
-            $pdf->Cell(0, 5, 'Dodavatel není plátcem DPH.', 0, 1);
-            $footerStartY += 5;
-        }
-
-        // Poznámky
-        if ($invoice->note) {
-            $pdf->SetXY(15, $footerStartY);
-            $pdf->SetFont('dejavusans', 'B', 9);
-            $pdf->Cell(0, 5, 'Poznámka:', 0, 1);
-
-            $pdf->SetXY(15, $footerStartY + 5);
-            $pdf->SetFont('dejavusans', 'I', 9);
-            $pdf->MultiCell(110, 5, $invoice->note, 0, 'L');
-            $footerStartY += 15;
-        }
-
-        // Platební údaje
-        $pdf->SetXY(15, $footerStartY);
-        $pdf->SetFont('dejavusans', 'B', 9);
-        $pdf->Cell(0, 5, 'Platební údaje:', 0, 1);
-
-        $pdf->SetXY(15, $footerStartY + 5);
-        $pdf->SetFont('dejavusans', '', 9);
-        $pdf->Cell(0, 5, 'Bankovní spojení: ' . $company->bank_name, 0, 1);
-
-        $pdf->SetXY(15, $footerStartY + 10);
-        $pdf->Cell(0, 5, 'Číslo účtu: ' . $company->bank_account, 0, 1);
-
-        $pdf->SetXY(15, $footerStartY + 15);
-        $variableSymbol = str_replace('/', '', $invoice->number);
-        $pdf->Cell(0, 5, 'Variabilní symbol: ' . $variableSymbol, 0, 1);
-
-// Podpis
-if ($company->signature && file_exists(WWW_DIR . '/uploads/signature/' . $company->signature) && $invoice->show_signature) {
-    $pdf->Image(WWW_DIR . '/uploads/signature/' . $company->signature, 15, $footerStartY + 25, 40);
+$pdf->SetTextColor(0, 0, 0);
+$pdf->SetFont('dejavusans', 'B', 24);
+$pdf->Cell($vsWidth, 10, $invoice->number, 0, 1, 'L');
     
-    $pdf->SetXY(15, $footerStartY + 45);
-    $pdf->SetFont('dejavusans', '', 8);
-    $pdf->Cell(40, 5, 'Podpis dodavatele', 0, 1, 'C');
-}
+    // Šedý lichoběžník v záhlaví
+    $pdf->Ln(5);
+    $startY = $pdf->GetY();
+    $endY = $startY + 95; // Konec lichoběžníku
 
-        // Generování QR kódu pro platbu, pokud je požadován
-        if ($invoice->qr_payment && $company->bank_account) {
-            try {
-                // Přidáme QR kód přímo do PDF
-                $this->qrPaymentService->addQrPaymentToPdf(
-                    $pdf,
-                    150, // X souřadnice
-                    $footerStartY + 5, // Y souřadnice 
-                    40, // Šířka
-                    40, // Výška
-                    $company->bank_account,
-                    $totalAmount,
-                    $variableSymbol,
-                    'Faktura ' . $invoice->number
-                );
-            } catch (\Exception $e) {
-                // Pokud se nepodaří vygenerovat QR kód, přidáme alespoň platební údaje v textové podobě
-                $pdf->SetXY(130, $footerStartY + 10);
-                $pdf->SetFont('dejavusans', 'B', 9);
-                $pdf->Cell(0, 5, 'PRO RYCHLOU PLATBU POUŽIJTE:', 0, 1);
+    // Pozice QR kódu
+    $qrWidth = 40;
+    $qrHeight = 40;
+    $qrX = 150;
+    $blockMiddleY = ($startY + $endY) / 2;
+    $qrY = $blockMiddleY - ($qrHeight / 2);
 
-                $pdf->SetXY(130, $footerStartY + 15);
-                $pdf->SetFont('dejavusans', '', 9);
-                $pdf->Cell(0, 5, 'Částka: ' . number_format($totalAmount, 2, ',', ' ') . ' Kč', 0, 1);
+    // Souřadnice pro lichoběžník
+    $p0x = 0;
+    $p0y = $startY;
+    $p1x = 195;
+    $p1y = $startY;
+    $p2x = $qrX;
+    $p2y = $endY;
+    $p3x = 0;
+    $p3y = $endY;
 
-                $pdf->SetXY(130, $footerStartY + 20);
-                $pdf->Cell(0, 5, 'Účet: ' . $company->bank_account, 0, 1);
+    // Kreslení šedého pozadí
+    $pdf->SetFillColor($greyColor[0], $greyColor[1], $greyColor[2]);
+    $points = array($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y);
+    $pdf->Polygon($points, 'F');
 
-                $pdf->SetXY(130, $footerStartY + 25);
-                $pdf->Cell(0, 5, 'VS: ' . $variableSymbol, 0, 1);
-            }
-        }
+    // ------------------------------------------------
+    // PLATEBNÍ ÚDAJE
+    // ------------------------------------------------
+    
+    // Nastavení pro tabulku platebních údajů
+    $leftMargin = 20;
+    $labelWidth = 36;
+    $valueWidth = 75;
+    $rowHeight = 5.5;
+    $labelRightPadding = 20;
+    $valueX = $leftMargin + $labelWidth + $labelRightPadding - 20;
 
-        // ------------------------------------------------
-        // PATIČKA FAKTURY
-        // ------------------------------------------------
-        $pdf->SetY(265);
-        $pdf->SetFont('dejavusans', '', 8);
-        $pdf->SetTextColor(100, 100, 100);
-        $pdf->Cell(0, 5, 'Faktura byla vytvořena v systému ' . $company->name . '.', 0, 1, 'C');
-        $pdf->Cell(0, 5, 'Děkujeme Vám za důvěru a těšíme se na další spolupráci.', 0, 1, 'C');
+    // Prosím o zaplacení
+    $pdf->SetXY($leftMargin, $startY + 10);
+    $pdf->SetFont('dejavusans', '', 11);
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->Cell(100, 5, 'Prosím o zaplacení', 0, 1, 'L');
 
-        // Výstup PDF
-        $pdf->Output('faktura-' . $invoice->number . '.pdf', 'D');
+    // Částka - velká
+    $pdf->SetXY($leftMargin, $startY + 16);
+    $pdf->SetFont('dejavusans', 'B', 28);
+    $pdf->Cell(100, 10, number_format($invoice->total, 0, ',', ' ') . ' Kč', 0, 1, 'L');
 
-        $this->terminate();
+    // Mezera před platebními údaji
+    $pdf->Ln(5);
+
+    // Forma úhrady
+    $pdf->SetXY($leftMargin, $pdf->GetY());
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell($labelWidth, $rowHeight, 'Forma úhrady:', 0, 0, 'L');
+    $pdf->SetX($valueX);
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell($valueWidth, $rowHeight, 'bankovním převodem', 0, 1, 'L');
+
+    // Číslo účtu
+    $pdf->SetXY($leftMargin, $pdf->GetY());
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell($labelWidth, $rowHeight, 'Číslo účtu:', 0, 0, 'L');
+    $pdf->SetX($valueX);
+    $pdf->SetFont('dejavusans', 'B', 10);
+    $pdf->Cell($valueWidth, $rowHeight, $company->bank_account, 0, 1, 'L');
+
+    // Mezera před variabilním symbolem
+    $pdf->Ln(2);
+
+    // Variabilní symbol
+    $pdf->SetXY($leftMargin, $pdf->GetY());
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell($labelWidth, $rowHeight, 'Variabilní symbol:', 0, 0, 'L');
+    $pdf->SetX($valueX);
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell($valueWidth, $rowHeight, $invoice->number, 0, 1, 'L');
+
+    // Datum vystavení
+    $pdf->SetXY($leftMargin, $pdf->GetY());
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell($labelWidth, $rowHeight, 'Datum vystavení:', 0, 0, 'L');
+    $pdf->SetX($valueX);
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell($valueWidth, $rowHeight, date('d. m. Y', strtotime($invoice->issue_date)), 0, 1, 'L');
+
+    // Datum splatnosti
+    $pdf->SetXY($leftMargin, $pdf->GetY());
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell($labelWidth, $rowHeight, 'Datum splatnosti:', 0, 0, 'L');
+    $pdf->SetX($valueX);
+    $pdf->SetFont('dejavusans', 'B', 10);
+    $pdf->Cell($valueWidth, $rowHeight, date('d. m. Y', strtotime($invoice->due_date)), 0, 1, 'L');
+
+    // Mezera před dalšími údaji
+    $pdf->Ln(2);
+
+    // Banka
+    $pdf->SetXY($leftMargin, $pdf->GetY());
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell($labelWidth, $rowHeight, 'Banka:', 0, 0, 'L');
+    $pdf->SetX($valueX);
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell($valueWidth, $rowHeight, $company->bank_name, 0, 1, 'L');
+
+    // QR kód pro platbu
+    if ($invoice->qr_payment) {
+        $cleanVs = preg_replace('/\D/', '', $invoice->number);
+        // Přidáme QR kód přímo do PDF
+        $this->qrPaymentService->addQrPaymentToPdf(
+            $pdf,
+            $qrX,
+            $qrY,
+            $qrWidth,
+            $qrHeight,
+            $company->bank_account,
+            $invoice->total,
+            $cleanVs,
+            'Faktura ' . $invoice->number
+        );
     }
+
+    // ------------------------------------------------
+    // SEKCE S DODAVATELEM A ODBĚRATELEM
+    // ------------------------------------------------
+    
+    // Začátek sekce - pod lichoběžníkem
+    $pdf->SetY($endY + 5);
+
+    // Dodavatel - bez lomítka, barva #cacaca
+    $pdf->SetTextColor($greyColor[0], $greyColor[1], $greyColor[2]);
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell(90, 8, 'Dodavatel', 0, 0, 'L');
+
+    // Odběratel - bez lomítka, barva #cacaca
+    $pdf->Cell(90, 8, 'Odběratel', 0, 1, 'L');
+
+    // Údaje dodavatele
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->SetFont('dejavusans', 'B', 10);
+    $pdf->Cell(90, 6, $company->name, 0, 0, 'L');
+
+    // Údaje odběratele
+    $pdf->SetFont('dejavusans', 'B', 10);
+    $pdf->Cell(90, 6, $client->name, 0, 1, 'L');
+
+    // Pokračování dodavatele
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell(90, 6, $company->address . ', ' . $company->zip . ' ' . $company->city, 0, 0, 'L');
+
+    // Pokračování odběratele
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell(90, 6, $client->address . ', ' . $client->zip . ' ' . $client->city, 0, 1, 'L');
+
+    // IČO dodavatele
+    $pdf->Cell(90, 6, 'IČO: ' . $company->ic, 0, 0, 'L');
+    
+    // IČO odběratele (pokud existuje)
+    $clientIcText = '';
+    if (!empty($client->ic)) {
+        $clientIcText = 'IČO: ' . $client->ic;
+    }
+    $pdf->Cell(90, 6, $clientIcText, 0, 1, 'L');
+
+    // DIČ dodavatele nebo "Nejsem plátce DPH"
+    if ($isVatPayer && !empty($company->dic)) {
+        $pdf->Cell(90, 6, 'DIČ: ' . $company->dic, 0, 0, 'L');
+    } else {
+        $pdf->Cell(90, 6, 'Nejsem plátce DPH.', 0, 0, 'L');
+    }
+    
+    // DIČ odběratele (pokud existuje)
+    $clientDicText = '';
+    if (!empty($client->dic)) {
+        $clientDicText = 'DIČ: ' . $client->dic;
+    }
+    $pdf->Cell(90, 6, $clientDicText, 0, 1, 'L');
+
+    // ------------------------------------------------
+    // SEKCE S POLOŽKAMI FAKTURY
+    // ------------------------------------------------
+    
+    // Fakturuji Vám za - barva #cacaca
+    $pdf->Ln(5);
+    $pdf->SetTextColor($greyColor[0], $greyColor[1], $greyColor[2]);
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell(180, 8, 'Fakturuji Vám za', 0, 1, 'L');
+
+    // Položky faktury
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->SetFont('dejavusans', '', 10);
+
+    foreach ($invoiceItems as $key => $item) {
+        $pdf->Cell(180, 8, $item->name, 'B', 1, 'L');
+        
+        // Pokud je popis, přidáme ho na další řádek
+        if (!empty($item->description)) {
+            $pdf->SetFont('dejavusans', 'I', 9);
+            $pdf->Cell(180, 6, $item->description, 0, 1, 'L');
+            $pdf->SetFont('dejavusans', '', 10);
+        }
+    }
+
+    // Celkem zaplaťte
+    $pdf->Ln(5);
+    $pdf->SetFont('dejavusans', '', 10);
+    $pdf->Cell(100, 8, '', 0, 0, 'L');
+    $pdf->Cell(30, 8, 'Celkem zaplaťte:', 0, 0, 'R');
+    $pdf->SetFont('dejavusans', 'B', 10);
+    $pdf->Cell(50, 8, number_format($invoice->total, 0, ',', ' ') . ' Kč', 0, 1, 'L');
+
+    // ------------------------------------------------
+    // PATIČKA FAKTURY
+    // ------------------------------------------------
+    
+    // Vypnutí automatického zalomení stránky
+    $pdf->SetAutoPageBreak(false);
+    
+    // Definice rozměrů pro patičku
+    $pageWidth = 210; // A4 šířka
+    $pageHeight = 297; // A4 výška
+    $footerHeight = 20; // Výška patičky
+    
+    // Souřadnice pro patičku
+    $footerStartY = $pageHeight - $footerHeight;
+    $footerEndY = $pageHeight;
+    
+    // Souřadnice pro lichoběžník patičky
+    $rightEdge = $pageWidth;
+    $leftEdgeTop = 70; // 2/3 šířky od pravého okraje nahoře
+    $leftEdgeBottom = 50; // Širší dole - zkosení doleva
+    
+    $p0x = $rightEdge;
+    $p0y = $footerStartY;
+    $p1x = $leftEdgeTop;
+    $p1y = $footerStartY;
+    $p2x = $leftEdgeBottom;
+    $p2y = $footerEndY;
+    $p3x = $rightEdge;
+    $p3y = $footerEndY;
+    
+    // Kreslení tmavého pozadí patičky
+    $pdf->SetFillColor($footerColor[0], $footerColor[1], $footerColor[2]);
+    $points = array($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y);
+    $pdf->Polygon($points, 'F');
+    
+    // Text pro patičku - bílá barva
+    $pdf->SetTextColor(255, 255, 255);
+    $pdf->SetFont('dejavusans', '', 9);
+    
+    // Výpočet pozic pro sloupce v patičce
+    $colWidth = 60;
+    $col1X = $leftEdgeTop + 15;
+    $col2X = $col1X + $colWidth + 10;
+    $verticalMiddle = $footerStartY + ($footerHeight / 2) - 5;
+    
+    // První sloupec - jméno a telefon
+    $pdf->SetXY($col1X, $verticalMiddle);
+    $pdf->Cell($colWidth, 6, $company->name, 0, 1, 'L');
+    $pdf->SetXY($col1X, $verticalMiddle + 6);
+    $pdf->Cell($colWidth, 6, $company->phone, 0, 1, 'L');
+    
+    // Druhý sloupec - email
+    $pdf->SetXY($col2X, $verticalMiddle);
+    $pdf->Cell($colWidth, 6, 'Email:', 0, 1, 'L');
+    $pdf->SetXY($col2X, $verticalMiddle + 6);
+    $pdf->Cell($colWidth, 6, $company->email, 0, 1, 'L');
+
+    // Výstup PDF
+    $pdf->Output('faktura-' . $invoice->number . '.pdf', 'D');
+    $this->terminate();
+}
 
     public function createComponentInvoiceForm(): Form
     {
