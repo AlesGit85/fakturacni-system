@@ -40,60 +40,92 @@ final class Template_21099fea76 extends Latte\Runtime\Template
 
 <div class="row">
     <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                Kontaktní údaje
+        <div class="card shadow-sm rounded-lg border-0">
+            <div class="card-header d-flex align-items-center">
+                <i class="bi bi-person-lines-fill me-2"></i>
+                <span>Kontaktní údaje</span>
             </div>
             <div class="card-body">
-                <p><strong>Adresa:</strong> ';
-		echo LR\Filters::escapeHtmlText($client->address) /* line 11 */;
+                <p><strong><i class="bi bi-geo-alt text-primary me-2"></i>Adresa:</strong> ';
+		echo LR\Filters::escapeHtmlText($client->address) /* line 12 */;
 		echo '</p>
-                <p><strong>Město:</strong> ';
-		echo LR\Filters::escapeHtmlText($client->city) /* line 12 */;
+                <p><strong><i class="bi bi-building text-primary me-2"></i>Město:</strong> ';
+		echo LR\Filters::escapeHtmlText($client->city) /* line 13 */;
 		echo '</p>
-                <p><strong>PSČ:</strong> ';
-		echo LR\Filters::escapeHtmlText($client->zip) /* line 13 */;
+                <p><strong><i class="bi bi-mailbox text-primary me-2"></i>PSČ:</strong> ';
+		echo LR\Filters::escapeHtmlText($client->zip) /* line 14 */;
 		echo '</p>
-                <p><strong>Země:</strong> ';
-		echo LR\Filters::escapeHtmlText($client->country) /* line 14 */;
+                <p><strong><i class="bi bi-globe text-primary me-2"></i>Země:</strong> ';
+		echo LR\Filters::escapeHtmlText($client->country) /* line 15 */;
 		echo '</p>
-                <p><strong>E-mail:</strong> ';
-		echo LR\Filters::escapeHtmlText($client->email) /* line 15 */;
+';
+		if ($client->contact_person) /* line 16 */ {
+			echo '                <p><strong><i class="bi bi-person text-primary me-2"></i>Kontaktní osoba:</strong> ';
+			echo LR\Filters::escapeHtmlText($client->contact_person) /* line 16 */;
+			echo '</p>';
+		}
+		echo '
+                <p><strong><i class="bi bi-envelope text-primary me-2"></i>E-mail:</strong> ';
+		echo LR\Filters::escapeHtmlText($client->email) /* line 17 */;
 		echo '</p>
-                <p><strong>Telefon:</strong> ';
-		echo LR\Filters::escapeHtmlText($client->phone) /* line 16 */;
+                <p><strong><i class="bi bi-telephone text-primary me-2"></i>Telefon:</strong> ';
+		echo LR\Filters::escapeHtmlText($client->phone) /* line 18 */;
 		echo '</p>
             </div>
         </div>
     </div>
     
     <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                Fakturační údaje
+        <div class="card shadow-sm rounded-lg border-0">
+            <div class="card-header d-flex align-items-center">
+                <i class="bi bi-receipt me-2"></i>
+                <span>Fakturační údaje</span>
             </div>
             <div class="card-body">
-                <p><strong>IČ:</strong> ';
-		echo LR\Filters::escapeHtmlText($client->ic) /* line 27 */;
+                <p><strong><i class="bi bi-upc text-primary me-2"></i>IČ:</strong> ';
+		echo LR\Filters::escapeHtmlText($client->ic) /* line 30 */;
 		echo '</p>
-                <p><strong>DIČ:</strong> ';
-		echo LR\Filters::escapeHtmlText($client->dic) /* line 28 */;
-		echo '</p>
-                <p><strong>Bankovní účet:</strong> ';
-		echo LR\Filters::escapeHtmlText($client->bank_account) /* line 29 */;
+                <p><strong><i class="bi bi-upc-scan text-primary me-2"></i>DIČ:</strong> ';
+		echo LR\Filters::escapeHtmlText($client->dic) /* line 31 */;
 		echo '</p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="mt-4">
+<div class="mt-4 d-flex gap-2">
     <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$client->id])) /* line 36 */;
-		echo '" class="btn btn-warning">Upravit</a>
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$client->id])) /* line 38 */;
+		echo '" class="btn btn-warning">
+        <i class="bi bi-pencil-square"></i> Upravit
+    </a>
+    
+';
+		$invoiceCount = $presenter->getClientInvoiceCount($client->id) /* line 42 */;
+		if ($invoiceCount == 0) /* line 43 */ {
+			echo '        <a href="';
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$client->id])) /* line 44 */;
+			echo '" class="btn btn-danger" onclick="return confirm(\'Opravdu chcete smazat tohoto klienta?\')">
+            <i class="bi bi-trash"></i> Smazat
+        </a>
+';
+		} else /* line 47 */ {
+			echo '        <button class="btn btn-danger" disabled title="Klient má ';
+			echo LR\Filters::escapeHtmlAttr($invoiceCount) /* line 48 */;
+			echo ' faktur a nelze ho smazat">
+            <i class="bi bi-trash"></i> Smazat
+        </button>
+        <small class="text-danger d-block mt-2">Pro smazání klienta je nutné nejprve smazat všechny jeho faktury (';
+			echo LR\Filters::escapeHtmlText($invoiceCount) /* line 51 */;
+			echo ')</small>
+';
+		}
+		echo '    
     <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 37 */;
-		echo '" class="btn btn-secondary">Zpět na seznam klientů</a>
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 54 */;
+		echo '" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Zpět na seznam klientů
+    </a>
 </div>
 ';
 	}

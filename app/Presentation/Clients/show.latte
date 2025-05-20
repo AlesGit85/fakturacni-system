@@ -3,46 +3,56 @@
 
 <div class="row">
     <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                Kontaktní údaje
+        <div class="card shadow-sm rounded-lg border-0">
+            <div class="card-header d-flex align-items-center">
+                <i class="bi bi-person-lines-fill me-2"></i>
+                <span>Kontaktní údaje</span>
             </div>
             <div class="card-body">
-                <p><strong>Adresa:</strong> {$client->address}</p>
-                <p><strong>Město:</strong> {$client->city}</p>
-                <p><strong>PSČ:</strong> {$client->zip}</p>
-                <p><strong>Země:</strong> {$client->country}</p>
-                <p><strong>E-mail:</strong> {$client->email}</p>
-                <p><strong>Telefon:</strong> {$client->phone}</p>
+                <p><strong><i class="bi bi-geo-alt text-primary me-2"></i>Adresa:</strong> {$client->address}</p>
+                <p><strong><i class="bi bi-building text-primary me-2"></i>Město:</strong> {$client->city}</p>
+                <p><strong><i class="bi bi-mailbox text-primary me-2"></i>PSČ:</strong> {$client->zip}</p>
+                <p><strong><i class="bi bi-globe text-primary me-2"></i>Země:</strong> {$client->country}</p>
+                {if $client->contact_person}<p><strong><i class="bi bi-person text-primary me-2"></i>Kontaktní osoba:</strong> {$client->contact_person}</p>{/if}
+                <p><strong><i class="bi bi-envelope text-primary me-2"></i>E-mail:</strong> {$client->email}</p>
+                <p><strong><i class="bi bi-telephone text-primary me-2"></i>Telefon:</strong> {$client->phone}</p>
             </div>
         </div>
     </div>
     
     <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                Fakturační údaje
+        <div class="card shadow-sm rounded-lg border-0">
+            <div class="card-header d-flex align-items-center">
+                <i class="bi bi-receipt me-2"></i>
+                <span>Fakturační údaje</span>
             </div>
             <div class="card-body">
-                <p><strong>IČ:</strong> {$client->ic}</p>
-                <p><strong>DIČ:</strong> {$client->dic}</p>
-                <p><strong>Bankovní účet:</strong> {$client->bank_account}</p>
+                <p><strong><i class="bi bi-upc text-primary me-2"></i>IČ:</strong> {$client->ic}</p>
+                <p><strong><i class="bi bi-upc-scan text-primary me-2"></i>DIČ:</strong> {$client->dic}</p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="mt-4">
-    <a n:href="edit $client->id" class="btn btn-warning">Upravit</a>
+<div class="mt-4 d-flex gap-2">
+    <a n:href="edit $client->id" class="btn btn-warning">
+        <i class="bi bi-pencil-square"></i> Upravit
+    </a>
     
 {var $invoiceCount = $presenter->getClientInvoiceCount($client->id)}
     {if $invoiceCount == 0}
-        <a n:href="delete $client->id" class="btn btn-danger" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')">Smazat</a>
+        <a n:href="delete $client->id" class="btn btn-danger" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')">
+            <i class="bi bi-trash"></i> Smazat
+        </a>
     {else}
-        <button class="btn btn-danger" disabled title="Klient má {$invoiceCount} faktur a nelze ho smazat">Smazat</button>
+        <button class="btn btn-danger" disabled title="Klient má {$invoiceCount} faktur a nelze ho smazat">
+            <i class="bi bi-trash"></i> Smazat
+        </button>
         <small class="text-danger d-block mt-2">Pro smazání klienta je nutné nejprve smazat všechny jeho faktury ({$invoiceCount})</small>
     {/if}
     
-    <a n:href="default" class="btn btn-secondary">Zpět na seznam klientů</a>
+    <a n:href="default" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Zpět na seznam klientů
+    </a>
 </div>
 {/block}

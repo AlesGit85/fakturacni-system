@@ -32,7 +32,7 @@ final class Template_d706c008be extends Latte\Runtime\Template
 		extract($this->params);
 
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
-			foreach (array_intersect_key(['client' => '20'], $this->params) as $ʟ_v => $ʟ_l) {
+			foreach (array_intersect_key(['client' => '41'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
@@ -47,81 +47,200 @@ final class Template_d706c008be extends Latte\Runtime\Template
 		extract($ʟ_args);
 		unset($ʟ_args);
 
-		echo '<h1>Klienti</h1>
+		echo '<div class="clients-container">
+    <!-- Záhlaví s názvem sekce a počtem klientů -->
+    <div class="section-header-row mb-4">
+        <div>
+            <h1 class="section-title mb-0">Klienti <span class="total-count">';
+		echo LR\Filters::escapeHtmlText($clients->count()) /* line 6 */;
+		echo ' společností</span></h1>
+            <p class="text-muted">Seznam všech klientů v systému</p>
+        </div>
+        <div class="header-actions">
+            <a href="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 10 */;
+		echo '" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Přidat klienta
+            </a>
+        </div>
+    </div>
 
-<p><a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 4 */;
-		echo '" class="btn btn-success">Přidat nového klienta</a></p>
+    <!-- Panel s vyhledáváním -->
+    <div class="search-panel">
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" id="clientSearch" class="search-input" placeholder="Vyhledat klienta...">
+            </div>
+        </div>
+    </div>
 
+    <!-- Tabulka klientů -->
 ';
-		if ($clients->count() > 0) /* line 6 */ {
-			echo '<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Název</th>
-                <th>IČ</th>
-                <th>DIČ</th>
-                <th>E-mail</th>
-                <th>Telefon</th>
-                <th>Akce</th>
-            </tr>
-        </thead>
-        <tbody>
+		if ($clients->count() > 0) /* line 27 */ {
+			echo '    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th class="sortable-column">Společnost</th>
+                    <th>IČ</th>
+                    <th>Kontaktní osoba</th>
+                    <th>Email</th>
+                    <th>Telefon</th>
+                    <th class="text-end">Akce</th>
+                </tr>
+            </thead>
+            <tbody>
 ';
-			foreach ($clients as $client) /* line 20 */ {
-				echo '            <tr>
-                <td>';
-				echo LR\Filters::escapeHtmlText($client->name) /* line 22 */;
-				echo '</td>
-                <td>';
-				echo LR\Filters::escapeHtmlText($client->ic) /* line 23 */;
-				echo '</td>
-                <td>';
-				echo LR\Filters::escapeHtmlText($client->dic) /* line 24 */;
-				echo '</td>
-                <td>';
-				echo LR\Filters::escapeHtmlText($client->email) /* line 25 */;
-				echo '</td>
-                <td>';
-				echo LR\Filters::escapeHtmlText($client->phone) /* line 26 */;
-				echo '</td>
-                <td>
-                 <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('show', [$client->id])) /* line 28 */;
-				echo '" class="btn btn-primary btn-sm">Detail</a>
-                  <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$client->id])) /* line 29 */;
-				echo '" class="btn btn-warning btn-sm">Upravit</a>
-    
+			foreach ($clients as $client) /* line 41 */ {
+				echo '                <tr class="data-row">
+                    <td class="company-column">
+                        <div class="company-name">
+                            <strong>';
+				echo LR\Filters::escapeHtmlText($client->name) /* line 45 */;
+				echo '</strong>
+                        </div>
 ';
-				$invoiceCount = $presenter->getClientInvoiceCount($client->id) /* line 31 */;
-				if ($invoiceCount == 0) /* line 32 */ {
-					echo '                     <a href="';
-					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$client->id])) /* line 33 */;
-					echo '" class="btn btn-danger btn-sm" onclick="return confirm(\'Opravdu chcete smazat tohoto klienta?\')">Smazat</a>
-';
-				} else /* line 34 */ {
-					echo '                     <button class="btn btn-danger btn-sm" disabled title="Klient má ';
-					echo LR\Filters::escapeHtmlAttr($invoiceCount) /* line 35 */;
-					echo ' faktur a nelze ho smazat">Smazat</button>
+				if ($client->city) /* line 47 */ {
+					echo '                        <div class="company-location text-muted">
+                            <small>';
+					echo LR\Filters::escapeHtmlText($client->city) /* line 49 */;
+					echo ', ';
+					echo LR\Filters::escapeHtmlText($client->country) /* line 49 */;
+					echo '</small>
+                        </div>
 ';
 				}
-				echo '                </td>
-            </tr>
+				echo '                    </td>
+                    <td>';
+				echo LR\Filters::escapeHtmlText($client->ic) /* line 53 */;
+				echo '</td>
+                    <td>
+';
+				if ($client->contact_person) /* line 55 */ {
+					echo '                            ';
+					echo LR\Filters::escapeHtmlText($client->contact_person) /* line 56 */;
+					echo "\n";
+				} else /* line 57 */ {
+					echo '                            <span class="text-muted">—</span>
+';
+				}
+				echo '                    </td>
+                    <td>
+';
+				if ($client->email) /* line 62 */ {
+					echo '                            <a href="mailto:';
+					echo LR\Filters::escapeHtmlAttr($client->email) /* line 63 */;
+					echo '" class="client-email">';
+					echo LR\Filters::escapeHtmlText($client->email) /* line 63 */;
+					echo '</a>
+';
+				} else /* line 64 */ {
+					echo '                            <span class="text-muted">—</span>
+';
+				}
+				echo '                    </td>
+                    <td>
+';
+				if ($client->phone) /* line 69 */ {
+					echo '                            ';
+					echo LR\Filters::escapeHtmlText($client->phone) /* line 70 */;
+					echo "\n";
+				} else /* line 71 */ {
+					echo '                            <span class="text-muted">—</span>
+';
+				}
+				echo '                    </td>
+                    <td class="actions-column">
+                        <div class="action-buttons">
+                            <a href="';
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('show', [$client->id])) /* line 77 */;
+				echo '" class="btn btn-icon" title="Detail klienta">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="';
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$client->id])) /* line 80 */;
+				echo '" class="btn btn-icon" title="Upravit klienta">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+';
+				$invoiceCount = $presenter->getClientInvoiceCount($client->id) /* line 84 */;
+				if ($invoiceCount == 0) /* line 85 */ {
+					echo '                                <a href="';
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$client->id])) /* line 86 */;
+					echo '" class="btn btn-icon text-danger" onclick="return confirm(\'Opravdu chcete smazat tohoto klienta?\')" title="Smazat klienta">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+';
+				} else /* line 89 */ {
+					echo '                                <a class="btn btn-icon text-muted" title="Klient má ';
+					echo LR\Filters::escapeHtmlAttr($invoiceCount) /* line 90 */;
+					echo ' faktur a nelze ho smazat" disabled>
+                                    <i class="bi bi-trash"></i>
+                                </a>
+';
+				}
+				echo '                        </div>
+                    </td>
+                </tr>
 ';
 
 			}
 
-			echo '        </tbody>
-    </table>
-</div>
+			echo '            </tbody>
+        </table>
+    </div>
+
+    <!-- Stránkování -->
+    <div class="pagination-container mt-3">
+        <div class="pagination-info">
+            Strana 1 z 1
+        </div>
+        <div class="pagination-controls">
+            <button class="btn btn-icon pagination-button" disabled>
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="btn btn-icon pagination-button" disabled>
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </div>
 ';
-		} else /* line 43 */ {
-			echo '<div class="alert alert-info">
-    Zatím nebyl přidán žádný klient.
-</div>
+		} else /* line 116 */ {
+			echo '    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="bi bi-people"></i>
+        </div>
+        <h3>Zatím zde nejsou žádní klienti</h3>
+        <p>Začněte přidáním nového klienta do systému</p>
+        <a href="';
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 123 */;
+			echo '" class="btn btn-primary mt-3">
+            <i class="bi bi-person-plus"></i> Přidat prvního klienta
+        </a>
+    </div>
 ';
 		}
+		echo '</div>
+
+<script>
+// Přidáme JavaScript pro vyhledávání v tabulce
+document.addEventListener(\'DOMContentLoaded\', function() {
+    const searchInput = document.getElementById(\'clientSearch\');
+    if (!searchInput) return;
+
+    searchInput.addEventListener(\'input\', function() {
+        const searchText = this.value.toLowerCase();
+        const rows = document.querySelectorAll(\'.data-table tbody tr\');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchText) ? \'\' : \'none\';
+        });
+    });
+});
+</script>
+';
 	}
 }

@@ -1,7 +1,117 @@
 {block content}
-<h1>Přidat klienta</h1>
+<div class="client-form-container">
+    <div class="page-header">
+        <h1 class="main-title">Přidat nového klienta</h1>
+        <p class="text-muted">Vyplňte níže uvedené údaje pro přidání nového klienta do systému</p>
+    </div>
 
-{control clientForm}
-
-<p><a n:href="default">Zpět na seznam klientů</a></p>
+    <div class="card shadow-sm rounded-lg border-0">
+        <div class="card-body p-4">
+            {form clientForm class => 'row g-4'}
+                <!-- Sekce se základními údaji -->
+                <div class="col-12">
+                    <div class="section-header">
+                        <i class="bi bi-person-vcard"></i>
+                        <h2 class="section-title">Základní údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input name class => 'form-control'}
+                        {label name class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input email class => 'form-control'}
+                        {label email class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input phone class => 'form-control'}
+                        {label phone class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input contact_person class => 'form-control'}
+                        {label contact_person class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <!-- Sekce s adresou -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-geo-alt"></i>
+                        <h2 class="section-title">Adresa</h2>
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <div class="form-floating">
+                        {input address class => 'form-control'}
+                        {label address class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        {input city class => 'form-control'}
+                        {label city class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        {input zip class => 'form-control'}
+                        {label zip class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        {input country class => 'form-control'}
+                        {label country class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <!-- Fakturační údaje -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-receipt"></i>
+                        <h2 class="section-title">Fakturační údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input ic class => 'form-control'}
+                        {label ic class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input dic class => 'form-control'}
+                        {label dic class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-12 mt-4 d-flex justify-content-between">
+                    <a n:href="default" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-arrow-left"></i> Zpět na seznam klientů
+                    </a>
+                    <button n:name="send" class="btn btn-primary btn-lg">
+                        <i class="bi bi-check-lg"></i> Uložit klienta
+                    </button>
+                </div>
+            {/form}
+        </div>
+    </div>
+</div>
 {/block}

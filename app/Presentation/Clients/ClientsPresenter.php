@@ -38,38 +38,38 @@ class ClientsPresenter extends Nette\Application\UI\Presenter
         $this->template->client = $client;
     }
 
-    protected function createComponentClientForm(): Form
-    {
-        $form = new Form;
+protected function createComponentClientForm(): Form
+{
+    $form = new Form;
 
-        $form->addText('name', 'Název společnosti:')
-            ->setRequired('Zadejte název společnosti');
+    $form->addText('name', 'Název společnosti:')
+        ->setRequired('Zadejte název společnosti');
 
-        $form->addTextArea('address', 'Adresa:')
-            ->setRequired('Zadejte adresu');
+    $form->addTextArea('address', 'Adresa:')
+        ->setRequired('Zadejte adresu');
 
-        $form->addText('city', 'Město:')
-            ->setRequired('Zadejte město');
+    $form->addText('city', 'Město:')
+        ->setRequired('Zadejte město');
 
-        $form->addText('zip', 'PSČ:')
-            ->setRequired('Zadejte PSČ');
+    $form->addText('zip', 'PSČ:')
+        ->setRequired('Zadejte PSČ');
 
-        $form->addText('country', 'Země:')
-            ->setRequired('Zadejte zemi')
-            ->setDefaultValue('Česká republika');
+    $form->addText('country', 'Země:')
+        ->setRequired('Zadejte zemi')
+        ->setDefaultValue('Česká republika');
 
-        $form->addText('ic', 'IČ:');
-        $form->addText('dic', 'DIČ:');
-        $form->addEmail('email', 'E-mail:');
-        $form->addText('phone', 'Telefon:');
-        $form->addText('bank_account', 'Bankovní účet:');
+    $form->addText('contact_person', 'Kontaktní osoba:');
+    $form->addText('ic', 'IČ:');
+    $form->addText('dic', 'DIČ:');
+    $form->addEmail('email', 'E-mail:');
+    $form->addText('phone', 'Telefon:');
 
-        $form->addSubmit('send', 'Uložit');
+    $form->addSubmit('send', 'Uložit');
 
-        $form->onSuccess[] = [$this, 'clientFormSucceeded'];
+    $form->onSuccess[] = [$this, 'clientFormSucceeded'];
 
-        return $form;
-    }
+    return $form;
+}
 
     public function clientFormSucceeded(Form $form, \stdClass $data): void
     {
