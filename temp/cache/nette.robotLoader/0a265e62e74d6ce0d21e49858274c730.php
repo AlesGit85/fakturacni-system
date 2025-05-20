@@ -65,7 +65,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1747669979,
+      1 => 1747672720,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -87,7 +87,7 @@ return array (
     'App\\Presentation\\Settings\\SettingsTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsShowTemplate' => 2,
+    'App\\Presentation\\Clients\\ClientsShowTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsEditTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesDeleteTemplate' => 3,

@@ -96,9 +96,6 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
                                 ';
 		echo Nette\Bridges\FormsLatte\Runtime::item('client_id', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 26 */;
 		echo '
-                                <div class="form-text"><a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Clients:add')) /* line 27 */;
-		echo '" target="_blank">Přidat nového klienta</a></div>
                             </div>
                         </div>
                     </div>
@@ -107,62 +104,62 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_name', $this->global)->getLabel()) /* line 35 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_name', $this->global)->getLabel()) /* line 34 */;
 		echo '
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('client_name', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 36 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('client_name', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 35 */;
 		echo '
                             </div>
                             <div class="col-md-6">
                                 ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_ic', $this->global)->getLabel()) /* line 39 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_ic', $this->global)->getLabel()) /* line 38 */;
 		echo '
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('client_ic', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 40 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('client_ic', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 39 */;
 		echo '
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_address', $this->global)->getLabel()) /* line 45 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_address', $this->global)->getLabel()) /* line 44 */;
 		echo '
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('client_address', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 46 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('client_address', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 45 */;
 		echo '
                             </div>
                             <div class="col-md-6">
                                 ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_dic', $this->global)->getLabel()) /* line 49 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_dic', $this->global)->getLabel()) /* line 48 */;
 		echo '
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('client_dic', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 50 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('client_dic', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 49 */;
 		echo '
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_city', $this->global)->getLabel()) /* line 55 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_city', $this->global)->getLabel()) /* line 54 */;
 		echo '
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('client_city', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 56 */;
-		echo '
-                            </div>
-                            <div class="col-md-4">
-                                ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_zip', $this->global)->getLabel()) /* line 59 */;
-		echo '
-                                ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('client_zip', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 60 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('client_city', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 55 */;
 		echo '
                             </div>
                             <div class="col-md-4">
                                 ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_country', $this->global)->getLabel()) /* line 63 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_zip', $this->global)->getLabel()) /* line 58 */;
 		echo '
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('client_country', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 64 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('client_zip', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 59 */;
+		echo '
+                            </div>
+                            <div class="col-md-4">
+                                ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('client_country', $this->global)->getLabel()) /* line 62 */;
+		echo '
+                                ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('client_country', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 63 */;
 		echo '
                             </div>
                         </div>
@@ -174,30 +171,30 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
                         <div class="col-md-4">
                             <div class="mb-3">
                                 ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('number', $this->global)->getLabel()) /* line 74 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('number', $this->global)->getLabel()) /* line 73 */;
 		echo '
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('number', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 75 */;
-		echo '
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('issue_date', $this->global)->getLabel()) /* line 80 */;
-		echo '
-                                ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('issue_date', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 81 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('number', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 74 */;
 		echo '
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-3">
                                 ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('due_date', $this->global)->getLabel()) /* line 86 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('issue_date', $this->global)->getLabel()) /* line 79 */;
 		echo '
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('due_date', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 87 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('issue_date', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 80 */;
+		echo '
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('due_date', $this->global)->getLabel()) /* line 85 */;
+		echo '
+                                ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('due_date', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 86 */;
 		echo '
                             </div>
                         </div>
@@ -207,10 +204,10 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
                         <div class="col-md-6">
                             <div class="mb-3">
                                 ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('payment_method', $this->global)->getLabel()) /* line 95 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('payment_method', $this->global)->getLabel()) /* line 94 */;
 		echo '
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('payment_method', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 96 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('payment_method', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 95 */;
 		echo '
                             </div>
                         </div>
@@ -225,27 +222,27 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
                         <div class="col-md-4">
                             <div class="mb-3 form-check">
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('qr_payment', $this->global)->getControl() /* line 109 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('qr_payment', $this->global)->getControl() /* line 108 */;
 		echo ' ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('qr_payment', $this->global)->getLabel()) /* line 109 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('qr_payment', $this->global)->getLabel()) /* line 108 */;
 		echo '
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-3 form-check">
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('show_logo', $this->global)->getControl() /* line 114 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('show_logo', $this->global)->getControl() /* line 113 */;
 		echo ' ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('show_logo', $this->global)->getLabel()) /* line 114 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('show_logo', $this->global)->getLabel()) /* line 113 */;
 		echo '
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-3 form-check">
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('show_signature', $this->global)->getControl() /* line 119 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('show_signature', $this->global)->getControl() /* line 118 */;
 		echo ' ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('show_signature', $this->global)->getLabel()) /* line 119 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('show_signature', $this->global)->getLabel()) /* line 118 */;
 		echo '
                             </div>
                         </div>
@@ -254,7 +251,7 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
             </div>
             
 ';
-		if ($isVatPayer) /* line 126 */ {
+		if ($isVatPayer) /* line 125 */ {
 			echo '            <!-- Formulář pro plátce DPH - s položkami a DPH -->
             <div class="card mb-4">
                 <div class="card-header">
@@ -307,7 +304,7 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
                 </div>
             </div>
 ';
-		} else /* line 178 */ {
+		} else /* line 177 */ {
 			echo '            <!-- Formulář pro neplátce DPH - zjednodušený bez DPH -->
             <div class="card mb-4">
                 <div class="card-header">
@@ -340,7 +337,7 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
                 <div class="card-body">
                     <div class="mb-3">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('note', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 209 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('note', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 208 */;
 		echo '
                     </div>
                 </div>
@@ -348,14 +345,14 @@ final class Template_aebea78be5 extends Latte\Runtime\Template
             
             <div class="mb-3">
                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary']) /* line 215 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary']) /* line 214 */;
 		echo '
                 <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 216 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 215 */;
 		echo '" class="btn btn-secondary">Zpět na seznam faktur</a>
             </div>
         ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 218 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 217 */;
 
 		echo '
     </div>
