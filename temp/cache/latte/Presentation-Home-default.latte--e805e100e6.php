@@ -37,8 +37,8 @@ final class Template_e805e100e6 extends Latte\Runtime\Template
 		echo '<div class="container py-5">
     <div class="row">
         <div class="col-md-12 text-center mb-4">
-            <h1>Fakturační systém</h1>
-            <p class="lead">Jednoduchý systém pro správu faktur a klientů</p>
+            <h1>QRdoklad</h1>
+            <p class="lead">Jednoduchý systém pro správu faktur a klientů – protože fakturovat nemusí být otrava.</p>
         </div>
     </div>
 

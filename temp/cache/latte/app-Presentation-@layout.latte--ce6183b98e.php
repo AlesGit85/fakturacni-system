@@ -95,7 +95,7 @@ final class Template_ce6183b98e extends Latte\Runtime\Template
 		<div class="container text-center">
 			<p>QRdoklad &copy; ';
 		echo LR\Filters::escapeHtmlText(date('Y')) /* line 45 */;
-		echo '</p>
+		echo ' - Proudly crafted by <a href="https://allimedia.cz" target="_blank">Allimedia.cz</a>.</p>
 		</div>
 	</footer>
 
