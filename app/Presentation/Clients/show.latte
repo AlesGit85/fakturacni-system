@@ -34,6 +34,15 @@
 
 <div class="mt-4">
     <a n:href="edit $client->id" class="btn btn-warning">Upravit</a>
+    
+{var $invoiceCount = $presenter->getClientInvoiceCount($client->id)}
+    {if $invoiceCount == 0}
+        <a n:href="delete $client->id" class="btn btn-danger" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')">Smazat</a>
+    {else}
+        <button class="btn btn-danger" disabled title="Klient má {$invoiceCount} faktur a nelze ho smazat">Smazat</button>
+        <small class="text-danger d-block mt-2">Pro smazání klienta je nutné nejprve smazat všechny jeho faktury ({$invoiceCount})</small>
+    {/if}
+    
     <a n:href="default" class="btn btn-secondary">Zpět na seznam klientů</a>
 </div>
 {/block}

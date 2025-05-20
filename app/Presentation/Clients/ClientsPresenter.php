@@ -11,9 +11,15 @@ class ClientsPresenter extends Nette\Application\UI\Presenter
     /** @var ClientsManager */
     private $clientsManager;
 
-    public function __construct(ClientsManager $clientsManager)
-    {
+    /** @var Nette\Database\Explorer */
+    private $database;
+
+    public function __construct(
+        ClientsManager $clientsManager,
+        Nette\Database\Explorer $database
+    ) {
         $this->clientsManager = $clientsManager;
+        $this->database = $database;
     }
 
     public function renderDefault(): void
@@ -93,8 +99,56 @@ class ClientsPresenter extends Nette\Application\UI\Presenter
 
     public function actionDelete(int $id): void
     {
+        // Nejprve zkontrolujeme, zda klient existuje
+        $client = $this->clientsManager->getById($id);
+
+        if (!$client) {
+            $this->error('Klient nebyl nalezen');
+        }
+
+        // Kontrola, zda má klient faktury
+        $invoiceCount = $this->database->table('invoices')
+            ->where('client_id', $id)
+            ->count();
+
+        if ($invoiceCount > 0) {
+            // Vytvořit srozumitelnou hlášku pro uživatele
+            if ($invoiceCount == 1) {
+                $message = "Klient '{$client->name}' má 1 fakturu v systému a nelze ho smazat. Nejprve musíte smazat tuto fakturu.";
+            } else {
+                $message = "Klient '{$client->name}' má {$invoiceCount} faktur v systému a nelze ho smazat. Nejprve musíte smazat tyto faktury.";
+            }
+
+            $message .= " <a href='" . $this->link('Invoices:default') . "'>Přejít na faktury</a>.";
+
+            $this->flashMessage($message, 'danger');
+            $this->redirect('show', $id); // Přesměrování na detail klienta
+            return;
+        }
+
+        // Pokud nemá faktury, můžeme ho smazat
         $this->clientsManager->delete($id);
-        $this->flashMessage('Klient byl úspěšně smazán', 'success');
+        $this->flashMessage("Klient '{$client->name}' byl úspěšně smazán", 'success');
         $this->redirect('default');
+    }
+
+    /**
+     * Zpřístupní databázi pro šablony
+     */
+    public function getDatabase()
+    {
+        return $this->database;
+    }
+
+    /**
+     * Zkontroluje, zda má klient faktury
+     * @param int $clientId ID klienta
+     * @return int Počet faktur klienta
+     */
+    public function getClientInvoiceCount(int $clientId): int
+    {
+        return $this->database->table('invoices')
+            ->where('client_id', $clientId)
+            ->count();
     }
 }

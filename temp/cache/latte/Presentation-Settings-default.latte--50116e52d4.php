@@ -328,30 +328,6 @@ final class Template_50116e52d4 extends Latte\Runtime\Template
 		echo '
     </div>
 </div>
-
-<script>
-// Spustí se po načtení stránky
-document.addEventListener(\'DOMContentLoaded\', function() {
-    const vatPayerCheckbox = document.getElementById(\'vat-payer-checkbox\');
-    const dicContainer = document.getElementById(\'dic-container\');
-    
-    // Funkce pro zobrazení/skrytí pole DIČ
-    function toggleDicField() {
-        if (vatPayerCheckbox.checked) {
-            dicContainer.style.display = \'block\';
-        } else {
-            dicContainer.style.display = \'none\';
-            document.getElementById(\'dic-field\').value = \'\';
-        }
-    }
-    
-    // Přidání posluchače události na změnu checkboxu
-    vatPayerCheckbox.addEventListener(\'change\', toggleDicField);
-    
-    // Inicializace stavu při načtení stránky
-    toggleDicField();
-});
-</script>
 ';
 	}
 }

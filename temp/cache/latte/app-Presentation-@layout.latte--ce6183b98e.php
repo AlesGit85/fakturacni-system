@@ -32,7 +32,7 @@ final class Template_ce6183b98e extends Latte\Runtime\Template
 			}) /* line 6 */;
 			echo ' | ';
 		}
-		echo 'Fakturační systém</title>
+		echo 'QRdoklad</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 8 */;
@@ -44,7 +44,7 @@ final class Template_ce6183b98e extends Latte\Runtime\Template
 		<div class="container">
 			<a href="';
 		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link(':Home:default')) /* line 14 */;
-		echo '" class="navbar-brand">Fakturační systém</a>
+		echo '" class="navbar-brand">QRdoklad</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -93,7 +93,7 @@ final class Template_ce6183b98e extends Latte\Runtime\Template
 
 	<footer class="mt-5 py-4 bg-light">
 		<div class="container text-center">
-			<p>Fakturační systém &copy; ';
+			<p>QRdoklad &copy; ';
 		echo LR\Filters::escapeHtmlText(date('Y')) /* line 45 */;
 		echo '</p>
 		</div>
@@ -103,6 +103,12 @@ final class Template_ce6183b98e extends Latte\Runtime\Template
 	<script src="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 50 */;
 		echo '/js/main.js"></script>
+	<script src="';
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 51 */;
+		echo '/js/invoice-form.js"></script>
+	<script src="';
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 52 */;
+		echo '/js/settings.js"></script>
 </body>
 </html>';
 	}

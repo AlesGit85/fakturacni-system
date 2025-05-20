@@ -1,17 +1,32 @@
+/**
+ * Fakturační systém - Hlavní CSS soubor
+ */
+
+/* -----------------------------
+ * Base styles
+ * -----------------------------*/
 body {
     background-color: #f8f9fa;
 }
 
+/* -----------------------------
+ * Form styles
+ * -----------------------------*/
 .required label::after {
     content: " *";
     color: red;
 }
 
+/* -----------------------------
+ * Table styles
+ * -----------------------------*/
 .table-actions {
     white-space: nowrap;
 }
 
-/* Invoice styles */
+/* -----------------------------
+ * Invoice styles
+ * -----------------------------*/
 .invoice-header {
     margin-bottom: 30px;
 }
@@ -44,6 +59,9 @@ body {
     font-style: italic;
 }
 
+/* -----------------------------
+ * Print styles
+ * -----------------------------*/
 @media print {
     .no-print {
         display: none;

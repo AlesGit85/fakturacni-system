@@ -87,16 +87,27 @@ final class Template_d706c008be extends Latte\Runtime\Template
 				echo LR\Filters::escapeHtmlText($client->phone) /* line 26 */;
 				echo '</td>
                 <td>
-                    <a href="';
+                 <a href="';
 				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('show', [$client->id])) /* line 28 */;
 				echo '" class="btn btn-primary btn-sm">Detail</a>
-                    <a href="';
+                  <a href="';
 				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$client->id])) /* line 29 */;
 				echo '" class="btn btn-warning btn-sm">Upravit</a>
-                    <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$client->id])) /* line 30 */;
-				echo '" class="btn btn-danger btn-sm" onclick="return confirm(\'Opravdu chcete smazat tohoto klienta?\')">Smazat</a>
-                </td>
+    
+';
+				$invoiceCount = $presenter->getClientInvoiceCount($client->id) /* line 31 */;
+				if ($invoiceCount == 0) /* line 32 */ {
+					echo '                     <a href="';
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$client->id])) /* line 33 */;
+					echo '" class="btn btn-danger btn-sm" onclick="return confirm(\'Opravdu chcete smazat tohoto klienta?\')">Smazat</a>
+';
+				} else /* line 34 */ {
+					echo '                     <button class="btn btn-danger btn-sm" disabled title="Klient má ';
+					echo LR\Filters::escapeHtmlAttr($invoiceCount) /* line 35 */;
+					echo ' faktur a nelze ho smazat">Smazat</button>
+';
+				}
+				echo '                </td>
             </tr>
 ';
 
@@ -106,7 +117,7 @@ final class Template_d706c008be extends Latte\Runtime\Template
     </table>
 </div>
 ';
-		} else /* line 37 */ {
+		} else /* line 43 */ {
 			echo '<div class="alert alert-info">
     Zatím nebyl přidán žádný klient.
 </div>

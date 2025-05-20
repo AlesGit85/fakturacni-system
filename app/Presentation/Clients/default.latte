@@ -25,9 +25,15 @@
                 <td>{$client->email}</td>
                 <td>{$client->phone}</td>
                 <td>
-                    <a n:href="show $client->id" class="btn btn-primary btn-sm">Detail</a>
-                    <a n:href="edit $client->id" class="btn btn-warning btn-sm">Upravit</a>
-                    <a n:href="delete $client->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')">Smazat</a>
+                 <a n:href="show $client->id" class="btn btn-primary btn-sm">Detail</a>
+                  <a n:href="edit $client->id" class="btn btn-warning btn-sm">Upravit</a>
+    
+                {var $invoiceCount = $presenter->getClientInvoiceCount($client->id)}
+                 {if $invoiceCount == 0}
+                     <a n:href="delete $client->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')">Smazat</a>
+                  {else}
+                     <button class="btn btn-danger btn-sm" disabled title="Klient má {$invoiceCount} faktur a nelze ho smazat">Smazat</button>
+                  {/if}
                 </td>
             </tr>
             {/foreach}

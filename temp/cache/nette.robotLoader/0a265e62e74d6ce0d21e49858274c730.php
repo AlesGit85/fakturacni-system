@@ -45,7 +45,7 @@ return array (
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1747503861,
+      1 => 1747742187,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -65,7 +65,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1747672720,
+      1 => 1747734612,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -91,7 +91,7 @@ return array (
     'App\\Presentation\\Clients\\ClientsEditTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesDeleteTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 3,
     'App\\Presentation\\https\\httpsPresenter' => 3,
   ),
