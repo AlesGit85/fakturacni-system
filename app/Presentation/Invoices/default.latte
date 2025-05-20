@@ -1,86 +1,175 @@
 {block content}
-<h1>Faktury</h1>
-
-<div class="row mb-4">
-    <div class="col-md-6">
-        <p><a n:href="add" class="btn btn-success">Vytvořit novou fakturu</a></p>
+<div class="invoices-container">
+    <!-- Záhlaví s názvem sekce a počtem faktur -->
+    <div class="section-header-row mb-4">
+        <div>
+            <h1 class="section-title mb-0">Faktury <span class="total-count">{$invoices->count()} dokladů</span></h1>
+            <p class="text-muted">Seznam všech faktur v systému</p>
+        </div>
+        <div class="header-actions">
+            <a n:href="add" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Vytvořit fakturu
+            </a>
+        </div>
     </div>
-    <div class="col-md-6">
-        {form searchForm class => 'd-flex'}
-            {input search class => 'form-control me-2'}
-            {input send class => 'btn btn-outline-primary'}
-        {/form}
+
+    <!-- Filtry a vyhledávání v jednom řádku -->
+    <div class="filters-search-row mb-3">
+        <!-- Panel s filtry vlevo -->
+        <div class="filters-container">
+            <a n:href="default" class="filter-tab {if !isset($filter) || $filter == 'all'}filter-tab-active{/if}">
+                <i class="bi bi-grid-3x3-gap"></i> Všechny
+            </a>
+            <a n:href="default, filter => 'created'" class="filter-tab {if isset($filter) && $filter == 'created'}filter-tab-active{/if}">
+                <i class="bi bi-file-earmark me-1"></i> Vystavené
+            </a>
+            <a n:href="default, filter => 'paid'" class="filter-tab {if isset($filter) && $filter == 'paid'}filter-tab-active{/if}">
+                <i class="bi bi-check-circle me-1"></i> Zaplacené
+            </a>
+            <a n:href="default, filter => 'overdue'" class="filter-tab {if isset($filter) && $filter == 'overdue'}filter-tab-active{/if}">
+                <i class="bi bi-exclamation-circle me-1"></i> Po splatnosti
+            </a>
+        </div>
+        
+        <!-- Panel s vyhledáváním vpravo -->
+        <div class="search-panel">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" id="invoiceSearch" class="search-input" placeholder="Vyhledat fakturu...">
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-{if $search}
-<div class="alert alert-info">
-    Výsledky vyhledávání pro: <strong>{$search}</strong>
-    <a n:href="default" class="float-end">Zrušit vyhledávání</a>
-</div>
-{/if}
+    <!-- Tabulka faktur -->
+    {if $invoices->count() > 0}
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th class="sortable-column">Číslo faktury</th>
+                    <th>Klient</th>
+                    <th>Vystaveno</th>
+                    <th>Splatnost</th>
+                    <th class="text-end">Částka</th>
+                    <th>Stav</th>
+                    <th class="text-end">Akce</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $invoices as $invoice}
+                <tr class="data-row {if $invoice->status == 'overdue'}row-danger{elseif $invoice->status == 'paid'}row-success{/if}">
+                    <td><strong>{$invoice->number}</strong></td>
+                    <td>{if $invoice->manual_client}{$invoice->client_name}{else}{$invoice->ref('client_id')->name}{/if}</td>
+                    <td>{$invoice->issue_date|date:'d.m.Y'}</td>
+                    <td>{$invoice->due_date|date:'d.m.Y'}</td>
+                    <td class="text-end">{$invoice->total|number(2, ',', ' ')} Kč</td>
+                    <td>
+                        {if $invoice->status == 'created'}
+                            <span class="status-badge status-badge-pending">Vystavena</span>
+                        {elseif $invoice->status == 'paid'}
+                            <span class="status-badge status-badge-success">
+                                <i class="bi bi-check-circle-fill me-1"></i>
+                                Zaplacena
+                                {if $invoice->payment_date}
+                                    <span class="payment-date">{$invoice->payment_date|date:'d.m.Y'}</span>
+                                {/if}
+                            </span>
+                        {elseif $invoice->status == 'overdue'}
+                            <span class="status-badge status-badge-danger">
+                                <i class="bi bi-exclamation-circle-fill me-1"></i>
+                                Po splatnosti
+                            </span>
+                        {/if}
+                    </td>
+                    <td class="actions-column">
+                        <div class="action-buttons">
+                            <a n:href="show $invoice->id" class="btn btn-icon" title="Detail faktury">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a n:href="edit $invoice->id" class="btn btn-icon" title="Upravit fakturu">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a n:href="pdf $invoice->id" class="btn btn-icon" title="Stáhnout PDF">
+                                <i class="bi bi-file-pdf"></i>
+                            </a>
+                            <div class="dropdown">
+                                <button class="btn btn-icon dropdown-toggle" type="button" id="dropdownMenuButton{$invoice->id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{$invoice->id}">
+                                    {if $invoice->status != 'paid'}
+                                        <li>
+                                            <a n:href="markAsPaid! $invoice->id" class="dropdown-item" onclick="return confirm('Označit fakturu jako zaplacenou?')">
+                                                <i class="bi bi-check-circle text-success me-2"></i> Označit jako zaplacenou
+                                            </a>
+                                        </li>
+                                    {else}
+                                        <li>
+                                            <a n:href="markAsCreated! $invoice->id" class="dropdown-item" onclick="return confirm('Označit fakturu jako nezaplacenou?')">
+                                                <i class="bi bi-arrow-counterclockwise me-2"></i> Zrušit zaplaceno
+                                            </a>
+                                        </li>
+                                    {/if}
+                                    <li>
+                                        <a n:href="delete $invoice->id" class="dropdown-item text-danger" onclick="return confirm('Opravdu chcete smazat tuto fakturu?')">
+                                            <i class="bi bi-trash me-2"></i> Smazat fakturu
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    </div>
 
-{if $invoices->count() > 0}
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Číslo faktury</th>
-                <th>Klient</th>
-                <th>Vystaveno</th>
-                <th>Splatnost</th>
-                <th>Částka</th>
-                <th>Stav</th>
-                <th>Akce</th>
-            </tr>
-        </thead>
-        <tbody>
-            {foreach $invoices as $invoice}
-            <tr {if $invoice->status == 'overdue'}class="table-danger"{elseif $invoice->status == 'paid'}class="table-success"{/if}>
-                <td>{$invoice->number}</td>
-                <td>{if $invoice->manual_client}{$invoice->client_name}{else}{$invoice->ref('client_id')->name}{/if}</td>
-                <td>{$invoice->issue_date|date:'d.m.Y'}</td>
-                <td>{$invoice->due_date|date:'d.m.Y'}</td>
-                <td>{$invoice->total|number(2, ',', ' ')} Kč</td>
-                <td>
-                    {if $invoice->status == 'created'}
-                        <span class="badge bg-warning">Vystavena</span>
-                    {elseif $invoice->status == 'paid'}
-                        <span class="badge bg-success">Zaplacena</span>
-                        {if $invoice->payment_date}
-                            <small class="d-block text-muted">({$invoice->payment_date|date:'d.m.Y'})</small>
-                        {/if}
-                    {elseif $invoice->status == 'overdue'}
-                        <span class="badge bg-danger">Po splatnosti</span>
-                    {/if}
-                </td>
-                <td class="table-actions">
-                    <div class="btn-group">
-                        <a n:href="show $invoice->id" class="btn btn-primary btn-sm">Detail</a>
-                        <a n:href="edit $invoice->id" class="btn btn-warning btn-sm">Upravit</a>
-                        <a n:href="pdf $invoice->id" class="btn btn-info btn-sm">PDF</a>
-                    </div>
-                    <div class="btn-group mt-1">
-                        {if $invoice->status != 'paid'}
-                            <a n:href="markAsPaid! $invoice->id" class="btn btn-success btn-sm" onclick="return confirm('Označit fakturu jako zaplacenou?')">✓ Zaplaceno</a>
-                        {else}
-                            <a n:href="markAsCreated! $invoice->id" class="btn btn-outline-secondary btn-sm" onclick="return confirm('Označit fakturu jako nezaplacenou?')">Zrušit zaplaceno</a>
-                        {/if}
-                        <a n:href="delete $invoice->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat tuto fakturu?')">Smazat</a>
-                    </div>
-                </td>
-            </tr>
-            {/foreach}
-        </tbody>
-    </table>
-</div>
-{else}
-<div class="alert alert-info">
-    {if $search}
-        Pro hledaný výraz "{$search}" nebyly nalezeny žádné faktury.
+    <!-- Stránkování -->
+    <div class="pagination-container mt-3">
+        <div class="pagination-info">
+            Strana 1 z 1
+        </div>
+        <div class="pagination-controls">
+            <button class="btn btn-icon pagination-button" disabled>
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="btn btn-icon pagination-button" disabled>
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </div>
     {else}
-        Zatím nebyla vytvořena žádná faktura.
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="bi bi-file-earmark-text"></i>
+        </div>
+        <h3>Zatím zde nejsou žádné faktury</h3>
+        <p>Začněte vytvořením nové faktury</p>
+        <a n:href="add" class="btn btn-primary mt-3">
+            <i class="bi bi-plus-circle"></i> Vytvořit první fakturu
+        </a>
+    </div>
     {/if}
 </div>
-{/if}
+
+<script>
+// Přidáme JavaScript pro vyhledávání v tabulce
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('invoiceSearch');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', function() {
+        const searchText = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.data-table tbody tr');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchText) ? '' : 'none';
+        });
+    });
+});
+</script>
 {/block}

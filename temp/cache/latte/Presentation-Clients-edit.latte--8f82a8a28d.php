@@ -184,12 +184,12 @@ final class Template_8f82a8a28d extends Latte\Runtime\Template
                 <div class="col-12 mt-4 d-flex justify-content-between">
                     <a href="';
 		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 106 */;
-		echo '" class="btn btn-outline-secondary btn-lg">
+		echo '" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Zpět na seznam klientů
                     </a>
                     <button';
 		echo ($ʟ_elem = Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControlPart())->addAttributes(['class' => null])->attributes() /* line 109 */;
-		echo ' class="btn btn-primary btn-lg">
+		echo ' class="btn btn-primary">
                         <i class="bi bi-check-lg"></i> Uložit změny
                     </button>
                 </div>

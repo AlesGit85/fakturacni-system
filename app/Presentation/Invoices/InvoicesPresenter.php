@@ -135,12 +135,13 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $pdf->SetMargins(15, 15, 15);
 
         // Převod HEX barev na RGB hodnoty
-        function hex2rgb($hex) {
+        function hex2rgb($hex)
+        {
             $hex = str_replace('#', '', $hex);
-            if(strlen($hex) == 3) {
-                $r = hexdec(substr($hex, 0, 1).substr($hex, 0, 1));
-                $g = hexdec(substr($hex, 1, 1).substr($hex, 1, 1));
-                $b = hexdec(substr($hex, 2, 1).substr($hex, 2, 1));
+            if (strlen($hex) == 3) {
+                $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
+                $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
+                $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
             } else {
                 $r = hexdec(substr($hex, 0, 2));
                 $g = hexdec(substr($hex, 2, 2));
@@ -152,7 +153,7 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         // Získání barev z nastavení firmy nebo použití výchozích
         $headingColorHex = $company->invoice_heading_color ?? '#cacaca';
         $trapezoidBgColorHex = $company->invoice_trapezoid_bg_color ?? '#cacaca';
-        $trapezoidTextColorHex = $company->invoice_trapezoid_text_color ?? '#000000'; 
+        $trapezoidTextColorHex = $company->invoice_trapezoid_text_color ?? '#000000';
         $labelsColorHex = $company->invoice_labels_color ?? '#cacaca';
         $footerColorHex = $company->invoice_footer_color ?? '#393b41';
 
@@ -774,13 +775,22 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $this->redirect('edit', $invoiceId);
     }
 
-    public function renderDefault(?string $search = null): void
+    public function renderDefault(?string $filter = null, ?string $search = null): void
     {
         // Kontrola faktur po splatnosti
         $this->invoicesManager->checkOverdueDates();
 
-        // Získání faktur (případně filtrovaných)
-        $this->template->invoices = $this->invoicesManager->getAll($search);
+        // Příprava dotazu
+        $query = $this->invoicesManager->getAll($search);
+
+        // Aplikace filtru podle stavu
+        if ($filter) {
+            $query->where('status', $filter);
+        }
+
+        // Nastavení proměnných pro šablonu
+        $this->template->invoices = $query;
+        $this->template->filter = $filter;
         $this->template->search = $search;
     }
 

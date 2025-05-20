@@ -32,7 +32,7 @@ final class Template_93cf1c3ebb extends Latte\Runtime\Template
 		extract($this->params);
 
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
-			foreach (array_intersect_key(['invoice' => '38'], $this->params) as $ʟ_v => $ʟ_l) {
+			foreach (array_intersect_key(['invoice' => '61'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
@@ -47,164 +47,266 @@ final class Template_93cf1c3ebb extends Latte\Runtime\Template
 		extract($ʟ_args);
 		unset($ʟ_args);
 
-		echo '<h1>Faktury</h1>
-
-<div class="row mb-4">
-    <div class="col-md-6">
-        <p><a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 6 */;
-		echo '" class="btn btn-success">Vytvořit novou fakturu</a></p>
+		echo '<div class="invoices-container">
+    <!-- Záhlaví s názvem sekce a počtem faktur -->
+    <div class="section-header-row mb-4">
+        <div>
+            <h1 class="section-title mb-0">Faktury <span class="total-count">';
+		echo LR\Filters::escapeHtmlText($invoices->count()) /* line 6 */;
+		echo ' dokladů</span></h1>
+            <p class="text-muted">Seznam všech faktur v systému</p>
+        </div>
+        <div class="header-actions">
+            <a href="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 10 */;
+		echo '" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Vytvořit fakturu
+            </a>
+        </div>
     </div>
-    <div class="col-md-6">
-        ';
-		$form = $this->global->formsStack[] = $this->global->uiControl['searchForm'] /* line 9 */;
-		Nette\Bridges\FormsLatte\Runtime::initializeForm($form);
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form, ['class' => 'd-flex']) /* line 9 */;
-		echo '
-            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('search', $this->global)->getControl()->addAttributes(['class' => 'form-control me-2']) /* line 10 */;
-		echo '
-            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-outline-primary']) /* line 11 */;
-		echo '
-        ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 12 */;
 
-		echo '
-    </div>
-</div>
-
-';
-		if ($search) /* line 16 */ {
-			echo '<div class="alert alert-info">
-    Výsledky vyhledávání pro: <strong>';
-			echo LR\Filters::escapeHtmlText($search) /* line 18 */;
-			echo '</strong>
-    <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 19 */;
-			echo '" class="float-end">Zrušit vyhledávání</a>
-</div>
-';
+    <!-- Filtry a vyhledávání v jednom řádku -->
+    <div class="filters-search-row mb-3">
+        <!-- Panel s filtry vlevo -->
+        <div class="filters-container">
+            <a href="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 20 */;
+		echo '" class="filter-tab ';
+		if (!isset($filter) || $filter == 'all') /* line 20 */ {
+			echo 'filter-tab-active';
 		}
-		echo "\n";
-		if ($invoices->count() > 0) /* line 23 */ {
-			echo '<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Číslo faktury</th>
-                <th>Klient</th>
-                <th>Vystaveno</th>
-                <th>Splatnost</th>
-                <th>Částka</th>
-                <th>Stav</th>
-                <th>Akce</th>
-            </tr>
-        </thead>
-        <tbody>
+		echo '">
+                <i class="bi bi-grid-3x3-gap"></i> Všechny
+            </a>
+            <a href="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default', ['filter' => 'created'])) /* line 23 */;
+		echo '" class="filter-tab ';
+		if (isset($filter) && $filter == 'created') /* line 23 */ {
+			echo 'filter-tab-active';
+		}
+		echo '">
+                <i class="bi bi-file-earmark me-1"></i> Vystavené
+            </a>
+            <a href="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default', ['filter' => 'paid'])) /* line 26 */;
+		echo '" class="filter-tab ';
+		if (isset($filter) && $filter == 'paid') /* line 26 */ {
+			echo 'filter-tab-active';
+		}
+		echo '">
+                <i class="bi bi-check-circle me-1"></i> Zaplacené
+            </a>
+            <a href="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default', ['filter' => 'overdue'])) /* line 29 */;
+		echo '" class="filter-tab ';
+		if (isset($filter) && $filter == 'overdue') /* line 29 */ {
+			echo 'filter-tab-active';
+		}
+		echo '">
+                <i class="bi bi-exclamation-circle me-1"></i> Po splatnosti
+            </a>
+        </div>
+        
+        <!-- Panel s vyhledáváním vpravo -->
+        <div class="search-panel">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" id="invoiceSearch" class="search-input" placeholder="Vyhledat fakturu...">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabulka faktur -->
 ';
-			foreach ($invoices as $invoice) /* line 38 */ {
-				echo '            <tr ';
-				if ($invoice->status == 'overdue') /* line 39 */ {
-					echo 'class="table-danger"';
-				} elseif ($invoice->status == 'paid') /* line 39 */ {
-					echo 'class="table-success"';
+		if ($invoices->count() > 0) /* line 46 */ {
+			echo '    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th class="sortable-column">Číslo faktury</th>
+                    <th>Klient</th>
+                    <th>Vystaveno</th>
+                    <th>Splatnost</th>
+                    <th class="text-end">Částka</th>
+                    <th>Stav</th>
+                    <th class="text-end">Akce</th>
+                </tr>
+            </thead>
+            <tbody>
+';
+			foreach ($invoices as $invoice) /* line 61 */ {
+				echo '                <tr class="data-row ';
+				if ($invoice->status == 'overdue') /* line 62 */ {
+					echo 'row-danger';
+				} elseif ($invoice->status == 'paid') /* line 62 */ {
+					echo 'row-success';
 				}
 
-				echo '>
-                <td>';
-				echo LR\Filters::escapeHtmlText($invoice->number) /* line 40 */;
-				echo '</td>
-                <td>';
-				if ($invoice->manual_client) /* line 41 */ {
-					echo LR\Filters::escapeHtmlText($invoice->client_name) /* line 41 */;
-				} else /* line 41 */ {
-					echo LR\Filters::escapeHtmlText($invoice->ref('client_id')->name) /* line 41 */;
+				echo '">
+                    <td><strong>';
+				echo LR\Filters::escapeHtmlText($invoice->number) /* line 63 */;
+				echo '</strong></td>
+                    <td>';
+				if ($invoice->manual_client) /* line 64 */ {
+					echo LR\Filters::escapeHtmlText($invoice->client_name) /* line 64 */;
+				} else /* line 64 */ {
+					echo LR\Filters::escapeHtmlText($invoice->ref('client_id')->name) /* line 64 */;
 				}
 				echo '</td>
-                <td>';
-				echo LR\Filters::escapeHtmlText(($this->filters->date)($invoice->issue_date, 'd.m.Y')) /* line 42 */;
+                    <td>';
+				echo LR\Filters::escapeHtmlText(($this->filters->date)($invoice->issue_date, 'd.m.Y')) /* line 65 */;
 				echo '</td>
-                <td>';
-				echo LR\Filters::escapeHtmlText(($this->filters->date)($invoice->due_date, 'd.m.Y')) /* line 43 */;
+                    <td>';
+				echo LR\Filters::escapeHtmlText(($this->filters->date)($invoice->due_date, 'd.m.Y')) /* line 66 */;
 				echo '</td>
-                <td>';
-				echo LR\Filters::escapeHtmlText(($this->filters->number)($invoice->total, 2, ',', ' ')) /* line 44 */;
+                    <td class="text-end">';
+				echo LR\Filters::escapeHtmlText(($this->filters->number)($invoice->total, 2, ',', ' ')) /* line 67 */;
 				echo ' Kč</td>
-                <td>
+                    <td>
 ';
-				if ($invoice->status == 'created') /* line 46 */ {
-					echo '                        <span class="badge bg-warning">Vystavena</span>
+				if ($invoice->status == 'created') /* line 69 */ {
+					echo '                            <span class="status-badge status-badge-pending">Vystavena</span>
 ';
-				} elseif ($invoice->status == 'paid') /* line 48 */ {
-					echo '                        <span class="badge bg-success">Zaplacena</span>
+				} elseif ($invoice->status == 'paid') /* line 71 */ {
+					echo '                            <span class="status-badge status-badge-success">
+                                <i class="bi bi-check-circle-fill me-1"></i>
+                                Zaplacena
 ';
-					if ($invoice->payment_date) /* line 50 */ {
-						echo '                            <small class="d-block text-muted">(';
-						echo LR\Filters::escapeHtmlText(($this->filters->date)($invoice->payment_date, 'd.m.Y')) /* line 51 */;
-						echo ')</small>
+					if ($invoice->payment_date) /* line 75 */ {
+						echo '                                    <span class="payment-date">';
+						echo LR\Filters::escapeHtmlText(($this->filters->date)($invoice->payment_date, 'd.m.Y')) /* line 76 */;
+						echo '</span>
 ';
 					}
-				} elseif ($invoice->status == 'overdue') /* line 53 */ {
-					echo '                        <span class="badge bg-danger">Po splatnosti</span>
+					echo '                            </span>
+';
+				} elseif ($invoice->status == 'overdue') /* line 79 */ {
+					echo '                            <span class="status-badge status-badge-danger">
+                                <i class="bi bi-exclamation-circle-fill me-1"></i>
+                                Po splatnosti
+                            </span>
 ';
 				}
 
 
-				echo '                </td>
-                <td class="table-actions">
-                    <div class="btn-group">
-                        <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('show', [$invoice->id])) /* line 59 */;
-				echo '" class="btn btn-primary btn-sm">Detail</a>
-                        <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$invoice->id])) /* line 60 */;
-				echo '" class="btn btn-warning btn-sm">Upravit</a>
-                        <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('pdf', [$invoice->id])) /* line 61 */;
-				echo '" class="btn btn-info btn-sm">PDF</a>
-                    </div>
-                    <div class="btn-group mt-1">
+				echo '                    </td>
+                    <td class="actions-column">
+                        <div class="action-buttons">
+                            <a href="';
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('show', [$invoice->id])) /* line 88 */;
+				echo '" class="btn btn-icon" title="Detail faktury">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="';
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$invoice->id])) /* line 91 */;
+				echo '" class="btn btn-icon" title="Upravit fakturu">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="';
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('pdf', [$invoice->id])) /* line 94 */;
+				echo '" class="btn btn-icon" title="Stáhnout PDF">
+                                <i class="bi bi-file-pdf"></i>
+                            </a>
+                            <div class="dropdown">
+                                <button class="btn btn-icon dropdown-toggle" type="button" id="dropdownMenuButton';
+				echo LR\Filters::escapeHtmlAttr($invoice->id) /* line 98 */;
+				echo '" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton';
+				echo LR\Filters::escapeHtmlAttr($invoice->id) /* line 101 */;
+				echo '">
 ';
-				if ($invoice->status != 'paid') /* line 64 */ {
-					echo '                            <a href="';
-					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('markAsPaid!', [$invoice->id])) /* line 65 */;
-					echo '" class="btn btn-success btn-sm" onclick="return confirm(\'Označit fakturu jako zaplacenou?\')">✓ Zaplaceno</a>
+				if ($invoice->status != 'paid') /* line 102 */ {
+					echo '                                        <li>
+                                            <a href="';
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('markAsPaid!', [$invoice->id])) /* line 104 */;
+					echo '" class="dropdown-item" onclick="return confirm(\'Označit fakturu jako zaplacenou?\')">
+                                                <i class="bi bi-check-circle text-success me-2"></i> Označit jako zaplacenou
+                                            </a>
+                                        </li>
 ';
-				} else /* line 66 */ {
-					echo '                            <a href="';
-					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('markAsCreated!', [$invoice->id])) /* line 67 */;
-					echo '" class="btn btn-outline-secondary btn-sm" onclick="return confirm(\'Označit fakturu jako nezaplacenou?\')">Zrušit zaplaceno</a>
+				} else /* line 108 */ {
+					echo '                                        <li>
+                                            <a href="';
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('markAsCreated!', [$invoice->id])) /* line 110 */;
+					echo '" class="dropdown-item" onclick="return confirm(\'Označit fakturu jako nezaplacenou?\')">
+                                                <i class="bi bi-arrow-counterclockwise me-2"></i> Zrušit zaplaceno
+                                            </a>
+                                        </li>
 ';
 				}
-				echo '                        <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$invoice->id])) /* line 69 */;
-				echo '" class="btn btn-danger btn-sm" onclick="return confirm(\'Opravdu chcete smazat tuto fakturu?\')">Smazat</a>
-                    </div>
-                </td>
-            </tr>
+				echo '                                    <li>
+                                        <a href="';
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$invoice->id])) /* line 116 */;
+				echo '" class="dropdown-item text-danger" onclick="return confirm(\'Opravdu chcete smazat tuto fakturu?\')">
+                                            <i class="bi bi-trash me-2"></i> Smazat fakturu
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
 ';
 
 			}
 
-			echo '        </tbody>
-    </table>
-</div>
+			echo '            </tbody>
+        </table>
+    </div>
+
+    <!-- Stránkování -->
+    <div class="pagination-container mt-3">
+        <div class="pagination-info">
+            Strana 1 z 1
+        </div>
+        <div class="pagination-controls">
+            <button class="btn btn-icon pagination-button" disabled>
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="btn btn-icon pagination-button" disabled>
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </div>
 ';
-		} else /* line 77 */ {
-			echo '<div class="alert alert-info">
-';
-			if ($search) /* line 79 */ {
-				echo '        Pro hledaný výraz "';
-				echo LR\Filters::escapeHtmlText($search) /* line 80 */;
-				echo '" nebyly nalezeny žádné faktury.
-';
-			} else /* line 81 */ {
-				echo '        Zatím nebyla vytvořena žádná faktura.
-';
-			}
-			echo '</div>
+		} else /* line 144 */ {
+			echo '    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="bi bi-file-earmark-text"></i>
+        </div>
+        <h3>Zatím zde nejsou žádné faktury</h3>
+        <p>Začněte vytvořením nové faktury</p>
+        <a href="';
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 151 */;
+			echo '" class="btn btn-primary mt-3">
+            <i class="bi bi-plus-circle"></i> Vytvořit první fakturu
+        </a>
+    </div>
 ';
 		}
+		echo '</div>
+
+<script>
+// Přidáme JavaScript pro vyhledávání v tabulce
+document.addEventListener(\'DOMContentLoaded\', function() {
+    const searchInput = document.getElementById(\'invoiceSearch\');
+    if (!searchInput) return;
+
+    searchInput.addEventListener(\'input\', function() {
+        const searchText = this.value.toLowerCase();
+        const rows = document.querySelectorAll(\'.data-table tbody tr\');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchText) ? \'\' : \'none\';
+        });
+    });
+});
+</script>
+';
 	}
 }
