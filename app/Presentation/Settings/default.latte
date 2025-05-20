@@ -169,6 +169,70 @@
             </div>
             
             <div class="col-12">
+                <hr>
+                <h3>Nastavení barev faktury</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Přizpůsobení vzhledu faktury
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    {label invoice_heading_color /}
+                                    <div class="d-flex align-items-center">
+                                        {input invoice_heading_color}
+                                        <span class="ms-2">FAKTURA</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    {label invoice_trapezoid_bg_color /}
+                                    <div class="d-flex align-items-center">
+                                        {input invoice_trapezoid_bg_color}
+                                        <span class="ms-2">Pozadí</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    {label invoice_trapezoid_text_color /}
+                                    <div class="d-flex align-items-center">
+                                        {input invoice_trapezoid_text_color}
+                                        <span class="ms-2">Text v pozadí</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    {label invoice_labels_color /}
+                                    <div class="d-flex align-items-center">
+                                        {input invoice_labels_color}
+                                        <span class="ms-2">Dodavatel, Odběratel, atd.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    {label invoice_footer_color /}
+                                    <div class="d-flex align-items-center">
+                                        {input invoice_footer_color}
+                                        <span class="ms-2">Patička</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-info">
+                            <small>Tyto barvy budou použity při generování PDF faktur</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12">
                 <div class="mb-3">
                     {input send class => 'btn btn-primary'}
                 </div>

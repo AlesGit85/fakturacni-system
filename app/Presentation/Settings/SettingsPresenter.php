@@ -74,6 +74,32 @@ class SettingsPresenter extends Nette\Application\UI\Presenter
             ->addRule(Form::IMAGE, 'Podpis musí být ve formátu JPEG, PNG nebo GIF')
             ->addRule(Form::MAX_FILE_SIZE, 'Maximální velikost souboru je 2 MB', 2 * 1024 * 1024);
 
+        // Barvy faktury
+        $form->addText('invoice_heading_color', 'Barva nadpisu "FAKTURA":')
+            ->setDefaultValue('#cacaca')
+            ->setHtmlAttribute('type', 'color')
+            ->setHtmlAttribute('class', 'form-control form-control-color');
+
+        $form->addText('invoice_trapezoid_bg_color', 'Barva pozadí lichoběžníku:')
+            ->setDefaultValue('#cacaca')
+            ->setHtmlAttribute('type', 'color')
+            ->setHtmlAttribute('class', 'form-control form-control-color');
+
+        $form->addText('invoice_trapezoid_text_color', 'Barva textu v lichoběžníku:')
+            ->setDefaultValue('#000000')
+            ->setHtmlAttribute('type', 'color')
+            ->setHtmlAttribute('class', 'form-control form-control-color');
+
+        $form->addText('invoice_labels_color', 'Barva popisků (Dodavatel, Odběratel, atd.):')
+            ->setDefaultValue('#cacaca')
+            ->setHtmlAttribute('type', 'color')
+            ->setHtmlAttribute('class', 'form-control form-control-color');
+
+        $form->addText('invoice_footer_color', 'Barva patičky:')
+            ->setDefaultValue('#393b41')
+            ->setHtmlAttribute('type', 'color')
+            ->setHtmlAttribute('class', 'form-control form-control-color');
+
         $form->addSubmit('send', 'Uložit');
 
         $form->onSuccess[] = [$this, 'companyFormSucceeded'];

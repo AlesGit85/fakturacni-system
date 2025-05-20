@@ -134,9 +134,36 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         // Nastavení okrajů
         $pdf->SetMargins(15, 15, 15);
 
+        // Převod HEX barev na RGB hodnoty
+        function hex2rgb($hex) {
+            $hex = str_replace('#', '', $hex);
+            if(strlen($hex) == 3) {
+                $r = hexdec(substr($hex, 0, 1).substr($hex, 0, 1));
+                $g = hexdec(substr($hex, 1, 1).substr($hex, 1, 1));
+                $b = hexdec(substr($hex, 2, 1).substr($hex, 2, 1));
+            } else {
+                $r = hexdec(substr($hex, 0, 2));
+                $g = hexdec(substr($hex, 2, 2));
+                $b = hexdec(substr($hex, 4, 2));
+            }
+            return array($r, $g, $b);
+        }
+
+        // Získání barev z nastavení firmy nebo použití výchozích
+        $headingColorHex = $company->invoice_heading_color ?? '#cacaca';
+        $trapezoidBgColorHex = $company->invoice_trapezoid_bg_color ?? '#cacaca';
+        $trapezoidTextColorHex = $company->invoice_trapezoid_text_color ?? '#000000'; 
+        $labelsColorHex = $company->invoice_labels_color ?? '#cacaca';
+        $footerColorHex = $company->invoice_footer_color ?? '#393b41';
+
+        // Převod HEX na RGB
+        $headingColor = hex2rgb($headingColorHex);
+        $trapezoidBgColor = hex2rgb($trapezoidBgColorHex);
+        $trapezoidTextColor = hex2rgb($trapezoidTextColorHex);
+        $labelsColor = hex2rgb($labelsColorHex);
+        $footerColor = hex2rgb($footerColorHex);
+
         // Definice barev
-        $greyColor = array(202, 202, 202); // #cacaca
-        $footerColor = array(57, 59, 65);  // #393b41
         $textColor = array(50, 50, 50);    // Tmavě šedá pro text
 
         // Nastavení fontu
@@ -191,7 +218,7 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $pdf->SetX(15);
 
         $pdf->SetFont('dejavusans', '', 24);
-        $pdf->SetTextColor($greyColor[0], $greyColor[1], $greyColor[2]);
+        $pdf->SetTextColor($headingColor[0], $headingColor[1], $headingColor[2]);
         $pdf->Cell($emptyWidth, 10, '', 0, 0, 'L');
         $pdf->Cell($fakturaWidth, 10, $fakturaText, 0, 0, 'R');
 
@@ -221,8 +248,8 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $p3x = 0;
         $p3y = $endY;
 
-        // Kreslení šedého pozadí
-        $pdf->SetFillColor($greyColor[0], $greyColor[1], $greyColor[2]);
+        // Kreslení pozadí lichoběžníku s uživatelskou barvou
+        $pdf->SetFillColor($trapezoidBgColor[0], $trapezoidBgColor[1], $trapezoidBgColor[2]);
         $points = array($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y);
         $pdf->Polygon($points, 'F');
 
@@ -238,10 +265,12 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $labelRightPadding = 20;
         $valueX = $leftMargin + $labelWidth + $labelRightPadding - 20;
 
+        // Nastavení barvy textu v lichoběžníku
+        $pdf->SetTextColor($trapezoidTextColor[0], $trapezoidTextColor[1], $trapezoidTextColor[2]);
+
         // Prosím o zaplacení
         $pdf->SetXY($leftMargin, $startY + 10);
         $pdf->SetFont('dejavusans', '', 11);
-        $pdf->SetTextColor(0, 0, 0);
         $pdf->Cell(100, 5, 'Prosím o zaplacení', 0, 1, 'L');
 
         // Částka - velká
@@ -330,16 +359,19 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         // Začátek sekce - pod lichoběžníkem
         $pdf->SetY($endY + 5);
 
-        // Dodavatel - bez lomítka, barva #cacaca
-        $pdf->SetTextColor($greyColor[0], $greyColor[1], $greyColor[2]);
+        // Obnovení černé barvy pro běžný text
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+
+        // Dodavatel - bez lomítka, barva z nastavení
+        $pdf->SetTextColor($labelsColor[0], $labelsColor[1], $labelsColor[2]);
         $pdf->SetFont('dejavusans', '', 10);
         $pdf->Cell(90, 8, 'Dodavatel', 0, 0, 'L');
 
-        // Odběratel - bez lomítka, barva #cacaca
+        // Odběratel - bez lomítka, barva z nastavení
         $pdf->Cell(90, 8, 'Odběratel', 0, 1, 'L');
 
-        // Údaje dodavatele
-        $pdf->SetTextColor(0, 0, 0);
+        // Údaje dodavatele - černá barva
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
         $pdf->SetFont('dejavusans', 'B', 10);
         $pdf->Cell(90, 6, $company->name, 0, 0, 'L');
 
@@ -383,14 +415,14 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         // SEKCE S POLOŽKAMI FAKTURY
         // ------------------------------------------------
 
-        // Fakturuji Vám za - barva #cacaca
+        // Fakturuji Vám za - barva z nastavení
         $pdf->Ln(5);
-        $pdf->SetTextColor($greyColor[0], $greyColor[1], $greyColor[2]);
+        $pdf->SetTextColor($labelsColor[0], $labelsColor[1], $labelsColor[2]);
         $pdf->SetFont('dejavusans', '', 10);
         $pdf->Cell(180, 8, 'Fakturuji Vám za', 0, 1, 'L');
 
-        // Položky faktury
-        $pdf->SetTextColor(0, 0, 0);
+        // Položky faktury - obnovení černé barvy
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
         $pdf->SetFont('dejavusans', '', 10);
 
         foreach ($invoiceItems as $key => $item) {
@@ -489,7 +521,7 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $p3x = $rightEdge;
         $p3y = $footerEndY;
 
-        // Kreslení tmavého pozadí patičky
+        // Kreslení tmavého pozadí patičky s uživatelskou barvou
         $pdf->SetFillColor($footerColor[0], $footerColor[1], $footerColor[2]);
         $points = array($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y);
         $pdf->Polygon($points, 'F');
@@ -520,6 +552,7 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $pdf->Output('faktura-' . $invoice->number . '.pdf', 'D');
         $this->terminate();
     }
+
 
     public function createComponentInvoiceForm(): Form
     {

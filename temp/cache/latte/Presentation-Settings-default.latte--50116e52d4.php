@@ -316,14 +316,98 @@ final class Template_50116e52d4 extends Latte\Runtime\Template
             </div>
             
             <div class="col-12">
+                <hr>
+                <h3>Nastavení barev faktury</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Přizpůsobení vzhledu faktury
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('invoice_heading_color', $this->global)->getLabel()) /* line 182 */;
+		echo '
+                                    <div class="d-flex align-items-center">
+                                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_heading_color', $this->global)->getControl() /* line 184 */;
+		echo '
+                                        <span class="ms-2">FAKTURA</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_bg_color', $this->global)->getLabel()) /* line 191 */;
+		echo '
+                                    <div class="d-flex align-items-center">
+                                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_bg_color', $this->global)->getControl() /* line 193 */;
+		echo '
+                                        <span class="ms-2">Pozadí</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_text_color', $this->global)->getLabel()) /* line 200 */;
+		echo '
+                                    <div class="d-flex align-items-center">
+                                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_text_color', $this->global)->getControl() /* line 202 */;
+		echo '
+                                        <span class="ms-2">Text v pozadí</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('invoice_labels_color', $this->global)->getLabel()) /* line 211 */;
+		echo '
+                                    <div class="d-flex align-items-center">
+                                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_labels_color', $this->global)->getControl() /* line 213 */;
+		echo '
+                                        <span class="ms-2">Dodavatel, Odběratel, atd.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('invoice_footer_color', $this->global)->getLabel()) /* line 220 */;
+		echo '
+                                    <div class="d-flex align-items-center">
+                                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_footer_color', $this->global)->getControl() /* line 222 */;
+		echo '
+                                        <span class="ms-2">Patička</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-info">
+                            <small>Tyto barvy budou použity při generování PDF faktur</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12">
                 <div class="mb-3">
                     ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary']) /* line 173 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary']) /* line 237 */;
 		echo '
                 </div>
             </div>
         ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 176 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 240 */;
 
 		echo '
     </div>
