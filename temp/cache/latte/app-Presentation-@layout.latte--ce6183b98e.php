@@ -128,7 +128,7 @@ final class Template_ce6183b98e extends Latte\Runtime\Template
 	<footer class="mt-5 py-4 text-center">
 		<div class="container">
 			<p class="mb-0">
-				<i class="bi bi-receipt me-2"></i> QRdoklad &copy; ';
+				QRdoklad &copy; ';
 		echo LR\Filters::escapeHtmlText(date('Y')) /* line 65 */;
 		echo ' | Moderní fakturační systém - Proudly crafted by <a href="https://allimedia.cz">Allimedia.cz</a>
 			</p>
