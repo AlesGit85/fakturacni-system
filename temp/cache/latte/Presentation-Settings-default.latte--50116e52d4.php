@@ -34,382 +34,464 @@ final class Template_50116e52d4 extends Latte\Runtime\Template
 		extract($ʟ_args);
 		unset($ʟ_args);
 
-		echo '<h1>Nastavení</h1>
+		echo '<div class="settings-container">
+    <div class="page-header">
+        <h1 class="main-title">Nastavení</h1>
+        <p class="text-muted">Správa firemních údajů a nastavení systému</p>
+    </div>
 
 ';
-		if ($company) /* line 4 */ {
-			echo '<div class="card mb-4">
-    <div class="card-header">
-        Aktuální firemní údaje
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <dl>
-                    <dt>Název společnosti</dt>
-                    <dd>';
-			echo LR\Filters::escapeHtmlText($company->name) /* line 14 */;
-			echo '</dd>
+		if ($company) /* line 8 */ {
+			echo '    <div class="info-card mb-4">
+        <div class="info-card-header">
+            <i class="bi bi-info-circle me-2"></i>
+            <h3>Aktuální firemní údaje</h3>
+        </div>
+        <div class="info-card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-building"></i>
+                            Název společnosti
+                        </div>
+                        <div class="info-value">';
+			echo LR\Filters::escapeHtmlText($company->name) /* line 22 */;
+			echo '</div>
+                    </div>
                     
-                    <dt>Adresa</dt>
-                    <dd>';
-			echo LR\Filters::escapeHtmlText($company->address) /* line 17 */;
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-geo-alt"></i>
+                            Adresa
+                        </div>
+                        <div class="info-value">';
+			echo LR\Filters::escapeHtmlText($company->address) /* line 30 */;
 			echo ', ';
-			echo LR\Filters::escapeHtmlText($company->zip) /* line 17 */;
+			echo LR\Filters::escapeHtmlText($company->zip) /* line 30 */;
 			echo ' ';
-			echo LR\Filters::escapeHtmlText($company->city) /* line 17 */;
+			echo LR\Filters::escapeHtmlText($company->city) /* line 30 */;
 			echo ', ';
-			echo LR\Filters::escapeHtmlText($company->country) /* line 17 */;
-			echo '</dd>
+			echo LR\Filters::escapeHtmlText($company->country) /* line 30 */;
+			echo '</div>
+                    </div>
                     
-                    <dt>IČ</dt>
-                    <dd>';
-			echo LR\Filters::escapeHtmlText($company->ic) /* line 20 */;
-			echo '</dd>
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-upc"></i>
+                            IČ
+                        </div>
+                        <div class="info-value">';
+			echo LR\Filters::escapeHtmlText($company->ic) /* line 38 */;
+			echo '</div>
+                    </div>
                     
 ';
-			if ($company->dic) /* line 22 */ {
-				echo '                    <dt>DIČ</dt>
-                    <dd>';
-				echo LR\Filters::escapeHtmlText($company->dic) /* line 24 */;
-				echo '</dd>
+			if ($company->dic) /* line 41 */ {
+				echo '                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-upc-scan"></i>
+                            DIČ
+                        </div>
+                        <div class="info-value">';
+				echo LR\Filters::escapeHtmlText($company->dic) /* line 47 */;
+				echo '</div>
+                    </div>
 ';
 			}
-			echo '                </dl>
-            </div>
-            <div class="col-md-6">
-                <dl>
-                    <dt>Kontaktní údaje</dt>
-                    <dd>E-mail: ';
-			echo LR\Filters::escapeHtmlText($company->email) /* line 31 */;
-			echo '</dd>
-                    <dd>Telefon: ';
-			echo LR\Filters::escapeHtmlText($company->phone) /* line 32 */;
-			echo '</dd>
+			echo '                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-envelope"></i>
+                            E-mail
+                        </div>
+                        <div class="info-value">';
+			echo LR\Filters::escapeHtmlText($company->email) /* line 57 */;
+			echo '</div>
+                    </div>
                     
-                    <dt>Bankovní údaje</dt>
-                    <dd>Účet: ';
-			echo LR\Filters::escapeHtmlText($company->bank_account) /* line 35 */;
-			echo '</dd>
-                    <dd>Banka: ';
-			echo LR\Filters::escapeHtmlText($company->bank_name) /* line 36 */;
-			echo '</dd>
-                </dl>
-                
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-telephone"></i>
+                            Telefon
+                        </div>
+                        <div class="info-value">';
+			echo LR\Filters::escapeHtmlText($company->phone) /* line 65 */;
+			echo '</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-bank"></i>
+                            Bankovní účet
+                        </div>
+                        <div class="info-value">';
+			echo LR\Filters::escapeHtmlText($company->bank_account) /* line 73 */;
+			echo ' (';
+			echo LR\Filters::escapeHtmlText($company->bank_name) /* line 73 */;
+			echo ')</div>
+                    </div>
+                    
 ';
-			if ($company->logo) /* line 39 */ {
-				echo '                <dt>Logo</dt>
-                <dd>
-                    <img src="';
-				echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 42 */;
+			if ($company->logo) /* line 76 */ {
+				echo '                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-image"></i>
+                            Logo
+                        </div>
+                        <div class="info-value">
+                            <img src="';
+				echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 83 */;
 				echo '/uploads/logo/';
-				echo LR\Filters::escapeHtmlAttr($company->logo) /* line 42 */;
-				echo '" alt="Logo" style="max-height: 100px;" class="mb-2">
-                </dd>
+				echo LR\Filters::escapeHtmlAttr($company->logo) /* line 83 */;
+				echo '" alt="Logo" style="max-height: 60px;" class="rounded">
+                        </div>
+                    </div>
 ';
 			}
-			echo '                
+			echo '                    
 ';
-			if ($company->signature) /* line 46 */ {
-				echo '                <dt>Podpis</dt>
-                <dd>
-                    <img src="';
-				echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 49 */;
+			if ($company->signature) /* line 88 */ {
+				echo '                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-pen"></i>
+                            Podpis
+                        </div>
+                        <div class="info-value">
+                            <img src="';
+				echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 95 */;
 				echo '/uploads/signature/';
-				echo LR\Filters::escapeHtmlAttr($company->signature) /* line 49 */;
-				echo '" alt="Podpis" style="max-height: 100px;">
-                </dd>
+				echo LR\Filters::escapeHtmlAttr($company->signature) /* line 95 */;
+				echo '" alt="Podpis" style="max-height: 60px;" class="rounded">
+                        </div>
+                    </div>
 ';
 			}
-			echo '            </div>
+			echo '                </div>
+            </div>
         </div>
     </div>
-</div>
 ';
 		}
 		echo '
-<div class="card mb-4">
-    <div class="card-header">
-        Upravit firemní údaje
-    </div>
-    <div class="card-body">
-        ';
-		$form = $this->global->formsStack[] = $this->global->uiControl['companyForm'] /* line 63 */;
+    <div class="card shadow-sm rounded-lg border-0 mb-4">
+        <div class="card-header">
+            <i class="bi bi-pencil-square me-2"></i>
+            <h3>Upravit firemní údaje</h3>
+        </div>
+        <div class="card-body">
+            ';
+		$form = $this->global->formsStack[] = $this->global->uiControl['companyForm'] /* line 111 */;
 		Nette\Bridges\FormsLatte\Runtime::initializeForm($form);
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form, ['class' => 'row g-3']) /* line 63 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form, ['class' => 'row g-4']) /* line 111 */;
 		echo '
-            <div class="col-md-6">
-                <div class="mb-3">
-                    ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('name', $this->global)->getLabel()) /* line 66 */;
-		echo '
-                    ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('name', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 67 */;
-		echo '
-                </div>
-                
-                <div class="mb-3">
-                    ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('address', $this->global)->getLabel()) /* line 71 */;
-		echo '
-                    ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('address', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 72 */;
-		echo '
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('city', $this->global)->getLabel()) /* line 78 */;
-		echo '
-                            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('city', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 79 */;
-		echo '
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('zip', $this->global)->getLabel()) /* line 84 */;
-		echo '
-                            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('zip', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 85 */;
-		echo '
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('country', $this->global)->getLabel()) /* line 90 */;
-		echo '
-                            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('country', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 91 */;
-		echo '
-                        </div>
+                <!-- Základní údaje -->
+                <div class="col-12">
+                    <div class="section-header">
+                        <i class="bi bi-building"></i>
+                        <h2 class="section-title">Základní údaje</h2>
                     </div>
                 </div>
                 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('ic', $this->global)->getLabel()) /* line 99 */;
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('name', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 122 */;
 		echo '
-                            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('ic', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 100 */;
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('name', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 123 */;
 		echo '
-                        </div>
                     </div>
                 </div>
                 
-                <div class="mb-3 form-check">
-                    <label class="form-check-label">
-                        <input type="checkbox" id="vat-payer-checkbox" class="form-check-input" name="vat_payer" value="1" ';
-		if ($company && $company->vat_payer) /* line 107 */ {
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('email', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 129 */;
+		echo '
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('email', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 130 */;
+		echo '
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('phone', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 136 */;
+		echo '
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('phone', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 137 */;
+		echo '
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('country', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 143 */;
+		echo '
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('country', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 144 */;
+		echo '
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <div class="form-floating">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('address', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 150 */;
+		echo '
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('address', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 151 */;
+		echo '
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('city', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 157 */;
+		echo '
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('city', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 158 */;
+		echo '
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('zip', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 164 */;
+		echo '
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('zip', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 165 */;
+		echo '
+                    </div>
+                </div>
+                
+                <!-- Fakturační údaje -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-receipt"></i>
+                        <h2 class="section-title">Fakturační údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('ic', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 179 */;
+		echo '
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('ic', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 180 */;
+		echo '
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="modern-checkbox-wrapper">
+                        <input type="checkbox" id="vat-payer-checkbox" name="vat_payer" value="1" ';
+		if ($company && $company->vat_payer) /* line 186 */ {
 			echo 'checked';
 		}
-		echo '> Jsem plátce DPH
-                    </label>
-                </div>
-                
-                <div id="dic-container" class="mb-3" style="display: none;">
-                    ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('dic', $this->global)->getLabel()) /* line 112 */;
-		echo '
-                    ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('dic', $this->global)->getControl()->addAttributes(['class' => 'form-control', 'id' => 'dic-field']) /* line 113 */;
-		echo '
-                </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('email', $this->global)->getLabel()) /* line 121 */;
-		echo '
-                            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('email', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 122 */;
-		echo '
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('phone', $this->global)->getLabel()) /* line 127 */;
-		echo '
-                            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('phone', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 128 */;
-		echo '
-                        </div>
+		echo ' class="modern-checkbox">
+                        <label for="vat-payer-checkbox" class="modern-checkbox-label">
+                            <div class="checkbox-content">
+                                <i class="bi bi-percent checkbox-icon"></i>
+                                <div class="checkbox-text">
+                                    <div class="checkbox-title">Jsem plátce DPH</div>
+                                    <div class="checkbox-description">Fakturace s DPH</div>
+                                </div>
+                            </div>
+                        </label>
                     </div>
                 </div>
                 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('bank_account', $this->global)->getLabel()) /* line 136 */;
+                <div id="dic-container" class="col-md-6" style="display: ';
+		if ($company && $company->vat_payer) /* line 199 */ {
+			echo 'block';
+		} else /* line 199 */ {
+			echo 'none';
+		}
+		echo ';">
+                    <div class="form-floating">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('dic', $this->global)->getControl()->addAttributes(['class' => 'form-control', 'id' => 'dic-field']) /* line 201 */;
 		echo '
-                            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('bank_account', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 137 */;
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('dic', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 202 */;
 		echo '
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('bank_name', $this->global)->getLabel()) /* line 142 */;
-		echo '
-                            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('bank_name', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 143 */;
-		echo '
-                        </div>
                     </div>
                 </div>
                 
-                <div class="mb-3">
-                    ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('logo', $this->global)->getLabel()) /* line 149 */;
+                <!-- Bankovní údaje -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-bank"></i>
+                        <h2 class="section-title">Bankovní údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('bank_account', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 216 */;
 		echo '
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('bank_account', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 217 */;
+		echo '
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('bank_name', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 223 */;
+		echo '
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('bank_name', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 224 */;
+		echo '
+                    </div>
+                </div>
+                
+                <!-- Soubory -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-file-earmark-image"></i>
+                        <h2 class="section-title">Logo a podpis</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label">Logo společnosti</label>
                     ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('logo', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 150 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('logo', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 238 */;
 		echo "\n";
-		if ($company && $company->logo) /* line 151 */ {
-			echo '                        <div class="mt-2 d-flex align-items-center">
+		if ($company && $company->logo) /* line 239 */ {
+			echo '                        <div class="mt-2 d-flex align-items-center gap-3">
                             <img src="';
-			echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 153 */;
+			echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 241 */;
 			echo '/uploads/logo/';
-			echo LR\Filters::escapeHtmlAttr($company->logo) /* line 153 */;
-			echo '" alt="Logo" style="max-height: 100px; margin-right: 10px;">
+			echo LR\Filters::escapeHtmlAttr($company->logo) /* line 241 */;
+			echo '" alt="Logo" style="max-height: 60px;" class="rounded">
                             <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('deleteLogo!')) /* line 154 */;
-			echo '" class="btn btn-sm btn-danger" onclick="return confirm(\'Opravdu chcete smazat logo?\')">Smazat logo</a>
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('deleteLogo!')) /* line 242 */;
+			echo '" class="btn btn-sm btn-outline-danger" onclick="return confirm(\'Opravdu chcete smazat logo?\')">
+                                <i class="bi bi-trash"></i> Smazat logo
+                            </a>
                         </div>
 ';
 		}
 		echo '                </div>
                 
-                <div class="mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Podpis</label>
                     ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('signature', $this->global)->getLabel()) /* line 160 */;
-		echo '
-                    ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('signature', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 161 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('signature', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 251 */;
 		echo "\n";
-		if ($company && $company->signature) /* line 162 */ {
-			echo '                        <div class="mt-2 d-flex align-items-center">
+		if ($company && $company->signature) /* line 252 */ {
+			echo '                        <div class="mt-2 d-flex align-items-center gap-3">
                             <img src="';
-			echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 164 */;
+			echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 254 */;
 			echo '/uploads/signature/';
-			echo LR\Filters::escapeHtmlAttr($company->signature) /* line 164 */;
-			echo '" alt="Podpis" style="max-height: 100px; margin-right: 10px;">
+			echo LR\Filters::escapeHtmlAttr($company->signature) /* line 254 */;
+			echo '" alt="Podpis" style="max-height: 60px;" class="rounded">
                             <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('deleteSignature!')) /* line 165 */;
-			echo '" class="btn btn-sm btn-danger" onclick="return confirm(\'Opravdu chcete smazat podpis?\')">Smazat podpis</a>
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('deleteSignature!')) /* line 255 */;
+			echo '" class="btn btn-sm btn-outline-danger" onclick="return confirm(\'Opravdu chcete smazat podpis?\')">
+                                <i class="bi bi-trash"></i> Smazat podpis
+                            </a>
                         </div>
 ';
 		}
 		echo '                </div>
-            </div>
-            
-            <div class="col-12">
-                <hr>
-                <h3>Nastavení barev faktury</h3>
-                <div class="card mb-4">
-                    <div class="card-header">
-                        Přizpůsobení vzhledu faktury
+                
+                <!-- Nastavení barev faktury -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-palette"></i>
+                        <h2 class="section-title">Nastavení barev faktury</h2>
                     </div>
-                    <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('invoice_heading_color', $this->global)->getLabel()) /* line 182 */;
+                </div>
+                
+                <div class="col-12">
+                    <div class="color-settings-grid">
+                        <div class="color-setting-item">
+                            <label class="form-label">Barva nadpisu "FAKTURA"</label>
+                            <div class="color-input-group">
+                                ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_heading_color', $this->global)->getControl()->addAttributes(['value' => $company->invoice_heading_color ?? '#cacaca']) /* line 275 */;
 		echo '
-                                    <div class="d-flex align-items-center">
-                                        ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_heading_color', $this->global)->getControl() /* line 184 */;
-		echo '
-                                        <span class="ms-2">FAKTURA</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_bg_color', $this->global)->getLabel()) /* line 191 */;
-		echo '
-                                    <div class="d-flex align-items-center">
-                                        ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_bg_color', $this->global)->getControl() /* line 193 */;
-		echo '
-                                        <span class="ms-2">Pozadí</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_text_color', $this->global)->getLabel()) /* line 200 */;
-		echo '
-                                    <div class="d-flex align-items-center">
-                                        ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_text_color', $this->global)->getControl() /* line 202 */;
-		echo '
-                                        <span class="ms-2">Text v pozadí</span>
-                                    </div>
-                                </div>
+                                <span class="color-preview">FAKTURA</span>
                             </div>
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('invoice_labels_color', $this->global)->getLabel()) /* line 211 */;
+                        
+                        <div class="color-setting-item">
+                            <label class="form-label">Barva pozadí lichoběžníku</label>
+                            <div class="color-input-group">
+                                ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_bg_color', $this->global)->getControl()->addAttributes(['value' => $company->invoice_trapezoid_bg_color ?? '#cacaca']) /* line 283 */;
 		echo '
-                                    <div class="d-flex align-items-center">
-                                        ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_labels_color', $this->global)->getControl() /* line 213 */;
-		echo '
-                                        <span class="ms-2">Dodavatel, Odběratel, atd.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('invoice_footer_color', $this->global)->getLabel()) /* line 220 */;
-		echo '
-                                    <div class="d-flex align-items-center">
-                                        ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_footer_color', $this->global)->getControl() /* line 222 */;
-		echo '
-                                        <span class="ms-2">Patička</span>
-                                    </div>
-                                </div>
+                                <span class="color-preview">Pozadí</span>
                             </div>
                         </div>
-                        <div class="alert alert-info">
-                            <small>Tyto barvy budou použity při generování PDF faktur</small>
+                        
+                        <div class="color-setting-item">
+                            <label class="form-label">Barva textu v lichoběžníku</label>
+                            <div class="color-input-group">
+                                ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_text_color', $this->global)->getControl()->addAttributes(['value' => $company->invoice_trapezoid_text_color ?? '#000000']) /* line 291 */;
+		echo '
+                                <span class="color-preview">Text v pozadí</span>
+                            </div>
+                        </div>
+                        
+                        <div class="color-setting-item">
+                            <label class="form-label">Barva popisků (Dodavatel, Odběratel, atd.)</label>
+                            <div class="color-input-group">
+                                ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_labels_color', $this->global)->getControl()->addAttributes(['value' => $company->invoice_labels_color ?? '#cacaca']) /* line 299 */;
+		echo '
+                                <span class="color-preview">Dodavatel, Odběratel, atd.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="color-setting-item">
+                            <label class="form-label">Barva patičky</label>
+                            <div class="color-input-group">
+                                ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_footer_color', $this->global)->getControl()->addAttributes(['value' => $company->invoice_footer_color ?? '#393b41']) /* line 307 */;
+		echo '
+                                <span class="color-preview">Patička</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <small>Tyto barvy budou použity při generování PDF faktur</small>
+                    </div>
+                </div>
+                
+                <!-- Akční tlačítka -->
+                <div class="col-12 mt-4">
+                    <div class="action-buttons-container">
+                        <div class="d-flex justify-content-end">
+                            <button';
+		echo ($ʟ_elem = Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControlPart())->addAttributes(['class' => null])->attributes() /* line 323 */;
+		echo ' class="btn btn-primary">
+                                <i class="bi bi-check-lg"></i> Uložit nastavení
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-12">
-                <div class="mb-3">
-                    ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary']) /* line 237 */;
-		echo '
-                </div>
-            </div>
-        ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 240 */;
+            ';
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 329 */;
 
 		echo '
+        </div>
     </div>
 </div>
 ';

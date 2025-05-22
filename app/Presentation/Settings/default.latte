@@ -1,243 +1,333 @@
 {block content}
-<h1>Nastavení</h1>
-
-{if $company}
-<div class="card mb-4">
-    <div class="card-header">
-        Aktuální firemní údaje
+<div class="settings-container">
+    <div class="page-header">
+        <h1 class="main-title">Nastavení</h1>
+        <p class="text-muted">Správa firemních údajů a nastavení systému</p>
     </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <dl>
-                    <dt>Název společnosti</dt>
-                    <dd>{$company->name}</dd>
+
+    {if $company}
+    <div class="info-card mb-4">
+        <div class="info-card-header">
+            <i class="bi bi-info-circle me-2"></i>
+            <h3>Aktuální firemní údaje</h3>
+        </div>
+        <div class="info-card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-building"></i>
+                            Název společnosti
+                        </div>
+                        <div class="info-value">{$company->name}</div>
+                    </div>
                     
-                    <dt>Adresa</dt>
-                    <dd>{$company->address}, {$company->zip} {$company->city}, {$company->country}</dd>
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-geo-alt"></i>
+                            Adresa
+                        </div>
+                        <div class="info-value">{$company->address}, {$company->zip} {$company->city}, {$company->country}</div>
+                    </div>
                     
-                    <dt>IČ</dt>
-                    <dd>{$company->ic}</dd>
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-upc"></i>
+                            IČ
+                        </div>
+                        <div class="info-value">{$company->ic}</div>
+                    </div>
                     
                     {if $company->dic}
-                    <dt>DIČ</dt>
-                    <dd>{$company->dic}</dd>
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-upc-scan"></i>
+                            DIČ
+                        </div>
+                        <div class="info-value">{$company->dic}</div>
+                    </div>
                     {/if}
-                </dl>
-            </div>
-            <div class="col-md-6">
-                <dl>
-                    <dt>Kontaktní údaje</dt>
-                    <dd>E-mail: {$company->email}</dd>
-                    <dd>Telefon: {$company->phone}</dd>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-envelope"></i>
+                            E-mail
+                        </div>
+                        <div class="info-value">{$company->email}</div>
+                    </div>
                     
-                    <dt>Bankovní údaje</dt>
-                    <dd>Účet: {$company->bank_account}</dd>
-                    <dd>Banka: {$company->bank_name}</dd>
-                </dl>
-                
-                {if $company->logo}
-                <dt>Logo</dt>
-                <dd>
-                    <img src="{$basePath}/uploads/logo/{$company->logo}" alt="Logo" style="max-height: 100px;" class="mb-2">
-                </dd>
-                {/if}
-                
-                {if $company->signature}
-                <dt>Podpis</dt>
-                <dd>
-                    <img src="{$basePath}/uploads/signature/{$company->signature}" alt="Podpis" style="max-height: 100px;">
-                </dd>
-                {/if}
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-telephone"></i>
+                            Telefon
+                        </div>
+                        <div class="info-value">{$company->phone}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-bank"></i>
+                            Bankovní účet
+                        </div>
+                        <div class="info-value">{$company->bank_account} ({$company->bank_name})</div>
+                    </div>
+                    
+                    {if $company->logo}
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-image"></i>
+                            Logo
+                        </div>
+                        <div class="info-value">
+                            <img src="{$basePath}/uploads/logo/{$company->logo}" alt="Logo" style="max-height: 60px;" class="rounded">
+                        </div>
+                    </div>
+                    {/if}
+                    
+                    {if $company->signature}
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-pen"></i>
+                            Podpis
+                        </div>
+                        <div class="info-value">
+                            <img src="{$basePath}/uploads/signature/{$company->signature}" alt="Podpis" style="max-height: 60px;" class="rounded">
+                        </div>
+                    </div>
+                    {/if}
+                </div>
             </div>
         </div>
     </div>
-</div>
-{/if}
+    {/if}
 
-<div class="card mb-4">
-    <div class="card-header">
-        Upravit firemní údaje
-    </div>
-    <div class="card-body">
-        {form companyForm class => 'row g-3'}
-            <div class="col-md-6">
-                <div class="mb-3">
-                    {label name /}
-                    {input name class => 'form-control'}
-                </div>
-                
-                <div class="mb-3">
-                    {label address /}
-                    {input address class => 'form-control'}
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            {label city /}
-                            {input city class => 'form-control'}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            {label zip /}
-                            {input zip class => 'form-control'}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            {label country /}
-                            {input country class => 'form-control'}
-                        </div>
+    <div class="card shadow-sm rounded-lg border-0 mb-4">
+        <div class="card-header">
+            <i class="bi bi-pencil-square me-2"></i>
+            <h3>Upravit firemní údaje</h3>
+        </div>
+        <div class="card-body">
+            {form companyForm class => 'row g-4'}
+                <!-- Základní údaje -->
+                <div class="col-12">
+                    <div class="section-header">
+                        <i class="bi bi-building"></i>
+                        <h2 class="section-title">Základní údaje</h2>
                     </div>
                 </div>
                 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            {label ic /}
-                            {input ic class => 'form-control'}
-                        </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input name class => 'form-control'}
+                        {label name class => 'form-label' /}
                     </div>
                 </div>
                 
-                <div class="mb-3 form-check">
-                    <label class="form-check-label">
-                        <input type="checkbox" id="vat-payer-checkbox" class="form-check-input" name="vat_payer" value="1" {if $company && $company->vat_payer}checked{/if}> Jsem plátce DPH
-                    </label>
-                </div>
-                
-                <div id="dic-container" class="mb-3" style="display: none;">
-                    {label dic /}
-                    {input dic class => 'form-control', id => 'dic-field'}
-                </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            {label email /}
-                            {input email class => 'form-control'}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            {label phone /}
-                            {input phone class => 'form-control'}
-                        </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input email class => 'form-control'}
+                        {label email class => 'form-label' /}
                     </div>
                 </div>
                 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            {label bank_account /}
-                            {input bank_account class => 'form-control'}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            {label bank_name /}
-                            {input bank_name class => 'form-control'}
-                        </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input phone class => 'form-control'}
+                        {label phone class => 'form-label' /}
                     </div>
                 </div>
                 
-                <div class="mb-3">
-                    {label logo /}
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input country class => 'form-control'}
+                        {label country class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <div class="form-floating">
+                        {input address class => 'form-control'}
+                        {label address class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input city class => 'form-control'}
+                        {label city class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input zip class => 'form-control'}
+                        {label zip class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <!-- Fakturační údaje -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-receipt"></i>
+                        <h2 class="section-title">Fakturační údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input ic class => 'form-control'}
+                        {label ic class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="modern-checkbox-wrapper">
+                        <input type="checkbox" id="vat-payer-checkbox" name="vat_payer" value="1" {if $company && $company->vat_payer}checked{/if} class="modern-checkbox">
+                        <label for="vat-payer-checkbox" class="modern-checkbox-label">
+                            <div class="checkbox-content">
+                                <i class="bi bi-percent checkbox-icon"></i>
+                                <div class="checkbox-text">
+                                    <div class="checkbox-title">Jsem plátce DPH</div>
+                                    <div class="checkbox-description">Fakturace s DPH</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="dic-container" class="col-md-6" style="display: {if $company && $company->vat_payer}block{else}none{/if};">
+                    <div class="form-floating">
+                        {input dic class => 'form-control', id => 'dic-field'}
+                        {label dic class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <!-- Bankovní údaje -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-bank"></i>
+                        <h2 class="section-title">Bankovní údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input bank_account class => 'form-control'}
+                        {label bank_account class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input bank_name class => 'form-control'}
+                        {label bank_name class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <!-- Soubory -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-file-earmark-image"></i>
+                        <h2 class="section-title">Logo a podpis</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label">Logo společnosti</label>
                     {input logo class => 'form-control'}
                     {if $company && $company->logo}
-                        <div class="mt-2 d-flex align-items-center">
-                            <img src="{$basePath}/uploads/logo/{$company->logo}" alt="Logo" style="max-height: 100px; margin-right: 10px;">
-                            <a n:href="deleteLogo!" class="btn btn-sm btn-danger" onclick="return confirm('Opravdu chcete smazat logo?')">Smazat logo</a>
+                        <div class="mt-2 d-flex align-items-center gap-3">
+                            <img src="{$basePath}/uploads/logo/{$company->logo}" alt="Logo" style="max-height: 60px;" class="rounded">
+                            <a n:href="deleteLogo!" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat logo?')">
+                                <i class="bi bi-trash"></i> Smazat logo
+                            </a>
                         </div>
                     {/if}
                 </div>
                 
-                <div class="mb-3">
-                    {label signature /}
+                <div class="col-md-6">
+                    <label class="form-label">Podpis</label>
                     {input signature class => 'form-control'}
                     {if $company && $company->signature}
-                        <div class="mt-2 d-flex align-items-center">
-                            <img src="{$basePath}/uploads/signature/{$company->signature}" alt="Podpis" style="max-height: 100px; margin-right: 10px;">
-                            <a n:href="deleteSignature!" class="btn btn-sm btn-danger" onclick="return confirm('Opravdu chcete smazat podpis?')">Smazat podpis</a>
+                        <div class="mt-2 d-flex align-items-center gap-3">
+                            <img src="{$basePath}/uploads/signature/{$company->signature}" alt="Podpis" style="max-height: 60px;" class="rounded">
+                            <a n:href="deleteSignature!" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat podpis?')">
+                                <i class="bi bi-trash"></i> Smazat podpis
+                            </a>
                         </div>
                     {/if}
                 </div>
-            </div>
-            
-            <div class="col-12">
-                <hr>
-                <h3>Nastavení barev faktury</h3>
-                <div class="card mb-4">
-                    <div class="card-header">
-                        Přizpůsobení vzhledu faktury
+                
+                <!-- Nastavení barev faktury -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-palette"></i>
+                        <h2 class="section-title">Nastavení barev faktury</h2>
                     </div>
-                    <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    {label invoice_heading_color /}
-                                    <div class="d-flex align-items-center">
-                                        {input invoice_heading_color}
-                                        <span class="ms-2">FAKTURA</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    {label invoice_trapezoid_bg_color /}
-                                    <div class="d-flex align-items-center">
-                                        {input invoice_trapezoid_bg_color}
-                                        <span class="ms-2">Pozadí</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    {label invoice_trapezoid_text_color /}
-                                    <div class="d-flex align-items-center">
-                                        {input invoice_trapezoid_text_color}
-                                        <span class="ms-2">Text v pozadí</span>
-                                    </div>
-                                </div>
+                </div>
+                
+                <div class="col-12">
+                    <div class="color-settings-grid">
+                        <div class="color-setting-item">
+                            <label class="form-label">Barva nadpisu "FAKTURA"</label>
+                            <div class="color-input-group">
+                                {input invoice_heading_color value => ($company->invoice_heading_color ?? '#cacaca')}
+                                <span class="color-preview">FAKTURA</span>
                             </div>
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    {label invoice_labels_color /}
-                                    <div class="d-flex align-items-center">
-                                        {input invoice_labels_color}
-                                        <span class="ms-2">Dodavatel, Odběratel, atd.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    {label invoice_footer_color /}
-                                    <div class="d-flex align-items-center">
-                                        {input invoice_footer_color}
-                                        <span class="ms-2">Patička</span>
-                                    </div>
-                                </div>
+                        
+                        <div class="color-setting-item">
+                            <label class="form-label">Barva pozadí lichoběžníku</label>
+                            <div class="color-input-group">
+                                {input invoice_trapezoid_bg_color value => ($company->invoice_trapezoid_bg_color ?? '#cacaca')}
+                                <span class="color-preview">Pozadí</span>
                             </div>
                         </div>
-                        <div class="alert alert-info">
-                            <small>Tyto barvy budou použity při generování PDF faktur</small>
+                        
+                        <div class="color-setting-item">
+                            <label class="form-label">Barva textu v lichoběžníku</label>
+                            <div class="color-input-group">
+                                {input invoice_trapezoid_text_color value => ($company->invoice_trapezoid_text_color ?? '#000000')}
+                                <span class="color-preview">Text v pozadí</span>
+                            </div>
+                        </div>
+                        
+                        <div class="color-setting-item">
+                            <label class="form-label">Barva popisků (Dodavatel, Odběratel, atd.)</label>
+                            <div class="color-input-group">
+                                {input invoice_labels_color value => ($company->invoice_labels_color ?? '#cacaca')}
+                                <span class="color-preview">Dodavatel, Odběratel, atd.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="color-setting-item">
+                            <label class="form-label">Barva patičky</label>
+                            <div class="color-input-group">
+                                {input invoice_footer_color value => ($company->invoice_footer_color ?? '#393b41')}
+                                <span class="color-preview">Patička</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <small>Tyto barvy budou použity při generování PDF faktur</small>
+                    </div>
+                </div>
+                
+                <!-- Akční tlačítka -->
+                <div class="col-12 mt-4">
+                    <div class="action-buttons-container">
+                        <div class="d-flex justify-content-end">
+                            <button n:name="send" class="btn btn-primary">
+                                <i class="bi bi-check-lg"></i> Uložit nastavení
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-12">
-                <div class="mb-3">
-                    {input send class => 'btn btn-primary'}
-                </div>
-            </div>
-        {/form}
+            {/form}
+        </div>
     </div>
 </div>
 {/block}
