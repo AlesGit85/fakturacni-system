@@ -51,9 +51,9 @@ final class Template_d706c008be extends Latte\Runtime\Template
     <!-- Záhlaví s názvem sekce a počtem klientů -->
     <div class="section-header-row mb-4">
         <div>
-            <h1 class="section-title mb-0">Klienti <span class="total-count">';
+            <h1 class="section-title mb-0">Klienti <span class="total-count">Počet klientů v systému: ';
 		echo LR\Filters::escapeHtmlText($clients->count()) /* line 6 */;
-		echo ' společností</span></h1>
+		echo '</span></h1>
             <p class="text-muted">Seznam všech klientů v systému</p>
         </div>
         <div class="header-actions">

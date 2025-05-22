@@ -65,7 +65,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1747774778,
+      1 => 1747897075,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (

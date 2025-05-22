@@ -775,7 +775,7 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $this->redirect('edit', $invoiceId);
     }
 
-    public function renderDefault(?string $filter = null, ?string $search = null): void
+    public function renderDefault(?string $filter = null, ?string $search = null, ?int $client = null): void
     {
         // Kontrola faktur po splatnosti
         $this->invoicesManager->checkOverdueDates();
@@ -788,10 +788,20 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
             $query->where('status', $filter);
         }
 
+        // Aplikace filtru podle klienta
+        if ($client) {
+            $query->where('client_id', $client);
+
+            // Získáme název klienta pro zobrazení v šabloně
+            $clientName = $this->clientsManager->getById($client)->name ?? null;
+            $this->template->clientFilter = $clientName;
+        }
+
         // Nastavení proměnných pro šablonu
         $this->template->invoices = $query;
         $this->template->filter = $filter;
         $this->template->search = $search;
+        $this->template->client = $client;
     }
 
     /**

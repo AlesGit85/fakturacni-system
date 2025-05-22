@@ -1,58 +1,233 @@
 {block content}
-<h1>{$client->name}</h1>
+<div class="client-detail-container">
+    <!-- Záhlaví stránky -->
+    <div class="page-header mb-4">
+        <div class="header-content">
+            <h1 class="main-title mb-2">{$client->name}</h1>
+            <p class="text-muted">Detail klienta a jeho kontaktní informace</p>
+        </div>
+        <div class="header-actions">
+            <a n:href="edit $client->id" class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i> Upravit klienta
+            </a>
+        </div>
+    </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card shadow-sm rounded-lg border-0">
-            <div class="card-header d-flex align-items-center">
-                <i class="bi bi-person-lines-fill me-2"></i>
-                <span>Kontaktní údaje</span>
+    <!-- Obsah stránky -->
+    <div class="row g-4">
+        <!-- Základní informace -->
+        <div class="col-lg-6">
+            <div class="info-card">
+                <div class="info-card-header">
+                    <i class="bi bi-person-lines-fill me-2"></i>
+                    <h3>Základní informace</h3>
+                </div>
+                <div class="info-card-body">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-building"></i>
+                            Název společnosti
+                        </div>
+                        <div class="info-value">{$client->name}</div>
+                    </div>
+                    
+                    {if $client->contact_person}
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-person"></i>
+                            Kontaktní osoba
+                        </div>
+                        <div class="info-value">{$client->contact_person}</div>
+                    </div>
+                    {/if}
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-envelope"></i>
+                            E-mail
+                        </div>
+                        <div class="info-value">
+                            {if $client->email}
+                                <a href="mailto:{$client->email}" class="client-email">{$client->email}</a>
+                            {else}
+                                <span class="text-muted">—</span>
+                            {/if}
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-telephone"></i>
+                            Telefon
+                        </div>
+                        <div class="info-value">
+                            {if $client->phone}
+                                <a href="tel:{$client->phone}" class="client-phone">{$client->phone}</a>
+                            {else}
+                                <span class="text-muted">—</span>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <p><strong><i class="bi bi-geo-alt text-primary me-2"></i>Adresa:</strong> {$client->address}</p>
-                <p><strong><i class="bi bi-building text-primary me-2"></i>Město:</strong> {$client->city}</p>
-                <p><strong><i class="bi bi-mailbox text-primary me-2"></i>PSČ:</strong> {$client->zip}</p>
-                <p><strong><i class="bi bi-globe text-primary me-2"></i>Země:</strong> {$client->country}</p>
-                {if $client->contact_person}<p><strong><i class="bi bi-person text-primary me-2"></i>Kontaktní osoba:</strong> {$client->contact_person}</p>{/if}
-                <p><strong><i class="bi bi-envelope text-primary me-2"></i>E-mail:</strong> {$client->email}</p>
-                <p><strong><i class="bi bi-telephone text-primary me-2"></i>Telefon:</strong> {$client->phone}</p>
+        </div>
+        
+        <!-- Adresa -->
+        <div class="col-lg-6">
+            <div class="info-card">
+                <div class="info-card-header">
+                    <i class="bi bi-geo-alt me-2"></i>
+                    <h3>Adresa</h3>
+                </div>
+                <div class="info-card-body">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-geo-alt"></i>
+                            Ulice
+                        </div>
+                        <div class="info-value">{$client->address}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-house"></i>
+                            Město
+                        </div>
+                        <div class="info-value">{$client->city}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-mailbox"></i>
+                            PSČ
+                        </div>
+                        <div class="info-value">{$client->zip}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-globe"></i>
+                            Země
+                        </div>
+                        <div class="info-value">{$client->country}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fakturační údaje -->
+        <div class="col-lg-6">
+            <div class="info-card">
+                <div class="info-card-header">
+                    <i class="bi bi-receipt me-2"></i>
+                    <h3>Fakturační údaje</h3>
+                </div>
+                <div class="info-card-body">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-upc"></i>
+                            IČ
+                        </div>
+                        <div class="info-value">
+                            {if $client->ic}
+                                {$client->ic}
+                            {else}
+                                <span class="text-muted">—</span>
+                            {/if}
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-upc-scan"></i>
+                            DIČ
+                        </div>
+                        <div class="info-value">
+                            {if $client->dic}
+                                {$client->dic}
+                            {else}
+                                <span class="text-muted">—</span>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistiky faktur -->
+        <div class="col-lg-6">
+            <div class="info-card">
+                <div class="info-card-header">
+                    <i class="bi bi-file-earmark-text me-2"></i>
+                    <h3>Faktury</h3>
+                </div>
+                <div class="info-card-body">
+                    {var $invoiceCount = $presenter->getClientInvoiceCount($client->id)}
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-file-earmark-text"></i>
+                            Počet faktur
+                        </div>
+                        <div class="info-value">
+                            {if $invoiceCount > 0}
+                                <span class="badge bg-dark">{$invoiceCount}</span>
+                            {else}
+                                <span class="text-muted">Zatím žádné faktury</span>
+                            {/if}
+                        </div>
+                    </div>
+                    
+                    {if $invoiceCount > 0}
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-arrow-right"></i>
+                            Akce
+                        </div>
+                        <div class="info-value">
+                            <a n:href="Invoices:default, client => $client->id" class="btn btn-sm btn-outline-dark">
+                                Zobrazit faktury klienta
+                            </a>
+                        </div>
+                    </div>
+                    {/if}
+                </div>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-6">
-        <div class="card shadow-sm rounded-lg border-0">
-            <div class="card-header d-flex align-items-center">
-                <i class="bi bi-receipt me-2"></i>
-                <span>Fakturační údaje</span>
-            </div>
-            <div class="card-body">
-                <p><strong><i class="bi bi-upc text-primary me-2"></i>IČ:</strong> {$client->ic}</p>
-                <p><strong><i class="bi bi-upc-scan text-primary me-2"></i>DIČ:</strong> {$client->dic}</p>
+
+    <!-- Akční tlačítka -->
+    <div class="action-buttons-container mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <a n:href="default" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Zpět na seznam klientů
+            </a>
+            
+            <div class="d-flex gap-2">
+                <a n:href="edit $client->id" class="btn btn-primary">
+                    <i class="bi bi-pencil-square"></i> Upravit
+                </a>
+                
+                {var $invoiceCount = $presenter->getClientInvoiceCount($client->id)}
+                {if $invoiceCount == 0}
+                    <a n:href="delete $client->id" class="btn btn-danger" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')">
+                        <i class="bi bi-trash"></i> Smazat
+                    </a>
+                {else}
+                    <button class="btn btn-outline-danger" disabled title="Klient má {$invoiceCount} faktur a nelze ho smazat">
+                        <i class="bi bi-trash"></i> Smazat
+                    </button>
+                {/if}
             </div>
         </div>
+        
+        {if $invoiceCount > 0}
+        <div class="mt-2">
+            <small class="text-muted">
+                <i class="bi bi-info-circle me-1"></i>
+                Pro smazání klienta je nutné nejprve smazat všechny jeho faktury ({$invoiceCount})
+            </small>
+        </div>
+        {/if}
     </div>
-</div>
-
-<div class="mt-4 d-flex gap-2">
-    <a n:href="edit $client->id" class="btn btn-warning">
-        <i class="bi bi-pencil-square"></i> Upravit
-    </a>
-    
-{var $invoiceCount = $presenter->getClientInvoiceCount($client->id)}
-    {if $invoiceCount == 0}
-        <a n:href="delete $client->id" class="btn btn-danger" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')">
-            <i class="bi bi-trash"></i> Smazat
-        </a>
-    {else}
-        <button class="btn btn-danger" disabled title="Klient má {$invoiceCount} faktur a nelze ho smazat">
-            <i class="bi bi-trash"></i> Smazat
-        </button>
-        <small class="text-danger d-block mt-2">Pro smazání klienta je nutné nejprve smazat všechny jeho faktury ({$invoiceCount})</small>
-    {/if}
-    
-    <a n:href="default" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> Zpět na seznam klientů
-    </a>
 </div>
 {/block}

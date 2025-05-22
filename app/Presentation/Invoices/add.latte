@@ -1,220 +1,301 @@
 {block content}
-<h1>Vytvořit novou fakturu</h1>
+<div class="invoice-form-container">
+    <div class="page-header">
+        <h1 class="main-title">Vytvořit novou fakturu</h1>
+        <p class="text-muted">Vyplňte údaje pro vytvoření nové faktury</p>
+    </div>
 
-<div class="row">
-    <div class="col-md-12">
-        {form invoiceForm}
-            <div class="card mb-4">
-                <div class="card-header">Základní údaje</div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label">Klient:</label>
-                        <div class="mb-3">
-                            {foreach $form['client_type']->items as $key => $label}
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="client_type" id="client_type_{$key}" value="{$key}" {if $form['client_type']->value === $key}checked{/if}>
-                                    <label class="form-check-label" for="client_type_{$key}">{$label}</label>
-                                </div>
-                            {/foreach}
-                        </div>
+    <div class="row">
+        <div class="col-md-12">
+            {form invoiceForm}
+                <!-- Výběr klienta -->
+                <div class="card shadow-sm rounded-lg border-0 mb-4">
+                    <div class="card-header">
+                        <i class="bi bi-person-lines-fill me-2"></i>
+                        <h3>Klient</h3>
                     </div>
-                    
-                    <div id="existing-client-section">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                {label client_id /}
+                    <div class="card-body">
+                        <div class="client-type-selector mb-4">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <input type="radio" name="client_type" id="client_type_existing" value="existing" {if $form['client_type']->value === 'existing'}checked{/if} class="client-type-radio">
+                                    <label for="client_type_existing" class="client-type-option">
+                                        <div class="option-content">
+                                            <div class="option-title">Existující klient</div>
+                                            <div class="option-description">Vybrat z databáze klientů</div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="radio" name="client_type" id="client_type_manual" value="manual" {if $form['client_type']->value === 'manual'}checked{/if} class="client-type-radio">
+                                    <label for="client_type_manual" class="client-type-option">
+                                        <div class="option-content">
+                                            <div class="option-title">Zadat ručně</div>
+                                            <div class="option-description">Vyplnit údaje klienta</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="existing-client-section">
+                            <div class="form-floating">
                                 {input client_id class => 'form-control'}
+                                {label client_id class => 'form-label' /}
                             </div>
                         </div>
-                    </div>
-                    
-                    <div id="manual-client-section" style="display: none;">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                {label client_name /}
-                                {input client_name class => 'form-control'}
-                            </div>
-                            <div class="col-md-6">
-                                {label client_ic /}
-                                {input client_ic class => 'form-control'}
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                {label client_address /}
-                                {input client_address class => 'form-control'}
-                            </div>
-                            <div class="col-md-6">
-                                {label client_dic /}
-                                {input client_dic class => 'form-control'}
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                {label client_city /}
-                                {input client_city class => 'form-control'}
-                            </div>
-                            <div class="col-md-4">
-                                {label client_zip /}
-                                {input client_zip class => 'form-control'}
-                            </div>
-                            <div class="col-md-4">
-                                {label client_country /}
-                                {input client_country class => 'form-control'}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <hr>
-                    
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                {label number /}
-                                {input number class => 'form-control'}
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                {label issue_date /}
-                                {input issue_date class => 'form-control'}
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                {label due_date /}
-                                {input due_date class => 'form-control'}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                {label payment_method /}
-                                {input payment_method class => 'form-control'}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card mb-4">
-                <div class="card-header">Možnosti zobrazení</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="mb-3 form-check">
-                                {input qr_payment} {label qr_payment /}
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3 form-check">
-                                {input show_logo} {label show_logo /}
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3 form-check">
-                                {input show_signature} {label show_signature /}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            {if $isVatPayer}
-            <!-- Formulář pro plátce DPH - s položkami a DPH -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    Položky faktury
-                    <button type="button" id="add-item" class="btn btn-sm btn-primary float-end">Přidat položku</button>
-                </div>
-                <div class="card-body">
-                    <div id="invoice-items">
-                        <div class="invoice-item card mb-3">
-                            <div class="card-header">
-                                Položka #1
-                                <button type="button" class="btn btn-sm btn-outline-danger float-end remove-item" style="display: none;">Odebrat</button>
-                            </div>
-                            <div class="card-body">
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Název položky</label>
-                                        <input type="text" name="items[0][name]" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Popis</label>
-                                        <input type="text" name="items[0][description]" class="form-control">
+                        
+                        <div id="manual-client-section" style="display: none;">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        {input client_name class => 'form-control'}
+                                        {label client_name class => 'form-label' /}
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <label class="form-label">Množství</label>
-                                        <input type="number" name="items[0][quantity]" class="form-control item-quantity" value="1" min="0.01" step="0.01" required>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        {input client_ic class => 'form-control'}
+                                        {label client_ic class => 'form-label' /}
                                     </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Jednotka</label>
-                                        <input type="text" name="items[0][unit]" class="form-control" value="ks" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        {input client_address class => 'form-control'}
+                                        {label client_address class => 'form-label' /}
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Cena/ks bez DPH</label>
-                                        <input type="number" name="items[0][price]" class="form-control item-price" min="0.01" step="0.01" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        {input client_dic class => 'form-control'}
+                                        {label client_dic class => 'form-label' /}
                                     </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">DPH %</label>
-                                        <input type="number" name="items[0][vat]" class="form-control item-vat" value="21" min="0" max="100" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        {input client_city class => 'form-control'}
+                                        {label client_city class => 'form-label' /}
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Celkem s DPH</label>
-                                        <input type="number" name="items[0][total]" class="form-control item-total" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        {input client_zip class => 'form-control'}
+                                        {label client_zip class => 'form-label' /}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        {input client_country class => 'form-control'}
+                                        {label client_country class => 'form-label' /}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {else}
-            <!-- Formulář pro neplátce DPH - zjednodušený bez DPH -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    Předmět fakturace
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label">Předmět fakturace</label>
-                        <textarea name="items[0][name]" class="form-control" rows="3" required></textarea>
-                        <input type="hidden" name="items[0][description]" value="">
-                        <input type="hidden" name="items[0][quantity]" value="1">
-                        <input type="hidden" name="items[0][unit]" value="ks">
-                        <input type="hidden" name="items[0][vat]" value="0">
+                
+                <!-- Základní údaje faktury -->
+                <div class="card shadow-sm rounded-lg border-0 mb-4">
+                    <div class="card-header">
+                        <i class="bi bi-file-earmark-text me-2"></i>
+                        <h3>Základní údaje faktury</h3>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Částka (konečná)</label>
-                        <div class="input-group">
-                            <input type="number" name="items[0][total]" id="simple-total" class="form-control" min="0.01" step="0.01" value="0" required>
-                            <span class="input-group-text">Kč</span>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    {input number class => 'form-control'}
+                                    {label number class => 'form-label' /}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    {input issue_date class => 'form-control'}
+                                    {label issue_date class => 'form-label' /}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    {input due_date class => 'form-control'}
+                                    {label due_date class => 'form-label' /}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    {input payment_method class => 'form-control'}
+                                    {label payment_method class => 'form-label' /}
+                                </div>
+                            </div>
                         </div>
-                        <input type="hidden" name="items[0][price]" id="simple-price" value="0">
                     </div>
                 </div>
-            </div>
-            {/if}
-            
-            <div class="card mb-4">
-                <div class="card-header">Poznámka</div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        {input note class => 'form-control'}
+                
+                <!-- Možnosti zobrazení -->
+                <div class="card shadow-sm rounded-lg border-0 mb-4">
+                    <div class="card-header">
+                        <i class="bi bi-gear me-2"></i>
+                        <h3>Možnosti zobrazení</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="modern-checkbox-wrapper">
+                                    <input type="checkbox" id="qr_payment_checkbox" name="qr_payment" value="1" {if $form['qr_payment']->value}checked{/if} class="modern-checkbox">
+                                    <label for="qr_payment_checkbox" class="modern-checkbox-label">
+                                        <div class="checkbox-content">
+                                            <i class="bi bi-qr-code checkbox-icon"></i>
+                                            <div class="checkbox-text">
+                                                <div class="checkbox-title">QR kód pro platbu</div>
+                                                <div class="checkbox-description">Generovat QR kód</div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="modern-checkbox-wrapper">
+                                    <input type="checkbox" id="show_logo_checkbox" name="show_logo" value="1" {if $form['show_logo']->value}checked{/if} class="modern-checkbox">
+                                    <label for="show_logo_checkbox" class="modern-checkbox-label">
+                                        <div class="checkbox-content">
+                                            <i class="bi bi-image checkbox-icon"></i>
+                                            <div class="checkbox-text">
+                                                <div class="checkbox-title">Zobrazit logo</div>
+                                                <div class="checkbox-description">Logo na faktuře</div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="modern-checkbox-wrapper">
+                                    <input type="checkbox" id="show_signature_checkbox" name="show_signature" value="1" {if $form['show_signature']->value}checked{/if} class="modern-checkbox">
+                                    <label for="show_signature_checkbox" class="modern-checkbox-label">
+                                        <div class="checkbox-content">
+                                            <i class="bi bi-pen checkbox-icon"></i>
+                                            <div class="checkbox-text">
+                                                <div class="checkbox-title">Zobrazit podpis</div>
+                                                <div class="checkbox-description">Podpis na faktuře</div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="mb-3">
-                {input send class => 'btn btn-primary'}
-                <a n:href="default" class="btn btn-secondary">Zpět na seznam faktur</a>
-            </div>
-        {/form}
+                
+                {if $isVatPayer}
+                <!-- Formulář pro plátce DPH - s položkami a DPH -->
+                <div class="card shadow-sm rounded-lg border-0 mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-list-ul me-2"></i>
+                            <h3 class="d-inline">Položky faktury</h3>
+                        </div>
+                        <button type="button" id="add-item" class="btn btn-sm btn-primary">
+                            <i class="bi bi-plus-circle"></i> Přidat položku
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="invoice-items">
+                            <div class="invoice-item card mb-3">
+                                <div class="card-header">
+                                    Položka #1
+                                    <button type="button" class="btn btn-sm btn-outline-danger float-end remove-item" style="display: none;">Odebrat</button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Název položky</label>
+                                            <input type="text" name="items[0][name]" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Popis</label>
+                                            <input type="text" name="items[0][description]" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="form-label">Množství</label>
+                                            <input type="number" name="items[0][quantity]" class="form-control item-quantity" value="1" min="0.01" step="0.01" required>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Jednotka</label>
+                                            <input type="text" name="items[0][unit]" class="form-control" value="ks" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Cena/ks bez DPH</label>
+                                            <input type="number" name="items[0][price]" class="form-control item-price" min="0.01" step="0.01" required>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">DPH %</label>
+                                            <input type="number" name="items[0][vat]" class="form-control item-vat" value="21" min="0" max="100" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Celkem s DPH</label>
+                                            <input type="number" name="items[0][total]" class="form-control item-total" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {else}
+                <!-- Formulář pro neplátce DPH - zjednodušený bez DPH -->
+                <div class="card shadow-sm rounded-lg border-0 mb-4">
+                    <div class="card-header">
+                        <i class="bi bi-list-ul me-2"></i>
+                        <h3>Předmět fakturace</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Předmět fakturace</label>
+                            <textarea name="items[0][name]" class="form-control" rows="3" required></textarea>
+                            <input type="hidden" name="items[0][description]" value="">
+                            <input type="hidden" name="items[0][quantity]" value="1">
+                            <input type="hidden" name="items[0][unit]" value="ks">
+                            <input type="hidden" name="items[0][vat]" value="0">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Částka (konečná)</label>
+                            <div class="input-group">
+                                <input type="number" name="items[0][total]" id="simple-total" class="form-control" min="0.01" step="0.01" value="0" required>
+                                <span class="input-group-text">Kč</span>
+                            </div>
+                            <input type="hidden" name="items[0][price]" id="simple-price" value="0">
+                        </div>
+                    </div>
+                </div>
+                {/if}
+                
+                <!-- Poznámka -->
+                <div class="card shadow-sm rounded-lg border-0 mb-4">
+                    <div class="card-header">
+                        <i class="bi bi-chat-left-text me-2"></i>
+                        <h3>Poznámka</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-floating">
+                            {input note class => 'form-control', style => 'height: 100px'}
+                            {label note class => 'form-label' /}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Akční tlačítka -->
+                <div class="action-buttons-container">
+                    <div class="d-flex justify-content-between">
+                        <a n:href="default" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Zpět na seznam faktur
+                        </a>
+                        <button n:name="send" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> Vytvořit fakturu
+                        </button>
+                    </div>
+                </div>
+            {/form}
+        </div>
     </div>
 </div>
 {/block}
