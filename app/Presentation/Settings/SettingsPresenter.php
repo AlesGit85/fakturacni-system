@@ -76,33 +76,52 @@ class SettingsPresenter extends Nette\Application\UI\Presenter
 
         // Barvy faktury
         $form->addText('invoice_heading_color', 'Barva nadpisu "FAKTURA":')
-            ->setDefaultValue('#cacaca')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color');
 
         $form->addText('invoice_trapezoid_bg_color', 'Barva pozadí lichoběžníku:')
-            ->setDefaultValue('#cacaca')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color');
 
         $form->addText('invoice_trapezoid_text_color', 'Barva textu v lichoběžníku:')
-            ->setDefaultValue('#000000')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color');
 
         $form->addText('invoice_labels_color', 'Barva popisků (Dodavatel, Odběratel, atd.):')
-            ->setDefaultValue('#cacaca')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color');
 
         $form->addText('invoice_footer_color', 'Barva patičky:')
-            ->setDefaultValue('#393b41')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color');
 
         $form->addSubmit('send', 'Uložit');
 
         $form->onSuccess[] = [$this, 'companyFormSucceeded'];
+
+        // Nastavení výchozích hodnot z databáze
+        $company = $this->companyManager->getCompanyInfo();
+        if ($company) {
+            $defaults = (array) $company;
+            
+            // Nastavení výchozích barev, pokud nejsou v databázi
+            $defaults['invoice_heading_color'] = $company->invoice_heading_color ?? '#cacaca';
+            $defaults['invoice_trapezoid_bg_color'] = $company->invoice_trapezoid_bg_color ?? '#cacaca';
+            $defaults['invoice_trapezoid_text_color'] = $company->invoice_trapezoid_text_color ?? '#000000';
+            $defaults['invoice_labels_color'] = $company->invoice_labels_color ?? '#cacaca';
+            $defaults['invoice_footer_color'] = $company->invoice_footer_color ?? '#393b41';
+            
+            $form->setDefaults($defaults);
+        } else {
+            // Výchozí hodnoty pro nový záznam
+            $form->setDefaults([
+                'invoice_heading_color' => '#cacaca',
+                'invoice_trapezoid_bg_color' => '#cacaca',
+                'invoice_trapezoid_text_color' => '#000000',
+                'invoice_labels_color' => '#cacaca',
+                'invoice_footer_color' => '#393b41'
+            ]);
+        }
 
         return $form;
     }

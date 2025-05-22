@@ -183,7 +183,7 @@
                 
                 <div class="col-md-6">
                     <div class="modern-checkbox-wrapper">
-                        <input type="checkbox" id="vat-payer-checkbox" name="vat_payer" value="1" {if $company && $company->vat_payer}checked{/if} class="modern-checkbox">
+                        {input vat_payer id => 'vat-payer-checkbox', class => 'modern-checkbox'}
                         <label for="vat-payer-checkbox" class="modern-checkbox-label">
                             <div class="checkbox-content">
                                 <i class="bi bi-percent checkbox-icon"></i>
@@ -272,7 +272,7 @@
                         <div class="color-setting-item">
                             <label class="form-label">Barva nadpisu "FAKTURA"</label>
                             <div class="color-input-group">
-                                {input invoice_heading_color value => ($company->invoice_heading_color ?? '#cacaca')}
+                                {input invoice_heading_color}
                                 <span class="color-preview">FAKTURA</span>
                             </div>
                         </div>
@@ -280,7 +280,7 @@
                         <div class="color-setting-item">
                             <label class="form-label">Barva pozadí lichoběžníku</label>
                             <div class="color-input-group">
-                                {input invoice_trapezoid_bg_color value => ($company->invoice_trapezoid_bg_color ?? '#cacaca')}
+                                {input invoice_trapezoid_bg_color}
                                 <span class="color-preview">Pozadí</span>
                             </div>
                         </div>
@@ -288,7 +288,7 @@
                         <div class="color-setting-item">
                             <label class="form-label">Barva textu v lichoběžníku</label>
                             <div class="color-input-group">
-                                {input invoice_trapezoid_text_color value => ($company->invoice_trapezoid_text_color ?? '#000000')}
+                                {input invoice_trapezoid_text_color}
                                 <span class="color-preview">Text v pozadí</span>
                             </div>
                         </div>
@@ -296,7 +296,7 @@
                         <div class="color-setting-item">
                             <label class="form-label">Barva popisků (Dodavatel, Odběratel, atd.)</label>
                             <div class="color-input-group">
-                                {input invoice_labels_color value => ($company->invoice_labels_color ?? '#cacaca')}
+                                {input invoice_labels_color}
                                 <span class="color-preview">Dodavatel, Odběratel, atd.</span>
                             </div>
                         </div>
@@ -304,7 +304,7 @@
                         <div class="color-setting-item">
                             <label class="form-label">Barva patičky</label>
                             <div class="color-input-group">
-                                {input invoice_footer_color value => ($company->invoice_footer_color ?? '#393b41')}
+                                {input invoice_footer_color}
                                 <span class="color-preview">Patička</span>
                             </div>
                         </div>

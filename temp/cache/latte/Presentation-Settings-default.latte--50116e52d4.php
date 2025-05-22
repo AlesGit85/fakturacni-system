@@ -292,11 +292,9 @@ final class Template_50116e52d4 extends Latte\Runtime\Template
                 
                 <div class="col-md-6">
                     <div class="modern-checkbox-wrapper">
-                        <input type="checkbox" id="vat-payer-checkbox" name="vat_payer" value="1" ';
-		if ($company && $company->vat_payer) /* line 186 */ {
-			echo 'checked';
-		}
-		echo ' class="modern-checkbox">
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('vat_payer', $this->global)->getControl()->addAttributes(['id' => 'vat-payer-checkbox', 'class' => 'modern-checkbox']) /* line 186 */;
+		echo '
                         <label for="vat-payer-checkbox" class="modern-checkbox-label">
                             <div class="checkbox-content">
                                 <i class="bi bi-percent checkbox-icon"></i>
@@ -422,7 +420,7 @@ final class Template_50116e52d4 extends Latte\Runtime\Template
                             <label class="form-label">Barva nadpisu "FAKTURA"</label>
                             <div class="color-input-group">
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_heading_color', $this->global)->getControl()->addAttributes(['value' => $company->invoice_heading_color ?? '#cacaca']) /* line 275 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_heading_color', $this->global)->getControl() /* line 275 */;
 		echo '
                                 <span class="color-preview">FAKTURA</span>
                             </div>
@@ -432,7 +430,7 @@ final class Template_50116e52d4 extends Latte\Runtime\Template
                             <label class="form-label">Barva pozadí lichoběžníku</label>
                             <div class="color-input-group">
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_bg_color', $this->global)->getControl()->addAttributes(['value' => $company->invoice_trapezoid_bg_color ?? '#cacaca']) /* line 283 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_bg_color', $this->global)->getControl() /* line 283 */;
 		echo '
                                 <span class="color-preview">Pozadí</span>
                             </div>
@@ -442,7 +440,7 @@ final class Template_50116e52d4 extends Latte\Runtime\Template
                             <label class="form-label">Barva textu v lichoběžníku</label>
                             <div class="color-input-group">
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_text_color', $this->global)->getControl()->addAttributes(['value' => $company->invoice_trapezoid_text_color ?? '#000000']) /* line 291 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_trapezoid_text_color', $this->global)->getControl() /* line 291 */;
 		echo '
                                 <span class="color-preview">Text v pozadí</span>
                             </div>
@@ -452,7 +450,7 @@ final class Template_50116e52d4 extends Latte\Runtime\Template
                             <label class="form-label">Barva popisků (Dodavatel, Odběratel, atd.)</label>
                             <div class="color-input-group">
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_labels_color', $this->global)->getControl()->addAttributes(['value' => $company->invoice_labels_color ?? '#cacaca']) /* line 299 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_labels_color', $this->global)->getControl() /* line 299 */;
 		echo '
                                 <span class="color-preview">Dodavatel, Odběratel, atd.</span>
                             </div>
@@ -462,7 +460,7 @@ final class Template_50116e52d4 extends Latte\Runtime\Template
                             <label class="form-label">Barva patičky</label>
                             <div class="color-input-group">
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_footer_color', $this->global)->getControl()->addAttributes(['value' => $company->invoice_footer_color ?? '#393b41']) /* line 307 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('invoice_footer_color', $this->global)->getControl() /* line 307 */;
 		echo '
                                 <span class="color-preview">Patička</span>
                             </div>

@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializace color pickerů s možností zadání HEX kódu
     initColorPickers();
+    
+    // Inicializace náhledu barev
+    initColorPreviews();
 });
 
 /**
@@ -26,7 +29,10 @@ function initVatPayerToggle() {
             dicContainer.style.display = 'block';
         } else {
             dicContainer.style.display = 'none';
-            document.getElementById('dic-field').value = '';
+            const dicField = document.getElementById('dic-field');
+            if (dicField) {
+                dicField.value = '';
+            }
         }
     }
     
@@ -61,6 +67,7 @@ function initColorPickers() {
         // Synchronizace barvy mezi color pickerem a textovým polem
         picker.addEventListener('input', function() {
             hexInput.value = picker.value;
+            updateColorPreview(picker);
         });
         
         hexInput.addEventListener('input', function() {
@@ -75,7 +82,67 @@ function initColorPickers() {
             const hexRegex = /^#([A-Fa-f0-9]{3}){1,2}$/;
             if (hexRegex.test(hexCode)) {
                 picker.value = hexCode;
+                updateColorPreview(picker);
             }
         });
+        
+        // Inicializace náhledu při načtení
+        updateColorPreview(picker);
     });
+}
+
+/**
+ * Inicializace náhledů barev
+ */
+function initColorPreviews() {
+    const colorPickers = document.querySelectorAll('input[type="color"]');
+    
+    colorPickers.forEach(picker => {
+        updateColorPreview(picker);
+    });
+}
+
+/**
+ * Aktualizace náhledu barvy
+ * @param {HTMLElement} picker Color picker element
+ */
+function updateColorPreview(picker) {
+    const colorInputGroup = picker.closest('.color-input-group');
+    if (!colorInputGroup) return;
+    
+    const preview = colorInputGroup.querySelector('.color-preview');
+    if (!preview) return;
+    
+    const color = picker.value;
+    
+    // Nastavení barvy pozadí nebo textu podle typu
+    if (picker.name.includes('text_color')) {
+        // Pro barvu textu nastavíme barvu textu
+        preview.style.color = color;
+        preview.style.backgroundColor = '#f8f9fa';
+    } else {
+        // Pro ostatní nastavíme barvu pozadí
+        preview.style.backgroundColor = color;
+        // Automaticky určíme barvu textu na základě světlosti pozadí
+        preview.style.color = getContrastColor(color);
+    }
+}
+
+/**
+ * Určí kontrastní barvu textu na základě barvy pozadí
+ * @param {string} hexColor HEX barva pozadí
+ * @returns {string} Černá nebo bílá barva pro optimální kontrast
+ */
+function getContrastColor(hexColor) {
+    // Převod HEX na RGB
+    const hex = hexColor.replace('#', '');
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    
+    // Výpočet relativní luminance
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    
+    // Vrátíme černou pro světlé pozadí, bílou pro tmavé
+    return luminance > 0.5 ? '#000000' : '#ffffff';
 }
