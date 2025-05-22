@@ -40,6 +40,11 @@ class UserManager implements Nette\Security\Authenticator
             throw new Nette\Security\AuthenticationException('Heslo není správné.', self::INVALID_CREDENTIAL);
         }
 
+        // Aktualizace posledního přihlášení
+        $this->database->table('users')
+            ->where('id', $row->id)
+            ->update(['last_login' => new \DateTime()]);
+
         $arr = $row->toArray();
         unset($arr['password']);
 
@@ -47,14 +52,33 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     /**
+     * Ověří heslo uživatele bez přihlášení (pro změnu hesla)
+     */
+    public function verifyPassword(string $username, string $password): bool
+    {
+        $row = $this->database->table('users')
+            ->where('username', $username)
+            ->fetch();
+
+        if (!$row) {
+            return false;
+        }
+
+        return $this->passwords->verify($password, $row->password);
+    }
+
+    /**
      * Přidá nového uživatele
      */
-    public function add(string $username, string $email, string $password): void
+    public function add(string $username, string $email, string $password, string $role = 'readonly'): void
     {
         $this->database->table('users')->insert([
             'username' => $username,
             'password' => $this->passwords->hash($password),
             'email' => $email,
+            'role' => $role,
+            'created_at' => new \DateTime(),
+            'last_login' => null,
         ]);
     }
 
@@ -79,6 +103,13 @@ class UserManager implements Nette\Security\Authenticator
      */
     public function update($id, $data)
     {
+        // Pokud se mění heslo, zahashujeme ho
+        if (isset($data['password']) && !empty($data['password'])) {
+            $data['password'] = $this->passwords->hash($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
         return $this->database->table('users')->where('id', $id)->update($data);
     }
 
@@ -88,5 +119,61 @@ class UserManager implements Nette\Security\Authenticator
     public function delete($id)
     {
         return $this->database->table('users')->where('id', $id)->delete();
+    }
+
+    /**
+     * Změna hesla uživatele
+     */
+    public function changePassword($userId, string $newPassword): void
+    {
+        $this->database->table('users')
+            ->where('id', $userId)
+            ->update(['password' => $this->passwords->hash($newPassword)]);
+    }
+
+    /**
+     * Kontrola, zda je uživatelské jméno dostupné
+     */
+    public function isUsernameAvailable(string $username, ?int $excludeUserId = null): bool
+    {
+        $query = $this->database->table('users')->where('username', $username);
+        
+        if ($excludeUserId) {
+            $query->where('id != ?', $excludeUserId);
+        }
+        
+        return $query->count() === 0;
+    }
+
+    /**
+     * Kontrola, zda je e-mail dostupný
+     */
+    public function isEmailAvailable(string $email, ?int $excludeUserId = null): bool
+    {
+        $query = $this->database->table('users')->where('email', $email);
+        
+        if ($excludeUserId) {
+            $query->where('id != ?', $excludeUserId);
+        }
+        
+        return $query->count() === 0;
+    }
+
+    /**
+     * Získá počet uživatelů podle rolí
+     */
+    public function getRoleStatistics(): array
+    {
+        $stats = $this->database->table('users')
+            ->select('role, COUNT(*) as count')
+            ->group('role')
+            ->fetchPairs('role', 'count');
+
+        return [
+            'admin' => $stats['admin'] ?? 0,
+            'accountant' => $stats['accountant'] ?? 0,
+            'readonly' => $stats['readonly'] ?? 0,
+            'total' => array_sum($stats)
+        ];
     }
 }

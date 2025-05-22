@@ -8,8 +8,9 @@ use Nette;
 use App\Model\InvoicesManager;
 use App\Model\ClientsManager;
 use App\Model\CompanyManager;
+use App\Presentation\BasePresenter;
 
-final class HomePresenter extends Nette\Application\UI\Presenter
+final class HomePresenter extends BasePresenter
 {
     /** @var InvoicesManager */
     private $invoicesManager;
@@ -19,6 +20,8 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
     /** @var CompanyManager */
     private $companyManager;
+
+    protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
 
     public function __construct(
         InvoicesManager $invoicesManager,
@@ -32,8 +35,10 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
     public function renderDefault(): void
     {
-        // Kontrola faktur po splatnosti
-        $this->invoicesManager->checkOverdueDates();
+        // Kontrola faktur po splatnosti (pouze pro účetní a admin)
+        if ($this->isAccountant()) {
+            $this->invoicesManager->checkOverdueDates();
+        }
 
         // Dashboard statistiky
         $invoiceStats = $this->invoicesManager->getStatistics();
@@ -51,18 +56,29 @@ final class HomePresenter extends Nette\Application\UI\Presenter
             ]
         ];
 
-        // Logika pro "Začínáme" sekci
-        $setupSteps = $this->getSetupSteps($company, $clientsCount, $invoiceStats['totalCount']);
-        $this->template->setupSteps = $setupSteps;
-        $this->template->isSetupComplete = empty($setupSteps);
+        // Logika pro "Začínáme" sekci (pouze pro admin)
+        if ($this->isAdmin()) {
+            $setupSteps = $this->getSetupSteps($company, $clientsCount, $invoiceStats['totalCount']);
+            $this->template->setupSteps = $setupSteps;
+            $this->template->isSetupComplete = empty($setupSteps);
+        } else {
+            $this->template->setupSteps = [];
+            $this->template->isSetupComplete = true;
+        }
 
         // Blížící se splatnosti (faktury splatné do 7 dnů)
-        $upcomingInvoices = $this->getUpcomingDueInvoices();
-        $this->template->upcomingInvoices = $upcomingInvoices;
+        if ($this->isAccountant()) {
+            $upcomingInvoices = $this->getUpcomingDueInvoices();
+            $this->template->upcomingInvoices = $upcomingInvoices;
 
-        // Nedávné faktury (posledních 5)
-        $recentInvoices = $this->invoicesManager->getAll()->limit(5);
-        $this->template->recentInvoices = $recentInvoices;
+            // Nedávné faktury (posledních 5)
+            $recentInvoices = $this->invoicesManager->getAll()->limit(5);
+            $this->template->recentInvoices = $recentInvoices;
+        } else {
+            // Pro readonly uživatele zobrazíme méně informací
+            $this->template->upcomingInvoices = [];
+            $this->template->recentInvoices = [];
+        }
 
         $this->template->company = $company;
     }

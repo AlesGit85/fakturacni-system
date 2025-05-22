@@ -5,11 +5,14 @@ namespace App\Presentation\Settings;
 use Nette;
 use Nette\Application\UI\Form;
 use App\Model\CompanyManager;
+use App\Presentation\BasePresenter;
 
-class SettingsPresenter extends Nette\Application\UI\Presenter
+class SettingsPresenter extends BasePresenter
 {
     /** @var CompanyManager */
     private $companyManager;
+
+    protected array $requiredRoles = ['admin'];
 
     public function __construct(CompanyManager $companyManager)
     {
@@ -24,6 +27,7 @@ class SettingsPresenter extends Nette\Application\UI\Presenter
     public function createComponentCompanyForm(): Form
     {
         $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
         $form->addText('name', 'Název společnosti:')
             ->setRequired('Zadejte název společnosti');

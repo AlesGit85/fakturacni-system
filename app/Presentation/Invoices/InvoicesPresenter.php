@@ -8,9 +8,10 @@ use App\Model\InvoicesManager;
 use App\Model\ClientsManager;
 use App\Model\CompanyManager;
 use App\Model\QrPaymentService;
+use App\Presentation\BasePresenter;
 use TCPDF;
 
-class InvoicesPresenter extends Nette\Application\UI\Presenter
+class InvoicesPresenter extends BasePresenter
 {
     /** @var InvoicesManager */
     private $invoicesManager;
@@ -23,6 +24,8 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
 
     /** @var QrPaymentService */
     private $qrPaymentService;
+
+    protected array $requiredRoles = ['accountant', 'admin'];
 
     public function __construct(
         InvoicesManager $invoicesManager,
@@ -79,6 +82,12 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
 
     public function actionDelete(int $id): void
     {
+        // Pouze admin může mazat faktury
+        if (!$this->isAdmin()) {
+            $this->flashMessage('Pouze administrátoři mohou mazat faktury.', 'danger');
+            $this->redirect('show', $id);
+        }
+
         $this->invoicesManager->delete($id);
         $this->flashMessage('Faktura byla úspěšně smazána', 'success');
         $this->redirect('default');
@@ -554,10 +563,10 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
         $this->terminate();
     }
 
-
     public function createComponentInvoiceForm(): Form
     {
         $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
         // Přepínač mezi existujícím a ručně zadaným klientem
         $clientTypeRadio = $form->addRadioList('client_type', 'Klient:', [
@@ -643,7 +652,7 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
             ->setHtmlAttribute('rows', 3);
 
         // Skrytá položka pro uživatele
-        $form->addHidden('user_id', 1);
+        $form->addHidden('user_id', $this->getUser()->getId());
 
         // Odeslání formuláře
         $form->addSubmit('send', 'Uložit fakturu');
@@ -810,6 +819,12 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
      */
     public function handleMarkAsPaid(int $id): void
     {
+        // Pouze admin a accountant mohou označovat faktury jako zaplacené
+        if (!$this->isAccountant()) {
+            $this->flashMessage('Nemáte oprávnění označovat faktury jako zaplacené.', 'danger');
+            $this->redirect('this');
+        }
+
         $today = new \DateTime();
 
         $this->invoicesManager->updateStatus($id, 'paid', $today->format('Y-m-d'));
@@ -823,6 +838,12 @@ class InvoicesPresenter extends Nette\Application\UI\Presenter
      */
     public function handleMarkAsCreated(int $id): void
     {
+        // Pouze admin a accountant mohou měnit stav faktur
+        if (!$this->isAccountant()) {
+            $this->flashMessage('Nemáte oprávnění měnit stav faktur.', 'danger');
+            $this->redirect('this');
+        }
+
         $this->invoicesManager->updateStatus($id, 'created');
         $this->flashMessage('Faktura byla označena jako vystavená', 'success');
         $this->redirect('this');

@@ -35,17 +35,22 @@ return array (
     'App\\Model\\UserManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\UserManager.php',
-      1 => 1747504402,
+      1 => 1747942285,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Accessory\\LatteExtension.php',
       1 => 1738539948,
     ),
+    'App\\Presentation\\BasePresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
+      1 => 1747924929,
+    ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1747772040,
+      1 => 1747942020,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -60,17 +65,27 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1747901945,
+      1 => 1747942040,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1747897075,
+      1 => 1747927780,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1747742991,
+      1 => 1747941989,
+    ),
+    'App\\Presentation\\Sign\\SignPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
+      1 => 1747925166,
+    ),
+    'App\\Presentation\\Users\\UsersPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
+      1 => 1747942349,
     ),
   ),
   1 => 

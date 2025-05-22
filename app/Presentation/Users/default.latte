@@ -1,0 +1,116 @@
+{block content}
+<div class="users-container">
+    <!-- Záhlaví s názvem sekce a počtem uživatelů -->
+    <div class="section-header-row mb-4">
+        <div>
+            <h1 class="section-title mb-0">Uživatelé <span class="total-count">{$totalUsers} uživatelů</span></h1>
+            <p class="text-muted">Správa uživatelských účtů v systému</p>
+        </div>
+        <div class="header-actions">
+            <a n:href="add" class="btn btn-primary">
+                <i class="bi bi-person-plus"></i> Přidat uživatele
+            </a>
+        </div>
+    </div>
+
+    <!-- Tabulka uživatelů -->
+    {if $totalUsers > 0}
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Uživatel</th>
+                    <th>E-mail</th>
+                    <th>Role</th>
+                    <th>Vytvořen</th>
+                    <th>Poslední přihlášení</th>
+                    <th class="text-end">Akce</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $users as $user}
+                <tr class="data-row">
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="user-avatar me-3">
+                                <i class="bi bi-person-circle text-primary" style="font-size: 2rem;"></i>
+                            </div>
+                            <div>
+                                <strong>{$user->username}</strong>
+                                {if $user->id === $currentUser->id}
+                                    <span class="badge bg-info ms-2">To jste vy</span>
+                                {/if}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <a href="mailto:{$user->email}" class="client-email">{$user->email}</a>
+                    </td>
+                    <td>
+                        {if $user->role === 'admin'}
+                            <span class="badge bg-danger">Administrátor</span>
+                        {elseif $user->role === 'accountant'}
+                            <span class="badge bg-warning text-dark">Účetní</span>
+                        {else}
+                            <span class="badge bg-secondary">Pouze čtení</span>
+                        {/if}
+                    </td>
+                    <td>
+                        {if $user->created_at}
+                            {$user->created_at|date:'d.m.Y'}
+                        {else}
+                            <span class="text-muted">—</span>
+                        {/if}
+                    </td>
+                    <td>
+                        {if $user->last_login}
+                            {$user->last_login|date:'d.m.Y H:i'}
+                        {else}
+                            <span class="text-muted">Nikdy</span>
+                        {/if}
+                    </td>
+                    <td class="actions-column">
+                        <div class="action-buttons">
+                            <a n:href="edit $user->id" class="btn btn-icon" title="Upravit uživatele">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            
+                            {if $user->id !== $currentUser->id}
+                                {var $isLastAdmin = $user->role === 'admin' && $users->where('role', 'admin')->count() <= 1}
+                                {if !$isLastAdmin}
+                                    <a n:href="delete $user->id" class="btn btn-icon text-danger" 
+                                       onclick="return confirm('Opravdu chcete smazat uživatele {$user->username}?')" 
+                                       title="Smazat uživatele">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                {else}
+                                    <span class="btn btn-icon text-muted" title="Nelze smazat posledního administrátora">
+                                        <i class="bi bi-shield-check"></i>
+                                    </span>
+                                {/if}
+                            {else}
+                                <span class="btn btn-icon text-muted" title="Nemůžete smazat sám sebe">
+                                    <i class="bi bi-person-x"></i>
+                                </span>
+                            {/if}
+                        </div>
+                    </td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    </div>
+    {else}
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="bi bi-people"></i>
+        </div>
+        <h3>Zatím zde nejsou žádní uživatelé</h3>
+        <p>Začněte přidáním nového uživatele do systému</p>
+        <a n:href="add" class="btn btn-primary mt-3">
+            <i class="bi bi-person-plus"></i> Přidat prvního uživatele
+        </a>
+    </div>
+    {/if}
+</div>
+{/block}

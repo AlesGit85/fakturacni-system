@@ -1,0 +1,125 @@
+{layout '../@layout.latte'}
+
+{block title}Registrace{/block}
+
+{block content}
+<div class="sign-container">
+    <div class="sign-card">
+        <div class="sign-header">
+            <img src="{$basePath}/images/qr-webp-white.webp" alt="QRdoklad" class="sign-logo">
+            <h1 class="sign-title">
+                {if $isFirstUser}
+                    Vytvoření administrátorského účtu
+                {else}
+                    Registrace nového uživatele
+                {/if}
+            </h1>
+            <p class="sign-subtitle">
+                {if $isFirstUser}
+                    Vytvořte první účet s administrátorskými právy
+                {else}
+                    Vyplňte údaje pro vytvoření nového účtu
+                {/if}
+            </p>
+        </div>
+
+        <div class="sign-body">
+            {form signUpForm class => 'sign-form'}
+                <div class="form-floating mb-3">
+                    {input username class => 'form-control'}
+                    {label username class => 'form-label' /}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {input email class => 'form-control'}
+                    {label email class => 'form-label' /}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {input password class => 'form-control'}
+                    {label password class => 'form-label' /}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {input passwordVerify class => 'form-control'}
+                    {label passwordVerify class => 'form-label' /}
+                </div>
+
+                {if !$isFirstUser}
+                <div class="form-floating mb-3">
+                    {input role class => 'form-select'}
+                    {label role class => 'form-label' /}
+                </div>
+                {/if}
+
+                <div class="d-grid">
+                    {input send class => 'btn btn-primary btn-lg'}
+                </div>
+            {/form}
+        </div>
+
+        <div class="sign-footer">
+            <p class="text-center text-muted">
+                Už máte účet? 
+                <a n:href="Sign:in" class="link-primary">Přihlaste se</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+.sign-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #B1D235 0%, #95B11F 100%);
+    padding: 2rem 1rem;
+}
+
+.sign-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15);
+    padding: 0;
+    width: 100%;
+    max-width: 450px;
+    overflow: hidden;
+}
+
+.sign-header {
+    background: linear-gradient(135deg, #B1D235 0%, #95B11F 100%);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.sign-logo {
+    height: 40px;
+    margin-bottom: 1rem;
+}
+
+.sign-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.sign-subtitle {
+    opacity: 0.9;
+    margin-bottom: 0;
+}
+
+.sign-body {
+    padding: 2rem;
+}
+
+.sign-footer {
+    padding: 1rem 2rem 2rem;
+}
+
+.sign-form .btn {
+    font-weight: 600;
+}
+</style>
+{/block}

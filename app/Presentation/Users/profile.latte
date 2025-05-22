@@ -1,0 +1,143 @@
+{block content}
+<div class="user-form-container">
+    <div class="page-header">
+        <h1 class="main-title">Můj profil</h1>
+        <p class="text-muted">Správa vašeho uživatelského účtu</p>
+    </div>
+
+    <!-- Aktuální informace o profilu -->
+    <div class="info-card mb-4">
+        <div class="info-card-header">
+            <i class="bi bi-person-circle me-2"></i>
+            <h3>Aktuální údaje</h3>
+        </div>
+        <div class="info-card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-person"></i>
+                            Uživatelské jméno
+                        </div>
+                        <div class="info-value">{$profileUser->username}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-envelope"></i>
+                            E-mail
+                        </div>
+                        <div class="info-value">{$profileUser->email}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-shield"></i>
+                            Role
+                        </div>
+                        <div class="info-value">
+                            {if $profileUser->role === 'admin'}
+                                <span class="badge bg-danger">Administrátor</span>
+                            {elseif $profileUser->role === 'accountant'}
+                                <span class="badge bg-warning text-dark">Účetní</span>
+                            {else}
+                                <span class="badge bg-secondary">Pouze čtení</span>
+                            {/if}
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-calendar"></i>
+                            Registrován
+                        </div>
+                        <div class="info-value">
+                            {if $profileUser->created_at}
+                                {$profileUser->created_at|date:'d.m.Y'}
+                            {else}
+                                <span class="text-muted">—</span>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulář pro úpravu profilu -->
+    <div class="card shadow-sm rounded-lg border-0">
+        <div class="card-header">
+            <i class="bi bi-pencil-square me-2"></i>
+            <h3>Upravit profil</h3>
+        </div>
+        <div class="card-body p-4">
+            {form profileForm class => 'row g-4'}
+                <!-- Základní údaje -->
+                <div class="col-12">
+                    <div class="section-header">
+                        <i class="bi bi-person-vcard"></i>
+                        <h2 class="section-title">Základní údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input username class => 'form-control'}
+                        {label username class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input email class => 'form-control'}
+                        {label email class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <!-- Změna hesla -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-key"></i>
+                        <h2 class="section-title">Změna hesla</h2>
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Pro změnu hesla vyplňte všechna tři pole. Pokud nechcete měnit heslo, ponechte je prázdná.
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        {input currentPassword class => 'form-control'}
+                        {label currentPassword class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        {input password class => 'form-control'}
+                        {label password class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        {input passwordVerify class => 'form-control'}
+                        {label passwordVerify class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-12 mt-4 d-flex justify-content-between">
+                    <a n:href="default" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Zpět na uživatele
+                    </a>
+                    <button n:name="send" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i> Uložit změny
+                    </button>
+                </div>
+            {/form}
+        </div>
+    </div>
+</div>
+{/block}

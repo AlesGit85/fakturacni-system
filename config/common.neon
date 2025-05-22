@@ -15,13 +15,25 @@ database:
 	options:
 		lazy: true
 
+
+session:
+	expiration: 20 minutes
+	autoStart: true
+	name: fakturacni_system_session
+	cookieHttponly: true
+	cookieSamesite: Lax
+
+
+security:
+	users: []
+
+
 services:
 	- App\Model\ClientsManager
 	- App\Model\InvoicesManager
-	- App\Model\UserManager
 	- App\Model\CompanyManager
 	- App\Model\QrPaymentService
-
+	authenticator: App\Model\UserManager
 
 
 latte:

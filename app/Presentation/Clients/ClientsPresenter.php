@@ -5,14 +5,17 @@ namespace App\Presentation\Clients;
 use Nette;
 use Nette\Application\UI\Form;
 use App\Model\ClientsManager;
+use App\Presentation\BasePresenter;
 
-class ClientsPresenter extends Nette\Application\UI\Presenter
+class ClientsPresenter extends BasePresenter
 {
     /** @var ClientsManager */
     private $clientsManager;
 
     /** @var Nette\Database\Explorer */
     private $database;
+
+    protected array $requiredRoles = ['accountant', 'admin'];
 
     public function __construct(
         ClientsManager $clientsManager,
@@ -38,38 +41,39 @@ class ClientsPresenter extends Nette\Application\UI\Presenter
         $this->template->client = $client;
     }
 
-protected function createComponentClientForm(): Form
-{
-    $form = new Form;
+    protected function createComponentClientForm(): Form
+    {
+        $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
-    $form->addText('name', 'Název společnosti:')
-        ->setRequired('Zadejte název společnosti');
+        $form->addText('name', 'Název společnosti:')
+            ->setRequired('Zadejte název společnosti');
 
-    $form->addTextArea('address', 'Adresa:')
-        ->setRequired('Zadejte adresu');
+        $form->addTextArea('address', 'Adresa:')
+            ->setRequired('Zadejte adresu');
 
-    $form->addText('city', 'Město:')
-        ->setRequired('Zadejte město');
+        $form->addText('city', 'Město:')
+            ->setRequired('Zadejte město');
 
-    $form->addText('zip', 'PSČ:')
-        ->setRequired('Zadejte PSČ');
+        $form->addText('zip', 'PSČ:')
+            ->setRequired('Zadejte PSČ');
 
-    $form->addText('country', 'Země:')
-        ->setRequired('Zadejte zemi')
-        ->setDefaultValue('Česká republika');
+        $form->addText('country', 'Země:')
+            ->setRequired('Zadejte zemi')
+            ->setDefaultValue('Česká republika');
 
-    $form->addText('contact_person', 'Kontaktní osoba:');
-    $form->addText('ic', 'IČ:');
-    $form->addText('dic', 'DIČ:');
-    $form->addEmail('email', 'E-mail:');
-    $form->addText('phone', 'Telefon:');
+        $form->addText('contact_person', 'Kontaktní osoba:');
+        $form->addText('ic', 'IČ:');
+        $form->addText('dic', 'DIČ:');
+        $form->addEmail('email', 'E-mail:');
+        $form->addText('phone', 'Telefon:');
 
-    $form->addSubmit('send', 'Uložit');
+        $form->addSubmit('send', 'Uložit');
 
-    $form->onSuccess[] = [$this, 'clientFormSucceeded'];
+        $form->onSuccess[] = [$this, 'clientFormSucceeded'];
 
-    return $form;
-}
+        return $form;
+    }
 
     public function clientFormSucceeded(Form $form, \stdClass $data): void
     {
@@ -99,6 +103,12 @@ protected function createComponentClientForm(): Form
 
     public function actionDelete(int $id): void
     {
+        // Kontrola oprávnění pro mazání - pouze admin
+        if (!$this->isAdmin()) {
+            $this->flashMessage('Pouze administrátoři mohou mazat klienty.', 'danger');
+            $this->redirect('show', $id);
+        }
+
         // Nejprve zkontrolujeme, zda klient existuje
         $client = $this->clientsManager->getById($id);
 

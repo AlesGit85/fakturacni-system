@@ -1,0 +1,74 @@
+{block content}
+<div class="user-form-container">
+    <div class="page-header">
+        <h1 class="main-title">Přidat nového uživatele</h1>
+        <p class="text-muted">Vyplňte údaje pro vytvoření nového uživatelského účtu</p>
+    </div>
+
+    <div class="card shadow-sm rounded-lg border-0">
+        <div class="card-body p-4">
+            {form addUserForm class => 'row g-4'}
+                <!-- Základní údaje -->
+                <div class="col-12">
+                    <div class="section-header">
+                        <i class="bi bi-person-vcard"></i>
+                        <h2 class="section-title">Základní údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input username class => 'form-control'}
+                        {label username class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input email class => 'form-control'}
+                        {label email class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input role class => 'form-select'}
+                        {label role class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <!-- Heslo -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-key"></i>
+                        <h2 class="section-title">Přihlašovací údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input password class => 'form-control'}
+                        {label password class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input passwordVerify class => 'form-control'}
+                        {label passwordVerify class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-12 mt-4 d-flex justify-content-between">
+                    <a n:href="default" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Zpět na seznam uživatelů
+                    </a>
+                    <button n:name="send" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i> Přidat uživatele
+                    </button>
+                </div>
+            {/form}
+        </div>
+    </div>
+</div>
+{/block}
