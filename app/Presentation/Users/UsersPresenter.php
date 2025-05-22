@@ -21,6 +21,15 @@ final class UsersPresenter extends BasePresenter
         $this->userManager = $userManager;
     }
 
+    private function debugLog($message)
+    {
+        $logFile = __DIR__ . '/../../../temp/profile_debug.log';
+        file_put_contents($logFile, 
+            date('Y-m-d H:i:s') . " - " . $message . "\n", 
+            FILE_APPEND
+        );
+    }
+
     public function renderDefault(): void
     {
         $this->template->add('users', $this->userManager->getAll());
@@ -29,18 +38,25 @@ final class UsersPresenter extends BasePresenter
 
     public function renderProfile(): void
     {
+        $this->debugLog("=== RENDER PROFILE START ===");
+        
         // Každý přihlášený uživatel může upravovat svůj profil
         $this->requiredRoles = ['readonly', 'accountant', 'admin'];
         
         $userId = $this->getUser()->getId();
+        $this->debugLog("User ID: " . $userId);
+        
         $user = $this->userManager->getById($userId);
         
         if (!$user) {
+            $this->debugLog("ERROR: User not found");
             $this->error('Uživatel nebyl nalezen');
         }
         
+        $this->debugLog("User found: " . $user->username);
         $this->template->add('profileUser', $user);
         $this['profileForm']->setDefaults($user);
+        $this->debugLog("=== RENDER PROFILE END ===");
     }
 
     public function actionAdd(): void
@@ -267,6 +283,8 @@ final class UsersPresenter extends BasePresenter
 
     protected function createComponentProfileForm(): Form
     {
+        $this->debugLog("=== CREATE PROFILE FORM START ===");
+        
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
@@ -296,15 +314,30 @@ final class UsersPresenter extends BasePresenter
         $form->addSubmit('send', 'Uložit změny');
 
         $form->onSuccess[] = [$this, 'profileFormSucceeded'];
-
+        
+        $this->debugLog("=== CREATE PROFILE FORM END ===");
         return $form;
     }
 
-public function profileFormSucceeded(Form $form, \stdClass $data): void
+    public function profileFormSucceeded(Form $form, \stdClass $data): void
     {
+        $this->debugLog("=== PROFILE FORM SUCCEEDED START ===");
+        $this->debugLog("Form data: " . print_r($data, true));
+        
         $userId = $this->getUser()->getId();
+        $this->debugLog("Current user ID: " . $userId);
         
         try {
+            // Získáme aktuální údaje uživatele
+            $currentUser = $this->userManager->getById($userId);
+            if (!$currentUser) {
+                $this->debugLog("ERROR: Current user not found");
+                $form->addError('Uživatel nebyl nalezen.');
+                return;
+            }
+            
+            $this->debugLog("Current user found: " . $currentUser->username);
+
             // Kontrola jedinečnosti uživatelského jména a e-mailu
             $existingUsername = $this->userManager->getAll()
                 ->where('username', $data->username)
@@ -317,6 +350,7 @@ public function profileFormSucceeded(Form $form, \stdClass $data): void
                 ->fetch();
 
             if ($existingUsername) {
+                $this->debugLog("ERROR: Username already exists");
                 /** @var Nette\Forms\Controls\TextInput $usernameField */
                 $usernameField = $form['username'];
                 $usernameField->addError('Uživatelské jméno už je obsazené.');
@@ -324,6 +358,7 @@ public function profileFormSucceeded(Form $form, \stdClass $data): void
             }
             
             if ($existingEmail) {
+                $this->debugLog("ERROR: Email already exists");
                 /** @var Nette\Forms\Controls\TextInput $emailField */
                 $emailField = $form['email'];
                 $emailField->addError('E-mailová adresa už je registrovaná.');
@@ -332,21 +367,30 @@ public function profileFormSucceeded(Form $form, \stdClass $data): void
             
             // Pokud se mění heslo, ověříme současné heslo
             if (!empty($data->password)) {
+                $this->debugLog("Password change requested");
+                $this->debugLog("Current password provided: " . (!empty($data->currentPassword) ? "YES" : "NO"));
+                
                 if (empty($data->currentPassword)) {
+                    $this->debugLog("ERROR: Current password not provided");
                     /** @var Nette\Forms\Controls\PasswordInput $currentPasswordField */
                     $currentPasswordField = $form['currentPassword'];
                     $currentPasswordField->addError('Pro změnu hesla musíte zadat současné heslo.');
                     return;
                 }
                 
-                // Ověření současného hesla pomocí nové metody
-                $currentUsername = $this->getUser()->getIdentity()->username;
-                if (!$this->userManager->verifyPassword($currentUsername, $data->currentPassword)) {
+                // Ověření současného hesla
+                $passwordValid = $this->userManager->verifyPassword($currentUser->username, $data->currentPassword);
+                $this->debugLog("Current password verification: " . ($passwordValid ? "SUCCESS" : "FAILED"));
+                
+                if (!$passwordValid) {
+                    $this->debugLog("ERROR: Current password verification failed");
                     /** @var Nette\Forms\Controls\PasswordInput $currentPasswordField */
                     $currentPasswordField = $form['currentPassword'];
                     $currentPasswordField->addError('Současné heslo není správné.');
                     return;
                 }
+                
+                $this->debugLog("Password verification successful, proceeding with password change");
             }
             
             $updateData = [
@@ -357,22 +401,39 @@ public function profileFormSucceeded(Form $form, \stdClass $data): void
             // Pokud je zadáno heslo, přidáme ho
             if (!empty($data->password)) {
                 $updateData['password'] = $data->password;
+                $this->debugLog("Adding new password to update data");
             }
             
-            $this->userManager->update($userId, $updateData);
-            $this->flashMessage('Váš profil byl úspěšně upraven.', 'success');
+            $this->debugLog("Update data: " . print_r($updateData, true));
             
-            // Pokud se změnilo uživatelské jméno, musíme uživatele znovu přihlásit
-            if ($data->username !== $this->getUser()->getIdentity()->username) {
-                $this->getUser()->logout();
-                $this->flashMessage('Změnil se váš uživatelský název. Přihlaste se prosím znovu.', 'info');
-                $this->redirect('Sign:in');
+            // Provedeme aktualizaci
+            $result = $this->userManager->update($userId, $updateData);
+            $this->debugLog("Update result: " . ($result ? "SUCCESS" : "FAILED"));
+            
+            if ($result) {
+                $this->debugLog("SUCCESS: Profile updated successfully");
+                $this->flashMessage('Váš profil byl úspěšně upraven.', 'success');
+                
+                // Pokud se změnilo uživatelské jméno, musíme uživatele znovu přihlásit
+                if ($data->username !== $currentUser->username) {
+                    $this->debugLog("Username changed, logging out user");
+                    $this->getUser()->logout();
+                    $this->flashMessage('Změnil se váš uživatelský název. Přihlaste se prosím znovu.', 'info');
+                    $this->redirect('Sign:in');
+                }
+                
+                $this->redirect('profile');
+            } else {
+                $this->debugLog("ERROR: Update failed");
+                $form->addError('Při ukládání změn došlo k chybě.');
             }
-            
-            $this->redirect('profile');
             
         } catch (\Exception $e) {
+            $this->debugLog("EXCEPTION: " . $e->getMessage());
+            $this->debugLog("Stack trace: " . $e->getTraceAsString());
             $form->addError('Při úpravě profilu došlo k chybě: ' . $e->getMessage());
         }
+        
+        $this->debugLog("=== PROFILE FORM SUCCEEDED END ===");
     }
 }

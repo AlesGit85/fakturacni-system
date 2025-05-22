@@ -35,7 +35,7 @@ return array (
     'App\\Model\\UserManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\UserManager.php',
-      1 => 1747942285,
+      1 => 1747943493,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -85,20 +85,20 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1747942349,
+      1 => 1747944184,
     ),
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 3,
-    'null' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
-    'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'Nette\\Bridges\\Assets\\DIExtension' => 1,
+    'null' => 1,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 2,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
+    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 2,
+    'App\\Presentation\\Home\\HomeTemplate' => 2,
     'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
     'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 3,
   ),
   2 => 
   array (

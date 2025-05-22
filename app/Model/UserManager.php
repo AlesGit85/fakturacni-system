@@ -70,9 +70,9 @@ class UserManager implements Nette\Security\Authenticator
     /**
      * Přidá nového uživatele
      */
-    public function add(string $username, string $email, string $password, string $role = 'readonly'): void
+    public function add(string $username, string $email, string $password, string $role = 'readonly'): Nette\Database\Table\ActiveRow
     {
-        $this->database->table('users')->insert([
+        return $this->database->table('users')->insert([
             'username' => $username,
             'password' => $this->passwords->hash($password),
             'email' => $email,
@@ -103,13 +103,20 @@ class UserManager implements Nette\Security\Authenticator
      */
     public function update($id, $data)
     {
+        // Převedeme data na pole pokud jsou objektem
+        if (is_object($data)) {
+            $data = (array) $data;
+        }
+
         // Pokud se mění heslo, zahashujeme ho
         if (isset($data['password']) && !empty($data['password'])) {
             $data['password'] = $this->passwords->hash($data['password']);
         } else {
+            // Pokud heslo není zadané, odstraníme ho z dat
             unset($data['password']);
         }
 
+        // Provedeme aktualizaci
         return $this->database->table('users')->where('id', $id)->update($data);
     }
 
@@ -122,13 +129,17 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     /**
-     * Změna hesla uživatele
+     * Změna hesla uživatele - pomocná metoda
      */
-    public function changePassword($userId, string $newPassword): void
+    public function changePassword($userId, string $newPassword): bool
     {
-        $this->database->table('users')
+        $hashedPassword = $this->passwords->hash($newPassword);
+        
+        $result = $this->database->table('users')
             ->where('id', $userId)
-            ->update(['password' => $this->passwords->hash($newPassword)]);
+            ->update(['password' => $hashedPassword]);
+            
+        return $result > 0;
     }
 
     /**
