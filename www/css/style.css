@@ -1,14 +1,4 @@
-/* Obecné styly pro odkazy */
-a {
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-a:hover {
-    color: var(--secondary-color);
-    text-decoration: underline;
-}/**
+/**
  * Fakturační systém - Modernizovaný CSS soubor
  */
 
@@ -32,6 +22,18 @@ body {
     color: #333;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     line-height: 1.6;
+}
+
+/* Obecné styly pro odkazy */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
 }
 
 /* Moderní stíny a zaoblení pro karty */
@@ -152,7 +154,8 @@ h1, h2, h3, h4, h5, h6 {
 .client-form-container,
 .client-detail-container,
 .invoice-detail-container,
-.invoice-form-container {
+.invoice-form-container,
+.home-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem 1rem;
@@ -338,65 +341,6 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--primary-color);
 }
 
-/* Sekce pro nastavení */
-.settings-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-}
-
-/* Color settings */
-.color-settings-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.color-setting-item {
-    background-color: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    border: 1px solid #e9ecef;
-}
-
-.color-input-group {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 0.5rem;
-}
-
-.color-input-group input[type="color"] {
-    width: 60px;
-    height: 40px;
-    border: 2px solid #dee2e6;
-    border-radius: 0.375rem;
-    padding: 0;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.color-input-group input[type="color"]:hover {
-    border-color: var(--primary-color);
-}
-
-.color-input-group input[type="color"]:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.25);
-}
-
-.color-preview {
-    flex: 1;
-    padding: 0.5rem 1rem;
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-    border-radius: 0.375rem;
-    font-size: 0.9rem;
-    color: #6c757d;
-}
-
 .section-title {
     font-size: 1.25rem;
     margin-bottom: 0;
@@ -525,9 +469,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* -----------------------------
- * Nový styl seznamu klientů
+ * Styly pro seznamy a tabulky
  * -----------------------------*/
-.clients-container {
+.clients-container,
+.invoices-container {
     padding: 1rem 0;
 }
 
@@ -567,9 +512,52 @@ h1, h2, h3, h4, h5, h6 {
     margin-right: 0.5rem;
 }
 
-.header-actions {
+/* Filtry a vyhledávání */
+.filters-search-row {
     display: flex;
-    gap: 0.75rem;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+.filters-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-right: auto;
+}
+
+.filter-tab {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.filter-tab:hover {
+    color: var(--primary-color);
+    background-color: rgba(177, 210, 53, 0.1);
+    border-color: var(--primary-color);
+    text-decoration: none;
+}
+
+.filter-tab-active {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.filter-tab-active:hover {
+    color: #fff;
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
 }
 
 /* Vyhledávání */
@@ -609,7 +597,7 @@ h1, h2, h3, h4, h5, h6 {
 .search-input:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    box-shadow: 0 0 0 3px rgba(177, 210, 53, 0.15);
 }
 
 /* Tabulka */
@@ -617,13 +605,26 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #fff;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    overflow: hidden;
+    overflow: visible;
     margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.table-container.table-scrollable {
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+.table-responsive-dropdown {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
 }
 
 .data-table {
     width: 100%;
     border-collapse: collapse;
+    margin-bottom: 0;
 }
 
 .data-table th {
@@ -665,15 +666,6 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 0.875rem;
 }
 
-.client-email {
-    color: var(--primary-color);
-    text-decoration: none;
-}
-
-.client-email:hover {
-    text-decoration: underline;
-}
-
 .actions-column {
     text-align: right;
     white-space: nowrap;
@@ -711,6 +703,44 @@ h1, h2, h3, h4, h5, h6 {
 .text-danger:hover {
     background-color: rgba(220, 53, 69, 0.1);
     color: #dc3545 !important;
+}
+
+/* Dropdown menu v tabulkách */
+.data-table .dropdown {
+    position: relative;
+}
+
+.data-table .dropdown-menu {
+    z-index: 1050;
+    position: absolute;
+    will-change: transform;
+}
+
+.data-table tbody tr:last-child .dropdown-menu,
+.data-table tbody tr:nth-last-child(2) .dropdown-menu {
+    transform: translateY(-50%);
+}
+
+.dropdown-menu-responsive {
+    min-width: 200px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+}
+
+.dropdown-menu.dropup {
+    top: auto !important;
+    bottom: 100% !important;
+    margin-bottom: 0.25rem;
+}
+
+.dropdown-menu.show {
+    z-index: 1055 !important;
+    position: absolute !important;
+}
+
+.dropdown-menu[data-bs-popper] {
+    z-index: 1055 !important;
 }
 
 /* Stránkování */
@@ -768,6 +798,242 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 1.5rem;
 }
 
+.empty-state-small {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #6c757d;
+}
+
+.empty-state-small i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Status badges pro tabulky */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-badge-pending {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+}
+
+.status-badge-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.status-badge-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.payment-date {
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+/* Řádky tabulky podle stavu */
+.row-danger {
+    background-color: rgba(220, 53, 69, 0.02);
+}
+
+.row-success {
+    background-color: rgba(40, 167, 69, 0.02);
+}
+
+/* -----------------------------
+ * Dashboard styly
+ * -----------------------------*/
+
+/* Uvítací sekce */
+.welcome-section {
+    margin-bottom: 2rem;
+}
+
+.welcome-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+}
+
+.welcome-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.quick-actions .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+}
+
+/* Setup sekce */
+.setup-section .card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.setup-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid #e9ecef;
+    border-radius: var(--border-radius);
+    background-color: #fff;
+    transition: var(--transition);
+    height: 100%;
+}
+
+.setup-step:hover {
+    box-shadow: var(--box-shadow);
+    border-color: var(--primary-color);
+}
+
+.step-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background-color: rgba(177, 210, 53, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--dark-color);
+}
+
+.step-description {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+/* Dashboard statistiky */
+.dashboard-stats {
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    transition: var(--transition);
+    border: none;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-card:hover {
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: #fff;
+}
+
+.stat-card-primary .stat-icon {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.stat-card-info .stat-icon {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+}
+
+.stat-card-success .stat-icon {
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+}
+
+.stat-card-warning .stat-icon {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.stat-action {
+    flex-shrink: 0;
+}
+
+/* Finanční přehled */
+.financial-overview {
+    text-align: center;
+}
+
+.financial-item {
+    margin-bottom: 1rem;
+}
+
+.financial-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+.financial-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.mini-stat {
+    text-align: center;
+}
+
+.mini-stat-number {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.mini-stat-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
 /* Responzivní úpravy */
 @media (max-width: 768px) {
     .filters-search-row {
@@ -817,7 +1083,8 @@ h1, h2, h3, h4, h5, h6 {
     .client-form-container,
     .client-detail-container,
     .invoice-detail-container,
-    .invoice-form-container {
+    .invoice-form-container,
+    .home-container {
         padding: 1rem;
     }
     
@@ -865,6 +1132,65 @@ h1, h2, h3, h4, h5, h6 {
         margin-right: 0;
         margin-bottom: 0.5rem;
     }
+
+    .welcome-section .row {
+        text-align: center;
+    }
+    
+    .welcome-section .col-md-4 {
+        margin-top: 1rem;
+    }
+    
+    .quick-actions {
+        text-align: center;
+    }
+    
+    .setup-step {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .step-icon {
+        margin: 0 auto;
+    }
+    
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .stat-content {
+        order: -1;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        overflow-y: visible;
+    }
+    
+    .data-table .dropdown-menu {
+        position: fixed;
+        z-index: 1060;
+    }
+
+    .dropdown-menu-responsive {
+        min-width: 180px;
+        font-size: 0.9rem;
+    }
+    
+    .table-bottom-space {
+        height: 60px;
+    }
+}
+
+/* Alternativní řešení pro dropdown na malých obrazovkách */
+@media (max-height: 600px) {
+    .dropdown-menu {
+        position: fixed !important;
+        z-index: 1060 !important;
+    }
 }
 
 /* Úpravy pro tisk */
@@ -880,5 +1206,117 @@ h1, h2, h3, h4, h5, h6 {
     
     body {
         background-color: #fff;
+    }
+}
+
+/* === DROPDOWN FIX === */
+.data-table .dropdown {
+    position: relative;
+}
+
+.data-table .dropdown-menu {
+    position: absolute;
+    z-index: 1050;
+    min-width: 200px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    background-color: #fff;
+}
+
+.data-table tbody tr.show-dropdown-up .dropdown-menu {
+    top: auto !important;
+    bottom: 0px !important;
+    transform: none !important;
+    margin-bottom: 0;
+}
+
+.data-table tbody tr.show-dropdown-up .dropdown-menu::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 16px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #fff;
+    z-index: 1051;
+}
+
+@media (max-width: 768px) {
+    .data-table .dropdown-menu {
+        position: fixed !important;
+        z-index: 1060 !important;
+        min-width: 180px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Dashboard statistiky - oprava tlačítek */
+.stat-card {
+    background: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    transition: var(--transition);
+    border: none;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative; /* Přidáno pro lepší pozicování */
+}
+
+.stat-card:hover {
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.stat-action {
+    flex-shrink: 0;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.stat-action .btn-icon-dashboard {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: #6c757d;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+.stat-action .btn-icon-dashboard:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+/* Responzivní úpravy pro dashboard */
+@media (max-width: 768px) {
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+    
+    .stat-content {
+        order: -1;
+    }
+    
+    .stat-action {
+        position: static;
+        margin-top: 0.5rem;
     }
 }

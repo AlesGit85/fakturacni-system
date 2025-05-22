@@ -1,58 +1,341 @@
 {block content}
-<div class="container py-5">
-    <div class="row">
-        <div class="col-md-12 text-center mb-4">
-            <h1>QRdoklad</h1>
-            <p class="lead">Jednoduchý systém pro správu faktur a klientů – protože fakturovat nemusí být otrava.</p>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <h3 class="card-title">Klienti</h3>
-                    <p class="card-text">Správa vašich klientů a jejich kontaktních údajů.</p>
-                    <a n:href="Clients:default" class="btn btn-primary">Zobrazit klienty</a>
-                </div>
+<div class="home-container">
+    <!-- Uvítací sekce -->
+    <div class="welcome-section mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="welcome-title mb-2">
+                    {if $company && $company->name}
+                        Vítejte zpět, {$company->name}!
+                    {else}
+                        Vítejte v QRdokladu!
+                    {/if}
+                </h1>
+                <p class="welcome-subtitle text-muted">
+                    {if $isSetupComplete}
+                        Váš fakturační systém je připraven k použití
+                    {else}
+                        Dokončete nastavení pro plné využití systému
+                    {/if}
+                </p>
             </div>
-        </div>
-        
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <h3 class="card-title">Faktury</h3>
-                    <p class="card-text">Vytváření a správa faktur pro vaše klienty.</p>
-                    <a n:href="Invoices:default" class="btn btn-primary">Zobrazit faktury</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <h3 class="card-title">Nastavení</h3>
-                    <p class="card-text">Úprava firemních údajů a nastavení systému.</p>
-                    <a n:href="Settings:default" class="btn btn-primary">Upravit nastavení</a>
+            <div class="col-md-4 text-end">
+                <div class="quick-actions">
+                    <a n:href="Invoices:add" class="btn btn-primary btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Nová faktura
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
+    <!-- Začínáme sekce (zobrazí se jen pokud není setup kompletní) -->
+    {if !$isSetupComplete}
+    <div class="setup-section mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-light">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-list-check text-primary me-2"></i>
+                    <h3 class="mb-0">Začínáme</h3>
+                    <span class="badge bg-primary ms-2">{count($setupSteps)} kroků zbývá</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    {foreach $setupSteps as $step}
+                    <div class="col-md-4">
+                        <div class="setup-step">
+                            <div class="step-icon">
+                                <i class="{$step['icon']} text-primary"></i>
+                            </div>
+                            <div class="step-content">
+                                <h5 class="step-title">{$step['title']}</h5>
+                                <p class="step-description text-muted">{$step['description']}</p>
+                                <a href="{$step['link']}" class="btn btn-outline-primary btn-sm">
+                                    {$step['linkText']}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
+
+<!-- Dashboard statistiky -->
+    <div class="dashboard-stats mb-4">
+        <div class="row g-4">
+            <!-- Celkové statistiky -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-primary">
+                    <div class="stat-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">{$dashboardStats['clients']}</div>
+                        <div class="stat-label">Klientů</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="Clients:default" class="btn btn-icon-dashboard" title="Zobrazit klienty">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-info">
+                    <div class="stat-icon">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">{$dashboardStats['invoices']['total']}</div>
+                        <div class="stat-label">Celkem faktur</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="Invoices:default" class="btn btn-icon-dashboard" title="Zobrazit faktury">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-success">
+                    <div class="stat-icon">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">{$dashboardStats['invoices']['paid']}</div>
+                        <div class="stat-label">Zaplacených</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="Invoices:default, filter => 'paid'" class="btn btn-icon-dashboard" title="Zobrazit zaplacené faktury">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-warning">
+                    <div class="stat-icon">
+                        <i class="bi bi-exclamation-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">{$dashboardStats['invoices']['overdue']}</div>
+                        <div class="stat-label">Po splatnosti</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="Invoices:default, filter => 'overdue'" class="btn btn-icon-dashboard" title="Zobrazit faktury po splatnosti">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Obsah dashboardu -->
+    <div class="row g-4">
+        <!-- Blížící se splatnosti -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-0">
+                                <i class="bi bi-calendar-event text-warning me-2"></i>
+                                Blížící se splatnosti
+                            </h4>
+                            <small class="text-muted">Faktury splatné do 7 dnů</small>
+                        </div>
+                        <a n:href="Invoices:default, filter => 'created'" class="btn btn-sm btn-outline-primary">
+                            Zobrazit všechny
+                        </a>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <h4>Začínáme</h4>
-                    <p>Pro začátek práce s fakturačním systémem doporučujeme:</p>
-                    <ol>
-                        <li>Nejprve nastavte vaše firemní údaje v sekci <a n:href="Settings:default">Nastavení</a>.</li>
-                        <li>Přidejte vaše klienty v sekci <a n:href="Clients:default">Klienti</a>.</li>
-                        <li>Poté můžete začít vytvářet faktury v sekci <a n:href="Invoices:default">Faktury</a>.</li>
-                    </ol>
+                    {if $upcomingInvoices->count() > 0}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Faktura</th>
+                                        <th>Klient</th>
+                                        <th>Splatnost</th>
+                                        <th class="text-end">Částka</th>
+                                        <th class="text-center">Akce</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {foreach $upcomingInvoices as $invoice}
+                                    <tr>
+                                        <td><strong>{$invoice->number}</strong></td>
+                                        <td>
+                                            {if $invoice->manual_client}
+                                                {$invoice->client_name}
+                                            {else}
+                                                {$invoice->ref('client_id')->name}
+                                            {/if}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-warning text-dark">
+                                                {$invoice->due_date|date:'d.m.Y'}
+                                            </span>
+                                        </td>
+                                        <td class="text-end">{$invoice->total|number(0, ',', ' ')} Kč</td>
+                                        <td class="text-center">
+                                            <a n:href="Invoices:show $invoice->id" class="btn btn-sm btn-outline-primary">
+                                                Detail
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                    {else}
+                        <div class="empty-state-small">
+                            <i class="bi bi-check-circle text-success"></i>
+                            <p class="mb-0">Žádné faktury se neblíží splatnosti</p>
+                        </div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+
+        <!-- Rychlé akce a přehled -->
+        <div class="col-lg-4">
+            <!-- Finanční přehled -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-currency-exchange text-success me-2"></i>
+                        Finanční přehled
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="financial-overview">
+                        <div class="financial-item">
+                            <div class="financial-label">Nezaplaceno celkem</div>
+                            <div class="financial-amount text-danger">
+                                {$dashboardStats['invoices']['unpaidAmount']|number(0, ',', ' ')} Kč
+                            </div>
+                        </div>
+                        <hr class="my-3">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="mini-stat">
+                                    <div class="mini-stat-number text-success">{$dashboardStats['invoices']['paid']}</div>
+                                    <div class="mini-stat-label">Zaplaceno</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mini-stat">
+                                    <div class="mini-stat-number text-warning">{$dashboardStats['invoices']['overdue']}</div>
+                                    <div class="mini-stat-label">Po splatnosti</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rychlé akce -->
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-lightning text-primary me-2"></i>
+                        Rychlé akce
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a n:href="Invoices:add" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            Nová faktura
+                        </a>
+                        <a n:href="Clients:add" class="btn btn-outline-primary">
+                            <i class="bi bi-person-plus me-2"></i>
+                            Nový klient
+                        </a>
+                        <a n:href="Settings:default" class="btn btn-outline-secondary">
+                            <i class="bi bi-gear me-2"></i>
+                            Nastavení
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Nedávné faktury -->
+    {if $recentInvoices->count() > 0}
+    <div class="recent-invoices mt-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-clock-history text-info me-2"></i>
+                        Nedávné faktury
+                    </h4>
+                    <a n:href="Invoices:default" class="btn btn-sm btn-outline-primary">
+                        Zobrazit všechny
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Číslo</th>
+                                <th>Klient</th>
+                                <th>Vystaveno</th>
+                                <th>Stav</th>
+                                <th class="text-end">Částka</th>
+                                <th class="text-center">Akce</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $recentInvoices as $invoice}
+                            <tr>
+                                <td><strong>{$invoice->number}</strong></td>
+                                <td>
+                                    {if $invoice->manual_client}
+                                        {$invoice->client_name}
+                                    {else}
+                                        {$invoice->ref('client_id')->name}
+                                    {/if}
+                                </td>
+                                <td>{$invoice->issue_date|date:'d.m.Y'}</td>
+                                <td>
+                                    {if $invoice->status == 'created'}
+                                        <span class="badge bg-secondary">Vystavena</span>
+                                    {elseif $invoice->status == 'paid'}
+                                        <span class="badge bg-success">Zaplacena</span>
+                                    {elseif $invoice->status == 'overdue'}
+                                        <span class="badge bg-danger">Po splatnosti</span>
+                                    {/if}
+                                </td>
+                                <td class="text-end">{$invoice->total|number(0, ',', ' ')} Kč</td>
+                                <td class="text-center">
+                                    <a n:href="Invoices:show $invoice->id" class="btn btn-sm btn-outline-primary">
+                                        Detail
+                                    </a>
+                                </td>
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
 </div>
 {/block}

@@ -152,7 +152,7 @@ final class Template_93cf1c3ebb extends Latte\Runtime\Template
         </div>
     </div>
 
-    <!-- Tabulka faktur -->
+<!-- Tabulka faktur -->
 ';
 		if ($invoices->count() > 0) /* line 66 */ {
 			echo '    <div class="table-container">
@@ -292,6 +292,45 @@ final class Template_93cf1c3ebb extends Latte\Runtime\Template
         </table>
     </div>
 
+<script>
+// Jednoduchý JavaScript pro dropdown v tabulkách
+document.addEventListener(\'DOMContentLoaded\', function() {
+    const dropdownToggles = document.querySelectorAll(\'.data-table .dropdown-toggle\');
+    
+    dropdownToggles.forEach(toggle => {
+        toggle.addEventListener(\'click\', function(e) {
+            const row = this.closest(\'tr\');
+            const tableBody = this.closest(\'tbody\');
+            const allRows = Array.from(tableBody.querySelectorAll(\'tr\'));
+            const rowIndex = allRows.indexOf(row);
+            const totalRows = allRows.length;
+            
+            // Pokud je to jeden z posledních dvou řádků, přidáme CSS třídu
+            if (rowIndex >= totalRows - 2) {
+                row.classList.add(\'show-dropdown-up\');
+            } else {
+                row.classList.remove(\'show-dropdown-up\');
+            }
+        });
+        
+        // Při zavření dropdown odebereme třídu
+        toggle.addEventListener(\'hidden.bs.dropdown\', function() {
+            const row = this.closest(\'tr\');
+            row.classList.remove(\'show-dropdown-up\');
+        });
+    });
+    
+    // Odebereme třídu při kliknutí mimo
+    document.addEventListener(\'click\', function(e) {
+        if (!e.target.closest(\'.dropdown\')) {
+            document.querySelectorAll(\'tr.show-dropdown-up\').forEach(row => {
+                row.classList.remove(\'show-dropdown-up\');
+            });
+        }
+    });
+});
+</script>
+
     <!-- Stránkování -->
     <div class="pagination-container mt-3">
         <div class="pagination-info">
@@ -307,7 +346,7 @@ final class Template_93cf1c3ebb extends Latte\Runtime\Template
         </div>
     </div>
 ';
-		} else /* line 164 */ {
+		} else /* line 203 */ {
 			echo '    <div class="empty-state">
         <div class="empty-state-icon">
             <i class="bi bi-file-earmark-text"></i>
@@ -315,7 +354,7 @@ final class Template_93cf1c3ebb extends Latte\Runtime\Template
         <h3>Zatím zde nejsou žádné faktury</h3>
         <p>Začněte vytvořením nové faktury</p>
         <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 171 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 210 */;
 			echo '" class="btn btn-primary mt-3">
             <i class="bi bi-plus-circle"></i> Vytvořit první fakturu
         </a>
