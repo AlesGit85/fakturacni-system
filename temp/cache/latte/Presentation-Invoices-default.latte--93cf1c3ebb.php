@@ -159,7 +159,7 @@ final class Template_93cf1c3ebb extends Latte\Runtime\Template
         <table class="data-table">
             <thead>
                 <tr>
-                    <th class="sortable-column">Číslo faktury</th>
+                    <th>Číslo faktury</th>
                     <th>Klient</th>
                     <th>Vystaveno</th>
                     <th>Splatnost</th>
