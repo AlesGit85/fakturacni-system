@@ -1,0 +1,401 @@
+/**
+ * Styly pro tabulky a seznamy
+ */
+
+.clients-container,
+.invoices-container {
+    padding: 1rem 0;
+}
+
+/* Záhlaví sekce */
+.section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.total-count {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    margin-left: 0.5rem;
+}
+
+.client-filter-badge {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--primary-color);
+    background-color: rgba(177, 210, 53, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+/* Filtry a vyhledávání */
+.filters-search-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+.filters-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-right: auto;
+}
+
+.filter-tab {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.filter-tab:hover {
+    color: var(--primary-color);
+    background-color: rgba(177, 210, 53, 0.1);
+    border-color: var(--primary-color);
+    text-decoration: none;
+}
+
+.filter-tab-active {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.filter-tab-active:hover {
+    color: #fff;
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+/* Vyhledávání */
+.search-panel {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.search-container {
+    position: relative;
+    width: 300px;
+}
+
+.search-input-wrapper {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 0.75rem 0.75rem 2.25rem;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    background-color: #fff;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(177, 210, 53, 0.15);
+}
+
+/* Tabulka */
+.table-container {
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: visible;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.table-container.table-scrollable {
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+.table-responsive-dropdown {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+}
+
+.data-table th {
+    padding: 1rem;
+    font-weight: 600;
+    color: #495057;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    text-align: left;
+}
+
+.data-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.sortable-column {
+    cursor: pointer;
+}
+
+.company-column {
+    min-width: 200px;
+}
+
+.company-name {
+    margin-bottom: 0.25rem;
+}
+
+.company-location {
+    font-size: 0.875rem;
+}
+
+.actions-column {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-danger:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545 !important;
+}
+
+/* Dropdown menu v tabulkách */
+.data-table .dropdown {
+    position: relative;
+}
+
+.data-table .dropdown-menu {
+    z-index: 1050;
+    position: absolute;
+    will-change: transform;
+    min-width: 200px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    background-color: #fff;
+}
+
+.data-table tbody tr:last-child .dropdown-menu,
+.data-table tbody tr:nth-last-child(2) .dropdown-menu {
+    transform: translateY(-50%);
+}
+
+.dropdown-menu-responsive {
+    min-width: 200px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+}
+
+.dropdown-menu.dropup {
+    top: auto !important;
+    bottom: 100% !important;
+    margin-bottom: 0.25rem;
+}
+
+.dropdown-menu.show {
+    z-index: 1055 !important;
+    position: absolute !important;
+}
+
+.dropdown-menu[data-bs-popper] {
+    z-index: 1055 !important;
+}
+
+.data-table tbody tr.show-dropdown-up .dropdown-menu {
+    top: auto !important;
+    bottom: 0px !important;
+    transform: none !important;
+    margin-bottom: 0;
+}
+
+.data-table tbody tr.show-dropdown-up .dropdown-menu::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 16px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #fff;
+    z-index: 1051;
+}
+
+/* Stránkování */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.pagination-info {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.pagination-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.pagination-button {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+}
+
+.pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Prázdný stav */
+.empty-state {
+    text-align: center;
+    padding: 3rem 0;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    color: #dee2e6;
+    margin-bottom: 1.5rem;
+}
+
+.empty-state h3 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.empty-state p {
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+.empty-state-small {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #6c757d;
+}
+
+.empty-state-small i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Status badges pro tabulky */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-badge-pending {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+}
+
+.status-badge-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.status-badge-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.payment-date {
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+/* Řádky tabulky podle stavu */
+.row-danger {
+    background-color: rgba(220, 53, 69, 0.02);
+}
+
+.row-success {
+    background-color: rgba(40, 167, 69, 0.02);
+}
+
+.client-email,
+.client-phone {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.client-email:hover,
+.client-phone:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}

@@ -1,0 +1,76 @@
+/**
+ * Základní styly a proměnné
+ */
+
+:root {
+    --primary-color: #B1D235;
+    --secondary-color: #95B11F;
+    --success-color: #8CC63F;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --grey-color: #adb5bd;
+    --border-radius: 0.5rem;
+    --box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .08);
+    --transition: all 0.3s ease;
+}
+
+body {
+    background-color: #f6f8fb;
+    color: #333;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+}
+
+/* Obecné styly pro odkazy */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* Nadpisy */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--dark-color);
+}
+
+.main-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--dark-color);
+}
+
+/* Alerty */
+.alert {
+    border-radius: var(--border-radius);
+    border: none;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.alert-info {
+    background-color: rgba(23, 162, 184, 0.1);
+    color: #17a2b8;
+}
+
+.alert-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #856404;
+}

@@ -145,6 +145,12 @@ final class Template_ce6183b98e extends Latte\Runtime\Template
 	<script src="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 73 */;
 		echo '/js/settings.js"></script>
+	<script src="';
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 74 */;
+		echo '/js/tables.js"></script>
+	<script src="';
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 75 */;
+		echo '/js/search.js"></script>
 </body>
 </html>';
 	}

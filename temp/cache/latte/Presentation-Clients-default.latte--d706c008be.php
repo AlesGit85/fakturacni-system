@@ -223,24 +223,6 @@ final class Template_d706c008be extends Latte\Runtime\Template
 ';
 		}
 		echo '</div>
-
-<script>
-// Přidáme JavaScript pro vyhledávání v tabulce
-document.addEventListener(\'DOMContentLoaded\', function() {
-    const searchInput = document.getElementById(\'clientSearch\');
-    if (!searchInput) return;
-
-    searchInput.addEventListener(\'input\', function() {
-        const searchText = this.value.toLowerCase();
-        const rows = document.querySelectorAll(\'.data-table tbody tr\');
-        
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchText) ? \'\' : \'none\';
-        });
-    });
-});
-</script>
 ';
 	}
 }

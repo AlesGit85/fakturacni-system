@@ -1,0 +1,40 @@
+/**
+ * Styly pro tisk
+ */
+
+@media print {
+    .no-print, 
+    .btn, 
+    .navbar, 
+    .search-panel, 
+    .pagination-container, 
+    .empty-state,
+    .header-actions,
+    .action-buttons-container,
+    .filters-search-row {
+        display: none !important;
+    }
+    
+    .table-container {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
+    
+    body {
+        background-color: #fff;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .page-header {
+        margin-bottom: 1rem;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
+}

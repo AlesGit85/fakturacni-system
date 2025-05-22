@@ -1,0 +1,235 @@
+/**
+ * Komponenty - karty, tlačítka, formuláře
+ */
+
+/* Moderní stíny a zaoblení pro karty */
+.card {
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    border: none;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1.25rem 1.5rem;
+    font-weight: 600;
+    color: var(--dark-color);
+    border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Formulářové prvky */
+.form-control {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1rem;
+    height: auto;
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.15);
+    border-color: var(--primary-color);
+}
+
+.form-floating > .form-control {
+    padding: 1rem 0.75rem;
+}
+
+.form-floating > label {
+    padding: 1rem 0.75rem;
+}
+
+/* Tlačítka */
+.btn {
+    border-radius: var(--border-radius);
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-lg {
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.25);
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.25rem;
+    color: #6c757d;
+    background-color: transparent;
+    border: none;
+    transition: var(--transition);
+}
+
+.btn-icon:hover {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.btn-icon-dashboard {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: #6c757d;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+.btn-icon-dashboard:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+/* Speciální radio buttony pro výběr typu klienta */
+.client-type-selector {
+    margin-bottom: 1.5rem;
+}
+
+.client-type-radio {
+    display: none;
+}
+
+.client-type-option {
+    display: block;
+    width: 100%;
+    padding: 1.5rem;
+    border: 2px solid #e9ecef;
+    border-radius: var(--border-radius);
+    background-color: #fff;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 0;
+}
+
+.client-type-option:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.1);
+}
+
+.client-type-radio:checked + .client-type-option {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.option-content {
+    text-align: center;
+}
+
+.option-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.option-description {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Moderní checkboxy */
+.modern-checkbox-wrapper {
+    position: relative;
+}
+
+.modern-checkbox {
+    display: none;
+}
+
+.modern-checkbox-label {
+    display: block;
+    width: 100%;
+    padding: 1.5rem;
+    border: 2px solid #e9ecef;
+    border-radius: var(--border-radius);
+    background-color: #fff;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 0;
+}
+
+.modern-checkbox-label:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.1);
+}
+
+.modern-checkbox:checked + .modern-checkbox-label {
+    border-color: var(--primary-color);
+    background-color: rgba(177, 210, 53, 0.05);
+}
+
+.checkbox-content {
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+.checkbox-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-right: 1rem;
+    min-width: 24px;
+}
+
+.checkbox-text {
+    flex: 1;
+}
+
+.checkbox-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--dark-color);
+}
+
+.checkbox-description {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
