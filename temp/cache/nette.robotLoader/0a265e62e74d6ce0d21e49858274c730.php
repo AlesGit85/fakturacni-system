@@ -35,7 +35,7 @@ return array (
     'App\\Model\\UserManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\UserManager.php',
-      1 => 1747979109,
+      1 => 1747981362,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -80,12 +80,12 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1747981008,
+      1 => 1747981433,
     ),
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1747980972,
+      1 => 1747981268,
     ),
   ),
   1 => 
@@ -99,10 +99,14 @@ return array (
     'App\\Presentation\\Home\\HomeTemplate' => 3,
     'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
     'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 1,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 1,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 1,
+    'App\\Presentation\\Users\\UsersDefaultTemplate' => 2,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 2,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 2,
     'App\\Presentation\\Sign\\SignUpTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
   ),
   2 => 
   array (

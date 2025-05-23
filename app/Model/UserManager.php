@@ -15,6 +15,12 @@ class UserManager implements Nette\Security\Authenticator
     /** @var Passwords */
     private $passwords;
 
+    /** @var int Maximální počet neúspěšných přihlášení */
+    private $maxLoginAttempts = 5;
+
+    /** @var int Doba blokování v minutách */
+    private $lockoutTime = 15;
+
     public function __construct(
         Nette\Database\Explorer $database,
         Passwords $passwords
@@ -36,9 +42,20 @@ class UserManager implements Nette\Security\Authenticator
             throw new Nette\Security\AuthenticationException('Uživatelské jméno není správné.', self::IDENTITY_NOT_FOUND);
         }
 
+        // Kontrola blokování
+        if ($this->isUserBlocked($row->id)) {
+            throw new Nette\Security\AuthenticationException('Účet je dočasně zablokován kvůli příliš mnoha neúspěšným pokusům o přihlášení. Zkuste to prosím později.', self::INVALID_CREDENTIAL);
+        }
+
         if (!$this->passwords->verify($password, $row->password)) {
+            // Zaznamenáme neúspěšný pokus o přihlášení
+            $this->logFailedLoginAttempt($row->id);
+            
             throw new Nette\Security\AuthenticationException('Heslo není správné.', self::INVALID_CREDENTIAL);
         }
+
+        // Reset neúspěšných pokusů při úspěšném přihlášení
+        $this->resetFailedLoginAttempts($row->id);
 
         // Aktualizace posledního přihlášení
         $this->database->table('users')
@@ -49,6 +66,71 @@ class UserManager implements Nette\Security\Authenticator
         unset($arr['password']);
 
         return new Nette\Security\SimpleIdentity($row->id, $row->role, $arr);
+    }
+
+    /**
+     * Zaznamená neúspěšný pokus o přihlášení
+     */
+    private function logFailedLoginAttempt(int $userId): void
+    {
+        // Nejprve zkontrolujeme, zda už existuje záznam
+        $record = $this->database->table('login_attempts')
+            ->where('user_id', $userId)
+            ->fetch();
+
+        if ($record) {
+            // Aktualizace existujícího záznamu
+            $this->database->table('login_attempts')
+                ->where('user_id', $userId)
+                ->update([
+                    'attempts' => $record->attempts + 1,
+                    'last_attempt' => new \DateTime(),
+                ]);
+        } else {
+            // Vytvoření nového záznamu
+            $this->database->table('login_attempts')->insert([
+                'user_id' => $userId,
+                'attempts' => 1,
+                'last_attempt' => new \DateTime(),
+            ]);
+        }
+    }
+
+    /**
+     * Resetuje počet neúspěšných pokusů o přihlášení
+     */
+    private function resetFailedLoginAttempts(int $userId): void
+    {
+        $this->database->table('login_attempts')
+            ->where('user_id', $userId)
+            ->delete();
+    }
+
+    /**
+     * Zkontroluje, zda je uživatel blokován kvůli příliš mnoha neúspěšným pokusům
+     */
+    private function isUserBlocked(int $userId): bool
+    {
+        $record = $this->database->table('login_attempts')
+            ->where('user_id', $userId)
+            ->fetch();
+
+        if (!$record) {
+            return false;
+        }
+
+        // Pokud počet pokusů nepřekročil limit, uživatel není blokován
+        if ($record->attempts < $this->maxLoginAttempts) {
+            return false;
+        }
+
+        // Kontrola, zda uplynula doba blokování
+        $lastAttempt = $record->last_attempt;
+        $now = new \DateTime();
+        $interval = $now->diff(new \DateTime($lastAttempt));
+        $minutesPassed = $interval->days * 24 * 60 + $interval->h * 60 + $interval->i;
+
+        return $minutesPassed < $this->lockoutTime;
     }
 
     /**
