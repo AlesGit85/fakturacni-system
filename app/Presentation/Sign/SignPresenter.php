@@ -84,18 +84,18 @@ final class SignPresenter extends BasePresenter
             }
 
             $this->getUser()->login($data->username, $data->password);
-            
+
             $this->flashMessage('Úspěšně jste se přihlásili.', 'success');
-            
+
             // Přesměrování na původně požadovanou stránku nebo na dashboard
             $backlink = $this->getParameter('backlink');
             if ($backlink) {
                 $this->restoreRequest($backlink);
             }
             $this->redirect('Home:default');
-
         } catch (Nette\Security\AuthenticationException $e) {
-            $form->addError('Nesprávné uživatelské jméno nebo heslo.');
+            // Přidáme chybovou hlášku jako globální chybu formuláře
+            $form->addError($e->getMessage());
         }
     }
 
@@ -180,7 +180,6 @@ final class SignPresenter extends BasePresenter
 
             $this->flashMessage('Registrace byla úspěšná. Nyní se můžete přihlásit.', 'success');
             $this->redirect('Sign:in');
-
         } catch (\Exception $e) {
             $form->addError('Při registraci došlo k chybě: ' . $e->getMessage());
         }

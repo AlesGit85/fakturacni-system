@@ -102,6 +102,7 @@ return array (
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 1,
     'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 1,
     'App\\Presentation\\Settings\\SettingsTemplate' => 1,
+    'App\\Presentation\\Sign\\SignUpTemplate' => 2,
   ),
   2 => 
   array (

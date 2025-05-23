@@ -1,0 +1,108 @@
+/**
+ * Styly pro přihlašovací a registrační stránky
+ */
+
+.auth-container {
+    width: 100%;
+    min-height: 100vh;
+    background: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.auth-inner {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 450px;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 2rem 0;
+}
+
+.auth-header {
+    background: #B1D235;
+    color: white;
+    padding: 2.5rem;
+    text-align: center;
+}
+
+.auth-logo {
+    height: 40px;
+    margin-bottom: 1.5rem;
+}
+
+.auth-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.auth-subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 0;
+}
+
+.auth-body {
+    padding: 2.5rem;
+}
+
+.auth-footer {
+    padding: 1rem 2.5rem 2.5rem;
+    border-top: 1px solid #f1f1f1;
+}
+
+.auth-form .btn {
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    margin-top: 1rem;
+}
+
+/* Úprava zobrazení chybových zpráv */
+.auth-container .alert {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form .text-danger {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Vlastní styl pro odkazy v přihlašovacím/registračním formuláři */
+.auth-link {
+    color: #B1D235;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.auth-link:hover {
+    color: #95B11F;
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .auth-card {
+        margin: 1rem 0;
+    }
+    
+    .auth-header,
+    .auth-body {
+        padding: 2rem;
+    }
+    
+    .auth-footer {
+        padding: 1rem 2rem 2rem;
+    }
+}
