@@ -114,7 +114,9 @@ final class SignPresenter extends BasePresenter
 
         $passwordField = $form->addPassword('password', 'Heslo:')
             ->setRequired('Zadejte heslo')
-            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 6);
+            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 8)
+            ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jednu číslici', '.*[0-9].*')
+            ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jedno velké písmeno', '.*[A-Z].*');
 
         $form->addPassword('passwordVerify', 'Heslo znovu:')
             ->setRequired('Zadejte heslo znovu pro kontrolu')

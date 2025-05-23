@@ -609,7 +609,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	{
 		$service = new Nette\Http\Session($this->getService('http.request'), $this->getService('http.response'));
 		$service->setExpiration('20 minutes');
-		$service->setOptions(['name' => 'fakturacni_system_session', 'cookieHttponly' => true, 'cookieSamesite' => 'Lax']);
+		$service->setOptions(['name' => 'fakturacni_system_session', 'cookieHttponly' => true, 'cookieSamesite' => 'Strict']);
 		return $service;
 	}
 
