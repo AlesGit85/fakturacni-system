@@ -121,6 +121,8 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
     'App\\Presentation\\Clients\\ClientsShowTemplate' => 1,
+    'App\\Presentation\\Users\\UsersEditTemplate' => 1,
+    'App\\Presentation\\Users\\UsersAddTemplate' => 1,
   ),
   2 => 
   array (

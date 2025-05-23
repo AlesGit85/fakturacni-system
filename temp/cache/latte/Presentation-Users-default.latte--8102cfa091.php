@@ -32,7 +32,7 @@ final class Template_8102cfa091 extends Latte\Runtime\Template
 		extract($this->params);
 
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
-			foreach (array_intersect_key(['user' => '31'], $this->params) as $ʟ_v => $ʟ_l) {
+			foreach (array_intersect_key(['userItem' => '31'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
@@ -51,9 +51,9 @@ final class Template_8102cfa091 extends Latte\Runtime\Template
     <!-- Záhlaví s názvem sekce a počtem uživatelů -->
     <div class="section-header-row mb-4">
         <div>
-            <h1 class="section-title mb-0">Uživatelé <span class="total-count">';
+            <h1 class="section-title mb-0">Uživatelé <span class="total-count">Počet uživatelů v systému: ';
 		echo LR\Filters::escapeHtmlText($totalUsers) /* line 6 */;
-		echo ' uživatelů</span></h1>
+		echo '</span></h1>
             <p class="text-muted">Správa uživatelských účtů v systému</p>
         </div>
         <div class="header-actions">
@@ -82,7 +82,7 @@ final class Template_8102cfa091 extends Latte\Runtime\Template
             </thead>
             <tbody>
 ';
-			foreach ($users as $user) /* line 31 */ {
+			foreach ($users as $userItem) /* line 31 */ {
 				echo '                <tr class="data-row">
                     <td>
                         <div class="d-flex align-items-center">
@@ -91,10 +91,10 @@ final class Template_8102cfa091 extends Latte\Runtime\Template
                             </div>
                             <div>
                                 <strong>';
-				echo LR\Filters::escapeHtmlText($user->username) /* line 39 */;
+				echo LR\Filters::escapeHtmlText($userItem->username) /* line 39 */;
 				echo '</strong>
 ';
-				if ($user->id === $currentUser->id) /* line 40 */ {
+				if ($userItem->id === $currentUser->id) /* line 40 */ {
 					echo '                                    <span class="badge bg-info ms-2">To jste vy</span>
 ';
 				}
@@ -103,17 +103,17 @@ final class Template_8102cfa091 extends Latte\Runtime\Template
                     </td>
                     <td>
                         <a href="mailto:';
-				echo LR\Filters::escapeHtmlAttr($user->email) /* line 47 */;
+				echo LR\Filters::escapeHtmlAttr($userItem->email) /* line 47 */;
 				echo '" class="client-email">';
-				echo LR\Filters::escapeHtmlText($user->email) /* line 47 */;
+				echo LR\Filters::escapeHtmlText($userItem->email) /* line 47 */;
 				echo '</a>
                     </td>
                     <td>
 ';
-				if ($user->role === 'admin') /* line 50 */ {
+				if ($userItem->role === 'admin') /* line 50 */ {
 					echo '                            <span class="badge bg-danger">Administrátor</span>
 ';
-				} elseif ($user->role === 'accountant') /* line 52 */ {
+				} elseif ($userItem->role === 'accountant') /* line 52 */ {
 					echo '                            <span class="badge bg-warning text-dark">Účetní</span>
 ';
 				} else /* line 54 */ {
@@ -124,9 +124,9 @@ final class Template_8102cfa091 extends Latte\Runtime\Template
 				echo '                    </td>
                     <td>
 ';
-				if ($user->created_at) /* line 59 */ {
+				if ($userItem->created_at) /* line 59 */ {
 					echo '                            ';
-					echo LR\Filters::escapeHtmlText(($this->filters->date)($user->created_at, 'd.m.Y')) /* line 60 */;
+					echo LR\Filters::escapeHtmlText(($this->filters->date)($userItem->created_at, 'd.m.Y')) /* line 60 */;
 					echo "\n";
 				} else /* line 61 */ {
 					echo '                            <span class="text-muted">—</span>
@@ -135,9 +135,9 @@ final class Template_8102cfa091 extends Latte\Runtime\Template
 				echo '                    </td>
                     <td>
 ';
-				if ($user->last_login) /* line 66 */ {
+				if ($userItem->last_login) /* line 66 */ {
 					echo '                            ';
-					echo LR\Filters::escapeHtmlText(($this->filters->date)($user->last_login, 'd.m.Y H:i')) /* line 67 */;
+					echo LR\Filters::escapeHtmlText(($this->filters->date)($userItem->last_login, 'd.m.Y H:i')) /* line 67 */;
 					echo "\n";
 				} else /* line 68 */ {
 					echo '                            <span class="text-muted">Nikdy</span>
@@ -147,20 +147,20 @@ final class Template_8102cfa091 extends Latte\Runtime\Template
                     <td class="actions-column">
                         <div class="action-buttons">
                             <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$user->id])) /* line 74 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$userItem->id])) /* line 74 */;
 				echo '" class="btn btn-icon" title="Upravit uživatele">
                                 <i class="bi bi-pencil"></i>
                             </a>
                             
 ';
-				if ($user->id !== $currentUser->id) /* line 78 */ {
-					$isLastAdmin = $user->role === 'admin' && $users->where('role', 'admin')->count() <= 1 /* line 79 */;
+				if ($userItem->id !== $currentUser->id) /* line 78 */ {
+					$isLastAdmin = $userItem->role === 'admin' && $users->where('role', 'admin')->count() <= 1 /* line 79 */;
 					if (!$isLastAdmin) /* line 80 */ {
 						echo '                                    <a href="';
-						echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$user->id])) /* line 81 */;
+						echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$userItem->id])) /* line 81 */;
 						echo '" class="btn btn-icon text-danger" 
                                        onclick="return confirm(\'Opravdu chcete smazat uživatele ';
-						echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($user->username)) /* line 82 */;
+						echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($userItem->username)) /* line 82 */;
 						echo '?\')" 
                                        title="Smazat uživatele">
                                         <i class="bi bi-trash"></i>
