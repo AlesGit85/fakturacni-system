@@ -9,10 +9,15 @@ document.addEventListener('DOMContentLoaded', function() {
  * Inicializace načítání z ARESu
  */
 function initAresLookup() {
+    console.log('Inicializace ARES lookup');
+    
     const aresButton = document.getElementById('load-from-ares');
+    console.log('ARES tlačítko nalezeno:', !!aresButton);
+    
     if (!aresButton) return;
     
     aresButton.addEventListener('click', function(e) {
+        console.log('ARES tlačítko kliknuto');
         e.preventDefault();
         
         const icoInput = document.getElementById('frm-clientForm-ic');
@@ -27,15 +32,23 @@ function initAresLookup() {
         aresButton.disabled = true;
         aresButton.innerHTML = '<i class="bi bi-arrow-repeat"></i> Načítám...';
         
-        // AJAX požadavek
-        fetch('?do=aresLookup&ico=' + encodeURIComponent(icoInput.value.trim()))
+        const icoValue = icoInput.value.trim();
+        console.log('Odesílám AJAX požadavek pro IČO:', icoValue);
+        
+        // AJAX požadavek přes Nette presenter
+        const url = '?do=aresLookup&ico=' + encodeURIComponent(icoValue);
+        console.log('URL požadavku:', url);
+        
+        fetch(url)
             .then(response => {
+                console.log('ARES odpověď:', response.status, response.statusText);
                 if (!response.ok) {
                     throw new Error('Chyba při komunikaci se serverem: ' + response.status);
                 }
                 return response.json();
             })
             .then(data => {
+                console.log('ARES data:', data);
                 if (data.error) {
                     showErrorMessage(data.error);
                     return;
@@ -60,6 +73,7 @@ function initAresLookup() {
                 // Obnovení tlačítka
                 aresButton.disabled = false;
                 aresButton.innerHTML = originalText;
+                console.log('AJAX požadavek dokončen');
             });
     });
 }

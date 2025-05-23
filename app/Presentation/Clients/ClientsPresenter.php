@@ -3,8 +3,9 @@
 namespace App\Presentation\Clients;
 
 use Nette;
-use Nette\Application\UI\Form;
+use App\Model\AresService;
 use App\Model\ClientsManager;
+use Nette\Application\UI\Form;
 use App\Presentation\BasePresenter;
 
 class ClientsPresenter extends BasePresenter
@@ -14,6 +15,9 @@ class ClientsPresenter extends BasePresenter
 
     /** @var Nette\Database\Explorer */
     private $database;
+
+    /** @var AresService */
+    private $aresService;
 
     // Základní role pro přístup k presenteru
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
@@ -27,13 +31,15 @@ class ClientsPresenter extends BasePresenter
         'delete' => ['admin'], // Smazat klienta může jen admin
     ];
 
-    public function __construct(
-        ClientsManager $clientsManager,
-        Nette\Database\Explorer $database
-    ) {
-        $this->clientsManager = $clientsManager;
-        $this->database = $database;
-    }
+public function __construct(
+    ClientsManager $clientsManager, 
+    Nette\Database\Explorer $database, 
+    AresService $aresService  // Toto by zde mělo být
+) {
+    $this->clientsManager = $clientsManager;
+    $this->database = $database;
+    $this->aresService = $aresService;
+}
 
     public function renderDefault(): void
     {
@@ -173,4 +179,67 @@ class ClientsPresenter extends BasePresenter
             ->where('client_id', $clientId)
             ->count();
     }
+
+/**
+ * Vyhledá firmu v ARESu podle IČO
+ */
+public function handleAresLookup(): void
+{
+    if (!$this->isAjax()) {
+        $this->redirect('this');
+    }
+    
+    $ico = $this->getParameter('ico');
+    if (!$ico) {
+        $this->sendJson(['error' => 'Nebylo zadáno IČO']);
+        return;
+    }
+    
+    try {
+        // Pokus o získání dat z ARESu
+        $data = $this->aresService->getCompanyDataByIco($ico);
+        
+        // Pokud data neexistují
+        if (!$data) {
+            // Záložní testovací data pro vývoj
+            if (file_exists(__DIR__ . '/../../../www/ares-test.php')) {
+                // Testovací data pro vývoj
+                $data = [
+                    'name' => 'Testovací Společnost s.r.o.',
+                    'ic' => $ico,
+                    'dic' => 'CZ' . $ico,
+                    'address' => 'Příkladová 123/45',
+                    'city' => 'Praha',
+                    'zip' => '11000',
+                    'country' => 'Česká republika',
+                ];
+                
+                $this->flashMessage('Data z ARESu nebyla nalezena, používám testovací data.', 'warning');
+            } else {
+                $this->sendJson(['error' => 'Firmu s tímto IČO se nepodařilo najít']);
+                return;
+            }
+        }
+        
+        // Pokud máme data, pošleme je jako JSON
+        $this->sendJson($data);
+        
+    } catch (\Exception $e) {
+        // Logování chyby
+        if ($this->getContext()->hasService('tracy.logger')) {
+            $logger = $this->getContext()->getService('tracy.logger');
+            $logger->log("Chyba ARES: " . $e->getMessage(), \Tracy\ILogger::ERROR);
+        }
+        
+        $this->sendJson(['error' => 'Při komunikaci s ARES došlo k chybě: ' . $e->getMessage()]);
+    }
+}
+
+/**
+ * Získá logger pro diagnostiku
+ */
+private function getLogger(): \Tracy\ILogger
+{
+    return $this->getPresenter()->getContext()->getByType(\Tracy\ILogger::class);
+}
 }

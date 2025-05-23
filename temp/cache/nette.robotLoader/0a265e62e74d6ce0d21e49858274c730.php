@@ -15,7 +15,7 @@ return array (
     'App\\Model\\AresService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\AresService.php',
-      1 => 1747986865,
+      1 => 1747997912,
     ),
     'App\\Model\\ClientsManager' => 
     array (
@@ -55,7 +55,7 @@ return array (
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1747988248,
+      1 => 1747998158,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -129,6 +129,7 @@ return array (
     'App\\Presentation\\Users\\UsersEditTemplate' => 1,
     'App\\Presentation\\Users\\UsersAddTemplate' => 1,
     'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 1,
+    'App\\Presentation\\AresTest\\AresTestPresenter' => 2,
   ),
   2 => 
   array (
