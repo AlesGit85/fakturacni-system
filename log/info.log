@@ -94,3 +94,45 @@
 [2025-05-23 13-00-09] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
 [2025-05-23 13-00-09] ARES úspěšně vrátil data pro IČO: 87894912, firma: Aleš Zita  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
 [2025-05-23 13-00-09] Používám testovací data pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-03-09] ARES lookup požadavek pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-03-09] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-03-09] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-03-12] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-03-12] Zkouším REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-03-13] HTTP úspěšná odpověď (1696 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-03-13] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-03-13] ARES úspěšně vrátil data pro IČO: 87894912, firma: Aleš Zita  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-03-30] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-30] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-30] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-33] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-33] Zkouším REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-33] HTTP úspěšná odpověď (3643 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-33] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-33] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-50] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-50] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-50] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-53] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-53] Zkouším REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-53] HTTP úspěšná odpověď (3643 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-53] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-03-53] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-06-43] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-06-43] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-06-43] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-06-46] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-06-46] Zkouším REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-06-46] HTTP úspěšná odpověď (3643 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-06-46] REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"1009\/31","city":"Nezn\u00e1m\u00e9 m\u011bsto","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-06-46] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-06-46] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-07-58] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-07-58] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-07-58] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-08-01] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-08-01] Zkouším REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-08-01] HTTP úspěšná odpověď (3643 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-08-01] REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"1009\/31","city":"Nezn\u00e1m\u00e9 m\u011bsto","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-08-01] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 13-08-01] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 

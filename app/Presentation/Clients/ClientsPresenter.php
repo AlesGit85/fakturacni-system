@@ -209,6 +209,7 @@ class ClientsPresenter extends BasePresenter
 
     /**
      * Vyhledá firmu v ARESu podle IČO
+     * AresService už vždy vrací data, takže nemusíme mít vlastní fallback
      */
     public function handleAresLookup(): void
     {
@@ -223,40 +224,20 @@ class ClientsPresenter extends BasePresenter
         // Logování požadavku
         $this->logger->log("ARES lookup požadavek pro IČO: $ico", ILogger::INFO);
         
-        try {
-            // Pokus o získání dat z ARESu - AresService teď vždy vrací data
-            $data = $this->aresService->getCompanyDataByIco($ico);
-            
-            // Kontrola, zda máme validní data
-            if (!$data || !isset($data['name']) || empty($data['name'])) {
-                $this->logger->log("ARES nevrátil validní data pro IČO: $ico", ILogger::WARNING);
-                $this->sendJson(['error' => 'Pro zadané IČO nebyla nalezena žádná data']);
-                return;
-            }
-            
-            $this->logger->log("ARES úspěšně vrátil data pro IČO: $ico, firma: " . $data['name'], ILogger::INFO);
-            
-            // Pošleme data jako JSON
-            $this->sendJson($data);
-            
-        } catch (\Throwable $e) {
-            // Logování detailní chyby
-            $errorMsg = $e->getMessage() ?: 'Neznámá chyba';
-            $this->logger->log("Chyba ARES pro IČO $ico: $errorMsg na řádku " . $e->getLine() . " v souboru " . $e->getFile(), ILogger::ERROR);
-            
-            // Fallback na testovací data
-            $fallbackData = [
-                'name' => 'Testovací Společnost s.r.o. (IČO: ' . $ico . ')',
-                'ic' => $ico,
-                'dic' => 'CZ' . $ico,
-                'address' => 'Příkladová 123/45',
-                'city' => 'Praha',
-                'zip' => '11000',
-                'country' => 'Česká republika',
-            ];
-            
-            $this->logger->log("Používám testovací data pro IČO: $ico", ILogger::INFO);
-            $this->sendJson($fallbackData);
+        // AresService vždy vrací data (buď z ARESu nebo testovací)
+        // Takže nepotřebujeme try-catch ani vlastní fallback
+        $data = $this->aresService->getCompanyDataByIco($ico);
+        
+        // Kontrola, zda máme validní data
+        if (!isset($data['name']) || empty(trim($data['name']))) {
+            $this->logger->log("AresService vrátil nevalidní data pro IČO: $ico", ILogger::ERROR);
+            $this->sendJson(['error' => 'Nepodařilo se načíst data pro zadané IČO']);
+            return;
         }
+        
+        $this->logger->log("ARES úspěšně vrátil data pro IČO: $ico, firma: " . $data['name'], ILogger::INFO);
+        
+        // Pošleme data jako JSON
+        $this->sendJson($data);
     }
 }

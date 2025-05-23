@@ -283,6 +283,9 @@ class AresService
      */
     private function mapRestApiData(array $data, string $ico): array
     {
+        $this->logger->log("REST API - mapování dat pro IČO: $ico", ILogger::DEBUG);
+        $this->logger->log("REST API - struktura dat: " . json_encode(array_keys($data)), ILogger::DEBUG);
+        
         $name = $data['obchodniJmeno'] ?? '';
         $dic = $data['dic'] ?? '';
         
@@ -292,28 +295,41 @@ class AresService
         
         if (isset($data['sidlo'])) {
             $sidlo = $data['sidlo'];
+            $this->logger->log("REST API - struktura sídla: " . json_encode(array_keys($sidlo)), ILogger::DEBUG);
             
+            // Ulice
             $street = '';
-            if (isset($sidlo['ulice']) && isset($sidlo['ulice']['nazev'])) {
-                $street = $sidlo['ulice']['nazev'];
+            if (isset($sidlo['ulice'])) {
+                if (is_array($sidlo['ulice']) && isset($sidlo['ulice']['nazev'])) {
+                    $street = $sidlo['ulice']['nazev'];
+                } elseif (is_string($sidlo['ulice'])) {
+                    $street = $sidlo['ulice'];
+                }
             }
             
+            // Číslo domu
             $houseNum = $sidlo['cisloDomovni'] ?? '';
             $orientNum = isset($sidlo['cisloOrientacni']) ? '/' . $sidlo['cisloOrientacni'] : '';
             
-            if (isset($sidlo['obec']) && isset($sidlo['obec']['nazev'])) {
-                $city = $sidlo['obec']['nazev'];
+            // Město
+            if (isset($sidlo['obec'])) {
+                if (is_array($sidlo['obec']) && isset($sidlo['obec']['nazev'])) {
+                    $city = $sidlo['obec']['nazev'];
+                } elseif (is_string($sidlo['obec'])) {
+                    $city = $sidlo['obec'];
+                }
             }
             
+            // PSČ
             $zip = $sidlo['psc'] ?? '';
+            
+            // Sestavení adresy
             $address = trim($street . ' ' . $houseNum . $orientNum);
             
-            if (empty($address) && !empty($city)) {
-                $address = $city;
-            }
+            $this->logger->log("REST API - parsované: ulice='$street', číslo='$houseNum', orient='$orientNum', město='$city', PSČ='$zip'", ILogger::DEBUG);
         }
         
-        return [
+        $result = [
             'name' => $name ?: 'Neznámá společnost',
             'ic' => $ico,
             'dic' => $dic,
@@ -322,47 +338,98 @@ class AresService
             'zip' => $zip ?: '00000',
             'country' => 'Česká republika',
         ];
+        
+        $this->logger->log("REST API - finální výsledek: " . json_encode($result), ILogger::INFO);
+        return $result;
     }
     
     /**
-     * Mapuje data z XML API
+     * Mapuje data z XML API s lepším debuggingem
      */
     private function mapXmlData($zaznam, string $ico): array
     {
+        $this->logger->log("XML API - mapování dat pro IČO: $ico", ILogger::DEBUG);
+        
+        // Jméno firmy
         $name = '';
         if (isset($zaznam->Obchodni_firma)) {
             $name = (string)$zaznam->Obchodni_firma;
+            $this->logger->log("XML API - obchodní firma: $name", ILogger::DEBUG);
         } elseif (isset($zaznam->Jmeno)) {
-            $name = trim((string)$zaznam->Jmeno . ' ' . (string)$zaznam->Prijmeni);
+            $jmeno = (string)$zaznam->Jmeno;
+            $prijmeni = (string)($zaznam->Prijmeni ?? '');
+            $name = trim($jmeno . ' ' . $prijmeni);
+            $this->logger->log("XML API - jméno osoby: $name", ILogger::DEBUG);
         }
         
+        // DIČ
         $dic = '';
         if (isset($zaznam->DIC)) {
             $dic = (string)$zaznam->DIC;
+            $this->logger->log("XML API - DIČ: $dic", ILogger::DEBUG);
         }
         
+        // Adresa
         $address = '';
         $city = '';
         $zip = '';
         
         if (isset($zaznam->Identifikace->Adresa_ARES)) {
             $adresa = $zaznam->Identifikace->Adresa_ARES;
+            $this->logger->log("XML API - nalezena adresa ARES", ILogger::DEBUG);
             
-            $street = isset($adresa->Nazev_ulice) ? (string)$adresa->Nazev_ulice : '';
-            $houseNum = isset($adresa->Cislo_domovni) ? (string)$adresa->Cislo_domovni : '';
-            $orientNum = isset($adresa->Cislo_orientacni) ? '/' . (string)$adresa->Cislo_orientacni : '';
-            
-            $city = isset($adresa->Nazev_obce) ? (string)$adresa->Nazev_obce : '';
-            $zip = isset($adresa->PSC) ? (string)$adresa->PSC : '';
-            
-            $address = trim($street . ' ' . $houseNum . $orientNum);
-            
-            if (empty($address) && !empty($city)) {
-                $address = $city;
+            // Ulice
+            $street = '';
+            if (isset($adresa->Nazev_ulice)) {
+                $street = (string)$adresa->Nazev_ulice;
+                $this->logger->log("XML API - ulice: '$street'", ILogger::DEBUG);
             }
+            
+            // Čísla
+            $houseNum = '';
+            if (isset($adresa->Cislo_domovni)) {
+                $houseNum = (string)$adresa->Cislo_domovni;
+                $this->logger->log("XML API - číslo domovní: '$houseNum'", ILogger::DEBUG);
+            }
+            
+            $orientNum = '';
+            if (isset($adresa->Cislo_orientacni)) {
+                $orientNum = '/' . (string)$adresa->Cislo_orientacni;
+                $this->logger->log("XML API - číslo orientační: '$orientNum'", ILogger::DEBUG);
+            }
+            
+            // Město
+            if (isset($adresa->Nazev_obce)) {
+                $city = (string)$adresa->Nazev_obce;
+                $this->logger->log("XML API - obec: '$city'", ILogger::DEBUG);
+            }
+            
+            // Část obce (někdy je tam místo Nazev_obce)
+            if (empty($city) && isset($adresa->Nazev_casti_obce)) {
+                $city = (string)$adresa->Nazev_casti_obce;
+                $this->logger->log("XML API - část obce: '$city'", ILogger::DEBUG);
+            }
+            
+            // PSČ
+            if (isset($adresa->PSC)) {
+                $zip = (string)$adresa->PSC;
+                $this->logger->log("XML API - PSČ: '$zip'", ILogger::DEBUG);
+            }
+            
+            // Sestavení adresy
+            if (!empty($street)) {
+                $address = trim($street . ' ' . $houseNum . $orientNum);
+            } elseif (!empty($houseNum)) {
+                // Jen číslo bez ulice
+                $address = trim($houseNum . $orientNum);
+            }
+            
+            $this->logger->log("XML API - sestavená adresa: '$address'", ILogger::DEBUG);
+        } else {
+            $this->logger->log("XML API - adresa ARES nenalezena", ILogger::DEBUG);
         }
         
-        return [
+        $result = [
             'name' => $name ?: 'Neznámá společnost',
             'ic' => $ico,
             'dic' => $dic,
@@ -371,5 +438,8 @@ class AresService
             'zip' => $zip ?: '00000',
             'country' => 'Česká republika',
         ];
+        
+        $this->logger->log("XML API - finální výsledek: " . json_encode($result), ILogger::INFO);
+        return $result;
     }
 }
