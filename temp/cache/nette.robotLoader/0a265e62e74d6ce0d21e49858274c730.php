@@ -5,7 +5,7 @@ return array (
     'App\\Bootstrap' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Bootstrap.php',
-      1 => 1747504786,
+      1 => 1747982283,
     ),
     'App\\Core\\RouterFactory' => 
     array (
@@ -45,12 +45,12 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1747924929,
+      1 => 1747981827,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1747942020,
+      1 => 1747982040,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -70,12 +70,12 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1747927780,
+      1 => 1747981962,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1747941989,
+      1 => 1747982083,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
@@ -85,7 +85,12 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1747981268,
+      1 => 1747981985,
+    ),
+    'App\\Security\\SecurityHeaders' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityHeaders.php',
+      1 => 1747982255,
     ),
   ),
   1 => 
@@ -99,14 +104,14 @@ return array (
     'App\\Presentation\\Home\\HomeTemplate' => 3,
     'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
     'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 2,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 2,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 2,
+    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
     'App\\Presentation\\Sign\\SignUpTemplate' => 2,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
   ),
   2 => 
   array (
