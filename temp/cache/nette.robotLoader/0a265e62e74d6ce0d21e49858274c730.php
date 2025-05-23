@@ -10,7 +10,7 @@ return array (
     'App\\Core\\RouterFactory' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
-      1 => 1747504055,
+      1 => 1747984904,
     ),
     'App\\Model\\ClientsManager' => 
     array (
@@ -35,7 +35,7 @@ return array (
     'App\\Model\\UserManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\UserManager.php',
-      1 => 1747981362,
+      1 => 1747984205,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -45,7 +45,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1747981827,
+      1 => 1747984388,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -80,17 +80,22 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1747981433,
+      1 => 1747984235,
     ),
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1747981985,
+      1 => 1747984473,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityHeaders.php',
       1 => 1747982255,
+    ),
+    'App\\Security\\SecurityLogger' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityLogger.php',
+      1 => 1747984094,
     ),
   ),
   1 => 
@@ -112,6 +117,10 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsAddTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsShowTemplate' => 1,
   ),
   2 => 
   array (

@@ -16,7 +16,7 @@ final class UsersPresenter extends BasePresenter
 
     // Admin může přistupovat ke všem akcím v tomto presenteru
     protected array $requiredRoles = ['admin'];
-    
+
     // Konkrétní role pro konkrétní akce
     protected array $actionRoles = [
         'profile' => ['readonly', 'accountant', 'admin'], // Svůj profil může upravovat každý
@@ -93,7 +93,11 @@ final class UsersPresenter extends BasePresenter
             }
         }
 
-        $this->userManager->delete($id);
+        // Použijeme upravený delete s informací o adminovi
+        $adminId = $this->getUser()->getId();
+        $adminName = $this->getUser()->getIdentity()->username;
+
+        $this->userManager->delete($id, $adminId, $adminName);
         $this->flashMessage("Uživatel '{$user->username}' byl úspěšně smazán.", 'success');
         $this->redirect('default');
     }
@@ -180,9 +184,13 @@ final class UsersPresenter extends BasePresenter
                 $updateData['password'] = $data->password;
             }
 
+            // Admin ID a jméno pro logování
+            $adminId = $this->getUser()->getId();
+            $adminName = $this->getUser()->getIdentity()->username;
+
             if ($id) {
                 // Editace existujícího uživatele
-                $this->userManager->update($id, $updateData);
+                $this->userManager->update($id, $updateData, $adminId, $adminName);
                 $this->flashMessage('Uživatel byl úspěšně upraven.', 'success');
             } else {
                 // Přidání nového uživatele
@@ -192,7 +200,7 @@ final class UsersPresenter extends BasePresenter
                     $passwordField->addError('Pro nového uživatele je heslo povinné.');
                     return;
                 }
-                $this->userManager->add($data->username, $data->email, $data->password, $data->role);
+                $this->userManager->add($data->username, $data->email, $data->password, $data->role, $adminId, $adminName);
                 $this->flashMessage('Uživatel byl úspěšně přidán.', 'success');
             }
 

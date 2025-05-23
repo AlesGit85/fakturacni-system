@@ -1,5 +1,11 @@
 services:
-	- App\Core\RouterFactory::createRouter
+	router: App\Core\RouterFactory::createRouter
+	- App\Model\ClientsManager
+	- App\Model\InvoicesManager
+	- App\Model\CompanyManager
+	- App\Model\QrPaymentService
+	- App\Security\SecurityLogger
+	authenticator: App\Model\UserManager
 
 
 search:

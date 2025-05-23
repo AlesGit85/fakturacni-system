@@ -30,14 +30,6 @@ security:
 	users: []
 
 
-services:
-	- App\Model\ClientsManager
-	- App\Model\InvoicesManager
-	- App\Model\CompanyManager
-	- App\Model\QrPaymentService
-	authenticator: App\Model\UserManager
-
-
 latte:
 	strictTypes: yes
 	strictParsing: yes

@@ -6,6 +6,7 @@ namespace App\Presentation;
 
 use Nette;
 use Nette\Application\UI\Presenter;
+use App\Security\SecurityLogger;
 
 abstract class BasePresenter extends Presenter
 {
@@ -17,6 +18,14 @@ abstract class BasePresenter extends Presenter
 
     /** @var bool Zda presenter vyžaduje přihlášení */
     protected bool $requiresLogin = true;
+
+    /** @var SecurityLogger */
+    private $securityLogger;
+
+    public function injectSecurityLogger(SecurityLogger $securityLogger): void
+    {
+        $this->securityLogger = $securityLogger;
+    }
 
     public function startup(): void
     {
@@ -38,6 +47,10 @@ abstract class BasePresenter extends Presenter
             if ($identity && isset($identity->role)) {
                 $userRole = $identity->role;
                 if (!in_array($userRole, $this->requiredRoles)) {
+                    // Logování pokusu o neoprávněný přístup
+                    $resource = $this->getName() . ':' . $this->getAction();
+                    $this->securityLogger->logUnauthorizedAccess($resource, $identity->id, $identity->username);
+                    
                     $this->flashMessage('Nemáte oprávnění pro přístup k této stránce.', 'danger');
                     $this->redirect('Home:default');
                 }
@@ -51,6 +64,10 @@ abstract class BasePresenter extends Presenter
             if ($identity && isset($identity->role)) {
                 $userRole = $identity->role;
                 if (!$this->hasRequiredRoleForAction($action, $userRole)) {
+                    // Logování pokusu o neoprávněný přístup k akci
+                    $resource = $this->getName() . ':' . $action;
+                    $this->securityLogger->logUnauthorizedAccess($resource, $identity->id, $identity->username);
+                    
                     $this->flashMessage('Nemáte oprávnění pro provedení této akce.', 'danger');
                     $this->redirect('Home:default');
                 }

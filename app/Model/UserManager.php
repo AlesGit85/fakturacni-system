@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Nette;
 use Nette\Security\Passwords;
+use App\Security\SecurityLogger;
 
 class UserManager implements Nette\Security\Authenticator
 {
@@ -15,6 +16,9 @@ class UserManager implements Nette\Security\Authenticator
     /** @var Passwords */
     private $passwords;
 
+    /** @var SecurityLogger */
+    private $securityLogger;
+
     /** @var int Maximální počet neúspěšných přihlášení */
     private $maxLoginAttempts = 5;
 
@@ -23,10 +27,12 @@ class UserManager implements Nette\Security\Authenticator
 
     public function __construct(
         Nette\Database\Explorer $database,
-        Passwords $passwords
+        Passwords $passwords,
+        SecurityLogger $securityLogger
     ) {
         $this->database = $database;
         $this->passwords = $passwords;
+        $this->securityLogger = $securityLogger;
     }
 
     /**
@@ -39,23 +45,35 @@ class UserManager implements Nette\Security\Authenticator
             ->fetch();
 
         if (!$row) {
+            $this->securityLogger->logFailedLogin($username, 'neexistující uživatel');
             throw new Nette\Security\AuthenticationException('Uživatelské jméno není správné.', self::IDENTITY_NOT_FOUND);
         }
 
         // Kontrola blokování
         if ($this->isUserBlocked($row->id)) {
+            $this->securityLogger->logFailedLogin($username, 'účet je zablokován');
             throw new Nette\Security\AuthenticationException('Účet je dočasně zablokován kvůli příliš mnoha neúspěšným pokusům o přihlášení. Zkuste to prosím později.', self::INVALID_CREDENTIAL);
         }
 
         if (!$this->passwords->verify($password, $row->password)) {
             // Zaznamenáme neúspěšný pokus o přihlášení
             $this->logFailedLoginAttempt($row->id);
+            $this->securityLogger->logFailedLogin($username);
+            
+            // Kontrola, zda jsme dosáhli limitu pokusů
+            $attempts = $this->getLoginAttempts($row->id);
+            if ($attempts >= $this->maxLoginAttempts) {
+                $this->securityLogger->logAccountLockout($row->id, $username);
+            }
             
             throw new Nette\Security\AuthenticationException('Heslo není správné.', self::INVALID_CREDENTIAL);
         }
 
         // Reset neúspěšných pokusů při úspěšném přihlášení
         $this->resetFailedLoginAttempts($row->id);
+        
+        // Logování úspěšného přihlášení
+        $this->securityLogger->logLogin($row->id, $username);
 
         // Aktualizace posledního přihlášení
         $this->database->table('users')
@@ -66,6 +84,18 @@ class UserManager implements Nette\Security\Authenticator
         unset($arr['password']);
 
         return new Nette\Security\SimpleIdentity($row->id, $row->role, $arr);
+    }
+
+    /**
+     * Získá počet neúspěšných pokusů o přihlášení
+     */
+    private function getLoginAttempts(int $userId): int
+    {
+        $record = $this->database->table('login_attempts')
+            ->where('user_id', $userId)
+            ->fetch();
+            
+        return $record ? $record->attempts : 0;
     }
 
     /**
@@ -152,9 +182,9 @@ class UserManager implements Nette\Security\Authenticator
     /**
      * Přidá nového uživatele
      */
-    public function add(string $username, string $email, string $password, string $role = 'readonly'): void
+    public function add(string $username, string $email, string $password, string $role = 'readonly', ?int $adminId = null, ?string $adminName = null): int
     {
-        $this->database->table('users')->insert([
+        $result = $this->database->table('users')->insert([
             'username' => $username,
             'password' => $this->passwords->hash($password),
             'email' => $email,
@@ -162,6 +192,13 @@ class UserManager implements Nette\Security\Authenticator
             'created_at' => new \DateTime(),
             'last_login' => null,
         ]);
+        
+        $newUserId = $result->id;
+        
+        // Logování vytvoření uživatele
+        $this->securityLogger->logUserCreation($newUserId, $username, $role, $adminId, $adminName);
+        
+        return $newUserId;
     }
 
     /**
@@ -183,17 +220,45 @@ class UserManager implements Nette\Security\Authenticator
     /**
      * Aktualizuje uživatele
      */
-    public function update($id, $data)
+    public function update($id, $data, ?int $adminId = null, ?string $adminName = null)
     {
         try {
-            // Pokud se mění heslo, zahashujeme ho
+            // Logování změny role
+            if (isset($data['role'])) {
+                $user = $this->getById($id);
+                if ($user && $user->role !== $data['role']) {
+                    $this->securityLogger->logRoleChange(
+                        $id, 
+                        $user->username, 
+                        $user->role, 
+                        $data['role'], 
+                        $adminId ?: -1, 
+                        $adminName ?: 'Systém'
+                    );
+                }
+            }
+            
+            // Logování změny hesla
+            $passwordChanged = false;
             if (isset($data['password']) && !empty($data['password'])) {
                 $data['password'] = $this->passwords->hash($data['password']);
+                $passwordChanged = true;
             } else {
                 unset($data['password']);
             }
 
-            return $this->database->table('users')->where('id', $id)->update($data);
+            $result = $this->database->table('users')->where('id', $id)->update($data);
+            
+            if ($passwordChanged && $result) {
+                $user = $this->getById($id);
+                $this->securityLogger->logPasswordChange(
+                    $id,
+                    $user->username,
+                    $adminId !== null && $adminId !== $id
+                );
+            }
+
+            return $result;
         } catch (\Exception $e) {
             // Logování chyby - v produkci by bylo vhodné použít logger
             error_log('Chyba při aktualizaci uživatele: ' . $e->getMessage());
@@ -204,15 +269,23 @@ class UserManager implements Nette\Security\Authenticator
     /**
      * Smaže uživatele
      */
-    public function delete($id)
+    public function delete($id, int $adminId, string $adminName)
     {
+        $user = $this->getById($id);
+        if (!$user) {
+            return false;
+        }
+        
+        // Logování smazání uživatele
+        $this->securityLogger->logUserDeletion($id, $user->username, $adminId, $adminName);
+        
         return $this->database->table('users')->where('id', $id)->delete();
     }
 
     /**
      * Změna hesla uživatele
      */
-    public function changePassword($userId, string $newPassword): bool
+    public function changePassword($userId, string $newPassword, ?int $adminId = null): bool
     {
         try {
             $hashedPassword = $this->passwords->hash($newPassword);
@@ -221,6 +294,17 @@ class UserManager implements Nette\Security\Authenticator
                 ->where('id', $userId)
                 ->update(['password' => $hashedPassword]);
                 
+            if ($result) {
+                $user = $this->getById($userId);
+                if ($user) {
+                    $this->securityLogger->logPasswordChange(
+                        $userId,
+                        $user->username,
+                        $adminId !== null && $adminId !== $userId
+                    );
+                }
+            }
+            
             return $result > 0;
         } catch (\Exception $e) {
             error_log('Chyba při změně hesla: ' . $e->getMessage());

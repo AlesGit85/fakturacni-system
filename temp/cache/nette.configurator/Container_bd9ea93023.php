@@ -58,14 +58,29 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'Tracy\ILogger' => [['tracy.logger']],
 		'Tracy\BlueScreen' => [['tracy.blueScreen']],
 		'Tracy\Bar' => [['tracy.bar']],
+		'Nette\Routing\RouteList' => [['router']],
+		'Nette\Routing\Router' => [['router']],
+		'ArrayAccess' => [
+			2 => [
+				'router',
+				'application.1',
+				'application.2',
+				'application.4',
+				'application.5',
+				'application.6',
+				'application.7',
+				'application.8',
+			],
+		],
+		'Nette\Application\Routers\RouteList' => [['router']],
 		'App\Model\ClientsManager' => [['01']],
 		'App\Model\InvoicesManager' => [['02']],
 		'App\Model\CompanyManager' => [['03']],
 		'App\Model\QrPaymentService' => [['04']],
+		'App\Security\SecurityLogger' => [['05']],
 		'Nette\Security\Authenticator' => [['authenticator']],
 		'Nette\Security\IAuthenticator' => [['authenticator']],
 		'App\Model\UserManager' => [['authenticator']],
-		'Nette\Routing\Router' => [['05']],
 		'App\Presentation\BasePresenter' => [
 			2 => ['application.1', 'application.4', 'application.5', 'application.6', 'application.7', 'application.8'],
 		],
@@ -168,17 +183,6 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 			],
 		],
-		'ArrayAccess' => [
-			2 => [
-				'application.1',
-				'application.2',
-				'application.4',
-				'application.5',
-				'application.6',
-				'application.7',
-				'application.8',
-			],
-		],
 		'Nette\Application\UI\Renderable' => [
 			2 => [
 				'application.1',
@@ -248,9 +252,9 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	}
 
 
-	public function createService05(): Nette\Routing\Router
+	public function createService05(): App\Security\SecurityLogger
 	{
-		return App\Core\RouterFactory::createRouter();
+		return new App\Security\SecurityLogger($this->getService('tracy.logger'), $this->getService('http.request'));
 	}
 
 
@@ -267,11 +271,12 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('router'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
+		$service->injectSecurityLogger($this->getService('05'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -279,7 +284,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 
 	public function createServiceApplication__10(): NetteModule\MicroPresenter
 	{
-		return new NetteModule\MicroPresenter($this, $this->getService('http.request'), $this->getService('05'));
+		return new NetteModule\MicroPresenter($this, $this->getService('http.request'), $this->getService('router'));
 	}
 
 
@@ -290,7 +295,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('router'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
@@ -313,11 +318,12 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('router'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
+		$service->injectSecurityLogger($this->getService('05'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -335,11 +341,12 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('router'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
+		$service->injectSecurityLogger($this->getService('05'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -352,11 +359,12 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('router'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
+		$service->injectSecurityLogger($this->getService('05'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -364,16 +372,17 @@ class Container_bd9ea93023 extends Nette\DI\Container
 
 	public function createServiceApplication__7(): App\Presentation\Sign\SignPresenter
 	{
-		$service = new App\Presentation\Sign\SignPresenter($this->getService('authenticator'));
+		$service = new App\Presentation\Sign\SignPresenter($this->getService('authenticator'), $this->getService('05'));
 		$service->injectPrimary(
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('router'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
+		$service->injectSecurityLogger($this->getService('05'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -386,11 +395,12 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('router'),
 			$this->getService('session.session'),
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
+		$service->injectSecurityLogger($this->getService('05'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -406,7 +416,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	{
 		$service = new Nette\Application\Application(
 			$this->getService('application.presenterFactory'),
-			$this->getService('05'),
+			$this->getService('router'),
 			$this->getService('http.request'),
 			$this->getService('http.response'),
 		);
@@ -415,7 +425,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$service,
 		);
 		$this->getService('tracy.bar')->addPanel(new Nette\Bridges\ApplicationTracy\RoutingPanel(
-			$this->getService('05'),
+			$this->getService('router'),
 			$this->getService('http.request'),
 			$this->getService('application.presenterFactory'),
 		));
@@ -426,7 +436,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	public function createServiceApplication__linkGenerator(): Nette\Application\LinkGenerator
 	{
 		return new Nette\Application\LinkGenerator(
-			$this->getService('05'),
+			$this->getService('router'),
 			$this->getService('http.request')->getUrl()->withoutUserInfo(),
 			$this->getService('application.presenterFactory'),
 		);
@@ -447,7 +457,11 @@ class Container_bd9ea93023 extends Nette\DI\Container
 
 	public function createServiceAuthenticator(): App\Model\UserManager
 	{
-		return new App\Model\UserManager($this->getService('database.default.explorer'), $this->getService('security.passwords'));
+		return new App\Model\UserManager(
+			$this->getService('database.default.explorer'),
+			$this->getService('security.passwords'),
+			$this->getService('05'),
+		);
 	}
 
 
@@ -582,6 +596,12 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	public function createServiceMail__mailer(): Nette\Mail\Mailer
 	{
 		return new Nette\Mail\SendmailMailer;
+	}
+
+
+	public function createServiceRouter(): Nette\Application\Routers\RouteList
+	{
+		return App\Core\RouterFactory::createRouter();
 	}
 
 

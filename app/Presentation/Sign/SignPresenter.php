@@ -8,17 +8,22 @@ use Nette;
 use Nette\Application\UI\Form;
 use App\Model\UserManager;
 use App\Presentation\BasePresenter;
+use App\Security\SecurityLogger;
 
 final class SignPresenter extends BasePresenter
 {
     /** @var UserManager */
     private $userManager;
+    
+    /** @var SecurityLogger */
+    private $securityLogger;
 
     protected bool $requiresLogin = false;
 
-    public function __construct(UserManager $userManager)
+    public function __construct(UserManager $userManager, SecurityLogger $securityLogger)
     {
         $this->userManager = $userManager;
+        $this->securityLogger = $securityLogger;
     }
 
     public function actionIn(): void
@@ -49,6 +54,12 @@ final class SignPresenter extends BasePresenter
 
     public function actionOut(): void
     {
+        // Logování odhlášení před samotným odhlášením
+        if ($this->getUser()->isLoggedIn()) {
+            $identity = $this->getUser()->getIdentity();
+            $this->securityLogger->logLogout($identity->id, $identity->username);
+        }
+        
         $this->getUser()->logout();
         $this->flashMessage('Byli jste úspěšně odhlášeni.', 'success');
         $this->redirect('Sign:in');
@@ -84,9 +95,9 @@ final class SignPresenter extends BasePresenter
             }
 
             $this->getUser()->login($data->username, $data->password);
-
+            
             $this->flashMessage('Úspěšně jste se přihlásili.', 'success');
-
+            
             // Přesměrování na původně požadovanou stránku nebo na dashboard
             $backlink = $this->getParameter('backlink');
             if ($backlink) {
@@ -177,8 +188,18 @@ final class SignPresenter extends BasePresenter
                 $role = isset($data->role) ? $data->role : 'readonly';
             }
 
+            // Admin ID a jméno pro logování (null pro samoregistraci)
+            $adminId = null;
+            $adminName = null;
+            
+            // Pokud je přihlášen admin, který vytváří uživatele
+            if ($this->getUser()->isLoggedIn() && $this->isAdmin()) {
+                $adminId = $this->getUser()->getId();
+                $adminName = $this->getUser()->getIdentity()->username;
+            }
+
             // Vytvoření uživatele
-            $this->userManager->add($data->username, $data->email, $data->password, $role);
+            $this->userManager->add($data->username, $data->email, $data->password, $role, $adminId, $adminName);
 
             $this->flashMessage('Registrace byla úspěšná. Nyní se můžete přihlásit.', 'success');
             $this->redirect('Sign:in');
