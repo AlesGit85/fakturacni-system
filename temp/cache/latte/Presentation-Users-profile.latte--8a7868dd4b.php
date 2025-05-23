@@ -140,19 +140,31 @@ final class Template_8a7868dd4b extends Latte\Runtime\Template
 		echo '
                         ';
 		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('username', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 87 */;
-		echo '
-                    </div>
+		echo "\n";
+		if ($form['username']->hasErrors()) /* line 88 */ {
+			echo '                            <div class="text-danger mt-1">';
+			echo LR\Filters::escapeHtmlText($form['username']->getError()) /* line 89 */;
+			echo '</div>
+';
+		}
+		echo '                    </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('email', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 93 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('email', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 96 */;
 		echo '
                         ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('email', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 94 */;
-		echo '
-                    </div>
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('email', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 97 */;
+		echo "\n";
+		if ($form['email']->hasErrors()) /* line 98 */ {
+			echo '                            <div class="text-danger mt-1">';
+			echo LR\Filters::escapeHtmlText($form['email']->getError()) /* line 99 */;
+			echo '</div>
+';
+		}
+		echo '                    </div>
                 </div>
                 
                 <!-- Změna hesla -->
@@ -163,57 +175,86 @@ final class Template_8a7868dd4b extends Latte\Runtime\Template
                     </div>
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle me-2"></i>
-                        Pro změnu hesla vyplňte všechna tři pole. Pokud nechcete měnit heslo, ponechte je prázdná.
+                        Pro změnu hesla vyplňte všechna tři pole. Heslo musí mít alespoň 6 znaků. Pokud nechcete měnit heslo, ponechte je prázdná.
                     </div>
                 </div>
                 
                 <div class="col-md-4">
                     <div class="form-floating">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('currentPassword', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 112 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('currentPassword', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 118 */;
 		echo '
                         ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('currentPassword', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 113 */;
-		echo '
-                    </div>
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('currentPassword', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 119 */;
+		echo "\n";
+		if ($form['currentPassword']->hasErrors()) /* line 120 */ {
+			echo '                            <div class="text-danger mt-1">';
+			echo LR\Filters::escapeHtmlText($form['currentPassword']->getError()) /* line 121 */;
+			echo '</div>
+';
+		}
+		echo '                    </div>
                 </div>
                 
                 <div class="col-md-4">
                     <div class="form-floating">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('password', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 119 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('password', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 128 */;
 		echo '
                         ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('password', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 120 */;
-		echo '
-                    </div>
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('password', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 129 */;
+		echo "\n";
+		if ($form['password']->hasErrors()) /* line 130 */ {
+			echo '                            <div class="text-danger mt-1">';
+			echo LR\Filters::escapeHtmlText($form['password']->getError()) /* line 131 */;
+			echo '</div>
+';
+		}
+		echo '                    </div>
                 </div>
                 
                 <div class="col-md-4">
                     <div class="form-floating">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('passwordVerify', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 126 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('passwordVerify', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 138 */;
 		echo '
                         ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('passwordVerify', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 127 */;
-		echo '
-                    </div>
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('passwordVerify', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 139 */;
+		echo "\n";
+		if ($form['passwordVerify']->hasErrors()) /* line 140 */ {
+			echo '                            <div class="text-danger mt-1">';
+			echo LR\Filters::escapeHtmlText($form['passwordVerify']->getError()) /* line 141 */;
+			echo '</div>
+';
+		}
+		echo '                    </div>
                 </div>
                 
+';
+		if ($form->hasErrors()) /* line 146 */ {
+			echo '                    <div class="col-12">
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Prosím opravte chyby ve formuláři.
+                        </div>
+                    </div>
+';
+		}
+		echo '                
                 <div class="col-12 mt-4 d-flex justify-content-between">
                     <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 132 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 156 */;
 		echo '" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Zpět na uživatele
                     </a>
                     <button';
-		echo ($ʟ_elem = Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControlPart())->addAttributes(['class' => null])->attributes() /* line 135 */;
+		echo ($ʟ_elem = Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControlPart())->addAttributes(['class' => null])->attributes() /* line 159 */;
 		echo ' class="btn btn-primary">
                         <i class="bi bi-check-lg"></i> Uložit změny
                     </button>
                 </div>
             ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 139 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 163 */;
 
 		echo '
         </div>

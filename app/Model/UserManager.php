@@ -70,9 +70,9 @@ class UserManager implements Nette\Security\Authenticator
     /**
      * Přidá nového uživatele
      */
-    public function add(string $username, string $email, string $password, string $role = 'readonly'): Nette\Database\Table\ActiveRow
+    public function add(string $username, string $email, string $password, string $role = 'readonly'): void
     {
-        return $this->database->table('users')->insert([
+        $this->database->table('users')->insert([
             'username' => $username,
             'password' => $this->passwords->hash($password),
             'email' => $email,
@@ -103,21 +103,20 @@ class UserManager implements Nette\Security\Authenticator
      */
     public function update($id, $data)
     {
-        // Převedeme data na pole pokud jsou objektem
-        if (is_object($data)) {
-            $data = (array) $data;
-        }
+        try {
+            // Pokud se mění heslo, zahashujeme ho
+            if (isset($data['password']) && !empty($data['password'])) {
+                $data['password'] = $this->passwords->hash($data['password']);
+            } else {
+                unset($data['password']);
+            }
 
-        // Pokud se mění heslo, zahashujeme ho
-        if (isset($data['password']) && !empty($data['password'])) {
-            $data['password'] = $this->passwords->hash($data['password']);
-        } else {
-            // Pokud heslo není zadané, odstraníme ho z dat
-            unset($data['password']);
+            return $this->database->table('users')->where('id', $id)->update($data);
+        } catch (\Exception $e) {
+            // Logování chyby - v produkci by bylo vhodné použít logger
+            error_log('Chyba při aktualizaci uživatele: ' . $e->getMessage());
+            return false;
         }
-
-        // Provedeme aktualizaci
-        return $this->database->table('users')->where('id', $id)->update($data);
     }
 
     /**
@@ -129,17 +128,22 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     /**
-     * Změna hesla uživatele - pomocná metoda
+     * Změna hesla uživatele
      */
     public function changePassword($userId, string $newPassword): bool
     {
-        $hashedPassword = $this->passwords->hash($newPassword);
-        
-        $result = $this->database->table('users')
-            ->where('id', $userId)
-            ->update(['password' => $hashedPassword]);
+        try {
+            $hashedPassword = $this->passwords->hash($newPassword);
             
-        return $result > 0;
+            $result = $this->database->table('users')
+                ->where('id', $userId)
+                ->update(['password' => $hashedPassword]);
+                
+            return $result > 0;
+        } catch (\Exception $e) {
+            error_log('Chyba při změně hesla: ' . $e->getMessage());
+            return false;
+        }
     }
 
     /**

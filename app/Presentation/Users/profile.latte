@@ -85,6 +85,9 @@
                     <div class="form-floating">
                         {input username class => 'form-control'}
                         {label username class => 'form-label' /}
+                        {if $form['username']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['username']->getError()}</div>
+                        {/if}
                     </div>
                 </div>
                 
@@ -92,6 +95,9 @@
                     <div class="form-floating">
                         {input email class => 'form-control'}
                         {label email class => 'form-label' /}
+                        {if $form['email']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['email']->getError()}</div>
+                        {/if}
                     </div>
                 </div>
                 
@@ -103,7 +109,7 @@
                     </div>
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle me-2"></i>
-                        Pro změnu hesla vyplňte všechna tři pole. Pokud nechcete měnit heslo, ponechte je prázdná.
+                        Pro změnu hesla vyplňte všechna tři pole. Heslo musí mít alespoň 6 znaků. Pokud nechcete měnit heslo, ponechte je prázdná.
                     </div>
                 </div>
                 
@@ -111,6 +117,9 @@
                     <div class="form-floating">
                         {input currentPassword class => 'form-control'}
                         {label currentPassword class => 'form-label' /}
+                        {if $form['currentPassword']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['currentPassword']->getError()}</div>
+                        {/if}
                     </div>
                 </div>
                 
@@ -118,6 +127,9 @@
                     <div class="form-floating">
                         {input password class => 'form-control'}
                         {label password class => 'form-label' /}
+                        {if $form['password']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['password']->getError()}</div>
+                        {/if}
                     </div>
                 </div>
                 
@@ -125,8 +137,20 @@
                     <div class="form-floating">
                         {input passwordVerify class => 'form-control'}
                         {label passwordVerify class => 'form-label' /}
+                        {if $form['passwordVerify']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['passwordVerify']->getError()}</div>
+                        {/if}
                     </div>
                 </div>
+                
+                {if $form->hasErrors()}
+                    <div class="col-12">
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Prosím opravte chyby ve formuláři.
+                        </div>
+                    </div>
+                {/if}
                 
                 <div class="col-12 mt-4 d-flex justify-content-between">
                     <a n:href="default" class="btn btn-outline-secondary">
