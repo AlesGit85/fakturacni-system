@@ -87,7 +87,7 @@
                                     <i class="bi bi-trash"></i>
                                 </a>
                             {else}
-                                <a class="btn btn-icon text-muted" title="Klient má {$invoiceCount} faktur a nelze ho smazat" disabled>
+                                <a class="btn btn-icon text-muted" title="Klient má {getInvoiceCountText($invoiceCount)} a nelze ho smazat" disabled>
                                     <i class="bi bi-trash"></i>
                                 </a>
                             {/if}

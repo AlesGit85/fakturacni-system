@@ -5,6 +5,7 @@ services:
 	- App\Model\CompanyManager
 	- App\Model\QrPaymentService
 	- App\Security\SecurityLogger
+	- App\Model\AresService
 	authenticator: App\Model\UserManager
 
 

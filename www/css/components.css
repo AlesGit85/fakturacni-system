@@ -262,3 +262,35 @@
     font-size: 0.85rem;
     color: #6c757d;
 }
+
+/* Úpravy pro ARES tlačítko */
+.input-group {
+    display: flex;
+    align-items: stretch;
+}
+
+.input-group .form-control {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.input-group .btn {
+    margin-left: -1px;
+}
+
+/* Spinner animace */
+.bi-arrow-repeat {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Styl pro zprávy po ARES vyhledávání */
+#ares-message {
+    margin-top: 0.5rem;
+    transition: opacity 0.5s ease;
+}

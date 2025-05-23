@@ -159,42 +159,48 @@ final class Template_61407a6650 extends Latte\Runtime\Template
                     </div>
                 </div>
                 
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('ic', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 93 */;
+<div class="col-md-6">
+    <div class="mb-3">
+        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('ic', $this->global)->getLabel()) /* line 93 */;
 		echo '
-                        ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('ic', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 94 */;
+        <div class="input-group">
+            ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('ic', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 95 */;
 		echo '
-                    </div>
-                </div>
+            <button type="button" id="load-from-ares" class="btn btn-outline-primary">
+                <i class="bi bi-cloud-download"></i> Načíst z ARES
+            </button>
+        </div>
+        <small class="form-text text-muted">Zadejte IČO a klikněte na tlačítko pro načtení údajů z ARESu</small>
+    </div>
+</div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('dic', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 100 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('dic', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 106 */;
 		echo '
                         ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('dic', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 101 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('dic', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 107 */;
 		echo '
                     </div>
                 </div>
                 
                 <div class="col-12 mt-4 d-flex justify-content-between">
                     <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 106 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 112 */;
 		echo '" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Zpět na seznam klientů
                     </a>
                     <button';
-		echo ($ʟ_elem = Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControlPart())->addAttributes(['class' => null])->attributes() /* line 109 */;
+		echo ($ʟ_elem = Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControlPart())->addAttributes(['class' => null])->attributes() /* line 115 */;
 		echo ' class="btn btn-primary">
                         <i class="bi bi-check-lg"></i> Uložit klienta
                     </button>
                 </div>
             ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 113 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 119 */;
 
 		echo '
         </div>

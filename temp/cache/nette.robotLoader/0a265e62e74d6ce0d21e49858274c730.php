@@ -12,6 +12,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
       1 => 1747984904,
     ),
+    'App\\Model\\AresService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\AresService.php',
+      1 => 1747986865,
+    ),
     'App\\Model\\ClientsManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ClientsManager.php',
@@ -45,12 +50,12 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1747984388,
+      1 => 1747988218,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1747982040,
+      1 => 1747988248,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -117,12 +122,13 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsAddTemplate' => 2,
+    'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
     'App\\Presentation\\Clients\\ClientsShowTemplate' => 1,
     'App\\Presentation\\Users\\UsersEditTemplate' => 1,
     'App\\Presentation\\Users\\UsersAddTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 1,
   ),
   2 => 
   array (

@@ -156,6 +156,34 @@ abstract class BasePresenter extends Presenter
     }
 
     /**
+     * Správné skloňování slova "faktura" podle českých gramatických pravidel
+     * 
+     * @param int $count Počet faktur
+     * @return string Správně skloňované slovo
+     */
+    public function pluralizeInvoices(int $count): string
+    {
+        if ($count === 1) {
+            return 'fakturu';
+        } elseif ($count >= 2 && $count <= 4) {
+            return 'faktury';
+        } else {
+            return 'faktur';
+        }
+    }
+
+    /**
+     * Vytvoří celou větu s počtem faktur
+     * 
+     * @param int $count Počet faktur
+     * @return string Celá věta s počtem a správně skloňovaným slovem
+     */
+    public function getInvoiceCountText(int $count): string
+    {
+        return $count . ' ' . $this->pluralizeInvoices($count);
+    }
+
+    /**
      * Template helper pro kontrolu rolí v šablonách
      */
     public function beforeRender(): void
@@ -178,6 +206,10 @@ abstract class BasePresenter extends Presenter
         // Helper funkce pro šablony
         $this->template->add('isUserAdmin', $this->isAdmin());
         $this->template->add('isUserAccountant', $this->isAccountant());
+        
+        // Přidání helper funkcí pro skloňování do šablony
+        $this->template->addFunction('pluralizeInvoices', [$this, 'pluralizeInvoices']);
+        $this->template->addFunction('getInvoiceCountText', [$this, 'getInvoiceCountText']);
     }
 
     /**

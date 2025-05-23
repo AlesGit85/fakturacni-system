@@ -132,11 +132,13 @@ class ClientsPresenter extends BasePresenter
             ->count();
 
         if ($invoiceCount > 0) {
-            // Vytvořit srozumitelnou hlášku pro uživatele
+            // Vytvoření srozumitelné hlášky s správnou gramatikou
+            $invoiceText = $this->getInvoiceCountText($invoiceCount);
+            
             if ($invoiceCount == 1) {
-                $message = "Klient '{$client->name}' má 1 fakturu v systému a nelze ho smazat. Nejprve musíte smazat tuto fakturu.";
+                $message = "Klient '{$client->name}' má {$invoiceText} v systému a nelze ho smazat. Nejprve musíte smazat tuto fakturu.";
             } else {
-                $message = "Klient '{$client->name}' má {$invoiceCount} faktur v systému a nelze ho smazat. Nejprve musíte smazat tyto faktury.";
+                $message = "Klient '{$client->name}' má {$invoiceText} v systému a nelze ho smazat. Nejprve musíte smazat tyto faktury.";
             }
 
             $message .= " <a href='" . $this->link('Invoices:default') . "'>Přejít na faktury</a>.";

@@ -88,12 +88,18 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        {input ic class => 'form-control'}
-                        {label ic class => 'form-label' /}
-                    </div>
-                </div>
+<div class="col-md-6">
+    <div class="mb-3">
+        {label ic /}
+        <div class="input-group">
+            {input ic class => 'form-control'}
+            <button type="button" id="load-from-ares" class="btn btn-outline-primary">
+                <i class="bi bi-cloud-download"></i> Načíst z ARES
+            </button>
+        </div>
+        <small class="form-text text-muted">Zadejte IČO a klikněte na tlačítko pro načtení údajů z ARESu</small>
+    </div>
+</div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">

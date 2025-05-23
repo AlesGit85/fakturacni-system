@@ -78,6 +78,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'App\Model\CompanyManager' => [['03']],
 		'App\Model\QrPaymentService' => [['04']],
 		'App\Security\SecurityLogger' => [['05']],
+		'App\Model\AresService' => [['06']],
 		'Nette\Security\Authenticator' => [['authenticator']],
 		'Nette\Security\IAuthenticator' => [['authenticator']],
 		'App\Model\UserManager' => [['authenticator']],
@@ -218,7 +219,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'App\Presentation\Users\UsersPresenter' => [2 => ['application.8']],
 		'NetteModule\ErrorPresenter' => [2 => ['application.9']],
 		'NetteModule\MicroPresenter' => [2 => ['application.10']],
-		'App\Core\RouterFactory' => [['06']],
+		'App\Core\RouterFactory' => [['07']],
 	];
 
 
@@ -258,7 +259,13 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	}
 
 
-	public function createService06(): App\Core\RouterFactory
+	public function createService06(): App\Model\AresService
+	{
+		return new App\Model\AresService($this->getService('tracy.logger'));
+	}
+
+
+	public function createService07(): App\Core\RouterFactory
 	{
 		return new App\Core\RouterFactory;
 	}
