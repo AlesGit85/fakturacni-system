@@ -1,0 +1,96 @@
+[2025-05-23 11-30-07] Volání REST API ARES: https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-30-07] REST API HTTP kód: 200  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-30-07] Výsledek ARES pro IČO 03082989: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"1009\/31","city":"","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-31-57] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-31-57] Volání REST API ARES: https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-31-57] REST API HTTP kód: 200  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-31-57] Výsledek ARES pro IČO 03082989: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"1009\/31","city":"","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-31-57] ARES úspěšně vrátil data pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-33-37] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-33-37] Začínám ARES lookup pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-33-37] Volání REST API ARES: https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-33-37] REST API HTTP odpověď: HTTP/1.1 200  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-33-37] Úspěšný výsledek ARES pro IČO 03082989: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-33-37] ARES úspěšně vrátil data pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-35-35] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-35-35] Začínám ARES lookup pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-35-35] Volání REST API ARES: https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-35-35] REST API HTTP kód: 200  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-35-35] ARES úspěšně vrátil data pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 11-35-46] ARES lookup požadavek pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-35-46] Začínám ARES lookup pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-35-46] Volání REST API ARES: https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-35-46] REST API HTTP kód: 200  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-35-46] ARES úspěšně vrátil data pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-35-57] ARES lookup požadavek pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-35-57] Začínám ARES lookup pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-35-57] Volání REST API ARES: https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-35-58] REST API HTTP kód: 200  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-35-58] ARES úspěšně vrátil data pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-42-02] ARES lookup požadavek pro IČO: 8789412  @  http://localhost:8000/clients/add?do=aresLookup&ico=8789412 
+[2025-05-23 11-42-02] ARES úspěšně vrátil data pro IČO: 8789412, firma: Testovací Společnost s.r.o. (IČO: 8789412)  @  http://localhost:8000/clients/add?do=aresLookup&ico=8789412 
+[2025-05-23 11-42-02] Používám testovací data pro IČO: 8789412  @  http://localhost:8000/clients/add?do=aresLookup&ico=8789412 
+[2025-05-23 11-43-27] ARES lookup požadavek pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-43-27] Začínám ARES lookup pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-43-27] Zkouším REST API: https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-43-27] ARES úspěšně vrátil data pro IČO: 87894912, firma: Aleš Zita  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-43-27] Používám testovací data pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 11-45-21] ARES lookup požadavek pro IČO: 19062583  @  http://localhost:8000/clients/add?do=aresLookup&ico=19062583 
+[2025-05-23 11-45-21] Začínám ARES lookup pro IČO: 19062583  @  http://localhost:8000/clients/add?do=aresLookup&ico=19062583 
+[2025-05-23 11-45-21] Zkouším REST API: https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/19062583  @  http://localhost:8000/clients/add?do=aresLookup&ico=19062583 
+[2025-05-23 11-45-21] ARES úspěšně vrátil data pro IČO: 19062583, firma: Microsoft 29324 Czech Republic, s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=19062583 
+[2025-05-23 11-45-21] Používám testovací data pro IČO: 19062583  @  http://localhost:8000/clients/add?do=aresLookup&ico=19062583 
+[2025-05-23 12-56-12] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-12] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-12] Zkouším REST API...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-12] REST URL: https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-12] Používám cURL  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-12] REST cURL - HTTP kód: 200  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-12] REST cURL - Content type: application/json  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-12] REST cURL - Total time: 0.127004  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-12] REST API výsledek: {"name":"Stovkomat s.r.o.","ic":"","dic":"CZ03082989","address":"1009\/31","city":"Nezn\u00e1m\u00e9 m\u011bsto","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-12] Zkouším XML API...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-12] XML URL: https://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-22] XML cURL - HTTP kód: 0  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-22] XML cURL - Content type: neznámý  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-22] XML cURL - Total time: 10.014274  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-22] XML file_get_contents začíná...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-23 12-56-45] ARES lookup požadavek pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-45] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-45] Zkouším REST API...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-45] REST URL: https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-45] Používám cURL  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-46] REST cURL - HTTP kód: 200  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-46] REST cURL - Content type: application/json  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-46] REST cURL - Total time: 0.147315  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-46] REST API výsledek: {"name":"Ale\u0161 Zita","ic":"","dic":"","address":"167","city":"Nezn\u00e1m\u00e9 m\u011bsto","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-46] Zkouším XML API...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-46] XML URL: https://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-56] XML cURL - HTTP kód: 0  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-56] XML cURL - Content type: neznámý  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-56] XML cURL - Total time: 10.008299  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-56-56] XML file_get_contents začíná...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-35] ARES lookup požadavek pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-35] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-35] Zkouším REST API...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-35] REST URL: https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-35] Používám cURL  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-35] REST cURL - HTTP kód: 200  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-35] REST cURL - Content type: application/json  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-35] REST cURL - Total time: 0.11835  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-35] REST API výsledek: {"name":"Ale\u0161 Zita","ic":"","dic":"","address":"167","city":"Nezn\u00e1m\u00e9 m\u011bsto","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-35] Zkouším XML API...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-35] XML URL: https://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-45] XML cURL - HTTP kód: 0  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-45] XML cURL - Content type: neznámý  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-45] XML cURL - Total time: 10.008216  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 12-58-45] XML file_get_contents začíná...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-00-05] ARES lookup požadavek pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-00-05] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-00-05] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-00-08] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-00-08] Zkouším REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-00-09] HTTP úspěšná odpověď (1696 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-00-09] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-00-09] ARES úspěšně vrátil data pro IČO: 87894912, firma: Aleš Zita  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-23 13-00-09] Používám testovací data pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 

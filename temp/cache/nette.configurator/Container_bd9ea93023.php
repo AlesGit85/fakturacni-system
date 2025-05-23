@@ -277,6 +277,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('01'),
 			$this->getService('database.default.explorer'),
 			$this->getService('06'),
+			$this->getService('tracy.logger'),
 		);
 		$service->injectPrimary(
 			$this->getService('http.request'),

@@ -23,7 +23,7 @@ function initAresLookup() {
         const icoInput = document.getElementById('frm-clientForm-ic');
         if (!icoInput || icoInput.value.trim() === '') {
             showErrorMessage('Prosím zadejte IČO');
-            icoInput.focus();
+            if (icoInput) icoInput.focus();
             return;
         }
         
@@ -35,16 +35,36 @@ function initAresLookup() {
         const icoValue = icoInput.value.trim();
         console.log('Odesílám AJAX požadavek pro IČO:', icoValue);
         
-        // AJAX požadavek přes Nette presenter
-        const url = '?do=aresLookup&ico=' + encodeURIComponent(icoValue);
+        // Správná URL pro Nette signál
+        const url = window.location.href.split('?')[0] + '?do=aresLookup&ico=' + encodeURIComponent(icoValue);
         console.log('URL požadavku:', url);
         
-        fetch(url)
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
             .then(response => {
                 console.log('ARES odpověď:', response.status, response.statusText);
+                
+                // Kontrola content type
+                const contentType = response.headers.get('content-type');
+                console.log('Content-Type:', contentType);
+                
                 if (!response.ok) {
                     throw new Error('Chyba při komunikaci se serverem: ' + response.status);
                 }
+                
+                // Kontrola, zda je odpověď JSON
+                if (!contentType || !contentType.includes('application/json')) {
+                    return response.text().then(text => {
+                        console.error('Neočekávaná odpověď (není JSON):', text.substring(0, 200));
+                        throw new Error('Server nevrátil JSON odpověď');
+                    });
+                }
+                
                 return response.json();
             })
             .then(data => {
@@ -54,20 +74,24 @@ function initAresLookup() {
                     return;
                 }
                 
-                // Předvyplnění formuláře
-                if (data.name) document.getElementById('frm-clientForm-name').value = data.name;
-                if (data.address) document.getElementById('frm-clientForm-address').value = data.address;
-                if (data.city) document.getElementById('frm-clientForm-city').value = data.city;
-                if (data.zip) document.getElementById('frm-clientForm-zip').value = data.zip;
-                if (data.country) document.getElementById('frm-clientForm-country').value = data.country;
-                if (data.dic) document.getElementById('frm-clientForm-dic').value = data.dic;
+                console.log('Začínám vyplňování formuláře...');
+                
+                // Předvyplnění formuláře s kontrolou existence polí
+                fillFormField('frm-clientForm-name', data.name);
+                fillFormField('frm-clientForm-address', data.address);
+                fillFormField('frm-clientForm-city', data.city);
+                fillFormField('frm-clientForm-zip', data.zip);
+                fillFormField('frm-clientForm-country', data.country);
+                fillFormField('frm-clientForm-dic', data.dic);
+                
+                console.log('Formulář vyplněn');
                 
                 // Zobrazíme informaci o úspěšném načtení
                 showSuccessMessage('Data úspěšně načtena z ARESu');
             })
             .catch(error => {
                 console.error('Chyba při načítání dat z ARES:', error);
-                showErrorMessage('Nepodařilo se načíst data z ARESu. Zkuste to prosím později.');
+                showErrorMessage('Nepodařilo se načíst data z ARESu: ' + error.message);
             })
             .finally(() => {
                 // Obnovení tlačítka
@@ -76,6 +100,21 @@ function initAresLookup() {
                 console.log('AJAX požadavek dokončen');
             });
     });
+}
+
+/**
+ * Bezpečně vyplní pole formuláře
+ */
+function fillFormField(fieldId, value) {
+    const field = document.getElementById(fieldId);
+    if (field && value) {
+        field.value = value;
+        console.log(`Vyplněno pole ${fieldId}:`, value);
+    } else if (!field) {
+        console.warn(`Pole ${fieldId} nebylo nalezeno`);
+    } else {
+        console.log(`Pole ${fieldId} má prázdnou hodnotu`);
+    }
 }
 
 /**
@@ -111,15 +150,24 @@ function showMessage(message, type) {
     
     // Vložíme zprávu za formulář IČO
     const icoField = document.getElementById('frm-clientForm-ic');
-    const icoParent = icoField.closest('.form-group') || icoField.closest('.input-group').parentNode;
-    icoParent.appendChild(messageElement);
+    if (icoField) {
+        const icoParent = icoField.closest('.form-group') || icoField.closest('.input-group').parentNode || icoField.closest('.mb-3');
+        if (icoParent) {
+            icoParent.appendChild(messageElement);
+        } else {
+            // Fallback - vložíme za IČO pole
+            icoField.parentNode.insertBefore(messageElement, icoField.nextSibling);
+        }
+    }
     
     // Nastavíme automatické zmizení po 5 sekundách
     setTimeout(() => {
         messageElement.style.transition = 'opacity 0.5s ease';
         messageElement.style.opacity = '0';
         setTimeout(() => {
-            messageElement.remove();
+            if (messageElement.parentNode) {
+                messageElement.remove();
+            }
         }, 500);
     }, 5000);
 }

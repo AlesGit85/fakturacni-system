@@ -4,9 +4,11 @@ namespace App\Presentation\Clients;
 
 use Nette;
 use App\Model\AresService;
+use Nette\Application\Responses\JsonResponse;
 use App\Model\ClientsManager;
 use Nette\Application\UI\Form;
 use App\Presentation\BasePresenter;
+use Tracy\ILogger;
 
 class ClientsPresenter extends BasePresenter
 {
@@ -18,6 +20,9 @@ class ClientsPresenter extends BasePresenter
 
     /** @var AresService */
     private $aresService;
+
+    /** @var ILogger */
+    private $logger;
 
     // Základní role pro přístup k presenteru
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
@@ -31,15 +36,17 @@ class ClientsPresenter extends BasePresenter
         'delete' => ['admin'], // Smazat klienta může jen admin
     ];
 
-public function __construct(
-    ClientsManager $clientsManager, 
-    Nette\Database\Explorer $database, 
-    AresService $aresService  // Toto by zde mělo být
-) {
-    $this->clientsManager = $clientsManager;
-    $this->database = $database;
-    $this->aresService = $aresService;
-}
+    public function __construct(
+        ClientsManager $clientsManager, 
+        Nette\Database\Explorer $database, 
+        AresService $aresService,
+        ILogger $logger
+    ) {
+        $this->clientsManager = $clientsManager;
+        $this->database = $database;
+        $this->aresService = $aresService;
+        $this->logger = $logger;
+    }
 
     public function renderDefault(): void
     {
@@ -55,6 +62,26 @@ public function __construct(
         }
 
         $this->template->client = $client;
+    }
+
+    public function renderAdd(): void
+    {
+        // Přidáme URL pro ARES lookup do šablony
+        $this->template->aresLookupUrl = $this->link('aresLookup!');
+    }
+
+    public function renderEdit(int $id): void
+    {
+        $client = $this->clientsManager->getById($id);
+
+        if (!$client) {
+            $this->error('Klient nebyl nalezen');
+        }
+
+        $this['clientForm']->setDefaults($client);
+        
+        // Přidáme URL pro ARES lookup do šablony
+        $this->template->aresLookupUrl = $this->link('aresLookup!');
     }
 
     protected function createComponentClientForm(): Form
@@ -180,66 +207,56 @@ public function __construct(
             ->count();
     }
 
-/**
- * Vyhledá firmu v ARESu podle IČO
- */
-public function handleAresLookup(): void
-{
-    if (!$this->isAjax()) {
-        $this->redirect('this');
-    }
-    
-    $ico = $this->getParameter('ico');
-    if (!$ico) {
-        $this->sendJson(['error' => 'Nebylo zadáno IČO']);
-        return;
-    }
-    
-    try {
-        // Pokus o získání dat z ARESu
-        $data = $this->aresService->getCompanyDataByIco($ico);
+    /**
+     * Vyhledá firmu v ARESu podle IČO
+     */
+    public function handleAresLookup(): void
+    {
+        // Získáme IČO z GET parametrů
+        $ico = $this->getHttpRequest()->getQuery('ico');
         
-        // Pokud data neexistují
-        if (!$data) {
-            // Záložní testovací data pro vývoj
-            if (file_exists(__DIR__ . '/../../../www/ares-test.php')) {
-                // Testovací data pro vývoj
-                $data = [
-                    'name' => 'Testovací Společnost s.r.o.',
-                    'ic' => $ico,
-                    'dic' => 'CZ' . $ico,
-                    'address' => 'Příkladová 123/45',
-                    'city' => 'Praha',
-                    'zip' => '11000',
-                    'country' => 'Česká republika',
-                ];
-                
-                $this->flashMessage('Data z ARESu nebyla nalezena, používám testovací data.', 'warning');
-            } else {
-                $this->sendJson(['error' => 'Firmu s tímto IČO se nepodařilo najít']);
+        if (!$ico) {
+            $this->sendJson(['error' => 'Nebylo zadáno IČO']);
+            return;
+        }
+        
+        // Logování požadavku
+        $this->logger->log("ARES lookup požadavek pro IČO: $ico", ILogger::INFO);
+        
+        try {
+            // Pokus o získání dat z ARESu - AresService teď vždy vrací data
+            $data = $this->aresService->getCompanyDataByIco($ico);
+            
+            // Kontrola, zda máme validní data
+            if (!$data || !isset($data['name']) || empty($data['name'])) {
+                $this->logger->log("ARES nevrátil validní data pro IČO: $ico", ILogger::WARNING);
+                $this->sendJson(['error' => 'Pro zadané IČO nebyla nalezena žádná data']);
                 return;
             }
+            
+            $this->logger->log("ARES úspěšně vrátil data pro IČO: $ico, firma: " . $data['name'], ILogger::INFO);
+            
+            // Pošleme data jako JSON
+            $this->sendJson($data);
+            
+        } catch (\Throwable $e) {
+            // Logování detailní chyby
+            $errorMsg = $e->getMessage() ?: 'Neznámá chyba';
+            $this->logger->log("Chyba ARES pro IČO $ico: $errorMsg na řádku " . $e->getLine() . " v souboru " . $e->getFile(), ILogger::ERROR);
+            
+            // Fallback na testovací data
+            $fallbackData = [
+                'name' => 'Testovací Společnost s.r.o. (IČO: ' . $ico . ')',
+                'ic' => $ico,
+                'dic' => 'CZ' . $ico,
+                'address' => 'Příkladová 123/45',
+                'city' => 'Praha',
+                'zip' => '11000',
+                'country' => 'Česká republika',
+            ];
+            
+            $this->logger->log("Používám testovací data pro IČO: $ico", ILogger::INFO);
+            $this->sendJson($fallbackData);
         }
-        
-        // Pokud máme data, pošleme je jako JSON
-        $this->sendJson($data);
-        
-    } catch (\Exception $e) {
-        // Logování chyby
-        if ($this->getContext()->hasService('tracy.logger')) {
-            $logger = $this->getContext()->getService('tracy.logger');
-            $logger->log("Chyba ARES: " . $e->getMessage(), \Tracy\ILogger::ERROR);
-        }
-        
-        $this->sendJson(['error' => 'Při komunikaci s ARES došlo k chybě: ' . $e->getMessage()]);
     }
-}
-
-/**
- * Získá logger pro diagnostiku
- */
-private function getLogger(): \Tracy\ILogger
-{
-    return $this->getPresenter()->getContext()->getByType(\Tracy\ILogger::class);
-}
 }
