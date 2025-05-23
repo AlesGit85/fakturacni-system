@@ -15,7 +15,17 @@ class ClientsPresenter extends BasePresenter
     /** @var Nette\Database\Explorer */
     private $database;
 
-    protected array $requiredRoles = ['accountant', 'admin'];
+    // Základní role pro přístup k presenteru
+    protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
+    
+    // Konkrétní role pro konkrétní akce
+    protected array $actionRoles = [
+        'default' => ['readonly', 'accountant', 'admin'], // Seznam klientů mohou vidět všichni
+        'show' => ['readonly', 'accountant', 'admin'], // Detail klienta mohou vidět všichni
+        'add' => ['accountant', 'admin'], // Přidat klienta může jen účetní a admin
+        'edit' => ['accountant', 'admin'], // Upravit klienta může jen účetní a admin
+        'delete' => ['admin'], // Smazat klienta může jen admin
+    ];
 
     public function __construct(
         ClientsManager $clientsManager,

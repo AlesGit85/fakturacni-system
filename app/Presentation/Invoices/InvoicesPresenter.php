@@ -25,7 +25,20 @@ class InvoicesPresenter extends BasePresenter
     /** @var QrPaymentService */
     private $qrPaymentService;
 
-    protected array $requiredRoles = ['accountant', 'admin'];
+    // Základní role pro přístup k presenteru
+    protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
+    
+    // Konkrétní role pro konkrétní akce
+    protected array $actionRoles = [
+        'default' => ['readonly', 'accountant', 'admin'], // Seznam faktur mohou vidět všichni
+        'show' => ['readonly', 'accountant', 'admin'], // Detail faktury mohou vidět všichni
+        'pdf' => ['readonly', 'accountant', 'admin'], // PDF může stáhnout každý
+        'add' => ['accountant', 'admin'], // Přidat fakturu může jen účetní a admin
+        'edit' => ['accountant', 'admin'], // Upravit fakturu může jen účetní a admin
+        'delete' => ['admin'], // Smazat fakturu může jen admin
+        'markAsPaid' => ['accountant', 'admin'], // Označit jako zaplacenou může účetní a admin
+        'markAsCreated' => ['accountant', 'admin'], // Zrušit zaplacení může účetní a admin
+    ];
 
     public function __construct(
         InvoicesManager $invoicesManager,

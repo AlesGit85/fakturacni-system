@@ -14,7 +14,17 @@ final class UsersPresenter extends BasePresenter
     /** @var UserManager */
     private $userManager;
 
+    // Admin může přistupovat ke všem akcím v tomto presenteru
     protected array $requiredRoles = ['admin'];
+    
+    // Konkrétní role pro konkrétní akce
+    protected array $actionRoles = [
+        'profile' => ['readonly', 'accountant', 'admin'], // Svůj profil může upravovat každý
+        'default' => ['admin'], // Seznam uživatelů může vidět jen admin
+        'add' => ['admin'], // Přidat uživatele může jen admin
+        'edit' => ['admin'], // Upravit uživatele může jen admin
+        'delete' => ['admin'], // Smazat uživatele může jen admin
+    ];
 
     public function __construct(UserManager $userManager)
     {

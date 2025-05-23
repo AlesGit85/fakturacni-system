@@ -12,7 +12,15 @@ class SettingsPresenter extends BasePresenter
     /** @var CompanyManager */
     private $companyManager;
 
+    // Jen admin může přistupovat k nastavení
     protected array $requiredRoles = ['admin'];
+    
+    // Konkrétní role pro konkrétní akce
+    protected array $actionRoles = [
+        'default' => ['admin'], // K nastavení má přístup jen admin
+        'deleteLogo' => ['admin'], // Smazat logo může jen admin
+        'deleteSignature' => ['admin'], // Smazat podpis může jen admin
+    ];
 
     public function __construct(CompanyManager $companyManager)
     {

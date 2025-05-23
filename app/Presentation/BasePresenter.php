@@ -12,6 +12,9 @@ abstract class BasePresenter extends Presenter
     /** @var array Definice požadovaných rolí pro jednotlivé presentery */
     protected array $requiredRoles = [];
 
+    /** @var array Definice požadovaných rolí pro jednotlivé akce */
+    protected array $actionRoles = [];
+
     /** @var bool Zda presenter vyžaduje přihlášení */
     protected bool $requiresLogin = true;
 
@@ -29,7 +32,7 @@ abstract class BasePresenter extends Presenter
             $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
         }
 
-        // Kontrola rolí
+        // Kontrola rolí na úrovni presenteru
         if ($this->requiresLogin && !empty($this->requiredRoles)) {
             $identity = $this->getUser()->getIdentity();
             if ($identity && isset($identity->role)) {
@@ -40,6 +43,47 @@ abstract class BasePresenter extends Presenter
                 }
             }
         }
+
+        // Kontrola rolí na úrovni akce
+        $action = $this->getAction();
+        if ($this->requiresLogin && isset($this->actionRoles[$action]) && !empty($this->actionRoles[$action])) {
+            $identity = $this->getUser()->getIdentity();
+            if ($identity && isset($identity->role)) {
+                $userRole = $identity->role;
+                if (!$this->hasRequiredRoleForAction($action, $userRole)) {
+                    $this->flashMessage('Nemáte oprávnění pro provedení této akce.', 'danger');
+                    $this->redirect('Home:default');
+                }
+            }
+        }
+    }
+
+    /**
+     * Kontroluje, zda má uživatel roli potřebnou pro danou akci
+     */
+    protected function hasRequiredRoleForAction(string $action, string $userRole): bool
+    {
+        if (!isset($this->actionRoles[$action])) {
+            return true; // Pokud akce nemá definované role, je povolena
+        }
+
+        $requiredRoles = $this->actionRoles[$action];
+        
+        // Hierarchie rolí - admin může vše, účetní může to co readonly
+        $roleHierarchy = [
+            'admin' => ['admin', 'accountant', 'readonly'],
+            'accountant' => ['accountant', 'readonly'],
+            'readonly' => ['readonly']
+        ];
+        
+        // Kontrola, zda uživatelská role je v seznamu povolených rolí pro akci
+        foreach ($requiredRoles as $requiredRole) {
+            if (in_array($requiredRole, $roleHierarchy[$userRole] ?? [])) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     /**
@@ -130,5 +174,29 @@ abstract class BasePresenter extends Presenter
 
         $identity = $this->getUser()->getIdentity();
         return $identity && isset($identity->role) ? $identity->role : 'readonly';
+    }
+    
+    /**
+     * Kontroluje, zda má uživatel přístup k akci na základě jeho role
+     * Metoda může být použita pro složitější kontroly přístupu v presenterech
+     */
+    protected function checkAccess(string $resource, string $privilege = null): bool
+    {
+        if (!$this->getUser()->isLoggedIn()) {
+            return false;
+        }
+        
+        $role = $this->getCurrentUserRole();
+        
+        // Pro zjednodušení používáme hierarchii rolí
+        // Admin může všechno
+        if ($role === 'admin') {
+            return true;
+        }
+        
+        // Podle potřeby zde můžete implementovat složitější logiku
+        // např. kontrolu na úrovni objektů, vlastnictví záznamů atd.
+        
+        return false;
     }
 }
