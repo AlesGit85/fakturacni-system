@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use Latte\Runtime as LR;
 
-/** source: D:\_coding\nette\fakturacni-system\app\Presentation\Clients/add.latte */
-final class Template_2a8f5ffe11 extends Latte\Runtime\Template
+/** source: D:\_coding\nette\fakturacni-system\app\Presentation\Clients/edit.latte */
+final class Template_83790998aa extends Latte\Runtime\Template
 {
-	public const Source = 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients/add.latte';
+	public const Source = 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients/edit.latte';
 
 	public const Blocks = [
 		['content' => 'blockContent'],
@@ -36,8 +36,8 @@ final class Template_2a8f5ffe11 extends Latte\Runtime\Template
 
 		echo '<div class="client-form-container">
     <div class="page-header">
-        <h1 class="main-title">Přidat nového klienta</h1>
-        <p class="text-muted">Vyplňte IČ a načtěte data z ARESu, nebo vyplňte ručně</p>
+        <h1 class="main-title">Upravit klienta</h1>
+        <p class="text-muted">Můžete znovu načíst data z ARESu nebo upravit údaje ručně</p>
     </div>
 
     <div class="card shadow-sm rounded-lg border-0">
@@ -53,9 +53,9 @@ final class Template_2a8f5ffe11 extends Latte\Runtime\Template
                         <i class="bi bi-cloud-download"></i>
                         <h2 class="section-title">Načítání z ARESu</h2>
                     </div>
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle me-2"></i>
-                        <strong>Tip:</strong> Zadejte IČ společnosti a klikněte na "Načíst z ARESu" pro automatické vyplnění údajů.
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Upozornění:</strong> Načtení z ARESu přepíše aktuální údaje společnosti (kromě kontaktních údajů).
                     </div>
                 </div>
                 
@@ -72,7 +72,7 @@ final class Template_2a8f5ffe11 extends Latte\Runtime\Template
                                 <i class="bi bi-cloud-download"></i> Načíst z ARESu
                             </button>
                         </div>
-                        <small class="form-text text-muted">Zadejte IČ a klikněte na tlačítko pro načtení údajů z ARESu</small>
+                        <small class="form-text text-muted">Změňte IČ a klikněte na tlačítko pro načtení nových údajů z ARESu</small>
                     </div>
                 </div>
                 
@@ -166,7 +166,7 @@ final class Template_2a8f5ffe11 extends Latte\Runtime\Template
                     </div>
                     <div class="alert alert-light">
                         <i class="bi bi-info-circle me-2"></i>
-                        Tyto údaje jsou volitelné a slouží pro lepší komunikaci s klientem.
+                        Kontaktní údaje se při načítání z ARESu nezmění - zůstanou zachovány.
                     </div>
                 </div>
                 
@@ -212,7 +212,7 @@ final class Template_2a8f5ffe11 extends Latte\Runtime\Template
                     <button';
 		echo ($ʟ_elem = Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControlPart())->addAttributes(['class' => null])->attributes() /* line 131 */;
 		echo ' class="btn btn-primary">
-                        <i class="bi bi-check-lg"></i> Uložit klienta
+                        <i class="bi bi-check-lg"></i> Uložit změny
                     </button>
                 </div>
             ';

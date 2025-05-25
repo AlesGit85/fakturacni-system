@@ -2,45 +2,56 @@
 <div class="client-form-container">
     <div class="page-header">
         <h1 class="main-title">Upravit klienta</h1>
-        <p class="text-muted">Upravte údaje klienta podle potřeby</p>
+        <p class="text-muted">Můžete znovu načíst data z ARESu nebo upravit údaje ručně</p>
     </div>
 
     <div class="card shadow-sm rounded-lg border-0">
         <div class="card-body p-4">
             {form clientForm class => 'row g-4'}
-                <!-- Sekce se základními údaji -->
+                <!-- Sekce pro načítání z ARESu -->
                 <div class="col-12">
                     <div class="section-header">
-                        <i class="bi bi-person-vcard"></i>
-                        <h2 class="section-title">Základní údaje</h2>
+                        <i class="bi bi-cloud-download"></i>
+                        <h2 class="section-title">Načítání z ARESu</h2>
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Upozornění:</strong> Načtení z ARESu přepíše aktuální údaje společnosti (kromě kontaktních údajů).
                     </div>
                 </div>
                 
-                <div class="col-md-6">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        {label ic /}
+                        <div class="input-group">
+                            {input ic class => 'form-control', placeholder => 'Zadejte 7 nebo 8 číslic IČ'}
+                            <button type="button" id="load-from-ares" class="btn btn-primary">
+                                <i class="bi bi-cloud-download"></i> Načíst z ARESu
+                            </button>
+                        </div>
+                        <small class="form-text text-muted">Změňte IČ a klikněte na tlačítko pro načtení nových údajů z ARESu</small>
+                    </div>
+                </div>
+                
+                <!-- Sekce se základními údaji -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-building"></i>
+                        <h2 class="section-title">Základní údaje společnosti</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-8">
                     <div class="form-floating">
                         {input name class => 'form-control'}
                         {label name class => 'form-label' /}
                     </div>
                 </div>
                 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-floating">
-                        {input email class => 'form-control'}
-                        {label email class => 'form-label' /}
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        {input phone class => 'form-control'}
-                        {label phone class => 'form-label' /}
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        {input contact_person class => 'form-control'}
-                        {label contact_person class => 'form-label' /}
+                        {input dic class => 'form-control'}
+                        {label dic class => 'form-label' /}
                     </div>
                 </div>
                 
@@ -48,7 +59,7 @@
                 <div class="col-12 mt-4">
                     <div class="section-header">
                         <i class="bi bi-geo-alt"></i>
-                        <h2 class="section-title">Adresa</h2>
+                        <h2 class="section-title">Adresa společnosti</h2>
                     </div>
                 </div>
                 
@@ -80,31 +91,36 @@
                     </div>
                 </div>
                 
-                <!-- Fakturační údaje -->
+                <!-- Kontaktní údaje -->
                 <div class="col-12 mt-4">
                     <div class="section-header">
-                        <i class="bi bi-receipt"></i>
-                        <h2 class="section-title">Fakturační údaje</h2>
+                        <i class="bi bi-person-lines-fill"></i>
+                        <h2 class="section-title">Kontaktní údaje</h2>
+                    </div>
+                    <div class="alert alert-light">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Kontaktní údaje se při načítání z ARESu nezmění - zůstanou zachovány.
                     </div>
                 </div>
                 
-<div class="col-md-6">
-    <div class="mb-3">
-        {label ic /}
-        <div class="input-group">
-            {input ic class => 'form-control'}
-            <button type="button" id="load-from-ares" class="btn btn-outline-primary">
-                <i class="bi bi-cloud-download"></i> Načíst z ARES
-            </button>
-        </div>
-        <small class="form-text text-muted">Zadejte IČO a klikněte na tlačítko pro načtení údajů z ARESu</small>
-    </div>
-</div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input contact_person class => 'form-control'}
+                        {label contact_person class => 'form-label' /}
+                    </div>
+                </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
-                        {input dic class => 'form-control'}
-                        {label dic class => 'form-label' /}
+                        {input email class => 'form-control'}
+                        {label email class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input phone class => 'form-control'}
+                        {label phone class => 'form-label' /}
                     </div>
                 </div>
                 

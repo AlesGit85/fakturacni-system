@@ -34,6 +34,7 @@ class ClientsPresenter extends BasePresenter
         'add' => ['accountant', 'admin'], // Přidat klienta může jen účetní a admin
         'edit' => ['accountant', 'admin'], // Upravit klienta může jen účetní a admin
         'delete' => ['admin'], // Smazat klienta může jen admin
+        'aresLookup' => ['accountant', 'admin'], // ARES lookup může jen účetní a admin
     ];
 
     public function __construct(
@@ -89,27 +90,41 @@ class ClientsPresenter extends BasePresenter
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
+        // === ARES a identifikační údaje (první) ===
+        $form->addText('ic', 'IČ:')
+            ->setHtmlAttribute('placeholder', 'Zadejte IČ a klikněte na načíst z ARESu');
+
         $form->addText('name', 'Název společnosti:')
             ->setRequired('Zadejte název společnosti');
 
+        $form->addText('dic', 'DIČ:')
+            ->setHtmlAttribute('placeholder', 'Volitelné - vyplní se automaticky z ARESu');
+
+        // === Adresa ===
         $form->addTextArea('address', 'Adresa:')
-            ->setRequired('Zadejte adresu');
+            ->setRequired('Zadejte adresu')
+            ->setHtmlAttribute('rows', 2);
 
         $form->addText('city', 'Město:')
             ->setRequired('Zadejte město');
 
         $form->addText('zip', 'PSČ:')
-            ->setRequired('Zadejte PSČ');
+            ->setRequired('Zadejte PSČ')
+            ->setHtmlAttribute('placeholder', '12345');
 
         $form->addText('country', 'Země:')
             ->setRequired('Zadejte zemi')
             ->setDefaultValue('Česká republika');
 
-        $form->addText('contact_person', 'Kontaktní osoba:');
-        $form->addText('ic', 'IČ:');
-        $form->addText('dic', 'DIČ:');
-        $form->addEmail('email', 'E-mail:');
-        $form->addText('phone', 'Telefon:');
+        // === Kontaktní údaje ===
+        $form->addText('contact_person', 'Kontaktní osoba:')
+            ->setHtmlAttribute('placeholder', 'Jméno kontaktní osoby');
+
+        $form->addEmail('email', 'E-mail:')
+            ->setHtmlAttribute('placeholder', 'email@firma.cz');
+
+        $form->addText('phone', 'Telefon:')
+            ->setHtmlAttribute('placeholder', '+420 123 456 789');
 
         $form->addSubmit('send', 'Uložit');
 

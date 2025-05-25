@@ -136,3 +136,134 @@
 [2025-05-23 13-08-01] REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"1009\/31","city":"Nezn\u00e1m\u00e9 m\u011bsto","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
 [2025-05-23 13-08-01] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
 [2025-05-23 13-08-01] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-41-46] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-41-46] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-41-46] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-41-49] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-41-49] Zkouším REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-41-49] HTTP úspěšná odpověď (3643 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-41-49] REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"1009\/31","city":"Nezn\u00e1m\u00e9 m\u011bsto","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-41-49] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-41-49] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-39] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-39] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-39] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-40] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-40] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-43] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-43] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-43] HTTP úspěšná odpověď (3643 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-43] Staré REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"Antala Sta\u0161ka 1009\/31","city":"Praha","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-43] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-43] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-44-59] ARES lookup požadavek pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-44-59] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-44-59] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-44-59] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-44-59] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-02] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-02] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-03] HTTP úspěšná odpověď (1696 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-03] Staré REST API - finální výsledek: {"name":"Ale\u0161 Zita","ic":"87894912","dic":"","address":"167","city":"Librantice","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-03] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-03] ARES úspěšně vrátil data pro IČO: 87894912, firma: Aleš Zita  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-17] ARES lookup požadavek pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-17] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-17] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-17] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-17] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-20] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-20] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-20] HTTP úspěšná odpověď (1696 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-20] Staré REST API - finální výsledek: {"name":"Ale\u0161 Zita","ic":"87894912","dic":"","address":"167","city":"Librantice","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-20] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-45-20] ARES úspěšně vrátil data pro IČO: 87894912, firma: Aleš Zita  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-05-25 19-46-52] ARES lookup požadavek pro IČO: 25429469  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-46-52] === ARES LOOKUP START pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-46-52] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-46-52] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-46-52] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-46-55] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=25429469  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-46-55] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-46-55] HTTP úspěšná odpověď (3697 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-46-55] Staré REST API - finální výsledek: {"name":"ANERI s.r.o.","ic":"25429469","dic":"CZ25429469","address":"Hodkovick\u00e1 52\/52","city":"Liberec","zip":46006,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-46-55] === ARES ÚSPĚCH pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-46-55] ARES úspěšně vrátil data pro IČO: 25429469, firma: ANERI s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-07] === ARES LOOKUP REQUEST ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-07] Požadované IČO: 25429469  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-07] HTTP metoda: GET  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-07] User agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-07] Je AJAX: ANO  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-07] ARES: Zahajuji vyhledávání pro IČO: 25429469  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-07] === ARES LOOKUP START pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-07] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-08] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-08] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-11] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=25429469  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-11] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-11] HTTP úspěšná odpověď (3697 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-11] Staré REST API - finální výsledek: {"name":"ANERI s.r.o.","ic":"25429469","dic":"CZ25429469","address":"Hodkovick\u00e1 52\/52","city":"Liberec","zip":46006,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-11] === ARES ÚSPĚCH pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-11] ARES ÚSPĚCH: Data načtena pro IČO: 25429469, firma: ANERI s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-11] ARES VÝSLEDEK: {"name":"ANERI s.r.o.","ic":"25429469","dic":"CZ25429469","address":"Hodkovick\u00e1 52\/52","city":"Liberec","zip":"46006","country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-05-25 19-48-21] === ARES LOOKUP REQUEST ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-21] Požadované IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-21] HTTP metoda: GET  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-21] User agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-21] Je AJAX: ANO  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-21] ARES: Zahajuji vyhledávání pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-21] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-21] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-22] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-22] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-25] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-25] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-25] HTTP úspěšná odpověď (3643 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-25] Staré REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"Antala Sta\u0161ka 1009\/31","city":"Praha","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-25] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-25] ARES ÚSPĚCH: Data načtena pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-25] ARES VÝSLEDEK: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"Antala Sta\u0161ka 1009\/31","city":"Praha","zip":"14000","country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-32] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-32] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-32] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-33] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-33] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-36] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-36] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-36] HTTP úspěšná odpověď (3643 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-36] Staré REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"Antala Sta\u0161ka 1009\/31","city":"Praha","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-36] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-48-36] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-50-19] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-50-19] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-50-19] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-50-19] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-50-19] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-50-22] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-50-22] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-50-22] HTTP úspěšná odpověď (3643 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-50-22] Staré REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"Antala Sta\u0161ka 1009\/31","city":"Praha","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-50-22] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-50-22] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-52-35] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-52-35] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-52-35] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-52-35] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-52-35] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-52-38] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-52-38] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-52-38] HTTP úspěšná odpověď (3643 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-52-38] Staré REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"Antala Sta\u0161ka 1009\/31","city":"Praha","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-52-38] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-52-38] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-54-07] ARES lookup požadavek pro IČO: 03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-54-07] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-54-07] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-54-07] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-54-07] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-54-10] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=03082989  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-54-10] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-54-10] HTTP úspěšná odpověď (3643 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-54-10] Staré REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"Antala Sta\u0161ka 1009\/31","city":"Praha","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-54-10] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-25 19-54-10] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
