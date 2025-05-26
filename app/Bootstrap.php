@@ -27,11 +27,31 @@ class Bootstrap
         $this->initializeEnvironment();
         $this->setupContainer();
         $container = $this->configurator->createContainer();
-        
+
         // Aplikace bezpečnostních hlaviček
         $httpResponse = $container->getByType(Nette\Http\Response::class);
         SecurityHeaders::apply($httpResponse);
-        
+
+        // Vytvoření složky pro přístup k assets modulů
+        $modulesDir = __DIR__ . '/Modules';
+        $wwwModulesDir = dirname(__DIR__) . '/www/Modules';
+
+        if (!is_dir($wwwModulesDir)) {
+            if (!is_dir($modulesDir)) {
+                mkdir($modulesDir, 0755, true);
+            }
+
+            // Na Windows můžeme potřebovat kopírovat místo symlinku
+            if (PHP_OS_FAMILY === 'Windows') {
+                // Vytvoříme pouze prázdný adresář, který bude později naplněn
+                mkdir($wwwModulesDir, 0755, true);
+            } else {
+                // Na Linuxu/macOS můžeme použít symlink
+                symlink($modulesDir, $wwwModulesDir);
+            }
+        }
+// Přidejte toto před vytvoření kontejneru
+$this->configurator->setDebugMode(true);
         return $container;
     }
 

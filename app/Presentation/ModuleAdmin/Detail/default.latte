@@ -1,0 +1,38 @@
+{block content}
+<div class="container-fluid">
+    <div class="page-header">
+        <h1 class="main-title">{$moduleInfo['name']}</h1>
+        <p class="text-muted">Verze {$moduleInfo['version']} | {$moduleInfo['author']}</p>
+    </div>
+    
+    {if isset($moduleCss)}
+        <link rel="stylesheet" href="{$basePath}{$moduleCss}">
+    {/if}
+    
+    <div class="card">
+        <div class="card-header" style="background-color: #B1D235; color: #212529;">
+            <i class="{$moduleInfo['icon']|noescape} me-2"></i>
+            {$moduleInfo['name']}
+        </div>
+        <div class="card-body">
+            {if isset($moduleTemplatePath)}
+                {include $moduleTemplatePath}
+            {else}
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Modul nemá žádnou šablonu k zobrazení.
+                </div>
+                <p>{$moduleInfo['description']}</p>
+            {/if}
+        </div>
+    </div>
+    
+    <div class="action-buttons-container mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <a n:href="Modules:" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Zpět na správu modulů
+            </a>
+        </div>
+    </div>
+</div>
+{/block}

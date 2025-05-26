@@ -5,12 +5,12 @@ return array (
     'App\\Bootstrap' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Bootstrap.php',
-      1 => 1748239656,
+      1 => 1748252683,
     ),
     'App\\Core\\RouterFactory' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
-      1 => 1748247359,
+      1 => 1748252413,
     ),
     'App\\Model\\AresService' => 
     array (
@@ -31,6 +31,11 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\InvoicesManager.php',
       1 => 1747669607,
+    ),
+    'App\\Model\\ModuleManager' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ModuleManager.php',
+      1 => 1748253089,
     ),
     'App\\Model\\QrPaymentService' => 
     array (
@@ -70,12 +75,22 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1748247359,
+      1 => 1748253230,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
       1 => 1747981962,
+    ),
+    'App\\Presentation\\Modules\\DetailPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\DetailPresenter.php',
+      1 => 1748251971,
+    ),
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
+      1 => 1748253630,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (

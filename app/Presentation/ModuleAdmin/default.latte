@@ -1,0 +1,61 @@
+{block content}
+<div class="container-fluid">
+    <div class="page-header">
+        <h1 class="main-title">Správa modulů</h1>
+        <p class="text-muted">Testovací stránka pro ověření funkčnosti</p>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header" style="background-color: #B1D235; color: #212529;">
+            <i class="bi bi-info-circle me-2"></i>
+            Testovací stránka
+        </div>
+        <div class="card-body">
+            <p>Toto je jednoduchá testovací stránka pro správu modulů.</p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header" style="background-color: #B1D235; color: #212529;">
+            <i class="bi bi-puzzle-fill me-2"></i>
+            Testovací moduly
+        </div>
+        <div class="card-body">
+            {if !empty($modules)}
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Název</th>
+                                <th>Verze</th>
+                                <th>Popis</th>
+                                <th>Autor</th>
+                                <th>Stav</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $modules as $id => $module}
+                                <tr>
+                                    <td><strong>{$module['name']}</strong></td>
+                                    <td>{$module['version']}</td>
+                                    <td>{$module['description']}</td>
+                                    <td>{$module['author']}</td>
+                                    <td>
+                                        {if isset($module['active']) && $module['active']}
+                                            <span class="badge bg-success">Aktivní</span>
+                                        {else}
+                                            <span class="badge bg-secondary">Neaktivní</span>
+                                        {/if}
+                                    </td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            {else}
+                <p>Žádné moduly nejsou k dispozici.</p>
+            {/if}
+        </div>
+    </div>
+</div>
+{/block}

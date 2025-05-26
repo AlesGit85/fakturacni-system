@@ -46,6 +46,13 @@
 							<i class="bi bi-gear"></i> Nastavení
 						</a>
 					</li>
+					{if isset($isUserAdmin) && $isUserAdmin}
+					<li class="nav-item">
+    					<a class="nav-link" n:href="ModuleAdmin:">
+        					<i class="bi bi-puzzle-fill"></i> Moduly
+    					</a>
+					</li>
+					{/if}
 					<li class="nav-item">
 						<a class="nav-link" n:href=":Users:default">
 							<i class="bi bi-people-fill"></i> Uživatelé
