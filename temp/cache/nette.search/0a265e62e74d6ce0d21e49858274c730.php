@@ -5,12 +5,12 @@ return array (
     'App\\Bootstrap' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Bootstrap.php',
-      1 => 1747982283,
+      1 => 1748239656,
     ),
     'App\\Core\\RouterFactory' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
-      1 => 1747984904,
+      1 => 1748247359,
     ),
     'App\\Model\\AresService' => 
     array (
@@ -50,12 +50,12 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1747988218,
+      1 => 1748239656,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1748202510,
+      1 => 1748202745,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -70,7 +70,7 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1747942040,
+      1 => 1748247359,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
