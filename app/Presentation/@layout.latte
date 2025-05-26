@@ -15,8 +15,8 @@
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
 		<div class="container">
 			<a class="navbar-brand" n:href=":Home:default">
-    			<img src="{$basePath}/images/qr-webp-white.webp" alt="QRdoklad" height="30" class="d-inline-block align-text-top me-2">
-    			QRdoklad
+    			<img src="{$basePath}/images/qr-webp-white.webp" alt="QRdoklad" height="30" class="d-inline-block align-text-top">
+    			<span class="brand-text">QRdoklad</span>
 			</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -25,37 +25,37 @@
 				<ul class="navbar-nav me-auto">
 					<li class="nav-item">
 						<a class="nav-link" n:href=":Home:default">
-							<i class="bi bi-house"></i> Úvod
+							<i class="bi bi-house"></i><span class="nav-text">Úvod</span>
 						</a>
 					</li>
 					{if isset($isUserAccountant) && ($isUserAccountant || $isUserAdmin)}
 					<li class="nav-item">
 						<a class="nav-link" n:href=":Clients:default">
-							<i class="bi bi-people"></i> Klienti
+							<i class="bi bi-people"></i><span class="nav-text">Klienti</span>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" n:href=":Invoices:default">
-							<i class="bi bi-file-earmark-text"></i> Faktury
+							<i class="bi bi-file-earmark-text"></i><span class="nav-text">Faktury</span>
 						</a>
 					</li>
 					{/if}
 					{if isset($isUserAdmin) && $isUserAdmin}
 					<li class="nav-item">
 						<a class="nav-link" n:href=":Settings:default">
-							<i class="bi bi-gear"></i> Nastavení
+							<i class="bi bi-gear"></i><span class="nav-text">Nastavení</span>
 						</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" n:href=":Users:default">
-							<i class="bi bi-people-fill"></i> Uživatelé
+							<i class="bi bi-people-fill"></i><span class="nav-text">Uživatelé</span>
 						</a>
 					</li>
 					{/if}
 					{if isset($isUserAdmin) && $isUserAdmin}
 					<li class="nav-item">
     					<a class="nav-link" n:href="ModuleAdmin:">
-        					<i class="bi bi-puzzle-fill"></i> Moduly
+        					<i class="bi bi-puzzle-fill"></i><span class="nav-text">Moduly</span>
     					</a>
 					</li>
 					{/if}
@@ -64,7 +64,7 @@
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<i class="bi bi-person-circle"></i> 
+							<i class="bi bi-person-circle"></i><span class="nav-text">
 							{if isset($currentUser) && $currentUser}{$currentUser->username}{else}Uživatel{/if}
 							{if isset($currentUserRole)}
 								{if $currentUserRole === 'admin'}
@@ -75,6 +75,7 @@
 									<span class="badge bg-secondary ms-1">Pouze čtení</span>
 								{/if}
 							{/if}
+							</span>
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<li><a class="dropdown-item" n:href=":Users:profile">
