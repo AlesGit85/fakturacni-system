@@ -92,23 +92,22 @@ final class Template_88337ed53b extends Latte\Runtime\Template
 							<i class="bi bi-gear"></i> Nastavení
 						</a>
 					</li>
-';
-				if (isset($isUserAdmin) && $isUserAdmin) /* line 49 */ {
-					echo '					<li class="nav-item">
-    					<a href="';
-					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('ModuleAdmin:')) /* line 51 */;
-					echo '" class="nav-link">
-        					<i class="bi bi-puzzle-fill"></i> Moduly
-    					</a>
-					</li>
-';
-				}
-				echo '					<li class="nav-item">
+					<li class="nav-item">
 						<a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link(':Users:default')) /* line 57 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link(':Users:default')) /* line 50 */;
 				echo '" class="nav-link">
 							<i class="bi bi-people-fill"></i> Uživatelé
 						</a>
+					</li>
+';
+			}
+			if (isset($isUserAdmin) && $isUserAdmin) /* line 55 */ {
+				echo '					<li class="nav-item">
+    					<a href="';
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('ModuleAdmin:')) /* line 57 */;
+				echo '" class="nav-link">
+        					<i class="bi bi-puzzle-fill"></i> Moduly
+    					</a>
 					</li>
 ';
 			}
