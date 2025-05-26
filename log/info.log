@@ -278,3 +278,5 @@
 [2025-05-26 08-19-04] Staré REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"Antala Sta\u0161ka 1009\/31","city":"Praha","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
 [2025-05-26 08-19-04] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
 [2025-05-26 08-19-04] ARES úspěšně vrátil data pro IČO: 03082989, firma: Stovkomat s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-05-26 10-04-01] ModuleManager byl inicializován  @  http://localhost:8000/module-admin/ 
+[2025-05-26 10-06-39] ModuleManager byl inicializován  @  http://localhost:8000/module-admin/ 
