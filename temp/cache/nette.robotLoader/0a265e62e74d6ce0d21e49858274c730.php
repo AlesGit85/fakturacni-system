@@ -57,11 +57,6 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748331866,
     ),
-    'App\\Modules\\test_module\\Module' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\test_module\\Module.php',
-      1 => 1748331948,
-    ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Accessory\\LatteExtension.php',
@@ -105,7 +100,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1748337600,
+      1 => 1748337971,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -141,7 +136,7 @@ return array (
     'App\\Presentation\\Home\\HomeTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 2,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
   ),
   2 => 
   array (

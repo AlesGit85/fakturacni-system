@@ -52,13 +52,13 @@
 						</a>
 					</li>
 					{/if}
-{if isset($isUserAdmin) && $isUserAdmin}
-<li class="nav-item">
-    <a class="nav-link" n:href="ModuleAdmin:default">
-        <i class="bi bi-puzzle-fill"></i><span class="nav-text">Moduly</span>
-    </a>
-</li>
-{/if}
+					{if isset($isUserAdmin) && $isUserAdmin}
+					<li class="nav-item">
+    					<a class="nav-link" n:href="ModuleAdmin:default">
+        					<i class="bi bi-puzzle-fill"></i><span class="nav-text">Moduly</span>
+    					</a>
+					</li>
+					{/if}
 				</ul>
 				
 				<ul class="navbar-nav">

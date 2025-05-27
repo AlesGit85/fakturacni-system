@@ -304,3 +304,21 @@
 [2025-05-27 09-21-33] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
 [2025-05-27 09-21-34] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/test_module 
 [2025-05-27 09-21-41] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-27 09-27-56] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-27 09-28-03] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-27 09-28-20] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-27 09-28-28] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/default/test_module?do=toggleModule 
+[2025-05-27 09-28-28] Modul 'Testovací modul' byl aktivován  @  http://localhost:8000/moduleadmin/default/test_module?do=toggleModule 
+[2025-05-27 09-28-28] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/?_fid=kt95 
+[2025-05-27 09-28-33] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/default/test_module?do=toggleModule 
+[2025-05-27 09-28-33] Modul 'Testovací modul' byl deaktivován  @  http://localhost:8000/moduleadmin/default/test_module?do=toggleModule 
+[2025-05-27 09-28-33] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/?_fid=si5z 
+[2025-05-27 09-28-39] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-27 09-28-40] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-27 09-28-40] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-27 09-28-44] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/default/test_module?do=uninstallModule 
+[2025-05-27 09-28-44] Modul 'Testovací modul' byl odinstalován  @  http://localhost:8000/moduleadmin/default/test_module?do=uninstallModule 
+[2025-05-27 09-28-44] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/?_fid=odjt 
+[2025-05-27 09-28-47] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-27 09-29-10] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/test_module 
+[2025-05-27 09-29-13] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 

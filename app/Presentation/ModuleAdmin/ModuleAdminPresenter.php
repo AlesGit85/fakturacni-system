@@ -52,6 +52,11 @@ final class ModuleAdminPresenter extends BasePresenter
         
         // Načtení všech modulů
         $this->template->modules = $this->moduleManager->getAllModules();
+        
+        // Získání maximální velikosti souboru pro nahrávání
+        $maxUploadSize = $this->getMaxUploadSize();
+        $this->template->maxUploadSize = $maxUploadSize;
+        $this->template->maxUploadSizeFormatted = $this->formatBytes($maxUploadSize);
     }
     
     public function renderDetail(string $id): void
@@ -86,16 +91,68 @@ final class ModuleAdminPresenter extends BasePresenter
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
+        // Získání maximální velikosti souboru pro nahrávání
+        $maxUploadSize = $this->getMaxUploadSize();
+
         $form->addUpload('moduleZip', 'ZIP soubor s modulem:')
             ->setRequired('Vyberte ZIP soubor s modulem')
             ->addRule(Form::MIME_TYPE, 'Soubor musí být ve formátu ZIP', 'application/zip')
-            ->addRule(Form::MAX_FILE_SIZE, 'Maximální velikost souboru je 2 MB', 2 * 1024 * 1024);
+            ->addRule(Form::MAX_FILE_SIZE, 'Maximální velikost souboru je ' . $this->formatBytes($maxUploadSize), $maxUploadSize);
 
         $form->addSubmit('upload', 'Nahrát modul');
 
         $form->onSuccess[] = [$this, 'uploadFormSucceeded'];
 
         return $form;
+    }
+    
+    /**
+     * Získá maximální velikost souboru pro nahrávání
+     */
+    private function getMaxUploadSize(): int
+    {
+        // Získá maximální velikost souboru z php.ini
+        $uploadMaxFilesize = $this->parseSize(ini_get('upload_max_filesize'));
+        $postMaxSize = $this->parseSize(ini_get('post_max_size'));
+        
+        // Použije menší z hodnot (obvykle je to omezující faktor)
+        $serverLimit = min($uploadMaxFilesize, $postMaxSize);
+        
+        // Nastavíme limit 20 MB, ale respektujeme serverové omezení, pokud je nižší
+        $desiredLimit = 20 * 1024 * 1024; // 20 MB
+        
+        return min($serverLimit, $desiredLimit);
+    }
+    
+    /**
+     * Převede řetězec s velikostí (např. "2M") na integer (bytes)
+     */
+    private function parseSize(string $size): int
+    {
+        $unit = preg_replace('/[^bkmgtpezy]/i', '', $size);
+        $size = preg_replace('/[^0-9\.]/', '', $size);
+        
+        if ($unit) {
+            $size *= pow(1024, stripos('bkmgtpezy', $unit[0]));
+        }
+        
+        return (int) $size;
+    }
+    
+    /**
+     * Formátuje velikost v bytech na čitelný formát
+     */
+    private function formatBytes(int $bytes, int $precision = 2): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+        
+        $bytes /= pow(1024, $pow);
+        
+        return round($bytes, $precision) . ' ' . $units[$pow];
     }
     
     /**

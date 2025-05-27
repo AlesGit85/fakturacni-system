@@ -15,20 +15,20 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6">
-                    {form uploadForm class => 'row g-3'}
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                {label moduleZip /}
-                                {input moduleZip class => 'form-control'}
-                                <small class="form-text text-muted">Vyberte ZIP soubor obsahující modul.</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            {input upload class => 'btn btn-primary mt-4'}
-                        </div>
-                    {/form}
-                </div>
+<div class="col-md-6">
+    {form uploadForm class => 'row g-3'}
+        <div class="col-md-8">
+            <div class="form-group">
+                {label moduleZip /}
+                {input moduleZip class => 'form-control'}
+                <small class="form-text text-muted">Vyberte ZIP soubor obsahující modul. Maximální velikost: {$maxUploadSizeFormatted}</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            {input upload class => 'btn btn-primary mt-4'}
+        </div>
+    {/form}
+</div>
                 <div class="col-md-6">
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle me-2"></i>

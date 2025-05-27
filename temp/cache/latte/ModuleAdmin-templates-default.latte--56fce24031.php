@@ -63,33 +63,35 @@ final class Template_56fce24031 extends Latte\Runtime\Template
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6">
-                    ';
+<div class="col-md-6">
+    ';
 		$form = $this->global->formsStack[] = $this->global->uiControl['uploadForm'] /* line 19 */;
 		Nette\Bridges\FormsLatte\Runtime::initializeForm($form);
 		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form, ['class' => 'row g-3']) /* line 19 */;
 		echo '
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                ';
+        <div class="col-md-8">
+            <div class="form-group">
+                ';
 		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('moduleZip', $this->global)->getLabel()) /* line 22 */;
 		echo '
-                                ';
+                ';
 		echo Nette\Bridges\FormsLatte\Runtime::item('moduleZip', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 23 */;
 		echo '
-                                <small class="form-text text-muted">Vyberte ZIP soubor obsahující modul.</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            ';
+                <small class="form-text text-muted">Vyberte ZIP soubor obsahující modul. Maximální velikost: ';
+		echo LR\Filters::escapeHtmlText($maxUploadSizeFormatted) /* line 24 */;
+		echo '</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            ';
 		echo Nette\Bridges\FormsLatte\Runtime::item('upload', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary mt-4']) /* line 28 */;
 		echo '
-                        </div>
-                    ';
+        </div>
+    ';
 		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 30 */;
 
 		echo '
-                </div>
+</div>
                 <div class="col-md-6">
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle me-2"></i>
