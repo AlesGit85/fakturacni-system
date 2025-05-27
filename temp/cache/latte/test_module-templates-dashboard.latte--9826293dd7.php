@@ -1,0 +1,61 @@
+<?php
+
+declare(strict_types=1);
+
+use Latte\Runtime as LR;
+
+/** source: D:\_coding\nette\fakturacni-system\app/Modules/test_module/templates/dashboard.latte */
+final class Template_9826293dd7 extends Latte\Runtime\Template
+{
+	public const Source = 'D:\\_coding\\nette\\fakturacni-system\\app/Modules/test_module/templates/dashboard.latte';
+
+
+	public function main(array $ʟ_args): void
+	{
+		extract($ʟ_args);
+		unset($ʟ_args);
+
+		if ($this->global->snippetDriver?->renderSnippets($this->blocks[self::LayerSnippet], $this->params)) {
+			return;
+		}
+
+		echo '<div class="test-module-dashboard">
+    <h2>Vítejte v testovacím modulu!</h2>
+    
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle me-2"></i>
+        Toto je jednoduchý testovací modul, který demonstruje možnosti modulárního systému QRdoklad.
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header" style="background-color: #B1D235; color: #212529;">
+                    <i class="bi bi-gear me-2"></i>
+                    Nastavení modulu
+                </div>
+                <div class="card-body">
+                    <p>V této sekci by mohlo být nastavení modulu.</p>
+                    <button class="btn btn-primary" disabled>Nastavení (ukázka)</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header" style="background-color: #B1D235; color: #212529;">
+                    <i class="bi bi-bar-chart me-2"></i>
+                    Statistiky
+                </div>
+                <div class="card-body">
+                    <p>V této sekci by mohly být statistiky modulu.</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 75%; background-color: #B1D235;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>';
+	}
+}

@@ -450,7 +450,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 
 	public function createServiceApplication__7(): App\Presentation\ModuleAdmin\ModuleAdminPresenter
 	{
-		$service = new App\Presentation\ModuleAdmin\ModuleAdminPresenter;
+		$service = new App\Presentation\ModuleAdmin\ModuleAdminPresenter($this->getService('07'), $this->getService('tracy.logger'));
 		$service->injectPrimary(
 			$this->getService('http.request'),
 			$this->getService('http.response'),

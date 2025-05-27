@@ -102,13 +102,13 @@ final class Template_88337ed53b extends Latte\Runtime\Template
 ';
 			}
 			if (isset($isUserAdmin) && $isUserAdmin) /* line 55 */ {
-				echo '					<li class="nav-item">
-    					<a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('ModuleAdmin:')) /* line 57 */;
+				echo '<li class="nav-item">
+    <a href="';
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('ModuleAdmin:default')) /* line 57 */;
 				echo '" class="nav-link">
-        					<i class="bi bi-puzzle-fill"></i><span class="nav-text">Moduly</span>
-    					</a>
-					</li>
+        <i class="bi bi-puzzle-fill"></i><span class="nav-text">Moduly</span>
+    </a>
+</li>
 ';
 			}
 			echo '				</ul>

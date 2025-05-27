@@ -1,0 +1,8 @@
+{
+    "id": "test_module",
+    "name": "Testovací modul",
+    "version": "1.0.0",
+    "description": "Jednoduchý testovací modul pro demonstraci možností modulárního systému",
+    "author": "QRdoklad Team",
+    "icon": "bi bi-stars"
+}
