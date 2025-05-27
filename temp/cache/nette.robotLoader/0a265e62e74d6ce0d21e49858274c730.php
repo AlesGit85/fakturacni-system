@@ -100,7 +100,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1748337971,
+      1 => 1748339230,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -137,6 +137,12 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
+    'App\\Presentation\\Sign\\SignInTemplate' => 2,
+    'App\\Presentation\\Sign\\SignTemplate' => 2,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 2,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
   ),
   2 => 
   array (

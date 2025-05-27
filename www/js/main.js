@@ -54,6 +54,11 @@ function initAutoHideFlashes() {
     const alerts = document.querySelectorAll('.alert');
     
     alerts.forEach(alert => {
+        // Zkontrolujeme, zda není permanent alert
+        if (alert.hasAttribute('data-permanent') || alert.classList.contains('permanent-alert')) {
+            return; // Přeskočíme permanent alerty
+        }
+        
         // Pouze pro success a info zprávy
         if (alert.classList.contains('alert-success') || alert.classList.contains('alert-info')) {
             setTimeout(() => {

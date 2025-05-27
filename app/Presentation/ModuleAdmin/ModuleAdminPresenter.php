@@ -57,6 +57,9 @@ final class ModuleAdminPresenter extends BasePresenter
         $maxUploadSize = $this->getMaxUploadSize();
         $this->template->maxUploadSize = $maxUploadSize;
         $this->template->maxUploadSizeFormatted = $this->formatBytes($maxUploadSize);
+        
+        // DEBUG: Přidáme informace o PHP limitech pro debugging
+        $this->template->debugInfo = $this->getPhpUploadDebugInfo();
     }
     
     public function renderDetail(string $id): void
@@ -107,21 +110,58 @@ final class ModuleAdminPresenter extends BasePresenter
     }
     
     /**
-     * Získá maximální velikost souboru pro nahrávání
+     * Získá maximální velikost souboru pro nahrávání s lepším debugováním
      */
     private function getMaxUploadSize(): int
     {
         // Získá maximální velikost souboru z php.ini
         $uploadMaxFilesize = $this->parseSize(ini_get('upload_max_filesize'));
         $postMaxSize = $this->parseSize(ini_get('post_max_size'));
+        $memoryLimit = $this->parseSize(ini_get('memory_limit'));
         
-        // Použije menší z hodnot (obvykle je to omezující faktor)
+        // Logujeme hodnoty pro debugging
+        $this->logger->log("PHP Upload limits - upload_max_filesize: " . $this->formatBytes($uploadMaxFilesize) . 
+                          ", post_max_size: " . $this->formatBytes($postMaxSize) . 
+                          ", memory_limit: " . $this->formatBytes($memoryLimit), ILogger::INFO);
+        
+        // Použije menší z upload a post hodnot
         $serverLimit = min($uploadMaxFilesize, $postMaxSize);
         
-        // Nastavíme limit 20 MB, ale respektujeme serverové omezení, pokud je nižší
-        $desiredLimit = 20 * 1024 * 1024; // 20 MB
+        // Pro lokální development nastavíme vyšší limit
+        // V produkci můžeme snížit podle potřeby
+        $desiredLimit = 50 * 1024 * 1024; // 50 MB pro development
         
-        return min($serverLimit, $desiredLimit);
+        $finalLimit = min($serverLimit, $desiredLimit);
+        
+        $this->logger->log("Final upload limit: " . $this->formatBytes($finalLimit), ILogger::INFO);
+        
+        return $finalLimit;
+    }
+    
+    /**
+     * Získá debug informace o PHP upload limitech
+     */
+    private function getPhpUploadDebugInfo(): array
+    {
+        return [
+            'upload_max_filesize_raw' => ini_get('upload_max_filesize'),
+            'upload_max_filesize_bytes' => $this->parseSize(ini_get('upload_max_filesize')),
+            'upload_max_filesize_formatted' => $this->formatBytes($this->parseSize(ini_get('upload_max_filesize'))),
+            
+            'post_max_size_raw' => ini_get('post_max_size'),
+            'post_max_size_bytes' => $this->parseSize(ini_get('post_max_size')),
+            'post_max_size_formatted' => $this->formatBytes($this->parseSize(ini_get('post_max_size'))),
+            
+            'memory_limit_raw' => ini_get('memory_limit'),
+            'memory_limit_bytes' => $this->parseSize(ini_get('memory_limit')),
+            'memory_limit_formatted' => $this->formatBytes($this->parseSize(ini_get('memory_limit'))),
+            
+            'max_execution_time' => ini_get('max_execution_time'),
+            'max_input_time' => ini_get('max_input_time'),
+            
+            'final_limit' => $this->getMaxUploadSize(),
+            'final_limit_formatted' => $this->formatBytes($this->getMaxUploadSize())
+        ];
     }
     
     /**
