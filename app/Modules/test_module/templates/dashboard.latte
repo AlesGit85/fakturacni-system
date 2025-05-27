@@ -1,25 +1,4 @@
-<?php
-
-declare(strict_types=1);
-
-use Latte\Runtime as LR;
-
-/** source: D:\_coding\nette\fakturacni-system\app/Modules/test_module/templates/dashboard.latte */
-final class Template_9826293dd7 extends Latte\Runtime\Template
-{
-	public const Source = 'D:\\_coding\\nette\\fakturacni-system\\app/Modules/test_module/templates/dashboard.latte';
-
-
-	public function main(array $ʟ_args): void
-	{
-		extract($ʟ_args);
-		unset($ʟ_args);
-
-		if ($this->global->snippetDriver?->renderSnippets($this->blocks[self::LayerSnippet], $this->params)) {
-			return;
-		}
-
-		echo '<div class="test-module-dashboard">
+<div class="test-module-dashboard">
     <div class="row">
         <div class="col-md-8">
             <div class="card">
@@ -109,17 +88,15 @@ final class Template_9826293dd7 extends Latte\Runtime\Template
                     <pre class="bg-light p-3 rounded"><code>// Příklad použití testovacího modulu
 class TestModule extends BaseModule {
     public function getName(): string {
-        return \'Testovací modul\';
+        return 'Testovací modul';
     }
     
     public function getVersion(): string {
-        return \'1.0.0\';
+        return '1.0.0';
     }
 }</code></pre>
                 </div>
             </div>
         </div>
     </div>
-</div>';
-	}
-}
+</div>

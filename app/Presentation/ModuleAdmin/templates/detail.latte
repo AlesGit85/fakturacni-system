@@ -32,9 +32,13 @@
     <div class="action-buttons-container mt-4">
         <div class="d-flex justify-content-between align-items-center">
             <a n:href="default" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> Zpět na správu modulů
+                <i class="bi bi-arrow-left"></i> Zpět na správa modulů
             </a>
         </div>
     </div>
 </div>
+
+{if isset($moduleJs)}
+    <script src="{$basePath}{$moduleJs}"></script>
+{/if}
 {/block}

@@ -96,11 +96,19 @@ final class Template_17ed9f1a8d extends Latte\Runtime\Template
             <a href="';
 		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 34 */;
 		echo '" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> Zpět na správu modulů
+                <i class="bi bi-arrow-left"></i> Zpět na správa modulů
             </a>
         </div>
     </div>
 </div>
+
 ';
+		if (isset($moduleJs)) /* line 41 */ {
+			echo '    <script src="';
+			echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 42 */;
+			echo LR\Filters::escapeHtmlAttr($moduleJs) /* line 42 */;
+			echo '"></script>
+';
+		}
 	}
 }

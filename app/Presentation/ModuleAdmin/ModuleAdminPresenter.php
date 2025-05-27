@@ -73,10 +73,21 @@ final class ModuleAdminPresenter extends BasePresenter
         $this->template->moduleInfo = $allModules[$id];
         $this->template->moduleId = $id;
         
-        // Přidání stylu modulu, pokud existuje
-        $cssPath = dirname(__DIR__, 2) . '/Modules/' . $id . '/assets/css/style.css';
-        if (file_exists($cssPath)) {
-            $this->template->moduleCss = '/Modules/' . $id . '/assets/css/style.css';
+        // Zkopírování assets do www adresáře, pokud ještě nebyly zkopírovány
+        $this->ensureModuleAssets($id);
+        
+        // Přidání CSS stylu modulu, pokud existuje
+        $cssPath = '/Modules/' . $id . '/assets/css/style.css';
+        $cssFullPath = WWW_DIR . $cssPath;
+        if (file_exists($cssFullPath)) {
+            $this->template->moduleCss = $cssPath;
+        }
+        
+        // Přidání JS scriptu modulu, pokud existuje
+        $jsPath = '/Modules/' . $id . '/assets/js/script.js';
+        $jsFullPath = WWW_DIR . $jsPath;
+        if (file_exists($jsFullPath)) {
+            $this->template->moduleJs = $jsPath;
         }
         
         // Načtení šablony modulu
@@ -84,6 +95,55 @@ final class ModuleAdminPresenter extends BasePresenter
         if (file_exists($templatePath)) {
             $this->template->moduleTemplatePath = $templatePath;
         }
+    }
+    
+    /**
+     * Zajistí, že assets modulu jsou zkopírovány do www adresáře
+     */
+    private function ensureModuleAssets(string $moduleId): void
+    {
+        $moduleAssetsDir = dirname(__DIR__, 2) . '/Modules/' . $moduleId . '/assets';
+        $wwwModuleDir = WWW_DIR . '/Modules/' . $moduleId;
+        
+        // Pokud assets existují a ještě nejsou zkopírovány
+        if (is_dir($moduleAssetsDir) && !is_dir($wwwModuleDir)) {
+            // Vytvoření adresáře
+            if (!is_dir(dirname($wwwModuleDir))) {
+                mkdir(dirname($wwwModuleDir), 0755, true);
+            }
+            
+            // Zkopírování assets
+            $this->copyDirectory($moduleAssetsDir, $wwwModuleDir . '/assets');
+            
+            $this->logger->log("Assets modulu '$moduleId' byly zkopírovány do www adresáře", ILogger::INFO);
+        }
+    }
+    
+    /**
+     * Rekurzivně kopíruje adresář
+     */
+    private function copyDirectory(string $source, string $dest): void
+    {
+        if (!is_dir($dest)) {
+            mkdir($dest, 0755, true);
+        }
+        
+        $dir = opendir($source);
+        while (($file = readdir($dir)) !== false) {
+            if ($file === '.' || $file === '..') {
+                continue;
+            }
+            
+            $srcFile = $source . '/' . $file;
+            $destFile = $dest . '/' . $file;
+            
+            if (is_dir($srcFile)) {
+                $this->copyDirectory($srcFile, $destFile);
+            } else {
+                copy($srcFile, $destFile);
+            }
+        }
+        closedir($dir);
     }
     
     /**
