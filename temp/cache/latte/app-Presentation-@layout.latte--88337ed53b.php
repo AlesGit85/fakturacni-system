@@ -228,6 +228,9 @@ final class Template_88337ed53b extends Latte\Runtime\Template
 	<script src="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 124 */;
 		echo '/js/ares-lookup.js"></script>
+	<script src="';
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 125 */;
+		echo '/js/modules.js"></script>
 </body>
 </html>';
 	}

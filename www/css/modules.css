@@ -1,0 +1,120 @@
+/**
+ * Styly pro správu modulů
+ */
+
+/* Toggle switch styly */
+.debug-toggle-container {
+    display: flex;
+    align-items: center;
+}
+
+.debug-toggle-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.debug-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.debug-toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.debug-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #dee2e6;
+    transition: 0.3s ease;
+    border-radius: 24px;
+}
+
+.debug-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s ease;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.debug-toggle-input:checked + .debug-toggle-slider {
+    background-color: #B1D235;
+}
+
+.debug-toggle-input:checked + .debug-toggle-slider.upload-toggle {
+    background-color: #212529;
+}
+
+.debug-toggle-input:checked + .debug-toggle-slider:before {
+    transform: translateX(26px);
+}
+
+.debug-toggle-slider:hover {
+    box-shadow: 0 0 8px rgba(177, 210, 53, 0.3);
+}
+
+.debug-toggle-slider.upload-toggle:hover {
+    box-shadow: 0 0 8px rgba(33, 37, 41, 0.3);
+}
+
+/* Animace pro debug content */
+.debug-content {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.debug-content.show {
+    display: block !important;
+    animation: slideDown 0.3s ease;
+}
+
+.debug-content.hide {
+    animation: slideUp 0.3s ease;
+}
+
+/* Permanent alerty se nebudou automaticky skrývat */
+.permanent-alert {
+    opacity: 1 !important;
+    display: block !important;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+        padding: 0 1.5rem;
+    }
+    to {
+        opacity: 1;
+        max-height: 500px;
+        padding: 1.5rem;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 1;
+        max-height: 500px;
+        padding: 1.5rem;
+    }
+    to {
+        opacity: 0;
+        max-height: 0;
+        padding: 0 1.5rem;
+    }
+}

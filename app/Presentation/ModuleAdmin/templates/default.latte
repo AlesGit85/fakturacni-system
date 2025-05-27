@@ -61,13 +61,22 @@
         </div>
     </div>
 
-    <!-- Nahrání nového modulu -->
-    <div class="card mb-4">
-        <div class="card-header" style="background-color: #B1D235; color: #212529;">
-            <i class="bi bi-cloud-upload me-2"></i>
-            <h3 class="d-inline">Nahrát nový modul</h3>
+    <!-- Nahrání nového modulu s toggle -->
+    <div class="card mb-4" style="border-left: 4px solid #B1D235;">
+        <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #B1D235; color: #212529;">
+            <div>
+                <i class="bi bi-cloud-upload me-2"></i>
+                <h5 class="d-inline">Nahrát nový modul</h5>
+            </div>
+            <div class="debug-toggle-container">
+                <span class="debug-toggle-label me-2" style="color: #212529;">Zobrazit formulář</span>
+                <div class="debug-toggle-switch">
+                    <input type="checkbox" id="uploadToggle" class="debug-toggle-input">
+                    <label for="uploadToggle" class="debug-toggle-slider upload-toggle"></label>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
+        <div class="card-body debug-content" id="uploadContent" style="display: none;">
             <div class="row">
                 <div class="col-md-6">
                     {form uploadForm class => 'row g-3'}
@@ -88,7 +97,7 @@
                         <i class="bi bi-info-circle me-2"></i>
                         <strong>Info:</strong> Moduly lze nahrát jako ZIP soubory. Po nahrání budou automaticky rozbaleny a připraveny k použití.
                     </div>
-                    <div class="alert alert-warning">
+                    <div class="alert alert-warning permanent-alert">
                         <i class="bi bi-exclamation-triangle me-2"></i>
                         <strong>Pozor:</strong> Aktuální limit pro nahrávání je <strong>{$maxUploadSizeFormatted}</strong>. Pokud potřebujete nahrát větší soubor, zvyšte PHP limity.
                     </div>
@@ -211,201 +220,4 @@
     </div>
     {/if}
 </div>
-
-<style>
-/* Toggle switch styly */
-.debug-toggle-container {
-    display: flex;
-    align-items: center;
-}
-
-.debug-toggle-label {
-    font-size: 0.9rem;
-    color: #6c757d;
-    font-weight: 500;
-}
-
-.debug-toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-}
-
-.debug-toggle-input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.debug-toggle-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #dee2e6;
-    transition: 0.3s ease;
-    border-radius: 24px;
-}
-
-.debug-toggle-slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: 0.3s ease;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.debug-toggle-input:checked + .debug-toggle-slider {
-    background-color: #B1D235;
-}
-
-.debug-toggle-input:checked + .debug-toggle-slider:before {
-    transform: translateX(26px);
-}
-
-.debug-toggle-slider:hover {
-    box-shadow: 0 0 8px rgba(177, 210, 53, 0.3);
-}
-
-/* Animace pro debug content */
-.debug-content {
-    transition: all 0.3s ease;
-    overflow: hidden;
-}
-
-.debug-content.show {
-    display: block !important;
-    animation: slideDown 0.3s ease;
-}
-
-.debug-content.hide {
-    animation: slideUp 0.3s ease;
-}
-
-/* Permanent alerty se nebudou automaticky skrývat */
-.permanent-alert {
-    opacity: 1 !important;
-    display: block !important;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        max-height: 0;
-        padding: 0 1.5rem;
-    }
-    to {
-        opacity: 1;
-        max-height: 500px;
-        padding: 1.5rem;
-    }
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 1;
-        max-height: 500px;
-        padding: 1.5rem;
-    }
-    to {
-        opacity: 0;
-        max-height: 0;
-        padding: 0 1.5rem;
-    }
-}
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const debugToggle = document.getElementById('debugToggle');
-    const debugContent = document.getElementById('debugContent');
-    
-    // Načtení uloženého stavu z localStorage
-    const savedState = localStorage.getItem('moduleAdminDebugVisible');
-    const isVisible = savedState === 'true';
-    
-    // Nastavení výchozího stavu
-    debugToggle.checked = isVisible;
-    if (isVisible) {
-        debugContent.style.display = 'block';
-        debugContent.classList.add('show');
-    }
-    
-    // Event listener pro toggle
-    debugToggle.addEventListener('change', function() {
-        const isChecked = this.checked;
-        
-        // Uložení stavu do localStorage
-        localStorage.setItem('moduleAdminDebugVisible', isChecked.toString());
-        
-        if (isChecked) {
-            // Zobrazení s animací
-            debugContent.style.display = 'block';
-            debugContent.classList.remove('hide');
-            debugContent.classList.add('show');
-        } else {
-            // Skrytí s animací
-            debugContent.classList.remove('show');
-            debugContent.classList.add('hide');
-            
-            // Skrytí po animaci
-            setTimeout(() => {
-                if (!debugToggle.checked) {
-                    debugContent.style.display = 'none';
-                }
-            }, 300);
-        }
-    });
-
-    // Zabránění automatickému skrývání permanent alertů
-    const permanentAlerts = document.querySelectorAll('.permanent-alert');
-    permanentAlerts.forEach(alert => {
-        // Přidáme data atribut aby main.js věděl, že se nemá skrývat
-        alert.setAttribute('data-permanent', 'true');
-    });
-
-    // Inicializace dropdown menu v tabulce modulů
-    const dropdownToggles = document.querySelectorAll('.data-table .dropdown-toggle');
-    
-    dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(e) {
-            const row = this.closest('tr');
-            const tableBody = this.closest('tbody');
-            const allRows = Array.from(tableBody.querySelectorAll('tr'));
-            const rowIndex = allRows.indexOf(row);
-            const totalRows = allRows.length;
-            
-            // Pokud je to jeden z posledních dvou řádků, přidáme CSS třídu
-            if (rowIndex >= totalRows - 2) {
-                row.classList.add('show-dropdown-up');
-            } else {
-                row.classList.remove('show-dropdown-up');
-            }
-        });
-        
-        // Při zavření dropdown odebereme třídu
-        toggle.addEventListener('hidden.bs.dropdown', function() {
-            const row = this.closest('tr');
-            row.classList.remove('show-dropdown-up');
-        });
-    });
-    
-    // Odebereme třídu při kliknutí mimo
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.dropdown')) {
-            document.querySelectorAll('tr.show-dropdown-up').forEach(row => {
-                row.classList.remove('show-dropdown-up');
-            });
-        }
-    });
-});
-</script>
 {/block}
