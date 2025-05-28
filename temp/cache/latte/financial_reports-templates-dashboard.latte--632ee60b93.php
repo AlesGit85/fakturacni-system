@@ -209,14 +209,14 @@ final class Template_632ee60b93 extends Latte\Runtime\Template
 		echo LR\Filters::escapeHtmlText(number_format($testVatLimits['currentTurnover'], 0, ',', ' ')) /* line 155 */;
 		echo ' Kč</strong>
                         </p>
-                        <small class="text-muted">
-                            Do limitu <span id="nextLimit">';
+                            <small class="text-muted">
+                               Do limitu <span id="nextLimit">';
 		echo LR\Filters::escapeHtmlText(number_format($testVatLimits['nextLimit'], 0, ',', ' ')) /* line 158 */;
-		echo '</span> Kč<br>
-                            zbývá: <span id="remainingToLimit">';
+		echo ' Kč</span><br>
+                              zbývá: <span id="remainingToLimit">';
 		echo LR\Filters::escapeHtmlText(number_format($testVatLimits['nextLimit'] - $testVatLimits['currentTurnover'], 0, ',', ' ')) /* line 159 */;
-		echo '</span> Kč
-                        </small>
+		echo ' Kč</span>
+                            </small>
                     </div>
                 </div>
             </div>

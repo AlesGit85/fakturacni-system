@@ -34,6 +34,9 @@ function initFinancialReports() {
 /**
  * Načte skutečná finanční data pomocí AJAX
  */
+/**
+ * Načte skutečná finanční data pomocí AJAX
+ */
 function loadRealFinancialData() {
     console.log('🚀 Spouštím načítání finančních dat...');
     
@@ -61,49 +64,135 @@ function loadRealFinancialData() {
         dataStatus.style.display = 'none';
     }
     
-    console.log('⏳ Loading stav nastaven, spouštím simulaci...');
+    console.log('⏳ Loading stav nastaven, spouštím AJAX volání...');
     
-    // Simulace AJAX volání - zatím použijeme simulovaná data
-    setTimeout(() => {
-        console.log('📊 Generuji mock data...');
-        
-        // Simulovaná data
+    // Získání AJAX URL z globální proměnné
+    const ajaxUrl = window.FINANCIAL_REPORTS_AJAX_URL;
+    
+    console.log('🔍 AJAX URL z window:', ajaxUrl);
+    console.log('🔍 Typ AJAX URL:', typeof ajaxUrl);
+    
+    if (!ajaxUrl) {
+        console.error('❌ AJAX URL není dostupné!');
+        // Fallback na mock data
         const mockData = generateMockFinancialData();
-        console.log('📈 Mock data vygenerována:', mockData);
-        
-        // Aktualizace UI
         updateFinancialStats(mockData.stats);
         updateVatStatus(mockData.vatLimits);
         
-        // Skrytí loading a zobrazení úspěchu
+        if (dataStatus) {
+            dataStatus.className = 'alert alert-warning mt-3';
+            dataStatus.style.display = 'block';
+            dataStatus.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2"></i>AJAX URL není dostupné - použita mock data';
+        }
+        return;
+    }
+    
+    console.log('📡 AJAX URL pro volání:', ajaxUrl);
+    
+    // Skutečné AJAX volání
+    fetch(ajaxUrl, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+            'Cache-Control': 'no-cache'
+        }
+    })
+    .then(response => {
+        console.log('📥 AJAX odpověď received:', {
+            status: response.status,
+            statusText: response.statusText,
+            ok: response.ok,
+            url: response.url,
+            headers: Object.fromEntries(response.headers.entries())
+        });
+        
+        if (!response.ok) {
+            return response.text().then(text => {
+                console.error('❌ Server error response:', text);
+                throw new Error(`HTTP ${response.status}: ${response.statusText} - ${text.substring(0, 200)}`);
+            });
+        }
+        
+        return response.text().then(text => {
+            console.log('📄 Raw response text:', text.substring(0, 500) + (text.length > 500 ? '...' : ''));
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error('❌ JSON parse error:', e);
+                throw new Error('Server nevrátil validní JSON: ' + text.substring(0, 100));
+            }
+        });
+    })
+    .then(data => {
+        console.log('📊 AJAX data parsed:', data);
+        
+        if (data.success) {
+            console.log('✅ Data úspěšně načtena z databáze');
+            
+            // Aktualizace UI s reálnými daty
+            updateFinancialStats(data.data.stats);
+            updateVatStatus(data.data.vatLimits);
+            
+            // Zobrazení úspěchu
+            if (dataStatus) {
+                dataStatus.className = 'alert alert-success mt-3';
+                dataStatus.style.display = 'block';
+                dataStatus.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Skutečná data byla úspěšně načtena z databáze!';
+            }
+            
+            if (loadButton) {
+                loadButton.innerHTML = '<i class="bi bi-check"></i> Data načtena z databáze';
+                loadButton.className = 'btn btn-success';
+            }
+            
+        } else {
+            throw new Error(data.error || 'Neznámá chyba serveru');
+        }
+    })
+    .catch(error => {
+        console.error('❌ AJAX chyba:', error);
+        console.error('❌ Error stack:', error.stack);
+        
+        // Zobrazení chyby
+        if (dataStatus) {
+            dataStatus.className = 'alert alert-danger mt-3';
+            dataStatus.style.display = 'block';
+            dataStatus.innerHTML = `<i class="bi bi-x-circle-fill me-2"></i>Chyba při načítání dat: ${error.message}`;
+        }
+        
+        if (loadButton) {
+            loadButton.innerHTML = '<i class="bi bi-arrow-repeat"></i> Zkusit znovu';
+            loadButton.className = 'btn btn-danger';
+        }
+        
+        // Fallback na mock data
+        console.log('🔄 Fallback na mock data...');
+        const mockData = generateMockFinancialData();
+        updateFinancialStats(mockData.stats);
+        updateVatStatus(mockData.vatLimits);
+    })
+    .finally(() => {
+        // Skrytí loading stavu
         if (loadingIndicator) {
             loadingIndicator.style.display = 'none';
         }
         
-        if (dataStatus) {
-            dataStatus.className = 'alert alert-success mt-3';
-            dataStatus.style.display = 'block';
-            dataStatus.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Data byla úspěšně načtena! (simulovaná data)';
-        }
-        
         if (loadButton) {
             loadButton.disabled = false;
-            loadButton.innerHTML = '<i class="bi bi-check"></i> Data načtena';
-            loadButton.className = 'btn btn-success';
         }
         
-        console.log('✅ Načítání dokončeno!');
-        
-    }, 2000);
+        console.log('✅ AJAX operace dokončena');
+    });
 }
 
 /**
- * Generuje mock data pro testování
+ * Generuje mock data pro testování (fallback)
  */
 function generateMockFinancialData() {
-    console.log('🎲 Generuji mock data...');
+    console.log('🎲 Generuji mock data jako fallback...');
     
-    // Simulovaná data - v dalším kroku budou nahrazena skutečnými daty z databáze
+    // Simulovaná data pro případ, že AJAX selže
     const data = {
         stats: {
             totalCount: 25,

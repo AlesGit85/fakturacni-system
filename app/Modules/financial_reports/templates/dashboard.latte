@@ -154,10 +154,10 @@
                         <p class="mb-1">
                             <strong id="currentTurnover">{number_format($testVatLimits['currentTurnover'], 0, ',', ' ')} Kč</strong>
                         </p>
-                        <small class="text-muted">
-                            Do limitu <span id="nextLimit">{number_format($testVatLimits['nextLimit'], 0, ',', ' ')}</span> Kč<br>
-                            zbývá: <span id="remainingToLimit">{number_format($testVatLimits['nextLimit'] - $testVatLimits['currentTurnover'], 0, ',', ' ')}</span> Kč
-                        </small>
+                            <small class="text-muted">
+                               Do limitu <span id="nextLimit">{number_format($testVatLimits['nextLimit'], 0, ',', ' ')} Kč</span><br>
+                              zbývá: <span id="remainingToLimit">{number_format($testVatLimits['nextLimit'] - $testVatLimits['currentTurnover'], 0, ',', ' ')} Kč</span>
+                            </small>
                     </div>
                 </div>
             </div>

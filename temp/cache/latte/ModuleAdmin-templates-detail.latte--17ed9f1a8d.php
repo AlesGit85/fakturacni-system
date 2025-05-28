@@ -110,5 +110,15 @@ final class Template_17ed9f1a8d extends Latte\Runtime\Template
 			echo '"></script>
 ';
 		}
+		echo "\n";
+		if (isset($ajaxUrl)) /* line 45 */ {
+			echo '    <script>
+        // Předání AJAX URL do JavaScriptu
+        window.FINANCIAL_REPORTS_AJAX_URL = ';
+			echo LR\Filters::escapeJs(($this->filters->datastream)($ajaxUrl)) /* line 48 */;
+			echo ';
+    </script>
+';
+		}
 	}
 }

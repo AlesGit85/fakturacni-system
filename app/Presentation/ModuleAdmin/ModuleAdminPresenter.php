@@ -14,7 +14,7 @@ final class ModuleAdminPresenter extends BasePresenter
 {
     /** @var ModuleManager */
     private $moduleManager;
-    
+
     /** @var ILogger */
     private $logger;
 
@@ -46,57 +46,162 @@ final class ModuleAdminPresenter extends BasePresenter
         ];
     }
 
+    /**
+     * AJAX action pro načítání dat z modulů
+     */
+    public function handleModuleData(string $moduleId, string $action): void
+    {
+        try {
+            $this->logger->log("AJAX volání pro modul: $moduleId, action: $action", ILogger::INFO);
+
+            // Kontrola, zda je modul aktivní
+            $activeModules = $this->moduleManager->getActiveModules();
+            if (!isset($activeModules[$moduleId])) {
+                $this->sendJson([
+                    'success' => false,
+                    'error' => 'Modul není aktivní nebo neexistuje'
+                ]);
+                return;
+            }
+
+            // Načtení instance modulu
+            $modulePath = dirname(__DIR__, 2) . '/Modules/' . $moduleId;
+            $moduleFile = $modulePath . '/Module.php';
+
+            if (!file_exists($moduleFile)) {
+                $this->sendJson([
+                    'success' => false,
+                    'error' => 'Soubor modulu nebyl nalezen'
+                ]);
+                return;
+            }
+
+            require_once $moduleFile;
+            $moduleClassName = 'Modules\\' . ucfirst($moduleId) . '\\Module';
+
+            if (!class_exists($moduleClassName)) {
+                $this->sendJson([
+                    'success' => false,
+                    'error' => 'Třída modulu nebyla nalezena'
+                ]);
+                return;
+            }
+
+            $moduleInstance = new $moduleClassName();
+
+            // Zde budeme volat specifické akce podle modulu
+            $result = $this->processModuleAction($moduleInstance, $moduleId, $action);
+
+            $this->sendJson([
+                'success' => true,
+                'data' => $result
+            ]);
+        } catch (\Exception $e) {
+            $this->logger->log("Chyba při AJAX volání modulu: " . $e->getMessage(), ILogger::ERROR);
+            $this->sendJson([
+                'success' => false,
+                'error' => 'Chyba při načítání dat: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Volá specifickou akci na modulu
+     */
+    private function processModuleAction($moduleInstance, string $moduleId, string $action)
+    {
+        switch ($moduleId) {
+            case 'financial_reports':
+                return $this->processFinancialReportsAction($moduleInstance, $action);
+
+            default:
+                throw new \Exception("Nepodporovaný modul: $moduleId");
+        }
+    }
+
+    /**
+     * Obsluha akcí pro modul Financial Reports
+     */
+    private function processFinancialReportsAction($moduleInstance, string $action)
+    {
+        switch ($action) {
+            case 'getBasicStats':
+                $service = $moduleInstance->getFinancialReportsService();
+                return $service->getBasicStats();
+
+            case 'getVatLimits':
+                $service = $moduleInstance->getFinancialReportsService();
+                return $service->checkVatLimits();
+
+            case 'getAllData':
+                $service = $moduleInstance->getFinancialReportsService();
+                return [
+                    'stats' => $service->getBasicStats(),
+                    'vatLimits' => $service->checkVatLimits()
+                ];
+
+            default:
+                throw new \Exception("Nepodporovaná akce: $action");
+        }
+    }
+
     public function renderDefault(): void
     {
         $this->template->title = "Správa modulů";
-        
+
         // Načtení všech modulů
         $this->template->modules = $this->moduleManager->getAllModules();
-        
+
         // Získání maximální velikosti souboru pro nahrávání
         $maxUploadSize = $this->getMaxUploadSize();
         $this->template->maxUploadSize = $maxUploadSize;
         $this->template->maxUploadSizeFormatted = $this->formatBytes($maxUploadSize);
-        
+
         // DEBUG: Přidáme informace o PHP limitech pro debugging
         $this->template->debugInfo = $this->getPhpUploadDebugInfo();
     }
-    
+
     public function renderDetail(string $id): void
     {
-        $allModules = $this->moduleManager->getAllModules();
+        $allModules = $this->moduleManager->getActiveModules();
         if (!isset($allModules[$id])) {
             $this->flashMessage('Modul nebyl nalezen.', 'danger');
             $this->redirect('default');
         }
-        
+
         $this->template->moduleInfo = $allModules[$id];
         $this->template->moduleId = $id;
-        
+
         // Zkopírování assets do www adresáře, pokud ještě nebyly zkopírovány
         $this->ensureModuleAssets($id);
-        
+
         // Přidání CSS stylu modulu, pokud existuje
         $cssPath = '/Modules/' . $id . '/assets/css/style.css';
         $cssFullPath = WWW_DIR . $cssPath;
         if (file_exists($cssFullPath)) {
             $this->template->moduleCss = $cssPath;
         }
-        
+
         // Přidání JS scriptu modulu, pokud existuje
         $jsPath = '/Modules/' . $id . '/assets/js/script.js';
         $jsFullPath = WWW_DIR . $jsPath;
         if (file_exists($jsFullPath)) {
             $this->template->moduleJs = $jsPath;
         }
-        
+
         // Načtení šablony modulu
         $templatePath = dirname(__DIR__, 2) . '/Modules/' . $id . '/templates/dashboard.latte';
         if (file_exists($templatePath)) {
             $this->template->moduleTemplatePath = $templatePath;
         }
+
+        // Pro financial_reports přidáme správné AJAX URL do šablony
+        if ($id === 'financial_reports') {
+            $this->template->ajaxUrl = $this->link('moduleData!', ['moduleId' => $id, 'action' => 'getAllData']);
+            $this->template->moduleId = $id;
+        }
     }
-    
+
     /**
      * Zajistí, že assets modulu jsou zkopírovány do www adresáře
      */
@@ -104,21 +209,21 @@ final class ModuleAdminPresenter extends BasePresenter
     {
         $moduleAssetsDir = dirname(__DIR__, 2) . '/Modules/' . $moduleId . '/assets';
         $wwwModuleDir = WWW_DIR . '/Modules/' . $moduleId;
-        
+
         // Pokud assets existují a ještě nejsou zkopírovány
         if (is_dir($moduleAssetsDir) && !is_dir($wwwModuleDir)) {
             // Vytvoření adresáře
             if (!is_dir(dirname($wwwModuleDir))) {
                 mkdir(dirname($wwwModuleDir), 0755, true);
             }
-            
+
             // Zkopírování assets
             $this->copyDirectory($moduleAssetsDir, $wwwModuleDir . '/assets');
-            
+
             $this->logger->log("Assets modulu '$moduleId' byly zkopírovány do www adresáře", ILogger::INFO);
         }
     }
-    
+
     /**
      * Rekurzivně kopíruje adresář
      */
@@ -127,16 +232,16 @@ final class ModuleAdminPresenter extends BasePresenter
         if (!is_dir($dest)) {
             mkdir($dest, 0755, true);
         }
-        
+
         $dir = opendir($source);
         while (($file = readdir($dir)) !== false) {
             if ($file === '.' || $file === '..') {
                 continue;
             }
-            
+
             $srcFile = $source . '/' . $file;
             $destFile = $dest . '/' . $file;
-            
+
             if (is_dir($srcFile)) {
                 $this->copyDirectory($srcFile, $destFile);
             } else {
@@ -145,7 +250,7 @@ final class ModuleAdminPresenter extends BasePresenter
         }
         closedir($dir);
     }
-    
+
     /**
      * Formulář pro nahrání nového modulu
      */
@@ -168,7 +273,7 @@ final class ModuleAdminPresenter extends BasePresenter
 
         return $form;
     }
-    
+
     /**
      * Získá maximální velikost souboru pro nahrávání s lepším debugováním
      */
@@ -178,26 +283,26 @@ final class ModuleAdminPresenter extends BasePresenter
         $uploadMaxFilesize = $this->parseSize(ini_get('upload_max_filesize'));
         $postMaxSize = $this->parseSize(ini_get('post_max_size'));
         $memoryLimit = $this->parseSize(ini_get('memory_limit'));
-        
+
         // Logujeme hodnoty pro debugging
-        $this->logger->log("PHP Upload limits - upload_max_filesize: " . $this->formatBytes($uploadMaxFilesize) . 
-                          ", post_max_size: " . $this->formatBytes($postMaxSize) . 
-                          ", memory_limit: " . $this->formatBytes($memoryLimit), ILogger::INFO);
-        
+        $this->logger->log("PHP Upload limits - upload_max_filesize: " . $this->formatBytes($uploadMaxFilesize) .
+            ", post_max_size: " . $this->formatBytes($postMaxSize) .
+            ", memory_limit: " . $this->formatBytes($memoryLimit), ILogger::INFO);
+
         // Použije menší z upload a post hodnot
         $serverLimit = min($uploadMaxFilesize, $postMaxSize);
-        
+
         // Pro lokální development nastavíme vyšší limit
         // V produkci můžeme snížit podle potřeby
         $desiredLimit = 50 * 1024 * 1024; // 50 MB pro development
-        
+
         $finalLimit = min($serverLimit, $desiredLimit);
-        
+
         $this->logger->log("Final upload limit: " . $this->formatBytes($finalLimit), ILogger::INFO);
-        
+
         return $finalLimit;
     }
-    
+
     /**
      * Získá debug informace o PHP upload limitech
      */
@@ -207,23 +312,23 @@ final class ModuleAdminPresenter extends BasePresenter
             'upload_max_filesize_raw' => ini_get('upload_max_filesize'),
             'upload_max_filesize_bytes' => $this->parseSize(ini_get('upload_max_filesize')),
             'upload_max_filesize_formatted' => $this->formatBytes($this->parseSize(ini_get('upload_max_filesize'))),
-            
+
             'post_max_size_raw' => ini_get('post_max_size'),
             'post_max_size_bytes' => $this->parseSize(ini_get('post_max_size')),
             'post_max_size_formatted' => $this->formatBytes($this->parseSize(ini_get('post_max_size'))),
-            
+
             'memory_limit_raw' => ini_get('memory_limit'),
             'memory_limit_bytes' => $this->parseSize(ini_get('memory_limit')),
             'memory_limit_formatted' => $this->formatBytes($this->parseSize(ini_get('memory_limit'))),
-            
+
             'max_execution_time' => ini_get('max_execution_time'),
             'max_input_time' => ini_get('max_input_time'),
-            
+
             'final_limit' => $this->getMaxUploadSize(),
             'final_limit_formatted' => $this->formatBytes($this->getMaxUploadSize())
         ];
     }
-    
+
     /**
      * Převede řetězec s velikostí (např. "2M") na integer (bytes)
      */
@@ -231,42 +336,42 @@ final class ModuleAdminPresenter extends BasePresenter
     {
         $unit = preg_replace('/[^bkmgtpezy]/i', '', $size);
         $size = preg_replace('/[^0-9\.]/', '', $size);
-        
+
         if ($unit) {
             $size *= pow(1024, stripos('bkmgtpezy', $unit[0]));
         }
-        
+
         return (int) $size;
     }
-    
+
     /**
      * Formátuje velikost v bytech na čitelný formát
      */
     private function formatBytes(int $bytes, int $precision = 2): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        
+
         $bytes = max($bytes, 0);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
-        
+
         $bytes /= pow(1024, $pow);
-        
+
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
-    
+
     /**
      * Zpracování formuláře pro nahrání modulu
      */
     public function uploadFormSucceeded(Form $form, \stdClass $values): void
     {
         $file = $values->moduleZip;
-        
+
         if ($file->isOk() && $file->getSize() > 0) {
             try {
                 // Zavolání metody pro instalaci modulu
                 $result = $this->moduleManager->installModule($file);
-                
+
                 if ($result['success']) {
                     $this->flashMessage('Modul byl úspěšně nainstalován: ' . $result['message'], 'success');
                 } else {
@@ -279,10 +384,10 @@ final class ModuleAdminPresenter extends BasePresenter
         } else {
             $this->flashMessage('Neplatný soubor nebo chyba při nahrávání.', 'danger');
         }
-        
+
         $this->redirect('default');
     }
-    
+
     /**
      * Akce pro aktivaci/deaktivaci modulu
      */
@@ -299,10 +404,10 @@ final class ModuleAdminPresenter extends BasePresenter
             $this->logger->log('Chyba při přepínání modulu: ' . $e->getMessage(), ILogger::ERROR);
             $this->flashMessage('Nastala chyba při přepínání modulu: ' . $e->getMessage(), 'danger');
         }
-        
+
         $this->redirect('default');
     }
-    
+
     /**
      * Akce pro odstranění modulu
      */
@@ -319,7 +424,7 @@ final class ModuleAdminPresenter extends BasePresenter
             $this->logger->log('Chyba při odinstalaci modulu: ' . $e->getMessage(), ILogger::ERROR);
             $this->flashMessage('Nastala chyba při odinstalaci modulu: ' . $e->getMessage(), 'danger');
         }
-        
+
         $this->redirect('default');
     }
 }

@@ -41,4 +41,11 @@
 {if isset($moduleJs)}
     <script src="{$basePath}{$moduleJs}"></script>
 {/if}
+
+{if isset($ajaxUrl)}
+    <script>
+        // Předání AJAX URL do JavaScriptu
+        window.FINANCIAL_REPORTS_AJAX_URL = {$ajaxUrl|datastream};
+    </script>
+{/if}
 {/block}

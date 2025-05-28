@@ -1037,3 +1037,130 @@
 [2025-05-28 13-12-26] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=u663 
 [2025-05-28 13-12-26] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=u663 
 [2025-05-28 13-12-28] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-18-01] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-05-28 13-18-06] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-18-06] Assets modulu 'financial_reports' byly zkopírovány do www adresáře  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-25-01] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-05-28 13-25-06] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-25-11] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-27-01] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-27-28] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-27-34] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-34-08] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-05-28 13-34-11] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-35-18] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-36-54] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-38-29] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-38-30] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-38-33] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-40-02] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-42-00] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-42-48] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 13-43-39] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-39] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-39] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-39] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-39] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-49] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-49] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-49] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-49] Začíná instalace modulu ze souboru: test_module.zip  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-50] Modul 'Testovací modul' byl úspěšně nainstalován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 13-43-50] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/?_fid=wfyi 
+[2025-05-28 13-43-50] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=wfyi 
+[2025-05-28 13-43-50] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=wfyi 
+[2025-05-28 13-43-50] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=wfyi 
+[2025-05-28 13-43-50] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=wfyi 
+[2025-05-28 13-43-50] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=wfyi 
+[2025-05-28 13-43-50] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=wfyi 
+[2025-05-28 13-43-50] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=wfyi 
+[2025-05-28 13-43-50] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=wfyi 
+[2025-05-28 19-55-44] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-05-28 19-55-46] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-05-28 19-55-46] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=ork8v&_fid=meag 
+[2025-05-28 19-55-49] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-05-28 19-55-50] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=35re 
+[2025-05-28 19-55-55] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 19-57-02] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-05-28 19-57-13] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-00-45] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-00-45] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-00-45] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-00-45] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-00-45] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-00-45] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-00-45] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-00-45] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-00-45] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-00-55] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/default/financial_reports?do=toggleModule 
+[2025-05-28 20-00-55] Modul 'Finanční přehledy' byl deaktivován  @  http://localhost:8000/moduleadmin/default/financial_reports?do=toggleModule 
+[2025-05-28 20-00-55] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/?_fid=cixv 
+[2025-05-28 20-00-55] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=cixv 
+[2025-05-28 20-00-55] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=cixv 
+[2025-05-28 20-00-55] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=cixv 
+[2025-05-28 20-00-55] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=cixv 
+[2025-05-28 20-00-55] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=cixv 
+[2025-05-28 20-00-55] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=cixv 
+[2025-05-28 20-00-55] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=cixv 
+[2025-05-28 20-00-55] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=cixv 
+[2025-05-28 20-01-04] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/default/financial_reports?do=toggleModule 
+[2025-05-28 20-01-04] Modul 'Finanční přehledy' byl aktivován  @  http://localhost:8000/moduleadmin/default/financial_reports?do=toggleModule 
+[2025-05-28 20-01-04] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/?_fid=go6z 
+[2025-05-28 20-01-04] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=go6z 
+[2025-05-28 20-01-04] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=go6z 
+[2025-05-28 20-01-04] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=go6z 
+[2025-05-28 20-01-04] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=go6z 
+[2025-05-28 20-01-04] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=go6z 
+[2025-05-28 20-01-04] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=go6z 
+[2025-05-28 20-01-04] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=go6z 
+[2025-05-28 20-01-04] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=go6z 
+[2025-05-28 20-01-08] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-03-14] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-03-14] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-03-14] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-03-14] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-03-14] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-03-14] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-03-14] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-03-14] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-03-14] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-03-26] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-03-26] Assets modulu 'financial_reports' byly zkopírovány do www adresáře  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-03-33] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-05-28 20-03-33] AJAX volání pro modul: financial_reports, action: detail  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-05-28 20-03-38] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-05-28 20-03-38] AJAX volání pro modul: financial_reports, action: detail  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-05-28 20-03-44] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-03-51] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-05-28 20-03-51] AJAX volání pro modul: financial_reports, action: detail  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-05-28 20-07-22] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-07-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-07-22] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-07-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-07-22] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-07-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-07-22] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-07-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-07-22] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-07-25] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-07-25] Assets modulu 'financial_reports' byly zkopírovány do www adresáře  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-08-18] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-08-59] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-09-21] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-12-21] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-13-52] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-13-52] Assets modulu 'financial_reports' byly zkopírovány do www adresáře  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-05-28 20-13-56] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-13-56] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-13-56] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-13-56] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-13-56] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-13-56] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-13-56] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-13-56] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-13-56] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-05-28 20-13-59] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
