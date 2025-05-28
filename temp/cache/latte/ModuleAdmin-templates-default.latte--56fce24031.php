@@ -193,9 +193,9 @@ final class Template_56fce24031 extends Latte\Runtime\Template
             <h2 class="section-title mb-0">
                 <i class="bi bi-puzzle-fill me-2 text-primary"></i>
                 Nainstalované moduly 
-                <span class="total-count">';
+                <span class="total-count">Počet nainstalovaných modulů: ';
 		echo LR\Filters::escapeHtmlText(count($modules)) /* line 115 */;
-		echo ' modulů</span>
+		echo '</span>
             </h2>
             <p class="text-muted">Správa a konfigurace systémových rozšíření</p>
         </div>

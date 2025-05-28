@@ -40,6 +40,49 @@
 						</a>
 					</li>
 					{/if}
+					
+					{* Dynamické menu pro moduly *}
+					{if isset($moduleMenuItems) && !empty($moduleMenuItems)}
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="extensionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="bi bi-puzzle-fill"></i><span class="nav-text">Rozšíření</span>
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="extensionsDropdown">
+							{foreach $moduleMenuItems as $moduleKey => $moduleData}
+								{if !empty($moduleData['menuItems'])}
+									<li><h6 class="dropdown-header">
+										<i class="{$moduleData['moduleInfo']['icon']|noescape} me-2"></i>
+										{$moduleData['moduleInfo']['name']}
+									</h6></li>
+									{foreach $moduleData['menuItems'] as $menuKey => $menuItem}
+										<li>
+											{if $menuItem['linkType'] === 'nette'}
+												<a class="dropdown-item" href="{$menuItem['link']}">
+													{if isset($menuItem['icon'])}<i class="{$menuItem['icon']|noescape} me-2"></i>{/if}
+													{$menuItem['label']}
+												</a>
+											{elseif $menuItem['linkType'] === 'javascript'}
+												<a class="dropdown-item" href="#" onclick="{$menuItem['onclick']|noescape}; return false;">
+													{if isset($menuItem['icon'])}<i class="{$menuItem['icon']|noescape} me-2"></i>{/if}
+													{$menuItem['label']}
+												</a>
+											{else}
+												<a class="dropdown-item" href="{$menuItem['link']}">
+													{if isset($menuItem['icon'])}<i class="{$menuItem['icon']|noescape} me-2"></i>{/if}
+													{$menuItem['label']}
+												</a>
+											{/if}
+										</li>
+									{/foreach}
+									{if !$iterator->isLast()}
+										<li><hr class="dropdown-divider"></li>
+									{/if}
+								{/if}
+							{/foreach}
+						</ul>
+					</li>
+					{/if}
+					
 					{if isset($isUserAdmin) && $isUserAdmin}
 					<li class="nav-item">
 						<a class="nav-link" n:href=":Settings:default">
@@ -51,11 +94,9 @@
 							<i class="bi bi-people-fill"></i><span class="nav-text">Uživatelé</span>
 						</a>
 					</li>
-					{/if}
-					{if isset($isUserAdmin) && $isUserAdmin}
 					<li class="nav-item">
     					<a class="nav-link" n:href="ModuleAdmin:default">
-        					<i class="bi bi-puzzle-fill"></i><span class="nav-text">Moduly</span>
+        					<i class="bi bi-gear-fill"></i><span class="nav-text">Správa modulů</span>
     					</a>
 					</li>
 					{/if}

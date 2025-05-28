@@ -1,101 +1,77 @@
-<div class="test-module-dashboard">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header" style="background-color: #B1D235; color: #212529;">
-                    <i class="bi bi-star-fill me-2"></i>
-                    <h5 class="d-inline">Testovací Dashboard</h5>
-                </div>
-                <div class="card-body">
-                    <div class="alert alert-success">
-                        <i class="bi bi-check-circle-fill me-2"></i>
-                        <strong>Úspěch!</strong> Testovací modul byl úspěšně načten a funguje správně.
-                    </div>
-                    
-                    <h6>Informace o modulu:</h6>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between">
-                            <strong>Název:</strong>
-                            <span>Testovací modul</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <strong>Verze:</strong>
-                            <span>1.0.0</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <strong>Autor:</strong>
-                            <span>QRdoklad System</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <strong>Stav:</strong>
-                            <span class="badge bg-success">Aktivní</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-success">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <strong>Úspěch!</strong> Testovací modul funguje správně.
         </div>
-        
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <i class="bi bi-gear me-2"></i>
-                    <h6 class="d-inline">Funkce modulu</h6>
-                </div>
-                <div class="card-body">
-                    <div class="test-functions">
-                        <button id="testButton" class="btn btn-primary btn-sm mb-2 w-100">
-                            <i class="bi bi-play-circle"></i> Spustit test
-                        </button>
-                        
-                        <button id="resetButton" class="btn btn-outline-secondary btn-sm w-100">
-                            <i class="bi bi-arrow-clockwise"></i> Reset
-                        </button>
-                    </div>
-                    
-                    <div id="testResult" class="mt-3" style="display: none;">
-                        <div class="alert alert-info mb-0">
-                            <small>Test byl úspěšně spuštěn!</small>
-                        </div>
-                    </div>
-                </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header" style="background-color: #B1D235; color: #212529;">
+                <i class="bi bi-info-circle me-2"></i>
+                <h5 class="mb-0">Informace o modulu</h5>
             </div>
-            
-            <div class="card mt-3">
-                <div class="card-header">
-                    <i class="bi bi-list-check me-2"></i>
-                    <h6 class="d-inline">Dostupné funkce</h6>
-                </div>
-                <div class="card-body">
-                    <ul class="list-unstyled mb-0">
-                        <li><i class="bi bi-check text-success"></i> Základní funkcionalita</li>
-                        <li><i class="bi bi-check text-success"></i> Dashboard template</li>
-                        <li><i class="bi bi-check text-success"></i> CSS styly</li>
-                        <li><i class="bi bi-check text-success"></i> JavaScript funkce</li>
-                    </ul>
-                </div>
+            <div class="card-body">
+                <p><strong>Název:</strong> Testovací modul</p>
+                <p><strong>Verze:</strong> 1.0.0</p>
+                <p><strong>Autor:</strong> QRdoklad System</p>
+                <p class="mb-0"><strong>Popis:</strong> Základní testovací modul pro ověření funkcionality systému</p>
             </div>
         </div>
     </div>
     
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <i class="bi bi-code-square me-2"></i>
-                    <h6 class="d-inline">Ukázka kódu</h6>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header" style="background-color: #95B11F; color: white;">
+                <i class="bi bi-gear me-2"></i>
+                <h5 class="mb-0">Funkce modulu</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check-circle text-success me-2"></i> Testování menu integrace</li>
+                    <li><i class="bi bi-check-circle text-success me-2"></i> Zobrazení dashboard šablony</li>
+                    <li><i class="bi bi-check-circle text-success me-2"></i> Ověření modulu rozhraní</li>
+                    <li><i class="bi bi-check-circle text-success me-2"></i> Test aktivace/deaktivace</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header" style="background-color: #6c757d; color: white;">
+                <i class="bi bi-code-square me-2"></i>
+                <h5 class="mb-0">Technické informace</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>Cesta k modulu:</h6>
+                        <code>app/Modules/test_module/</code>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Třída modulu:</h6>
+                        <code>Modules\Test_module\Module</code>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Šablona:</h6>
+                        <code>templates/dashboard.latte</code>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <pre class="bg-light p-3 rounded"><code>// Příklad použití testovacího modulu
-class TestModule extends BaseModule {
-    public function getName(): string {
-        return 'Testovací modul';
-    }
-    
-    public function getVersion(): string {
-        return '1.0.0';
-    }
-}</code></pre>
-                </div>
+                
+                <hr>
+                
+                <h6>Menu položky generované modulem:</h6>
+                <ul>
+                    <li><strong>Testovací dashboard</strong> - odkaz na detail modulu</li>
+                    <li><strong>Test akce 1</strong> - ukázková akce</li>
+                    <li><strong>Test akce 2</strong> - další ukázková akce</li>
+                </ul>
             </div>
         </div>
     </div>

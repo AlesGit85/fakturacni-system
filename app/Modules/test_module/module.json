@@ -2,22 +2,8 @@
     "id": "test_module",
     "name": "Testovac\u00ed modul",
     "version": "1.0.0",
-    "description": "Z\u00e1kladn\u00ed testovac\u00ed modul pro ov\u011b\u0159en\u00ed funk\u010dnosti syst\u00e9mu modul\u016f",
-    "author": "QRdoklad System",
-    "icon": "bi bi-star-fill",
+    "description": "Z\u00e1kladn\u00ed testovac\u00ed modul pro ov\u011b\u0159en\u00ed funkcionality syst\u00e9mu",
+    "author": "Allimedia.cz",
     "active": true,
-    "requirements": {
-        "php": ">=8.0",
-        "qrdoklad": ">=1.0.0"
-    },
-    "menu_items": [
-        {
-            "link": "Modules:detail",
-            "params": {
-                "id": "test_module"
-            },
-            "label": "Test Dashboard",
-            "icon": "bi bi-star"
-        }
-    ]
+    "icon": "bi bi-star-fill"
 }

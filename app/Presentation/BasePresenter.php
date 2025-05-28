@@ -7,6 +7,7 @@ namespace App\Presentation;
 use Nette;
 use Nette\Application\UI\Presenter;
 use App\Security\SecurityLogger;
+use App\Model\ModuleManager;
 
 abstract class BasePresenter extends Presenter
 {
@@ -22,9 +23,17 @@ abstract class BasePresenter extends Presenter
     /** @var SecurityLogger */
     private $securityLogger;
 
+    /** @var ModuleManager */
+    private $moduleManager;
+
     public function injectSecurityLogger(SecurityLogger $securityLogger): void
     {
         $this->securityLogger = $securityLogger;
+    }
+
+    public function injectModuleManager(ModuleManager $moduleManager): void
+    {
+        $this->moduleManager = $moduleManager;
     }
 
     public function startup(): void
@@ -101,6 +110,75 @@ abstract class BasePresenter extends Presenter
         }
         
         return false;
+    }
+
+    /**
+     * Získá menu položky z aktivních modulů
+     */
+    protected function getModuleMenuItems(): array
+    {
+        if (!$this->moduleManager) {
+            return [];
+        }
+
+        $menuItems = [];
+        $activeModules = $this->moduleManager->getActiveModules();
+        
+        foreach ($activeModules as $moduleId => $moduleInfo) {
+            try {
+                // Pokusíme se načíst modul a získat jeho menu položky
+                $modulePath = dirname(__DIR__) . '/Modules/' . $moduleId;
+                $moduleFile = $modulePath . '/Module.php';
+                
+                if (file_exists($moduleFile)) {
+                    require_once $moduleFile;
+                    $moduleClassName = 'Modules\\' . ucfirst($moduleId) . '\\Module';
+                    
+                    if (class_exists($moduleClassName)) {
+                        $moduleInstance = new $moduleClassName();
+                        
+                        if (method_exists($moduleInstance, 'getMenuItems')) {
+                            $moduleMenuItems = $moduleInstance->getMenuItems();
+                            
+                            if (!empty($moduleMenuItems)) {
+                                // Zpracujeme menu položky a vygenerujeme odkazy
+                                $processedMenuItems = [];
+                                
+                                foreach ($moduleMenuItems as $menuItem) {
+                                    $processedItem = $menuItem;
+                                    
+                                    // Pokud má presenter a action, vygenerujeme Nette link
+                                    if (isset($menuItem['presenter']) && isset($menuItem['action'])) {
+                                        $params = $menuItem['params'] ?? [];
+                                        $processedItem['link'] = $this->link($menuItem['presenter'] . ':' . $menuItem['action'], $params);
+                                        $processedItem['linkType'] = 'nette';
+                                    } elseif (isset($menuItem['onclick'])) {
+                                        $processedItem['linkType'] = 'javascript';
+                                    } elseif (isset($menuItem['link'])) {
+                                        $processedItem['linkType'] = 'direct';
+                                    }
+                                    
+                                    $processedMenuItems[] = $processedItem;
+                                }
+                                
+                                $menuItems[$moduleId] = [
+                                    'moduleInfo' => $moduleInfo,
+                                    'menuItems' => $processedMenuItems
+                                ];
+                            }
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                // Logujeme chybu, ale pokračujeme
+                if (isset($this->securityLogger)) {
+                    $this->securityLogger->logSecurityEvent('module_menu_error', 
+                        "Chyba při načítání menu z modulu $moduleId: " . $e->getMessage());
+                }
+            }
+        }
+        
+        return $menuItems;
     }
 
     /**
@@ -210,6 +288,9 @@ abstract class BasePresenter extends Presenter
         // Přidání helper funkcí pro skloňování do šablony
         $this->template->addFunction('pluralizeInvoices', [$this, 'pluralizeInvoices']);
         $this->template->addFunction('getInvoiceCountText', [$this, 'getInvoiceCountText']);
+        
+        // Přidání menu položek z modulů do šablony
+        $this->template->add('moduleMenuItems', $this->getModuleMenuItems());
     }
 
     /**

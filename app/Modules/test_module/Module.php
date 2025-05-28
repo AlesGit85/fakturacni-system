@@ -2,47 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Modules\TestModule;
+namespace Modules\Test_module;
 
 use App\Modules\BaseModule;
 
 /**
- * Testovací modul pro ověření funkčnosti systému modulů
+ * Testovací modul
  */
 class Module extends BaseModule
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function initialize(): void
-    {
-        // Inicializace testovacího modulu
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function activate(): void
-    {
-        // Logika při aktivaci modulu
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function deactivate(): void
-    {
-        // Logika při deaktivaci modulu
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function uninstall(): void
-    {
-        // Cleanup při odinstalaci modulu
-    }
-    
     /**
      * {@inheritdoc}
      */
@@ -50,29 +18,48 @@ class Module extends BaseModule
     {
         return [
             [
-                'link' => 'Modules:detail',
+                'presenter' => 'ModuleAdmin',
+                'action' => 'detail',
                 'params' => ['id' => 'test_module'],
-                'label' => 'Test Dashboard',
-                'icon' => 'bi bi-star'
+                'label' => 'Testovací dashboard',
+                'icon' => 'bi bi-speedometer2'
+            ],
+            [
+                'link' => 'javascript:void(0)',
+                'onclick' => 'alert("Test akce 1 byla spuštěna!")',
+                'label' => 'Test akce 1',
+                'icon' => 'bi bi-gear'
+            ],
+            [
+                'link' => 'javascript:void(0)',
+                'onclick' => 'alert("Test akce 2 byla spuštěna!")',
+                'label' => 'Test akce 2',
+                'icon' => 'bi bi-graph-up'
             ]
         ];
     }
     
     /**
-     * Vlastní metoda pro testování
+     * {@inheritdoc}
      */
-    public function getTestData(): array
+    public function initialize(): void
     {
-        return [
-            'message' => 'Testovací modul funguje správně!',
-            'timestamp' => date('Y-m-d H:i:s'),
-            'version' => $this->getVersion(),
-            'features' => [
-                'Základní funkcionalita',
-                'Dashboard template',
-                'CSS styly',
-                'JavaScript funkce'
-            ]
-        ];
+        // Testovací inicializace
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function activate(): void
+    {
+        // Testovací aktivace
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function deactivate(): void
+    {
+        // Testovací deaktivace
     }
 }

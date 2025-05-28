@@ -182,8 +182,18 @@ class ModuleManager
             $moduleConfig['active'] = true;
             file_put_contents($this->modulesDir . '/' . $moduleId . '/module.json', json_encode($moduleConfig, JSON_PRETTY_PRINT));
             
-            // Kopírování assets do www adresáře
-            $this->copyModuleAssets($moduleId);
+            // Vytvoření symlinku pro assets v www adresáři
+            $moduleAssetsDir = $this->modulesDir . '/' . $moduleId . '/assets';
+            $wwwModuleDir = $this->wwwModulesDir . '/' . $moduleId;
+            
+            if (is_dir($moduleAssetsDir)) {
+                if (is_dir($wwwModuleDir)) {
+                    $this->rrmdir($wwwModuleDir); // Odstranění existujícího adresáře
+                }
+                
+                // Kopírování assets místo vytváření symlinku (kvůli kompatibilitě s Windows)
+                $this->copyDirectory($moduleAssetsDir, $wwwModuleDir);
+            }
             
             // Úklid dočasných souborů
             $this->cleanup($tempDir);
@@ -206,32 +216,6 @@ class ModuleManager
                 'success' => false,
                 'message' => 'Chyba při instalaci modulu: ' . $e->getMessage()
             ];
-        }
-    }
-    
-    /**
-     * Kopíruje assets modulu do www adresáře
-     */
-    private function copyModuleAssets(string $moduleId): void
-    {
-        $moduleAssetsDir = $this->modulesDir . '/' . $moduleId . '/assets';
-        $wwwModuleDir = $this->wwwModulesDir . '/' . $moduleId;
-        
-        if (is_dir($moduleAssetsDir)) {
-            // Odstranění existujícího adresáře
-            if (is_dir($wwwModuleDir)) {
-                $this->rrmdir($wwwModuleDir);
-            }
-            
-            // Vytvoření základního adresáře
-            if (!is_dir($wwwModuleDir)) {
-                mkdir($wwwModuleDir, 0755, true);
-            }
-            
-            // Kopírování assets se zachováním struktury
-            $this->copyDirectory($moduleAssetsDir, $wwwModuleDir . '/assets');
-            
-            $this->logger->log("Assets modulu '$moduleId' byly zkopírovány", ILogger::INFO);
         }
     }
     
@@ -265,11 +249,6 @@ class ModuleManager
             
             // Přepnutí stavu modulu
             $moduleConfig['active'] = !($moduleConfig['active'] ?? false);
-            
-            // Pokud se aktivuje, zkopírujeme assets
-            if ($moduleConfig['active']) {
-                $this->copyModuleAssets($moduleId);
-            }
             
             // Uložení změn
             file_put_contents($moduleJsonFile, json_encode($moduleConfig, JSON_PRETTY_PRINT));
@@ -317,7 +296,7 @@ class ModuleManager
             // Odstranění adresáře modulu
             $this->rrmdir($moduleDir);
             
-            // Odstranění assets z www adresáře
+            // Odstranění symlinku pro assets
             $wwwModuleDir = $this->wwwModulesDir . '/' . $moduleId;
             if (is_dir($wwwModuleDir)) {
                 $this->rrmdir($wwwModuleDir);

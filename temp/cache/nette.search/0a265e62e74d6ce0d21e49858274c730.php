@@ -35,7 +35,7 @@ return array (
     'App\\Model\\ModuleManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ModuleManager.php',
-      1 => 1748335198,
+      1 => 1748432803,
     ),
     'App\\Model\\QrPaymentService' => 
     array (
@@ -57,10 +57,10 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748331866,
     ),
-    'App\\Modules\\test_module\\Module' => 
+    'Modules\\Test_module\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\test_module\\Module.php',
-      1 => 1748331948,
+      1 => 1748432990,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -70,7 +70,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1748239656,
+      1 => 1748433581,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -105,7 +105,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1748337600,
+      1 => 1748355670,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
