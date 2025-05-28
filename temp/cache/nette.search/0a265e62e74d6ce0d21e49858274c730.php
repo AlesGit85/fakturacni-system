@@ -67,6 +67,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748331866,
     ),
+    'Modules\\TestModule\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\test_module\\Module.php',
+      1 => 1748439830,
+    ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Accessory\\LatteExtension.php',
@@ -110,7 +115,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1748438697,
+      1 => 1748465007,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (

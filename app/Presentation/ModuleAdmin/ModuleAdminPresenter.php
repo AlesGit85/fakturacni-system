@@ -7,6 +7,8 @@ namespace App\Presentation\ModuleAdmin;
 use Nette;
 use Nette\Application\UI\Form;
 use App\Model\ModuleManager;
+use App\Model\InvoicesManager;
+use App\Model\CompanyManager;
 use App\Presentation\BasePresenter;
 use Tracy\ILogger;
 
@@ -18,12 +20,29 @@ final class ModuleAdminPresenter extends BasePresenter
     /** @var ILogger */
     private $logger;
 
+    /** @var InvoicesManager */
+    private $invoicesManager;
+
+    /** @var CompanyManager */
+    private $companyManager;
+
+    /** @var Nette\Database\Explorer */
+    private $database;
+
     protected array $requiredRoles = ['admin'];
 
-    public function __construct(ModuleManager $moduleManager, ILogger $logger)
-    {
+    public function __construct(
+        ModuleManager $moduleManager, 
+        ILogger $logger,
+        InvoicesManager $invoicesManager,
+        CompanyManager $companyManager,
+        Nette\Database\Explorer $database
+    ) {
         $this->moduleManager = $moduleManager;
         $this->logger = $logger;
+        $this->invoicesManager = $invoicesManager;
+        $this->companyManager = $companyManager;
+        $this->database = $database;
     }
 
     /**
@@ -49,10 +68,22 @@ final class ModuleAdminPresenter extends BasePresenter
     /**
      * AJAX action pro načítání dat z modulů
      */
-    public function handleModuleData(string $moduleId, string $action): void
+    public function handleModuleData(): void
     {
         try {
+            // Čteme parametry přímo z HTTP požadavku
+            $moduleId = $this->getHttpRequest()->getQuery('moduleId');
+            $action = $this->getHttpRequest()->getQuery('action') ?: 'getAllData';
+            
             $this->logger->log("AJAX volání pro modul: $moduleId, action: $action", ILogger::INFO);
+
+            if (!$moduleId) {
+                $this->sendJson([
+                    'success' => false,
+                    'error' => 'Nebyl zadán moduleId'
+                ]);
+                return;
+            }
 
             // Kontrola, zda je modul aktivní
             $activeModules = $this->moduleManager->getActiveModules();
@@ -64,40 +95,16 @@ final class ModuleAdminPresenter extends BasePresenter
                 return;
             }
 
-            // Načtení instance modulu
-            $modulePath = dirname(__DIR__, 2) . '/Modules/' . $moduleId;
-            $moduleFile = $modulePath . '/Module.php';
-
-            if (!file_exists($moduleFile)) {
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Soubor modulu nebyl nalezen'
-                ]);
-                return;
-            }
-
-            require_once $moduleFile;
-            $moduleClassName = 'Modules\\' . ucfirst($moduleId) . '\\Module';
-
-            if (!class_exists($moduleClassName)) {
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Třída modulu nebyla nalezena'
-                ]);
-                return;
-            }
-
-            $moduleInstance = new $moduleClassName();
-
-            // Zde budeme volat specifické akce podle modulu
-            $result = $this->processModuleAction($moduleInstance, $moduleId, $action);
+            // Zpracování podle modulu
+            $result = $this->processModuleAction($moduleId, $action);
 
             $this->sendJson([
                 'success' => true,
                 'data' => $result
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->log("Chyba při AJAX volání modulu: " . $e->getMessage(), ILogger::ERROR);
+            $this->logger->log("Stack trace: " . $e->getTraceAsString(), ILogger::ERROR);
             $this->sendJson([
                 'success' => false,
                 'error' => 'Chyba při načítání dat: ' . $e->getMessage()
@@ -108,11 +115,11 @@ final class ModuleAdminPresenter extends BasePresenter
     /**
      * Volá specifickou akci na modulu
      */
-    private function processModuleAction($moduleInstance, string $moduleId, string $action)
+    private function processModuleAction(string $moduleId, string $action)
     {
         switch ($moduleId) {
             case 'financial_reports':
-                return $this->processFinancialReportsAction($moduleInstance, $action);
+                return $this->processFinancialReportsAction($action);
 
             default:
                 throw new \Exception("Nepodporovaný modul: $moduleId");
@@ -122,26 +129,52 @@ final class ModuleAdminPresenter extends BasePresenter
     /**
      * Obsluha akcí pro modul Financial Reports
      */
-    private function processFinancialReportsAction($moduleInstance, string $action)
+    private function processFinancialReportsAction(string $action)
     {
-        switch ($action) {
-            case 'getBasicStats':
-                $service = $moduleInstance->getFinancialReportsService();
-                return $service->getBasicStats();
+        try {
+            // Ověříme, že soubor služby existuje
+            $serviceFile = dirname(__DIR__, 2) . '/Modules/financial_reports/FinancialReportsService.php';
+            if (!file_exists($serviceFile)) {
+                throw new \Exception("Soubor služby FinancialReportsService nebyl nalezen: $serviceFile");
+            }
 
-            case 'getVatLimits':
-                $service = $moduleInstance->getFinancialReportsService();
-                return $service->checkVatLimits();
+            // Načteme službu
+            require_once $serviceFile;
+            
+            // Ověříme, že třída existuje
+            if (!class_exists('\Modules\Financial_reports\FinancialReportsService')) {
+                throw new \Exception("Třída FinancialReportsService nebyla nalezena");
+            }
 
-            case 'getAllData':
-                $service = $moduleInstance->getFinancialReportsService();
-                return [
-                    'stats' => $service->getBasicStats(),
-                    'vatLimits' => $service->checkVatLimits()
-                ];
+            // Vytvoříme instanci služby s reálnými závislostmi
+            $service = new \Modules\Financial_reports\FinancialReportsService(
+                $this->invoicesManager,
+                $this->companyManager,
+                $this->database
+            );
 
-            default:
-                throw new \Exception("Nepodporovaná akce: $action");
+            switch ($action) {
+                case 'getBasicStats':
+                    return $service->getBasicStats();
+
+                case 'getVatLimits':
+                    return $service->checkVatLimits();
+
+                case 'getAllData':
+                    $stats = $service->getBasicStats();
+                    $vatLimits = $service->checkVatLimits();
+                    
+                    return [
+                        'stats' => $stats,
+                        'vatLimits' => $vatLimits
+                    ];
+
+                default:
+                    throw new \Exception("Nepodporovaná akce: $action");
+            }
+        } catch (\Throwable $e) {
+            $this->logger->log("Chyba ve FinancialReportsAction: " . $e->getMessage(), ILogger::ERROR);
+            throw $e;
         }
     }
 
@@ -195,9 +228,12 @@ final class ModuleAdminPresenter extends BasePresenter
             $this->template->moduleTemplatePath = $templatePath;
         }
 
-        // Pro financial_reports přidáme správné AJAX URL do šablony
+        // Pro financial_reports přidáme AJAX URL (jen pro kompatibilitu)
         if ($id === 'financial_reports') {
-            $this->template->ajaxUrl = $this->link('moduleData!', ['moduleId' => $id, 'action' => 'getAllData']);
+            $this->template->ajaxUrl = $this->link('moduleData!', [
+                'moduleId' => $id, 
+                'action' => 'getAllData'
+            ]);
             $this->template->moduleId = $id;
         }
     }

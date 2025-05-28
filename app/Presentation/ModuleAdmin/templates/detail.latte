@@ -16,7 +16,7 @@
             <i class="{$moduleInfo['icon']|noescape} me-2"></i>
             {$moduleInfo['name']}
         </div>
-        <div class="card-body">
+        <div class="card-body" {if isset($ajaxUrl)}data-ajax-url="{$ajaxUrl}"{/if}>
             {if isset($moduleTemplatePath)}
                 {include $moduleTemplatePath}
             {else}
@@ -44,8 +44,16 @@
 
 {if isset($ajaxUrl)}
     <script>
-        // Předání AJAX URL do JavaScriptu
-        window.FINANCIAL_REPORTS_AJAX_URL = {$ajaxUrl|datastream};
+        // Načtení AJAX URL z data atributu
+        const cardBody = document.querySelector('.card-body[data-ajax-url]');
+        if (cardBody) {
+            window.FINANCIAL_REPORTS_AJAX_URL = cardBody.getAttribute('data-ajax-url');
+            console.log('🔗 AJAX URL nastaveno z data atributu:', window.FINANCIAL_REPORTS_AJAX_URL);
+            console.log('🔍 Typ URL:', typeof window.FINANCIAL_REPORTS_AJAX_URL);
+            console.log('🌐 Current URL:', window.location.href);
+        } else {
+            console.error('❌ Card body s data-ajax-url nebyl nalezen');
+        }
     </script>
 {/if}
 {/block}

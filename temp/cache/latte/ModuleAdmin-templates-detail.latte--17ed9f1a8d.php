@@ -74,7 +74,13 @@ final class Template_17ed9f1a8d extends Latte\Runtime\Template
 		echo LR\Filters::escapeHtmlText($moduleInfo['name']) /* line 17 */;
 		echo '
         </div>
-        <div class="card-body">
+        <div class="card-body" ';
+		if (isset($ajaxUrl)) /* line 19 */ {
+			echo 'data-ajax-url="';
+			echo LR\Filters::escapeHtmlAttr($ajaxUrl) /* line 19 */;
+			echo '"';
+		}
+		echo '>
 ';
 		if (isset($moduleTemplatePath)) /* line 20 */ {
 			$this->createTemplate($moduleTemplatePath, $this->params, 'include')->renderToContentType('html') /* line 21 */;
@@ -113,10 +119,16 @@ final class Template_17ed9f1a8d extends Latte\Runtime\Template
 		echo "\n";
 		if (isset($ajaxUrl)) /* line 45 */ {
 			echo '    <script>
-        // Předání AJAX URL do JavaScriptu
-        window.FINANCIAL_REPORTS_AJAX_URL = ';
-			echo LR\Filters::escapeJs(($this->filters->datastream)($ajaxUrl)) /* line 48 */;
-			echo ';
+        // Načtení AJAX URL z data atributu
+        const cardBody = document.querySelector(\'.card-body[data-ajax-url]\');
+        if (cardBody) {
+            window.FINANCIAL_REPORTS_AJAX_URL = cardBody.getAttribute(\'data-ajax-url\');
+            console.log(\'🔗 AJAX URL nastaveno z data atributu:\', window.FINANCIAL_REPORTS_AJAX_URL);
+            console.log(\'🔍 Typ URL:\', typeof window.FINANCIAL_REPORTS_AJAX_URL);
+            console.log(\'🌐 Current URL:\', window.location.href);
+        } else {
+            console.error(\'❌ Card body s data-ajax-url nebyl nalezen\');
+        }
     </script>
 ';
 		}
