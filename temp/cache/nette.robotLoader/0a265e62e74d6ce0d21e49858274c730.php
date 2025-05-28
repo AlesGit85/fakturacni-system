@@ -52,6 +52,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\BaseModule.php',
       1 => 1748331895,
     ),
+    'Modules\\Financial_reports\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\financial_reports\\Module.php',
+      1 => 1748436627,
+    ),
     'App\\Modules\\IModule' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
@@ -146,8 +151,8 @@ return array (
     'App\\Presentation\\Sign\\SignTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 2,
     'App\\Presentation\\Clients\\ClientsTemplate' => 2,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
     'App\\Presentation\\Users\\UsersTemplate' => 3,
   ),

@@ -1,0 +1,155 @@
+/**
+ * Finanční přehledy - CSS styly
+ */
+
+.financial-reports-dashboard {
+    padding: 1rem 0;
+}
+
+.financial-reports-dashboard .card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: all 0.3s ease;
+}
+
+.financial-reports-dashboard .card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.financial-reports-dashboard .card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+}
+
+/* Statistické karty */
+.financial-stat-card {
+    padding: 1.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #f8f9fa;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.financial-stat-card:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+}
+
+.financial-stat-card .stat-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.financial-stat-card .stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 0.25rem;
+}
+
+.financial-stat-card .stat-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* DPH upozornění */
+.vat-warning {
+    border-left: 4px solid #ffc107;
+    background-color: rgba(255, 193, 7, 0.1);
+}
+
+.vat-danger {
+    border-left: 4px solid #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Graf kontejner */
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+/* Filtr panel */
+.filter-panel {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-panel .form-select {
+    border: 1px solid #B1D235;
+    border-radius: 0.5rem;
+}
+
+.filter-panel .form-select:focus {
+    border-color: #95B11F;
+    box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.25);
+}
+
+/* Tabulka faktur */
+.invoices-table .table th {
+    background-color: #B1D235;
+    color: #212529;
+    border: none;
+    font-weight: 600;
+}
+
+.invoices-table .table td {
+    border-color: rgba(177, 210, 53, 0.2);
+    vertical-align: middle;
+}
+
+.invoices-table .status-paid {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.invoices-table .status-unpaid {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.invoices-table .status-overdue {
+    color: #e74c3c;
+    font-weight: 700;
+}
+
+/* Animace pro načítání dat */
+.loading-placeholder {
+    background: linear-gradient(
+        90deg,
+        rgba(177, 210, 53, 0.1) 25%,
+        rgba(177, 210, 53, 0.2) 50%,
+        rgba(177, 210, 53, 0.1) 75%
+    );
+    background-size: 200% 100%;
+    animation: loading 2s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Responzivní úpravy */
+@media (max-width: 768px) {
+    .financial-stat-card {
+        margin-bottom: 1rem;
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+    
+    .filter-panel {
+        text-align: center;
+    }
+}
