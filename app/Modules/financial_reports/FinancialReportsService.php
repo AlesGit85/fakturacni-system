@@ -45,21 +45,70 @@ class FinancialReportsService
         $allInvoices = $this->database->table('invoices')
             ->where('YEAR(issue_date) = ?', $currentYear);
         
-        $totalCount = $allInvoices->count();
-        $paidCount = $allInvoices->where('status', 'paid')->count();
-        $unpaidCount = $allInvoices->where('status != ?', 'paid')->count();
-        $overdueCount = $allInvoices->where('status', 'overdue')->count();
+        // Debug: Zjistíme si všechny faktury pro kontrolu
+        $allInvoicesArray = $allInvoices->fetchAll();
+        $debugInfo = [];
+        foreach ($allInvoicesArray as $invoice) {
+            $debugInfo[] = [
+                'number' => $invoice->number,
+                'status' => $invoice->status,
+                'total' => $invoice->total,
+                'issue_date' => $invoice->issue_date
+            ];
+        }
+        error_log("DEBUG - Všechny faktury pro rok $currentYear: " . json_encode($debugInfo));
+        
+        // Znovu vytvoříme query pro počítání
+        $baseQuery = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ?', $currentYear);
+        
+        $totalCount = $baseQuery->count();
+        
+        // Zaplacené faktury
+        $paidQuery = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ?', $currentYear)
+            ->where('status', 'paid');
+        $paidCount = $paidQuery->count();
+        
+        // Nezaplacené faktury (created + overdue)
+        $unpaidQuery = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ?', $currentYear)
+            ->where('status != ?', 'paid');
+        $unpaidCount = $unpaidQuery->count();
+        
+        // Po splatnosti
+        $overdueQuery = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ?', $currentYear)
+            ->where('status', 'overdue');
+        $overdueCount = $overdueQuery->count();
         
         // Celkový obrat (všechny vystavené faktury)
-        $totalTurnover = $allInvoices->sum('total') ?: 0;
+        $totalTurnoverQuery = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ?', $currentYear);
+        $totalTurnover = 0;
+        foreach ($totalTurnoverQuery as $invoice) {
+            $totalTurnover += (float)$invoice->total;
+        }
         
         // Zaplacené částky
-        $paidAmount = $allInvoices->where('status', 'paid')->sum('total') ?: 0;
+        $paidAmountQuery = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ?', $currentYear)
+            ->where('status', 'paid');
+        $paidAmount = 0;
+        foreach ($paidAmountQuery as $invoice) {
+            $paidAmount += (float)$invoice->total;
+        }
         
         // Nezaplacené částky
-        $unpaidAmount = $allInvoices->where('status != ?', 'paid')->sum('total') ?: 0;
+        $unpaidAmountQuery = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ?', $currentYear)
+            ->where('status != ?', 'paid');
+        $unpaidAmount = 0;
+        foreach ($unpaidAmountQuery as $invoice) {
+            $unpaidAmount += (float)$invoice->total;
+        }
 
-        return [
+        $result = [
             'totalCount' => $totalCount,
             'paidCount' => $paidCount,
             'unpaidCount' => $unpaidCount,
@@ -69,6 +118,10 @@ class FinancialReportsService
             'unpaidAmount' => $unpaidAmount,
             'year' => $currentYear
         ];
+        
+        error_log("DEBUG - Výsledné statistiky: " . json_encode($result));
+        
+        return $result;
     }
 
     /**
@@ -80,13 +133,41 @@ class FinancialReportsService
             ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month);
         
         $totalCount = $invoices->count();
-        $paidCount = $invoices->where('status', 'paid')->count();
-        $unpaidCount = $invoices->where('status != ?', 'paid')->count();
-        $overdueCount = $invoices->where('status', 'overdue')->count();
         
-        $totalTurnover = $invoices->sum('total') ?: 0;
-        $paidAmount = $invoices->where('status', 'paid')->sum('total') ?: 0;
-        $unpaidAmount = $invoices->where('status != ?', 'paid')->sum('total') ?: 0;
+        // Znovu vytvoříme queries pro jednotlivé kategorie
+        $paidCount = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month)
+            ->where('status', 'paid')
+            ->count();
+            
+        $unpaidCount = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month)
+            ->where('status != ?', 'paid')
+            ->count();
+            
+        $overdueCount = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month)
+            ->where('status', 'overdue')
+            ->count();
+        
+        // Ruční sčítání pro jistotu
+        $totalTurnover = 0;
+        $paidAmount = 0;
+        $unpaidAmount = 0;
+        
+        $allMonthInvoices = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month);
+            
+        foreach ($allMonthInvoices as $invoice) {
+            $amount = (float)$invoice->total;
+            $totalTurnover += $amount;
+            
+            if ($invoice->status === 'paid') {
+                $paidAmount += $amount;
+            } else {
+                $unpaidAmount += $amount;
+            }
+        }
 
         return [
             'totalCount' => $totalCount,
@@ -109,10 +190,16 @@ class FinancialReportsService
     {
         $currentYear = date('Y');
         
-        // Celkový obrat za aktuální rok
-        $yearlyTurnover = $this->database->table('invoices')
-            ->where('YEAR(issue_date) = ?', $currentYear)
-            ->sum('total') ?: 0;
+        // Celkový obrat za aktuální rok - ruční sčítání
+        $yearlyTurnover = 0;
+        $yearInvoices = $this->database->table('invoices')
+            ->where('YEAR(issue_date) = ?', $currentYear);
+            
+        foreach ($yearInvoices as $invoice) {
+            $yearlyTurnover += (float)$invoice->total;
+        }
+        
+        error_log("DEBUG - DPH obrat za rok $currentYear: $yearlyTurnover");
 
         $alerts = [];
         
@@ -138,13 +225,17 @@ class FinancialReportsService
             ];
         }
 
+        // Pokrok k dalšímu limitu
+        $nextLimit = $yearlyTurnover < 2000000 ? 2000000 : 2536500;
+        $progressToNextLimit = $yearlyTurnover < 2000000 
+            ? ($yearlyTurnover / 2000000) * 100 
+            : (($yearlyTurnover - 2000000) / 536500) * 100;
+
         return [
             'currentTurnover' => $yearlyTurnover,
             'alerts' => $alerts,
-            'nextLimit' => $yearlyTurnover < 2000000 ? 2000000 : 2536500,
-            'progressToNextLimit' => $yearlyTurnover < 2000000 
-                ? ($yearlyTurnover / 2000000) * 100 
-                : (($yearlyTurnover - 2000000) / 536500) * 100
+            'nextLimit' => $nextLimit,
+            'progressToNextLimit' => $progressToNextLimit
         ];
     }
 
@@ -156,10 +247,15 @@ class FinancialReportsService
         $monthlyData = [];
         
         for ($month = 1; $month <= 12; $month++) {
-            $monthlyIncome = $this->database->table('invoices')
+            $monthlyIncome = 0;
+            
+            $monthInvoices = $this->database->table('invoices')
                 ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month)
-                ->where('status', 'paid')
-                ->sum('total') ?: 0;
+                ->where('status', 'paid');
+                
+            foreach ($monthInvoices as $invoice) {
+                $monthlyIncome += (float)$invoice->total;
+            }
             
             $monthlyData[] = [
                 'month' => $month,

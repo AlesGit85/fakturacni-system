@@ -71,13 +71,16 @@ final class ModuleAdminPresenter extends BasePresenter
     public function handleModuleData(): void
     {
         try {
+            $this->logger->log("=== ZAČÁTEK AJAX VOLÁNÍ ===", ILogger::INFO);
+            
             // Čteme parametry přímo z HTTP požadavku
             $moduleId = $this->getHttpRequest()->getQuery('moduleId');
             $action = $this->getHttpRequest()->getQuery('action') ?: 'getAllData';
             
-            $this->logger->log("AJAX volání pro modul: $moduleId, action: $action", ILogger::INFO);
+            $this->logger->log("AJAX parametry - moduleId: '$moduleId', action: '$action'", ILogger::INFO);
 
             if (!$moduleId) {
+                $this->logger->log("CHYBA: Nebyl zadán moduleId", ILogger::ERROR);
                 $this->sendJson([
                     'success' => false,
                     'error' => 'Nebyl zadán moduleId'
@@ -86,8 +89,12 @@ final class ModuleAdminPresenter extends BasePresenter
             }
 
             // Kontrola, zda je modul aktivní
+            $this->logger->log("Kontroluji aktivní moduly...", ILogger::INFO);
             $activeModules = $this->moduleManager->getActiveModules();
+            $this->logger->log("Aktivní moduly: " . implode(', ', array_keys($activeModules)), ILogger::INFO);
+            
             if (!isset($activeModules[$moduleId])) {
+                $this->logger->log("CHYBA: Modul '$moduleId' není aktivní nebo neexistuje", ILogger::ERROR);
                 $this->sendJson([
                     'success' => false,
                     'error' => 'Modul není aktivní nebo neexistuje'
@@ -95,16 +102,29 @@ final class ModuleAdminPresenter extends BasePresenter
                 return;
             }
 
+            $this->logger->log("Modul '$moduleId' je aktivní, zpracovávám akci '$action'", ILogger::INFO);
+
             // Zpracování podle modulu
             $result = $this->processModuleAction($moduleId, $action);
 
+            $this->logger->log("Akce úspěšně zpracována, odesílám výsledek", ILogger::INFO);
             $this->sendJson([
                 'success' => true,
                 'data' => $result
             ]);
+            
+        } catch (Nette\Application\AbortException $e) {
+            // AbortException je normální ukončení po sendJson() - nelogujeme jako chybu
+            $this->logger->log("AJAX volání úspěšně ukončeno (AbortException je normální)", ILogger::INFO);
+            throw $e; // Necháme ji projít, je to očekávané chování
+            
         } catch (\Throwable $e) {
-            $this->logger->log("Chyba při AJAX volání modulu: " . $e->getMessage(), ILogger::ERROR);
+            $this->logger->log("=== SKUTEČNÁ CHYBA V AJAX VOLÁNÍ ===", ILogger::ERROR);
+            $this->logger->log("Exception: " . get_class($e), ILogger::ERROR);
+            $this->logger->log("Message: " . $e->getMessage(), ILogger::ERROR);
+            $this->logger->log("File: " . $e->getFile() . " (line " . $e->getLine() . ")", ILogger::ERROR);
             $this->logger->log("Stack trace: " . $e->getTraceAsString(), ILogger::ERROR);
+            
             $this->sendJson([
                 'success' => false,
                 'error' => 'Chyba při načítání dat: ' . $e->getMessage()
@@ -117,11 +137,15 @@ final class ModuleAdminPresenter extends BasePresenter
      */
     private function processModuleAction(string $moduleId, string $action)
     {
+        $this->logger->log("processModuleAction: moduleId='$moduleId', action='$action'", ILogger::INFO);
+        
         switch ($moduleId) {
             case 'financial_reports':
+                $this->logger->log("Volám processFinancialReportsAction", ILogger::INFO);
                 return $this->processFinancialReportsAction($action);
 
             default:
+                $this->logger->log("CHYBA: Nepodporovaný modul: $moduleId", ILogger::ERROR);
                 throw new \Exception("Nepodporovaný modul: $moduleId");
         }
     }
@@ -132,49 +156,87 @@ final class ModuleAdminPresenter extends BasePresenter
     private function processFinancialReportsAction(string $action)
     {
         try {
+            $this->logger->log("=== FINANCIAL REPORTS ACTION START ===", ILogger::INFO);
+            $this->logger->log("Action: $action", ILogger::INFO);
+            
             // Ověříme, že soubor služby existuje
             $serviceFile = dirname(__DIR__, 2) . '/Modules/financial_reports/FinancialReportsService.php';
+            $this->logger->log("Hledám službu na cestě: $serviceFile", ILogger::INFO);
+            
             if (!file_exists($serviceFile)) {
+                $this->logger->log("CHYBA: Soubor služby neexistuje: $serviceFile", ILogger::ERROR);
                 throw new \Exception("Soubor služby FinancialReportsService nebyl nalezen: $serviceFile");
             }
+            
+            $this->logger->log("Soubor služby nalezen, načítám...", ILogger::INFO);
 
             // Načteme službu
             require_once $serviceFile;
             
             // Ověříme, že třída existuje
-            if (!class_exists('\Modules\Financial_reports\FinancialReportsService')) {
+            $className = '\Modules\Financial_reports\FinancialReportsService';
+            $this->logger->log("Kontroluji existenci třídy: $className", ILogger::INFO);
+            
+            if (!class_exists($className)) {
+                $this->logger->log("CHYBA: Třída neexistuje: $className", ILogger::ERROR);
                 throw new \Exception("Třída FinancialReportsService nebyla nalezena");
             }
+            
+            $this->logger->log("Třída nalezena, vytvářím instanci...", ILogger::INFO);
 
             // Vytvoříme instanci služby s reálnými závislostmi
+            $this->logger->log("Injektuji závislosti - InvoicesManager, CompanyManager, Database", ILogger::INFO);
             $service = new \Modules\Financial_reports\FinancialReportsService(
                 $this->invoicesManager,
                 $this->companyManager,
                 $this->database
             );
+            
+            $this->logger->log("Instance služby vytvořena úspěšně", ILogger::INFO);
 
             switch ($action) {
                 case 'getBasicStats':
-                    return $service->getBasicStats();
+                    $this->logger->log("Volám getBasicStats", ILogger::INFO);
+                    $result = $service->getBasicStats();
+                    $this->logger->log("getBasicStats výsledek: " . json_encode($result), ILogger::INFO);
+                    return $result;
 
                 case 'getVatLimits':
-                    return $service->checkVatLimits();
+                    $this->logger->log("Volám getVatLimits", ILogger::INFO);
+                    $result = $service->checkVatLimits();
+                    $this->logger->log("getVatLimits výsledek: " . json_encode($result), ILogger::INFO);
+                    return $result;
 
                 case 'getAllData':
-                    $stats = $service->getBasicStats();
-                    $vatLimits = $service->checkVatLimits();
+                    $this->logger->log("Volám getAllData (getBasicStats + getVatLimits)", ILogger::INFO);
                     
-                    return [
+                    $this->logger->log("Načítám základní statistiky...", ILogger::INFO);
+                    $stats = $service->getBasicStats();
+                    $this->logger->log("Základní statistiky: " . json_encode($stats), ILogger::INFO);
+                    
+                    $this->logger->log("Načítám DPH limity...", ILogger::INFO);
+                    $vatLimits = $service->checkVatLimits();
+                    $this->logger->log("DPH limity: " . json_encode($vatLimits), ILogger::INFO);
+                    
+                    $result = [
                         'stats' => $stats,
                         'vatLimits' => $vatLimits
                     ];
+                    
+                    $this->logger->log("getAllData kompletní výsledek: " . json_encode($result), ILogger::INFO);
+                    return $result;
 
                 default:
+                    $this->logger->log("CHYBA: Nepodporovaná akce: $action", ILogger::ERROR);
                     throw new \Exception("Nepodporovaná akce: $action");
             }
+            
         } catch (\Throwable $e) {
-            $this->logger->log("Chyba ve FinancialReportsAction: " . $e->getMessage(), ILogger::ERROR);
-            throw $e;
+            $this->logger->log("=== CHYBA VE FINANCIAL REPORTS ACTION ===", ILogger::ERROR);
+            $this->logger->log("Exception: " . get_class($e), ILogger::ERROR);
+            $this->logger->log("Message: " . $e->getMessage(), ILogger::ERROR);
+            $this->logger->log("File: " . $e->getFile() . " (line " . $e->getLine() . ")", ILogger::ERROR);
+            throw $e; // Předáme výjimku výše
         }
     }
 

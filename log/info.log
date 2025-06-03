@@ -1241,3 +1241,127 @@
 [2025-05-28 20-51-25] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
 [2025-05-28 20-51-29] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?moduleId=financial_reports&action=getAllData&do=moduleData 
 [2025-05-28 20-51-29] AJAX volání pro modul: financial_reports, action: getAllData  @  http://localhost:8000/moduleadmin/detail/financial_reports?moduleId=financial_reports&action=getAllData&do=moduleData 
+[2025-06-03 08-51-25] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-03 08-51-26] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=7aw2r&_fid=2ue9 
+[2025-06-03 08-51-30] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-03 08-51-30] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=x46h 
+[2025-06-03 08-51-35] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 08-51-41] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?moduleId=financial_reports&action=getAllData&do=moduleData 
+[2025-06-03 08-51-41] AJAX volání pro modul: financial_reports, action: getAllData  @  http://localhost:8000/moduleadmin/detail/financial_reports?moduleId=financial_reports&action=getAllData&do=moduleData 
+[2025-06-03 09-04-12] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 09-04-12] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 09-04-12] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 09-04-12] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 09-04-12] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 09-04-12] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 09-04-12] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 09-04-13] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 09-04-13] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 09-04-18] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 09-04-18] Assets modulu 'financial_reports' byly zkopírovány do www adresáře  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 09-04-23] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-04-23] AJAX volání pro modul: financial_reports, action: getAllData  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-05-10] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 09-05-12] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-05-12] AJAX volání pro modul: financial_reports, action: getAllData  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-56] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 09-07-58] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] === ZAČÁTEK AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] AJAX parametry - moduleId: 'financial_reports', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Aktivní moduly: financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Modul 'financial_reports' je aktivní, zpracovávám akci 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] processModuleAction: moduleId='financial_reports', action='getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Volám processFinancialReportsAction  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] === FINANCIAL REPORTS ACTION START ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Action: getAllData  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Hledám službu na cestě: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/FinancialReportsService.php  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Soubor služby nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Kontroluji existenci třídy: \Modules\Financial_reports\FinancialReportsService  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Injektuji závislosti - InvoicesManager, CompanyManager, Database  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Instance služby vytvořena úspěšně  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Volám getAllData (getBasicStats + getVatLimits)  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Načítám základní statistiky...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Základní statistiky: {"totalCount":3,"paidCount":1,"unpaidCount":0,"overdueCount":0,"totalTurnover":0,"paidAmount":0,"unpaidAmount":0,"year":"2025"}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Načítám DPH limity...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] DPH limity: {"currentTurnover":60886,"alerts":[],"nextLimit":2000000,"progressToNextLimit":3.0443000000000002}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] getAllData kompletní výsledek: {"stats":{"totalCount":3,"paidCount":1,"unpaidCount":0,"overdueCount":0,"totalTurnover":0,"paidAmount":0,"unpaidAmount":0,"year":"2025"},"vatLimits":{"currentTurnover":60886,"alerts":[],"nextLimit":2000000,"progressToNextLimit":3.0443000000000002}}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-07-58] Akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-16] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 09-12-18] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] === ZAČÁTEK AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] AJAX parametry - moduleId: 'financial_reports', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Aktivní moduly: financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Modul 'financial_reports' je aktivní, zpracovávám akci 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] processModuleAction: moduleId='financial_reports', action='getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Volám processFinancialReportsAction  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] === FINANCIAL REPORTS ACTION START ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Action: getAllData  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Hledám službu na cestě: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/FinancialReportsService.php  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Soubor služby nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Kontroluji existenci třídy: \Modules\Financial_reports\FinancialReportsService  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Injektuji závislosti - InvoicesManager, CompanyManager, Database  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Instance služby vytvořena úspěšně  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Volám getAllData (getBasicStats + getVatLimits)  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Načítám základní statistiky...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Základní statistiky: {"totalCount":3,"paidCount":1,"unpaidCount":0,"overdueCount":0,"totalTurnover":0,"paidAmount":0,"unpaidAmount":0,"year":"2025"}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Načítám DPH limity...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] DPH limity: {"currentTurnover":60886,"alerts":[],"nextLimit":2000000,"progressToNextLimit":3.0443000000000002}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] getAllData kompletní výsledek: {"stats":{"totalCount":3,"paidCount":1,"unpaidCount":0,"overdueCount":0,"totalTurnover":0,"paidAmount":0,"unpaidAmount":0,"year":"2025"},"vatLimits":{"currentTurnover":60886,"alerts":[],"nextLimit":2000000,"progressToNextLimit":3.0443000000000002}}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] Akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-18] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-12-35] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-03 09-12-45] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 09-12-48] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-03 09-13-04] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] === ZAČÁTEK AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] AJAX parametry - moduleId: 'financial_reports', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Aktivní moduly: financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Modul 'financial_reports' je aktivní, zpracovávám akci 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] processModuleAction: moduleId='financial_reports', action='getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Volám processFinancialReportsAction  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] === FINANCIAL REPORTS ACTION START ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Action: getAllData  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Hledám službu na cestě: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/FinancialReportsService.php  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Soubor služby nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Kontroluji existenci třídy: \Modules\Financial_reports\FinancialReportsService  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Injektuji závislosti - InvoicesManager, CompanyManager, Database  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Instance služby vytvořena úspěšně  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Volám getAllData (getBasicStats + getVatLimits)  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Načítám základní statistiky...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Základní statistiky: {"totalCount":3,"paidCount":1,"unpaidCount":0,"overdueCount":0,"totalTurnover":0,"paidAmount":0,"unpaidAmount":0,"year":"2025"}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Načítám DPH limity...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] DPH limity: {"currentTurnover":60886,"alerts":[],"nextLimit":2000000,"progressToNextLimit":3.0443000000000002}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] getAllData kompletní výsledek: {"stats":{"totalCount":3,"paidCount":1,"unpaidCount":0,"overdueCount":0,"totalTurnover":0,"paidAmount":0,"unpaidAmount":0,"year":"2025"},"vatLimits":{"currentTurnover":60886,"alerts":[],"nextLimit":2000000,"progressToNextLimit":3.0443000000000002}}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] Akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-13-04] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-18] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 09-19-20] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] === ZAČÁTEK AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] AJAX parametry - moduleId: 'financial_reports', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Aktivní moduly: financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Modul 'financial_reports' je aktivní, zpracovávám akci 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] processModuleAction: moduleId='financial_reports', action='getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Volám processFinancialReportsAction  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] === FINANCIAL REPORTS ACTION START ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Action: getAllData  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Hledám službu na cestě: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/FinancialReportsService.php  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Soubor služby nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Kontroluji existenci třídy: \Modules\Financial_reports\FinancialReportsService  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Injektuji závislosti - InvoicesManager, CompanyManager, Database  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Instance služby vytvořena úspěšně  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Volám getAllData (getBasicStats + getVatLimits)  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Načítám základní statistiky...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Základní statistiky: {"totalCount":3,"paidCount":1,"unpaidCount":2,"overdueCount":1,"totalTurnover":60886,"paidAmount":6636,"unpaidAmount":54250,"year":"2025"}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Načítám DPH limity...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] DPH limity: {"currentTurnover":60886,"alerts":[],"nextLimit":2000000,"progressToNextLimit":3.0443000000000002}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] getAllData kompletní výsledek: {"stats":{"totalCount":3,"paidCount":1,"unpaidCount":2,"overdueCount":1,"totalTurnover":60886,"paidAmount":6636,"unpaidAmount":54250,"year":"2025"},"vatLimits":{"currentTurnover":60886,"alerts":[],"nextLimit":2000000,"progressToNextLimit":3.0443000000000002}}  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] Akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 09-19-20] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 

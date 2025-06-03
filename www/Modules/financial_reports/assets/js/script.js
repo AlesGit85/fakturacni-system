@@ -63,41 +63,17 @@ function loadRealFinancialData() {
     
     console.log('⏳ Loading stav nastaven, spouštím AJAX volání...');
     
-    // Vytvoríme správnou URL ručně
-    const currentUrl = window.location.href;
-    const baseUrl = currentUrl.split('?')[0]; // odstraníme query parametry
-    const ajaxUrl = baseUrl + '?moduleId=financial_reports&action=getAllData&do=moduleData';
+    // Vytvoříme správnou URL pro Nette signál
+    // Zjistíme base URL bez query parametrů
+    const currentLocation = window.location;
+    const baseUrl = currentLocation.protocol + '//' + currentLocation.host + currentLocation.pathname;
     
-    console.log('🔗 Původní URL z window:', window.FINANCIAL_REPORTS_AJAX_URL);
+    // Pro ModuleAdmin presenter vytvoříme URL se signálem
+    const ajaxUrl = baseUrl + '?do=moduleData&moduleId=financial_reports&action=getAllData';
+    
+    console.log('🔗 Current location:', currentLocation.href);
+    console.log('🔧 Base URL:', baseUrl);
     console.log('🔧 Vytvořená AJAX URL:', ajaxUrl);
-    console.log('🔍 Typ URL:', typeof ajaxUrl);
-    
-    if (!ajaxUrl) {
-        console.error('❌ AJAX URL se nepodařilo sestavit!');
-        // Fallback na mock data
-        const mockData = generateMockFinancialData();
-        updateFinancialStats(mockData.stats);
-        updateVatStatus(mockData.vatLimits);
-        
-        if (dataStatus) {
-            dataStatus.className = 'alert alert-warning mt-3';
-            dataStatus.style.display = 'block';
-            dataStatus.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2"></i>AJAX URL se nepodařilo sestavit - použita mock data';
-        }
-        
-        // Obnovení tlačítka
-        if (loadButton) {
-            loadButton.disabled = false;
-            loadButton.innerHTML = '<i class="bi bi-arrow-repeat"></i> Načíst skutečná data z databáze';
-        }
-        
-        if (loadingIndicator) {
-            loadingIndicator.style.display = 'none';
-        }
-        return;
-    }
-    
-    console.log('📡 AJAX URL pro volání:', ajaxUrl);
     
     // Skutečné AJAX volání
     fetch(ajaxUrl, {
@@ -118,18 +94,37 @@ function loadRealFinancialData() {
         
         if (!response.ok) {
             return response.text().then(text => {
-                console.error('❌ Server error response:', text);
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                console.error('❌ Server error response (first 1000 chars):', text.substring(0, 1000));
+                throw new Error(`HTTP ${response.status}: ${response.statusText}\n\nServer response: ${text.substring(0, 200)}`);
             });
         }
         
         return response.text().then(text => {
-            console.log('📄 Raw response text:', text.substring(0, 500) + (text.length > 500 ? '...' : ''));
+            console.log('📄 Raw response text (first 500 chars):', text.substring(0, 500) + (text.length > 500 ? '...' : ''));
+            
+            // Zkusíme najít JSON v odpovědi (může být obalený v HTML)
+            let jsonText = text.trim();
+            
+            // Pokud odpověď začína HTML, zkusíme najít JSON
+            if (jsonText.startsWith('<!DOCTYPE') || jsonText.startsWith('<html')) {
+                console.log('📄 Detekována HTML odpověď, hledám JSON...');
+                
+                // Zkusíme najít JSON někde v HTML (možná je v script tagu nebo podobně)
+                const jsonMatch = jsonText.match(/\{.*\}/s);
+                if (jsonMatch) {
+                    jsonText = jsonMatch[0];
+                    console.log('📄 Nalezen JSON v HTML:', jsonText.substring(0, 200));
+                } else {
+                    throw new Error('Server vrátil HTML místo JSON. Možná chyba v routingu nebo v presenteru.');
+                }
+            }
+            
             try {
-                return JSON.parse(text);
+                return JSON.parse(jsonText);
             } catch (e) {
                 console.error('❌ JSON parse error:', e);
-                throw new Error('Server nevrátil validní JSON: ' + text.substring(0, 100));
+                console.error('❌ Pokusil jsem se parsovat:', jsonText.substring(0, 200));
+                throw new Error('Server nevrátil validní JSON. Možná chyba na serveru nebo v routingu.');
             }
         });
     })
@@ -140,8 +135,13 @@ function loadRealFinancialData() {
             console.log('✅ Data úspěšně načtena z databáze');
             
             // Aktualizace UI s reálnými daty
-            updateFinancialStats(data.data.stats);
-            updateVatStatus(data.data.vatLimits);
+            if (data.data && data.data.stats && data.data.vatLimits) {
+                updateFinancialStats(data.data.stats);
+                updateVatStatus(data.data.vatLimits);
+            } else {
+                console.error('❌ Neočekávaná struktura dat:', data);
+                throw new Error('Server vrátil data v neočekávané struktuře');
+            }
             
             // Zobrazení úspěchu
             if (dataStatus) {
@@ -162,11 +162,14 @@ function loadRealFinancialData() {
     .catch(error => {
         console.error('❌ AJAX chyba:', error);
         
-        // Zobrazení chyby
+        // Zobrazení chyby s více detaily
         if (dataStatus) {
             dataStatus.className = 'alert alert-danger mt-3';
             dataStatus.style.display = 'block';
-            dataStatus.innerHTML = `<i class="bi bi-x-circle-fill me-2"></i>Chyba při načítání dat: ${error.message}`;
+            dataStatus.innerHTML = `<i class="bi bi-x-circle-fill me-2"></i>
+                <strong>Chyba při načítání dat:</strong><br>
+                ${error.message}<br><br>
+                <small>Pro více informací otevřete Developer Tools (F12) a podívejte se do Console záložky.</small>`;
         }
         
         if (loadButton) {
