@@ -50,17 +50,22 @@ return array (
     'App\\Modules\\BaseModule' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\BaseModule.php',
-      1 => 1748331895,
+      1 => 1748950452,
+    ),
+    'Modules\\Financial_reports\\FinancialReportsService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\financial_reports\\FinancialReportsService.php',
+      1 => 1748942353,
     ),
     'Modules\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\financial_reports\\Module.php',
-      1 => 1748437277,
+      1 => 1748950824,
     ),
     'App\\Modules\\IModule' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
-      1 => 1748331866,
+      1 => 1748950316,
     ),
     'Modules\\TestModule\\Module' => 
     array (
@@ -110,7 +115,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1748465007,
+      1 => 1748950956,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -136,11 +141,6 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityLogger.php',
       1 => 1747984094,
-    ),
-    'Modules\\Financial_reports\\FinancialReportsService' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\financial_reports\\FinancialReportsService.php',
-      1 => 1748942353,
     ),
   ),
   1 => 

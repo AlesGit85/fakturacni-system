@@ -66,12 +66,12 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * AJAX action pro načítání dat z modulů
+     * AJAX action pro načítání dat z modulů - NOVÁ OBECNÁ IMPLEMENTACE
      */
     public function handleModuleData(): void
     {
         try {
-            $this->logger->log("=== ZAČÁTEK AJAX VOLÁNÍ ===", ILogger::INFO);
+            $this->logger->log("=== ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===", ILogger::INFO);
             
             // Čteme parametry přímo z HTTP požadavku
             $moduleId = $this->getHttpRequest()->getQuery('moduleId');
@@ -102,12 +102,34 @@ final class ModuleAdminPresenter extends BasePresenter
                 return;
             }
 
-            $this->logger->log("Modul '$moduleId' je aktivní, zpracovávám akci '$action'", ILogger::INFO);
+            $this->logger->log("Modul '$moduleId' je aktivní, načítám instanci modulu", ILogger::INFO);
 
-            // Zpracování podle modulu
-            $result = $this->processModuleAction($moduleId, $action);
+            // NOVÁ OBECNÁ LOGIKA: Vytvoření instance modulu
+            $moduleInstance = $this->createModuleInstance($moduleId);
+            
+            if (!$moduleInstance) {
+                $this->logger->log("CHYBA: Nepodařilo se vytvořit instanci modulu '$moduleId'", ILogger::ERROR);
+                $this->sendJson([
+                    'success' => false,
+                    'error' => 'Nepodařilo se načíst modul'
+                ]);
+                return;
+            }
 
-            $this->logger->log("Akce úspěšně zpracována, odesílám výsledek", ILogger::INFO);
+            $this->logger->log("Instance modulu '$moduleId' úspěšně vytvořena", ILogger::INFO);
+
+            // Příprava závislostí pro modul
+            $dependencies = $this->prepareDependencies();
+            
+            // Příprava parametrů z HTTP požadavku
+            $parameters = $this->prepareParameters();
+
+            $this->logger->log("Volám handleAjaxRequest na modulu '$moduleId' s akcí '$action'", ILogger::INFO);
+
+            // Zavolání AJAX metody na modulu
+            $result = $moduleInstance->handleAjaxRequest($action, $parameters, $dependencies);
+
+            $this->logger->log("AJAX akce úspěšně zpracována, odesílám výsledek", ILogger::INFO);
             $this->sendJson([
                 'success' => true,
                 'data' => $result
@@ -119,7 +141,7 @@ final class ModuleAdminPresenter extends BasePresenter
             throw $e; // Necháme ji projít, je to očekávané chování
             
         } catch (\Throwable $e) {
-            $this->logger->log("=== SKUTEČNÁ CHYBA V AJAX VOLÁNÍ ===", ILogger::ERROR);
+            $this->logger->log("=== SKUTEČNÁ CHYBA V OBECNÉM AJAX VOLÁNÍ ===", ILogger::ERROR);
             $this->logger->log("Exception: " . get_class($e), ILogger::ERROR);
             $this->logger->log("Message: " . $e->getMessage(), ILogger::ERROR);
             $this->logger->log("File: " . $e->getFile() . " (line " . $e->getLine() . ")", ILogger::ERROR);
@@ -133,111 +155,96 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * Volá specifickou akci na modulu
+     * NOVÁ METODA: Vytvoří instanci modulu
      */
-    private function processModuleAction(string $moduleId, string $action)
-    {
-        $this->logger->log("processModuleAction: moduleId='$moduleId', action='$action'", ILogger::INFO);
-        
-        switch ($moduleId) {
-            case 'financial_reports':
-                $this->logger->log("Volám processFinancialReportsAction", ILogger::INFO);
-                return $this->processFinancialReportsAction($action);
-
-            default:
-                $this->logger->log("CHYBA: Nepodporovaný modul: $moduleId", ILogger::ERROR);
-                throw new \Exception("Nepodporovaný modul: $moduleId");
-        }
-    }
-
-    /**
-     * Obsluha akcí pro modul Financial Reports
-     */
-    private function processFinancialReportsAction(string $action)
+    private function createModuleInstance(string $moduleId): ?\App\Modules\IModule
     {
         try {
-            $this->logger->log("=== FINANCIAL REPORTS ACTION START ===", ILogger::INFO);
-            $this->logger->log("Action: $action", ILogger::INFO);
+            $this->logger->log("Vytvářím instanci modulu '$moduleId'", ILogger::INFO);
             
-            // Ověříme, že soubor služby existuje
-            $serviceFile = dirname(__DIR__, 2) . '/Modules/financial_reports/FinancialReportsService.php';
-            $this->logger->log("Hledám službu na cestě: $serviceFile", ILogger::INFO);
+            // Cesta k hlavnímu souboru modulu
+            $modulePath = dirname(__DIR__, 2) . '/Modules/' . $moduleId;
+            $moduleFile = $modulePath . '/Module.php';
             
-            if (!file_exists($serviceFile)) {
-                $this->logger->log("CHYBA: Soubor služby neexistuje: $serviceFile", ILogger::ERROR);
-                throw new \Exception("Soubor služby FinancialReportsService nebyl nalezen: $serviceFile");
+            $this->logger->log("Hledám soubor modulu: $moduleFile", ILogger::INFO);
+            
+            if (!file_exists($moduleFile)) {
+                $this->logger->log("CHYBA: Soubor modulu neexistuje: $moduleFile", ILogger::ERROR);
+                return null;
             }
             
-            $this->logger->log("Soubor služby nalezen, načítám...", ILogger::INFO);
+            $this->logger->log("Soubor modulu nalezen, načítám...", ILogger::INFO);
 
-            // Načteme službu
-            require_once $serviceFile;
+            // Načtení souboru modulu
+            require_once $moduleFile;
             
-            // Ověříme, že třída existuje
-            $className = '\Modules\Financial_reports\FinancialReportsService';
-            $this->logger->log("Kontroluji existenci třídy: $className", ILogger::INFO);
+            // Vytvoření názvu třídy (namespace podle ID modulu)
+            $moduleClassName = 'Modules\\' . ucfirst($moduleId) . '\\Module';
             
-            if (!class_exists($className)) {
-                $this->logger->log("CHYBA: Třída neexistuje: $className", ILogger::ERROR);
-                throw new \Exception("Třída FinancialReportsService nebyla nalezena");
+            $this->logger->log("Kontroluji existenci třídy: $moduleClassName", ILogger::INFO);
+            
+            if (!class_exists($moduleClassName)) {
+                $this->logger->log("CHYBA: Třída modulu neexistuje: $moduleClassName", ILogger::ERROR);
+                return null;
             }
             
             $this->logger->log("Třída nalezena, vytvářím instanci...", ILogger::INFO);
 
-            // Vytvoříme instanci služby s reálnými závislostmi
-            $this->logger->log("Injektuji závislosti - InvoicesManager, CompanyManager, Database", ILogger::INFO);
-            $service = new \Modules\Financial_reports\FinancialReportsService(
-                $this->invoicesManager,
-                $this->companyManager,
-                $this->database
-            );
+            // Vytvoření instance modulu
+            $moduleInstance = new $moduleClassName();
             
-            $this->logger->log("Instance služby vytvořena úspěšně", ILogger::INFO);
-
-            switch ($action) {
-                case 'getBasicStats':
-                    $this->logger->log("Volám getBasicStats", ILogger::INFO);
-                    $result = $service->getBasicStats();
-                    $this->logger->log("getBasicStats výsledek: " . json_encode($result), ILogger::INFO);
-                    return $result;
-
-                case 'getVatLimits':
-                    $this->logger->log("Volám getVatLimits", ILogger::INFO);
-                    $result = $service->checkVatLimits();
-                    $this->logger->log("getVatLimits výsledek: " . json_encode($result), ILogger::INFO);
-                    return $result;
-
-                case 'getAllData':
-                    $this->logger->log("Volám getAllData (getBasicStats + getVatLimits)", ILogger::INFO);
-                    
-                    $this->logger->log("Načítám základní statistiky...", ILogger::INFO);
-                    $stats = $service->getBasicStats();
-                    $this->logger->log("Základní statistiky: " . json_encode($stats), ILogger::INFO);
-                    
-                    $this->logger->log("Načítám DPH limity...", ILogger::INFO);
-                    $vatLimits = $service->checkVatLimits();
-                    $this->logger->log("DPH limity: " . json_encode($vatLimits), ILogger::INFO);
-                    
-                    $result = [
-                        'stats' => $stats,
-                        'vatLimits' => $vatLimits
-                    ];
-                    
-                    $this->logger->log("getAllData kompletní výsledek: " . json_encode($result), ILogger::INFO);
-                    return $result;
-
-                default:
-                    $this->logger->log("CHYBA: Nepodporovaná akce: $action", ILogger::ERROR);
-                    throw new \Exception("Nepodporovaná akce: $action");
+            if (!$moduleInstance instanceof \App\Modules\IModule) {
+                $this->logger->log("CHYBA: Třída modulu neimplementuje IModule: $moduleClassName", ILogger::ERROR);
+                return null;
             }
             
+            $this->logger->log("Instance modulu '$moduleId' úspěšně vytvořena", ILogger::INFO);
+            return $moduleInstance;
+            
         } catch (\Throwable $e) {
-            $this->logger->log("=== CHYBA VE FINANCIAL REPORTS ACTION ===", ILogger::ERROR);
-            $this->logger->log("Exception: " . get_class($e), ILogger::ERROR);
-            $this->logger->log("Message: " . $e->getMessage(), ILogger::ERROR);
-            $this->logger->log("File: " . $e->getFile() . " (line " . $e->getLine() . ")", ILogger::ERROR);
-            throw $e; // Předáme výjimku výše
+            $this->logger->log("CHYBA při vytváření instance modulu '$moduleId': " . $e->getMessage(), ILogger::ERROR);
+            return null;
         }
+    }
+
+    /**
+     * NOVÁ METODA: Připraví závislosti pro moduly
+     */
+    private function prepareDependencies(): array
+    {
+        $this->logger->log("Připravuji závislosti pro modul", ILogger::INFO);
+        
+        return [
+            $this->invoicesManager,
+            $this->companyManager,
+            $this->database,
+            $this->logger
+        ];
+    }
+
+    /**
+     * NOVÁ METODA: Připraví parametry z HTTP požadavku
+     */
+    private function prepareParameters(): array
+    {
+        $httpRequest = $this->getHttpRequest();
+        
+        // Získáme všechny query parametry kromě základních
+        $parameters = [];
+        foreach ($httpRequest->getQuery() as $key => $value) {
+            if (!in_array($key, ['do', 'moduleId', 'action'])) {
+                $parameters[$key] = $value;
+            }
+        }
+        
+        // Přidáme také POST parametry pokud existují
+        foreach ($httpRequest->getPost() as $key => $value) {
+            $parameters[$key] = $value;
+        }
+        
+        $this->logger->log("Připravené parametry: " . json_encode($parameters), ILogger::INFO);
+        
+        return $parameters;
     }
 
     public function renderDefault(): void
@@ -267,7 +274,7 @@ final class ModuleAdminPresenter extends BasePresenter
         $this->template->moduleInfo = $allModules[$id];
         $this->template->moduleId = $id;
 
-        // NOVÉ: Zkopírování/aktualizace assets při každém zobrazení detailu
+        // Zkopírování/aktualizace assets při každém zobrazení detailu
         $this->updateModuleAssets($id);
 
         // Přidání CSS stylu modulu, pokud existuje
@@ -290,18 +297,16 @@ final class ModuleAdminPresenter extends BasePresenter
             $this->template->moduleTemplatePath = $templatePath;
         }
 
-        // Pro financial_reports přidáme AJAX URL (jen pro kompatibilitu)
-        if ($id === 'financial_reports') {
-            $this->template->ajaxUrl = $this->link('moduleData!', [
-                'moduleId' => $id, 
-                'action' => 'getAllData'
-            ]);
-            $this->template->moduleId = $id;
-        }
+        // OBECNÉ: AJAX URL pro všechny moduly
+        $this->template->ajaxUrl = $this->link('moduleData!', [
+            'moduleId' => $id, 
+            'action' => 'getAllData'
+        ]);
+        $this->template->moduleId = $id;
     }
 
     /**
-     * NOVÁ METODA: Aktualizuje assets modulu - vždy překopíruje nejnovější verzi
+     * Aktualizuje assets modulu - vždy překopíruje nejnovější verzi
      */
     private function updateModuleAssets(string $moduleId): void
     {
@@ -338,7 +343,7 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * NOVÁ METODA: Rekurzivně odstraní adresář a jeho obsah
+     * Rekurzivně odstraní adresář a jeho obsah
      */
     private function removeDirectory(string $dir): void
     {

@@ -1395,3 +1395,62 @@
 [2025-06-03 09-36-18] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
 [2025-06-03 09-36-18] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/assets do: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
 [2025-06-03 09-36-18] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 11-39-42] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-39-42] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=owcma&_fid=ml55 
+[2025-06-03 11-39-43] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-03 11-39-44] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=8eo1 
+[2025-06-03 11-40-51] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-40-51] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-40-51] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-40-51] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-40-51] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-40-51] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-40-51] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-40-51] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-40-51] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-40-53] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 11-40-53] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 11-40-53] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/assets do: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 11-40-53] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 11-43-14] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 11-43-14] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 11-43-14] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/assets do: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 11-43-14] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-03 11-43-17] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] === ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] AJAX parametry - moduleId: 'financial_reports', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Aktivní moduly: financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Modul 'financial_reports' je aktivní, načítám instanci modulu  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Vytvářím instanci modulu 'financial_reports'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Hledám soubor modulu: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/Module.php  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Soubor modulu nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Kontroluji existenci třídy: Modules\Financial_reports\Module  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Instance modulu 'financial_reports' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Instance modulu 'financial_reports' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Připravené parametry: []  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] Volám handleAjaxRequest na modulu 'financial_reports' s akcí 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] AJAX akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-17] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-03 11-43-23] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-43-23] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-43-23] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-43-23] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-43-23] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-43-23] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-43-23] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-43-23] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-43-23] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-03 11-43-48] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/default/test_module?do=toggleModule 
+[2025-06-03 11-43-48] Modul 'Testovací modul' byl deaktivován  @  http://localhost:8000/moduleadmin/default/test_module?do=toggleModule 
+[2025-06-03 11-43-48] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/?_fid=s4wg 
+[2025-06-03 11-43-48] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=s4wg 
+[2025-06-03 11-43-48] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=s4wg 
+[2025-06-03 11-43-48] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=s4wg 
+[2025-06-03 11-43-48] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=s4wg 
+[2025-06-03 11-43-48] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=s4wg 
+[2025-06-03 11-43-48] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=s4wg 
+[2025-06-03 11-43-48] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=s4wg 
+[2025-06-03 11-43-48] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=s4wg 

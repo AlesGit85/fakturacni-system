@@ -5,7 +5,7 @@
     "description": "Z\u00e1kladn\u00ed testovac\u00ed modul pro ov\u011b\u0159en\u00ed funk\u010dnosti syst\u00e9mu modul\u016f",
     "author": "QRdoklad System",
     "icon": "bi bi-star-fill",
-    "active": true,
+    "active": false,
     "requirements": {
         "php": ">=8.0",
         "qrdoklad": ">=1.0.0"
