@@ -267,8 +267,8 @@ final class ModuleAdminPresenter extends BasePresenter
         $this->template->moduleInfo = $allModules[$id];
         $this->template->moduleId = $id;
 
-        // Zkopírování assets do www adresáře, pokud ještě nebyly zkopírovány
-        $this->ensureModuleAssets($id);
+        // NOVÉ: Zkopírování/aktualizace assets při každém zobrazení detailu
+        $this->updateModuleAssets($id);
 
         // Přidání CSS stylu modulu, pokud existuje
         $cssPath = '/Modules/' . $id . '/assets/css/style.css';
@@ -301,25 +301,67 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * Zajistí, že assets modulu jsou zkopírovány do www adresáře
+     * NOVÁ METODA: Aktualizuje assets modulu - vždy překopíruje nejnovější verzi
      */
-    private function ensureModuleAssets(string $moduleId): void
+    private function updateModuleAssets(string $moduleId): void
     {
         $moduleAssetsDir = dirname(__DIR__, 2) . '/Modules/' . $moduleId . '/assets';
         $wwwModuleDir = WWW_DIR . '/Modules/' . $moduleId;
 
-        // Pokud assets existují a ještě nejsou zkopírovány
-        if (is_dir($moduleAssetsDir) && !is_dir($wwwModuleDir)) {
-            // Vytvoření adresáře
+        // Pokud zdrojové assets neexistují, nic neděláme
+        if (!is_dir($moduleAssetsDir)) {
+            $this->logger->log("Assets modulu '$moduleId' neexistují v: $moduleAssetsDir", ILogger::INFO);
+            return;
+        }
+
+        try {
+            // Pokud už www adresář existuje, smažeme ho
+            if (is_dir($wwwModuleDir)) {
+                $this->logger->log("Mažu existující assets modulu '$moduleId' z: $wwwModuleDir", ILogger::INFO);
+                $this->removeDirectory($wwwModuleDir);
+            }
+
+            // Vytvoření základního adresáře
             if (!is_dir(dirname($wwwModuleDir))) {
                 mkdir(dirname($wwwModuleDir), 0755, true);
             }
 
-            // Zkopírování assets
+            // Zkopírování nových assets
+            $this->logger->log("Kopíruji nové assets modulu '$moduleId' z: $moduleAssetsDir do: $wwwModuleDir", ILogger::INFO);
             $this->copyDirectory($moduleAssetsDir, $wwwModuleDir . '/assets');
 
-            $this->logger->log("Assets modulu '$moduleId' byly zkopírovány do www adresáře", ILogger::INFO);
+            $this->logger->log("Assets modulu '$moduleId' byly úspěšně aktualizovány", ILogger::INFO);
+            
+        } catch (\Exception $e) {
+            $this->logger->log("Chyba při aktualizaci assets modulu '$moduleId': " . $e->getMessage(), ILogger::ERROR);
         }
+    }
+
+    /**
+     * NOVÁ METODA: Rekurzivně odstraní adresář a jeho obsah
+     */
+    private function removeDirectory(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        $objects = scandir($dir);
+        foreach ($objects as $object) {
+            if ($object === '.' || $object === '..') {
+                continue;
+            }
+
+            $path = $dir . '/' . $object;
+
+            if (is_dir($path)) {
+                $this->removeDirectory($path);
+            } else {
+                unlink($path);
+            }
+        }
+
+        rmdir($dir);
     }
 
     /**
