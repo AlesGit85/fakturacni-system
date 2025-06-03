@@ -127,4 +127,48 @@ abstract class BaseModule implements IModule
     {
         return [];
     }
+    
+    /**
+     * {@inheritdoc}
+     * 
+     * NOVÁ METODA: Základní implementace zpracování AJAX požadavků
+     * Potomci tuto metodu mohou přepsat pro vlastní logiku
+     */
+    public function handleAjaxRequest(string $action, array $parameters = [], array $dependencies = [])
+    {
+        // Základní implementace - žádné AJAX akce nejsou podporovány
+        throw new \Exception("Modul '{$this->getName()}' nepodporuje AJAX akci: $action");
+    }
+    
+    /**
+     * Pomocná metoda pro získání závislosti z pole dependencies
+     * 
+     * @param array $dependencies Pole závislostí
+     * @param string $className Název třídy kterou hledáme
+     * @return mixed|null Nalezená závislost nebo null
+     */
+    protected function getDependency(array $dependencies, string $className)
+    {
+        foreach ($dependencies as $dependency) {
+            if ($dependency instanceof $className) {
+                return $dependency;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Pomocná metoda pro logování z modulu
+     * 
+     * @param string $message Zpráva k zalogování
+     * @param string $level Úroveň loga (INFO, ERROR, WARNING)
+     */
+    protected function log(string $message, string $level = 'INFO'): void
+    {
+        $moduleId = $this->getId();
+        $logMessage = "[MODULE: $moduleId] $message";
+        
+        // V produkční verzi by zde mohlo být lepší řešení logování
+        error_log("[$level] $logMessage");
+    }
 }

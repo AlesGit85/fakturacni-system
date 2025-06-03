@@ -69,4 +69,15 @@ interface IModule
      * @return array ve formátu [['link' => 'Presenter:action', 'label' => 'Název', 'icon' => 'bi bi-xyz'], ...]
      */
     public function getMenuItems(): array;
+    
+    /**
+     * NOVÁ METODA: Zpracovává AJAX požadavky pro modul
+     * 
+     * @param string $action Název akce (např. 'getAllData', 'getStats')
+     * @param array $parameters Parametry požadavku
+     * @param array $dependencies Závislosti (InvoicesManager, Database, atd.)
+     * @return mixed Výsledek zpracování
+     * @throws \Exception Pokud akce není podporována
+     */
+    public function handleAjaxRequest(string $action, array $parameters = [], array $dependencies = []);
 }
