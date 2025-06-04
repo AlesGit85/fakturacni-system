@@ -84,17 +84,18 @@ final class SignPresenter extends BasePresenter
 
         // Pokud už není přihlášen, přesměruj na přihlášení
         if (!$this->getUser()->isLoggedIn()) {
+            $this->flashMessage('Byli jste odhlášeni. Přihlaste se prosím znovu.', 'info');
             $this->redirect('Sign:in');
         }
 
-        // Informace pro šablonu
-        $this->template->username = $this->getUser()->isLoggedIn() ?
-            $this->getUser()->getIdentity()->username : 'neznámý uživatel';
+        // Získáme informace pro šablonu (currentUser už je nastaveno v BasePresenter)
+        $identity = $this->getUser()->getIdentity();
+        $this->template->username = $identity ? $identity->username : 'neznámý uživatel';
     }
 
     public function actionForceLogout(): void
     {
-        // Tato akce provede skutečné odhlášení
+        // Tato akce provede skutečné odhlášení s logováním
         if ($this->getUser()->isLoggedIn()) {
             $identity = $this->getUser()->getIdentity();
             $this->securityLogger->logLogout($identity->id, $identity->username);

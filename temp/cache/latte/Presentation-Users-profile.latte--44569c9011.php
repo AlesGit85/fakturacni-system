@@ -326,6 +326,79 @@ final class Template_44569c9011 extends Latte\Runtime\Template
         </div>
     </div>
 </div>
+
 ';
+		if (isset($showLogoutCountdown) && $showLogoutCountdown) /* line 209 */ {
+			echo '<!-- Modal overlay pro countdown -->
+<div class="modal fade show" style="display: block; background: rgba(0,0,0,0.7);" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #B1D235; color: #212529;">
+                <h5 class="modal-title">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    Uživatelské jméno změněno
+                </h5>
+            </div>
+            <div class="modal-body text-center">
+                <div class="alert alert-success mb-4">
+                    <strong>Úspěch!</strong> Vaše uživatelské jméno bylo změněno z 
+                    <strong>';
+			echo LR\Filters::escapeHtmlText($originalUsername) /* line 223 */;
+			echo '</strong> na <strong>';
+			echo LR\Filters::escapeHtmlText($newUsername) /* line 223 */;
+			echo '</strong>.
+                </div>
+                
+                <div class="alert alert-warning mb-4">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong>Bezpečnostní opatření:</strong> Z bezpečnostních důvodů musíte být odhlášeni a přihlásit se znovu s novým uživatelským jménem.
+                </div>
+                
+                <p class="mb-4">
+                    Budete automaticky odhlášeni za <span id="countdown" style="color: #B1D235; font-weight: bold; font-size: 1.2em;">5</span> sekund.
+                </p>
+                
+                <div class="d-grid gap-2">
+                    <a href="';
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link(':Sign:out')) /* line 236 */;
+			echo '" class="btn btn-primary btn-lg" id="logoutBtn">
+                        <i class="bi bi-box-arrow-right me-2"></i>
+                        Odhlásit se ihned
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let countdown = 10;
+let timer;
+const countdownElement = document.getElementById(\'countdown\');
+const logoutBtn = document.getElementById(\'logoutBtn\');
+
+function startCountdown() {
+    timer = setInterval(function() {
+        countdown--;
+        countdownElement.textContent = countdown;
+        
+        if (countdown <= 0) {
+            clearInterval(timer);
+            window.location.href = logoutBtn.href;
+        }
+    }, 1000);
+}
+
+// Spustíme countdown při načtení
+startCountdown();
+
+// Pokud uživatel klikne na tlačítko odhlásit, zruš countdown
+logoutBtn.addEventListener(\'click\', function() {
+    clearInterval(timer);
+});
+</script>
+';
+		}
+		echo "\n";
 	}
 }

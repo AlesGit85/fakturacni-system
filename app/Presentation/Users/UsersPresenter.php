@@ -336,7 +336,6 @@ final class UsersPresenter extends BasePresenter
     public function profileFormSucceeded(Form $form, \stdClass $data): void
     {
         $userId = $this->getUser()->getId();
-
         $originalUsername = $this->getUser()->getIdentity()->username;
 
         try {
@@ -374,7 +373,6 @@ final class UsersPresenter extends BasePresenter
                     return;
                 }
 
-                // Ověření současného hesla pomocí nové metody
                 $currentUsername = $this->getUser()->getIdentity()->username;
                 if (!$this->userManager->verifyPassword($currentUsername, $data->currentPassword)) {
                     /** @var Nette\Forms\Controls\PasswordInput $currentPasswordField */
@@ -391,7 +389,6 @@ final class UsersPresenter extends BasePresenter
                 'email' => $data->email,
             ];
 
-            // Pokud je zadáno heslo, přidáme ho
             if (!empty($data->password)) {
                 $updateData['password'] = $data->password;
                 $this->flashMessage('Heslo bylo úspěšně změněno.', 'success');
@@ -401,15 +398,19 @@ final class UsersPresenter extends BasePresenter
             $result = $this->userManager->update($userId, $updateData);
 
             if ($result) {
+                // Pokud se změnilo uživatelské jméno - zobrazíme countdown modal
+                if ($data->username !== $originalUsername) {
+                    $this->flashMessage('Uživatelské jméno bylo úspěšně změněno.', 'success');
+                    $this->template->showLogoutCountdown = true;
+                    $this->template->newUsername = $data->username;
+                    $this->template->originalUsername = $originalUsername;
+                    return; // Zobrazíme countdown místo redirectu
+                }
+                
                 $this->flashMessage('Váš profil byl úspěšně upraven.', 'success');
             } else {
                 $form->addError('Při aktualizaci profilu došlo k chybě. Žádné změny nebyly uloženy.');
                 return;
-            }
-
-            // Pokud se změnilo uživatelské jméno, přesměrujeme na bezpečnou odhlašovací stránku
-            if ($data->username !== $originalUsername) {
-                $this->redirect('Sign:relogin');
             }
 
             $this->redirect('profile');
