@@ -110,7 +110,7 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1748253230,
+      1 => 1749017657,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
@@ -135,7 +135,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1747984235,
+      1 => 1749018719,
     ),
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
@@ -176,6 +176,9 @@ return array (
     'App\\Presentation\\Settings\\SettingsTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsAddTemplate' => 1,
     'App\\Presentation\\Sign\\SignUpTemplate' => 3,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 3,
+    'App\\Presentation\\Users\\UsersDeleteTemplate' => 2,
+    'App\\Presentation\\Users\\UsersEditTemplate' => 2,
   ),
   2 => 
   array (

@@ -290,7 +290,7 @@ final class Template_88337ed53b extends Latte\Runtime\Template
 			echo '	<footer class="mt-5 py-4 text-center">
 		<div class="container">
 			<p class="mb-0">
-				QRdoklad &copy; ';
+				QRdoklad (verze 1.9.4) &copy; ';
 			echo LR\Filters::escapeHtmlText(date('Y')) /* line 153 */;
 			echo ' | Moderní fakturační systém - Proudly crafted by <a href="https://allimedia.cz">Allimedia.cz</a>
 			</p>

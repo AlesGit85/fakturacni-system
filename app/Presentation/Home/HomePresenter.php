@@ -35,52 +35,86 @@ final class HomePresenter extends BasePresenter
 
     public function renderDefault(): void
     {
-        // Kontrola faktur po splatnosti (pouze pro účetní a admin)
-        if ($this->isAccountant()) {
-            $this->invoicesManager->checkOverdueDates();
-        }
+        try {
+            // Kontrola faktur po splatnosti (pouze pro účetní a admin)
+            if ($this->isAccountant()) {
+                $this->invoicesManager->checkOverdueDates();
+            }
 
-        // Dashboard statistiky
-        $invoiceStats = $this->invoicesManager->getStatistics();
-        $clientsCount = $this->clientsManager->getAll()->count();
-        $company = $this->companyManager->getCompanyInfo();
+            // Dashboard statistiky s bezpečnou kontrolou
+            $invoiceStats = $this->invoicesManager->getStatistics();
+            
+            // Bezpečné získání počtu klientů
+            $clientsSelection = $this->clientsManager->getAll();
+            $clientsCount = 0;
+            if ($clientsSelection && method_exists($clientsSelection, 'count')) {
+                $clientsCount = $clientsSelection->count();
+            } elseif (is_array($clientsSelection)) {
+                $clientsCount = count($clientsSelection);
+            }
+            
+            $company = $this->companyManager->getCompanyInfo();
 
-        // Připravíme data pro dashboard
-        $this->template->dashboardStats = [
-            'clients' => $clientsCount,
-            'invoices' => [
-                'total' => $invoiceStats['totalCount'],
-                'paid' => $invoiceStats['paidCount'],
-                'overdue' => $invoiceStats['overdueCount'],
-                'unpaidAmount' => $invoiceStats['unpaidAmount']
-            ]
-        ];
+            // Připravíme data pro dashboard
+            $this->template->dashboardStats = [
+                'clients' => $clientsCount,
+                'invoices' => [
+                    'total' => $invoiceStats['totalCount'],
+                    'paid' => $invoiceStats['paidCount'],
+                    'overdue' => $invoiceStats['overdueCount'],
+                    'unpaidAmount' => $invoiceStats['unpaidAmount']
+                ]
+            ];
 
-        // Logika pro "Začínáme" sekci (pouze pro admin)
-        if ($this->isAdmin()) {
-            $setupSteps = $this->getSetupSteps($company, $clientsCount, $invoiceStats['totalCount']);
-            $this->template->setupSteps = $setupSteps;
-            $this->template->isSetupComplete = empty($setupSteps);
-        } else {
+            // Logika pro "Začínáme" sekci (pouze pro admin)
+            if ($this->isAdmin()) {
+                $setupSteps = $this->getSetupSteps($company, $clientsCount, $invoiceStats['totalCount']);
+                $this->template->setupSteps = $setupSteps;
+                $this->template->isSetupComplete = empty($setupSteps);
+            } else {
+                $this->template->setupSteps = [];
+                $this->template->isSetupComplete = true;
+            }
+
+            // Blížící se splatnosti (faktury splatné do 7 dnů)
+            if ($this->isAccountant()) {
+                $upcomingInvoices = $this->getUpcomingDueInvoices();
+                $this->template->upcomingInvoices = $upcomingInvoices;
+
+                // Nedávné faktury (posledních 5)
+                $recentInvoices = $this->invoicesManager->getAll()->limit(5);
+                $this->template->recentInvoices = $recentInvoices;
+            } else {
+                // Pro readonly uživatele zobrazíme méně informací
+                $this->template->upcomingInvoices = [];
+                $this->template->recentInvoices = [];
+            }
+
+            $this->template->company = $company;
+            
+        } catch (\Exception $e) {
+            // Logování chyby pro debug
+            error_log('Chyba v HomePresenter::renderDefault(): ' . $e->getMessage());
+            
+            // Fallback hodnoty
+            $this->template->dashboardStats = [
+                'clients' => 0,
+                'invoices' => [
+                    'total' => 0,
+                    'paid' => 0,
+                    'overdue' => 0,
+                    'unpaidAmount' => 0
+                ]
+            ];
             $this->template->setupSteps = [];
             $this->template->isSetupComplete = true;
-        }
-
-        // Blížící se splatnosti (faktury splatné do 7 dnů)
-        if ($this->isAccountant()) {
-            $upcomingInvoices = $this->getUpcomingDueInvoices();
-            $this->template->upcomingInvoices = $upcomingInvoices;
-
-            // Nedávné faktury (posledních 5)
-            $recentInvoices = $this->invoicesManager->getAll()->limit(5);
-            $this->template->recentInvoices = $recentInvoices;
-        } else {
-            // Pro readonly uživatele zobrazíme méně informací
             $this->template->upcomingInvoices = [];
             $this->template->recentInvoices = [];
+            $this->template->company = null;
+            
+            // Zobrazíme chybovou hlášku
+            $this->flashMessage('Došlo k chybě při načítání dashboardu. Zkuste to prosím znovu.', 'warning');
         }
-
-        $this->template->company = $company;
     }
 
     /**

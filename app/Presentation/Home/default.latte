@@ -159,7 +159,9 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    {if $upcomingInvoices->count() > 0}
+                    {* Bezpečná kontrola pro count() - funguje pro pole i pro Selection objekty *}
+                    {var $upcomingCount = is_array($upcomingInvoices) ? count($upcomingInvoices) : ($upcomingInvoices ? $upcomingInvoices->count() : 0)}
+                    {if $upcomingCount > 0}
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -201,7 +203,12 @@
                     {else}
                         <div class="empty-state-small">
                             <i class="bi bi-check-circle text-success"></i>
-                            <p class="mb-0">Žádné faktury se neblíží splatnosti</p>
+                            {if $isUserAccountant}
+                                <p class="mb-0">Žádné faktury se neblíží splatnosti</p>
+                            {else}
+                                <p class="mb-0">Pro zobrazení faktur potřebujete vyšší oprávnění</p>
+                                <small class="text-muted">Kontaktujte administrátora pro přidělení role Účetní</small>
+                            {/if}
                         </div>
                     {/if}
                 </div>
@@ -255,14 +262,21 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a n:href="Invoices:add" class="btn btn-primary">
-                            <i class="bi bi-plus-circle me-2"></i>
-                            Nová faktura
-                        </a>
-                        <a n:href="Clients:add" class="btn btn-outline-primary">
-                            <i class="bi bi-person-plus me-2"></i>
-                            Nový klient
-                        </a>
+                        {if $isUserAccountant}
+                            <a n:href="Invoices:add" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>
+                                Nová faktura
+                            </a>
+                            <a n:href="Clients:add" class="btn btn-outline-primary">
+                                <i class="bi bi-person-plus me-2"></i>
+                                Nový klient
+                            </a>
+                        {else}
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <small>Pro vytváření faktur a klientů potřebujete roli Účetní nebo vyšší</small>
+                            </div>
+                        {/if}
                         <a n:href="Settings:default" class="btn btn-outline-secondary">
                             <i class="bi bi-gear me-2"></i>
                             Nastavení
@@ -274,7 +288,8 @@
     </div>
 
     <!-- Nedávné faktury -->
-    {if $recentInvoices->count() > 0}
+    {var $recentCount = is_array($recentInvoices) ? count($recentInvoices) : ($recentInvoices ? $recentInvoices->count() : 0)}
+    {if $recentCount > 0}
     <div class="recent-invoices mt-4">
         <div class="card shadow-sm border-0">
             <div class="card-header bg-white">
