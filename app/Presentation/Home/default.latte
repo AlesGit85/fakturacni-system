@@ -4,13 +4,13 @@
     <div class="welcome-section mb-4">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h1 class="welcome-title mb-2">
-                    {if $company && $company->name}
-                        Vítejte zpět, {$company->name}!
-                    {else}
-                        Vítejte v QRdokladu!
-                    {/if}
-                </h1>
+                    <h1 class="welcome-title mb-2">
+                        {if $userDisplayName}
+                        Vítejte zpět, {$userDisplayName}!
+                        {else}
+                            Vítejte v QRdokladu!
+                        {/if}
+</h1>
                 <p class="welcome-subtitle text-muted">
                     {if $isSetupComplete}
                         Váš fakturační systém je připraven k použití

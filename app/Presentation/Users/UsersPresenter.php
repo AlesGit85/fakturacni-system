@@ -14,8 +14,9 @@ final class UsersPresenter extends BasePresenter
     /** @var UserManager */
     private $userManager;
 
-    // Admin může přistupovat ke všem akcím v tomto presenteru
-    protected array $requiredRoles = ['admin'];
+    // OPRAVENO: Presenter nevyžaduje defaultně žádnou specifickou roli
+    // Role se kontrolují na úrovni jednotlivých akcí
+    protected array $requiredRoles = [];
 
     // Konkrétní role pro konkrétní akce
     protected array $actionRoles = [
@@ -290,6 +291,15 @@ final class UsersPresenter extends BasePresenter
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
+        // Základní údaje
+        $form->addText('first_name', 'Křestní jméno:')
+            ->setRequired(false)
+            ->addRule(Form::MAX_LENGTH, 'Křestní jméno může mít maximálně %d znaků', 100);
+
+        $form->addText('last_name', 'Příjmení:')
+            ->setRequired(false)
+            ->addRule(Form::MAX_LENGTH, 'Příjmení může mít maximálně %d znaků', 100);
+
         $form->addText('username', 'Uživatelské jméno:')
             ->setRequired('Zadejte uživatelské jméno')
             ->addRule(Form::MIN_LENGTH, 'Uživatelské jméno musí mít alespoň %d znaků', 3)
@@ -298,6 +308,7 @@ final class UsersPresenter extends BasePresenter
         $form->addEmail('email', 'E-mail:')
             ->setRequired('Zadejte e-mailovou adresu');
 
+        // Změna hesla
         $form->addPassword('currentPassword', 'Současné heslo:')
             ->setRequired(false);
 
@@ -325,6 +336,8 @@ final class UsersPresenter extends BasePresenter
     public function profileFormSucceeded(Form $form, \stdClass $data): void
     {
         $userId = $this->getUser()->getId();
+
+        $originalUsername = $this->getUser()->getIdentity()->username;
 
         try {
             // Kontrola jedinečnosti uživatelského jména a e-mailu
@@ -372,6 +385,8 @@ final class UsersPresenter extends BasePresenter
             }
 
             $updateData = [
+                'first_name' => $data->first_name ?: null,
+                'last_name' => $data->last_name ?: null,
                 'username' => $data->username,
                 'email' => $data->email,
             ];
@@ -392,11 +407,9 @@ final class UsersPresenter extends BasePresenter
                 return;
             }
 
-            // Pokud se změnilo uživatelské jméno, musíme uživatele znovu přihlásit
-            if ($data->username !== $this->getUser()->getIdentity()->username) {
-                $this->getUser()->logout();
-                $this->flashMessage('Změnil se váš uživatelský název. Přihlaste se prosím znovu.', 'info');
-                $this->redirect('Sign:in');
+            // Pokud se změnilo uživatelské jméno, přesměrujeme na bezpečnou odhlašovací stránku
+            if ($data->username !== $originalUsername) {
+                $this->redirect('Sign:relogin');
             }
 
             $this->redirect('profile');

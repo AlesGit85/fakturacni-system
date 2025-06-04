@@ -182,12 +182,14 @@ class UserManager implements Nette\Security\Authenticator
     /**
      * Přidá nového uživatele
      */
-    public function add(string $username, string $email, string $password, string $role = 'readonly', ?int $adminId = null, ?string $adminName = null): int
+    public function add(string $username, string $email, string $password, string $role = 'readonly', ?int $adminId = null, ?string $adminName = null, ?string $firstName = null, ?string $lastName = null): int
     {
         $result = $this->database->table('users')->insert([
             'username' => $username,
             'password' => $this->passwords->hash($password),
             'email' => $email,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
             'role' => $role,
             'created_at' => new \DateTime(),
             'last_login' => null,
@@ -356,5 +358,49 @@ class UserManager implements Nette\Security\Authenticator
             'readonly' => $stats['readonly'] ?? 0,
             'total' => array_sum($stats)
         ];
+    }
+
+    /**
+     * Získá plné jméno uživatele
+     */
+    public function getUserDisplayName($user): string
+    {
+        if (!$user) {
+            return '';
+        }
+
+        // Pokud má křestní jméno, použijeme ho
+        if (!empty($user->first_name)) {
+            return $user->first_name;
+        }
+
+        // Jinak použijeme username
+        return $user->username;
+    }
+
+    /**
+     * Získá plné jméno s příjmením
+     */
+    public function getUserFullName($user): string
+    {
+        if (!$user) {
+            return '';
+        }
+
+        $parts = [];
+        
+        if (!empty($user->first_name)) {
+            $parts[] = $user->first_name;
+        }
+        
+        if (!empty($user->last_name)) {
+            $parts[] = $user->last_name;
+        }
+
+        if (empty($parts)) {
+            return $user->username;
+        }
+
+        return implode(' ', $parts);
     }
 }

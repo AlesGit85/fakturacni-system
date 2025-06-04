@@ -52,18 +52,18 @@ final class Template_1d533538c6 extends Latte\Runtime\Template
     <div class="welcome-section mb-4">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h1 class="welcome-title mb-2">
+                    <h1 class="welcome-title mb-2">
 ';
-		if ($company && $company->name) /* line 8 */ {
+		if ($userDisplayName) /* line 8 */ {
 			echo '                        Vítejte zpět, ';
-			echo LR\Filters::escapeHtmlText($company->name) /* line 9 */;
+			echo LR\Filters::escapeHtmlText($userDisplayName) /* line 9 */;
 			echo '!
 ';
 		} else /* line 10 */ {
-			echo '                        Vítejte v QRdokladu!
+			echo '                            Vítejte v QRdokladu!
 ';
 		}
-		echo '                </h1>
+		echo '</h1>
                 <p class="welcome-subtitle text-muted">
 ';
 		if ($isSetupComplete) /* line 15 */ {

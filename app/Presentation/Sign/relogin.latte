@@ -1,0 +1,73 @@
+{layout '../@layout.latte'}
+
+{block title}Odhlášení po změně uživatelského jména{/block}
+
+{block content}
+<div class="auth-container">
+    <div class="auth-inner">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="{$basePath}/images/qr-webp-white.webp" alt="QRdoklad" class="auth-logo">
+                <h1 class="auth-title">Změna uživatelského jména</h1>
+                <p class="auth-subtitle">Vaše uživatelské jméno bylo úspěšně změněno</p>
+            </div>
+
+            <div class="auth-body">
+                <div class="alert alert-success mb-4">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <strong>Úspěch!</strong> Vaše uživatelské jméno bylo změněno na <strong>{$username}</strong>.
+                </div>
+                
+                <div class="alert alert-info mb-4">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Bezpečnostní opatření:</strong> Z bezpečnostních důvodů musíte být odhlášeni a přihlásit se znovu s novým uživatelským jménem.
+                </div>
+
+                <div class="mb-4">
+                    <h5>Co se stane:</h5>
+                    <ol class="ps-3">
+                        <li>Budete automaticky odhlášeni za <span id="countdown">5</span> sekund</li>
+                        <li>Budete přesměrováni na přihlašovací stránku</li>
+                        <li>Přihlaste se s novým uživatelským jménem: <strong>{$username}</strong></li>
+                    </ol>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <a n:href="forceLogout!" class="btn btn-primary btn-lg" id="logoutBtn">
+                        <i class="bi bi-box-arrow-right me-2"></i>
+                        Odhlásit se ihned
+                    </a>
+                    
+                    <a n:href="Sign:in" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Zrušit (zůstat přihlášen)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Automatické přesměrování za 5 sekund
+let countdown = 5;
+const countdownElement = document.getElementById('countdown');
+const logoutBtn = document.getElementById('logoutBtn');
+
+const timer = setInterval(function() {
+    countdown--;
+    countdownElement.textContent = countdown;
+    
+    if (countdown <= 0) {
+        clearInterval(timer);
+        // Přesměrování na odhlášení
+        window.location.href = logoutBtn.href;
+    }
+}, 1000);
+
+// Pokud uživatel klikne na tlačítko, zruš countdown
+logoutBtn.addEventListener('click', function() {
+    clearInterval(timer);
+});
+</script>
+{/block}

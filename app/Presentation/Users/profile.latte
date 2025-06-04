@@ -14,9 +14,22 @@
         <div class="info-card-body">
             <div class="row">
                 <div class="col-md-6">
+                    {if $profileUser->first_name || $profileUser->last_name}
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-person"></i>
+                            Jméno
+                        </div>
+                        <div class="info-value">
+                            {if $profileUser->first_name}{$profileUser->first_name}{/if}
+                            {if $profileUser->last_name} {$profileUser->last_name}{/if}
+                        </div>
+                    </div>
+                    {/if}
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-at"></i>
                             Uživatelské jméno
                         </div>
                         <div class="info-value">{$profileUser->username}</div>
@@ -73,11 +86,39 @@
         </div>
         <div class="card-body p-4">
             {form profileForm class => 'row g-4'}
-                <!-- Základní údaje -->
+                <!-- Osobní údaje -->
                 <div class="col-12">
                     <div class="section-header">
                         <i class="bi bi-person-vcard"></i>
-                        <h2 class="section-title">Základní údaje</h2>
+                        <h2 class="section-title">Osobní údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input first_name class => 'form-control'}
+                        {label first_name class => 'form-label' /}
+                        {if $form['first_name']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['first_name']->getError()}</div>
+                        {/if}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input last_name class => 'form-control'}
+                        {label last_name class => 'form-label' /}
+                        {if $form['last_name']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['last_name']->getError()}</div>
+                        {/if}
+                    </div>
+                </div>
+                
+                <!-- Přihlašovací údaje -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-at"></i>
+                        <h2 class="section-title">Přihlašovací údaje</h2>
                     </div>
                 </div>
                 

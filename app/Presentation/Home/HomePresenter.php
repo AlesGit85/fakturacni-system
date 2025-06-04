@@ -8,6 +8,7 @@ use Nette;
 use App\Model\InvoicesManager;
 use App\Model\ClientsManager;
 use App\Model\CompanyManager;
+use App\Model\UserManager;
 use App\Presentation\BasePresenter;
 
 final class HomePresenter extends BasePresenter
@@ -21,16 +22,21 @@ final class HomePresenter extends BasePresenter
     /** @var CompanyManager */
     private $companyManager;
 
+    /** @var UserManager */
+    private $userManager;
+
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
 
     public function __construct(
         InvoicesManager $invoicesManager,
         ClientsManager $clientsManager,
-        CompanyManager $companyManager
+        CompanyManager $companyManager,
+        UserManager $userManager
     ) {
         $this->invoicesManager = $invoicesManager;
         $this->clientsManager = $clientsManager;
         $this->companyManager = $companyManager;
+        $this->userManager = $userManager;
     }
 
     public function renderDefault(): void
@@ -54,6 +60,21 @@ final class HomePresenter extends BasePresenter
             }
             
             $company = $this->companyManager->getCompanyInfo();
+
+            // Získání informací o přihlášeném uživateli
+            $currentUser = null;
+            $userDisplayName = '';
+            $userFullName = '';
+            
+            if ($this->getUser()->isLoggedIn()) {
+                $userId = $this->getUser()->getId();
+                $currentUser = $this->userManager->getById($userId);
+                
+                if ($currentUser) {
+                    $userDisplayName = $this->userManager->getUserDisplayName($currentUser);
+                    $userFullName = $this->userManager->getUserFullName($currentUser);
+                }
+            }
 
             // Připravíme data pro dashboard
             $this->template->dashboardStats = [
@@ -90,7 +111,11 @@ final class HomePresenter extends BasePresenter
                 $this->template->recentInvoices = [];
             }
 
+            // Předání dat o uživateli do šablony
             $this->template->company = $company;
+            $this->template->currentUserData = $currentUser;
+            $this->template->userDisplayName = $userDisplayName;
+            $this->template->userFullName = $userFullName;
             
         } catch (\Exception $e) {
             // Logování chyby pro debug
@@ -111,6 +136,9 @@ final class HomePresenter extends BasePresenter
             $this->template->upcomingInvoices = [];
             $this->template->recentInvoices = [];
             $this->template->company = null;
+            $this->template->currentUserData = null;
+            $this->template->userDisplayName = '';
+            $this->template->userFullName = '';
             
             // Zobrazíme chybovou hlášku
             $this->flashMessage('Došlo k chybě při načítání dashboardu. Zkuste to prosím znovu.', 'warning');

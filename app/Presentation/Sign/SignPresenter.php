@@ -77,6 +77,34 @@ final class SignPresenter extends BasePresenter
         $this->redirect('Sign:in');
     }
 
+    public function actionRelogin(): void
+    {
+        // Tato akce je určena pro situace, kdy se změnilo uživatelské jméno
+        // a je potřeba uživatele bezpečně odhlásit a přesměrovat na přihlášení
+
+        // Pokud už není přihlášen, přesměruj na přihlášení
+        if (!$this->getUser()->isLoggedIn()) {
+            $this->redirect('Sign:in');
+        }
+
+        // Informace pro šablonu
+        $this->template->username = $this->getUser()->isLoggedIn() ?
+            $this->getUser()->getIdentity()->username : 'neznámý uživatel';
+    }
+
+    public function actionForceLogout(): void
+    {
+        // Tato akce provede skutečné odhlášení
+        if ($this->getUser()->isLoggedIn()) {
+            $identity = $this->getUser()->getIdentity();
+            $this->securityLogger->logLogout($identity->id, $identity->username);
+            $this->getUser()->logout();
+        }
+
+        $this->flashMessage('Byli jste úspěšně odhlášeni. Přihlaste se prosím s novým uživatelským jménem.', 'info');
+        $this->redirect('Sign:in');
+    }
+
     protected function createComponentSignInForm(): Form
     {
         $form = new Form;
@@ -176,87 +204,85 @@ final class SignPresenter extends BasePresenter
         return $form;
     }
 
-public function signUpFormSucceeded(Form $form, \stdClass $data): void
-{
-    try {
-        // Kontrola, zda už uživatel neexistuje - kontrolujeme zvlášť username a email
-        $existingUsername = null;
-        $existingEmail = null;
-
+    public function signUpFormSucceeded(Form $form, \stdClass $data): void
+    {
         try {
-            $allUsers = $this->userManager->getAll();
-            if ($allUsers) {
-                $existingUsername = $allUsers->where('username', $data->username)->fetch();
-                $existingEmail = $allUsers->where('email', $data->email)->fetch();
+            // Kontrola, zda už uživatel neexistuje - kontrolujeme zvlášť username a email
+            $existingUsername = null;
+            $existingEmail = null;
+
+            try {
+                $allUsers = $this->userManager->getAll();
+                if ($allUsers) {
+                    $existingUsername = $allUsers->where('username', $data->username)->fetch();
+                    $existingEmail = $allUsers->where('email', $data->email)->fetch();
+                }
+            } catch (\Exception $e) {
+                // Pokud selže dotaz, pokračujeme (může být první uživatel)
+                error_log('Chyba při kontrole existujících uživatelů: ' . $e->getMessage());
             }
-        } catch (\Exception $e) {
-            // Pokud selže dotaz, pokračujeme (může být první uživatel)
-            error_log('Chyba při kontrole existujících uživatelů: ' . $e->getMessage());
-        }
 
-        if ($existingUsername) {
-            /** @var Nette\Forms\Controls\TextInput $usernameField */
-            $usernameField = $form['username'];
-            $usernameField->addError('Uživatelské jméno už je obsazené.');
-            return;
-        }
-
-        if ($existingEmail) {
-            /** @var Nette\Forms\Controls\TextInput $emailField */
-            $emailField = $form['email'];
-            $emailField->addError('E-mailová adresa už je registrovaná.');
-            return;
-        }
-
-        // Určení role
-        $userCount = 0;
-        try {
-            $allUsers = $this->userManager->getAll();
-            if ($allUsers && method_exists($allUsers, 'count')) {
-                $userCount = $allUsers->count();
-            } elseif (is_array($allUsers)) {
-                $userCount = count($allUsers);
+            if ($existingUsername) {
+                /** @var Nette\Forms\Controls\TextInput $usernameField */
+                $usernameField = $form['username'];
+                $usernameField->addError('Uživatelské jméno už je obsazené.');
+                return;
             }
-        } catch (\Exception $e) {
+
+            if ($existingEmail) {
+                /** @var Nette\Forms\Controls\TextInput $emailField */
+                $emailField = $form['email'];
+                $emailField->addError('E-mailová adresa už je registrovaná.');
+                return;
+            }
+
+            // Určení role
             $userCount = 0;
+            try {
+                $allUsers = $this->userManager->getAll();
+                if ($allUsers && method_exists($allUsers, 'count')) {
+                    $userCount = $allUsers->count();
+                } elseif (is_array($allUsers)) {
+                    $userCount = count($allUsers);
+                }
+            } catch (\Exception $e) {
+                $userCount = 0;
+            }
+
+            if ($userCount === 0) {
+                // První uživatel je automaticky admin
+                $role = 'admin';
+            } else {
+                $role = isset($data->role) ? $data->role : 'readonly';
+            }
+
+            // Admin ID a jméno pro logování (null pro samoregistraci)
+            $adminId = null;
+            $adminName = null;
+
+            // Pokud je přihlášen admin, který vytváří uživatele
+            if ($this->getUser()->isLoggedIn() && $this->isAdmin()) {
+                $adminId = $this->getUser()->getId();
+                $adminName = $this->getUser()->getIdentity()->username;
+            }
+
+            // Vytvoření uživatele
+            $newUserId = $this->userManager->add($data->username, $data->email, $data->password, $role, $adminId, $adminName);
+
+            // Kontrola, zda se uživatel skutečně vytvořil
+            if ($newUserId && $newUserId > 0) {
+                $this->flashMessage('Registrace byla úspěšná. Nyní se můžete přihlásit.', 'success');
+                $this->redirect('Sign:in');
+            } else {
+                $form->addError('Nepodařilo se vytvořit uživatelský účet. Zkuste to prosím znovu.');
+            }
+        } catch (Nette\Application\AbortException $e) {
+            // AbortException je normální při redirect - necháme ji projít
+            throw $e;
+        } catch (\Exception $e) {
+            // Logování pouze závažných chyb
+            error_log('Chyba při registraci: ' . $e->getMessage());
+            $form->addError('Při registraci došlo k neočekávané chybě. Zkuste to prosím znovu.');
         }
-
-        if ($userCount === 0) {
-            // První uživatel je automaticky admin
-            $role = 'admin';
-        } else {
-            $role = isset($data->role) ? $data->role : 'readonly';
-        }
-
-        // Admin ID a jméno pro logování (null pro samoregistraci)
-        $adminId = null;
-        $adminName = null;
-        
-        // Pokud je přihlášen admin, který vytváří uživatele
-        if ($this->getUser()->isLoggedIn() && $this->isAdmin()) {
-            $adminId = $this->getUser()->getId();
-            $adminName = $this->getUser()->getIdentity()->username;
-        }
-
-        // Vytvoření uživatele
-        $newUserId = $this->userManager->add($data->username, $data->email, $data->password, $role, $adminId, $adminName);
-
-        // Kontrola, zda se uživatel skutečně vytvořil
-        if ($newUserId && $newUserId > 0) {
-            $this->flashMessage('Registrace byla úspěšná. Nyní se můžete přihlásit.', 'success');
-            $this->redirect('Sign:in');
-        } else {
-            $form->addError('Nepodařilo se vytvořit uživatelský účet. Zkuste to prosím znovu.');
-        }
-
-    } catch (Nette\Application\AbortException $e) {
-        // AbortException je normální při redirect - necháme ji projít
-        throw $e;
-        
-    } catch (\Exception $e) {
-        // Logování pouze závažných chyb
-        error_log('Chyba při registraci: ' . $e->getMessage());
-        $form->addError('Při registraci došlo k neočekávané chybě. Zkuste to prosím znovu.');
     }
-}
 }
