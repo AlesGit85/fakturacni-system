@@ -15,7 +15,7 @@ return array (
     'App\\Model\\AresService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\AresService.php',
-      1 => 1748202270,
+      1 => 1749101730,
     ),
     'App\\Model\\ClientsManager' => 
     array (
@@ -90,12 +90,12 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1748433696,
+      1 => 1749101730,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1748202745,
+      1 => 1749101730,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -115,7 +115,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1747981962,
+      1 => 1749101730,
     ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (
@@ -135,12 +135,12 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1749029617,
+      1 => 1749030486,
     ),
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1749029426,
+      1 => 1749030119,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
@@ -174,7 +174,7 @@ return array (
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsAddTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsAddTemplate' => 2,
     'App\\Presentation\\Sign\\SignUpTemplate' => 3,
     'App\\Presentation\\Sign\\SignOutTemplate' => 3,
     'App\\Presentation\\Users\\UsersDeleteTemplate' => 2,

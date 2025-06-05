@@ -3227,3 +3227,20 @@
 [2025-06-04 09-51-12] ModuleManager byl inicializován  @  http://localhost:8000/users/profile 
 [2025-06-04 09-51-14] ModuleManager byl inicializován  @  http://localhost:8000/sign/out 
 [2025-06-04 09-51-14] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?_fid=p2g5 
+[2025-06-05 05-35-53] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 05-35-56] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 05-35-57] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 05-35-58] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-05 05-36-02] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-02] ARES lookup požadavek pro IČO: 25429469  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-02] === ARES LOOKUP START pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-02] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-02] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-02] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-05] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=25429469  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-05] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-06] HTTP úspěšná odpověď (3697 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-06] Staré REST API - finální výsledek: {"name":"ANERI s.r.o.","ic":"25429469","dic":"CZ25429469","address":"Hodkovick\u00e1 52\/52","city":"Liberec","zip":46006,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-06] === ARES ÚSPĚCH pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-06] ARES úspěšně vrátil data pro IČO: 25429469, firma: ANERI s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 05-36-12] ModuleManager byl inicializován  @  http://localhost:8000/ 
