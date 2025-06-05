@@ -21,10 +21,19 @@
             </div>
             <div class="col-md-4 text-end">
                 <div class="quick-actions">
-                    <a n:href="Invoices:add" class="btn btn-primary btn-lg">
-                        <i class="bi bi-plus-circle me-2"></i>
-                        Nová faktura
-                    </a>
+                    {* Tlačítko Nová faktura - pouze pro účetní a adminy *}
+                    {if $isUserAccountant}
+                        <a n:href="Invoices:add" class="btn btn-primary btn-lg">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            Nová faktura
+                        </a>
+                    {else}
+                        {* Pro readonly uživatele - tlačítko na profil *}
+                        <a n:href="Users:profile" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person me-2"></i>
+                            Můj profil
+                        </a>
+                    {/if}
                 </div>
             </div>
         </div>
@@ -203,12 +212,7 @@
                     {else}
                         <div class="empty-state-small">
                             <i class="bi bi-check-circle text-success"></i>
-                            {if $isUserAccountant}
-                                <p class="mb-0">Žádné faktury se neblíží splatnosti</p>
-                            {else}
-                                <p class="mb-0">Pro zobrazení faktur potřebujete vyšší oprávnění</p>
-                                <small class="text-muted">Kontaktujte administrátora pro přidělení role Účetní</small>
-                            {/if}
+                            <p class="mb-0">Žádné faktury se neblíží splatnosti</p>
                         </div>
                     {/if}
                 </div>
@@ -263,6 +267,7 @@
                 <div class="card-body">
                     <div class="d-grid gap-2">
                         {if $isUserAccountant}
+                            {* Účetní a Admin vidí akce pro vytváření *}
                             <a n:href="Invoices:add" class="btn btn-primary">
                                 <i class="bi bi-plus-circle me-2"></i>
                                 Nová faktura
@@ -271,16 +276,23 @@
                                 <i class="bi bi-person-plus me-2"></i>
                                 Nový klient
                             </a>
+                            {if $isUserAdmin}
+                                <a n:href="Settings:default" class="btn btn-outline-secondary">
+                                    <i class="bi bi-gear me-2"></i>
+                                    Nastavení
+                                </a>
+                            {/if}
                         {else}
+                            {* Readonly uživatel vidí pouze tlačítko na profil *}
+                            <a n:href="Users:profile" class="btn btn-primary">
+                                <i class="bi bi-person me-2"></i>
+                                Upravit můj profil
+                            </a>
                             <div class="alert alert-info">
                                 <i class="bi bi-info-circle me-2"></i>
-                                <small>Pro vytváření faktur a klientů potřebujete roli Účetní nebo vyšší</small>
+                                <small>Máte oprávnění pouze pro čtení. Pro vytváření faktur a klientů kontaktujte administrátora.</small>
                             </div>
                         {/if}
-                        <a n:href="Settings:default" class="btn btn-outline-secondary">
-                            <i class="bi bi-gear me-2"></i>
-                            Nastavení
-                        </a>
                     </div>
                 </div>
             </div>

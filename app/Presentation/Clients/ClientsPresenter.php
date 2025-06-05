@@ -24,17 +24,17 @@ class ClientsPresenter extends BasePresenter
     /** @var ILogger */
     private $logger;
 
-    // Základní role pro přístup k presenteru
+    // Všichni přihlášení uživatelé mají základní přístup ke klientům
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
     
-    // Konkrétní role pro konkrétní akce
+    // Konkrétní role pro jednotlivé akce
     protected array $actionRoles = [
         'default' => ['readonly', 'accountant', 'admin'], // Seznam klientů mohou vidět všichni
         'show' => ['readonly', 'accountant', 'admin'], // Detail klienta mohou vidět všichni
-        'add' => ['accountant', 'admin'], // Přidat klienta může jen účetní a admin
-        'edit' => ['accountant', 'admin'], // Upravit klienta může jen účetní a admin
+        'add' => ['accountant', 'admin'], // Přidat klienta může účetní a admin
+        'edit' => ['accountant', 'admin'], // Upravit klienta může účetní a admin
         'delete' => ['admin'], // Smazat klienta může jen admin
-        'aresLookup' => ['accountant', 'admin'], // ARES lookup může jen účetní a admin
+        'aresLookup' => ['accountant', 'admin'], // ARES lookup může účetní a admin (pro vytváření/editaci)
     ];
 
     public function __construct(
@@ -161,11 +161,7 @@ class ClientsPresenter extends BasePresenter
 
     public function actionDelete(int $id): void
     {
-        // Kontrola oprávnění pro mazání - pouze admin
-        if (!$this->isAdmin()) {
-            $this->flashMessage('Pouze administrátoři mohou mazat klienty.', 'danger');
-            $this->redirect('show', $id);
-        }
+        // Kontrola oprávnění je už v actionRoles - pouze admin
 
         // Nejprve zkontrolujeme, zda klient existuje
         $client = $this->clientsManager->getById($id);
@@ -228,6 +224,12 @@ class ClientsPresenter extends BasePresenter
      */
     public function handleAresLookup(): void
     {
+        // Explicitní kontrola oprávnění - pouze účetní a admin
+        if (!$this->isAccountant()) {
+            $this->sendJson(['error' => 'Nemáte oprávnění pro vyhledávání v ARESu.']);
+            return;
+        }
+
         // Získáme IČO z GET parametrů
         $ico = $this->getHttpRequest()->getQuery('ico');
         

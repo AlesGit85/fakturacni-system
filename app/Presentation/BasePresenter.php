@@ -95,7 +95,10 @@ abstract class BasePresenter extends Presenter
 
         $requiredRoles = $this->actionRoles[$action];
         
-        // Hierarchie rolí - admin může vše, účetní může to co readonly
+        // Hierarchie rolí:
+        // - admin: má přístup ke všemu (admin, accountant, readonly akce)
+        // - accountant: má přístup k accountant a readonly akcím
+        // - readonly: má přístup pouze k readonly akcím
         $roleHierarchy = [
             'admin' => ['admin', 'accountant', 'readonly'],
             'accountant' => ['accountant', 'readonly'],
@@ -193,6 +196,7 @@ abstract class BasePresenter extends Presenter
 
     /**
      * Kontroluje, zda má uživatel požadovanou roli
+     * Používá hierarchii rolí - admin může vše, accountant může accountant + readonly, readonly jen readonly
      */
     public function hasRole(string $role): bool
     {
@@ -231,6 +235,14 @@ abstract class BasePresenter extends Presenter
     public function isAccountant(): bool
     {
         return $this->hasRole('accountant');
+    }
+
+    /**
+     * Kontroluje, zda má uživatel roli readonly nebo vyšší
+     */
+    public function isReadonly(): bool
+    {
+        return $this->hasRole('readonly');
     }
 
     /**
@@ -284,6 +296,7 @@ abstract class BasePresenter extends Presenter
         // Helper funkce pro šablony
         $this->template->add('isUserAdmin', $this->isAdmin());
         $this->template->add('isUserAccountant', $this->isAccountant());
+        $this->template->add('isUserReadonly', $this->isReadonly());
         
         // Přidání helper funkcí pro skloňování do šablony
         $this->template->addFunction('pluralizeInvoices', [$this, 'pluralizeInvoices']);

@@ -14,11 +14,10 @@ final class UsersPresenter extends BasePresenter
     /** @var UserManager */
     private $userManager;
 
-    // OPRAVENO: Presenter nevyžaduje defaultně žádnou specifickou roli
-    // Role se kontrolují na úrovni jednotlivých akcí
+    // Celý presenter je primárně pro adminy, kromě profilu
     protected array $requiredRoles = [];
 
-    // Konkrétní role pro konkrétní akce
+    // Konkrétní role pro jednotlivé akce
     protected array $actionRoles = [
         'profile' => ['readonly', 'accountant', 'admin'], // Svůj profil může upravovat každý
         'default' => ['admin'], // Seznam uživatelů může vidět jen admin
@@ -41,8 +40,6 @@ final class UsersPresenter extends BasePresenter
     public function renderProfile(): void
     {
         // Každý přihlášený uživatel může upravovat svůj profil
-        $this->requiredRoles = ['readonly', 'accountant', 'admin'];
-
         $userId = $this->getUser()->getId();
         $user = $this->userManager->getById($userId);
 
@@ -56,7 +53,7 @@ final class UsersPresenter extends BasePresenter
 
     public function actionAdd(): void
     {
-        // Pouze admin může přidávat uživatele
+        // Pouze admin může přidávat uživatele - kontrola je už v actionRoles
     }
 
     public function actionEdit(int $id): void

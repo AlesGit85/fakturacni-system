@@ -97,16 +97,16 @@ final class HomePresenter extends BasePresenter
                 $this->template->isSetupComplete = true;
             }
 
-            // Blížící se splatnosti (faktury splatné do 7 dnů)
-            if ($this->isAccountant()) {
+            // Blížící se splatnosti (faktury splatné do 7 dnů) - pro všechny přihlášené uživatele
+            if ($this->isReadonly()) {
                 $upcomingInvoices = $this->getUpcomingDueInvoices();
                 $this->template->upcomingInvoices = $upcomingInvoices;
 
-                // Nedávné faktury (posledních 5)
+                // Nedávné faktury (posledních 5) - pro všechny přihlášené uživatele
                 $recentInvoices = $this->invoicesManager->getAll()->limit(5);
                 $this->template->recentInvoices = $recentInvoices;
             } else {
-                // Pro readonly uživatele zobrazíme méně informací
+                // Fallback pro nepřihlášené uživatele (nemělo by se stát)
                 $this->template->upcomingInvoices = [];
                 $this->template->recentInvoices = [];
             }

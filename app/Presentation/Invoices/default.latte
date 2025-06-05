@@ -27,9 +27,12 @@
                     <i class="bi bi-person"></i> Detail klienta
                 </a>
             {/if}
-            <a n:href="add" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Vytvořit fakturu
-            </a>
+            {* Tlačítko pro vytváření faktury - pouze pro účetní a admin *}
+            {if $isUserAccountant}
+                <a n:href="add" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Vytvořit fakturu
+                </a>
+            {/if}
         </div>
     </div>
 
@@ -105,40 +108,52 @@
                     </td>
                     <td class="actions-column">
                         <div class="action-buttons">
+                            {* Tlačítko Detail - všichni uživatelé *}
                             <a n:href="show $invoice->id" class="btn btn-icon" title="Detail faktury">
                                 <i class="bi bi-eye"></i>
                             </a>
-                            <a n:href="edit $invoice->id" class="btn btn-icon" title="Upravit fakturu">
-                                <i class="bi bi-pencil"></i>
-                            </a>
+                            {* Tlačítko Upravit - pouze účetní a admin *}
+                            {if $isUserAccountant}
+                                <a n:href="edit $invoice->id" class="btn btn-icon" title="Upravit fakturu">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            {/if}
+                            {* Tlačítko PDF - všichni uživatelé *}
                             <a n:href="pdf $invoice->id" class="btn btn-icon" title="Stáhnout PDF">
                                 <i class="bi bi-file-pdf"></i>
                             </a>
-                            <div class="dropdown">
-                                <button class="btn btn-icon dropdown-toggle" type="button" id="dropdownMenuButton{$invoice->id}" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-three-dots-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{$invoice->id}">
-                                    {if $invoice->status != 'paid'}
-                                        <li>
-                                            <a n:href="markAsPaid! $invoice->id" class="dropdown-item" onclick="return confirm('Označit fakturu jako zaplacenou?')">
-                                                <i class="bi bi-check-circle text-success me-2"></i> Označit jako zaplacenou
-                                            </a>
-                                        </li>
-                                    {else}
-                                        <li>
-                                            <a n:href="markAsCreated! $invoice->id" class="dropdown-item" onclick="return confirm('Označit fakturu jako nezaplacenou?')">
-                                                <i class="bi bi-arrow-counterclockwise me-2"></i> Zrušit zaplaceno
-                                            </a>
-                                        </li>
-                                    {/if}
-                                    <li>
-                                        <a n:href="delete $invoice->id" class="dropdown-item text-danger" onclick="return confirm('Opravdu chcete smazat tuto fakturu?')">
-                                            <i class="bi bi-trash me-2"></i> Smazat fakturu
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                            {* Dropdown menu - pouze pro účetní a admin (pro změny stavů) nebo admin (pro mazání) *}
+                            {if $isUserAccountant}
+                                <div class="dropdown">
+                                    <button class="btn btn-icon dropdown-toggle" type="button" id="dropdownMenuButton{$invoice->id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{$invoice->id}">
+                                        {* Změny stavů - účetní a admin *}
+                                        {if $invoice->status != 'paid'}
+                                            <li>
+                                                <a n:href="markAsPaid! $invoice->id" class="dropdown-item" onclick="return confirm('Označit fakturu jako zaplacenou?')">
+                                                    <i class="bi bi-check-circle text-success me-2"></i> Označit jako zaplacenou
+                                                </a>
+                                            </li>
+                                        {else}
+                                            <li>
+                                                <a n:href="markAsCreated! $invoice->id" class="dropdown-item" onclick="return confirm('Označit fakturu jako nezaplacenou?')">
+                                                    <i class="bi bi-arrow-counterclockwise me-2"></i> Zrušit zaplaceno
+                                                </a>
+                                            </li>
+                                        {/if}
+                                        {* Mazání - pouze admin *}
+                                        {if $isUserAdmin}
+                                            <li>
+                                                <a n:href="delete $invoice->id" class="dropdown-item text-danger" onclick="return confirm('Opravdu chcete smazat tuto fakturu?')">
+                                                    <i class="bi bi-trash me-2"></i> Smazat fakturu
+                                                </a>
+                                            </li>
+                                        {/if}
+                                    </ul>
+                                </div>
+                            {/if}
                         </div>
                     </td>
                 </tr>
@@ -207,9 +222,17 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <h3>Zatím zde nejsou žádné faktury</h3>
         <p>Začněte vytvořením nové faktury</p>
-        <a n:href="add" class="btn btn-primary mt-3">
-            <i class="bi bi-plus-circle"></i> Vytvořit první fakturu
-        </a>
+        {* Tlačítko pro vytvoření první faktury - pouze pro účetní a admin *}
+        {if $isUserAccountant}
+            <a n:href="add" class="btn btn-primary mt-3">
+                <i class="bi bi-plus-circle"></i> Vytvořit první fakturu
+            </a>
+        {else}
+            <div class="alert alert-info mt-3">
+                <i class="bi bi-info-circle me-2"></i>
+                Pro vytváření faktur potřebujete oprávnění účetní nebo administrátor.
+            </div>
+        {/if}
     </div>
     {/if}
 </div>

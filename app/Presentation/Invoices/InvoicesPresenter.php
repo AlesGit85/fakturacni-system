@@ -25,16 +25,16 @@ class InvoicesPresenter extends BasePresenter
     /** @var QrPaymentService */
     private $qrPaymentService;
 
-    // Základní role pro přístup k presenteru
+    // Všichni přihlášení uživatelé mají základní přístup k fakturám
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
     
-    // Konkrétní role pro konkrétní akce
+    // Konkrétní role pro jednotlivé akce
     protected array $actionRoles = [
         'default' => ['readonly', 'accountant', 'admin'], // Seznam faktur mohou vidět všichni
         'show' => ['readonly', 'accountant', 'admin'], // Detail faktury mohou vidět všichni
         'pdf' => ['readonly', 'accountant', 'admin'], // PDF může stáhnout každý
-        'add' => ['accountant', 'admin'], // Přidat fakturu může jen účetní a admin
-        'edit' => ['accountant', 'admin'], // Upravit fakturu může jen účetní a admin
+        'add' => ['accountant', 'admin'], // Přidat fakturu může účetní a admin
+        'edit' => ['accountant', 'admin'], // Upravit fakturu může účetní a admin
         'delete' => ['admin'], // Smazat fakturu může jen admin
         'markAsPaid' => ['accountant', 'admin'], // Označit jako zaplacenou může účetní a admin
         'markAsCreated' => ['accountant', 'admin'], // Zrušit zaplacení může účetní a admin
@@ -95,12 +95,7 @@ class InvoicesPresenter extends BasePresenter
 
     public function actionDelete(int $id): void
     {
-        // Pouze admin může mazat faktury
-        if (!$this->isAdmin()) {
-            $this->flashMessage('Pouze administrátoři mohou mazat faktury.', 'danger');
-            $this->redirect('show', $id);
-        }
-
+        // Kontrola oprávnění je už v actionRoles - pouze admin
         $this->invoicesManager->delete($id);
         $this->flashMessage('Faktura byla úspěšně smazána', 'success');
         $this->redirect('default');
@@ -799,8 +794,10 @@ class InvoicesPresenter extends BasePresenter
 
     public function renderDefault(?string $filter = null, ?string $search = null, ?int $client = null): void
     {
-        // Kontrola faktur po splatnosti
-        $this->invoicesManager->checkOverdueDates();
+        // Kontrola faktur po splatnosti - pouze pro účetní a admin
+        if ($this->isAccountant()) {
+            $this->invoicesManager->checkOverdueDates();
+        }
 
         // Příprava dotazu
         $query = $this->invoicesManager->getAll($search);
@@ -832,7 +829,7 @@ class InvoicesPresenter extends BasePresenter
      */
     public function handleMarkAsPaid(int $id): void
     {
-        // Pouze admin a accountant mohou označovat faktury jako zaplacené
+        // Explicitní kontrola oprávnění - pouze účetní a admin
         if (!$this->isAccountant()) {
             $this->flashMessage('Nemáte oprávnění označovat faktury jako zaplacené.', 'danger');
             $this->redirect('this');
@@ -851,7 +848,7 @@ class InvoicesPresenter extends BasePresenter
      */
     public function handleMarkAsCreated(int $id): void
     {
-        // Pouze admin a accountant mohou měnit stav faktur
+        // Explicitní kontrola oprávnění - pouze účetní a admin
         if (!$this->isAccountant()) {
             $this->flashMessage('Nemáte oprávnění měnit stav faktur.', 'danger');
             $this->redirect('this');

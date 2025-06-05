@@ -28,7 +28,8 @@
 							<i class="bi bi-house"></i><span class="nav-text">Úvod</span>
 						</a>
 					</li>
-					{if isset($isUserAccountant) && ($isUserAccountant || $isUserAdmin)}
+					{* Klienti a faktury vidí všichni přihlášení uživatelé (readonly, accountant, admin) *}
+					{if isset($isUserReadonly) && $isUserReadonly}
 					<li class="nav-item">
 						<a class="nav-link" n:href=":Clients:default">
 							<i class="bi bi-people"></i><span class="nav-text">Klienti</span>
@@ -41,7 +42,7 @@
 					</li>
 					{/if}
 					
-					{* Dynamické menu pro moduly *}
+					{* Dynamické menu pro moduly - vidí všichni přihlášení uživatelé *}
 					{if isset($moduleMenuItems) && !empty($moduleMenuItems)}
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="extensionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -83,6 +84,7 @@
 					</li>
 					{/if}
 					
+					{* Administrátorské sekce - pouze pro adminy *}
 					{if isset($isUserAdmin) && $isUserAdmin}
 					<li class="nav-item">
 						<a class="nav-link" n:href=":Settings:default">

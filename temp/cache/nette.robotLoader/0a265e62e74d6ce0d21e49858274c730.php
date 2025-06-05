@@ -90,12 +90,12 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1749101730,
+      1 => 1749104150,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1749101730,
+      1 => 1749105776,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -110,12 +110,12 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1749019653,
+      1 => 1749105677,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1749101730,
+      1 => 1749105442,
     ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (
@@ -130,7 +130,7 @@ return array (
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1747982083,
+      1 => 1749104536,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
@@ -140,7 +140,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1749030119,
+      1 => 1749104747,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
@@ -174,15 +174,21 @@ return array (
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsAddTemplate' => 2,
+    'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
     'App\\Presentation\\Sign\\SignUpTemplate' => 3,
     'App\\Presentation\\Sign\\SignOutTemplate' => 3,
     'App\\Presentation\\Users\\UsersDeleteTemplate' => 2,
-    'App\\Presentation\\Users\\UsersEditTemplate' => 2,
+    'App\\Presentation\\Users\\UsersEditTemplate' => 3,
     'App\\Presentation\\Sign\\SignReloginTemplate' => 3,
     'App\\Presentation\\Sign\\SignForceLogoutTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
     'App\\Presentation\\Index\\Php\\PhpPresenter' => 3,
+    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsShowTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesDeleteTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsEditTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 3,
   ),
   2 => 
   array (

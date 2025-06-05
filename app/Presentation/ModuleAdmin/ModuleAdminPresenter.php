@@ -29,7 +29,17 @@ final class ModuleAdminPresenter extends BasePresenter
     /** @var Nette\Database\Explorer */
     private $database;
 
-    protected array $requiredRoles = ['admin'];
+    // Základní přístup k modulům mají všichni přihlášení uživatelé
+    protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
+
+    // Konkrétní role pro jednotlivé akce
+    protected array $actionRoles = [
+        'detail' => ['readonly', 'accountant', 'admin'], // Zobrazení detailu modulu - všichni
+        'default' => ['admin'], // Správa modulů - pouze admin
+        'toggleModule' => ['admin'], // Aktivace/deaktivace - pouze admin
+        'uninstallModule' => ['admin'], // Odinstalace - pouze admin
+        'moduleData' => ['readonly', 'accountant', 'admin'], // AJAX data z modulů - všichni
+    ];
 
     public function __construct(
         ModuleManager $moduleManager, 
@@ -268,7 +278,7 @@ final class ModuleAdminPresenter extends BasePresenter
         $allModules = $this->moduleManager->getActiveModules();
         if (!isset($allModules[$id])) {
             $this->flashMessage('Modul nebyl nalezen.', 'danger');
-            $this->redirect('default');
+            $this->redirect('Home:default');
         }
 
         $this->template->moduleInfo = $allModules[$id];

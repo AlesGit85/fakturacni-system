@@ -3244,3 +3244,386 @@
 [2025-06-05 05-36-06] === ARES ÚSPĚCH pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
 [2025-06-05 05-36-06] ARES úspěšně vrátil data pro IČO: 25429469, firma: ANERI s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
 [2025-06-05 05-36-12] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 05-39-36] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-15-53] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-15-53] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=rv014&_fid=ypgq 
+[2025-06-05 06-16-14] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-16-14] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=nm98i&_fid=10s5 
+[2025-06-05 06-16-22] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-16-22] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=2p52c&_fid=t25t 
+[2025-06-05 06-16-25] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-05 06-16-25] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=kr4f 
+[2025-06-05 06-16-33] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-05 06-16-33] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=978a 
+[2025-06-05 06-16-43] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-05 06-16-43] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=umnp 
+[2025-06-05 06-16-51] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-16-52] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-05 06-16-57] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-17-03] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-03] ARES lookup požadavek pro IČO: 25429469  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-03] === ARES LOOKUP START pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-03] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-03] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-03] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-06] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=25429469  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-06] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-06] HTTP úspěšná odpověď (3697 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-06] Staré REST API - finální výsledek: {"name":"ANERI s.r.o.","ic":"25429469","dic":"CZ25429469","address":"Hodkovick\u00e1 52\/52","city":"Liberec","zip":46006,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-06] === ARES ÚSPĚCH pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-06] ARES úspěšně vrátil data pro IČO: 25429469, firma: ANERI s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-17-31] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-05 06-17-31] ModuleManager byl inicializován  @  http://localhost:8000/clients/?_fid=x7o3 
+[2025-06-05 06-17-54] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-17-59] ModuleManager byl inicializován  @  http://localhost:8000/invoices/add 
+[2025-06-05 06-18-16] ModuleManager byl inicializován  @  http://localhost:8000/invoices/add 
+[2025-06-05 06-18-16] ModuleManager byl inicializován  @  http://localhost:8000/invoices/show/34?_fid=7m4k 
+[2025-06-05 06-18-32] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-18-34] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=978a 
+[2025-06-05 06-18-36] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-18-39] ModuleManager byl inicializován  @  http://localhost:8000/invoices/edit/34 
+[2025-06-05 06-18-39] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=trvk 
+[2025-06-05 06-18-40] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-18-41] ModuleManager byl inicializován  @  http://localhost:8000/invoices/show/34 
+[2025-06-05 06-18-45] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-18-49] ModuleManager byl inicializován  @  http://localhost:8000/invoices/default/34?do=markAsPaid 
+[2025-06-05 06-18-49] ModuleManager byl inicializován  @  http://localhost:8000/invoices/?_fid=e9xs 
+[2025-06-05 06-18-58] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-19-04] ModuleManager byl inicializován  @  http://localhost:8000/invoices/default/33?do=markAsPaid 
+[2025-06-05 06-19-04] ModuleManager byl inicializován  @  http://localhost:8000/invoices/?_fid=gr5x 
+[2025-06-05 06-19-09] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-19-20] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-19-21] ModuleManager byl inicializován  @  http://localhost:8000/clients/show/7 
+[2025-06-05 06-19-23] ModuleManager byl inicializován  @  http://localhost:8000/clients/show/7 
+[2025-06-05 06-19-28] ModuleManager byl inicializován  @  http://localhost:8000/invoices/?client=7 
+[2025-06-05 06-22-42] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-05 06-22-55] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-23-04] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-23-17] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-05 06-23-17] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=5ctb 
+[2025-06-05 06-23-21] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-05 06-23-21] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=cpgu 
+[2025-06-05 06-26-11] ModuleManager byl inicializován  @  http://localhost:8000/users/ 
+[2025-06-05 06-26-23] ModuleManager byl inicializován  @  http://localhost:8000/users/edit/8 
+[2025-06-05 06-26-26] ModuleManager byl inicializován  @  http://localhost:8000/users/ 
+[2025-06-05 06-26-28] ModuleManager byl inicializován  @  http://localhost:8000/users/profile 
+[2025-06-05 06-26-46] ModuleManager byl inicializován  @  http://localhost:8000/users/profile 
+[2025-06-05 06-26-53] ModuleManager byl inicializován  @  http://localhost:8000/users/ 
+[2025-06-05 06-26-53] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=2xlu 
+[2025-06-05 06-26-59] ModuleManager byl inicializován  @  http://localhost:8000/users/profile 
+[2025-06-05 06-27-05] ModuleManager byl inicializován  @  http://localhost:8000/users/ 
+[2025-06-05 06-27-05] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=wgbq 
+[2025-06-05 06-31-55] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-32-09] ModuleManager byl inicializován  @  http://localhost:8000/invoices/default/33?do=markAsCreated 
+[2025-06-05 06-32-09] ModuleManager byl inicializován  @  http://localhost:8000/invoices/?_fid=tamz 
+[2025-06-05 06-32-19] ModuleManager byl inicializován  @  http://localhost:8000/invoices/pdf/34 
+[2025-06-05 06-32-43] ModuleManager byl inicializován  @  http://localhost:8000/invoices/add 
+[2025-06-05 06-32-57] ModuleManager byl inicializován  @  http://localhost:8000/invoices/add 
+[2025-06-05 06-32-57] ModuleManager byl inicializován  @  http://localhost:8000/invoices/show/35?_fid=os0q 
+[2025-06-05 06-33-01] ModuleManager byl inicializován  @  http://localhost:8000/invoices/pdf/35 
+[2025-06-05 06-33-46] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-33-51] ModuleManager byl inicializován  @  http://localhost:8000/invoices/delete/35 
+[2025-06-05 06-33-51] ModuleManager byl inicializován  @  http://localhost:8000/invoices/?_fid=6b1n 
+[2025-06-05 06-34-13] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-34-19] ModuleManager byl inicializován  @  http://localhost:8000/invoices/delete/34 
+[2025-06-05 06-34-19] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=hnv8 
+[2025-06-05 06-34-22] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-34-26] ModuleManager byl inicializován  @  http://localhost:8000/invoices/edit/34 
+[2025-06-05 06-34-39] ModuleManager byl inicializován  @  http://localhost:8000/invoices/edit/34 
+[2025-06-05 06-34-48] ModuleManager byl inicializován  @  http://localhost:8000/invoices/edit/34 
+[2025-06-05 06-34-48] ModuleManager byl inicializován  @  http://localhost:8000/invoices/show/34?_fid=5jvw 
+[2025-06-05 06-34-50] ModuleManager byl inicializován  @  http://localhost:8000/invoices/pdf/34 
+[2025-06-05 06-35-06] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-35-12] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-35-22] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-35-24] ModuleManager byl inicializován  @  http://localhost:8000/invoices/show/34 
+[2025-06-05 06-35-31] ModuleManager byl inicializován  @  http://localhost:8000/invoices/edit/34 
+[2025-06-05 06-35-31] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=t02i 
+[2025-06-05 06-35-33] ModuleManager byl inicializován  @  http://localhost:8000/invoices/show/34 
+[2025-06-05 06-35-34] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-35-38] ModuleManager byl inicializován  @  http://localhost:8000/invoices/default/34?do=markAsPaid 
+[2025-06-05 06-35-38] ModuleManager byl inicializován  @  http://localhost:8000/invoices/?_fid=hdvk 
+[2025-06-05 06-35-47] ModuleManager byl inicializován  @  http://localhost:8000/invoices/default/34?do=markAsCreated 
+[2025-06-05 06-35-48] ModuleManager byl inicializován  @  http://localhost:8000/invoices/?_fid=u143 
+[2025-06-05 06-36-02] ModuleManager byl inicializován  @  http://localhost:8000/invoices/add 
+[2025-06-05 06-36-02] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=vxf6 
+[2025-06-05 06-36-45] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-36-49] ModuleManager byl inicializován  @  http://localhost:8000/invoices/edit/34 
+[2025-06-05 06-36-49] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=6n4m 
+[2025-06-05 06-36-50] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-36-52] ModuleManager byl inicializován  @  http://localhost:8000/invoices/pdf/34 
+[2025-06-05 06-36-58] ModuleManager byl inicializován  @  http://localhost:8000/invoices/delete/34 
+[2025-06-05 06-36-58] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=rnam 
+[2025-06-05 06-37-27] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-37-28] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-37-32] ModuleManager byl inicializován  @  http://localhost:8000/invoices/default/34?do=markAsPaid 
+[2025-06-05 06-37-32] ModuleManager byl inicializován  @  http://localhost:8000/invoices/?_fid=mrrg 
+[2025-06-05 06-37-39] ModuleManager byl inicializován  @  http://localhost:8000/invoices/default/30?do=markAsCreated 
+[2025-06-05 06-37-39] ModuleManager byl inicializován  @  http://localhost:8000/invoices/?_fid=g3eq 
+[2025-06-05 06-37-48] ModuleManager byl inicializován  @  http://localhost:8000/invoices/edit/34 
+[2025-06-05 06-37-48] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=0zio 
+[2025-06-05 06-38-18] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-38-19] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=0zio 
+[2025-06-05 06-38-27] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-05 06-38-27] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=tfdk 
+[2025-06-05 06-41-23] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-43-24] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-43-29] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-43-32] ModuleManager byl inicializován  @  http://localhost:8000/clients/show/7 
+[2025-06-05 06-43-37] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-43-39] ModuleManager byl inicializován  @  http://localhost:8000/clients/edit/7 
+[2025-06-05 06-43-39] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=xt1t 
+[2025-06-05 06-43-40] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-43-50] ModuleManager byl inicializován  @  http://localhost:8000/clients/delete/9 
+[2025-06-05 06-43-50] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=ioq5 
+[2025-06-05 06-43-51] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-43-52] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-05 06-43-52] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=qf98 
+[2025-06-05 06-43-56] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-44-02] ModuleManager byl inicializován  @  http://localhost:8000/clients/show/7 
+[2025-06-05 06-44-04] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-44-05] ModuleManager byl inicializován  @  http://localhost:8000/clients/edit/7 
+[2025-06-05 06-44-15] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-44-23] ModuleManager byl inicializován  @  http://localhost:8000/clients/delete/9 
+[2025-06-05 06-44-23] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=4jsn 
+[2025-06-05 06-44-37] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-44-38] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-05 06-44-41] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-41] ARES lookup požadavek pro IČO: 25429469  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-41] === ARES LOOKUP START pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-41] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-42] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-42] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-45] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=25429469  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-45] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-45] HTTP úspěšná odpověď (3697 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-45] Staré REST API - finální výsledek: {"name":"ANERI s.r.o.","ic":"25429469","dic":"CZ25429469","address":"Hodkovick\u00e1 52\/52","city":"Liberec","zip":46006,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-45] === ARES ÚSPĚCH pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-45] ARES úspěšně vrátil data pro IČO: 25429469, firma: ANERI s.r.o.  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-06-05 06-44-57] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-45-08] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-05 06-45-09] ModuleManager byl inicializován  @  http://localhost:8000/clients/?_fid=ub6i 
+[2025-06-05 06-45-17] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-45-20] ModuleManager byl inicializován  @  http://localhost:8000/clients/delete/10 
+[2025-06-05 06-45-20] ModuleManager byl inicializován  @  http://localhost:8000/clients/?_fid=ggzq 
+[2025-06-05 06-45-25] ModuleManager byl inicializován  @  http://localhost:8000/clients/delete/9 
+[2025-06-05 06-45-25] ModuleManager byl inicializován  @  http://localhost:8000/clients/?_fid=zxxh 
+[2025-06-05 06-45-36] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-05 06-45-38] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-38] ARES lookup požadavek pro IČO: 66003008  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-38] === ARES LOOKUP START pro IČO: 66003008 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-38] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-38] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-38] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-41] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=66003008  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-41] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-42] HTTP úspěšná odpověď (2322 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-42] Staré REST API - finální výsledek: {"name":"Ministerstvo dopravy","ic":"66003008","dic":"CZ66003008","address":"n\u00e1b\u0159e\u017e\u00ed Ludv\u00edka Svobody 1222\/12","city":"Praha","zip":11000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-42] === ARES ÚSPĚCH pro IČO: 66003008 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-42] ARES úspěšně vrátil data pro IČO: 66003008, firma: Ministerstvo dopravy  @  http://localhost:8000/clients/add?do=aresLookup&ico=66003008 
+[2025-06-05 06-45-57] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-05 06-45-58] ModuleManager byl inicializován  @  http://localhost:8000/clients/?_fid=18iv 
+[2025-06-05 06-46-14] ModuleManager byl inicializován  @  http://localhost:8000/clients/edit/11 
+[2025-06-05 06-46-30] ModuleManager byl inicializován  @  http://localhost:8000/clients/edit/11 
+[2025-06-05 06-46-30] ModuleManager byl inicializován  @  http://localhost:8000/clients/?_fid=ub31 
+[2025-06-05 06-48-22] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-48-26] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-48-27] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-48-30] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-48-32] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-48-32] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=q8ml 
+[2025-06-05 06-48-34] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-05 06-48-34] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=jav6 
+[2025-06-05 06-48-36] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-48-43] ModuleManager byl inicializován  @  http://localhost:8000/users/profile 
+[2025-06-05 06-48-46] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-48-47] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-48-49] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-48-50] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-48-51] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-48-51] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=uosg 
+[2025-06-05 06-48-53] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-05 06-48-53] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=eygm 
+[2025-06-05 06-48-56] ModuleManager byl inicializován  @  http://localhost:8000/users/profile 
+[2025-06-05 06-49-01] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-49-02] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-49-03] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-49-04] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-49-06] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-49-06] Mažu existující assets modulu 'notes' z: D:\_coding\nette\fakturacni-system/www/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-49-06] Kopíruji nové assets modulu 'notes' z: D:\_coding\nette\fakturacni-system\app/Modules/notes/assets do: D:\_coding\nette\fakturacni-system/www/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-49-06] Assets modulu 'notes' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-49-06] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] === ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] AJAX parametry - moduleId: 'notes', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Aktivní moduly: notes, financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Modul 'notes' je aktivní, načítám instanci modulu  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Vytvářím instanci modulu 'notes'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Hledám soubor modulu: D:\_coding\nette\fakturacni-system\app/Modules/notes/Module.php  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Soubor modulu nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Kontroluji existenci třídy: Modules\Notes\Module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Připravené parametry: []  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] Volám handleAjaxRequest na modulu 'notes' s akcí 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] AJAX akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-06] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-49-08] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-05 06-49-08] ModuleManager byl inicializován  @  http://localhost:8000/users/ 
+[2025-06-05 06-49-09] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-05 06-49-09] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-05 06-49-09] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-05 06-49-09] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-05 06-49-09] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-05 06-49-09] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-05 06-49-09] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-05 06-49-09] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-05 06-49-09] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-05 06-49-12] ModuleManager byl inicializován  @  http://localhost:8000/users/profile 
+[2025-06-05 06-50-17] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-50-18] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-05 06-50-20] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-20] ARES lookup požadavek pro IČO: 00006947  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-20] === ARES LOOKUP START pro IČO: 00006947 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-20] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-20] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-20] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-23] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=00006947  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-23] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-24] HTTP úspěšná odpověď (2122 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-24] Staré REST API - finální výsledek: {"name":"Ministerstvo financ\u00ed","ic":"00006947","dic":"CZ00006947","address":"Letensk\u00e1 525\/15","city":"Praha","zip":11800,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-24] === ARES ÚSPĚCH pro IČO: 00006947 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-24] ARES úspěšně vrátil data pro IČO: 00006947, firma: Ministerstvo financí  @  http://localhost:8000/clients/add?do=aresLookup&ico=00006947 
+[2025-06-05 06-50-59] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-05 06-50-59] ModuleManager byl inicializován  @  http://localhost:8000/clients/?_fid=54do 
+[2025-06-05 06-51-50] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-52-01] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-52-09] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 06-54-48] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-55-07] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-55-21] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 06-56-59] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-57-07] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-57-15] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 06-57-58] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-57-58] Mažu existující assets modulu 'notes' z: D:\_coding\nette\fakturacni-system/www/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-57-58] Kopíruji nové assets modulu 'notes' z: D:\_coding\nette\fakturacni-system\app/Modules/notes/assets do: D:\_coding\nette\fakturacni-system/www/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-57-58] Assets modulu 'notes' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-57-58] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] === ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] AJAX parametry - moduleId: 'notes', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Aktivní moduly: notes, financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Modul 'notes' je aktivní, načítám instanci modulu  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Vytvářím instanci modulu 'notes'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Hledám soubor modulu: D:\_coding\nette\fakturacni-system\app/Modules/notes/Module.php  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Soubor modulu nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Kontroluji existenci třídy: Modules\Notes\Module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Připravené parametry: []  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] Volám handleAjaxRequest na modulu 'notes' s akcí 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] AJAX akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-57-58] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 06-58-03] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-58-03] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=ohc6 
+[2025-06-05 06-58-08] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 06-58-08] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=lano 
+[2025-06-05 07-07-17] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 07-07-19] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-19] Mažu existující assets modulu 'notes' z: D:\_coding\nette\fakturacni-system/www/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-19] Kopíruji nové assets modulu 'notes' z: D:\_coding\nette\fakturacni-system\app/Modules/notes/assets do: D:\_coding\nette\fakturacni-system/www/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-19] Assets modulu 'notes' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-19] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] === ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] AJAX parametry - moduleId: 'notes', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Aktivní moduly: notes, financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Modul 'notes' je aktivní, načítám instanci modulu  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Vytvářím instanci modulu 'notes'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Hledám soubor modulu: D:\_coding\nette\fakturacni-system\app/Modules/notes/Module.php  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Soubor modulu nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Kontroluji existenci třídy: Modules\Notes\Module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Připravené parametry: []  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] Volám handleAjaxRequest na modulu 'notes' s akcí 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] AJAX akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-19] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-24] Mažu existující assets modulu 'notes' z: D:\_coding\nette\fakturacni-system/www/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-24] Kopíruji nové assets modulu 'notes' z: D:\_coding\nette\fakturacni-system\app/Modules/notes/assets do: D:\_coding\nette\fakturacni-system/www/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-24] Assets modulu 'notes' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-24] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] === ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] AJAX parametry - moduleId: 'notes', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Aktivní moduly: notes, financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Modul 'notes' je aktivní, načítám instanci modulu  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Vytvářím instanci modulu 'notes'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Hledám soubor modulu: D:\_coding\nette\fakturacni-system\app/Modules/notes/Module.php  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Soubor modulu nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Kontroluji existenci třídy: Modules\Notes\Module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Připravené parametry: []  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] Volám handleAjaxRequest na modulu 'notes' s akcí 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] AJAX akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-24] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-27] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-05 07-07-27] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-05 07-07-27] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/assets do: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-05 07-07-27] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-05 07-07-30] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] === ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] AJAX parametry - moduleId: 'financial_reports', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Aktivní moduly: notes, financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Modul 'financial_reports' je aktivní, načítám instanci modulu  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Vytvářím instanci modulu 'financial_reports'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Hledám soubor modulu: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/Module.php  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Soubor modulu nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Kontroluji existenci třídy: Modules\Financial_reports\Module  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Instance modulu 'financial_reports' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Instance modulu 'financial_reports' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Připravené parametry: []  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] Volám handleAjaxRequest na modulu 'financial_reports' s akcí 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] AJAX akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-30] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-06-05 07-07-35] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-35] Mažu existující assets modulu 'notes' z: D:\_coding\nette\fakturacni-system/www/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-35] Kopíruji nové assets modulu 'notes' z: D:\_coding\nette\fakturacni-system\app/Modules/notes/assets do: D:\_coding\nette\fakturacni-system/www/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-35] Assets modulu 'notes' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-05 07-07-36] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] === ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] AJAX parametry - moduleId: 'notes', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Aktivní moduly: notes, financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Modul 'notes' je aktivní, načítám instanci modulu  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Vytvářím instanci modulu 'notes'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Hledám soubor modulu: D:\_coding\nette\fakturacni-system\app/Modules/notes/Module.php  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Soubor modulu nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Kontroluji existenci třídy: Modules\Notes\Module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Připravené parametry: []  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] Volám handleAjaxRequest na modulu 'notes' s akcí 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] AJAX akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-36] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-05 07-07-37] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-05 07-07-37] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-05 07-07-37] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/assets do: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-05 07-07-37] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
