@@ -101,8 +101,13 @@ class InvoicesPresenter extends BasePresenter
         $this->redirect('default');
     }
 
-    public function actionPdf(int $id): void
+public function actionPdf(int $id): void
     {
+        // Čištění output bufferů
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+        
         $invoice = $this->invoicesManager->getById($id);
 
         if (!$invoice) {

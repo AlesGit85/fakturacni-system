@@ -50,16 +50,23 @@ class Bootstrap
                 symlink($modulesDir, $wwwModulesDir);
             }
         }
-// Přidejte toto před vytvoření kontejneru
-$this->configurator->setDebugMode(true);
+
+        // OPRAVENO: Debug mode jen na localhost/developmentu
+        // $this->configurator->setDebugMode(true); // <-- SMAZÁNO!
+        
         return $container;
     }
 
 
     public function initializeEnvironment(): void
     {
-        define('WWW_DIR', dirname(__DIR__) . '/www');
-        //$this->configurator->setDebugMode('secret@23.75.345.200'); // enable for your remote IP
+        define('WWW_DIR', dirname(__DIR__));
+        
+        // OPRAVENO: Debug mode jen pro specifické IP nebo localhost
+        // Pro produkci zakomentováno:
+        // $this->configurator->setDebugMode('secret@23.75.345.200');
+        
+        // Tracy jen pro development (na produkci bude vypnutá local.neon)
         $this->configurator->enableTracy($this->rootDir . '/log');
 
         $this->configurator->createRobotLoader()

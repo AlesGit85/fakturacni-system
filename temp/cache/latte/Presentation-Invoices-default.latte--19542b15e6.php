@@ -60,9 +60,9 @@ final class Template_19542b15e6 extends Latte\Runtime\Template
 			echo '</span>
 ';
 		}
-		echo '                <span class="total-count">';
+		echo '                <span class="total-count">Počet vystavených dokladů: ';
 		echo LR\Filters::escapeHtmlText($invoices->count()) /* line 11 */;
-		echo ' dokladů</span>
+		echo '</span>
             </h1>
             <p class="text-muted">
 ';

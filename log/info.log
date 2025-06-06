@@ -3627,3 +3627,104 @@
 [2025-06-05 07-07-37] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
 [2025-06-05 07-07-37] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/financial_reports/assets do: D:\_coding\nette\fakturacni-system/www/Modules/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
 [2025-06-05 07-07-37] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-06-05 07-27-25] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-05 07-27-25] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=12fl3&_fid=pd94 
+[2025-06-05 07-27-27] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-05 07-27-27] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=9669 
+[2025-06-05 11-46-05] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 11-46-06] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=fr9w9&_fid=2ilx 
+[2025-06-05 11-46-10] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-05 11-46-10] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=yd00 
+[2025-06-05 11-53-52] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 11-53-55] ModuleManager byl inicializován  @  http://localhost:8000/invoices/add 
+[2025-06-05 11-55-02] ModuleManager byl inicializován  @  http://localhost:8000/invoices/add 
+[2025-06-05 11-55-02] ModuleManager byl inicializován  @  http://localhost:8000/invoices/show/36?_fid=yfz0 
+[2025-06-05 11-55-04] ModuleManager byl inicializován  @  http://localhost:8000/invoices/pdf/36 
+[2025-06-05 11-56-32] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 11-56-39] ModuleManager byl inicializován  @  http://localhost:8000/invoices/pdf/36 
+[2025-06-05 11-57-37] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 11-57-39] ModuleManager byl inicializován  @  http://localhost:8000/invoices/add 
+[2025-06-05 11-57-41] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 11-57-43] ModuleManager byl inicializován  @  http://localhost:8000/invoices/add 
+[2025-06-05 11-57-44] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 11-57-47] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 12-52-49] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-05 12-52-49] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=xk8sa&_fid=1xaq 
+[2025-06-05 12-52-52] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-05 12-52-52] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=4yin 
+[2025-06-05 12-52-54] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 12-52-56] ModuleManager byl inicializován  @  http://localhost:8000/clients/show/7 
+[2025-06-05 12-58-05] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 12-58-07] ModuleManager byl inicializován  @  http://localhost:8000/invoices/show/36 
+[2025-06-05 12-59-29] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-05 14-20-15] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 14-20-15] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=y0kyq&_fid=5985 
+[2025-06-05 14-20-16] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-05 14-20-16] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=6nie 
+[2025-06-05 14-20-20] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-05 14-20-21] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-05 14-20-23] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-05 14-20-23] ARES lookup požadavek pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-05 14-20-23] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-05 14-20-23] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-05 14-20-24] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-05 14-20-24] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-05 14-20-27] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-05 14-20-27] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-05 14-20-27] HTTP úspěšná odpověď (1696 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-05 14-20-27] Staré REST API - finální výsledek: {"name":"Ale\u0161 Zita","ic":"87894912","dic":"","address":"167","city":"Librantice","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-05 14-20-27] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-05 14-20-27] ARES úspěšně vrátil data pro IČO: 87894912, firma: Aleš Zita  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-45-53] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-06 07-45-54] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=8oh6t&_fid=uhl5 
+[2025-06-06 07-46-46] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-06 07-46-47] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=v8xr 
+[2025-06-06 07-46-49] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-06 07-46-50] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-06-06 07-46-53] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-46-53] ARES lookup požadavek pro IČO: 87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-46-53] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-46-53] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-46-53] HTTP neúspěšný status: HTTP/1.1 404  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-46-53] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-46-56] HTTP požadavek selhal pro: http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=87894912  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-46-56] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-46-57] HTTP úspěšná odpověď (2315 znaků)  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-46-57] Staré REST API - finální výsledek: {"name":"Ale\u0161 Zita","ic":"87894912","dic":"","address":"167","city":"Librantice","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-46-57] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-46-57] ARES úspěšně vrátil data pro IČO: 87894912, firma: Aleš Zita  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-06-06 07-52-14] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-06 07-52-19] ModuleManager byl inicializován  @  http://localhost:8000/invoices/add 
+[2025-06-06 08-15-14] ModuleManager byl inicializován  @  http://localhost:8000/invoices/add 
+[2025-06-06 08-15-14] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=zgidd&_fid=8ch6 
+[2025-06-06 08-15-16] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-06 08-15-16] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=n10n 
+[2025-06-06 11-07-02] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 11-07-02] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=bsn6i&_fid=wn8b 
+[2025-06-06 11-53-31] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-06 11-53-33] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-06 11-53-33] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=4faq 
+[2025-06-06 11-53-35] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 11-57-18] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 12-29-26] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 12-29-26] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=3dyrb&_fid=f78s 
+[2025-06-06 12-29-28] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-06 12-29-28] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=nv8a 
+[2025-06-06 12-29-29] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 12-41-32] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-20-47] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-20-47] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=f6sbc&_fid=v0z1 
+[2025-06-06 13-20-49] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-06 13-20-49] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=ikuy 
+[2025-06-06 13-20-51] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-23-37] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-24-41] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-24-44] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-27-40] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-32-42] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-34-05] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-47-33] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-47-44] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-48-08] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-48-46] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 
+[2025-06-06 13-50-02] ModuleManager byl inicializován  @  http://localhost:8000/settings/ 

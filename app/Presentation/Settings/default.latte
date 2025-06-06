@@ -181,21 +181,20 @@
                     </div>
                 </div>
                 
+                <!-- DPH checkbox - jednoduchá verze -->
                 <div class="col-md-6">
-                    <div class="modern-checkbox-wrapper">
-                        {input vat_payer id => 'vat-payer-checkbox', class => 'modern-checkbox'}
-                        <label for="vat-payer-checkbox" class="modern-checkbox-label">
-                            <div class="checkbox-content">
-                                <i class="bi bi-percent checkbox-icon"></i>
-                                <div class="checkbox-text">
-                                    <div class="checkbox-title">Jsem plátce DPH</div>
-                                    <div class="checkbox-description">Fakturace s DPH</div>
-                                </div>
-                            </div>
-                        </label>
+                    <div class="form-check-container">
+                        <div class="form-check">
+                            {input vat_payer class => 'form-check-input', id => 'vat-payer-checkbox'}
+                            {label vat_payer class => 'form-check-label', for => 'vat-payer-checkbox'}
+                                <i class="bi bi-percent me-2"></i>
+                            {/label}
+                        </div>
+                        <small class="text-muted">Fakturace s DPH</small>
                     </div>
                 </div>
                 
+                <!-- DIČ pole - zobrazí se když je zaškrtnuto DPH -->
                 <div id="dic-container" class="col-md-6" style="display: {if $company && $company->vat_payer}block{else}none{/if};">
                     <div class="form-floating">
                         {input dic class => 'form-control', id => 'dic-field'}
@@ -326,8 +325,135 @@
                         </div>
                     </div>
                 </div>
+                
             {/form}
         </div>
     </div>
 </div>
+
+<style>
+/* Styly pro jednoduchý checkbox */
+.form-check-container {
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-check-container:hover {
+    border-color: #B1D235;
+    background: rgba(177, 210, 53, 0.1);
+}
+
+.form-check {
+    margin-bottom: 0.5rem;
+}
+
+.form-check-input {
+    margin-right: 0.5rem;
+}
+
+.form-check-input:checked {
+    background-color: #B1D235;
+    border-color: #B1D235;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.25);
+    border-color: #95B11F;
+}
+
+.form-check-label {
+    font-weight: 600;
+    color: #212529;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.form-check-label i {
+    color: #6c757d;
+}
+
+.form-check-input:checked + .form-check-label i {
+    color: #95B11F;
+}
+
+.form-check-container .text-muted {
+    font-size: 0.875rem;
+    margin-left: 1.5rem;
+}
+
+/* Animace pro DIČ container */
+#dic-container {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+/* Responsive úpravy */
+@media (max-width: 767px) {
+    .form-check-container {
+        margin-bottom: 1rem;
+    }
+    
+    #dic-container {
+        margin-top: 1rem;
+    }
+}
+
+/* Color settings grid */
+.color-settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.color-setting-item {
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+.color-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.color-preview {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 500;
+    min-width: 120px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+}
+
+/* Vylepšení pro primary button */
+.btn-primary {
+    background-color: #B1D235;
+    border-color: #B1D235;
+    color: #212529;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #95B11F;
+    border-color: #95B11F;
+    color: #212529;
+}
+
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.25);
+}
+</style>
+
+<script src="{$basePath}/js/settings.js"></script>
 {/block}

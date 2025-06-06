@@ -1,0 +1,41 @@
+# config/local.neon - Produkční konfigurace pro inv.allimedia.cz
+parameters:
+	production: true
+	
+database:
+	dsn: 'mysql:host=localhost;dbname=c4invallimedia'
+	user: 'c4alpho'
+	password: 'nzsm_YJH6'
+	options:
+		lazy: true
+		charset: utf8mb4
+
+session:
+	expiration: 14 days
+	autoStart: true
+	name: qrdoklad_session
+	cookieHttponly: true
+	cookieSecure: true # HTTPS je povinné v produkci
+	cookieSamesite: Strict
+
+tracy:
+	email: info@allimedia.cz
+	logSeverity: [E_ERROR, E_WARNING, E_PARSE, E_COMPILE_ERROR]
+	strictMode: true
+	showBar: false # Skryje Tracy bar v produkci
+	logDir: %appDir%/../log
+	maxLogFiles: 50
+
+application:
+	errorPresenter: Error:Error4xx
+	catchExceptions: true
+	
+latte:
+	strictTypes: yes
+	strictParsing: yes
+
+services:
+	security.headers:
+		factory: App\Security\SecurityHeaders
+		setup:
+			- apply(@Nette\Http\Response)

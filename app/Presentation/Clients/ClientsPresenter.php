@@ -220,41 +220,98 @@ class ClientsPresenter extends BasePresenter
 
     /**
      * Vyhledá firmu v ARESu podle IČO
-     * AresService už vždy vrací data, takže nemusíme mít vlastní fallback
+     * Opravená produkční verze
      */
     public function handleAresLookup(): void
     {
-        // Explicitní kontrola oprávnění - pouze účetní a admin
-        if (!$this->isAccountant()) {
-            $this->sendJson(['error' => 'Nemáte oprávnění pro vyhledávání v ARESu.']);
-            return;
-        }
+        try {
+            // Agresivní čištění všech output bufferů (řeší problém s již odeslanými headers)
+            while (ob_get_level()) {
+                ob_end_clean();
+            }
+            
+            // Ručně nastavíme correct content type header
+            if (!headers_sent()) {
+                header('Content-Type: application/json; charset=utf-8');
+            }
+            
+            // Explicitní kontrola oprávnění - pouze účetní a admin
+            if (!$this->isAccountant()) {
+                echo json_encode(['error' => 'Nemáte oprávnění pro vyhledávání v ARESu.']);
+                exit;
+            }
 
-        // Získáme IČO z GET parametrů
-        $ico = $this->getHttpRequest()->getQuery('ico');
-        
-        if (!$ico) {
-            $this->sendJson(['error' => 'Nebylo zadáno IČO']);
-            return;
+            // Získáme IČO z GET parametrů
+            $ico = $this->getHttpRequest()->getQuery('ico');
+            
+            if (!$ico) {
+                echo json_encode(['error' => 'Nebylo zadáno IČO']);
+                exit;
+            }
+            
+            // Validace IČO
+            $ico = trim($ico);
+            if (!preg_match('/^\d{7,8}$/', $ico)) {
+                echo json_encode(['error' => 'Neplatné IČO. Zadejte 7 nebo 8 číslic.']);
+                exit;
+            }
+            
+            // Logování požadavku - bezpečně
+            try {
+                $this->logger->log("ARES lookup požadavek pro IČO: $ico", ILogger::INFO);
+            } catch (\Exception $e) {
+                // Pokud selže logování, pokračujeme bez něj
+            }
+            
+            // AresService vždy vrací data (buď z ARESu nebo testovací)
+            $data = $this->aresService->getCompanyDataByIco($ico);
+            
+            // Kontrola, zda máme validní data
+            if (!isset($data['name']) || empty(trim($data['name']))) {
+                try {
+                    $this->logger->log("AresService vrátil nevalidní data pro IČO: $ico", ILogger::ERROR);
+                } catch (\Exception $e) {
+                    // Pokud selže logování, pokračujeme bez něj
+                }
+                echo json_encode(['error' => 'Nepodařilo se načíst data pro zadané IČO']);
+                exit;
+            }
+            
+            // Test JSON serializace před odesláním
+            $jsonData = json_encode($data);
+            if ($jsonData === false) {
+                $jsonError = json_last_error_msg();
+                try {
+                    $this->logger->log("JSON serialization failed: $jsonError", ILogger::ERROR);
+                } catch (\Exception $e) {
+                    // Pokud selže logování, pokračujeme bez něj
+                }
+                echo json_encode(['error' => 'Došlo k chybě při zpracování dat']);
+                exit;
+            }
+            
+            try {
+                $this->logger->log("ARES úspěšně vrátil data pro IČO: $ico, firma: " . $data['name'], ILogger::INFO);
+            } catch (\Exception $e) {
+                // Pokud selže logování, pokračujeme bez něj
+            }
+            
+            // Pošleme data přímo (obcházíme Nette sendJson které má problémy na produkci)
+            echo $jsonData;
+            exit;
+            
+        } catch (\Throwable $e) {
+            // Zachytíme všechny chyby a pošleme je jako JSON
+            try {
+                $this->logger->log("Chyba v ARES lookup: " . $e->getMessage(), ILogger::ERROR);
+            } catch (\Exception $logError) {
+                // Pokud selže i logování chyby, ignorujeme to
+            }
+            
+            echo json_encode([
+                'error' => 'Došlo k chybě při načítání dat z ARESu. Zkuste to prosím později.'
+            ]);
+            exit;
         }
-        
-        // Logování požadavku
-        $this->logger->log("ARES lookup požadavek pro IČO: $ico", ILogger::INFO);
-        
-        // AresService vždy vrací data (buď z ARESu nebo testovací)
-        // Takže nepotřebujeme try-catch ani vlastní fallback
-        $data = $this->aresService->getCompanyDataByIco($ico);
-        
-        // Kontrola, zda máme validní data
-        if (!isset($data['name']) || empty(trim($data['name']))) {
-            $this->logger->log("AresService vrátil nevalidní data pro IČO: $ico", ILogger::ERROR);
-            $this->sendJson(['error' => 'Nepodařilo se načíst data pro zadané IČO']);
-            return;
-        }
-        
-        $this->logger->log("ARES úspěšně vrátil data pro IČO: $ico, firma: " . $data['name'], ILogger::INFO);
-        
-        // Pošleme data jako JSON
-        $this->sendJson($data);
     }
 }

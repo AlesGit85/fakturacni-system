@@ -8,7 +8,7 @@
                 {if isset($clientFilter)}
                     <span class="client-filter-badge">klienta {$clientFilter}</span>
                 {/if}
-                <span class="total-count">{$invoices->count()} dokladů</span>
+                <span class="total-count">Počet vystavených dokladů: {$invoices->count()}</span>
             </h1>
             <p class="text-muted">
                 {if isset($clientFilter)}
