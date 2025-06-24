@@ -349,8 +349,6 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
-		$service->injectSecurityLogger($this->getService('05'));
-		$service->injectModuleManager($this->getService('07'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -368,8 +366,6 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
-		$service->injectSecurityLogger($this->getService('05'));
-		$service->injectModuleManager($this->getService('07'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -427,8 +423,6 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
-		$service->injectSecurityLogger($this->getService('05'));
-		$service->injectModuleManager($this->getService('07'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -451,8 +445,6 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
-		$service->injectSecurityLogger($this->getService('05'));
-		$service->injectModuleManager($this->getService('07'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -470,8 +462,6 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
-		$service->injectSecurityLogger($this->getService('05'));
-		$service->injectModuleManager($this->getService('07'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -495,8 +485,6 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
-		$service->injectSecurityLogger($this->getService('05'));
-		$service->injectModuleManager($this->getService('07'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -514,8 +502,6 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
-		$service->injectSecurityLogger($this->getService('05'));
-		$service->injectModuleManager($this->getService('07'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -538,8 +524,6 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('security.user'),
 			$this->getService('latte.templateFactory'),
 		);
-		$service->injectSecurityLogger($this->getService('05'));
-		$service->injectModuleManager($this->getService('07'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}

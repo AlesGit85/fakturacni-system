@@ -33,8 +33,8 @@ final class UsersPresenter extends BasePresenter
 
     public function renderDefault(): void
     {
-        $this->template->add('users', $this->userManager->getAll());
-        $this->template->add('totalUsers', $this->userManager->getAll()->count());
+        $this->template->users = $this->userManager->getAll();
+        $this->template->totalUsers = $this->userManager->getAll()->count();
     }
 
     public function renderProfile(): void
@@ -47,7 +47,7 @@ final class UsersPresenter extends BasePresenter
             $this->error('Uživatel nebyl nalezen');
         }
 
-        $this->template->add('profileUser', $user);
+        $this->template->profileUser = $user;
         $this['profileForm']->setDefaults($user);
     }
 
@@ -64,7 +64,7 @@ final class UsersPresenter extends BasePresenter
             $this->error('Uživatel nebyl nalezen');
         }
 
-        $this->template->add('editUser', $user);
+        $this->template->editUser = $user;
         $this['userForm']->setDefaults($user);
     }
 
@@ -171,34 +171,36 @@ final class UsersPresenter extends BasePresenter
                 return;
             }
 
-            $updateData = [
-                'username' => $data->username,
-                'email' => $data->email,
-                'role' => $data->role,
-            ];
-
-            // Pokud je zadáno heslo, přidáme ho
-            if (!empty($data->password)) {
-                $updateData['password'] = $data->password;
-            }
-
-            // Admin ID a jméno pro logování
-            $adminId = $this->getUser()->getId();
-            $adminName = $this->getUser()->getIdentity()->username;
-
             if ($id) {
-                // Editace existujícího uživatele
+                // Úprava stávajícího uživatele
+                $updateData = [
+                    'username' => $data->username,
+                    'email' => $data->email,
+                    'role' => $data->role,
+                ];
+
+                if (!empty($data->password)) {
+                    $updateData['password'] = $data->password;
+                }
+
+                $adminId = $this->getUser()->getId();
+                $adminName = $this->getUser()->getIdentity()->username;
                 $this->userManager->update($id, $updateData, $adminId, $adminName);
+
                 $this->flashMessage('Uživatel byl úspěšně upraven.', 'success');
             } else {
                 // Přidání nového uživatele
                 if (empty($data->password)) {
                     /** @var Nette\Forms\Controls\PasswordInput $passwordField */
                     $passwordField = $form['password'];
-                    $passwordField->addError('Pro nového uživatele je heslo povinné.');
+                    $passwordField->addError('Pro nového uživatele je nutné zadat heslo.');
                     return;
                 }
+
+                $adminId = $this->getUser()->getId();
+                $adminName = $this->getUser()->getIdentity()->username;
                 $this->userManager->add($data->username, $data->email, $data->password, $data->role, $adminId, $adminName);
+
                 $this->flashMessage('Uživatel byl úspěšně přidán.', 'success');
             }
 
@@ -208,7 +210,7 @@ final class UsersPresenter extends BasePresenter
         }
     }
 
-    protected function createComponentAddUserForm(): Form
+    protected function createComponentAddForm(): Form
     {
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
@@ -226,8 +228,7 @@ final class UsersPresenter extends BasePresenter
             'accountant' => 'Účetní',
             'admin' => 'Administrátor'
         ])
-            ->setRequired('Vyberte roli')
-            ->setDefaultValue('readonly');
+            ->setRequired('Vyberte roli');
 
         $passwordField = $form->addPassword('password', 'Heslo:')
             ->setRequired('Zadejte heslo')
@@ -237,17 +238,16 @@ final class UsersPresenter extends BasePresenter
 
         $form->addPassword('passwordVerify', 'Heslo znovu:')
             ->setRequired('Zadejte heslo znovu pro kontrolu')
-            ->addConditionOn($passwordField, $form::VALID)
             ->addRule(Form::EQUAL, 'Hesla se neshodují', $passwordField);
 
         $form->addSubmit('send', 'Přidat uživatele');
 
-        $form->onSuccess[] = [$this, 'addUserFormSucceeded'];
+        $form->onSuccess[] = [$this, 'addFormSucceeded'];
 
         return $form;
     }
 
-    public function addUserFormSucceeded(Form $form, \stdClass $data): void
+    public function addFormSucceeded(Form $form, \stdClass $data): void
     {
         try {
             // Kontrola jedinečnosti uživatelského jména a e-mailu

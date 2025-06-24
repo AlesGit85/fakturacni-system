@@ -53,6 +53,7 @@ final class HomePresenter extends BasePresenter
             // Bezpečné získání počtu klientů
             $clientsSelection = $this->clientsManager->getAll();
             $clientsCount = 0;
+
             if ($clientsSelection && method_exists($clientsSelection, 'count')) {
                 $clientsCount = $clientsSelection->count();
             } elseif (is_array($clientsSelection)) {
@@ -71,7 +72,15 @@ final class HomePresenter extends BasePresenter
                 $currentUser = $this->userManager->getById($userId);
                 
                 if ($currentUser) {
-                    $userDisplayName = $this->userManager->getUserDisplayName($currentUser);
+                    // Místo getUserDisplayName() používáme vokativ
+                    if (!empty($currentUser->first_name)) {
+                        // Pokud má křestní jméno, použijeme ho v 5. pádě (vokativ)
+                        $userDisplayName = $this->getVocativeName($currentUser->first_name);
+                    } else {
+                        // Jinak použijeme username (bez vokativu, protože to není křestní jméno)
+                        $userDisplayName = $currentUser->username;
+                    }
+                    
                     $userFullName = $this->userManager->getUserFullName($currentUser);
                 }
             }

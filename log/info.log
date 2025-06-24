@@ -3849,3 +3849,54 @@
 [2025-06-24 09-51-34] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?_fid=vqu8 
 [2025-06-24 09-51-41] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
 [2025-06-24 09-51-41] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=7g0m 
+[2025-06-24 11-24-41] ModuleManager byl inicializován  @  http://localhost:8000/sign/out 
+[2025-06-24 11-24-41] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?_fid=jevi 
+[2025-06-24 11-24-45] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-06-24 11-24-45] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=wds2 
+[2025-06-24 11-24-53] ModuleManager byl inicializován  @  http://localhost:8000/users/profile 
+[2025-06-24 11-25-28] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-24 11-29-43] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-29-43] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-29-43] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-29-43] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-29-43] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-29-43] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-29-43] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-29-43] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-29-43] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-30-22] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-30-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-30-22] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-30-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-30-22] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-30-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-30-22] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-30-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-30-22] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-35-09] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-35-09] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-35-09] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-35-09] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-35-09] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-35-09] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-35-09] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-35-10] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-35-10] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-37-42] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-37-42] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-37-42] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-37-42] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-37-42] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-37-42] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-37-42] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-37-42] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-37-42] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-38-44] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-38-44] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-38-44] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-38-44] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-38-44] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-38-44] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-38-44] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-38-44] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-24 11-38-44] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
