@@ -25,48 +25,26 @@ body {
     align-items: center !important;
     color: white !important;
     transition: var(--transition);
+    padding: 0.5rem 0;
 }
 
 .navbar-brand:hover {
     text-decoration: none !important;
     color: white !important;
+    transform: scale(1.05);
 }
 
 /* Styly pro logo v navbar-brand */
 .navbar-brand img {
+    max-height: 32px;
+    width: auto;
+    max-width: 200px;
     transition: var(--transition);
     filter: brightness(1);
 }
 
 .navbar-brand:hover img {
-    filter: brightness(1.2) drop-shadow(0 0 8px rgba(177, 210, 53, 0.4));
-}
-
-/* Wrapper pro text v brand, aby se podtrhl jen text, ne logo */
-.navbar-brand .brand-text {
-    position: relative;
-    color: white;
-    transition: var(--transition);
-    margin-left: 0.5rem;
-}
-
-.navbar-brand:hover .brand-text {
-    color: white;
-}
-
-.navbar-brand .brand-text::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--primary-color);
-    transition: width 0.3s ease;
-}
-
-.navbar-brand:hover .brand-text::after {
-    width: 100%;
+    filter: brightness(1.1) drop-shadow(0 0 8px rgba(177, 210, 53, 0.4));
 }
 
 .nav-link {
@@ -308,4 +286,17 @@ body {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary-color);
+}
+
+/* Responzivní úpravy pro logo */
+@media (max-width: 768px) {
+    .navbar-brand img {
+        max-height: 28px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand img {
+        max-height: 24px;
+    }
 }
