@@ -51,6 +51,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'Nette\Application\UI\TemplateFactory' => [['latte.templateFactory']],
 		'Nette\Bridges\ApplicationLatte\TemplateFactory' => [['latte.templateFactory']],
 		'Nette\Mail\Mailer' => [['mail.mailer']],
+		'App\Mail\TestMailer' => [['mail.mailer']],
 		'Nette\Security\Passwords' => [['security.passwords']],
 		'Nette\Security\UserStorage' => [['security.userStorage']],
 		'Nette\Security\User' => [['security.user']],
@@ -82,6 +83,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'App\Security\SecurityLogger' => [['05']],
 		'App\Model\AresService' => [['06']],
 		'App\Model\ModuleManager' => [['07']],
+		'App\Model\EmailService' => [['08']],
 		'Nette\Security\Authenticator' => [['authenticator']],
 		'Nette\Security\IAuthenticator' => [['authenticator']],
 		'App\Model\UserManager' => [['authenticator']],
@@ -255,8 +257,8 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'App\Presentation\Users\UsersPresenter' => [2 => ['application.10']],
 		'NetteModule\ErrorPresenter' => [2 => ['application.11']],
 		'NetteModule\MicroPresenter' => [2 => ['application.12']],
-		'App\Core\RouterFactory' => [['08']],
-		'Modules\Financial_reports\FinancialReportsService' => [['09']],
+		'App\Core\RouterFactory' => [['09']],
+		'Modules\Financial_reports\FinancialReportsService' => [['010']],
 	];
 
 
@@ -308,13 +310,19 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	}
 
 
-	public function createService08(): App\Core\RouterFactory
+	public function createService08(): App\Model\EmailService
+	{
+		return new App\Model\EmailService($this->getService('mail.mailer'), $this->getService('application.linkGenerator'));
+	}
+
+
+	public function createService09(): App\Core\RouterFactory
 	{
 		return new App\Core\RouterFactory;
 	}
 
 
-	public function createService09(): Modules\Financial_reports\FinancialReportsService
+	public function createService010(): Modules\Financial_reports\FinancialReportsService
 	{
 		return new Modules\Financial_reports\FinancialReportsService(
 			$this->getService('02'),
@@ -515,7 +523,12 @@ class Container_bd9ea93023 extends Nette\DI\Container
 
 	public function createServiceApplication__9(): App\Presentation\Sign\SignPresenter
 	{
-		$service = new App\Presentation\Sign\SignPresenter($this->getService('authenticator'), $this->getService('05'));
+		$service = new App\Presentation\Sign\SignPresenter(
+			$this->getService('authenticator'),
+			$this->getService('05'),
+			$this->getService('08'),
+			$this->getService('database.default.explorer'),
+		);
 		$service->injectPrimary(
 			$this->getService('http.request'),
 			$this->getService('http.response'),
@@ -713,9 +726,9 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	}
 
 
-	public function createServiceMail__mailer(): Nette\Mail\Mailer
+	public function createServiceMail__mailer(): App\Mail\TestMailer
 	{
-		return new Nette\Mail\SendmailMailer;
+		return new App\Mail\TestMailer('D:\_coding\nette\fakturacni-system/temp');
 	}
 
 

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use Latte\Runtime as LR;
 
-/** source: D:\_coding\nette\fakturacni-system\app\Presentation\Sign/in.latte */
-final class Template_a762865352 extends Latte\Runtime\Template
+/** source: D:\_coding\nette\fakturacni-system\app\Presentation\Sign/resetPassword.latte */
+final class Template_e5ca6e9674 extends Latte\Runtime\Template
 {
-	public const Source = 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign/in.latte';
+	public const Source = 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign/resetPassword.latte';
 
 	public const Blocks = [
 		['title' => 'blockTitle', 'content' => 'blockContent'],
@@ -49,7 +49,7 @@ final class Template_a762865352 extends Latte\Runtime\Template
 	/** {block title} on line 3 */
 	public function blockTitle(array $ʟ_args): void
 	{
-		echo 'Přihlášení';
+		echo 'Nastavení nového hesla';
 	}
 
 
@@ -67,13 +67,13 @@ final class Template_a762865352 extends Latte\Runtime\Template
                 <img src="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 10 */;
 		echo '/images/qr-webp-white.webp" alt="QRdoklad" class="auth-logo">
-                <h1 class="auth-title">Přihlášení do systému</h1>
-                <p class="auth-subtitle">Zadejte své přihlašovací údaje</p>
+                <h1 class="auth-title">Nastavení nového hesla</h1>
+                <p class="auth-subtitle">Zadejte své nové heslo</p>
             </div>
 
             <div class="auth-body">
                 ';
-		$form = $this->global->formsStack[] = $this->global->uiControl['signInForm'] /* line 16 */;
+		$form = $this->global->formsStack[] = $this->global->uiControl['resetPasswordForm'] /* line 16 */;
 		Nette\Bridges\FormsLatte\Runtime::initializeForm($form);
 		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form, ['class' => 'auth-form']) /* line 16 */;
 		echo "\n";
@@ -92,15 +92,19 @@ final class Template_a762865352 extends Latte\Runtime\Template
 ';
 		}
 		echo '                    
+                    ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('token', $this->global)->getControl()->addAttributes(['value' => $token]) /* line 27 */;
+		echo '
+                    
                     <div class="form-floating mb-3">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('username', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 28 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('password', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 30 */;
 		echo '
-                        <label for="frm-signInForm-username" class="form-label">Uživatelské jméno</label>
+                        <label for="frm-resetPasswordForm-password" class="form-label">Nové heslo</label>
 ';
-		if ($form['username']->hasErrors()) /* line 30 */ {
+		if ($form['password']->hasErrors()) /* line 32 */ {
 			echo '                            <div class="text-danger mt-1">';
-			echo LR\Filters::escapeHtmlText($form['username']->getError()) /* line 31 */;
+			echo LR\Filters::escapeHtmlText($form['password']->getError()) /* line 33 */;
 			echo '</div>
 ';
 		}
@@ -108,50 +112,39 @@ final class Template_a762865352 extends Latte\Runtime\Template
 
                     <div class="form-floating mb-3">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('password', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 36 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('passwordVerify', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 38 */;
 		echo '
-                        <label for="frm-signInForm-password" class="form-label">Heslo</label>
+                        <label for="frm-resetPasswordForm-passwordVerify" class="form-label">Heslo znovu</label>
 ';
-		if ($form['password']->hasErrors()) /* line 38 */ {
+		if ($form['passwordVerify']->hasErrors()) /* line 40 */ {
 			echo '                            <div class="text-danger mt-1">';
-			echo LR\Filters::escapeHtmlText($form['password']->getError()) /* line 39 */;
+			echo LR\Filters::escapeHtmlText($form['passwordVerify']->getError()) /* line 41 */;
 			echo '</div>
 ';
 		}
 		echo '                    </div>
 
-                    <div class="form-check mb-4">
+                    <div class="d-grid mb-3">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('remember', $this->global)->getControl()->addAttributes(['class' => 'form-check-input']) /* line 44 */;
-		echo '
-                        <label for="frm-signInForm-remember" class="form-check-label">Zůstat přihlášen</label>
-                    </div>
-
-                    <div class="d-grid">
-                        ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary btn-lg']) /* line 49 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary btn-lg']) /* line 46 */;
 		echo '
                     </div>
                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 51 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 48 */;
 
 		echo '
             </div>
 
             <div class="auth-footer">
-                <p class="text-center text-muted">
-                    Nemáte účet? 
-                    <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Sign:up')) /* line 57 */;
-		echo '" class="auth-link">Zaregistrujte se</a>
-                </p>
-                <p class="text-center text-muted">
-                    <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Sign:forgotPassword')) /* line 60 */;
-		echo '" class="auth-link">
-                        <i class="bi bi-key"></i> Zapomněl jsem heslo
-                    </a>
-                </p>
+                <div class="alert alert-warning">
+                    <i class="bi bi-shield-exclamation me-2"></i>
+                    <strong>Bezpečnostní požadavky:</strong>
+                    <ul class="mb-0 mt-2">
+                        <li>Heslo musí mít alespoň 8 znaků</li>
+                        <li>Musí obsahovat alespoň jednu číslici</li>
+                        <li>Musí obsahovat alespoň jedno velké písmeno</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

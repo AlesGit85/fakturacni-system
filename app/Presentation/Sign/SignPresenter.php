@@ -7,6 +7,7 @@ namespace App\Presentation\Sign;
 use Nette;
 use Nette\Application\UI\Form;
 use App\Model\UserManager;
+use App\Model\EmailService;
 use App\Presentation\BasePresenter;
 use App\Security\SecurityLogger;
 
@@ -18,12 +19,32 @@ final class SignPresenter extends BasePresenter
     /** @var SecurityLogger */
     private $securityLogger;
 
+    /** @var EmailService */
+    private $emailService;
+
+    /** @var Nette\Database\Explorer */
+    private $database;
+
     protected bool $requiresLogin = false;
 
-    public function __construct(UserManager $userManager, SecurityLogger $securityLogger)
-    {
+    public function __construct(
+        UserManager $userManager, 
+        SecurityLogger $securityLogger,
+        EmailService $emailService,
+        Nette\Database\Explorer $database
+    ) {
         $this->userManager = $userManager;
         $this->securityLogger = $securityLogger;
+        $this->emailService = $emailService;
+        $this->database = $database;
+    }
+
+    /**
+     * Default akce - přesměruje na přihlášení
+     */
+    public function actionDefault(): void
+    {
+        $this->redirect('Sign:in');
     }
 
     public function actionIn(): void
@@ -64,6 +85,22 @@ final class SignPresenter extends BasePresenter
         }
     }
 
+    /**
+     * Testovací akce pro ověření funkčnosti emailů
+     * URL: /sign/test-email
+     */
+    public function actionTestEmail(): void
+    {
+        // Pouze pro vývojové a testovací účely
+        // V produkci můžete tuto akci odstranit nebo omezit přístup
+    }
+
+    public function renderTestEmail(): void
+    {
+        // Explicitně nastavíme šablonu (pokud chceš zachovat název s pomlčkou)
+        $this->template->setFile(__DIR__ . '/test-email.latte');
+    }
+
     public function actionOut(): void
     {
         // Logování odhlášení před samotným odhlášením
@@ -93,19 +130,6 @@ final class SignPresenter extends BasePresenter
         $this->template->username = $identity ? $identity->username : 'neznámý uživatel';
     }
 
-    public function actionForceLogout(): void
-    {
-        // Tato akce provede skutečné odhlášení s logováním
-        if ($this->getUser()->isLoggedIn()) {
-            $identity = $this->getUser()->getIdentity();
-            $this->securityLogger->logLogout($identity->id, $identity->username);
-            $this->getUser()->logout();
-        }
-
-        $this->flashMessage('Byli jste úspěšně odhlášeni. Přihlaste se prosím s novým uživatelským jménem.', 'info');
-        $this->redirect('Sign:in');
-    }
-
     protected function createComponentSignInForm(): Form
     {
         $form = new Form;
@@ -129,6 +153,7 @@ final class SignPresenter extends BasePresenter
     public function signInFormSucceeded(Form $form, \stdClass $data): void
     {
         try {
+            // Nastavení délky přihlášení podle zaškrtnutí "Zůstat přihlášen"
             if ($data->remember) {
                 $this->getUser()->setExpiration('14 days');
             } else {
@@ -136,18 +161,18 @@ final class SignPresenter extends BasePresenter
             }
 
             $this->getUser()->login($data->username, $data->password);
-
+            
+            // Logování úspěšného přihlášení
+            $identity = $this->getUser()->getIdentity();
+            $this->securityLogger->logLogin($identity->id, $identity->username);
+            
             $this->flashMessage('Úspěšně jste se přihlásili.', 'success');
-
-            // Přesměrování na původně požadovanou stránku nebo na dashboard
-            $backlink = $this->getParameter('backlink');
-            if ($backlink) {
-                $this->restoreRequest($backlink);
-            }
             $this->redirect('Home:default');
         } catch (Nette\Security\AuthenticationException $e) {
-            // Přidáme chybovou hlášku jako globální chybu formuláře
-            $form->addError($e->getMessage());
+            // Logování neúspěšného pokusu o přihlášení
+            $this->securityLogger->logFailedLogin($data->username, $e->getMessage());
+            
+            $form->addError('Nesprávné uživatelské jméno nebo heslo.');
         }
     }
 
@@ -164,18 +189,7 @@ final class SignPresenter extends BasePresenter
         $form->addEmail('email', 'E-mail:')
             ->setRequired('Zadejte e-mailovou adresu');
 
-        $passwordField = $form->addPassword('password', 'Heslo:')
-            ->setRequired('Zadejte heslo')
-            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 8)
-            ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jednu číslici', '.*[0-9].*')
-            ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jedno velké písmeno', '.*[A-Z].*');
-
-        $form->addPassword('passwordVerify', 'Heslo znovu:')
-            ->setRequired('Zadejte heslo znovu pro kontrolu')
-            ->addConditionOn($passwordField, $form::VALID)
-            ->addRule(Form::EQUAL, 'Hesla se neshodují', $passwordField);
-
-        // Role - pouze pokud už existují uživatelé (první uživatel je automaticky admin)
+        // Role se zobrazí pouze pokud už existují uživatelé a je přihlášen admin
         $userCount = 0;
         try {
             $allUsers = $this->userManager->getAll();
@@ -188,7 +202,8 @@ final class SignPresenter extends BasePresenter
             $userCount = 0;
         }
 
-        if ($userCount > 0) {
+        // Přidáme role select pouze pokud už existují uživatelé a je přihlášen admin
+        if ($userCount > 0 && $this->getUser()->isLoggedIn() && $this->isAdmin()) {
             $form->addSelect('role', 'Role:', [
                 'readonly' => 'Pouze čtení',
                 'accountant' => 'Účetní',
@@ -198,29 +213,72 @@ final class SignPresenter extends BasePresenter
                 ->setDefaultValue('readonly');
         }
 
-        $form->addSubmit('send', 'Registrovat se');
+        $passwordField = $form->addPassword('password', 'Heslo:')
+            ->setRequired('Zadejte heslo')
+            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 8)
+            ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jednu číslici', '.*[0-9].*')
+            ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jedno velké písmeno', '.*[A-Z].*');
+
+        $form->addPassword('passwordVerify', 'Heslo znovu:')
+            ->setRequired('Zadejte heslo znovu pro kontrolu')
+            ->addConditionOn($passwordField, $form::VALID)
+            ->addRule(Form::EQUAL, 'Hesla se neshodují', $passwordField);
+
+        $form->addSubmit('send', 'Zaregistrovat se');
 
         $form->onSuccess[] = [$this, 'signUpFormSucceeded'];
 
         return $form;
     }
 
+    /**
+     * Testovací formulář pro odesílání emailů
+     */
+    protected function createComponentTestEmailForm(): Form
+    {
+        $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+
+        $form->addEmail('email', 'E-mail pro test:')
+            ->setRequired('Zadejte e-mailovou adresu')
+            ->setDefaultValue('info@allimedia.cz');
+
+        $form->addSubmit('send', 'Odeslat testovací email');
+
+        $form->onSuccess[] = [$this, 'testEmailFormSucceeded'];
+
+        return $form;
+    }
+
+    public function testEmailFormSucceeded(Form $form, \stdClass $data): void
+    {
+        try {
+            $this->emailService->sendTestEmail($data->email);
+            $this->flashMessage('Testovací email byl úspěšně odeslán na ' . $data->email, 'success');
+        } catch (\Exception $e) {
+            $this->flashMessage('Chyba při odesílání emailu: ' . $e->getMessage(), 'danger');
+        }
+
+        $this->redirect('this');
+    }
+
     public function signUpFormSucceeded(Form $form, \stdClass $data): void
     {
         try {
-            // Kontrola, zda už uživatel neexistuje - kontrolujeme zvlášť username a email
+            // Kontrola jedinečnosti uživatelského jména a e-mailu
             $existingUsername = null;
             $existingEmail = null;
 
             try {
-                $allUsers = $this->userManager->getAll();
-                if ($allUsers) {
-                    $existingUsername = $allUsers->where('username', $data->username)->fetch();
-                    $existingEmail = $allUsers->where('email', $data->email)->fetch();
-                }
+                $existingUsername = $this->userManager->getAll()
+                    ->where('username', $data->username)
+                    ->fetch();
+
+                $existingEmail = $this->userManager->getAll()
+                    ->where('email', $data->email)
+                    ->fetch();
             } catch (\Exception $e) {
-                // Pokud selže dotaz, pokračujeme (může být první uživatel)
-                error_log('Chyba při kontrole existujících uživatelů: ' . $e->getMessage());
+                error_log('Chyba při kontrole uživatele: ' . $e->getMessage());
             }
 
             if ($existingUsername) {
@@ -272,7 +330,24 @@ final class SignPresenter extends BasePresenter
 
             // Kontrola, zda se uživatel skutečně vytvořil
             if ($newUserId && $newUserId > 0) {
-                $this->flashMessage('Registrace byla úspěšná. Nyní se můžete přihlásit.', 'success');
+                // ** NOVĚ: Odesílání emailů **
+                try {
+                    // Potvrzení registrace uživateli
+                    $this->emailService->sendRegistrationConfirmation($data->email, $data->username, $role);
+                    
+                    // Upozornění adminovi (pouze pokud to není první uživatel)
+                    if ($userCount > 0) {
+                        $this->emailService->sendAdminNotification($data->username, $data->email, $role);
+                    }
+                } catch (\Exception $e) {
+                    // Email se nepodařilo odeslat, ale registrace proběhla úspěšně
+                    error_log('Chyba při odesílání emailu: ' . $e->getMessage());
+                    $this->flashMessage('Registrace byla úspěšná, ale nepodařilo se odeslat potvrzovací email.', 'warning');
+                    $this->redirect('Sign:in');
+                    return;
+                }
+
+                $this->flashMessage('Registrace byla úspěšná. Na váš email bylo odesláno potvrzení. Nyní se můžete přihlásit.', 'success');
                 $this->redirect('Sign:in');
             } else {
                 $form->addError('Nepodařilo se vytvořit uživatelský účet. Zkuste to prosím znovu.');
@@ -284,6 +359,191 @@ final class SignPresenter extends BasePresenter
             // Logování pouze závažných chyb
             error_log('Chyba při registraci: ' . $e->getMessage());
             $form->addError('Při registraci došlo k neočekávané chybě. Zkuste to prosím znovu.');
+        }
+    }
+
+    /**
+     * Zapomenuté heslo - zobrazí formulář pro zadání emailu
+     */
+    public function actionForgotPassword(): void
+    {
+        if ($this->getUser()->isLoggedIn()) {
+            $this->redirect('Home:default');
+        }
+    }
+
+    /**
+     * Reset hesla s tokenem
+     */
+    public function actionResetPassword(string $token): void
+    {
+        if ($this->getUser()->isLoggedIn()) {
+            $this->redirect('Home:default');
+        }
+
+        // Ověření platnosti tokenu
+        $resetToken = $this->database->table('password_reset_tokens')
+            ->where('token', $token)
+            ->where('expires_at > ?', new \DateTime())
+            ->where('used_at IS NULL')
+            ->fetch();
+
+        if (!$resetToken) {
+            $this->flashMessage('Odkaz pro obnovení hesla je neplatný nebo vypršel.', 'danger');
+            $this->redirect('Sign:forgotPassword');
+        }
+
+        $this->template->token = $token;
+    }
+
+    /**
+     * Formulář pro zapomenuté heslo
+     */
+    protected function createComponentForgotPasswordForm(): Form
+    {
+        $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+
+        $form->addEmail('email', 'E-mailová adresa:')
+            ->setRequired('Zadejte e-mailovou adresu');
+
+        $form->addSubmit('send', 'Odeslat odkaz pro obnovení');
+
+        $form->onSuccess[] = [$this, 'forgotPasswordFormSucceeded'];
+
+        return $form;
+    }
+
+    public function forgotPasswordFormSucceeded(Form $form, \stdClass $data): void
+    {
+        try {
+            // Najdeme uživatele podle emailu
+            $user = $this->database->table('users')
+                ->where('email', $data->email)
+                ->fetch();
+
+            if (!$user) {
+                // I když uživatel neexistuje, zobrazíme stejnou zprávu (bezpečnost)
+                $this->flashMessage('Pokud účet s touto e-mailovou adresou existuje, byl odeslán odkaz pro obnovení hesla.', 'info');
+                $this->redirect('Sign:in');
+                return;
+            }
+
+            // Vygenerujeme reset token
+            $token = bin2hex(random_bytes(32));
+            $expiresAt = new \DateTime('+24 hours');
+
+            // Smazání starých tokenů pro tohoto uživatele
+            $this->database->table('password_reset_tokens')
+                ->where('user_id', $user->id)
+                ->delete();
+
+            // Vytvoření nového tokenu
+            $this->database->table('password_reset_tokens')->insert([
+                'user_id' => $user->id,
+                'token' => $token,
+                'expires_at' => $expiresAt,
+                'created_at' => new \DateTime(),
+            ]);
+
+            // Odeslání emailu
+            $this->emailService->sendPasswordReset($user->email, $user->username, $token);
+
+            // Úspěšné dokončení
+            $this->flashMessage('Odkaz pro obnovení hesla byl odeslán na vaši e-mailovou adresu.', 'success');
+            $this->redirect('Sign:in');
+
+        } catch (Nette\Application\AbortException $e) {
+            // AbortException je normální při redirect - necháme ji projít
+            throw $e;
+        } catch (\Exception $e) {
+            error_log('Chyba při resetování hesla: ' . $e->getMessage());
+            $form->addError('Při odesílání odkazu došlo k chybě. Zkuste to prosím znovu.');
+        }
+    }
+
+    /**
+     * Formulář pro nastavení nového hesla
+     */
+    protected function createComponentResetPasswordForm(): Form
+    {
+        $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+
+        $form->addHidden('token');
+
+        $passwordField = $form->addPassword('password', 'Nové heslo:')
+            ->setRequired('Zadejte nové heslo')
+            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 8)
+            ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jednu číslici', '.*[0-9].*')
+            ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jedno velké písmeno', '.*[A-Z].*');
+
+        $form->addPassword('passwordVerify', 'Heslo znovu:')
+            ->setRequired('Zadejte heslo znovu pro kontrolu')
+            ->addConditionOn($passwordField, $form::VALID)
+            ->addRule(Form::EQUAL, 'Hesla se neshodují', $passwordField);
+
+        $form->addSubmit('send', 'Nastavit nové heslo');
+
+        $form->onSuccess[] = [$this, 'resetPasswordFormSucceeded'];
+
+        return $form;
+    }
+
+    public function resetPasswordFormSucceeded(Form $form, \stdClass $data): void
+    {
+        try {
+            $token = $this->getParameter('token');
+
+            // Ověření platnosti tokenu
+            $resetToken = $this->database->table('password_reset_tokens')
+                ->where('token', $token)
+                ->where('expires_at > ?', new \DateTime())
+                ->where('used_at IS NULL')
+                ->fetch();
+
+            if (!$resetToken) {
+                $form->addError('Odkaz pro obnovení hesla je neplatný nebo vypršel.');
+                return;
+            }
+
+            // Získání uživatele
+            $user = $this->database->table('users')->get($resetToken->user_id);
+            if (!$user) {
+                $form->addError('Uživatel nebyl nalezen.');
+                return;
+            }
+
+            // Aktualizace hesla - použijeme Passwords service přímo
+            $passwords = new \Nette\Security\Passwords();
+            $hashedPassword = $passwords->hash($data->password);
+            
+            $this->database->table('users')
+                ->where('id', $user->id)
+                ->update(['password' => $hashedPassword]);
+
+            // Označení tokenu jako použitého
+            $this->database->table('password_reset_tokens')
+                ->where('id', $resetToken->id)
+                ->update(['used_at' => new \DateTime()]);
+
+            // Logování změny hesla (s try-catch pro případ chyby)
+            try {
+                $this->securityLogger->logPasswordChange($user->id, $user->username, false);
+            } catch (\Exception $e) {
+                error_log('Chyba při logování změny hesla: ' . $e->getMessage());
+                // Pokračujeme i když logování selže
+            }
+
+            $this->flashMessage('Heslo bylo úspěšně změněno. Můžete se přihlásit s novým heslem.', 'success');
+            $this->redirect('Sign:in');
+
+        } catch (Nette\Application\AbortException $e) {
+            // AbortException je normální při redirect - necháme ji projít
+            throw $e;
+        } catch (\Exception $e) {
+            error_log('Chyba při změně hesla: ' . $e->getMessage());
+            $form->addError('Při změně hesla došlo k chybě. Zkuste to prosím znovu.');
         }
     }
 }

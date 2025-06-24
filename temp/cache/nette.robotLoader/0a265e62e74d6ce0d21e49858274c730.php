@@ -12,6 +12,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
       1 => 1748337636,
     ),
+    'App\\Mail\\TestMailer' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Mail\\TestMailer.php',
+      1 => 1750756766,
+    ),
     'App\\Model\\AresService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\AresService.php',
@@ -26,6 +31,11 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\CompanyManager.php',
       1 => 1747508731,
+    ),
+    'App\\Model\\EmailService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\EmailService.php',
+      1 => 1750756732,
     ),
     'App\\Model\\InvoicesManager' => 
     array (
@@ -45,7 +55,7 @@ return array (
     'App\\Model\\UserManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\UserManager.php',
-      1 => 1749019014,
+      1 => 1750757988,
     ),
     'App\\Modules\\BaseModule' => 
     array (
@@ -130,12 +140,12 @@ return array (
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1749216203,
+      1 => 1749217662,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1749030486,
+      1 => 1750758657,
     ),
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
@@ -155,40 +165,16 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 3,
-    'null' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
-    'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'Nette\\Bridges\\Assets\\DIExtension' => 2,
+    'null' => 2,
+    'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 3,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
     'Modules\\Test_module\\Module' => 3,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
-    'App\\Presentation\\Sign\\SignUpTemplate' => 3,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDeleteTemplate' => 2,
-    'App\\Presentation\\Users\\UsersEditTemplate' => 3,
-    'App\\Presentation\\Sign\\SignReloginTemplate' => 3,
-    'App\\Presentation\\Sign\\SignForceLogoutTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
-    'App\\Presentation\\Index\\Php\\PhpPresenter' => 3,
-    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsShowTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDeleteTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsEditTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 3,
+    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'App\\Presentation\\Sign\\SignResetPasswordTemplate' => 3,
+    'App\\Presentation\\Sign\\SignDefaultTemplate' => 2,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
+    'App\\Presentation\\Home\\HomeTemplate' => 1,
   ),
   2 => 
   array (

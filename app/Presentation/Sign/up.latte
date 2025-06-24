@@ -38,7 +38,7 @@
                     
                     <div class="form-floating mb-3">
                         {input username class => 'form-control'}
-                        {label username class => 'form-label' /}
+                        <label for="frm-signUpForm-username" class="form-label">Uživatelské jméno</label>
                         {if $form['username']->hasErrors()}
                             <div class="text-danger mt-1">{$form['username']->getError()}</div>
                         {/if}
@@ -46,7 +46,7 @@
 
                     <div class="form-floating mb-3">
                         {input email class => 'form-control'}
-                        {label email class => 'form-label' /}
+                        <label for="frm-signUpForm-email" class="form-label">E-mail</label>
                         {if $form['email']->hasErrors()}
                             <div class="text-danger mt-1">{$form['email']->getError()}</div>
                         {/if}
@@ -54,7 +54,7 @@
 
                     <div class="form-floating mb-3">
                         {input password class => 'form-control'}
-                        {label password class => 'form-label' /}
+                        <label for="frm-signUpForm-password" class="form-label">Heslo</label>
                         {if $form['password']->hasErrors()}
                             <div class="text-danger mt-1">{$form['password']->getError()}</div>
                         {/if}
@@ -62,16 +62,25 @@
 
                     <div class="form-floating mb-3">
                         {input passwordVerify class => 'form-control'}
-                        {label passwordVerify class => 'form-label' /}
+                        <label for="frm-signUpForm-passwordVerify" class="form-label">Heslo znovu</label>
                         {if $form['passwordVerify']->hasErrors()}
                             <div class="text-danger mt-1">{$form['passwordVerify']->getError()}</div>
                         {/if}
                     </div>
 
-                    {if !$isFirstUser}
+                    {* Pole role se zobrazí jen pokud není první uživatel A je přihlášen admin *}
+                    {if !$isFirstUser && $userLoggedIn && $isUserAdmin}
                     <div class="form-floating mb-3">
                         {input role class => 'form-select'}
-                        {label role class => 'form-label' /}
+                        <label for="frm-signUpForm-role" class="form-label">Role</label>
+                        {if $form['role']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['role']->getError()}</div>
+                        {/if}
+                    </div>
+                    {elseif !$isFirstUser}
+                    <div class="alert alert-info mb-3">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Nový účet bude vytvořen s rolí "Pouze čtení". Admin může roli později změnit.
                     </div>
                     {/if}
 

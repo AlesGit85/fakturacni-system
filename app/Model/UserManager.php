@@ -403,4 +403,12 @@ class UserManager implements Nette\Security\Authenticator
 
         return implode(' ', $parts);
     }
+
+    /**
+     * Zahashuje heslo pomocí Nette Passwords
+     */
+    public function hashPassword(string $password): string
+    {
+        return $this->passwords->hash($password);
+    }
 }

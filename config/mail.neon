@@ -1,0 +1,21 @@
+# Konfigurace e-mailů
+
+# Pro testování - vlastní TestMailer (ukládá emaily do temp/mails)
+services:
+	nette.mailer:
+		factory: App\Mail\TestMailer(%tempDir%)
+
+# Pro produkci - SMTP konfigurace:
+# services:
+# 	nette.mailer:
+# 		factory: Nette\Mail\SmtpMailer
+# 		arguments:
+# 			host: mail.allimedia.cz
+# 			port: 587
+# 			username: noreply@allimedia.cz
+# 			password: your_smtp_password
+# 			secure: tls
+
+# Pro produkci - jednoduchý SendmailMailer:
+# services:
+# 	nette.mailer: Nette\Mail\SendmailMailer

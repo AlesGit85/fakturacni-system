@@ -7,8 +7,8 @@ services:
 	- App\Security\SecurityLogger
 	- App\Model\AresService
 	- App\Model\ModuleManager
+	- App\Model\EmailService
 	authenticator: App\Model\UserManager
-
 
 search:
 	-	in: %appDir%

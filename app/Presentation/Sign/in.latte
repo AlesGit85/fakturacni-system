@@ -26,7 +26,7 @@
                     
                     <div class="form-floating mb-3">
                         {input username class => 'form-control'}
-                        {label username class => 'form-label' /}
+                        <label for="frm-signInForm-username" class="form-label">Uživatelské jméno</label>
                         {if $form['username']->hasErrors()}
                             <div class="text-danger mt-1">{$form['username']->getError()}</div>
                         {/if}
@@ -34,7 +34,7 @@
 
                     <div class="form-floating mb-3">
                         {input password class => 'form-control'}
-                        {label password class => 'form-label' /}
+                        <label for="frm-signInForm-password" class="form-label">Heslo</label>
                         {if $form['password']->hasErrors()}
                             <div class="text-danger mt-1">{$form['password']->getError()}</div>
                         {/if}
@@ -42,7 +42,7 @@
 
                     <div class="form-check mb-4">
                         {input remember class => 'form-check-input'}
-                        {label remember class => 'form-check-label' /}
+                        <label for="frm-signInForm-remember" class="form-check-label">Zůstat přihlášen</label>
                     </div>
 
                     <div class="d-grid">
@@ -55,6 +55,11 @@
                 <p class="text-center text-muted">
                     Nemáte účet? 
                     <a n:href="Sign:up" class="auth-link">Zaregistrujte se</a>
+                </p>
+                <p class="text-center text-muted">
+                    <a n:href="Sign:forgotPassword" class="auth-link">
+                        <i class="bi bi-key"></i> Zapomněl jsem heslo
+                    </a>
                 </p>
             </div>
         </div>
