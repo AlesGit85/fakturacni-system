@@ -130,6 +130,9 @@ final class SignPresenter extends BasePresenter
         $this->template->username = $identity ? $identity->username : 'neznámý uživatel';
     }
 
+    /**
+     * OPRAVENÁ METODA - checkbox bez duplicitního textu
+     */
     protected function createComponentSignInForm(): Form
     {
         $form = new Form;
@@ -141,7 +144,8 @@ final class SignPresenter extends BasePresenter
         $form->addPassword('password', 'Heslo:')
             ->setRequired('Zadejte heslo');
 
-        $form->addCheckbox('remember', 'Zůstat přihlášen');
+        // Checkbox BEZ labelu - label se přidá v šabloně
+        $form->addCheckbox('remember');
 
         $form->addSubmit('send', 'Přihlásit se');
 
@@ -507,35 +511,17 @@ final class SignPresenter extends BasePresenter
                 return;
             }
 
-            // Získání uživatele
-            $user = $this->database->table('users')->get($resetToken->user_id);
-            if (!$user) {
-                $form->addError('Uživatel nebyl nalezen.');
-                return;
-            }
-
-            // Aktualizace hesla - použijeme Passwords service přímo
-            $passwords = new \Nette\Security\Passwords();
-            $hashedPassword = $passwords->hash($data->password);
-            
-            $this->database->table('users')
-                ->where('id', $user->id)
-                ->update(['password' => $hashedPassword]);
+            // Aktualizace hesla
+            $this->userManager->update($resetToken->user_id, [
+                'password' => $data->password
+            ]);
 
             // Označení tokenu jako použitého
             $this->database->table('password_reset_tokens')
                 ->where('id', $resetToken->id)
                 ->update(['used_at' => new \DateTime()]);
 
-            // Logování změny hesla (s try-catch pro případ chyby)
-            try {
-                $this->securityLogger->logPasswordChange($user->id, $user->username, false);
-            } catch (\Exception $e) {
-                error_log('Chyba při logování změny hesla: ' . $e->getMessage());
-                // Pokračujeme i když logování selže
-            }
-
-            $this->flashMessage('Heslo bylo úspěšně změněno. Můžete se přihlásit s novým heslem.', 'success');
+            $this->flashMessage('Heslo bylo úspěšně změněno. Nyní se můžete přihlásit.', 'success');
             $this->redirect('Sign:in');
 
         } catch (Nette\Application\AbortException $e) {

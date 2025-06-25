@@ -6,123 +6,178 @@ namespace App\Presentation;
 
 use Nette;
 use Nette\Application\UI\Presenter;
-use Nette\Security\User;
+use App\Security\SecurityLogger;
+use App\Model\ModuleManager;
 
 abstract class BasePresenter extends Presenter
 {
-    /** @var bool Vyžaduje přihlášení (default true) */
-    protected bool $requiresLogin = true;
-
-    /** @var array Požadované role pro celý presenter */
+    /** @var array Definice požadovaných rolí pro jednotlivé presentery */
     protected array $requiredRoles = [];
 
-    /** @var array Specifické role pro jednotlivé akce */
+    /** @var array Definice požadovaných rolí pro jednotlivé akce */
     protected array $actionRoles = [];
 
-    public function checkRequirements($element): void
-    {
-        // Nejdřív zavoláme původní kontrolu
-        parent::checkRequirements($element);
+    /** @var bool Zda presenter vyžaduje přihlášení */
+    protected bool $requiresLogin = true;
 
-        // Kontrola přihlášení - pokud presenter vyžaduje přihlášení
+    /** @var SecurityLogger */
+    private $securityLogger;
+
+    /** @var ModuleManager */
+    private $moduleManager;
+
+    public function injectSecurityLogger(SecurityLogger $securityLogger): void
+    {
+        $this->securityLogger = $securityLogger;
+    }
+
+    public function injectModuleManager(ModuleManager $moduleManager): void
+    {
+        $this->moduleManager = $moduleManager;
+    }
+
+    public function startup(): void
+    {
+        parent::startup();
+        
+        // Kontrola přihlášení
         if ($this->requiresLogin && !$this->getUser()->isLoggedIn()) {
-            $this->redirect('Sign:in');
+            if ($this->getUser()->getLogoutReason() === Nette\Security\UserStorage::LOGOUT_INACTIVITY) {
+                $this->flashMessage('Byli jste odhlášeni z důvodu neaktivity. Přihlaste se prosím znovu.', 'warning');
+            } else {
+                $this->flashMessage('Pro přístup k této stránce se musíte přihlásit.', 'info');
+            }
+            $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
         }
 
-        // Kontrola rolí - pokud jsou definované
-        if ($this->getUser()->isLoggedIn()) {
-            $currentAction = $this->getAction();
-            $requiredRoles = [];
-
-            // Zkusíme najít specifické role pro akci
-            if (isset($this->actionRoles[$currentAction])) {
-                $requiredRoles = $this->actionRoles[$currentAction];
-            } elseif (!empty($this->requiredRoles)) {
-                // Pokud nejsou specifické role pro akci, použijeme obecné role presenteru
-                $requiredRoles = $this->requiredRoles;
-            }
-
-            // Pokud jsou definované nějaké role, zkontrolujeme je
-            if (!empty($requiredRoles)) {
-                $hasRequiredRole = false;
-                foreach ($requiredRoles as $role) {
-                    if ($this->hasRole($role)) {
-                        $hasRequiredRole = true;
-                        break;
-                    }
+        // Kontrola rolí na úrovni presenteru
+        if ($this->requiresLogin && !empty($this->requiredRoles)) {
+            $identity = $this->getUser()->getIdentity();
+            if ($identity && isset($identity->role)) {
+                $userRole = $identity->role;
+                if (!in_array($userRole, $this->requiredRoles)) {
+                    // Logování pokusu o neoprávněný přístup
+                    $resource = $this->getName() . ':' . $this->getAction();
+                    $this->securityLogger->logUnauthorizedAccess($resource, $identity->id, $identity->username);
+                    
+                    $this->flashMessage('Nemáte oprávnění pro přístup k této stránce.', 'danger');
+                    $this->redirect('Home:default');
                 }
+            }
+        }
 
-                if (!$hasRequiredRole) {
-                    $this->error('Nemáte oprávnění k této akci', 403);
+        // Kontrola rolí na úrovni akce
+        $action = $this->getAction();
+        if ($this->requiresLogin && isset($this->actionRoles[$action]) && !empty($this->actionRoles[$action])) {
+            $identity = $this->getUser()->getIdentity();
+            if ($identity && isset($identity->role)) {
+                $userRole = $identity->role;
+                if (!$this->hasRequiredRoleForAction($action, $userRole)) {
+                    // Logování pokusu o neoprávněný přístup k akci
+                    $resource = $this->getName() . ':' . $action;
+                    $this->securityLogger->logUnauthorizedAccess($resource, $identity->id, $identity->username);
+                    
+                    $this->flashMessage('Nemáte oprávnění pro provedení této akce.', 'danger');
+                    $this->redirect('Home:default');
                 }
             }
         }
     }
 
     /**
-     * Vytvoří navigační menu podle oprávnění uživatele
+     * Kontroluje, zda má uživatel roli potřebnou pro danou akci
      */
-    protected function getNavigationMenu(): array
+    protected function hasRequiredRoleForAction(string $action, string $userRole): bool
     {
-        $menuItems = [];
+        if (!isset($this->actionRoles[$action])) {
+            return true; // Pokud akce nemá definované role, je povolena
+        }
+
+        $requiredRoles = $this->actionRoles[$action];
         
-        try {
-            if ($this->getUser()->isLoggedIn()) {
-                // Domů - pro všechny přihlášené
-                $menuItems[] = [
-                    'title' => 'Domů',
-                    'link' => $this->link('Home:default'),
-                    'icon' => 'bi-house',
-                    'active' => $this->getPresenter()->getName() === 'Home'
-                ];
-
-                // Faktury - pro readonly a vyšší
-                if ($this->hasRole('readonly')) {
-                    $menuItems[] = [
-                        'title' => 'Faktury',
-                        'link' => $this->link('Invoices:default'),
-                        'icon' => 'bi-receipt',
-                        'active' => $this->getPresenter()->getName() === 'Invoices'
-                    ];
-                }
-
-                // Klienti - pro readonly a vyšší
-                if ($this->hasRole('readonly')) {
-                    $menuItems[] = [
-                        'title' => 'Klienti',
-                        'link' => $this->link('Clients:default'),
-                        'icon' => 'bi-people',
-                        'active' => $this->getPresenter()->getName() === 'Clients'
-                    ];
-                }
-
-
-
-                // Nastavení - pro accountant a vyšší
-                if ($this->hasRole('accountant')) {
-                    $menuItems[] = [
-                        'title' => 'Nastavení',
-                        'link' => $this->link('Settings:default'),
-                        'icon' => 'bi-gear',
-                        'active' => $this->getPresenter()->getName() === 'Settings'
-                    ];
-                }
-
-                // Uživatelé - jen pro admina, ale profil pro všechny
-                if ($this->hasRole('admin')) {
-                    $menuItems[] = [
-                        'title' => 'Uživatelé',
-                        'link' => $this->link('Users:default'),
-                        'icon' => 'bi-person-gear',
-                        'active' => $this->getPresenter()->getName() === 'Users'
-                    ];
-                }
+        // Hierarchie rolí:
+        // - admin: má přístup ke všemu (admin, accountant, readonly akce)
+        // - accountant: má přístup k accountant a readonly akcím
+        // - readonly: má přístup pouze k readonly akcím
+        $roleHierarchy = [
+            'admin' => ['admin', 'accountant', 'readonly'],
+            'accountant' => ['accountant', 'readonly'],
+            'readonly' => ['readonly']
+        ];
+        
+        // Kontrola, zda uživatelská role je v seznamu povolených rolí pro akci
+        foreach ($requiredRoles as $requiredRole) {
+            if (in_array($requiredRole, $roleHierarchy[$userRole] ?? [])) {
+                return true;
             }
-        } catch (\Exception $e) {
-            // V případě chyby logujeme a pokračujeme s prázdným menu
-            if (class_exists('\Tracy\Debugger')) {
-                \Tracy\Debugger::log('Chyba při vytváření navigačního menu: ' . 
-                    $e->getMessage());
+        }
+        
+        return false;
+    }
+
+    /**
+     * Získá menu položky z aktivních modulů
+     */
+    protected function getModuleMenuItems(): array
+    {
+        if (!$this->moduleManager) {
+            return [];
+        }
+
+        $menuItems = [];
+        $activeModules = $this->moduleManager->getActiveModules();
+        
+        foreach ($activeModules as $moduleId => $moduleInfo) {
+            try {
+                // Pokusíme se načíst modul a získat jeho menu položky
+                $modulePath = dirname(__DIR__) . '/Modules/' . $moduleId;
+                $moduleFile = $modulePath . '/Module.php';
+                
+                if (file_exists($moduleFile)) {
+                    require_once $moduleFile;
+                    $moduleClassName = 'Modules\\' . ucfirst($moduleId) . '\\Module';
+                    
+                    if (class_exists($moduleClassName)) {
+                        $moduleInstance = new $moduleClassName();
+                        
+                        if (method_exists($moduleInstance, 'getMenuItems')) {
+                            $moduleMenuItems = $moduleInstance->getMenuItems();
+                            
+                            if (!empty($moduleMenuItems)) {
+                                // Zpracujeme menu položky a vygenerujeme odkazy
+                                $processedMenuItems = [];
+                                
+                                foreach ($moduleMenuItems as $menuItem) {
+                                    $processedItem = $menuItem;
+                                    
+                                    // Pokud má presenter a action, vygenerujeme Nette link
+                                    if (isset($menuItem['presenter']) && isset($menuItem['action'])) {
+                                        $params = $menuItem['params'] ?? [];
+                                        $processedItem['link'] = $this->link($menuItem['presenter'] . ':' . $menuItem['action'], $params);
+                                        $processedItem['linkType'] = 'nette';
+                                    } elseif (isset($menuItem['onclick'])) {
+                                        $processedItem['linkType'] = 'javascript';
+                                    } elseif (isset($menuItem['link'])) {
+                                        $processedItem['linkType'] = 'direct';
+                                    }
+                                    
+                                    $processedMenuItems[] = $processedItem;
+                                }
+                                
+                                $menuItems[$moduleId] = [
+                                    'moduleInfo' => $moduleInfo,
+                                    'menuItems' => $processedMenuItems
+                                ];
+                            }
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                // Logujeme chybu, ale pokračujeme
+                if (isset($this->securityLogger)) {
+                    $this->securityLogger->logSecurityEvent('module_menu_error', 
+                        "Chyba při načítání menu z modulu $moduleId: " . $e->getMessage());
+                }
             }
         }
         
@@ -312,14 +367,13 @@ abstract class BasePresenter extends Presenter
 
         // Pokud jméno není ve slovníku, použijeme základní pravidla
         $lastChar = mb_substr($name, -1, 1, 'UTF-8');
-        $lastTwoChars = mb_substr($name, -2, 2, 'UTF-8');
         
         // Základní pravidla pro mužská jména
         if (mb_substr($lowerName, -1) === 'š') {
             return $name . 'i';
         }
         
-        if (in_array($lastChar, ['l', 'r', 'n', 't', 'd', 'k', 'm', 'p', 'b', 'v', 'f', 'g', 'h', 'ch', 's', 'z'])) {
+        if (in_array($lastChar, ['l', 'r', 'n', 't', 'd', 'k', 'm', 'p', 'b', 'v', 'f', 'g', 'h', 's', 'z'])) {
             return $name . 'e';
         }
         
@@ -351,29 +405,62 @@ abstract class BasePresenter extends Presenter
         if ($user->isLoggedIn()) {
             $identity = $user->getIdentity();
             $this->template->add('currentUser', $identity);
-            $this->template->add('currentUserRole', $identity && isset($identity->role) ? $identity->role : null);
-            
-            // Přidáme helper proměnné pro role do šablony
-            $this->template->add('isUserAdmin', $this->isAdmin());
-            $this->template->add('isUserAccountant', $this->isAccountant());
-            $this->template->add('isUserReadonly', $this->isReadonly());
-            
-            // Přidáme helper pro vokativ do šablony
-            $this->template->addFunction('vocative', function($name) {
-                return $this->getVocativeName($name);
-            });
-            
-            // Přidáme helper pro skloňování faktur do šablony
-            $this->template->addFunction('getInvoiceCountText', function($count) {
-                return $this->getInvoiceCountText($count);
-            });
-            
-            $this->template->addFunction('pluralizeInvoices', function($count) {
-                return $this->pluralizeInvoices($count);
-            });
+            $this->template->add('currentUserRole', $identity && isset($identity->role) ? $identity->role : 'readonly');
+        } else {
+            $this->template->add('currentUser', null);
+            $this->template->add('currentUserRole', 'readonly');
         }
         
-        // Nastavení navigačního menu
-        $this->template->menuItems = $this->getNavigationMenu();
+        // Helper funkce pro šablony
+        $this->template->add('isUserAdmin', $this->isAdmin());
+        $this->template->add('isUserAccountant', $this->isAccountant());
+        $this->template->add('isUserReadonly', $this->isReadonly());
+        
+        // Přidání helper funkcí pro skloňování do šablony
+        $this->template->addFunction('pluralizeInvoices', [$this, 'pluralizeInvoices']);
+        $this->template->addFunction('getInvoiceCountText', [$this, 'getInvoiceCountText']);
+        
+        // Přidání helper funkce pro vokativ do šablony
+        $this->template->addFunction('vocative', [$this, 'getVocativeName']);
+        
+        // Přidání menu položek z modulů do šablony
+        $this->template->add('moduleMenuItems', $this->getModuleMenuItems());
+    }
+
+    /**
+     * Získá aktuální roli uživatele
+     */
+    private function getCurrentUserRole(): string
+    {
+        if (!$this->getUser()->isLoggedIn()) {
+            return 'guest';
+        }
+
+        $identity = $this->getUser()->getIdentity();
+        return $identity && isset($identity->role) ? $identity->role : 'readonly';
+    }
+    
+    /**
+     * Kontroluje, zda má uživatel přístup k akci na základě jeho role
+     * Metoda může být použita pro složitější kontroly přístupu v presenterech
+     */
+    protected function checkAccess(string $resource, string $privilege = null): bool
+    {
+        if (!$this->getUser()->isLoggedIn()) {
+            return false;
+        }
+        
+        $role = $this->getCurrentUserRole();
+        
+        // Pro zjednodušení používáme hierarchii rolí
+        // Admin může všechno
+        if ($role === 'admin') {
+            return true;
+        }
+        
+        // Podle potřeby zde můžete implementovat složitější logiku
+        // např. kontrolu na úrovni objektů, vlastnictví záznamů atd.
+        
+        return false;
     }
 }
