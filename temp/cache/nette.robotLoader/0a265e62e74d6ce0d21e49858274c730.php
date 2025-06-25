@@ -70,7 +70,7 @@ return array (
     'Modules\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\financial_reports\\Module.php',
-      1 => 1748950824,
+      1 => 1750839709,
     ),
     'App\\Modules\\IModule' => 
     array (
@@ -100,7 +100,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1750833697,
+      1 => 1750839694,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -150,7 +150,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1750765034,
+      1 => 1750838910,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
@@ -190,6 +190,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesDeleteTemplate' => 2,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
   ),
   2 => 
   array (

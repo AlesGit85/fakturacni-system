@@ -3920,3 +3920,82 @@
 [2025-06-25 08-06-36] ModuleManager byl inicializován  @  http://localhost:8000/users/ 
 [2025-06-25 08-07-10] ModuleManager byl inicializován  @  http://localhost:8000/users/ 
 [2025-06-25 08-08-32] ModuleManager byl inicializován  @  http://localhost:8000/users/ 
+[2025-06-25 08-20-07] ModuleManager byl inicializován  @  http://localhost:8000/invoices/ 
+[2025-06-25 08-20-15] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-20-15] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-20-15] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-20-15] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-20-15] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-20-15] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-20-15] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-20-15] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-20-15] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-20-35] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-25 08-20-35] Kopíruji nové assets modulu 'notes' z: D:\_coding\nette\fakturacni-system\app/Modules/notes/assets do: D:\_coding\nette\fakturacni-system/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-25 08-20-35] Assets modulu 'notes' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-25 08-20-35] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] === ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] AJAX parametry - moduleId: 'notes', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Aktivní moduly: notes, financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Modul 'notes' je aktivní, načítám instanci modulu  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Vytvářím instanci modulu 'notes'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Hledám soubor modulu: D:\_coding\nette\fakturacni-system\app/Modules/notes/Module.php  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Soubor modulu nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Kontroluji existenci třídy: Modules\Notes\Module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Připravené parametry: []  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] Volám handleAjaxRequest na modulu 'notes' s akcí 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] AJAX akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-20-35] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-38] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-06-25 08-21-39] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-25 08-21-39] Mažu existující assets modulu 'notes' z: D:\_coding\nette\fakturacni-system/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-25 08-21-39] Kopíruji nové assets modulu 'notes' z: D:\_coding\nette\fakturacni-system\app/Modules/notes/assets do: D:\_coding\nette\fakturacni-system/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-25 08-21-39] Assets modulu 'notes' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-25 08-21-51] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-25 08-21-51] Mažu existující assets modulu 'notes' z: D:\_coding\nette\fakturacni-system/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-25 08-21-51] Kopíruji nové assets modulu 'notes' z: D:\_coding\nette\fakturacni-system\app/Modules/notes/assets do: D:\_coding\nette\fakturacni-system/Modules/notes  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-25 08-21-51] Assets modulu 'notes' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/notes 
+[2025-06-25 08-21-51] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] === ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] AJAX parametry - moduleId: 'notes', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Aktivní moduly: notes, financial_reports, test_module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Modul 'notes' je aktivní, načítám instanci modulu  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Vytvářím instanci modulu 'notes'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Hledám soubor modulu: D:\_coding\nette\fakturacni-system\app/Modules/notes/Module.php  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Soubor modulu nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Kontroluji existenci třídy: Modules\Notes\Module  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Instance modulu 'notes' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Připravené parametry: []  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] Volám handleAjaxRequest na modulu 'notes' s akcí 'getAllData'  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] AJAX akce úspěšně zpracována, odesílám výsledek  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-51] AJAX volání úspěšně ukončeno (AbortException je normální)  @  http://localhost:8000/moduleadmin/detail/notes?do=moduleData&moduleId=notes&action=getAllData 
+[2025-06-25 08-21-55] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-25 08-21-59] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-21-59] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-21-59] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-21-59] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-21-59] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-21-59] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-21-59] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-21-59] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-21-59] Final upload limit: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-06-25 08-22-02] ModuleManager byl inicializován  @  http://localhost:8000/moduleadmin/detail/test_module 
+[2025-06-25 08-22-02] Kopíruji nové assets modulu 'test_module' z: D:\_coding\nette\fakturacni-system\app/Modules/test_module/assets do: D:\_coding\nette\fakturacni-system/Modules/test_module  @  http://localhost:8000/moduleadmin/detail/test_module 
+[2025-06-25 08-22-02] Assets modulu 'test_module' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/test_module 
+[2025-06-25 08-22-13] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-25 08-25-41] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-25 08-26-11] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-25 08-28-13] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-25 08-30-03] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-25 08-34-05] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-25 08-41-13] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-06-25 08-41-54] ModuleManager byl inicializován  @  http://localhost:8000/ 
