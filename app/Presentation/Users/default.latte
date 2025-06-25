@@ -76,7 +76,7 @@
                             </a>
                             
                             {if $userItem->id !== $currentUser->id}
-                                {var $isLastAdmin = $userItem->role === 'admin' && $users->where('role', 'admin')->count() <= 1}
+                                {var $isLastAdmin = $userItem->role === 'admin' && $adminCount <= 1}
                                 {if !$isLastAdmin}
                                     <a n:href="delete $userItem->id" class="btn btn-icon text-danger" 
                                        onclick="return confirm('Opravdu chcete smazat uživatele {$userItem->username}?')" 

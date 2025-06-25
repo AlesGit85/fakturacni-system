@@ -33,8 +33,20 @@ final class UsersPresenter extends BasePresenter
 
     public function renderDefault(): void
     {
+        // Získáme všechny uživatele
+        $allUsers = $this->userManager->getAll();
+        
+        // Spočítáme adminy přímo zde
+        $adminCount = 0;
+        foreach ($allUsers as $user) {
+            if ($user->role === 'admin') {
+                $adminCount++;
+            }
+        }
+        
         $this->template->users = $this->userManager->getAll();
         $this->template->totalUsers = $this->userManager->getAll()->count();
+        $this->template->adminCount = $adminCount;
     }
 
     public function renderProfile(): void

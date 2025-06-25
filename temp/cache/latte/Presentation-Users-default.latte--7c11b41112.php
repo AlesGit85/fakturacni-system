@@ -154,7 +154,7 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
                             
 ';
 				if ($userItem->id !== $currentUser->id) /* line 78 */ {
-					$isLastAdmin = $userItem->role === 'admin' && $users->where('role', 'admin')->count() <= 1 /* line 79 */;
+					$isLastAdmin = $userItem->role === 'admin' && $adminCount <= 1 /* line 79 */;
 					if (!$isLastAdmin) /* line 80 */ {
 						echo '                                    <a href="';
 						echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$userItem->id])) /* line 81 */;
