@@ -1,23 +1,33 @@
 {
     "id": "test_module",
-    "name": "Testovac\u00ed modul",
-    "version": "1.0.0",
-    "description": "Z\u00e1kladn\u00ed testovac\u00ed modul pro ov\u011b\u0159en\u00ed funk\u010dnosti syst\u00e9mu modul\u016f",
-    "author": "QRdoklad System",
+    "name": "Testovací modul",
+    "version": "1.4.2",
+    "description": "Modul pro ukázku jednoduché instalace a správy modulů v systému",
+    "author": "Allimedia.cz",
     "icon": "bi bi-star-fill",
     "active": true,
+    "demo_mode": true,
     "requirements": {
         "php": ">=8.0",
         "qrdoklad": ">=1.0.0"
     },
+    "features": [
+        "Vlastní dashboard template",
+        "CSS styly s animacemi", 
+        "JavaScript funkcionalita",
+        "Integrace do hlavního menu",
+        "Ukázka správy modulů",
+        "Demo testovací funkce"
+    ],
     "menu_items": [
         {
-            "link": "Modules:detail",
+            "presenter": "ModuleAdmin",
+            "action": "detail",
             "params": {
                 "id": "test_module"
             },
-            "label": "Test Dashboard",
-            "icon": "bi bi-star"
+            "label": "Test modul",
+            "icon": "bi bi-star-fill"
         }
     ]
 }

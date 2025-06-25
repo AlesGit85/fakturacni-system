@@ -87,10 +87,10 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\Notes\\NotesManager.php',
       1 => 1748954135,
     ),
-    'Modules\\TestModule\\Module' => 
+    'Modules\\Test_module\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\test_module\\Module.php',
-      1 => 1748952626,
+      1 => 1750843952,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -165,32 +165,13 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 3,
-    'null' => 3,
-    'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 3,
-    'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'Modules\\Test_module\\Module' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Sign\\SignResetPasswordTemplate' => 3,
-    'App\\Presentation\\Sign\\SignDefaultTemplate' => 2,
+    'Nette\\Bridges\\Assets\\DIExtension' => 1,
+    'null' => 1,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 3,
-    'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Statistics\\StatisticsPresenter' => 2,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 1,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDeleteTemplate' => 2,
-    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 2,
   ),
   2 => 
   array (
