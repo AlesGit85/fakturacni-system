@@ -52,7 +52,13 @@ final class HomePresenter extends BasePresenter
             $this->isSuperAdmin()
         );
         
-        // TODO: Přidat i pro InvoicesManager a CompanyManager až budou mít multi-tenancy
+        // AKTUALIZOVÁNO: InvoicesManager má nyní multi-tenancy
+        $this->invoicesManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
+        
+        // TODO: Přidat i pro CompanyManager až bude mít multi-tenancy
     }
 
     public function renderDefault(): void
@@ -66,54 +72,46 @@ final class HomePresenter extends BasePresenter
             // Dashboard statistiky s bezpečnou kontrolou
             $invoiceStats = $this->invoicesManager->getStatistics();
             
-            // OPRAVENO: Bezpečné získání počtu klientů s tenant filtrováním
-            $clientsSelection = $this->clientsManager->getAll();
-            $clientsCount = 0;
-            if ($clientsSelection && method_exists($clientsSelection, 'count')) {
-                $clientsCount = $clientsSelection->count();
-            } elseif (is_array($clientsSelection)) {
-                $clientsCount = count($clientsSelection);
-            }
+            // Statistiky klientů
+            $clientsCount = $this->clientsManager->getAll()->count();
             
+            // Informace o společnosti
             $company = $this->companyManager->getCompanyInfo();
 
-            // Získání informací o přihlášeném uživateli
-            $currentUser = null;
+            // Informace o aktuálním uživateli
+            $currentUser = $this->getUser()->getIdentity();
             $userDisplayName = '';
             $userFullName = '';
-            
-            if ($this->getUser()->isLoggedIn()) {
-                $userId = $this->getUser()->getId();
-                $currentUser = $this->userManager->getById($userId);
+
+            if ($currentUser) {
+                // Získání informací o uživateli z databáze pro zobrazení celého jména
+                $userData = $this->userManager->getById($currentUser->id);
                 
-                if ($currentUser) {
-                    // Místo getUserDisplayName() používáme vokativ pro křestní jména
-                    if (!empty($currentUser->first_name)) {
-                        // Pokud má křestní jméno, použijeme ho v 5. pádě (vokativ)
-                        $userDisplayName = $this->getVocativeName($currentUser->first_name);
-                    } else {
-                        // Jinak použijeme username (bez vokativu, protože to není křestní jméno)
-                        $userDisplayName = $currentUser->username;
-                    }
+                if ($userData) {
+                    $userDisplayName = $userData->username;
+                    $userFullName = trim($userData->first_name . ' ' . $userData->last_name);
                     
-                    $userFullName = $this->userManager->getUserFullName($currentUser);
+                    // Pokud je celé jméno prázdné, použijeme username
+                    if (empty($userFullName)) {
+                        $userFullName = $userData->username;
+                    }
                 }
             }
 
-            // Připravíme data pro dashboard
+            // Příprava dat pro dashboard
             $this->template->dashboardStats = [
                 'clients' => $clientsCount,
                 'invoices' => [
-                    'total' => $invoiceStats['totalCount'],
-                    'paid' => $invoiceStats['paidCount'],
-                    'overdue' => $invoiceStats['overdueCount'],
-                    'unpaidAmount' => $invoiceStats['unpaidAmount']
+                    'total' => $invoiceStats['total'] ?? 0,
+                    'paid' => $invoiceStats['paid'] ?? 0,
+                    'overdue' => $invoiceStats['overdue'] ?? 0,
+                    'unpaidAmount' => $invoiceStats['unpaid_amount'] ?? 0
                 ]
             ];
 
             // Logika pro "Začínáme" sekci (pouze pro admin)
             if ($this->isAdmin()) {
-                $setupSteps = $this->getSetupSteps($company, $clientsCount, $invoiceStats['totalCount']);
+                $setupSteps = $this->getSetupSteps($company, $clientsCount, $invoiceStats['total'] ?? 0);
                 $this->template->setupSteps = $setupSteps;
                 $this->template->isSetupComplete = empty($setupSteps);
             } else {
@@ -165,68 +163,82 @@ final class HomePresenter extends BasePresenter
             $this->template->userFullName = '';
             
             // Zobrazíme chybovou hlášku
-            $this->flashMessage('Došlo k chybě při načítání dashboardu. Zkuste to prosím znovu.', 'danger');
+            $this->flashMessage('Došlo k chybě při načítání dashboardu. Zkuste to prosím znovu.', 'warning');
         }
     }
 
     /**
-     * Vytváří seznam kroků pro dokončení nastavení systému
+     * Získá kroky pro dokončení nastavení systému
      */
     private function getSetupSteps($company, int $clientsCount, int $invoicesCount): array
     {
         $steps = [];
 
-        // Kontrola firemních údajů
-        if (!$company || empty($company->name) || empty($company->address)) {
+        // Krok 1: Nastavení údajů společnosti
+        if (!$company || empty($company->name) || empty($company->address) || empty($company->ic)) {
             $steps[] = [
-                'title' => 'Nastavte firemní údaje',
-                'description' => 'Zadejte základní informace o vaší společnosti.',
+                'title' => 'Doplňte údaje vaší společnosti',
+                'description' => 'Nastavte název, adresu, IČO a další informace o vaší firmě.',
+                'link' => $this->link('Settings:company'),
                 'icon' => 'bi-building',
-                'link' => $this->link('Settings:default'),
-                'action' => 'Nastavit údaje'
+                'priority' => 1
             ];
         }
 
-        // Kontrola klientů
+        // Krok 2: Nastavení bankovního účtu
+        if (!$company || empty($company->bank_account)) {
+            $steps[] = [
+                'title' => 'Nastavte bankovní účet',
+                'description' => 'Přidejte číslo bankovního účtu pro platby faktur.',
+                'link' => $this->link('Settings:company'),
+                'icon' => 'bi-bank',
+                'priority' => 2
+            ];
+        }
+
+        // Krok 3: Přidání prvního klienta
         if ($clientsCount === 0) {
             $steps[] = [
                 'title' => 'Přidejte prvního klienta',
-                'description' => 'Začněte přidáním klienta, kterému budete fakturovat.',
-                'icon' => 'bi-people',
+                'description' => 'Vytvořte záznam o vašem prvním klientovi.',
                 'link' => $this->link('Clients:add'),
-                'action' => 'Přidat klienta'
+                'icon' => 'bi-person-plus',
+                'priority' => 3
             ];
         }
 
-        // Kontrola faktur (pouze pokud už má klienty)
-        if ($clientsCount > 0 && $invoicesCount === 0) {
+        // Krok 4: Vytvoření první faktury
+        if ($invoicesCount === 0) {
             $steps[] = [
                 'title' => 'Vytvořte první fakturu',
-                'description' => 'Vystavte první fakturu a začněte fakturovat.',
-                'icon' => 'bi-file-earmark-text',
+                'description' => 'Vystavte svou první fakturu a vyzkoušejte si systém.',
                 'link' => $this->link('Invoices:add'),
-                'action' => 'Vytvořit fakturu'
+                'icon' => 'bi-file-earmark-plus',
+                'priority' => 4
             ];
         }
+
+        // Seřadíme podle priority
+        usort($steps, function($a, $b) {
+            return $a['priority'] <=> $b['priority'];
+        });
 
         return $steps;
     }
 
     /**
-     * Získá faktury blížící se splatnosti (do 7 dnů)
+     * Získá faktury s blížící se splatností (do 7 dnů)
      */
-    private function getUpcomingDueInvoices(): array
+    private function getUpcomingDueInvoices()
     {
-        $upcomingDate = new \DateTime('+7 days');
+        $sevenDaysFromNow = new \DateTime('+7 days');
         $today = new \DateTime();
-        
-        $upcomingInvoices = $this->invoicesManager->getAll()
+
+        return $this->invoicesManager->getAll()
             ->where('status', 'created')
             ->where('due_date >= ?', $today->format('Y-m-d'))
-            ->where('due_date <= ?', $upcomingDate->format('Y-m-d'))
+            ->where('due_date <= ?', $sevenDaysFromNow->format('Y-m-d'))
             ->order('due_date ASC')
             ->limit(5);
-
-        return iterator_to_array($upcomingInvoices);
     }
 }
