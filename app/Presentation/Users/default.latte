@@ -47,7 +47,9 @@
                         <a href="mailto:{$userItem->email}" class="client-email">{$userItem->email}</a>
                     </td>
                     <td>
-                        {if $userItem->role === 'admin'}
+                        {if $userItem->is_super_admin}
+                            <span class="badge" style="background-color: #B1D235; color: #212529; font-weight: 600;">Super Administrátor</span>
+                        {elseif $userItem->role === 'admin'}
                             <span class="badge bg-danger">Administrátor</span>
                         {elseif $userItem->role === 'accountant'}
                             <span class="badge bg-warning text-dark">Účetní</span>

@@ -202,15 +202,17 @@
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							<i class="bi bi-person-circle"></i><span class="nav-text">
 							{if isset($currentUser) && $currentUser}{$currentUser->username}{else}Uživatel{/if}
-							{if isset($currentUserRole)}
-								{if $currentUserRole === 'admin'}
-									<span class="badge bg-danger ms-1">Admin</span>
-								{elseif $currentUserRole === 'accountant'}
-									<span class="badge bg-warning ms-1">Účetní</span>
-								{else}
-									<span class="badge bg-secondary ms-1">Pouze čtení</span>
-								{/if}
+						{if isset($currentUserRole)}
+							{if $isSuperAdmin}
+								<span class="badge ms-1" style="background-color: #B1D235; color: #212529; font-weight: 600;">Super Admin</span>
+							{elseif $currentUserRole === 'admin'}
+								<span class="badge bg-danger ms-1">Admin</span>
+							{elseif $currentUserRole === 'accountant'}
+								<span class="badge bg-warning ms-1">Účetní</span>
+							{else}
+								<span class="badge bg-secondary ms-1">Pouze čtení</span>
 							{/if}
+						{/if}
 					</span>
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">

@@ -110,36 +110,40 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
                     </td>
                     <td>
 ';
-				if ($userItem->role === 'admin') /* line 50 */ {
+				if ($userItem->is_super_admin) /* line 50 */ {
+					echo '                            <span class="badge" style="background-color: #B1D235; color: #212529; font-weight: 600;">Super Administrátor</span>
+';
+				} elseif ($userItem->role === 'admin') /* line 52 */ {
 					echo '                            <span class="badge bg-danger">Administrátor</span>
 ';
-				} elseif ($userItem->role === 'accountant') /* line 52 */ {
+				} elseif ($userItem->role === 'accountant') /* line 54 */ {
 					echo '                            <span class="badge bg-warning text-dark">Účetní</span>
 ';
-				} else /* line 54 */ {
+				} else /* line 56 */ {
 					echo '                            <span class="badge bg-secondary">Pouze čtení</span>
 ';
 				}
 
+
 				echo '                    </td>
                     <td>
 ';
-				if ($userItem->created_at) /* line 59 */ {
+				if ($userItem->created_at) /* line 61 */ {
 					echo '                            ';
-					echo LR\Filters::escapeHtmlText(($this->filters->date)($userItem->created_at, 'd.m.Y')) /* line 60 */;
+					echo LR\Filters::escapeHtmlText(($this->filters->date)($userItem->created_at, 'd.m.Y')) /* line 62 */;
 					echo "\n";
-				} else /* line 61 */ {
+				} else /* line 63 */ {
 					echo '                            <span class="text-muted">—</span>
 ';
 				}
 				echo '                    </td>
                     <td>
 ';
-				if ($userItem->last_login) /* line 66 */ {
+				if ($userItem->last_login) /* line 68 */ {
 					echo '                            ';
-					echo LR\Filters::escapeHtmlText(($this->filters->date)($userItem->last_login, 'd.m.Y H:i')) /* line 67 */;
+					echo LR\Filters::escapeHtmlText(($this->filters->date)($userItem->last_login, 'd.m.Y H:i')) /* line 69 */;
 					echo "\n";
-				} else /* line 68 */ {
+				} else /* line 70 */ {
 					echo '                            <span class="text-muted">Nikdy</span>
 ';
 				}
@@ -147,32 +151,32 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
                     <td class="actions-column">
                         <div class="action-buttons">
                             <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$userItem->id])) /* line 74 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$userItem->id])) /* line 76 */;
 				echo '" class="btn btn-icon" title="Upravit uživatele">
                                 <i class="bi bi-pencil"></i>
                             </a>
                             
 ';
-				if ($userItem->id !== $currentUser->id) /* line 78 */ {
-					$isLastAdmin = $userItem->role === 'admin' && $adminCount <= 1 /* line 79 */;
-					if (!$isLastAdmin) /* line 80 */ {
+				if ($userItem->id !== $currentUser->id) /* line 80 */ {
+					$isLastAdmin = $userItem->role === 'admin' && $adminCount <= 1 /* line 81 */;
+					if (!$isLastAdmin) /* line 82 */ {
 						echo '                                    <a href="';
-						echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$userItem->id])) /* line 81 */;
+						echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$userItem->id])) /* line 83 */;
 						echo '" class="btn btn-icon text-danger" 
                                        onclick="return confirm(\'Opravdu chcete smazat uživatele ';
-						echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($userItem->username)) /* line 82 */;
+						echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($userItem->username)) /* line 84 */;
 						echo '?\')" 
                                        title="Smazat uživatele">
                                         <i class="bi bi-trash"></i>
                                     </a>
 ';
-					} else /* line 86 */ {
+					} else /* line 88 */ {
 						echo '                                    <span class="btn btn-icon text-muted" title="Nelze smazat posledního administrátora">
                                         <i class="bi bi-shield-check"></i>
                                     </span>
 ';
 					}
-				} else /* line 91 */ {
+				} else /* line 93 */ {
 					echo '                                <span class="btn btn-icon text-muted" title="Nemůžete smazat sám sebe">
                                     <i class="bi bi-person-x"></i>
                                 </span>
@@ -189,7 +193,7 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
         </table>
     </div>
 ';
-		} else /* line 103 */ {
+		} else /* line 105 */ {
 			echo '    <div class="empty-state">
         <div class="empty-state-icon">
             <i class="bi bi-people"></i>
@@ -197,7 +201,7 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
         <h3>Zatím zde nejsou žádní uživatelé</h3>
         <p>Začněte přidáním nového uživatele do systému</p>
         <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 110 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 112 */;
 			echo '" class="btn btn-primary mt-3">
             <i class="bi bi-person-plus"></i> Přidat prvního uživatele
         </a>

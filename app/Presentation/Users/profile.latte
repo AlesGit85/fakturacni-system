@@ -50,7 +50,9 @@
                             Role
                         </div>
                         <div class="info-value">
-                            {if $profileUser->role === 'admin'}
+                            {if $profileUser->is_super_admin}
+                                <span class="badge" style="background-color: #B1D235; color: #212529; font-weight: 600;">Super Administrátor</span>
+                            {elseif $profileUser->role === 'admin'}
                                 <span class="badge bg-danger">Administrátor</span>
                             {elseif $profileUser->role === 'accountant'}
                                 <span class="badge bg-warning text-dark">Účetní</span>
