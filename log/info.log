@@ -4247,3 +4247,53 @@
 [2025-07-08 08-05-24] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
 [2025-07-08 08-05-25] Staré REST API - finální výsledek: {"name":"Ale\u0161 Zita","ic":"87894912","dic":"","address":"167","city":"Librantice","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
 [2025-07-08 08-05-25] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-15-57] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-07-08 08-15-59] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-07-08 08-16-01] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-16-01] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-16-01] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-16-05] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-16-05] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-18-48] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-07-08 08-36-53] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-07-08 08-37-02] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-07-08 08-37-05] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-37-05] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-37-05] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-37-05] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-37-05] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-37-05] Staré REST API - finální výsledek: {"name":"Ale\u0161 Zita","ic":"87894912","dic":"","address":"167","city":"Librantice","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-37-05] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-37-43] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-07-08 08-37-44] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-07-08 08-37-46] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-07-08 08-37-46] === ARES LOOKUP START pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-07-08 08-37-46] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-07-08 08-37-47] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-07-08 08-37-47] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-07-08 08-37-48] Staré REST API - finální výsledek: {"name":"Stovkomat s.r.o.","ic":"03082989","dic":"CZ03082989","address":"Antala Sta\u0161ka 1009\/31","city":"Praha","zip":14000,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-07-08 08-37-48] === ARES ÚSPĚCH pro IČO: 03082989 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=03082989 
+[2025-07-08 08-37-53] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-07-08 08-38-03] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-07-08 08-38-11] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-38-11] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-38-11] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-38-12] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-38-12] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-38-12] Staré REST API - finální výsledek: {"name":"Ale\u0161 Zita","ic":"87894912","dic":"","address":"167","city":"Librantice","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-38-12] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-07-08 08-38-27] ModuleManager byl inicializován  @  http://localhost:8000/ 
+[2025-07-08 08-38-36] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-07-08 08-38-36] ModuleManager byl inicializován  @  http://localhost:8000/sign/in?backlink=egztg&_fid=5ljs 
+[2025-07-08 08-38-37] ModuleManager byl inicializován  @  http://localhost:8000/sign/in 
+[2025-07-08 08-38-37] ModuleManager byl inicializován  @  http://localhost:8000/?_fid=1k1z 
+[2025-07-08 08-38-43] ModuleManager byl inicializován  @  http://localhost:8000/clients/ 
+[2025-07-08 08-38-44] ModuleManager byl inicializován  @  http://localhost:8000/clients/add 
+[2025-07-08 08-38-47] ModuleManager byl inicializován  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-07-08 08-38-47] === ARES LOOKUP START pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-07-08 08-38-47] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-07-08 08-38-48] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-07-08 08-38-48] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-07-08 08-38-49] Staré REST API - finální výsledek: {"name":"ANERI s.r.o.","ic":"25429469","dic":"CZ25429469","address":"Hodkovick\u00e1 52\/52","city":"Liberec","zip":46006,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-07-08 08-38-49] === ARES ÚSPĚCH pro IČO: 25429469 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=25429469 
+[2025-07-08 08-38-54] ModuleManager byl inicializován  @  http://localhost:8000/ 

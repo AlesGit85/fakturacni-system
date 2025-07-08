@@ -80,15 +80,23 @@ function initAresLookup() {
                 
                 return response.json();
             })
-            .then(data => {
-                console.log('ARES data:', data);
+            .then(responseData => {
+                console.log('ARES data:', responseData);
                 
-                if (data.error) {
-                    showErrorMessage(data.error);
+                // OPRAVENO: Kontrola formátu odpovědi
+                if (responseData.error) {
+                    showErrorMessage(responseData.error);
                     return;
                 }
                 
-                // Kontrola, zda máme potřebná data
+                // OPRAVENO: Data jsou ve responseData.data, ne přímo v responseData
+                const data = responseData.data;
+                if (!data) {
+                    showErrorMessage('Neočekávaný formát odpovědi z ARESu');
+                    return;
+                }
+                
+                // OPRAVENO: Kontrola názvu z data.name místo responseData.name
                 if (!data.name || data.name.trim() === '') {
                     showErrorMessage('Z ARESu se nepodařilo načíst název firmy');
                     return;

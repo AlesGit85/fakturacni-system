@@ -1,1 +1,2 @@
 [2025-05-23 11-42-02] Neplatné IČO: 8789412  @  http://localhost:8000/clients/add?do=aresLookup&ico=8789412 
+[2025-07-08 08-16-08] === ARES nedostupný - použití testovacích dat pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 

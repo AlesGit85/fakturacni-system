@@ -229,9 +229,11 @@ class ClientsPresenter extends BasePresenter
             ->count();
     }
 
+
+
     /**
      * Vyhledá firmu v ARESu podle IČO
-     * PŮVODNÍ FUNKČNÍ VERZE - VRÁCENA ZPĚT
+     * VRÁCENA PŮVODNÍ FUNKČNÍ VERZE
      */
     public function handleAresLookup(): void
     {
@@ -241,7 +243,7 @@ class ClientsPresenter extends BasePresenter
                 ob_end_clean();
             }
             
-            // Ručně nastavíme correct content type header
+            // Ručně nastavíme content type header
             if (!headers_sent()) {
                 header('Content-Type: application/json; charset=utf-8');
             }
@@ -267,7 +269,7 @@ class ClientsPresenter extends BasePresenter
                 exit;
             }
             
-            // PŮVODNÍ VOLÁNÍ - getCompanyInfo (nyní alias)
+            // PŮVODNÍ VOLÁNÍ - getCompanyInfo (alias který vrací null při neúspěchu)
             $result = $this->aresService->getCompanyInfo($ico);
             
             if ($result) {
