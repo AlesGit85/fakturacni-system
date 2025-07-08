@@ -27,6 +27,20 @@ class SettingsPresenter extends BasePresenter
         $this->companyManager = $companyManager;
     }
 
+    /**
+     * MULTI-TENANCY: Nastavení tenant kontextu po spuštění presenteru
+     */
+    public function startup(): void
+    {
+        parent::startup();
+        
+        // Nastavíme tenant kontext v CompanyManager
+        $this->companyManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
+    }
+
     public function renderDefault(): void
     {
         $this->template->company = $this->companyManager->getCompanyInfo();
@@ -37,11 +51,13 @@ class SettingsPresenter extends BasePresenter
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
+        // Základní údaje firmy
         $form->addText('name', 'Název společnosti:')
             ->setRequired('Zadejte název společnosti');
 
         $form->addTextArea('address', 'Adresa:')
-            ->setRequired('Zadejte adresu');
+            ->setRequired('Zadejte adresu')
+            ->setHtmlAttribute('rows', 3);
 
         $form->addText('city', 'Město:')
             ->setRequired('Zadejte město');
@@ -53,41 +69,40 @@ class SettingsPresenter extends BasePresenter
             ->setRequired('Zadejte zemi')
             ->setDefaultValue('Česká republika');
 
-        $form->addText('ic', 'IČ:')
-            ->setRequired('Zadejte IČ');
+        $form->addText('ic', 'IČO:')
+            ->setRequired('Zadejte IČO');
 
-        // Checkbox pro plátce DPH
-        $form->addCheckbox('vat_payer', ' Jsem plátce DPH');
+        // DIČ s podmínkou
+        $form->addCheckbox('vat_payer', 'Jsem plátce DPH');
 
-        // DIČ
         $form->addText('dic', 'DIČ:')
-            ->setRequired(false)
-            ->setNullable();
+            ->setHtmlAttribute('placeholder', 'Vyplňte pouze jako plátce DPH');
 
+        // Bankovní údaje
+        $form->addText('bank_account', 'Číslo účtu:')
+            ->setHtmlAttribute('placeholder', 'např. 123456789/0100');
+
+        $form->addText('bank_name', 'Název banky:')
+            ->setHtmlAttribute('placeholder', 'např. Komerční banka');
+
+        // Kontaktní údaje
         $form->addEmail('email', 'E-mail:')
             ->setRequired('Zadejte e-mail');
 
         $form->addText('phone', 'Telefon:')
-            ->setRequired('Zadejte telefon');
+            ->setHtmlAttribute('placeholder', '+420 123 456 789');
 
-        $form->addText('bank_account', 'Číslo účtu:')
-            ->setRequired('Zadejte číslo účtu');
-
-        $form->addText('bank_name', 'Název banky:')
-            ->setRequired('Zadejte název banky');
-
+        // Nahrávání souborů
         $form->addUpload('logo', 'Logo společnosti:')
-            ->setRequired(false)
-            ->addRule(Form::IMAGE, 'Logo musí být ve formátu JPEG, PNG nebo GIF')
-            ->addRule(Form::MAX_FILE_SIZE, 'Maximální velikost souboru je 2 MB', 2 * 1024 * 1024);
+            ->setHtmlAttribute('accept', 'image/*')
+            ->addRule(Form::IMAGE, 'Logo musí být obrázek');
 
         $form->addUpload('signature', 'Podpis:')
-            ->setRequired(false)
-            ->addRule(Form::IMAGE, 'Podpis musí být ve formátu JPEG, PNG nebo GIF')
-            ->addRule(Form::MAX_FILE_SIZE, 'Maximální velikost souboru je 2 MB', 2 * 1024 * 1024);
+            ->setHtmlAttribute('accept', 'image/*')
+            ->addRule(Form::IMAGE, 'Podpis musí být obrázek');
 
-        // Barvy faktury s výchozími hodnotami podle vašeho schématu
-        $form->addText('invoice_heading_color', 'Barva nadpisu "FAKTURA":')
+        // Barvy pro faktury - podle vašeho schématu
+        $form->addText('invoice_heading_color', 'Barva nadpisu faktury:')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color')
             ->setDefaultValue('#B1D235');
@@ -102,7 +117,7 @@ class SettingsPresenter extends BasePresenter
             ->setHtmlAttribute('class', 'form-control form-control-color')
             ->setDefaultValue('#212529');
 
-        $form->addText('invoice_labels_color', 'Barva popisků (Dodavatel, Odběratel, atd.):')
+        $form->addText('invoice_labels_color', 'Barva štítků (Dodavatel, Odběratel, apod.):')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color')
             ->setDefaultValue('#95B11F');

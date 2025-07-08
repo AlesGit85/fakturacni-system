@@ -69,6 +69,12 @@ class InvoicesPresenter extends BasePresenter
             $this->getCurrentTenantId(),
             $this->isSuperAdmin()
         );
+        
+        // PŘIDÁNO: CompanyManager také potřebuje tenant kontext pro zobrazení faktur
+        $this->companyManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
     }
 
     public function renderAdd(): void

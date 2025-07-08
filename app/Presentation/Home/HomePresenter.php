@@ -58,7 +58,11 @@ final class HomePresenter extends BasePresenter
             $this->isSuperAdmin()
         );
         
-        // TODO: Přidat i pro CompanyManager až bude mít multi-tenancy
+        // AKTUALIZOVÁNO: CompanyManager má nyní multi-tenancy
+        $this->companyManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
     }
 
     public function renderDefault(): void
@@ -179,7 +183,8 @@ final class HomePresenter extends BasePresenter
             $steps[] = [
                 'title' => 'Doplňte údaje vaší společnosti',
                 'description' => 'Nastavte název, adresu, IČO a další informace o vaší firmě.',
-                'link' => $this->link('Settings:company'),
+                'link' => $this->link('Settings:default'),
+                'linkText' => 'Nastavit údaje',
                 'icon' => 'bi-building',
                 'priority' => 1
             ];
@@ -190,7 +195,8 @@ final class HomePresenter extends BasePresenter
             $steps[] = [
                 'title' => 'Nastavte bankovní účet',
                 'description' => 'Přidejte číslo bankovního účtu pro platby faktur.',
-                'link' => $this->link('Settings:company'),
+                'link' => $this->link('Settings:default'),
+                'linkText' => 'Přidat účet',
                 'icon' => 'bi-bank',
                 'priority' => 2
             ];
@@ -202,6 +208,7 @@ final class HomePresenter extends BasePresenter
                 'title' => 'Přidejte prvního klienta',
                 'description' => 'Vytvořte záznam o vašem prvním klientovi.',
                 'link' => $this->link('Clients:add'),
+                'linkText' => 'Přidat klienta',
                 'icon' => 'bi-person-plus',
                 'priority' => 3
             ];
@@ -213,6 +220,7 @@ final class HomePresenter extends BasePresenter
                 'title' => 'Vytvořte první fakturu',
                 'description' => 'Vystavte svou první fakturu a vyzkoušejte si systém.',
                 'link' => $this->link('Invoices:add'),
+                'linkText' => 'Vytvořit fakturu',
                 'icon' => 'bi-file-earmark-plus',
                 'priority' => 4
             ];

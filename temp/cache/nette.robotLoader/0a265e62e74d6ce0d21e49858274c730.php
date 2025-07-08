@@ -30,7 +30,7 @@ return array (
     'App\\Model\\CompanyManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\CompanyManager.php',
-      1 => 1747508731,
+      1 => 1751976266,
     ),
     'App\\Model\\EmailService' => 
     array (
@@ -120,7 +120,7 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1751959802,
+      1 => 1751977806,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
@@ -140,7 +140,7 @@ return array (
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1749217662,
+      1 => 1751977831,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
@@ -186,6 +186,9 @@ return array (
     'App\\Presentation\\Clients\\ClientsShowTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesDeleteTemplate' => 2,
+    'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 2,
+    'App\\Presentation\\Settings\\SettingsCompanyTemplate' => 3,
   ),
   2 => 
   array (
