@@ -18,6 +18,22 @@ class AresService
     }
 
     /**
+     * ALIAS pro zpětnou kompatibilitu s původním kódem
+     * Volá getCompanyDataByIco()
+     */
+    public function getCompanyInfo(string $ico): ?array
+    {
+        $result = $this->getCompanyDataByIco($ico);
+        
+        // Pokud je výsledek prázdný pole nebo nemá název, vrátíme null
+        if (empty($result) || !isset($result['name']) || empty(trim($result['name']))) {
+            return null;
+        }
+        
+        return $result;
+    }
+
+    /**
      * Načte data firmy z ARESu podle IČO
      * Vždy vrací data - buď z ARESu nebo testovací
      */
@@ -143,119 +159,69 @@ class AresService
                     'method' => 'GET',
                     'header' => [
                         'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) QRdoklad/1.0',
-                        'Accept: ' . ($isJson ? 'application/json' : 'text/xml, application/xml'),
-                        'Connection: close',
+                        'Accept: ' . ($isJson ? 'application/json' : 'text/xml'),
                         'Cache-Control: no-cache'
                     ],
                     'timeout' => $timeoutSeconds,
                     'ignore_errors' => true
-                ],
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                    'allow_self_signed' => true
                 ]
             ]);
             
-            // Potlačíme všechny warnings
+            // OPRAVENO: Potlačíme warningy pomocí @ operátoru
             $response = @file_get_contents($url, false, $context);
             
             // Obnovíme původní timeout
             ini_set('default_socket_timeout', $originalTimeout);
             
             if ($response === false) {
-                $this->logger->log("HTTP požadavek selhal pro: $url", ILogger::INFO);
+                $this->logger->log("HTTP request failed: $url", ILogger::DEBUG); // Změněno z WARNING na DEBUG
                 return null;
             }
             
-            // Kontrola HTTP status
-            if (isset($http_response_header) && !empty($http_response_header)) {
-                $statusLine = $http_response_header[0];
-                if (strpos($statusLine, '200') === false) {
-                    $this->logger->log("HTTP neúspěšný status: $statusLine", ILogger::INFO);
-                    return null;
-                }
-            }
-            
-            if (empty($response)) {
-                $this->logger->log("HTTP prázdná odpověď", ILogger::INFO);
-                return null;
-            }
-            
-            $this->logger->log("HTTP úspěšná odpověď (" . strlen($response) . " znaků)", ILogger::INFO);
             return $response;
             
-        } catch (\Throwable $e) {
-            // Obnovíme timeout i při chybě
+        } catch (\Exception $e) {
+            $this->logger->log("HTTP request exception: " . $e->getMessage(), ILogger::DEBUG); // Změněno z WARNING na DEBUG
+            // Obnovíme původní timeout i při výjimce
             if (isset($originalTimeout)) {
                 ini_set('default_socket_timeout', $originalTimeout);
             }
-            
-            $this->logger->log("HTTP výjimka: " . $e->getMessage(), ILogger::INFO);
             return null;
         }
     }
     
     /**
-     * Parsuje XML odpověď
+     * Parsuje XML odpověď z ARES
      */
-    private function parseXmlResponse(string $response, string $ico): ?array
+    private function parseXmlResponse(string $xmlContent, string $ico): ?array
     {
         try {
-            // Potlačíme XML warnings
-            $oldUseErrors = libxml_use_internal_errors(true);
-            libxml_clear_errors();
+            $xml = simplexml_load_string($xmlContent);
             
-            $xml = simplexml_load_string($response);
-            
-            if (!$xml) {
-                $errors = libxml_get_errors();
-                $this->logger->log("XML parse error: " . json_encode($errors), ILogger::INFO);
-                libxml_clear_errors();
-                libxml_use_internal_errors($oldUseErrors);
+            if ($xml === false) {
+                $this->logger->log("Neplatný XML pro IČO: $ico", ILogger::WARNING);
                 return null;
             }
             
-            // Zalogujeme XML strukturu pro debugging
-            $this->logger->log("XML root element: " . $xml->getName(), ILogger::DEBUG);
+            // Registrujeme namespace pro ARES
+            $xml->registerXPathNamespace('are', 'http://wwwinfo.mfcr.cz/ares/xml_doc/schemas/ares/ares_answer/v_1.0.1');
+            $xml->registerXPathNamespace('dtt', 'http://wwwinfo.mfcr.cz/ares/xml_doc/schemas/ares/ares_datatypes/v_1.0.4');
+            $xml->registerXPathNamespace('udt', 'http://wwwinfo.mfcr.cz/ares/xml_doc/schemas/ufo/common_datatypes/v_1.0.1');
             
-            $namespaces = $xml->getNamespaces(true);
-            $this->logger->log("XML namespaces: " . json_encode(array_keys($namespaces)), ILogger::DEBUG);
+            // Najdeme záznam
+            $zaznamy = $xml->xpath('//are:Zaznam');
             
-            if (!isset($namespaces['are'])) {
-                $this->logger->log("Chybí namespace 'are' v XML", ILogger::INFO);
-                libxml_use_internal_errors($oldUseErrors);
+            if (empty($zaznamy)) {
+                $this->logger->log("Žádný záznam nenalezen pro IČO: $ico", ILogger::WARNING);
                 return null;
             }
             
-            $data = $xml->children($namespaces['are']);
+            $zaznam = $zaznamy[0];
             
-            if (!isset($data->Odpoved)) {
-                $this->logger->log("Chybí element Odpoved v XML", ILogger::INFO);
-                libxml_use_internal_errors($oldUseErrors);
-                return null;
-            }
+            return $this->mapXmlData($zaznam, $ico);
             
-            if (isset($data->Odpoved->Error)) {
-                $this->logger->log("ARES XML vrátil chybu: " . (string)$data->Odpoved->Error, ILogger::INFO);
-                libxml_use_internal_errors($oldUseErrors);
-                return null;
-            }
-            
-            if (!isset($data->Odpoved->Zaznam)) {
-                $this->logger->log("Chybí element Zaznam v XML odpovědi", ILogger::INFO);
-                libxml_use_internal_errors($oldUseErrors);
-                return null;
-            }
-            
-            libxml_use_internal_errors($oldUseErrors);
-            return $this->mapXmlData($data->Odpoved->Zaznam, $ico);
-            
-        } catch (\Throwable $e) {
-            if (isset($oldUseErrors)) {
-                libxml_use_internal_errors($oldUseErrors);
-            }
-            $this->logger->log("XML parsing exception: " . $e->getMessage(), ILogger::INFO);
+        } catch (\Exception $e) {
+            $this->logger->log("XML parsing error pro IČO $ico: " . $e->getMessage(), ILogger::WARNING);
             return null;
         }
     }
@@ -347,42 +313,19 @@ class AresService
             
             // Sestavení adresy
             $addressParts = [];
-            
-            // Ulice - různé možné struktury
-            if (isset($sidlo['ulice'])) {
-                if (is_array($sidlo['ulice']) && isset($sidlo['ulice']['nazev'])) {
-                    $addressParts[] = $sidlo['ulice']['nazev'];
-                } elseif (is_string($sidlo['ulice'])) {
-                    $addressParts[] = $sidlo['ulice'];
-                }
-            } elseif (isset($sidlo['nazevUlice'])) {
+            if (isset($sidlo['nazevUlice'])) {
                 $addressParts[] = $sidlo['nazevUlice'];
             }
-            
-            // Číslo domu
-            $houseNumber = '';
             if (isset($sidlo['cisloDomovni'])) {
-                $houseNumber = (string)$sidlo['cisloDomovni'];
+                $houseNumber = $sidlo['cisloDomovni'];
                 if (isset($sidlo['cisloOrientacni'])) {
                     $houseNumber .= '/' . $sidlo['cisloOrientacni'];
                 }
                 $addressParts[] = $houseNumber;
             }
-            
             $address = implode(' ', $addressParts);
             
-            // Město - různé možné struktury
-            if (isset($sidlo['obec'])) {
-                if (is_array($sidlo['obec']) && isset($sidlo['obec']['nazev'])) {
-                    $city = $sidlo['obec']['nazev'];
-                } elseif (is_string($sidlo['obec'])) {
-                    $city = $sidlo['obec'];
-                }
-            } elseif (isset($sidlo['nazevObce'])) {
-                $city = $sidlo['nazevObce'];
-            }
-            
-            // PSČ
+            $city = $sidlo['nazevObce'] ?? '';
             $zip = $sidlo['psc'] ?? '';
             
             $this->logger->log("Staré REST API - parsované: adresa='$address', město='$city', PSČ='$zip'", ILogger::DEBUG);
@@ -493,7 +436,7 @@ class AresService
     }
     
     /**
-     * Parsuje adresu z XML elementu
+     * Parsuje adresu z XML struktury
      */
     private function parseXmlAddress($adresa, string $context): array
     {
@@ -504,48 +447,35 @@ class AresService
             'zip' => ''
         ];
         
-        if (!$adresa) {
-            return $result;
-        }
+        $address = '';
+        $city = '';
+        $zip = '';
         
-        // Ulice
+        // Název ulice
         $street = '';
         if (isset($adresa->Nazev_ulice)) {
             $street = (string)$adresa->Nazev_ulice;
-            $this->logger->log("XML API ($context) - ulice: '$street'", ILogger::DEBUG);
         }
         
-        // Čísla
+        // Čísla domů
         $houseNum = '';
         if (isset($adresa->Cislo_domovni)) {
             $houseNum = (string)$adresa->Cislo_domovni;
-            $this->logger->log("XML API ($context) - číslo domovní: '$houseNum'", ILogger::DEBUG);
         }
         
         $orientNum = '';
         if (isset($adresa->Cislo_orientacni)) {
-            $orientNum = '/' . (string)$adresa->Cislo_orientacni;
-            $this->logger->log("XML API ($context) - číslo orientační: '$orientNum'", ILogger::DEBUG);
+            $orientNum = (string)$adresa->Cislo_orientacni;
         }
         
-        // Město - zkusíme několik variant
-        $city = '';
+        // Město
         if (isset($adresa->Nazev_obce)) {
             $city = (string)$adresa->Nazev_obce;
-            $this->logger->log("XML API ($context) - obec: '$city'", ILogger::DEBUG);
-        } elseif (isset($adresa->Nazev_casti_obce)) {
-            $city = (string)$adresa->Nazev_casti_obce;
-            $this->logger->log("XML API ($context) - část obce: '$city'", ILogger::DEBUG);
-        } elseif (isset($adresa->Nazev_mestske_casti)) {
-            $city = (string)$adresa->Nazev_mestske_casti;
-            $this->logger->log("XML API ($context) - městská část: '$city'", ILogger::DEBUG);
         }
         
         // PSČ
-        $zip = '';
         if (isset($adresa->PSC)) {
             $zip = (string)$adresa->PSC;
-            $this->logger->log("XML API ($context) - PSČ: '$zip'", ILogger::DEBUG);
         }
         
         // Sestavení adresy
@@ -554,7 +484,11 @@ class AresService
             $addressParts[] = $street;
         }
         if (!empty($houseNum)) {
-            $addressParts[] = $houseNum . $orientNum;
+            $houseNumber = $houseNum;
+            if (!empty($orientNum)) {
+                $houseNumber .= '/' . $orientNum;
+            }
+            $addressParts[] = $houseNumber;
         }
         
         $address = implode(' ', $addressParts);

@@ -26,6 +26,9 @@ abstract class BasePresenter extends Presenter
     /** @var ModuleManager */
     private $moduleManager;
 
+    /** @var Nette\Database\Explorer Databáze pro multi-tenancy dotazy */
+    protected $database;
+
     public function injectSecurityLogger(SecurityLogger $securityLogger): void
     {
         $this->securityLogger = $securityLogger;
@@ -34,6 +37,11 @@ abstract class BasePresenter extends Presenter
     public function injectModuleManager(ModuleManager $moduleManager): void
     {
         $this->moduleManager = $moduleManager;
+    }
+
+    public function injectDatabase(Nette\Database\Explorer $database): void
+    {
+        $this->database = $database;
     }
 
     public function startup(): void
@@ -84,11 +92,116 @@ abstract class BasePresenter extends Presenter
         }
     }
 
+    // =====================================================
+    // MULTI-TENANCY METODY (NOVÉ)
+    // =====================================================
+
+    /**
+     * Získá aktuální tenant ID přihlášeného uživatele
+     */
+    protected function getCurrentTenantId(): ?int
+    {
+        if (!$this->getUser()->isLoggedIn()) {
+            return null;
+        }
+
+        $identity = $this->getUser()->getIdentity();
+        return $identity && isset($identity->tenant_id) ? (int)$identity->tenant_id : null;
+    }
+
+    /**
+     * Kontroluje, zda je uživatel super admin
+     */
+    public function isSuperAdmin(): bool
+    {
+        if (!$this->getUser()->isLoggedIn()) {
+            return false;
+        }
+
+        $identity = $this->getUser()->getIdentity();
+        return $identity && isset($identity->is_super_admin) && $identity->is_super_admin == 1;
+    }
+
+    /**
+     * Kontroluje, zda má uživatel přístup k danému tenantu
+     */
+    public function canAccessTenant(int $tenantId): bool
+    {
+        // Super admin může přistupovat ke všem tenantům
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        // Ostatní uživatelé mohou přistupovat pouze ke svému tenantu
+        return $this->getCurrentTenantId() === $tenantId;
+    }
+
+    /**
+     * Zajistí, že uživatel může přistupovat pouze ke svému tenantu
+     * Automaticky filtruje dotazy podle tenant_id
+     */
+    protected function filterByTenant(Nette\Database\Table\Selection $selection): Nette\Database\Table\Selection
+    {
+        // Super admin vidí všechna data
+        if ($this->isSuperAdmin()) {
+            return $selection;
+        }
+
+        // Ostatní uživatelé vidí pouze data svého tenanta
+        $tenantId = $this->getCurrentTenantId();
+        if ($tenantId === null) {
+            // Pokud nemá tenant_id, nevidí nic
+            return $selection->where('1 = 0'); // Prázdný výsledek
+        }
+
+        return $selection->where('tenant_id', $tenantId);
+    }
+
+    /**
+     * Získá seznam všech tenantů (pouze pro super admina)
+     */
+    protected function getAllTenants(): array
+    {
+        if (!$this->isSuperAdmin()) {
+            return [];
+        }
+
+        $tenants = [];
+        foreach ($this->database->table('tenants')->order('name ASC') as $tenant) {
+            $tenants[$tenant->id] = $tenant->name;
+        }
+
+        return $tenants;
+    }
+
+    /**
+     * Získá informace o aktuálním tenantu
+     */
+    protected function getCurrentTenant(): ?Nette\Database\Table\ActiveRow
+    {
+        $tenantId = $this->getCurrentTenantId();
+        if ($tenantId === null) {
+            return null;
+        }
+
+        return $this->database->table('tenants')->get($tenantId);
+    }
+
+    // =====================================================
+    // PŮVODNÍ METODY S MULTI-TENANCY ROZŠÍŘENÍM
+    // =====================================================
+
     /**
      * Kontroluje, zda má uživatel roli potřebnou pro danou akci
+     * ROZŠÍŘENO: Super admin má automaticky všechna práva
      */
     protected function hasRequiredRoleForAction(string $action, string $userRole): bool
     {
+        // Super admin má přístup ke všemu
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
         if (!isset($this->actionRoles[$action])) {
             return true; // Pokud akce nemá definované role, je povolena
         }
@@ -196,12 +309,17 @@ abstract class BasePresenter extends Presenter
 
     /**
      * Kontroluje, zda má uživatel požadovanou roli
-     * Používá hierarchii rolí - admin může vše, accountant může accountant + readonly, readonly jen readonly
+     * ROZŠÍŘENO: Super admin má automaticky všechna práva
      */
     public function hasRole(string $role): bool
     {
         if (!$this->getUser()->isLoggedIn()) {
             return false;
+        }
+
+        // Super admin má automaticky všechna práva
+        if ($this->isSuperAdmin()) {
+            return true;
         }
 
         $identity = $this->getUser()->getIdentity();
@@ -222,27 +340,27 @@ abstract class BasePresenter extends Presenter
     }
 
     /**
-     * Kontroluje, zda je uživatel admin
+     * Kontroluje, zda je uživatel admin (nebo super admin)
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole('admin');
+        return $this->isSuperAdmin() || $this->hasRole('admin');
     }
 
     /**
-     * Kontroluje, zda je uživatel účetní nebo admin
+     * Kontroluje, zda je uživatel účetní (nebo admin/super admin)
      */
     public function isAccountant(): bool
     {
-        return $this->hasRole('accountant');
+        return $this->isSuperAdmin() || $this->hasRole('accountant');
     }
 
     /**
-     * Kontroluje, zda má uživatel roli readonly nebo vyšší
+     * Kontroluje, zda má uživatel roli readonly nebo vyšší (nebo super admin)
      */
     public function isReadonly(): bool
     {
-        return $this->hasRole('readonly');
+        return $this->isSuperAdmin() || $this->hasRole('readonly');
     }
 
     /**
@@ -393,6 +511,7 @@ abstract class BasePresenter extends Presenter
 
     /**
      * Template helper pro kontrolu rolí v šablonách
+     * ROZŠÍŘENO: přidány multi-tenancy proměnné
      */
     public function beforeRender(): void
     {
@@ -411,10 +530,15 @@ abstract class BasePresenter extends Presenter
             $this->template->add('currentUserRole', 'readonly');
         }
         
-        // Helper funkce pro šablony
+        // Helper funkce pro šablony (ROZŠÍŘENO)
         $this->template->add('isUserAdmin', $this->isAdmin());
         $this->template->add('isUserAccountant', $this->isAccountant());
         $this->template->add('isUserReadonly', $this->isReadonly());
+        $this->template->add('isSuperAdmin', $this->isSuperAdmin()); // NOVÉ!
+        
+        // Multi-tenancy informace (NOVÉ!)
+        $this->template->add('currentTenantId', $this->getCurrentTenantId());
+        $this->template->add('currentTenant', $this->getCurrentTenant());
         
         // Přidání helper funkcí pro skloňování do šablony
         $this->template->addFunction('pluralizeInvoices', [$this, 'pluralizeInvoices']);
@@ -442,15 +566,20 @@ abstract class BasePresenter extends Presenter
     
     /**
      * Kontroluje, zda má uživatel přístup k akci na základě jeho role
-     * Metoda může být použita pro složitější kontroly přístupu v presenterech
+     * OPRAVENO: nullable parameter
      */
-    protected function checkAccess(string $resource, string $privilege = null): bool
+    protected function checkAccess(string $resource, ?string $privilege = null): bool
     {
         if (!$this->getUser()->isLoggedIn()) {
             return false;
         }
         
         $role = $this->getCurrentUserRole();
+        
+        // Super admin může všechno (NOVÉ!)
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
         
         // Pro zjednodušení používáme hierarchii rolí
         // Admin může všechno

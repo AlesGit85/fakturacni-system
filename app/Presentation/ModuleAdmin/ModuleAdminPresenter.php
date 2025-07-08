@@ -26,9 +26,6 @@ final class ModuleAdminPresenter extends BasePresenter
     /** @var CompanyManager */
     private $companyManager;
 
-    /** @var Nette\Database\Explorer */
-    private $database;
-
     // Základní přístup k modulům mají všichni přihlášení uživatelé
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
 

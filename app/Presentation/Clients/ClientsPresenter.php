@@ -15,9 +15,6 @@ class ClientsPresenter extends BasePresenter
     /** @var ClientsManager */
     private $clientsManager;
 
-    /** @var Nette\Database\Explorer */
-    private $database;
-
     /** @var AresService */
     private $aresService;
 
@@ -47,6 +44,20 @@ class ClientsPresenter extends BasePresenter
         $this->database = $database;
         $this->aresService = $aresService;
         $this->logger = $logger;
+    }
+
+    /**
+     * MULTI-TENANCY: Nastavení tenant kontextu po spuštění presenteru
+     */
+    public function startup(): void
+    {
+        parent::startup();
+        
+        // Nastavíme tenant kontext v ClientsManager
+        $this->clientsManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
     }
 
     public function renderDefault(): void
@@ -220,7 +231,7 @@ class ClientsPresenter extends BasePresenter
 
     /**
      * Vyhledá firmu v ARESu podle IČO
-     * Opravená produkční verze
+     * PŮVODNÍ FUNKČNÍ VERZE - VRÁCENA ZPĚT
      */
     public function handleAresLookup(): void
     {
@@ -256,62 +267,21 @@ class ClientsPresenter extends BasePresenter
                 exit;
             }
             
-            // Logování požadavku - bezpečně
-            try {
-                $this->logger->log("ARES lookup požadavek pro IČO: $ico", ILogger::INFO);
-            } catch (\Exception $e) {
-                // Pokud selže logování, pokračujeme bez něj
+            // PŮVODNÍ VOLÁNÍ - getCompanyInfo (nyní alias)
+            $result = $this->aresService->getCompanyInfo($ico);
+            
+            if ($result) {
+                echo json_encode(['success' => true, 'data' => $result]);
+            } else {
+                echo json_encode(['error' => 'Firma s tímto IČO nebyla v ARESu nalezena.']);
             }
             
-            // AresService vždy vrací data (buď z ARESu nebo testovací)
-            $data = $this->aresService->getCompanyDataByIco($ico);
-            
-            // Kontrola, zda máme validní data
-            if (!isset($data['name']) || empty(trim($data['name']))) {
-                try {
-                    $this->logger->log("AresService vrátil nevalidní data pro IČO: $ico", ILogger::ERROR);
-                } catch (\Exception $e) {
-                    // Pokud selže logování, pokračujeme bez něj
-                }
-                echo json_encode(['error' => 'Nepodařilo se načíst data pro zadané IČO']);
-                exit;
-            }
-            
-            // Test JSON serializace před odesláním
-            $jsonData = json_encode($data);
-            if ($jsonData === false) {
-                $jsonError = json_last_error_msg();
-                try {
-                    $this->logger->log("JSON serialization failed: $jsonError", ILogger::ERROR);
-                } catch (\Exception $e) {
-                    // Pokud selže logování, pokračujeme bez něj
-                }
-                echo json_encode(['error' => 'Došlo k chybě při zpracování dat']);
-                exit;
-            }
-            
-            try {
-                $this->logger->log("ARES úspěšně vrátil data pro IČO: $ico, firma: " . $data['name'], ILogger::INFO);
-            } catch (\Exception $e) {
-                // Pokud selže logování, pokračujeme bez něj
-            }
-            
-            // Pošleme data přímo (obcházíme Nette sendJson které má problémy na produkci)
-            echo $jsonData;
-            exit;
-            
-        } catch (\Throwable $e) {
-            // Zachytíme všechny chyby a pošleme je jako JSON
-            try {
-                $this->logger->log("Chyba v ARES lookup: " . $e->getMessage(), ILogger::ERROR);
-            } catch (\Exception $logError) {
-                // Pokud selže i logování chyby, ignorujeme to
-            }
-            
-            echo json_encode([
-                'error' => 'Došlo k chybě při načítání dat z ARESu. Zkuste to prosím později.'
-            ]);
-            exit;
+        } catch (\Exception $e) {
+            // Logování chyby
+            $this->logger->log("ARES Lookup Error: " . $e->getMessage(), \Tracy\ILogger::ERROR);
+            echo json_encode(['error' => 'Došlo k chybě při komunikaci s ARESem: ' . $e->getMessage()]);
         }
+        
+        exit;
     }
 }

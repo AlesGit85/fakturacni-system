@@ -351,6 +351,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		);
 		$service->injectSecurityLogger($this->getService('05'));
 		$service->injectModuleManager($this->getService('07'));
+		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -370,6 +371,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		);
 		$service->injectSecurityLogger($this->getService('05'));
 		$service->injectModuleManager($this->getService('07'));
+		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -429,6 +431,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		);
 		$service->injectSecurityLogger($this->getService('05'));
 		$service->injectModuleManager($this->getService('07'));
+		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -453,6 +456,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		);
 		$service->injectSecurityLogger($this->getService('05'));
 		$service->injectModuleManager($this->getService('07'));
+		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -472,6 +476,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		);
 		$service->injectSecurityLogger($this->getService('05'));
 		$service->injectModuleManager($this->getService('07'));
+		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -497,6 +502,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		);
 		$service->injectSecurityLogger($this->getService('05'));
 		$service->injectModuleManager($this->getService('07'));
+		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -516,6 +522,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		);
 		$service->injectSecurityLogger($this->getService('05'));
 		$service->injectModuleManager($this->getService('07'));
+		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -540,6 +547,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		);
 		$service->injectSecurityLogger($this->getService('05'));
 		$service->injectModuleManager($this->getService('07'));
+		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}

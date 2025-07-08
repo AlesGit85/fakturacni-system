@@ -20,12 +20,12 @@ return array (
     'App\\Model\\AresService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\AresService.php',
-      1 => 1749101730,
+      1 => 1751961729,
     ),
     'App\\Model\\ClientsManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ClientsManager.php',
-      1 => 1747508669,
+      1 => 1751960164,
     ),
     'App\\Model\\CompanyManager' => 
     array (
@@ -55,7 +55,7 @@ return array (
     'App\\Model\\UserManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\UserManager.php',
-      1 => 1750757988,
+      1 => 1751958539,
     ),
     'App\\Modules\\BaseModule' => 
     array (
@@ -87,10 +87,10 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\Notes\\NotesManager.php',
       1 => 1748954135,
     ),
-    'Modules\\TestModule\\Module' => 
+    'Modules\\Test_module\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\test_module\\Module.php',
-      1 => 1750843715,
+      1 => 1750843952,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -100,12 +100,12 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1750839694,
+      1 => 1751957979,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1749195999,
+      1 => 1751961780,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -120,7 +120,7 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1750835601,
+      1 => 1751959802,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
@@ -135,7 +135,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1749107227,
+      1 => 1751958345,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -145,7 +145,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1750835866,
+      1 => 1751958368,
     ),
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (

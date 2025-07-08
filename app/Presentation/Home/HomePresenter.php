@@ -39,6 +39,22 @@ final class HomePresenter extends BasePresenter
         $this->userManager = $userManager;
     }
 
+    /**
+     * MULTI-TENANCY: Nastavení tenant kontextu po spuštění presenteru
+     */
+    public function startup(): void
+    {
+        parent::startup();
+        
+        // Nastavíme tenant kontext v manažerech
+        $this->clientsManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
+        
+        // TODO: Přidat i pro InvoicesManager a CompanyManager až budou mít multi-tenancy
+    }
+
     public function renderDefault(): void
     {
         try {
@@ -50,7 +66,7 @@ final class HomePresenter extends BasePresenter
             // Dashboard statistiky s bezpečnou kontrolou
             $invoiceStats = $this->invoicesManager->getStatistics();
             
-            // Bezpečné získání počtu klientů
+            // OPRAVENO: Bezpečné získání počtu klientů s tenant filtrováním
             $clientsSelection = $this->clientsManager->getAll();
             $clientsCount = 0;
             if ($clientsSelection && method_exists($clientsSelection, 'count')) {
@@ -149,72 +165,68 @@ final class HomePresenter extends BasePresenter
             $this->template->userFullName = '';
             
             // Zobrazíme chybovou hlášku
-            $this->flashMessage('Došlo k chybě při načítání dashboardu. Zkuste to prosím znovu.', 'warning');
+            $this->flashMessage('Došlo k chybě při načítání dashboardu. Zkuste to prosím znovu.', 'danger');
         }
     }
 
     /**
-     * Určí, které kroky nastavení ještě zbývají
+     * Vytváří seznam kroků pro dokončení nastavení systému
      */
-    private function getSetupSteps(?object $company, int $clientsCount, int $invoicesCount): array
+    private function getSetupSteps($company, int $clientsCount, int $invoicesCount): array
     {
         $steps = [];
 
-        // Krok 1: Nastavení firemních údajů
-        if (!$company || empty($company->name) || empty($company->ic) || empty($company->bank_account)) {
+        // Kontrola firemních údajů
+        if (!$company || empty($company->name) || empty($company->address)) {
             $steps[] = [
                 'title' => 'Nastavte firemní údaje',
-                'description' => 'Vyplňte základní informace o vaší společnosti',
-                'icon' => 'bi-gear',
+                'description' => 'Zadejte základní informace o vaší společnosti.',
+                'icon' => 'bi-building',
                 'link' => $this->link('Settings:default'),
-                'linkText' => 'Upravit nastavení',
-                'priority' => 1
+                'action' => 'Nastavit údaje'
             ];
         }
 
-        // Krok 2: Přidání klientů
+        // Kontrola klientů
         if ($clientsCount === 0) {
             $steps[] = [
                 'title' => 'Přidejte prvního klienta',
-                'description' => 'Vytvořte databázi svých klientů pro rychlejší fakturaci',
+                'description' => 'Začněte přidáním klienta, kterému budete fakturovat.',
                 'icon' => 'bi-people',
                 'link' => $this->link('Clients:add'),
-                'linkText' => 'Přidat klienta',
-                'priority' => 2
+                'action' => 'Přidat klienta'
             ];
         }
 
-        // Krok 3: Vystavení první faktury
-        if ($invoicesCount === 0) {
+        // Kontrola faktur (pouze pokud už má klienty)
+        if ($clientsCount > 0 && $invoicesCount === 0) {
             $steps[] = [
-                'title' => 'Vystavte první fakturu',
-                'description' => 'Začněte fakturovat a využívejte plný potenciál systému',
+                'title' => 'Vytvořte první fakturu',
+                'description' => 'Vystavte první fakturu a začněte fakturovat.',
                 'icon' => 'bi-file-earmark-text',
                 'link' => $this->link('Invoices:add'),
-                'linkText' => 'Vytvořit fakturu',
-                'priority' => 3
+                'action' => 'Vytvořit fakturu'
             ];
         }
-
-        // Seřadíme podle priority
-        usort($steps, function($a, $b) {
-            return $a['priority'] <=> $b['priority'];
-        });
 
         return $steps;
     }
 
     /**
-     * Získá faktury se splatností do 7 dnů
+     * Získá faktury blížící se splatnosti (do 7 dnů)
      */
-    private function getUpcomingDueInvoices()
+    private function getUpcomingDueInvoices(): array
     {
-        $sevenDaysFromNow = new \DateTime('+7 days');
+        $upcomingDate = new \DateTime('+7 days');
+        $today = new \DateTime();
         
-        return $this->invoicesManager->getAll()
+        $upcomingInvoices = $this->invoicesManager->getAll()
             ->where('status', 'created')
-            ->where('due_date BETWEEN ? AND ?', date('Y-m-d'), $sevenDaysFromNow->format('Y-m-d'))
+            ->where('due_date >= ?', $today->format('Y-m-d'))
+            ->where('due_date <= ?', $upcomingDate->format('Y-m-d'))
             ->order('due_date ASC')
             ->limit(5);
+
+        return iterator_to_array($upcomingInvoices);
     }
 }

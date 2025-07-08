@@ -22,9 +22,6 @@ final class SignPresenter extends BasePresenter
     /** @var EmailService */
     private $emailService;
 
-    /** @var Nette\Database\Explorer */
-    private $database;
-
     protected bool $requiresLogin = false;
 
     public function __construct(
