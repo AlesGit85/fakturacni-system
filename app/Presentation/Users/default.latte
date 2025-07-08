@@ -1,20 +1,358 @@
+{* CONDITIONAL CSS pro super admin *}
+{block head}
+    {if $isSuperAdmin}
+        <link rel="stylesheet" href="{$basePath}/css/users-super-admin.css">
+    {/if}
+{/block}
+
 {block content}
+
+{* DEBUG - zkontroluj, jestli je super admin *}
+{if $isSuperAdmin}
+    <div class="alert alert-info">DEBUG: Super admin detekován - CSS by se měl načítat</div>
+{/if}
+
 <div class="users-container">
     <!-- Záhlaví s názvem sekce a počtem uživatelů -->
     <div class="section-header-row mb-4">
         <div>
-            <h1 class="section-title mb-0">Uživatelé <span class="total-count">Počet uživatelů v systému: {$totalUsers}</span></h1>
-            <p class="text-muted">Správa uživatelských účtů v systému</p>
+            <h1 class="section-title mb-0">
+                {if $isSuperAdmin}
+                    Správa uživatelů <span class="total-count">Celkem: {$totalUsers} uživatelů ve {$superAdminStats['total_tenants']} tenantů</span>
+                {else}
+                    Uživatelé <span class="total-count">Počet uživatelů v systému: {$totalUsers}</span>
+                {/if}
+            </h1>
+            <p class="text-muted">
+                {if $isSuperAdmin}
+                    Super admin pohled - správa všech uživatelů napříč tenanty
+                {else}
+                    Správa uživatelských účtů v systému
+                {/if}
+            </p>
         </div>
         <div class="header-actions">
+            {if $isSuperAdmin && $searchQuery}
+                <a n:href="default" class="btn btn-outline-secondary me-2">
+                    <i class="bi bi-arrow-left"></i> Zpět na přehled
+                </a>
+            {/if}
             <a n:href="add" class="btn btn-primary">
                 <i class="bi bi-person-plus"></i> Přidat uživatele
             </a>
         </div>
     </div>
 
-    <!-- Tabulka uživatelů -->
-    {if $totalUsers > 0}
+    {* SUPER ADMIN - Vyhledávací panel *}
+    {if $isSuperAdmin}
+    <div class="search-panel mb-4">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    {form searchForm class => 'search-form'}
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-8">
+                                <div class="form-floating">
+                                    {input search class => 'form-control form-control-lg'}
+                                    {label search class => 'form-label' /}
+                                </div>
+                                <small class="form-text text-muted mt-1">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Vyhledávejte podle jména uživatele, e-mailu, názvu firmy nebo tenanta
+                                </small>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex gap-2 justify-content-center">
+                                    {input send class => 'btn btn-primary'}
+                                    {input clear class => 'btn btn-outline-secondary'}
+                                </div>
+                            </div>
+                        </div>
+                    {/form}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {* Super admin statistiky *}
+    {if !$searchQuery}
+    <div class="stats-cards mb-4">
+        <div class="row g-3">
+            <div class="col-md-2">
+                <div class="stat-card">
+                    <div class="stat-number text-primary">{$superAdminStats['total_tenants']}</div>
+                    <div class="stat-label">Tenanty</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="stat-card">
+                    <div class="stat-number text-secondary">{$superAdminStats['total_users']}</div>
+                    <div class="stat-label">Uživatelé</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="stat-card">
+                    <div class="stat-number text-danger">{$superAdminStats['total_admins']}</div>
+                    <div class="stat-label">Admini</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="stat-card">
+                    <div class="stat-number text-warning">{$superAdminStats['total_accountants']}</div>
+                    <div class="stat-label">Účetní</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="stat-card">
+                    <div class="stat-number text-muted">{$superAdminStats['total_readonly']}</div>
+                    <div class="stat-label">Readonly</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="stat-card stat-card-primary">
+                    <div class="stat-number text-white">{$superAdminStats['active_users_30d']}</div>
+                    <div class="stat-label text-white">Aktivní (30d)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
+    {/if}
+
+    {* SUPER ADMIN - Výsledky vyhledávání *}
+    {if $isSuperAdmin && $searchQuery && count($searchResults) > 0}
+    <div class="search-results mb-4">
+        <h3>Výsledky vyhledávání pro "{$searchQuery}" ({count($searchResults)} výsledků)</h3>
+        
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Uživatel</th>
+                        <th>Tenant / Firma</th>
+                        <th>E-mail</th>
+                        <th>Role</th>
+                        <th>Poslední přihlášení</th>
+                        <th class="text-end">Akce</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach $searchResults as $userItem}
+                    <tr class="data-row">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="user-avatar me-3">
+                                    <i class="bi bi-person-circle text-primary" style="font-size: 2rem;"></i>
+                                </div>
+                                <div>
+                                    <strong>{$userItem->username}</strong>
+                                    {if $userItem->first_name || $userItem->last_name}
+                                        <br><small class="text-muted">{$userItem->first_name} {$userItem->last_name}</small>
+                                    {/if}
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <strong>{$userItem->tenant_name}</strong>
+                                {if $userItem->company_name && $userItem->company_name !== $userItem->tenant_name}
+                                    <br><small class="text-muted">{$userItem->company_name}</small>
+                                {/if}
+                            </div>
+                        </td>
+                        <td>
+                            <a href="mailto:{$userItem->email}" class="user-email-link">{$userItem->email}</a>
+                        </td>
+                        <td>
+                            {if $userItem->is_super_admin}
+                                <span class="badge badge-super-admin">Super Admin</span>
+                            {elseif $userItem->role === 'admin'}
+                                <span class="badge bg-danger">Admin</span>
+                            {elseif $userItem->role === 'accountant'}
+                                <span class="badge bg-warning text-dark">Účetní</span>
+                            {else}
+                                <span class="badge bg-secondary">Readonly</span>
+                            {/if}
+                        </td>
+                        <td>
+                            {if $userItem->last_login}
+                                {$userItem->last_login|date:'d.m.Y H:i'}
+                            {else}
+                                <span class="text-muted">Nikdy</span>
+                            {/if}
+                        </td>
+                        <td class="text-end">
+                            <div class="action-buttons">
+                                <a n:href="edit $userItem->id" class="btn btn-icon btn-primary" title="Upravit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove({$userItem->id})" title="Přesunout do jiného tenanta">
+                                    <i class="bi bi-arrow-left-right"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {/if}
+
+    {* SUPER ADMIN - Accordion seskupení podle tenantů *}
+    {if $isSuperAdmin && !$searchQuery && count($groupedUsers) > 0}
+    <div class="tenants-accordion">
+        <div class="accordion" id="tenantsAccordion">
+            {foreach $groupedUsers as $tenantGroup}
+            <div class="accordion-item tenant-accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button {if !$iterator->first}collapsed{/if}" type="button" 
+                            data-bs-toggle="collapse" data-bs-target="#tenant{$tenantGroup['tenant_id']}" 
+                            aria-expanded="{if $iterator->first}true{else}false{/if}" 
+                            aria-controls="tenant{$tenantGroup['tenant_id']}">
+                        <div class="tenant-summary w-100">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <div class="tenant-info">
+                                    <div class="tenant-name">
+                                        <i class="bi bi-building me-2 text-primary"></i>
+                                        <strong>{$tenantGroup['company_name']}</strong>
+                                    </div>
+                                    <div class="tenant-details mt-1">
+                                        <span class="badge bg-light text-dark me-2">
+                                            <i class="bi bi-people me-1"></i>
+                                            {$tenantGroup['user_count']} uživatelů
+                                        </span>
+                                        <span class="badge bg-danger me-2">
+                                            <i class="bi bi-shield-check me-1"></i>
+                                            {$tenantGroup['admin_count']} adminů
+                                        </span>
+                                        {if $tenantGroup['owner']}
+                                            <span class="badge bg-warning text-dark me-3">
+                                                <i class="bi bi-crown me-1"></i>
+                                                Majitel: {$tenantGroup['owner']->username}
+                                            </span>
+                                        {/if}
+                                    </div>
+                                </div>
+                                <div class="tenant-meta">
+                                    <span class="badge bg-secondary">ID: {$tenantGroup['tenant_id']}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+                </h2>
+                <div id="tenant{$tenantGroup['tenant_id']}" 
+                     class="accordion-collapse collapse {if $iterator->first}show{/if}" 
+                     data-bs-parent="#tenantsAccordion">
+                    <div class="accordion-body">
+                        {if $tenantGroup['company_email'] || $tenantGroup['company_phone']}
+                        <div class="tenant-contact-info mb-3">
+                            {if $tenantGroup['company_email']}
+                                <span class="me-4">
+                                    <i class="bi bi-envelope me-2 text-muted"></i>
+                                    <a href="mailto:{$tenantGroup['company_email']}" class="tenant-contact-link">{$tenantGroup['company_email']}</a>
+                                </span>
+                            {/if}
+                            {if $tenantGroup['company_phone']}
+                                <span>
+                                    <i class="bi bi-telephone me-2 text-muted"></i>
+                                    <a href="tel:{$tenantGroup['company_phone']}" class="tenant-contact-link">{$tenantGroup['company_phone']}</a>
+                                </span>
+                            {/if}
+                        </div>
+                        {/if}
+
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Uživatel</th>
+                                        <th>E-mail</th>
+                                        <th>Role</th>
+                                        <th>Vytvořen</th>
+                                        <th>Poslední přihlášení</th>
+                                        <th class="text-end">Akce</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {foreach $tenantGroup['users'] as $userItem}
+                                    <tr class="data-row">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="user-avatar me-3">
+                                                    <i class="bi bi-person-circle text-primary" style="font-size: 2rem;"></i>
+                                                </div>
+                                                <div>
+                                                    <strong>{$userItem->username}</strong>
+                                                    {if $userItem->first_name || $userItem->last_name}
+                                                        <br><small class="text-muted">{$userItem->first_name} {$userItem->last_name}</small>
+                                                    {/if}
+                                                    {if $userItem->id === $currentUser->id}
+                                                        <span class="badge bg-info ms-2">To jste vy</span>
+                                                    {/if}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="mailto:{$userItem->email}" class="user-email-link">{$userItem->email}</a>
+                                        </td>
+                                        <td>
+                                            {if $userItem->is_super_admin}
+                                                <span class="badge badge-super-admin">Super Admin</span>
+                                            {elseif $userItem->role === 'admin'}
+                                                <span class="badge bg-danger">Admin</span>
+                                            {elseif $userItem->role === 'accountant'}
+                                                <span class="badge bg-warning text-dark">Účetní</span>
+                                            {else}
+                                                <span class="badge bg-secondary">Readonly</span>
+                                            {/if}
+                                        </td>
+                                        <td>
+                                            {if $userItem->created_at}
+                                                {$userItem->created_at|date:'d.m.Y'}
+                                            {else}
+                                                <span class="text-muted">—</span>
+                                            {/if}
+                                        </td>
+                                        <td>
+                                            {if $userItem->last_login}
+                                                {$userItem->last_login|date:'d.m.Y H:i'}
+                                            {else}
+                                                <span class="text-muted">Nikdy</span>
+                                            {/if}
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="action-buttons">
+                                                <a n:href="edit $userItem->id" class="btn btn-icon btn-primary" title="Upravit">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove({$userItem->id})" title="Přesunout do jiného tenanta">
+                                                    <i class="bi bi-arrow-left-right"></i>
+                                                </button>
+                                                {if $userItem->id !== $currentUser->id}
+                                                    <a n:href="delete $userItem->id" class="btn btn-icon btn-danger" 
+                                                       onclick="return confirm('Opravdu chcete smazat uživatele {$userItem->username}?')" 
+                                                       title="Smazat uživatele">
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
+                                                {/if}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+
+    {* NORMÁLNÍ ADMIN - Klasická tabulka uživatelů *}
+    {if !$isSuperAdmin && $totalUsers > 0}
     <div class="table-container">
         <table class="data-table">
             <thead>
@@ -37,6 +375,9 @@
                             </div>
                             <div>
                                 <strong>{$userItem->username}</strong>
+                                {if $userItem->first_name || $userItem->last_name}
+                                    <br><small class="text-muted">{$userItem->first_name} {$userItem->last_name}</small>
+                                {/if}
                                 {if $userItem->id === $currentUser->id}
                                     <span class="badge bg-info ms-2">To jste vy</span>
                                 {/if}
@@ -44,17 +385,17 @@
                         </div>
                     </td>
                     <td>
-                        <a href="mailto:{$userItem->email}" class="client-email">{$userItem->email}</a>
+                        <a href="mailto:{$userItem->email}" class="user-email-link">{$userItem->email}</a>
                     </td>
                     <td>
                         {if $userItem->is_super_admin}
-                            <span class="badge" style="background-color: #B1D235; color: #212529; font-weight: 600;">Super Administrátor</span>
+                            <span class="badge badge-super-admin">Super Admin</span>
                         {elseif $userItem->role === 'admin'}
-                            <span class="badge bg-danger">Administrátor</span>
+                            <span class="badge bg-danger">Admin</span>
                         {elseif $userItem->role === 'accountant'}
                             <span class="badge bg-warning text-dark">Účetní</span>
                         {else}
-                            <span class="badge bg-secondary">Pouze čtení</span>
+                            <span class="badge bg-secondary">Readonly</span>
                         {/if}
                     </td>
                     <td>
@@ -71,29 +412,17 @@
                             <span class="text-muted">Nikdy</span>
                         {/if}
                     </td>
-                    <td class="actions-column">
+                    <td class="text-end">
                         <div class="action-buttons">
-                            <a n:href="edit $userItem->id" class="btn btn-icon" title="Upravit uživatele">
+                            <a n:href="edit $userItem->id" class="btn btn-icon btn-primary" title="Upravit">
                                 <i class="bi bi-pencil"></i>
                             </a>
-                            
                             {if $userItem->id !== $currentUser->id}
-                                {var $isLastAdmin = $userItem->role === 'admin' && $adminCount <= 1}
-                                {if !$isLastAdmin}
-                                    <a n:href="delete $userItem->id" class="btn btn-icon text-danger" 
-                                       onclick="return confirm('Opravdu chcete smazat uživatele {$userItem->username}?')" 
-                                       title="Smazat uživatele">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-                                {else}
-                                    <span class="btn btn-icon text-muted" title="Nelze smazat posledního administrátora">
-                                        <i class="bi bi-shield-check"></i>
-                                    </span>
-                                {/if}
-                            {else}
-                                <span class="btn btn-icon text-muted" title="Nemůžete smazat sám sebe">
-                                    <i class="bi bi-person-x"></i>
-                                </span>
+                                <a n:href="delete $userItem->id" class="btn btn-icon btn-danger" 
+                                   onclick="return confirm('Opravdu chcete smazat uživatele {$userItem->username}?')" 
+                                   title="Smazat uživatele">
+                                    <i class="bi bi-trash"></i>
+                                </a>
                             {/if}
                         </div>
                     </td>
@@ -102,7 +431,10 @@
             </tbody>
         </table>
     </div>
-    {else}
+    {/if}
+
+    {* Prázdný stav *}
+    {if $totalUsers == 0}
     <div class="empty-state">
         <div class="empty-state-icon">
             <i class="bi bi-people"></i>
@@ -115,4 +447,51 @@
     </div>
     {/if}
 </div>
+
+{* Super admin - Modal pro přesunutí uživatele *}
+{if $isSuperAdmin}
+<div class="modal fade" id="moveTenantModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-arrow-left-right me-2 text-warning"></i>
+                    Přesunout uživatele do jiného tenanta
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            {form moveTenantForm}
+            <div class="modal-body">
+                {input user_id}
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <strong>Pozor!</strong> Přesunutí uživatele do jiného tenanta je nevratná operace. 
+                    Uživatel ztratí přístup ke všem datům současného tenanta.
+                </div>
+                
+                <div class="mb-3">
+                    {label new_tenant_id class => 'form-label' /}
+                    {input new_tenant_id class => 'form-select'}
+                </div>
+                
+                <div class="mb-3">
+                    {label reason class => 'form-label' /}
+                    {input reason class => 'form-control'}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
+                {input send class => 'btn btn-warning'}
+            </div>
+            {/form}
+        </div>
+    </div>
+</div>
+{/if}
+
+{* CONDITIONAL JAVASCRIPT - pouze pro super admin *}
+{if $isSuperAdmin}
+    <script src="{$basePath}/js/users-super-admin.js" defer></script>
+{/if}
+
 {/block}

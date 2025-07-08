@@ -1,0 +1,212 @@
+/**
+ * Super Admin Users Management - CSS
+ * Styly pro rozšířené zobrazení uživatelů pro super admina
+ */
+
+/* Vyhledávací panel - OPRAVENO */
+.search-panel {
+    background: white !important;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 1.5rem;
+}
+
+/* Statistické karty */
+.stats-cards .stat-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.stats-cards .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* OPRAVENO - Aktivní uživatelé karta */
+.stats-cards .stat-card-primary {
+    background: linear-gradient(135deg, #B1D235 0%, #95B11F 100%) !important;
+    border-color: #B1D235;
+    color: white;
+}
+
+.stats-cards .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stats-cards .stat-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* OPRAVENO - Text v primary kartě */
+.stats-cards .stat-card-primary .stat-number {
+    color: white !important;
+}
+
+.stats-cards .stat-card-primary .stat-label {
+    color: white !important;
+}
+
+/* Accordion pro tenanty - OPRAVENO */
+.tenants-accordion .accordion-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 0.75rem !important;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* OPRAVENO - Accordion hlavička */
+.tenants-accordion .accordion-button {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    border: none !important;
+    padding: 1.5rem;
+    font-weight: 500;
+    color: #212529 !important;
+}
+
+.tenants-accordion .accordion-button:not(.collapsed) {
+    background: linear-gradient(135deg, #B1D235 0%, #95B11F 100%) !important;
+    color: #212529 !important;
+    box-shadow: none !important;
+}
+
+.tenants-accordion .accordion-button:focus {
+    box-shadow: none !important;
+    border-color: #B1D235;
+}
+
+/* OPRAVENO - Accordion chevron */
+.tenants-accordion .accordion-button::after {
+    filter: none !important;
+}
+
+.tenants-accordion .accordion-button:not(.collapsed)::after {
+    filter: invert(1) !important;
+}
+
+.tenants-accordion .accordion-body {
+    padding: 0;
+    background: white;
+}
+
+.tenants-accordion .tenant-contact-info {
+    padding: 1rem 1.5rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.9rem;
+}
+
+.tenants-accordion .tenant-contact-link {
+    color: #212529 !important;
+    text-decoration: none;
+}
+
+.tenants-accordion .tenant-contact-link:hover {
+    color: #6c757d !important;
+    text-decoration: underline;
+}
+
+.tenants-accordion .tenant-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.tenants-accordion .tenant-details {
+    font-size: 0.875rem;
+}
+
+/* Super admin badge */
+.badge-super-admin {
+    background: linear-gradient(135deg, #B1D235 0%, #95B11F 100%);
+    color: #212529;
+    font-weight: 600;
+}
+
+/* Emailové linky v tabulkách */
+.user-email-link {
+    color: #212529 !important;
+    text-decoration: none;
+}
+
+.user-email-link:hover {
+    color: #6c757d !important;
+    text-decoration: underline;
+}
+
+/* Action buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.375rem;
+}
+
+/* Přepsání primary barvy pro btn-primary */
+.btn-primary {
+    background-color: #B1D235 !important;
+    border-color: #B1D235 !important;
+    color: #212529 !important;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #95B11F !important;
+    border-color: #95B11F !important;
+    color: #212529 !important;
+}
+
+.btn-primary:focus, 
+.btn-primary:active {
+    background-color: #95B11F !important;
+    border-color: #95B11F !important;
+    color: #212529 !important;
+    box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.25) !important;
+}
+
+.btn-outline-primary {
+    color: #B1D235 !important;
+    border-color: #B1D235 !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: #B1D235 !important;
+    border-color: #B1D235 !important;
+    color: #212529 !important;
+}
+
+/* Responsivita */
+@media (max-width: 768px) {
+    .stats-cards .col-md-2 {
+        margin-bottom: 1rem;
+    }
+    
+    .tenant-summary .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .tenant-meta {
+        margin-top: 0.5rem;
+    }
+}

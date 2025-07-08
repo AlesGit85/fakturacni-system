@@ -24,6 +24,7 @@ final class UsersPresenter extends BasePresenter
         'add' => ['admin'], // Přidat uživatele může jen admin
         'edit' => ['admin'], // Upravit uživatele může jen admin
         'delete' => ['admin'], // Smazat uživatele může jen admin
+        'search' => ['admin'], // Vyhledávání může admin (super admin má rozšířené možnosti)
     ];
 
     public function __construct(UserManager $userManager)
@@ -38,17 +39,36 @@ final class UsersPresenter extends BasePresenter
     {
         parent::startup();
         
+        \Tracy\Debugger::barDump('startup() called', 'DEBUG');
+        \Tracy\Debugger::barDump($this->getCurrentTenantId(), 'Tenant ID');
+        \Tracy\Debugger::barDump($this->isSuperAdmin(), 'Is Super Admin');
+        
         // Nastavíme tenant kontext v UserManager
         $this->userManager->setTenantContext(
             $this->getCurrentTenantId(),
             $this->isSuperAdmin()
         );
+        
+        \Tracy\Debugger::barDump('setTenantContext called', 'DEBUG');
     }
 
     public function renderDefault(): void
     {
-        // Získáme všechny uživatele (nyní už s tenant filtrováním)
+        \Tracy\Debugger::barDump('renderDefault() called', 'DEBUG');
+        \Tracy\Debugger::barDump($this->isSuperAdmin(), 'isSuperAdmin in renderDefault');
+        
+        // Super admin má speciální zobrazení s grupováním podle tenantů
+        if ($this->isSuperAdmin()) {
+            \Tracy\Debugger::barDump('Going to renderSuperAdminView', 'DEBUG');
+            $this->renderSuperAdminView();
+            return;
+        }
+
+        \Tracy\Debugger::barDump('Normal admin view', 'DEBUG');
+        
+        // Normální admin/uživatel - zobrazí jen své uživatele
         $allUsers = $this->userManager->getAll();
+        \Tracy\Debugger::barDump($allUsers->count(), 'Normal admin users count');
         
         // Spočítáme adminy přímo zde
         $adminCount = 0;
@@ -61,9 +81,53 @@ final class UsersPresenter extends BasePresenter
         $this->template->users = $allUsers;
         $this->template->totalUsers = $allUsers->count();
         $this->template->adminCount = $adminCount;
+        $this->template->isSuperAdmin = false;
+        $this->template->currentUser = $this->getUser()->getIdentity();
+    }
+
+    /**
+     * Speciální zobrazení pro super admina s grupováním podle tenantů
+     */
+    public function renderSuperAdminView(): void
+    {
+        \Tracy\Debugger::barDump('renderSuperAdminView() called', 'DEBUG');
+        \Tracy\Debugger::barDump($this->isSuperAdmin(), 'isSuperAdmin in renderSuperAdminView');
         
-        // Přidáme informaci o super admin statusu pro šablonu
-        $this->template->isSuperAdmin = $this->isSuperAdmin();
+        // Zpracování vyhledávání
+        $search = $this->getParameter('search');
+        
+        if ($search) {
+            // Vyhledávání - zobrazíme výsledky lineárně
+            $searchResults = $this->userManager->searchUsersForSuperAdmin($search);
+            \Tracy\Debugger::barDump(count($searchResults), 'search results count');
+            $this->template->searchResults = $searchResults;
+            $this->template->searchQuery = $search;
+            $this->template->groupedUsers = [];
+        } else {
+            // Normální zobrazení - seskupené podle tenantů
+            $groupedUsers = $this->userManager->getAllUsersGroupedByTenants();
+            \Tracy\Debugger::barDump(count($groupedUsers), 'grouped users count');
+            \Tracy\Debugger::barDump($groupedUsers, 'grouped users data');
+            $this->template->groupedUsers = $groupedUsers;
+            $this->template->searchResults = [];
+            $this->template->searchQuery = '';
+        }
+
+        // Statistiky pro super admin
+        $stats = $this->userManager->getSuperAdminStatistics();
+        \Tracy\Debugger::barDump($stats, 'super admin stats');
+        $this->template->superAdminStats = $stats;
+        
+        // Seznam tenantů pro formuláře
+        $this->template->availableTenants = $this->userManager->getAllTenantsForSelect();
+        
+        $this->template->isSuperAdmin = true;
+        $this->template->users = []; // Prázdné pro zpětnou kompatibilitu
+        $this->template->totalUsers = $stats['total_users'] ?? 0;
+        $this->template->adminCount = $stats['total_admins'] ?? 0;
+        $this->template->currentUser = $this->getUser()->getIdentity();
+        
+        \Tracy\Debugger::barDump('Template variables set', 'DEBUG');
     }
 
     public function renderProfile(): void
@@ -83,6 +147,20 @@ final class UsersPresenter extends BasePresenter
     public function actionAdd(): void
     {
         // Pouze admin může přidávat uživatele - kontrola je už v actionRoles
+    }
+
+    public function actionSearch(): void
+    {
+        // Super admin může vyhledávat napříč všemi tenanty
+        if (!$this->isSuperAdmin()) {
+            $this->flashMessage('Nemáte oprávnění pro vyhledávání napříč tenanty.', 'danger');
+            $this->redirect('default');
+        }
+    }
+
+    public function renderSearch(): void
+    {
+        $this->setView('default'); // Použijeme stejnou šablonu jako default
     }
 
     public function actionEdit(int $id): void
@@ -425,5 +503,101 @@ final class UsersPresenter extends BasePresenter
         } catch (\Exception $e) {
             $form->addError('Při ukládání profilu došlo k chybě: ' . $e->getMessage());
         }
+    }
+
+    // =====================================================
+    // SUPER ADMIN FORMULÁŘE A AKCE
+    // =====================================================
+
+    /**
+     * Vyhledávací formulář pro super admina
+     */
+    protected function createComponentSearchForm(): Form
+    {
+        $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+
+        $form->addText('search', 'Vyhledat:')
+            ->setHtmlAttribute('placeholder', 'Zadejte jméno uživatele, firmu, email...')
+            ->setDefaultValue($this->getParameter('search') ?? '');
+
+        $form->addSubmit('send', 'Vyhledat')
+            ->setHtmlAttribute('class', 'btn btn-primary');
+
+        $form->addSubmit('clear', 'Vymazat')
+            ->setHtmlAttribute('class', 'btn btn-outline-secondary')
+            ->setValidationScope([]);
+
+        $form->onSuccess[] = [$this, 'searchFormSucceeded'];
+
+        return $form;
+    }
+
+    public function searchFormSucceeded(Form $form, \stdClass $data): void
+    {
+        if ($form->isSubmitted() === $form['clear']) {
+            // Vymazání vyhledávání
+            $this->redirect('default');
+        } else {
+            // Vyhledávání
+            if (!empty($data->search)) {
+                $this->redirect('default', ['search' => $data->search]);
+            } else {
+                $this->redirect('default');
+            }
+        }
+    }
+
+    /**
+     * Formulář pro přesunutí uživatele do jiného tenanta (super admin)
+     */
+    protected function createComponentMoveTenantForm(): Form
+    {
+        $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+
+        $form->addHidden('user_id');
+
+        $form->addSelect('new_tenant_id', 'Nový tenant:', $this->userManager->getAllTenantsForSelect())
+            ->setRequired('Vyberte nový tenant');
+
+        $form->addTextArea('reason', 'Důvod přesunutí:')
+            ->setRequired('Zadejte důvod přesunutí')
+            ->setHtmlAttribute('rows', 3);
+
+        $form->addSubmit('send', 'Přesunout uživatele')
+            ->setHtmlAttribute('class', 'btn btn-warning');
+
+        $form->onSuccess[] = [$this, 'moveTenantFormSucceeded'];
+
+        return $form;
+    }
+
+    public function moveTenantFormSucceeded(Form $form, \stdClass $data): void
+    {
+        if (!$this->isSuperAdmin()) {
+            $this->flashMessage('Nemáte oprávnění pro přesouvání uživatelů mezi tenanty.', 'danger');
+            $this->redirect('default');
+        }
+
+        try {
+            $userId = (int)$data->user_id;
+            $newTenantId = (int)$data->new_tenant_id;
+            
+            $adminId = $this->getUser()->getId();
+            $adminName = $this->getUser()->getIdentity()->username;
+
+            $success = $this->userManager->moveUserToTenant($userId, $newTenantId, $adminId, $adminName);
+
+            if ($success) {
+                $this->flashMessage('Uživatel byl úspěšně přesunut do nového tenanta.', 'success');
+            } else {
+                $this->flashMessage('Chyba při přesouvání uživatele.', 'danger');
+            }
+        } catch (\Exception $e) {
+            $this->flashMessage('Chyba při přesouvání uživatele: ' . $e->getMessage(), 'danger');
+        }
+
+        $this->redirect('default');
     }
 }

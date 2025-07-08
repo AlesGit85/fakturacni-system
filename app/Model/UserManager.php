@@ -585,4 +585,156 @@ class UserManager implements Nette\Security\Authenticator
 
         return $result > 0;
     }
+
+    // =====================================================
+    // SUPER ADMIN METODY PRO SESKUPENÉ ZOBRAZENÍ
+    // =====================================================
+
+    /**
+     * Získá všechny uživatele seskupené podle tenantů (pouze pro super admina)
+     */
+    public function getAllUsersGroupedByTenants(): array
+    {
+        error_log('DEBUG UserManager: getAllUsersGroupedByTenants() called');
+        error_log('DEBUG UserManager: isSuperAdmin = ' . ($this->isSuperAdmin ? 'true' : 'false'));
+        
+        if (!$this->isSuperAdmin) {
+            error_log('DEBUG UserManager: Not super admin, returning empty array');
+            return [];
+        }
+
+        // Získáme všechny tenanty s informacemi o společnosti
+        $tenants = $this->database->query('
+            SELECT 
+                t.id as tenant_id,
+                t.name as tenant_name,
+                c.name as company_name,
+                c.email as company_email,
+                c.phone as company_phone
+            FROM tenants t
+            LEFT JOIN company_info c ON c.tenant_id = t.id
+            ORDER BY t.name ASC
+        ')->fetchAll();
+
+        error_log('DEBUG UserManager: Found ' . count($tenants) . ' tenants');
+
+        $result = [];
+
+        foreach ($tenants as $tenant) {
+            // Získáme uživatele pro tento tenant
+            $users = $this->database->table('users')
+                ->where('tenant_id', $tenant->tenant_id)
+                ->order('role DESC, username ASC') // Admini první, pak alfabeticky
+                ->fetchAll();
+
+            error_log('DEBUG UserManager: Tenant ' . $tenant->tenant_id . ' has ' . count($users) . ' users');
+
+            // Najdeme majitele (prvního admina v tenantu)
+            $owner = null;
+            foreach ($users as $user) {
+                if ($user->role === 'admin') {
+                    $owner = $user;
+                    break;
+                }
+            }
+
+            $result[] = [
+                'tenant_id' => $tenant->tenant_id,
+                'tenant_name' => $tenant->tenant_name,
+                'company_name' => $tenant->company_name ?? $tenant->tenant_name,
+                'company_email' => $tenant->company_email,
+                'company_phone' => $tenant->company_phone,
+                'owner' => $owner,
+                'users' => $users,
+                'user_count' => count($users),
+                'admin_count' => count(array_filter($users, fn($u) => $u->role === 'admin'))
+            ];
+        }
+
+        error_log('DEBUG UserManager: Returning ' . count($result) . ' tenant groups');
+        return $result;
+    }
+
+    /**
+     * Vyhledá uživatele podle různých kritérií (pouze pro super admina)
+     */
+    public function searchUsersForSuperAdmin(string $query): array
+    {
+        if (!$this->isSuperAdmin) {
+            return [];
+        }
+
+        $searchQuery = "%$query%";
+
+        // Vyhledáme ve všech relevantních polích
+        $users = $this->database->query('
+            SELECT 
+                u.*,
+                t.name as tenant_name,
+                c.name as company_name
+            FROM users u
+            LEFT JOIN tenants t ON t.id = u.tenant_id
+            LEFT JOIN company_info c ON c.tenant_id = u.tenant_id
+            WHERE 
+                u.username LIKE ? OR
+                u.email LIKE ? OR
+                u.first_name LIKE ? OR
+                u.last_name LIKE ? OR
+                t.name LIKE ? OR
+                c.name LIKE ?
+            ORDER BY t.name ASC, u.role DESC, u.username ASC
+        ', $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery)->fetchAll();
+
+        return $users;
+    }
+
+    /**
+     * Získá statistiky pro super admin dashboard
+     */
+    public function getSuperAdminStatistics(): array
+    {
+        if (!$this->isSuperAdmin) {
+            return [];
+        }
+
+        $stats = $this->database->query('
+            SELECT 
+                COUNT(DISTINCT u.tenant_id) as total_tenants,
+                COUNT(u.id) as total_users,
+                COUNT(CASE WHEN u.role = "admin" THEN 1 END) as total_admins,
+                COUNT(CASE WHEN u.role = "accountant" THEN 1 END) as total_accountants,
+                COUNT(CASE WHEN u.role = "readonly" THEN 1 END) as total_readonly,
+                COUNT(CASE WHEN u.is_super_admin = 1 THEN 1 END) as total_super_admins,
+                COUNT(CASE WHEN u.last_login >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 1 END) as active_users_30d
+            FROM users u
+            WHERE u.tenant_id IS NOT NULL
+        ')->fetch();
+
+        return [
+            'total_tenants' => (int)$stats->total_tenants,
+            'total_users' => (int)$stats->total_users,
+            'total_admins' => (int)$stats->total_admins,
+            'total_accountants' => (int)$stats->total_accountants,
+            'total_readonly' => (int)$stats->total_readonly,
+            'total_super_admins' => (int)$stats->total_super_admins,
+            'active_users_30d' => (int)$stats->active_users_30d
+        ];
+    }
+
+    /**
+     * Získá všechny tenanty pro dropdown (pouze pro super admina)
+     */
+    public function getAllTenantsForSelect(): array
+    {
+        if (!$this->isSuperAdmin) {
+            return [];
+        }
+
+        $tenants = [];
+        foreach ($this->database->table('tenants')->order('name ASC') as $tenant) {
+            $tenants[$tenant->id] = $tenant->name;
+        }
+
+        return $tenants;
+    }
 }
