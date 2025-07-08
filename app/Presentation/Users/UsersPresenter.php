@@ -31,9 +31,23 @@ final class UsersPresenter extends BasePresenter
         $this->userManager = $userManager;
     }
 
+    /**
+     * MULTI-TENANCY: Nastavení tenant kontextu po spuštění presenteru
+     */
+    public function startup(): void
+    {
+        parent::startup();
+        
+        // Nastavíme tenant kontext v UserManager
+        $this->userManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
+    }
+
     public function renderDefault(): void
     {
-        // Získáme všechny uživatele
+        // Získáme všechny uživatele (nyní už s tenant filtrováním)
         $allUsers = $this->userManager->getAll();
         
         // Spočítáme adminy přímo zde
@@ -44,9 +58,12 @@ final class UsersPresenter extends BasePresenter
             }
         }
         
-        $this->template->users = $this->userManager->getAll();
-        $this->template->totalUsers = $this->userManager->getAll()->count();
+        $this->template->users = $allUsers;
+        $this->template->totalUsers = $allUsers->count();
         $this->template->adminCount = $adminCount;
+        
+        // Přidáme informaci o super admin statusu pro šablonu
+        $this->template->isSuperAdmin = $this->isSuperAdmin();
     }
 
     public function renderProfile(): void
@@ -161,12 +178,12 @@ final class UsersPresenter extends BasePresenter
             // Kontrola jedinečnosti uživatelského jména a e-mailu
             $existingUsername = $this->userManager->getAll()
                 ->where('username', $data->username)
-                ->where('id != ?', $id ?: 0)
+                ->where('id != ?', $id)
                 ->fetch();
 
             $existingEmail = $this->userManager->getAll()
                 ->where('email', $data->email)
-                ->where('id != ?', $id ?: 0)
+                ->where('id != ?', $id)
                 ->fetch();
 
             if ($existingUsername) {
@@ -183,39 +200,25 @@ final class UsersPresenter extends BasePresenter
                 return;
             }
 
-            if ($id) {
-                // Úprava stávajícího uživatele
-                $updateData = [
-                    'username' => $data->username,
-                    'email' => $data->email,
-                    'role' => $data->role,
-                ];
+            // Připravíme data pro aktualizaci
+            $updateData = [
+                'username' => $data->username,
+                'email' => $data->email,
+                'role' => $data->role,
+            ];
 
-                if (!empty($data->password)) {
-                    $updateData['password'] = $data->password;
-                }
-
-                $adminId = $this->getUser()->getId();
-                $adminName = $this->getUser()->getIdentity()->username;
-                $this->userManager->update($id, $updateData, $adminId, $adminName);
-
-                $this->flashMessage('Uživatel byl úspěšně upraven.', 'success');
-            } else {
-                // Přidání nového uživatele
-                if (empty($data->password)) {
-                    /** @var Nette\Forms\Controls\PasswordInput $passwordField */
-                    $passwordField = $form['password'];
-                    $passwordField->addError('Pro nového uživatele je nutné zadat heslo.');
-                    return;
-                }
-
-                $adminId = $this->getUser()->getId();
-                $adminName = $this->getUser()->getIdentity()->username;
-                $this->userManager->add($data->username, $data->email, $data->password, $data->role, $adminId, $adminName);
-
-                $this->flashMessage('Uživatel byl úspěšně přidán.', 'success');
+            // Pokud bylo zadáno nové heslo, přidáme ho
+            if (!empty($data->password)) {
+                $updateData['password'] = $this->userManager->hashPassword($data->password);
             }
 
+            // Aktualizace uživatele
+            $adminId = $this->getUser()->getId();
+            $adminName = $this->getUser()->getIdentity()->username;
+            
+            $this->userManager->update($id, $updateData, $adminId, $adminName);
+
+            $this->flashMessage('Uživatel byl úspěšně aktualizován.', 'success');
             $this->redirect('default');
         } catch (\Exception $e) {
             $form->addError('Při ukládání uživatele došlo k chybě: ' . $e->getMessage());
@@ -285,8 +288,19 @@ final class UsersPresenter extends BasePresenter
                 return;
             }
 
-            // Vytvoření uživatele
-            $this->userManager->add($data->username, $data->email, $data->password, $data->role);
+            // Vytvoření uživatele s aktuálním tenant kontextem
+            $adminId = $this->getUser()->getId();
+            $adminName = $this->getUser()->getIdentity()->username;
+            
+            $this->userManager->add(
+                $data->username, 
+                $data->email, 
+                $data->password, 
+                $data->role,
+                null, // tenant_id se nastaví automaticky podle kontextu
+                $adminId,
+                $adminName
+            );
 
             $this->flashMessage('Uživatel byl úspěšně přidán.', 'success');
             $this->redirect('default');
@@ -335,7 +349,7 @@ final class UsersPresenter extends BasePresenter
             ->setRequired('Zadejte heslo znovu pro kontrolu')
             ->addRule(Form::EQUAL, 'Hesla se neshodují', $passwordField);
 
-        $form->addSubmit('send', 'Uložit změny');
+        $form->addSubmit('send', 'Uložit profil');
 
         $form->onSuccess[] = [$this, 'profileFormSucceeded'];
 
@@ -345,7 +359,6 @@ final class UsersPresenter extends BasePresenter
     public function profileFormSucceeded(Form $form, \stdClass $data): void
     {
         $userId = $this->getUser()->getId();
-        $originalUsername = $this->getUser()->getIdentity()->username;
 
         try {
             // Kontrola jedinečnosti uživatelského jména a e-mailu
@@ -373,7 +386,7 @@ final class UsersPresenter extends BasePresenter
                 return;
             }
 
-            // Pokud se mění heslo, ověříme současné heslo
+            // Ověření současného hesla při změně hesla
             if (!empty($data->password)) {
                 if (empty($data->currentPassword)) {
                     /** @var Nette\Forms\Controls\PasswordInput $currentPasswordField */
@@ -382,8 +395,8 @@ final class UsersPresenter extends BasePresenter
                     return;
                 }
 
-                $currentUsername = $this->getUser()->getIdentity()->username;
-                if (!$this->userManager->verifyPassword($currentUsername, $data->currentPassword)) {
+                $currentUser = $this->getUser()->getIdentity();
+                if (!$this->userManager->verifyPassword($currentUser->username, $data->currentPassword)) {
                     /** @var Nette\Forms\Controls\PasswordInput $currentPasswordField */
                     $currentPasswordField = $form['currentPassword'];
                     $currentPasswordField->addError('Současné heslo není správné.');
@@ -391,40 +404,26 @@ final class UsersPresenter extends BasePresenter
                 }
             }
 
+            // Připravíme data pro aktualizaci
             $updateData = [
-                'first_name' => $data->first_name ?: null,
-                'last_name' => $data->last_name ?: null,
+                'first_name' => $data->first_name,
+                'last_name' => $data->last_name,
                 'username' => $data->username,
                 'email' => $data->email,
             ];
 
+            // Pokud bylo zadáno nové heslo, přidáme ho
             if (!empty($data->password)) {
-                $updateData['password'] = $data->password;
-                $this->flashMessage('Heslo bylo úspěšně změněno.', 'success');
+                $updateData['password'] = $this->userManager->hashPassword($data->password);
             }
 
-            // Provedeme aktualizaci
-            $result = $this->userManager->update($userId, $updateData);
+            // Aktualizace profilu
+            $this->userManager->update($userId, $updateData, $userId, $data->username);
 
-            if ($result) {
-                // Pokud se změnilo uživatelské jméno - zobrazíme countdown modal
-                if ($data->username !== $originalUsername) {
-                    $this->flashMessage('Uživatelské jméno bylo úspěšně změněno.', 'success');
-                    $this->template->showLogoutCountdown = true;
-                    $this->template->newUsername = $data->username;
-                    $this->template->originalUsername = $originalUsername;
-                    return; // Zobrazíme countdown místo redirectu
-                }
-                
-                $this->flashMessage('Váš profil byl úspěšně upraven.', 'success');
-            } else {
-                $form->addError('Při aktualizaci profilu došlo k chybě. Žádné změny nebyly uloženy.');
-                return;
-            }
-
+            $this->flashMessage('Profil byl úspěšně aktualizován.', 'success');
             $this->redirect('profile');
         } catch (\Exception $e) {
-            $form->addError('Při úpravě profilu došlo k chybě: ' . $e->getMessage());
+            $form->addError('Při ukládání profilu došlo k chybě: ' . $e->getMessage());
         }
     }
 }

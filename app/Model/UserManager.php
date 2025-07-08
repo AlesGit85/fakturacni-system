@@ -25,6 +25,12 @@ class UserManager implements Nette\Security\Authenticator
     /** @var int Doba blokování v minutách */
     private $lockoutTime = 15;
 
+    /** @var int|null Current tenant ID pro filtrování */
+    private $currentTenantId = null;
+
+    /** @var bool Je uživatel super admin? */
+    private $isSuperAdmin = false;
+
     public function __construct(
         Nette\Database\Explorer $database,
         Passwords $passwords,
@@ -34,6 +40,43 @@ class UserManager implements Nette\Security\Authenticator
         $this->passwords = $passwords;
         $this->securityLogger = $securityLogger;
     }
+
+    // =====================================================
+    // MULTI-TENANCY NASTAVENÍ (NOVÉ)
+    // =====================================================
+
+    /**
+     * Nastaví current tenant ID pro filtrování dat
+     * Volá se z BasePresenter nebo jiných služeb
+     */
+    public function setTenantContext(?int $tenantId, bool $isSuperAdmin = false): void
+    {
+        $this->currentTenantId = $tenantId;
+        $this->isSuperAdmin = $isSuperAdmin;
+    }
+
+    /**
+     * Aplikuje tenant filtr na databázový dotaz
+     */
+    private function applyTenantFilter(Nette\Database\Table\Selection $selection): Nette\Database\Table\Selection
+    {
+        // Super admin vidí všechna data
+        if ($this->isSuperAdmin) {
+            return $selection;
+        }
+
+        // Ostatní uživatelé vidí pouze data svého tenanta
+        if ($this->currentTenantId !== null) {
+            return $selection->where('tenant_id', $this->currentTenantId);
+        }
+
+        // Pokud nemá tenant_id, nevidí nic (fallback bezpečnost)
+        return $selection->where('1 = 0');
+    }
+
+    // =====================================================
+    // PŮVODNÍ METODY S MULTI-TENANCY ROZŠÍŘENÍM
+    // =====================================================
 
     /**
      * Přihlášení uživatele
@@ -191,7 +234,7 @@ class UserManager implements Nette\Security\Authenticator
 
     /**
      * Přidá nového uživatele
-     * ROZŠÍŘENO: Podpora pro tenant_id při vytváření uživatelů
+     * ROZŠÍŘENO: Automaticky nastaví tenant_id podle kontextu
      */
     public function add(
         string $username, 
@@ -204,9 +247,9 @@ class UserManager implements Nette\Security\Authenticator
         ?string $firstName = null, 
         ?string $lastName = null
     ): int {
-        // Pokud není zadáno tenant_id, použijeme defaultní tenant (ID=1)
+        // Pokud není zadáno tenant_id, použijeme aktuální kontext
         if ($tenantId === null) {
-            $tenantId = 1; // Default tenant
+            $tenantId = $this->currentTenantId ?? 1; // Fallback na default tenant
         }
 
         $userData = [
@@ -216,8 +259,8 @@ class UserManager implements Nette\Security\Authenticator
             'first_name' => $firstName,
             'last_name' => $lastName,
             'role' => $role,
-            'tenant_id' => $tenantId, // NOVÉ!
-            'is_super_admin' => 0, // NOVÉ! (normální uživatelé nejsou super admini)
+            'tenant_id' => $tenantId,
+            'is_super_admin' => 0,
             'created_at' => new \DateTime(),
             'last_login' => null,
         ];
@@ -232,45 +275,46 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     /**
-     * Získá všechny uživatele
-     * ROZŠÍŘENO: Pro super admina vrací všechny uživatele, pro ostatní pouze z jejich tenanta
+     * Získá všechny uživatele (filtrované podle tenant_id)
+     * AKTUALIZOVÁNO: Nyní používá tenant kontext místo parametrů
      */
-    public function getAll(?int $tenantId = null, bool $isSuperAdmin = false)
+    public function getAll()
     {
-        $query = $this->database->table('users');
-
-        // Super admin vidí všechny uživatele
-        if (!$isSuperAdmin && $tenantId !== null) {
-            $query->where('tenant_id', $tenantId);
-        }
-
-        return $query->order('username ASC');
+        $selection = $this->database->table('users')->order('username ASC');
+        return $this->applyTenantFilter($selection);
     }
 
     /**
-     * Získá uživatele podle ID
-     * POZOR: Nefiltruje podle tenanta - kontrola musí být na úrovni presenteru
+     * Získá uživatele podle ID (s kontrolou tenant_id)
+     * AKTUALIZOVÁNO: Nyní používá tenant kontext
      */
     public function getById($id)
     {
-        return $this->database->table('users')->get($id);
+        $selection = $this->database->table('users')->where('id', $id);
+        $filteredSelection = $this->applyTenantFilter($selection);
+        return $filteredSelection->fetch();
     }
 
     /**
      * Aktualizuje uživatele
-     * ROZŠÍŘENO: Podpora pro aktualizaci tenant_id a is_super_admin
+     * ROZŠÍŘENO: Kontroluje tenant přístup při editaci
      */
     public function update($id, $data, ?int $adminId = null, ?string $adminName = null)
     {
         try {
+            // MULTI-TENANCY: Ověříme, že uživatel existuje a máme k němu přístup
+            $existingUser = $this->getById($id);
+            if (!$existingUser) {
+                throw new \Exception('Uživatel neexistuje nebo k němu nemáte přístup.');
+            }
+
             // Logování změny role
             if (isset($data['role'])) {
-                $user = $this->getById($id);
-                if ($user && $user->role !== $data['role']) {
+                if ($existingUser->role !== $data['role']) {
                     $this->securityLogger->logRoleChange(
                         $id, 
-                        $user->username, 
-                        $user->role, 
+                        $existingUser->username, 
+                        $existingUser->role, 
                         $data['role'], 
                         $adminId ?: -1, 
                         $adminName ?: 'Systém'
@@ -278,52 +322,39 @@ class UserManager implements Nette\Security\Authenticator
                 }
             }
             
-            // Logování změny tenant_id (NOVÉ!)
-            if (isset($data['tenant_id'])) {
-                $user = $this->getById($id);
-                if ($user && $user->tenant_id != $data['tenant_id']) {
+            // Logování změny tenant_id (pouze pro super admina)
+            if (isset($data['tenant_id']) && $this->isSuperAdmin) {
+                if ($existingUser->tenant_id != $data['tenant_id']) {
                     $this->securityLogger->logSecurityEvent(
                         'tenant_change',
-                        "Uživatel {$user->username} (ID: $id) byl přesunut z tenanta {$user->tenant_id} do tenanta {$data['tenant_id']} administrátorem " . ($adminName ?: 'Systém') . " (ID: " . ($adminId ?: -1) . ")"
+                        "Uživatel {$existingUser->username} (ID: $id) byl přesunut z tenanta {$existingUser->tenant_id} do tenanta {$data['tenant_id']} administrátorem " . ($adminName ?: 'Systém') . " (ID: " . ($adminId ?: -1) . ")"
                     );
                 }
+            } elseif (isset($data['tenant_id']) && !$this->isSuperAdmin) {
+                // Nestandardní případ - tenant_id se nemá měnit bez super admin práv
+                unset($data['tenant_id']);
             }
 
-            // Logování změny super admin statusu (NOVÉ!)
-            if (isset($data['is_super_admin'])) {
-                $user = $this->getById($id);
-                if ($user && $user->is_super_admin != $data['is_super_admin']) {
-                    $action = $data['is_super_admin'] ? 'povýšen na' : 'degradován z';
+            // Logování změny super admin statusu (pouze pro super admina)
+            if (isset($data['is_super_admin']) && $this->isSuperAdmin) {
+                if ($existingUser->is_super_admin != $data['is_super_admin']) {
+                    $action = $data['is_super_admin'] ? 'přidělena' : 'odebrána';
                     $this->securityLogger->logSecurityEvent(
                         'super_admin_change',
-                        "Uživatel {$user->username} (ID: $id) byl {$action} super admina administrátorem " . ($adminName ?: 'Systém') . " (ID: " . ($adminId ?: -1) . ")"
+                        "Super admin role byla $action uživateli {$existingUser->username} (ID: $id) administrátorem " . ($adminName ?: 'Systém') . " (ID: " . ($adminId ?: -1) . ")"
                     );
                 }
-            }
-            
-            // Logování změny hesla
-            $passwordChanged = false;
-            if (isset($data['password']) && !empty($data['password'])) {
-                $data['password'] = $this->passwords->hash($data['password']);
-                $passwordChanged = true;
-            } else {
-                unset($data['password']);
+            } elseif (isset($data['is_super_admin']) && !$this->isSuperAdmin) {
+                // Super admin status může měnit pouze super admin
+                unset($data['is_super_admin']);
             }
 
-            $result = $this->database->table('users')->where('id', $id)->update($data);
-            
-            if ($passwordChanged && $result) {
-                $user = $this->getById($id);
-                $this->securityLogger->logPasswordChange(
-                    $id,
-                    $user->username,
-                    $adminId !== null && $adminId !== $id
-                );
-            }
-
-            return $result;
+            $result = $this->database->table('users')
+                ->where('id', $id)
+                ->update($data);
+                
+            return $result > 0;
         } catch (\Exception $e) {
-            // Logování chyby - v produkci by bylo vhodné použít logger
             error_log('Chyba při aktualizaci uživatele: ' . $e->getMessage());
             return false;
         }
@@ -331,9 +362,11 @@ class UserManager implements Nette\Security\Authenticator
 
     /**
      * Smaže uživatele
+     * ROZŠÍŘENO: Kontroluje tenant přístup při mazání
      */
     public function delete($id, int $adminId, string $adminName)
     {
+        // MULTI-TENANCY: Ověříme přístup k uživateli
         $user = $this->getById($id);
         if (!$user) {
             return false;
@@ -404,19 +437,15 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     /**
-     * Získá počet uživatelů podle rolí
-     * ROZŠÍŘENO: Filtruje podle tenanta, pokud není super admin
+     * Získá počet uživatelů podle rolí (filtrované podle tenant_id)
+     * AKTUALIZOVÁNO: Nyní používá tenant kontext místo parametrů
      */
-    public function getRoleStatistics(?int $tenantId = null, bool $isSuperAdmin = false): array
+    public function getRoleStatistics(): array
     {
-        $query = $this->database->table('users');
+        $selection = $this->database->table('users');
+        $filteredSelection = $this->applyTenantFilter($selection);
 
-        // Super admin vidí všechny uživatele
-        if (!$isSuperAdmin && $tenantId !== null) {
-            $query->where('tenant_id', $tenantId);
-        }
-
-        $stats = $query
+        $stats = $filteredSelection
             ->select('role, COUNT(*) as count')
             ->group('role')
             ->fetchPairs('role', 'count');
@@ -482,17 +511,16 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     // =====================================================
-    // NOVÉ MULTI-TENANCY HELPER METODY
+    // SUPER ADMIN METODY
     // =====================================================
 
     /**
-     * Vytvoří super admina (pouze pro instalaci/migraci)
+     * Vytvoří super admin uživatele (bez tenant omezení)
      */
     public function createSuperAdmin(
         string $username, 
         string $email, 
         string $password, 
-        int $tenantId,
         ?string $firstName = null, 
         ?string $lastName = null
     ): int {
@@ -503,8 +531,8 @@ class UserManager implements Nette\Security\Authenticator
             'first_name' => $firstName,
             'last_name' => $lastName,
             'role' => 'admin',
-            'tenant_id' => $tenantId,
-            'is_super_admin' => 1, // SUPER ADMIN!
+            'tenant_id' => null, // Super admin není vázán na tenant
+            'is_super_admin' => 1,
             'created_at' => new \DateTime(),
             'last_login' => null,
         ];
@@ -522,7 +550,7 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     /**
-     * Získá všechny uživatele z daného tenanta
+     * Získá všechny uživatele z daného tenanta (pouze pro super admina)
      */
     public function getUsersByTenant(int $tenantId)
     {
@@ -536,7 +564,8 @@ class UserManager implements Nette\Security\Authenticator
      */
     public function moveUserToTenant(int $userId, int $newTenantId, int $adminId, string $adminName): bool
     {
-        $user = $this->getById($userId);
+        // Zde nepoužíváme getById(), protože super admin potřebuje přístup ke všem uživatelům
+        $user = $this->database->table('users')->get($userId);
         if (!$user) {
             return false;
         }
