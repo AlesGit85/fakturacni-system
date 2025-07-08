@@ -52,6 +52,25 @@ class InvoicesPresenter extends BasePresenter
         $this->qrPaymentService = $qrPaymentService;
     }
 
+    /**
+     * MULTI-TENANCY: Nastavení tenant kontextu po spuštění presenteru
+     */
+    public function startup(): void
+    {
+        parent::startup();
+        
+        // Nastavíme tenant kontext v manažerech
+        $this->invoicesManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
+        
+        $this->clientsManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
+    }
+
     public function renderAdd(): void
     {
         $company = $this->companyManager->getCompanyInfo();
@@ -805,7 +824,7 @@ public function actionPdf(int $id): void
         }
 
         // Příprava dotazu
-        $query = $this->invoicesManager->getAll($search);
+        $query = $this->invoicesManager->getAll(null, null, $search);
 
         // Aplikace filtru podle stavu
         if ($filter) {
@@ -840,9 +859,7 @@ public function actionPdf(int $id): void
             $this->redirect('this');
         }
 
-        $today = new \DateTime();
-
-        $this->invoicesManager->updateStatus($id, 'paid', $today->format('Y-m-d'));
+        $this->invoicesManager->markAsPaid($id);
         $this->flashMessage('Faktura byla označena jako zaplacená', 'success');
         $this->redirect('this');
     }
@@ -859,7 +876,7 @@ public function actionPdf(int $id): void
             $this->redirect('this');
         }
 
-        $this->invoicesManager->updateStatus($id, 'created');
+        $this->invoicesManager->markAsCreated($id);
         $this->flashMessage('Faktura byla označena jako vystavená', 'success');
         $this->redirect('this');
     }

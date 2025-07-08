@@ -40,7 +40,7 @@ return array (
     'App\\Model\\InvoicesManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\InvoicesManager.php',
-      1 => 1747669607,
+      1 => 1751964565,
     ),
     'App\\Model\\ModuleManager' => 
     array (
@@ -125,7 +125,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1749199923,
+      1 => 1751964484,
     ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (
@@ -169,7 +169,7 @@ return array (
     'null' => 3,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 2,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 2,
     'App\\Presentation\\Sign\\SignInTemplate' => 3,
@@ -178,12 +178,14 @@ return array (
     'App\\Presentation\\Users\\UsersTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 2,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsShowTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsShowTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
   ),
   2 => 
   array (
