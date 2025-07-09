@@ -150,7 +150,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1751981954,
+      1 => 1752053157,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
@@ -165,8 +165,8 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 1,
-    'null' => 1,
+    'Nette\\Bridges\\Assets\\DIExtension' => 3,
+    'null' => 3,
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
     'App\\Presentation\\Users\\UsersTemplate' => 3,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
@@ -177,8 +177,8 @@ return array (
     'App\\Presentation\\Clients\\ClientsTemplate' => 2,
     'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 1,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 1,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 2,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 2,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 1,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 1,
   ),
