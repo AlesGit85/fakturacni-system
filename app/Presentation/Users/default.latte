@@ -7,11 +7,6 @@
 
 {block content}
 
-{* DEBUG - zkontroluj, jestli je super admin *}
-{if $isSuperAdmin}
-    <div class="alert alert-info">DEBUG: Super admin detekován - CSS by se měl načítat</div>
-{/if}
-
 <div class="users-container">
     <!-- Záhlaví s názvem sekce a počtem uživatelů -->
     <div class="section-header-row mb-4">
@@ -92,13 +87,13 @@
             </div>
             <div class="col-md-2">
                 <div class="stat-card">
-                    <div class="stat-number text-danger">{$superAdminStats['total_admins']}</div>
+                    <div class="stat-number text-admin">{$superAdminStats['total_admins']}</div>
                     <div class="stat-label">Admini</div>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="stat-card">
-                    <div class="stat-number text-warning">{$superAdminStats['total_accountants']}</div>
+                    <div class="stat-number text-accountant">{$superAdminStats['total_accountants']}</div>
                     <div class="stat-label">Účetní</div>
                 </div>
             </div>
@@ -167,11 +162,11 @@
                             {if $userItem->is_super_admin}
                                 <span class="badge badge-super-admin">Super Admin</span>
                             {elseif $userItem->role === 'admin'}
-                                <span class="badge bg-danger">Admin</span>
+                                <span class="badge badge-admin">Admin</span>
                             {elseif $userItem->role === 'accountant'}
-                                <span class="badge bg-warning text-dark">Účetní</span>
+                                <span class="badge badge-accountant">Účetní</span>
                             {else}
-                                <span class="badge bg-secondary">Readonly</span>
+                                <span class="badge badge-readonly">Readonly</span>
                             {/if}
                         </td>
                         <td>
@@ -222,12 +217,12 @@
                                             <i class="bi bi-people me-1"></i>
                                             {$tenantGroup['user_count']} uživatelů
                                         </span>
-                                        <span class="badge bg-danger me-2">
+                                        <span class="badge bg-admin me-2">
                                             <i class="bi bi-shield-check me-1"></i>
                                             {$tenantGroup['admin_count']} adminů
                                         </span>
                                         {if $tenantGroup['owner']}
-                                            <span class="badge bg-warning text-dark me-3">
+                                            <span class="badge bg-owner me-3">
                                                 <i class="bi bi-crown me-1"></i>
                                                 Majitel: {$tenantGroup['owner']->username}
                                             </span>
@@ -300,11 +295,11 @@
                                             {if $userItem->is_super_admin}
                                                 <span class="badge badge-super-admin">Super Admin</span>
                                             {elseif $userItem->role === 'admin'}
-                                                <span class="badge bg-danger">Admin</span>
+                                                <span class="badge badge-admin">Admin</span>
                                             {elseif $userItem->role === 'accountant'}
-                                                <span class="badge bg-warning text-dark">Účetní</span>
+                                                <span class="badge badge-accountant">Účetní</span>
                                             {else}
-                                                <span class="badge bg-secondary">Readonly</span>
+                                                <span class="badge badge-readonly">Readonly</span>
                                             {/if}
                                         </td>
                                         <td>
@@ -391,11 +386,11 @@
                         {if $userItem->is_super_admin}
                             <span class="badge badge-super-admin">Super Admin</span>
                         {elseif $userItem->role === 'admin'}
-                            <span class="badge bg-danger">Admin</span>
+                            <span class="badge badge-admin">Admin</span>
                         {elseif $userItem->role === 'accountant'}
-                            <span class="badge bg-warning text-dark">Účetní</span>
+                            <span class="badge badge-accountant">Účetní</span>
                         {else}
-                            <span class="badge bg-secondary">Readonly</span>
+                            <span class="badge badge-readonly">Readonly</span>
                         {/if}
                     </td>
                     <td>
@@ -481,7 +476,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
-                {input send class => 'btn btn-warning'}
+                {input send class => 'btn btn-warning', value => 'Přesunout uživatele'}
             </div>
             {/form}
         </div>

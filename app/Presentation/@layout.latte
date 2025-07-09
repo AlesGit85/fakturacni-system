@@ -9,6 +9,9 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 	<link rel="stylesheet" href="{$basePath}/css/style.css">
 	
+	{* OPRAVA: Zahrnutí head bloku z podšablon *}
+	{ifset head}{include head}{/ifset}
+	
 	{* Hierarchické menu CSS - pouze inline *}
 	<style>
 		/* Hierarchické dropdown menu CSS */
@@ -266,52 +269,28 @@
 	<script>
 		// Hierarchické dropdown menu
 		document.addEventListener('DOMContentLoaded', function() {
-			initHierarchicalDropdown();
-		});
-
-		function initHierarchicalDropdown() {
+			// Podpora pro hierarchické dropdown menu na mobilních zařízeních
 			const dropdownSubmenus = document.querySelectorAll('.dropdown-submenu');
 			
 			dropdownSubmenus.forEach(function(submenu) {
 				const toggle = submenu.querySelector('.dropdown-toggle');
-				const submenuDropdown = submenu.querySelector('.dropdown-submenu-menu');
 				
-				if (toggle && submenuDropdown) {
-					// Desktop - hover efekt
-					if (window.innerWidth > 767) {
-						submenu.addEventListener('mouseenter', function() {
-							submenuDropdown.style.display = 'block';
-						});
+				// Na mobilních zařízeních reagujeme na kliknutí místo hover
+				if (window.innerWidth <= 767) {
+					toggle.addEventListener('click', function(e) {
+						e.preventDefault();
+						e.stopPropagation();
 						
-						submenu.addEventListener('mouseleave', function() {
-							submenuDropdown.style.display = 'none';
-						});
-					} else {
-						// Mobile - click efekt
-						toggle.addEventListener('click', function(e) {
-							e.preventDefault();
-							e.stopPropagation();
-							
-							// Zavřeme ostatní submenu
-							dropdownSubmenus.forEach(function(otherSubmenu) {
-								if (otherSubmenu !== submenu) {
-									otherSubmenu.classList.remove('open');
-									const otherSubmenuDropdown = otherSubmenu.querySelector('.dropdown-submenu-menu');
-									if (otherSubmenuDropdown) {
-										otherSubmenuDropdown.style.display = 'none';
-									}
-								}
-							});
-							
-							// Toggle aktuální submenu
-							submenu.classList.toggle('open');
-							if (submenu.classList.contains('open')) {
-								submenuDropdown.style.display = 'block';
-							} else {
-								submenuDropdown.style.display = 'none';
+						// Zavřeme všechny ostatní submenu
+						dropdownSubmenus.forEach(function(otherSubmenu) {
+							if (otherSubmenu !== submenu) {
+								otherSubmenu.classList.remove('open');
 							}
 						});
-					}
+						
+						// Přepneme toto submenu
+						submenu.classList.toggle('open');
+					});
 				}
 			});
 			
@@ -320,25 +299,10 @@
 				if (!e.target.closest('.dropdown-submenu')) {
 					dropdownSubmenus.forEach(function(submenu) {
 						submenu.classList.remove('open');
-						const submenuDropdown = submenu.querySelector('.dropdown-submenu-menu');
-						if (submenuDropdown) {
-							submenuDropdown.style.display = 'none';
-						}
 					});
 				}
 			});
-			
-			// Responsive handling
-			window.addEventListener('resize', function() {
-				dropdownSubmenus.forEach(function(submenu) {
-					const submenuDropdown = submenu.querySelector('.dropdown-submenu-menu');
-					if (submenuDropdown && window.innerWidth > 767) {
-						submenu.classList.remove('open');
-						submenuDropdown.style.display = 'none';
-					}
-				});
-			});
-		}
+		});
 	</script>
 </body>
 </html>

@@ -169,6 +169,18 @@ return array (
     'null' => 1,
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
     'App\\Presentation\\Users\\UsersTemplate' => 3,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeTemplate' => 3,
+    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'App\\Presentation\\Sign\\SignTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 2,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 1,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 1,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 1,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 1,
   ),
   2 => 
   array (
