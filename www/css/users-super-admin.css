@@ -215,6 +215,42 @@
     flex-shrink: 0;
 }
 
+/* OPRAVA BAREV PRO BADGES V ACCORDION HLAVIČCE */
+.tenants-accordion .accordion-button .badge {
+    color: #212529 !important; /* tmavě šedá */
+}
+
+.tenants-accordion .accordion-button .bg-light {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+}
+
+.tenants-accordion .accordion-button .bg-admin {
+    background-color: #6c757d !important; /* střední šedá */
+    color: #ffffff !important;
+}
+
+.tenants-accordion .accordion-button .bg-owner {
+    background-color: #495057 !important; /* tmavší šedá */
+    color: #ffffff !important;
+}
+
+/* Pro rozbalený stav - původní barvy */
+.tenants-accordion .accordion-button:not(.collapsed) .bg-light {
+    background-color: #f8f9fa !important;
+    color: #212529 !important;
+}
+
+.tenants-accordion .accordion-button:not(.collapsed) .bg-admin {
+    background-color: #B1D235 !important; /* naše primární barva */
+    color: #212529 !important;
+}
+
+.tenants-accordion .accordion-button:not(.collapsed) .bg-owner {
+    background-color: #95B11F !important; /* naše sekundární barva */
+    color: #212529 !important;
+}
+
 /* NOVÉ ELEGANTNĚJŠÍ BADGE BARVY */
 
 /* Super admin badge */
@@ -424,4 +460,16 @@
     .tenants-accordion .tenant-contact-info {
         padding: 0.75rem;
     }
+}
+
+/* Oprava pro bg-secondary badge (ID tenanta) - bílý text na tmavém pozadí */
+.tenants-accordion .accordion-button .bg-secondary {
+    background-color: #6c757d !important; /* tmavě šedá */
+    color: #ffffff !important; /* bílý text */
+}
+
+/* Pro rozbalený stav také bílý text */
+.tenants-accordion .accordion-button:not(.collapsed) .bg-secondary {
+    background-color: #495057 !important; /* ještě tmavší šedá */
+    color: #ffffff !important; /* bílý text */
 }

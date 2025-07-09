@@ -32,17 +32,22 @@ final class UsersPresenter extends BasePresenter
         $this->userManager = $userManager;
     }
 
+    /**
+     * MULTI-TENANCY: Nastavení tenant kontextu po spuštění presenteru
+     */
+    public function startup(): void
+    {
+        parent::startup();
+
+        // Nastavíme tenant kontext v UserManager
+        $this->userManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
+    }
+
     public function renderDefault(): void
     {
-        // DEBUG: Přidáme informace o přihlášeném uživateli
-        $currentUser = $this->getUser()->getIdentity();
-        $this->template->debugInfo = [
-            'user_id' => $currentUser ? $currentUser->id : 'NULL',
-            'username' => $currentUser ? $currentUser->username : 'NULL',
-            'is_super_admin_check' => $this->isSuperAdmin() ? 'YES' : 'NO',
-            'tenant_id' => $this->getCurrentTenantId()
-        ];
-
         // Předání informace o tom, zda je uživatel super admin
         $this->template->isSuperAdmin = $this->isSuperAdmin();
         $this->template->currentUser = $this->getUser()->getIdentity();
@@ -70,26 +75,17 @@ final class UsersPresenter extends BasePresenter
             $searchResults = $this->performUserSearch($searchQuery);
             $this->template->searchResults = $searchResults;
             $this->template->groupedUsers = [];
-            
-            // DEBUG flash zpráva
-            $this->flashMessage("DEBUG: Search performed for '$searchQuery', found " . count($searchResults) . " results", 'info');
         } else {
             // NORMÁLNÍ ZOBRAZENÍ - seskupení podle tenantů
             $groupedUsers = $this->getUsersGroupedByTenants();
             $this->template->groupedUsers = $groupedUsers;
             $this->template->searchResults = [];
-            
-            // DEBUG flash zpráva
-            $this->flashMessage("DEBUG: Normal view loaded, found " . count($groupedUsers) . " tenant groups", 'info');
         }
 
         // Celkové statistiky pro super admina
         $superAdminStats = $this->getSuperAdminStatistics();
         $this->template->superAdminStats = $superAdminStats;
         $this->template->totalUsers = $superAdminStats['total_users'];
-        
-        // DEBUG flash zpráva
-        $this->flashMessage("DEBUG: Statistics - " . $superAdminStats['total_tenants'] . " tenants, " . $superAdminStats['total_users'] . " users", 'info');
     }
 
     /**
@@ -100,7 +96,7 @@ final class UsersPresenter extends BasePresenter
         // Získání uživatelů z aktuálního tenanta
         $tenantId = $this->getCurrentTenantId();
         $users = $this->userManager->getAll($tenantId, false);
-        
+
         $this->template->users = $users;
         $this->template->totalUsers = $users->count();
         $this->template->searchQuery = null;
@@ -158,7 +154,7 @@ final class UsersPresenter extends BasePresenter
 
         $groupedUsers = [];
 
-        // Získání všech aktivních tenantů z vaší databáze
+        // Získání všech aktivních tenantů z databáze
         $tenants = $this->database->table('tenants')->where('status', 'active')->order('name ASC');
 
         foreach ($tenants as $tenant) {
@@ -181,7 +177,7 @@ final class UsersPresenter extends BasePresenter
                 }
             }
 
-            // Získání informací o firmě - podle vaší struktury
+            // Získání informací o firmě
             $company = $this->database->table('company_info')->where('tenant_id', $tenant->id)->fetch();
 
             if (count($usersArray) > 0) { // Pouze tenanty s uživateli
@@ -199,8 +195,6 @@ final class UsersPresenter extends BasePresenter
             }
         }
 
-        error_log("DEBUG: Grouped users found: " . count($groupedUsers) . " tenant groups");
-        
         return $groupedUsers;
     }
 
@@ -235,7 +229,7 @@ final class UsersPresenter extends BasePresenter
                 ->where('last_login > ?', $thirtyDaysAgo)
                 ->count();
 
-            $stats = [
+            return [
                 'total_tenants' => $totalTenants,
                 'total_users' => $totalUsers,
                 'total_admins' => $totalAdmins,
@@ -243,12 +237,7 @@ final class UsersPresenter extends BasePresenter
                 'total_readonly' => $totalReadonly,
                 'active_users_30d' => $activeUsers30d
             ];
-
-            error_log("DEBUG: Super admin statistics: " . json_encode($stats));
-            
-            return $stats;
         } catch (\Exception $e) {
-            error_log("ERROR: Failed to get super admin statistics: " . $e->getMessage());
             return [
                 'total_tenants' => 0,
                 'total_users' => 0,
@@ -381,18 +370,36 @@ final class UsersPresenter extends BasePresenter
 
         $form->addHidden('user_id');
 
-        // Načtení seznamu tenantů přímo z databáze
+        // Načtení seznamu tenantů s informacemi o firmách
         $tenants = [];
-        foreach ($this->database->table('tenants')->where('status', 'active')->order('name ASC') as $tenant) {
-            $tenants[$tenant->id] = $tenant->name;
-        }
-        
-        // DEBUG: Logujeme dostupné tenanty
-        error_log("DEBUG: Available tenants for form: " . json_encode($tenants));
+        $tenantsQuery = $this->database->query('
+        SELECT 
+            t.id as tenant_id,
+            t.name as tenant_name,
+            c.name as company_name
+        FROM tenants t
+        LEFT JOIN company_info c ON c.tenant_id = t.id
+        WHERE t.status = "active"
+        ORDER BY c.name ASC, t.name ASC
+    ');
 
-        $form->addSelect('new_tenant_id', 'Nový tenant:')
+        foreach ($tenantsQuery as $tenant) {
+            // Vytvoříme pěkný popisek: "Název firmy - Tenant (ID: 123)"
+            $companyName = $tenant->company_name ?: $tenant->tenant_name;
+            $label = sprintf(
+                '%s - %s (ID: %d)',
+                $companyName,
+                $tenant->tenant_name,
+                $tenant->tenant_id
+            );
+
+            $tenants[$tenant->tenant_id] = $label;
+        }
+
+        $form->addSelect('new_tenant_id', 'Cílový tenant:')
             ->setItems($tenants)
-            ->setRequired('Vyberte tenant, do kterého chcete uživatele přesunout');
+            ->setRequired('Vyberte tenant, do kterého chcete uživatele přesunout')
+            ->setHtmlAttribute('class', 'form-select');
 
         $form->addTextArea('reason', 'Důvod přesunutí:')
             ->setHtmlAttribute('rows', 3)
@@ -409,55 +416,40 @@ final class UsersPresenter extends BasePresenter
 
     public function moveTenantFormSucceeded(Form $form, \stdClass $data): void
     {
-        // DEBUG: Přidáme flash zprávy pro debugging
-        $this->flashMessage("DEBUG: Form submitted successfully", 'info');
-        
         if (!$this->isSuperAdmin()) {
             $this->flashMessage('Pouze super admin může přesouvat uživatele mezi tenanty.', 'danger');
             $this->redirect('default');
         }
 
-        $this->flashMessage("DEBUG: Super admin check passed", 'info');
-
         $userId = (int) $data->user_id;
         $newTenantId = (int) $data->new_tenant_id;
         $reason = trim($data->reason);
 
-        // DEBUG: Přidáme podrobný debug pomocí flash zpráv
-        $this->flashMessage("DEBUG: user_id from form: " . ($data->user_id ?? 'NULL'), 'info');
-        $this->flashMessage("DEBUG: new_tenant_id from form: " . ($data->new_tenant_id ?? 'NULL'), 'info');
-        $this->flashMessage("DEBUG: Parsed userId: $userId", 'info');
-        $this->flashMessage("DEBUG: Parsed newTenantId: $newTenantId", 'info');
-
         // Kontrola, že máme platné ID
         if ($userId <= 0) {
-            $this->flashMessage("DEBUG: Invalid user ID: $userId", 'danger');
+            $this->flashMessage('Neplatné ID uživatele.', 'danger');
             $this->redirect('default');
         }
 
         if ($newTenantId <= 0) {
-            $this->flashMessage("DEBUG: Invalid tenant ID: $newTenantId", 'danger');
+            $this->flashMessage('Neplatné ID tenanta.', 'danger');
             $this->redirect('default');
         }
 
         try {
             // Ověření, že uživatel existuje
-            $user = $this->userManager->getById($userId);
+            $user = $this->userManager->getByIdForSuperAdmin($userId);
             if (!$user) {
-                $this->flashMessage("DEBUG: User not found with ID: $userId", 'danger');
+                $this->flashMessage('Uživatel nebyl nalezen.', 'danger');
                 $this->redirect('default');
             }
-
-            $this->flashMessage("DEBUG: User found: " . $user->username . ", current tenant: " . ($user->tenant_id ?? 'NULL'), 'info');
 
             // Ověření, že tenant existuje
             $tenant = $this->database->table('tenants')->get($newTenantId);
             if (!$tenant) {
-                $this->flashMessage("DEBUG: Tenant not found with ID: $newTenantId", 'danger');
+                $this->flashMessage('Tenant nebyl nalezen.', 'danger');
                 $this->redirect('default');
             }
-
-            $this->flashMessage("DEBUG: Tenant found: " . $tenant->name, 'info');
 
             // Kontrola, zda uživatel už není v tomto tenantu
             if ($user->tenant_id == $newTenantId) {
@@ -486,7 +478,6 @@ final class UsersPresenter extends BasePresenter
             } else {
                 $this->flashMessage('Nepodařilo se přesunout uživatele. Zkuste to prosím znovu.', 'danger');
             }
-
         } catch (\Exception $e) {
             $this->flashMessage('Chyba při přesouvání uživatele: ' . $e->getMessage(), 'danger');
         }
@@ -591,7 +582,6 @@ final class UsersPresenter extends BasePresenter
             }
 
             $this->redirect('default');
-
         } catch (\Exception $e) {
             $this->flashMessage('Chyba při ukládání uživatele: ' . $e->getMessage(), 'danger');
         }
@@ -655,7 +645,6 @@ final class UsersPresenter extends BasePresenter
 
             $this->userManager->update($userId, $userData);
             $this->flashMessage('Váš profil byl úspěšně aktualizován.', 'success');
-
         } catch (\Exception $e) {
             $this->flashMessage('Chyba při ukládání profilu: ' . $e->getMessage(), 'danger');
         }

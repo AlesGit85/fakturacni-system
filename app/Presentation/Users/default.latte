@@ -181,7 +181,7 @@
                                 <a n:href="edit $userItem->id" class="btn btn-icon btn-primary" title="Upravit">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove({$userItem->id})" title="Přesunout do jiného tenanta">
+                                <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove({$userItem->id}, '{$userItem->username}', '{$userItem->tenant_name}')" title="Přesunout do jiného tenanta">
                                     <i class="bi bi-arrow-left-right"></i>
                                 </button>
                             </div>
@@ -201,10 +201,10 @@
             {foreach $groupedUsers as $tenantGroup}
             <div class="accordion-item tenant-accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button {if !$iterator->first}collapsed{/if}" type="button" 
-                            data-bs-toggle="collapse" data-bs-target="#tenant{$tenantGroup['tenant_id']}" 
-                            aria-expanded="{if $iterator->first}true{else}false{/if}" 
-                            aria-controls="tenant{$tenantGroup['tenant_id']}">
+                    <button class="accordion-button collapsed" type="button" 
+                        data-bs-toggle="collapse" data-bs-target="#tenant{$tenantGroup['tenant_id']}" 
+                        aria-expanded="false" 
+                        aria-controls="tenant{$tenantGroup['tenant_id']}">
                         <div class="tenant-summary w-100">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="tenant-info">
@@ -237,8 +237,8 @@
                     </button>
                 </h2>
                 <div id="tenant{$tenantGroup['tenant_id']}" 
-                     class="accordion-collapse collapse {if $iterator->first}show{/if}" 
-                     data-bs-parent="#tenantsAccordion">
+                    class="accordion-collapse collapse" 
+                    data-bs-parent="#tenantsAccordion">
                     <div class="accordion-body">
                         {if $tenantGroup['company_email'] || $tenantGroup['company_phone']}
                         <div class="tenant-contact-info mb-3">
@@ -321,7 +321,7 @@
                                                 <a n:href="edit $userItem->id" class="btn btn-icon btn-primary" title="Upravit">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove({$userItem->id})" title="Přesunout do jiného tenanta">
+                                                <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove({$userItem->id}, '{$userItem->username}', 'Tenant ID: {$userItem->tenant_id}')" title="Přesunout do jiného tenanta">
                                                     <i class="bi bi-arrow-left-right"></i>
                                                 </button>
                                                 {if $userItem->id !== $currentUser->id}
@@ -446,37 +446,53 @@
 {* Super admin - Modal pro přesunutí uživatele *}
 {if $isSuperAdmin}
 <div class="modal fade" id="moveTenantModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color: #B1D235; color: #212529;">
                 <h5 class="modal-title">
-                    <i class="bi bi-arrow-left-right me-2 text-warning"></i>
-                    Přesunout uživatele do jiného tenanta
+                    <i class="bi bi-arrow-left-right me-2"></i>
+                    Přesunout uživatele mezi tenanty
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
             </div>
             {form moveTenantForm}
             <div class="modal-body">
                 {input user_id}
+                
+                {* Místo pro informace o aktuálním uživateli - vyplní se JavaScriptem *}
+                <div id="currentUserInfo"></div>
+                
                 <div class="alert alert-warning">
                     <i class="bi bi-exclamation-triangle me-2"></i>
                     <strong>Pozor!</strong> Přesunutí uživatele do jiného tenanta je nevratná operace. 
                     Uživatel ztratí přístup ke všem datům současného tenanta.
                 </div>
                 
-                <div class="mb-3">
-                    {label new_tenant_id class => 'form-label' /}
-                    {input new_tenant_id class => 'form-select'}
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        {label new_tenant_id class => 'form-label fw-bold' /}
+                        {input new_tenant_id class => 'form-select form-select-lg'}
+                        <div class="form-text">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Formát: Název firmy - Tenant (ID: číslo)
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="mb-3">
-                    {label reason class => 'form-label' /}
+                    {label reason class => 'form-label fw-bold' /}
                     {input reason class => 'form-control'}
+                    <div class="form-text">
+                        <i class="bi bi-pencil me-1"></i>
+                        Důvod bude zalogován do bezpečnostního protokolu
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
-                {input send class => 'btn btn-warning', value => 'Přesunout uživatele'}
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-2"></i>Zrušit
+                </button>
+                {input send class => 'btn btn-warning btn-lg', value => 'Přesunout uživatele'}
             </div>
             {/form}
         </div>

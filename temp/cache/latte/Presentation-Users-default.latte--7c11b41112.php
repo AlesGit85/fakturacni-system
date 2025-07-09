@@ -323,7 +323,11 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
                                 </a>
                                 <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove(';
 				echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($userItem->id)) /* line 184 */;
-				echo ')" title="Přesunout do jiného tenanta">
+				echo ', \'';
+				echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($userItem->username)) /* line 184 */;
+				echo '\', \'';
+				echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($userItem->tenant_name)) /* line 184 */;
+				echo '\')" title="Přesunout do jiného tenanta">
                                     <i class="bi bi-arrow-left-right"></i>
                                 </button>
                             </div>
@@ -344,25 +348,15 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
 			echo '    <div class="tenants-accordion">
         <div class="accordion" id="tenantsAccordion">
 ';
-			foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($groupedUsers, $ʟ_it ?? null) as $tenantGroup) /* line 201 */ {
+			foreach ($groupedUsers as $tenantGroup) /* line 201 */ {
 				echo '            <div class="accordion-item tenant-accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button ';
-				if (!$iterator->first) /* line 204 */ {
-					echo 'collapsed';
-				}
-				echo '" type="button" 
-                            data-bs-toggle="collapse" data-bs-target="#tenant';
+                    <button class="accordion-button collapsed" type="button" 
+                        data-bs-toggle="collapse" data-bs-target="#tenant';
 				echo LR\Filters::escapeHtmlAttr($tenantGroup['tenant_id']) /* line 205 */;
 				echo '" 
-                            aria-expanded="';
-				if ($iterator->first) /* line 206 */ {
-					echo 'true';
-				} else /* line 206 */ {
-					echo 'false';
-				}
-				echo '" 
-                            aria-controls="tenant';
+                        aria-expanded="false" 
+                        aria-controls="tenant';
 				echo LR\Filters::escapeHtmlAttr($tenantGroup['tenant_id']) /* line 207 */;
 				echo '">
                         <div class="tenant-summary w-100">
@@ -411,12 +405,8 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
                 <div id="tenant';
 				echo LR\Filters::escapeHtmlAttr($tenantGroup['tenant_id']) /* line 239 */;
 				echo '" 
-                     class="accordion-collapse collapse ';
-				if ($iterator->first) /* line 240 */ {
-					echo 'show';
-				}
-				echo '" 
-                     data-bs-parent="#tenantsAccordion">
+                    class="accordion-collapse collapse" 
+                    data-bs-parent="#tenantsAccordion">
                     <div class="accordion-body">
 ';
 				if ($tenantGroup['company_email'] || $tenantGroup['company_phone']) /* line 243 */ {
@@ -545,7 +535,11 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
                                                 </a>
                                                 <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove(';
 					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($userItem->id)) /* line 324 */;
-					echo ')" title="Přesunout do jiného tenanta">
+					echo ', \'';
+					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($userItem->username)) /* line 324 */;
+					echo '\', \'Tenant ID: ';
+					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($userItem->tenant_id)) /* line 324 */;
+					echo '\')" title="Přesunout do jiného tenanta">
                                                     <i class="bi bi-arrow-left-right"></i>
                                                 </button>
 ';
@@ -577,7 +571,6 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
 ';
 
 			}
-			$iterator = $ʟ_it = $ʟ_it->getParent();
 
 			echo '        </div>
     </div>
@@ -726,14 +719,14 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
 ';
 		if ($isSuperAdmin) /* line 447 */ {
 			echo '<div class="modal fade" id="moveTenantModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color: #B1D235; color: #212529;">
                 <h5 class="modal-title">
-                    <i class="bi bi-arrow-left-right me-2 text-warning"></i>
-                    Přesunout uživatele do jiného tenanta
+                    <i class="bi bi-arrow-left-right me-2"></i>
+                    Přesunout uživatele mezi tenanty
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
             </div>
             ';
 			$form = $this->global->formsStack[] = $this->global->uiControl['moveTenantForm'] /* line 458 */;
@@ -744,38 +737,53 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
                 ';
 			echo Nette\Bridges\FormsLatte\Runtime::item('user_id', $this->global)->getControl() /* line 460 */;
 			echo '
+                
+                <div id="currentUserInfo"></div>
+                
                 <div class="alert alert-warning">
                     <i class="bi bi-exclamation-triangle me-2"></i>
                     <strong>Pozor!</strong> Přesunutí uživatele do jiného tenanta je nevratná operace. 
                     Uživatel ztratí přístup ke všem datům současného tenanta.
                 </div>
                 
-                <div class="mb-3">
-                    ';
-			echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('new_tenant_id', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 468 */;
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        ';
+			echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('new_tenant_id', $this->global)->getLabel())?->addAttributes(['class' => 'form-label fw-bold']) /* line 473 */;
 			echo '
-                    ';
-			echo Nette\Bridges\FormsLatte\Runtime::item('new_tenant_id', $this->global)->getControl()->addAttributes(['class' => 'form-select']) /* line 469 */;
+                        ';
+			echo Nette\Bridges\FormsLatte\Runtime::item('new_tenant_id', $this->global)->getControl()->addAttributes(['class' => 'form-select form-select-lg']) /* line 474 */;
 			echo '
+                        <div class="form-text">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Formát: Název firmy - Tenant (ID: číslo)
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="mb-3">
                     ';
-			echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('reason', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 473 */;
+			echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('reason', $this->global)->getLabel())?->addAttributes(['class' => 'form-label fw-bold']) /* line 483 */;
 			echo '
                     ';
-			echo Nette\Bridges\FormsLatte\Runtime::item('reason', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 474 */;
+			echo Nette\Bridges\FormsLatte\Runtime::item('reason', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 484 */;
 			echo '
+                    <div class="form-text">
+                        <i class="bi bi-pencil me-1"></i>
+                        Důvod bude zalogován do bezpečnostního protokolu
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-2"></i>Zrušit
+                </button>
                 ';
-			echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-warning', 'value' => 'Přesunout uživatele']) /* line 479 */;
+			echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-warning btn-lg', 'value' => 'Přesunout uživatele']) /* line 495 */;
 			echo '
             </div>
             ';
-			echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 481 */;
+			echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 497 */;
 
 			echo '
         </div>
@@ -784,9 +792,9 @@ final class Template_7c11b41112 extends Latte\Runtime\Template
 ';
 		}
 		echo "\n";
-		if ($isSuperAdmin) /* line 488 */ {
+		if ($isSuperAdmin) /* line 504 */ {
 			echo '    <script src="';
-			echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 489 */;
+			echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 505 */;
 			echo '/js/users-super-admin.js" defer></script>
 ';
 		}

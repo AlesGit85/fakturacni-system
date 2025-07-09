@@ -6,10 +6,12 @@
 /**
  * Načte modal pro přesunutí uživatele do jiného tenanta
  * @param {number} userId - ID uživatele k přesunutí
+ * @param {string} username - Jméno uživatele
+ * @param {string} currentTenant - Současný tenant uživatele
  */
-function loadUserForMove(userId) {
+function loadUserForMove(userId, username, currentTenant) {
     try {
-        console.log('🔄 Loading move modal for user ID:', userId);
+        console.log('🔄 Loading move modal for user:', username, 'ID:', userId);
         
         // Ověřme, že máme platné ID
         if (!userId || userId <= 0) {
@@ -27,6 +29,19 @@ function loadUserForMove(userId) {
             console.error('❌ Hidden input user_id not found');
             alert('Chyba: Formulář nebyl správně načten');
             return;
+        }
+
+        // Aktualizujeme informace o uživateli v modal okně
+        const userInfo = document.getElementById('currentUserInfo');
+        if (userInfo) {
+            userInfo.innerHTML = `
+                <div class="alert alert-info">
+                    <i class="bi bi-person-circle me-2"></i>
+                    <strong>Přesouvání uživatele:</strong> ${username}<br>
+                    <i class="bi bi-building me-2"></i>
+                    <strong>Současný tenant:</strong> ${currentTenant}
+                </div>
+            `;
         }
 
         // Zobrazíme modal
@@ -78,6 +93,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (form) {
                 form.reset();
             }
+            // Vyčistíme také informace o uživateli
+            const userInfo = document.getElementById('currentUserInfo');
+            if (userInfo) {
+                userInfo.innerHTML = '';
+            }
         });
     }
 
@@ -105,6 +125,9 @@ document.addEventListener('DOMContentLoaded', function () {
  */
 function animateStatsCards() {
     const statCards = document.querySelectorAll('.stats-cards .stat-card');
+    
+    if (statCards.length === 0) return;
+    
     statCards.forEach((card, index) => {
         setTimeout(() => {
             card.style.opacity = '0';

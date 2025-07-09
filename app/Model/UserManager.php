@@ -103,19 +103,19 @@ class UserManager implements Nette\Security\Authenticator
             // Zaznamenáme neúspěšný pokus o přihlášení
             $this->logFailedLoginAttempt($row->id);
             $this->securityLogger->logFailedLogin($username);
-            
+
             // Kontrola, zda jsme dosáhli limitu pokusů
             $attempts = $this->getLoginAttempts($row->id);
             if ($attempts >= $this->maxLoginAttempts) {
                 $this->securityLogger->logAccountLockout($row->id, $username);
             }
-            
+
             throw new Nette\Security\AuthenticationException('Heslo není správné.', self::INVALID_CREDENTIAL);
         }
 
         // Reset neúspěšných pokusů při úspěšném přihlášení
         $this->resetFailedLoginAttempts($row->id);
-        
+
         // Logování úspěšného přihlášení
         $this->securityLogger->logLogin($row->id, $username);
 
@@ -147,7 +147,7 @@ class UserManager implements Nette\Security\Authenticator
         $record = $this->database->table('login_attempts')
             ->where('user_id', $userId)
             ->fetch();
-            
+
         return $record ? $record->attempts : 0;
     }
 
@@ -237,14 +237,14 @@ class UserManager implements Nette\Security\Authenticator
      * ROZŠÍŘENO: Automaticky nastaví tenant_id podle kontextu
      */
     public function add(
-        string $username, 
-        string $email, 
-        string $password, 
-        string $role = 'readonly', 
+        string $username,
+        string $email,
+        string $password,
+        string $role = 'readonly',
         ?int $tenantId = null,
-        ?int $adminId = null, 
-        ?string $adminName = null, 
-        ?string $firstName = null, 
+        ?int $adminId = null,
+        ?string $adminName = null,
+        ?string $firstName = null,
         ?string $lastName = null
     ): int {
         // Pokud není zadáno tenant_id, použijeme aktuální kontext
@@ -267,10 +267,10 @@ class UserManager implements Nette\Security\Authenticator
 
         $result = $this->database->table('users')->insert($userData);
         $newUserId = $result->id;
-        
+
         // Logování vytvoření uživatele
         $this->securityLogger->logUserCreation($newUserId, $username, $role, $adminId, $adminName);
-        
+
         return $newUserId;
     }
 
@@ -296,6 +296,18 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     /**
+     * Získá uživatele podle ID BEZ tenant filtru (pouze pro super admina)
+     */
+    public function getByIdForSuperAdmin($id)
+    {
+        if (!$this->isSuperAdmin) {
+            throw new \Exception('Pouze super admin může používat tuto metodu.');
+        }
+
+        return $this->database->table('users')->where('id', $id)->fetch();
+    }
+
+    /**
      * Aktualizuje uživatele
      * ROZŠÍŘENO: Kontroluje tenant přístup při editaci
      */
@@ -312,16 +324,16 @@ class UserManager implements Nette\Security\Authenticator
             if (isset($data['role'])) {
                 if ($existingUser->role !== $data['role']) {
                     $this->securityLogger->logRoleChange(
-                        $id, 
-                        $existingUser->username, 
-                        $existingUser->role, 
-                        $data['role'], 
-                        $adminId ?: -1, 
+                        $id,
+                        $existingUser->username,
+                        $existingUser->role,
+                        $data['role'],
+                        $adminId ?: -1,
                         $adminName ?: 'Systém'
                     );
                 }
             }
-            
+
             // Logování změny tenant_id (pouze pro super admina)
             if (isset($data['tenant_id']) && $this->isSuperAdmin) {
                 if ($existingUser->tenant_id != $data['tenant_id']) {
@@ -352,7 +364,7 @@ class UserManager implements Nette\Security\Authenticator
             $result = $this->database->table('users')
                 ->where('id', $id)
                 ->update($data);
-                
+
             return $result > 0;
         } catch (\Exception $e) {
             error_log('Chyba při aktualizaci uživatele: ' . $e->getMessage());
@@ -371,10 +383,10 @@ class UserManager implements Nette\Security\Authenticator
         if (!$user) {
             return false;
         }
-        
+
         // Logování smazání uživatele
         $this->securityLogger->logUserDeletion($id, $user->username, $adminId, $adminName);
-        
+
         return $this->database->table('users')->where('id', $id)->delete();
     }
 
@@ -385,11 +397,11 @@ class UserManager implements Nette\Security\Authenticator
     {
         try {
             $hashedPassword = $this->passwords->hash($newPassword);
-            
+
             $result = $this->database->table('users')
                 ->where('id', $userId)
                 ->update(['password' => $hashedPassword]);
-                
+
             if ($result) {
                 $user = $this->getById($userId);
                 if ($user) {
@@ -400,7 +412,7 @@ class UserManager implements Nette\Security\Authenticator
                     );
                 }
             }
-            
+
             return $result > 0;
         } catch (\Exception $e) {
             error_log('Chyba při změně hesla: ' . $e->getMessage());
@@ -414,11 +426,11 @@ class UserManager implements Nette\Security\Authenticator
     public function isUsernameAvailable(string $username, ?int $excludeUserId = null): bool
     {
         $query = $this->database->table('users')->where('username', $username);
-        
+
         if ($excludeUserId) {
             $query->where('id != ?', $excludeUserId);
         }
-        
+
         return $query->count() === 0;
     }
 
@@ -428,11 +440,11 @@ class UserManager implements Nette\Security\Authenticator
     public function isEmailAvailable(string $email, ?int $excludeUserId = null): bool
     {
         $query = $this->database->table('users')->where('email', $email);
-        
+
         if ($excludeUserId) {
             $query->where('id != ?', $excludeUserId);
         }
-        
+
         return $query->count() === 0;
     }
 
@@ -486,11 +498,11 @@ class UserManager implements Nette\Security\Authenticator
         }
 
         $parts = [];
-        
+
         if (!empty($user->first_name)) {
             $parts[] = $user->first_name;
         }
-        
+
         if (!empty($user->last_name)) {
             $parts[] = $user->last_name;
         }
@@ -518,10 +530,10 @@ class UserManager implements Nette\Security\Authenticator
      * Vytvoří super admin uživatele (bez tenant omezení)
      */
     public function createSuperAdmin(
-        string $username, 
-        string $email, 
-        string $password, 
-        ?string $firstName = null, 
+        string $username,
+        string $email,
+        string $password,
+        ?string $firstName = null,
         ?string $lastName = null
     ): int {
         $userData = [
@@ -539,13 +551,13 @@ class UserManager implements Nette\Security\Authenticator
 
         $result = $this->database->table('users')->insert($userData);
         $newUserId = $result->id;
-        
+
         // Logování vytvoření super admina
         $this->securityLogger->logSecurityEvent(
             'super_admin_creation',
             "Super admin $username (ID: $newUserId) byl vytvořen"
         );
-        
+
         return $newUserId;
     }
 
@@ -571,7 +583,7 @@ class UserManager implements Nette\Security\Authenticator
         }
 
         $oldTenantId = $user->tenant_id;
-        
+
         $result = $this->database->table('users')
             ->where('id', $userId)
             ->update(['tenant_id' => $newTenantId]);
@@ -595,11 +607,7 @@ class UserManager implements Nette\Security\Authenticator
      */
     public function getAllUsersGroupedByTenants(): array
     {
-        error_log('DEBUG UserManager: getAllUsersGroupedByTenants() called');
-        error_log('DEBUG UserManager: isSuperAdmin = ' . ($this->isSuperAdmin ? 'true' : 'false'));
-        
         if (!$this->isSuperAdmin) {
-            error_log('DEBUG UserManager: Not super admin, returning empty array');
             return [];
         }
 
@@ -616,8 +624,6 @@ class UserManager implements Nette\Security\Authenticator
             ORDER BY t.name ASC
         ')->fetchAll();
 
-        error_log('DEBUG UserManager: Found ' . count($tenants) . ' tenants');
-
         $result = [];
 
         foreach ($tenants as $tenant) {
@@ -626,8 +632,6 @@ class UserManager implements Nette\Security\Authenticator
                 ->where('tenant_id', $tenant->tenant_id)
                 ->order('role DESC, username ASC') // Admini první, pak alfabeticky
                 ->fetchAll();
-
-            error_log('DEBUG UserManager: Tenant ' . $tenant->tenant_id . ' has ' . count($users) . ' users');
 
             // Najdeme majitele (prvního admina v tenantu)
             $owner = null;
@@ -651,7 +655,6 @@ class UserManager implements Nette\Security\Authenticator
             ];
         }
 
-        error_log('DEBUG UserManager: Returning ' . count($result) . ' tenant groups');
         return $result;
     }
 
