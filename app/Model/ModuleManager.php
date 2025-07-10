@@ -347,7 +347,7 @@ class ModuleManager
     /**
      * Nainstaluje modul pro uživatele z nahraného souboru
      */
-    public function installModuleForUser(Nette\Http\FileUpload $file, int $userId, ?int $tenantId = null, ?string $installedBy = null): array
+    public function installModuleForUser(Nette\Http\FileUpload $file, int $userId, ?int $tenantId = null, ?int $installedBy = null): array
     {
         try {
             // Pokud není zadán tenant ID, použijeme aktuální tenant z kontextu

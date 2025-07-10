@@ -674,7 +674,7 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * Zpracování nahraného modulu
+     * OPRAVENÁ METODA: Zpracování nahraného modulu - nyní předává správné user ID
      */
     public function uploadFormSucceeded(Form $form): void
     {
@@ -692,11 +692,12 @@ final class ModuleAdminPresenter extends BasePresenter
             return;
         }
 
+        // OPRAVA: Nyní předáváme $identity->id místo $identity->username
         $result = $this->moduleManager->installModuleForUser(
             $file,
             $identity->id,
             null, // tenant ID se určí automaticky z kontextu
-            $identity->username
+            $identity->id  // ZMĚNA: předáváme user ID místo username
         );
 
         if ($result['success']) {
@@ -709,7 +710,7 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * NOVÉ: Synchronizace modulů - oprava databáze podle fyzických souborů
+     * OPRAVENÁ METODA: Synchronizace modulů - nyní používá správné user ID
      */
     public function handleSyncModules(): void
     {
@@ -757,7 +758,7 @@ final class ModuleAdminPresenter extends BasePresenter
                                         ->fetch();
                                     
                                     if (!$existingModule) {
-                                        // Vytvoříme chybějící záznam
+                                        // OPRAVA: Nyní ukládáme user ID místo stringu
                                         $this->database->table('user_modules')->insert([
                                             'user_id' => $user->id,
                                             'tenant_id' => $tenantId,
@@ -767,7 +768,7 @@ final class ModuleAdminPresenter extends BasePresenter
                                             'module_path' => "Modules/tenant_{$tenantId}/{$moduleInfo['id']}",
                                             'is_active' => 1,
                                             'installed_at' => new \DateTime(),
-                                            'installed_by' => 'system_sync',
+                                            'installed_by' => $user->id,  // ZMĚNA: používáme user ID místo 'system_sync'
                                             'config_data' => null,
                                             'last_used' => null
                                         ]);
