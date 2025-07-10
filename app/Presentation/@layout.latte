@@ -131,7 +131,7 @@
 					</li>
 					{/if}
 					
-					{* Dynamické menu pro moduly - HIERARCHICKÉ VERZE *}
+					{* Rozšíření - dropdown s moduly pro všechny uživatele *}
 					{if isset($moduleMenuItems) && !empty($moduleMenuItems)}
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="extensionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -140,7 +140,7 @@
 						<ul class="dropdown-menu" aria-labelledby="extensionsDropdown">
 							{foreach $moduleMenuItems as $moduleKey => $moduleData}
 								{if !empty($moduleData['menuItems'])}
-									{* NOVÉ: Vytvoříme submenu pro každý modul *}
+									{* Vytvoříme submenu pro každý modul *}
 									<li class="dropdown-submenu">
 										<a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">
 											<i class="{$moduleData['moduleInfo']['icon']|noescape} me-2"></i>
@@ -192,11 +192,35 @@
 							<i class="bi bi-people-fill"></i><span class="nav-text">Uživatelé</span>
 						</a>
 					</li>
-					<li class="nav-item">
-    					<a class="nav-link" n:href="ModuleAdmin:default">
-        					<i class="bi bi-gear-fill"></i><span class="nav-text">Správa modulů</span>
-    					</a>
-					</li>
+					
+					{* Správa modulů - rozdílné chování pro super admina vs. normální admin *}
+					{if $isSuperAdmin}
+						{* Super admin - dropdown s více volbami *}
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="moduleAdminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="bi bi-gear-fill"></i><span class="nav-text">Správa modulů</span>
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="moduleAdminDropdown">
+								<li>
+									<a class="dropdown-item" n:href="ModuleAdmin:default">
+										<i class="bi bi-gear me-2"></i>Správa vlastních modulů
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item" n:href="ModuleAdmin:users">
+										<i class="bi bi-people me-2"></i>Správa uživatelských modulů
+									</a>
+								</li>
+							</ul>
+						</li>
+					{else}
+						{* Normální admin - přímý odkaz *}
+						<li class="nav-item">
+							<a class="nav-link" n:href="ModuleAdmin:default">
+								<i class="bi bi-gear-fill"></i><span class="nav-text">Správa modulů</span>
+							</a>
+						</li>
+					{/if}
 					{/if}
 				</ul>
 				

@@ -91,6 +91,32 @@
                             {input upload class => 'btn btn-primary mt-4'}
                         </div>
                     {/form}
+                    
+                    {* NOVÉ: Tlačítko synchronizace pro super admina *}
+                    {if $isSuperAdmin}
+                        <div class="row g-3 mt-2">
+                            <div class="col-12">
+                                <hr class="my-3">
+                                <h6 class="text-muted">
+                                    <i class="bi bi-tools me-2"></i>
+                                    Správa databáze (Super Admin)
+                                </h6>
+                            </div>
+                            <div class="col-md-8">
+                                <p class="text-muted small mb-2">
+                                    Synchronizuje databázi s fyzicky přítomými moduly. Použijte pokud moduly nevidíte v seznamu.
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="{link syncModules!}" class="btn btn-outline-warning btn-sm w-100" 
+                                   onclick="return confirm('Opravdu chcete synchronizovat moduly s databází?\n\nTato akce vytvoří chybějící záznamy v databázi pro fyzicky přítomné moduly.')"
+                                   title="Synchronizovat moduly s databází">
+                                    <i class="bi bi-arrow-repeat me-2"></i>
+                                    Synchronizovat DB
+                                </a>
+                            </div>
+                        </div>
+                    {/if}
                 </div>
                 <div class="col-md-6">
                     <div class="alert alert-info">

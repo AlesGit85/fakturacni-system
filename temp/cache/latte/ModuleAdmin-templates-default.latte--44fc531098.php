@@ -33,7 +33,7 @@ final class Template_44fc531098 extends Latte\Runtime\Template
 		extract($this->params);
 
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
-			foreach (array_intersect_key(['id' => '134', 'module' => '134'], $this->params) as $ʟ_v => $ʟ_l) {
+			foreach (array_intersect_key(['id' => '160', 'module' => '160'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
@@ -170,7 +170,36 @@ final class Template_44fc531098 extends Latte\Runtime\Template
 		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 93 */;
 
 		echo '
-                </div>
+                    
+';
+		if ($isSuperAdmin) /* line 96 */ {
+			echo '                        <div class="row g-3 mt-2">
+                            <div class="col-12">
+                                <hr class="my-3">
+                                <h6 class="text-muted">
+                                    <i class="bi bi-tools me-2"></i>
+                                    Správa databáze (Super Admin)
+                                </h6>
+                            </div>
+                            <div class="col-md-8">
+                                <p class="text-muted small mb-2">
+                                    Synchronizuje databázi s fyzicky přítomými moduly. Použijte pokud moduly nevidíte v seznamu.
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="';
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('syncModules!')) /* line 111 */;
+			echo '" class="btn btn-outline-warning btn-sm w-100" 
+                                   onclick="return confirm(\'Opravdu chcete synchronizovat moduly s databází?\\n\\nTato akce vytvoří chybějící záznamy v databázi pro fyzicky přítomné moduly.\')"
+                                   title="Synchronizovat moduly s databází">
+                                    <i class="bi bi-arrow-repeat me-2"></i>
+                                    Synchronizovat DB
+                                </a>
+                            </div>
+                        </div>
+';
+		}
+		echo '                </div>
                 <div class="col-md-6">
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle me-2"></i>
@@ -179,7 +208,7 @@ final class Template_44fc531098 extends Latte\Runtime\Template
                     <div class="alert alert-warning permanent-alert">
                         <i class="bi bi-exclamation-triangle me-2"></i>
                         <strong>Pozor:</strong> Aktuální limit pro nahrávání je <strong>';
-		echo LR\Filters::escapeHtmlText($maxUploadSizeFormatted) /* line 102 */;
+		echo LR\Filters::escapeHtmlText($maxUploadSizeFormatted) /* line 128 */;
 		echo '</strong>. Pokud potřebujete nahrát větší soubor, zvyšte PHP limity.
                     </div>
                 </div>
@@ -194,7 +223,7 @@ final class Template_44fc531098 extends Latte\Runtime\Template
                 <i class="bi bi-puzzle-fill me-2 text-primary"></i>
                 Nainstalované moduly 
                 <span class="total-count">Počet nainstalovaných modulů: ';
-		echo LR\Filters::escapeHtmlText(count($modules)) /* line 115 */;
+		echo LR\Filters::escapeHtmlText(count($modules)) /* line 141 */;
 		echo '</span>
             </h2>
             <p class="text-muted">Správa a konfigurace systémových rozšíření</p>
@@ -202,7 +231,7 @@ final class Template_44fc531098 extends Latte\Runtime\Template
     </div>
 
 ';
-		if (!empty($modules)) /* line 121 */ {
+		if (!empty($modules)) /* line 147 */ {
 			echo '    <div class="table-container">
         <table class="data-table">
             <thead>
@@ -216,39 +245,39 @@ final class Template_44fc531098 extends Latte\Runtime\Template
             </thead>
             <tbody>
 ';
-			foreach ($modules as $id => $module) /* line 134 */ {
+			foreach ($modules as $id => $module) /* line 160 */ {
 				echo '                    <tr class="data-row">
                         <td class="company-column">
                             <div class="company-name">
                                 <strong>';
-				echo LR\Filters::escapeHtmlText($module['name']) /* line 138 */;
+				echo LR\Filters::escapeHtmlText($module['name']) /* line 164 */;
 				echo '</strong>
                             </div>
 ';
-				if ($module['description']) /* line 140 */ {
+				if ($module['description']) /* line 166 */ {
 					echo '                            <div class="company-location text-muted">
                                 <small>';
-					echo LR\Filters::escapeHtmlText($module['description']) /* line 142 */;
+					echo LR\Filters::escapeHtmlText($module['description']) /* line 168 */;
 					echo '</small>
                             </div>
 ';
 				}
 				echo '                        </td>
                         <td>';
-				echo LR\Filters::escapeHtmlText($module['version']) /* line 146 */;
+				echo LR\Filters::escapeHtmlText($module['version']) /* line 172 */;
 				echo '</td>
                         <td>';
-				echo LR\Filters::escapeHtmlText($module['author']) /* line 147 */;
+				echo LR\Filters::escapeHtmlText($module['author']) /* line 173 */;
 				echo '</td>
                         <td>
 ';
-				if (isset($module['active']) && $module['active']) /* line 149 */ {
+				if (isset($module['active']) && $module['active']) /* line 175 */ {
 					echo '                                <span class="status-badge status-badge-success">
                                     <i class="bi bi-check-circle-fill me-1 text-success"></i>
                                     Aktivní
                                 </span>
 ';
-				} else /* line 154 */ {
+				} else /* line 180 */ {
 					echo '                                <span class="status-badge status-badge-pending">
                                     <i class="bi bi-pause-circle me-1"></i>
                                     Neaktivní
@@ -259,21 +288,21 @@ final class Template_44fc531098 extends Latte\Runtime\Template
                         <td class="actions-column">
                             <div class="action-buttons">
                                 <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('detail', ['id' => $id])) /* line 163 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('detail', ['id' => $id])) /* line 189 */;
 				echo '" class="btn btn-icon" title="Detail modulu">
                                     <i class="bi bi-eye"></i>
                                 </a>
 ';
-				if (isset($module['active']) && $module['active']) /* line 166 */ {
+				if (isset($module['active']) && $module['active']) /* line 192 */ {
 					echo '                                    <a href="';
-					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('toggleModule!', ['id' => $id])) /* line 167 */;
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('toggleModule!', ['id' => $id])) /* line 193 */;
 					echo '" class="btn btn-icon text-warning" onclick="return confirm(\'Opravdu chcete deaktivovat modul?\')" title="Deaktivovat modul">
                                         <i class="bi bi-power"></i>
                                     </a>
 ';
-				} else /* line 170 */ {
+				} else /* line 196 */ {
 					echo '                                    <a href="';
-					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('toggleModule!', ['id' => $id])) /* line 171 */;
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('toggleModule!', ['id' => $id])) /* line 197 */;
 					echo '" class="btn btn-icon text-success" title="Aktivovat modul">
                                         <i class="bi bi-power"></i>
                                     </a>
@@ -281,35 +310,35 @@ final class Template_44fc531098 extends Latte\Runtime\Template
 				}
 				echo '                                <div class="dropdown">
                                     <button class="btn btn-icon dropdown-toggle" type="button" id="dropdownMenuButton';
-				echo LR\Filters::escapeHtmlAttr($id) /* line 176 */;
+				echo LR\Filters::escapeHtmlAttr($id) /* line 202 */;
 				echo '" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton';
-				echo LR\Filters::escapeHtmlAttr($id) /* line 179 */;
+				echo LR\Filters::escapeHtmlAttr($id) /* line 205 */;
 				echo '">
                                         <li>
                                             <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('detail', ['id' => $id])) /* line 181 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('detail', ['id' => $id])) /* line 207 */;
 				echo '" class="dropdown-item">
                                                 <i class="bi bi-eye me-2"></i> Detail modulu
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
 ';
-				if (isset($module['active']) && $module['active']) /* line 186 */ {
+				if (isset($module['active']) && $module['active']) /* line 212 */ {
 					echo '                                            <li>
                                                 <a href="';
-					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('toggleModule!', ['id' => $id])) /* line 188 */;
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('toggleModule!', ['id' => $id])) /* line 214 */;
 					echo '" class="dropdown-item" onclick="return confirm(\'Opravdu chcete deaktivovat modul?\')">
                                                     <i class="bi bi-power text-warning me-2"></i> Deaktivovat
                                                 </a>
                                             </li>
 ';
-				} else /* line 192 */ {
+				} else /* line 218 */ {
 					echo '                                            <li>
                                                 <a href="';
-					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('toggleModule!', ['id' => $id])) /* line 194 */;
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('toggleModule!', ['id' => $id])) /* line 220 */;
 					echo '" class="dropdown-item">
                                                     <i class="bi bi-power text-success me-2"></i> Aktivovat
                                                 </a>
@@ -318,7 +347,7 @@ final class Template_44fc531098 extends Latte\Runtime\Template
 				}
 				echo '                                        <li>
                                             <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('uninstallModule!', ['id' => $id])) /* line 200 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('uninstallModule!', ['id' => $id])) /* line 226 */;
 				echo '" class="dropdown-item text-danger" onclick="return confirm(\'Opravdu chcete odinstalovat modul? Tato akce nelze vrátit.\')">
                                                 <i class="bi bi-trash me-2"></i> Odinstalovat
                                             </a>
@@ -336,7 +365,7 @@ final class Template_44fc531098 extends Latte\Runtime\Template
         </table>
     </div>
 ';
-		} else /* line 213 */ {
+		} else /* line 239 */ {
 			echo '    <div class="empty-state">
         <div class="empty-state-icon">
             <i class="bi bi-puzzle-fill"></i>

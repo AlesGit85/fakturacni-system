@@ -1,0 +1,304 @@
+{layout '../../@layout.latte'}
+
+{block content}
+<div class="container-fluid">
+    <div class="page-header">
+        <h1 class="main-title">
+            <i class="bi bi-people me-2" style="color: #B1D235;"></i>
+            Správa uživatelských modulů
+        </h1>
+        <p class="text-muted">Přehled modulů nainstalovaných jednotlivými uživateli</p>
+    </div>
+
+    <!-- Statistiky -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white" style="background-color: #B1D235;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title" style="color: #212529;">Celkem uživatelů</h6>
+                            <h2 class="mb-0" style="color: #212529;">{$totalUsers}</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="bi bi-people" style="font-size: 2rem; color: #212529;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white" style="background-color: #95B11F;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title" style="color: white;">Celkem modulů</h6>
+                            <h2 class="mb-0" style="color: white;">{$totalModules}</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="bi bi-puzzle" style="font-size: 2rem; color: white;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white" style="background-color: #6c757d;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Uživatelé s moduly</h6>
+                            <h2 class="mb-0">{count(array_filter($usersWithModules, function($u) { return $u['modules_count'] > 0; }))}</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="bi bi-person-check" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white" style="background-color: #212529;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Aktivní moduly</h6>
+                            <h2 class="mb-0">{array_sum(array_column($usersWithModules, 'active_modules_count'))}</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="bi bi-check-circle" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigace -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a n:href="default" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>
+                Zpět na správu vlastních modulů
+            </a>
+        </div>
+        <div>
+            <button class="btn btn-outline-primary" onclick="toggleAllDetails()">
+                <i class="bi bi-eye me-2"></i>
+                <span id="toggleText">Rozbalit všechny</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Seznam uživatelů a jejich modulů -->
+    {if !empty($usersWithModules)}
+        <div class="accordion" id="usersAccordion">
+            {foreach $usersWithModules as $userData}
+                <div class="card mb-3">
+                    <div class="card-header" id="heading{$userData['user']->id}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-link text-decoration-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{$userData['user']->id}" aria-expanded="false" aria-controls="collapse{$userData['user']->id}">
+                                    <i class="bi bi-chevron-right accordion-icon me-2"></i>
+                                </button>
+                                <div>
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-person-circle me-2" style="color: #B1D235;"></i>
+                                        <strong>{$userData['user']->username}</strong>
+                                        {if $userData['user']->first_name || $userData['user']->last_name}
+                                            <small class="text-muted">({$userData['user']->first_name} {$userData['user']->last_name})</small>
+                                        {/if}
+                                    </h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-envelope me-1"></i>{$userData['user']->email}
+                                        <span class="mx-2">|</span>
+                                        <i class="bi bi-shield me-1"></i>
+                                        {if $userData['user']->is_super_admin}
+                                            <span class="badge" style="background-color: #B1D235; color: #212529;">Super Admin</span>
+                                        {elseif $userData['user']->role === 'admin'}
+                                            <span class="badge bg-danger">Admin</span>
+                                        {elseif $userData['user']->role === 'accountant'}
+                                            <span class="badge bg-warning">Účetní</span>
+                                        {else}
+                                            <span class="badge bg-secondary">Pouze čtení</span>
+                                        {/if}
+                                        {if isset($userData['user']->tenant_id)}
+                                            <span class="mx-2">|</span>
+                                            <i class="bi bi-building me-1"></i>Tenant: {$userData['user']->tenant_id}
+                                        {/if}
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                {if $userData['modules_count'] > 0}
+                                    <span class="badge bg-primary me-2">{$userData['active_modules_count']} aktivních</span>
+                                    <span class="badge bg-secondary">{$userData['modules_count']} celkem</span>
+                                {else}
+                                    <span class="badge bg-light text-dark">Žádné moduly</span>
+                                {/if}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="collapse{$userData['user']->id}" class="collapse" aria-labelledby="heading{$userData['user']->id}" data-bs-parent="#usersAccordion">
+                        <div class="card-body">
+                            {if $userData['modules_count'] > 0}
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Modul</th>
+                                                <th>Verze</th>
+                                                <th>Tenant</th>
+                                                <th>Cesta</th>
+                                                <th>Stav</th>
+                                                <th>Nainstalován</th>
+                                                <th>Naposledy použit</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {foreach $userData['modules'] as $module}
+                                                <tr class="{if !$module['is_active']}table-secondary{/if}">
+                                                    <td>
+                                                        <strong>{$module['name']}</strong>
+                                                        <br>
+                                                        <small class="text-muted">ID: {$module['id']}</small>
+                                                    </td>
+                                                    <td>{$module['version']}</td>
+                                                    <td>
+                                                        <span class="badge bg-info">{$module['tenant_id']}</span>
+                                                    </td>
+                                                    <td>
+                                                        <small class="text-muted font-monospace">{$module['path']}</small>
+                                                    </td>
+                                                    <td>
+                                                        {if $module['is_active']}
+                                                            <span class="badge bg-success">
+                                                                <i class="bi bi-check-circle me-1"></i>Aktivní
+                                                            </span>
+                                                        {else}
+                                                            <span class="badge bg-secondary">
+                                                                <i class="bi bi-pause-circle me-1"></i>Neaktivní
+                                                            </span>
+                                                        {/if}
+                                                    </td>
+                                                    <td>
+                                                        {if $module['installed_at']}
+                                                            <small>{$module['installed_at']|date:'d.m.Y H:i'}</small>
+                                                        {else}
+                                                            <small class="text-muted">-</small>
+                                                        {/if}
+                                                    </td>
+                                                    <td>
+                                                        {if $module['last_used']}
+                                                            <small>{$module['last_used']|date:'d.m.Y H:i'}</small>
+                                                        {else}
+                                                            <small class="text-muted">Nikdy</small>
+                                                        {/if}
+                                                    </td>
+                                                </tr>
+                                            {/foreach}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {else}
+                                <div class="text-center py-4">
+                                    <i class="bi bi-puzzle" style="font-size: 2rem; color: #6c757d;"></i>
+                                    <p class="text-muted mt-2 mb-0">Tento uživatel nemá nainstalované žádné moduly</p>
+                                </div>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            {/foreach}
+        </div>
+    {else}
+        <div class="text-center py-5">
+            <i class="bi bi-people" style="font-size: 4rem; color: #6c757d;"></i>
+            <h4 class="text-muted mt-3">Žádní uživatelé</h4>
+            <p class="text-muted">V systému nejsou registrováni žádní uživatelé</p>
+        </div>
+    {/if}
+</div>
+
+<style>
+.accordion-icon {
+    transition: transform 0.2s;
+}
+
+.collapse.show + .card-body .accordion-icon,
+.accordion-icon[aria-expanded="true"] {
+    transform: rotate(90deg);
+}
+
+.btn-link {
+    color: #212529 !important;
+    text-decoration: none !important;
+}
+
+.btn-link:hover {
+    color: #B1D235 !important;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.card {
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.badge {
+    font-size: 0.75em;
+}
+</style>
+
+<script>
+let allExpanded = false;
+
+function toggleAllDetails() {
+    const collapses = document.querySelectorAll('.collapse');
+    const toggleText = document.getElementById('toggleText');
+    
+    if (allExpanded) {
+        // Sbalit všechny
+        collapses.forEach(collapse => {
+            const bsCollapse = new bootstrap.Collapse(collapse, { show: false });
+            bsCollapse.hide();
+        });
+        toggleText.textContent = 'Rozbalit všechny';
+        allExpanded = false;
+    } else {
+        // Rozbalit všechny
+        collapses.forEach(collapse => {
+            const bsCollapse = new bootstrap.Collapse(collapse, { show: true });
+            bsCollapse.show();
+        });
+        toggleText.textContent = 'Sbalit všechny';
+        allExpanded = true;
+    }
+}
+
+// Animace šipek při rozbalování/sbalování
+document.addEventListener('DOMContentLoaded', function() {
+    const accordionButtons = document.querySelectorAll('[data-bs-toggle="collapse"]');
+    
+    accordionButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const icon = this.querySelector('.accordion-icon');
+            if (icon) {
+                setTimeout(() => {
+                    if (this.getAttribute('aria-expanded') === 'true') {
+                        icon.style.transform = 'rotate(90deg)';
+                    } else {
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                }, 100);
+            }
+        });
+    });
+});
+</script>
+{/block}

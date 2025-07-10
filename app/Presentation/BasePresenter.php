@@ -262,18 +262,15 @@ abstract class BasePresenter extends Presenter
     }
 
     /**
-     * Získá menu položky z aktivních modulů
-     * AKTUALIZOVÁNO: Nyní používá nový multi-tenancy systém
+     * Získá menu položky z aktivních modulů - OPRAVENÁ VERZE!
+     * KLÍČOVÁ OPRAVA: Používá physical_path z moduleInfo místo špatné cesty
      */
     protected function getModuleMenuItems(): array
     {
         if (!$this->moduleManager) {
+            $this->securityLogger->logSecurityEvent('module_menu_error', 
+                "ModuleManager není dostupný v getModuleMenuItems()");
             return [];
-        }
-
-        // DŮLEŽITÉ: Kontext by už měl být nastaven v startup(), ale pro jistotu zkontrolujeme
-        if ($this->getUser()->isLoggedIn()) {
-            $this->setupModuleContext();
         }
 
         $menuItems = [];
@@ -281,6 +278,9 @@ abstract class BasePresenter extends Presenter
         try {
             // Načteme aktivní moduly pro aktuálního uživatele
             $activeModules = $this->moduleManager->getActiveModules();
+            
+            $this->securityLogger->logSecurityEvent('module_menu_debug', 
+                "Načítání menu z " . count($activeModules) . " aktivních modulů");
             
             foreach ($activeModules as $moduleId => $moduleInfo) {
                 try {
@@ -292,19 +292,38 @@ abstract class BasePresenter extends Presenter
                         }
                     }
 
-                    // Pokusíme se načíst modul a získat jeho menu položky
-                    $modulePath = dirname(__DIR__) . '/Modules/' . $moduleId;
+                    // KLÍČOVÁ OPRAVA: Používáme physical_path z moduleInfo
+                    $modulePath = $moduleInfo['physical_path'] ?? null;
+                    
+                    if (!$modulePath || !is_dir($modulePath)) {
+                        $this->securityLogger->logSecurityEvent('module_menu_warning', 
+                            "Modul $moduleId nemá platnou physical_path: " . ($modulePath ?? 'null'));
+                        continue;
+                    }
+                    
                     $moduleFile = $modulePath . '/Module.php';
+                    
+                    $this->securityLogger->logSecurityEvent('module_menu_debug', 
+                        "Hledám Module.php pro $moduleId na cestě: $moduleFile");
                     
                     if (file_exists($moduleFile)) {
                         require_once $moduleFile;
-                        $moduleClassName = 'Modules\\' . ucfirst($moduleId) . '\\Module';
+                        
+                        // OPRAVA: Používáme skutečné ID modulu místo klíče (který může být tenant_X_moduleId)
+                        $realModuleId = $moduleInfo['id'] ?? $moduleId;
+                        $moduleClassName = 'Modules\\' . ucfirst($realModuleId) . '\\Module';
+                        
+                        $this->securityLogger->logSecurityEvent('module_menu_debug', 
+                            "Vytvářím instanci třídy: $moduleClassName pro modul: $realModuleId");
                         
                         if (class_exists($moduleClassName)) {
                             $moduleInstance = new $moduleClassName();
                             
                             if (method_exists($moduleInstance, 'getMenuItems')) {
                                 $moduleMenuItems = $moduleInstance->getMenuItems();
+                                
+                                $this->securityLogger->logSecurityEvent('module_menu_debug', 
+                                    "Modul $moduleId vrátil " . count($moduleMenuItems) . " menu položek");
                                 
                                 if (!empty($moduleMenuItems)) {
                                     // Zpracujeme menu položky a vygenerujeme odkazy
@@ -331,25 +350,36 @@ abstract class BasePresenter extends Presenter
                                         'moduleInfo' => $moduleInfo,
                                         'menuItems' => $processedMenuItems
                                     ];
+                                    
+                                    $this->securityLogger->logSecurityEvent('module_menu_success', 
+                                        "Úspěšně zpracován modul $moduleId s " . count($processedMenuItems) . " menu položkami");
                                 }
+                            } else {
+                                $this->securityLogger->logSecurityEvent('module_menu_info', 
+                                    "Modul $moduleId nemá metodu getMenuItems()");
                             }
+                        } else {
+                            $this->securityLogger->logSecurityEvent('module_menu_warning', 
+                                "Třída $moduleClassName pro modul $moduleId neexistuje");
                         }
+                    } else {
+                        $this->securityLogger->logSecurityEvent('module_menu_warning', 
+                            "Soubor Module.php pro modul $moduleId neexistuje: $moduleFile");
                     }
                 } catch (\Throwable $e) {
                     // Logujeme chybu, ale pokračujeme
-                    if (isset($this->securityLogger)) {
-                        $this->securityLogger->logSecurityEvent('module_menu_error', 
-                            "Chyba při načítání menu z modulu $moduleId: " . $e->getMessage());
-                    }
+                    $this->securityLogger->logSecurityEvent('module_menu_error', 
+                        "Chyba při načítání menu z modulu $moduleId: " . $e->getMessage());
                 }
             }
         } catch (\Throwable $e) {
             // Logujeme kritickou chybu s moduly
-            if (isset($this->securityLogger)) {
-                $this->securityLogger->logSecurityEvent('module_system_error', 
-                    "Kritická chyba modulového systému: " . $e->getMessage());
-            }
+            $this->securityLogger->logSecurityEvent('module_system_error', 
+                "Kritická chyba modulového systému: " . $e->getMessage());
         }
+        
+        $this->securityLogger->logSecurityEvent('module_menu_final', 
+            "Finální počet modulů s menu: " . count($menuItems));
         
         return $menuItems;
     }
@@ -391,8 +421,11 @@ abstract class BasePresenter extends Presenter
         $this->template->addFunction('vocative', [$this, 'getVocativeName']);
         
         // DŮLEŽITÉ: Přidání menu položek z modulů do šablony
-        // Kontext je nastaven v startup(), takže teď budou moduly načteny správně
-        $this->template->add('moduleMenuItems', $this->getModuleMenuItems());
+        $moduleMenuItems = $this->getModuleMenuItems();
+        $this->template->add('moduleMenuItems', $moduleMenuItems);
+        
+        // DEBUG: Přidáme informaci o počtu menu položek do šablony pro ladění
+        $this->template->add('moduleMenuItemsCount', count($moduleMenuItems));
     }
 
     /**

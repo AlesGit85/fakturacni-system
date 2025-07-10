@@ -33,6 +33,7 @@ final class ModuleAdminPresenter extends BasePresenter
     protected array $actionRoles = [
         'detail' => ['readonly', 'accountant', 'admin'], // Zobrazení detailu modulu - všichni
         'default' => ['admin'], // Správa modulů - pouze admin
+        'users' => [], // Správa uživatelských modulů - kontrola v metodě (pouze super admin)
         'toggleModule' => ['admin'], // Aktivace/deaktivace - pouze admin
         'uninstallModule' => ['admin'], // Odinstalace - pouze admin
         'moduleData' => ['readonly', 'accountant', 'admin'], // AJAX data z modulů - všichni
@@ -50,6 +51,26 @@ final class ModuleAdminPresenter extends BasePresenter
         $this->invoicesManager = $invoicesManager;
         $this->companyManager = $companyManager;
         $this->database = $database;
+    }
+
+    /**
+     * NOVÉ: Nastavení kontextu ModuleManager při spuštění presenteru
+     */
+    public function startup(): void
+    {
+        parent::startup();
+        
+        // OPRAVA: Nastavíme kontext ModuleManager pro tento presenter
+        if ($this->getUser()->isLoggedIn()) {
+            $identity = $this->getUser()->getIdentity();
+            if ($identity) {
+                $this->moduleManager->setUserContext(
+                    $identity->id,
+                    $this->getCurrentTenantId(),
+                    $this->isSuperAdmin()
+                );
+            }
+        }
     }
 
     /**
@@ -98,58 +119,74 @@ final class ModuleAdminPresenter extends BasePresenter
             // Kontrola, zda je modul aktivní
             $this->logger->log("Kontroluji aktivní moduly...", ILogger::INFO);
             $activeModules = $this->moduleManager->getActiveModules();
-            $this->logger->log("Aktivní moduly: " . implode(', ', array_keys($activeModules)), ILogger::INFO);
-            
+            $this->logger->log("Aktivní moduly: " . json_encode(array_keys($activeModules)), ILogger::INFO);
+
             if (!isset($activeModules[$moduleId])) {
                 $this->logger->log("CHYBA: Modul '$moduleId' není aktivní nebo neexistuje", ILogger::ERROR);
                 $this->sendJson([
                     'success' => false,
-                    'error' => 'Modul není aktivní nebo neexistuje'
+                    'error' => "Modul '$moduleId' není aktivní nebo neexistuje"
                 ]);
                 return;
             }
 
-            $this->logger->log("Modul '$moduleId' je aktivní, načítám instanci modulu", ILogger::INFO);
+            $this->logger->log("Modul '$moduleId' je aktivní, pokračuji...", ILogger::INFO);
 
-            // NOVÁ OBECNÁ LOGIKA: Vytvoření instance modulu
+            // Vytvoření instance modulu
             $moduleInstance = $this->createModuleInstance($moduleId);
-            
             if (!$moduleInstance) {
                 $this->logger->log("CHYBA: Nepodařilo se vytvořit instanci modulu '$moduleId'", ILogger::ERROR);
                 $this->sendJson([
                     'success' => false,
-                    'error' => 'Nepodařilo se načíst modul'
+                    'error' => "Nepodařilo se načíst modul '$moduleId'"
                 ]);
                 return;
             }
 
             $this->logger->log("Instance modulu '$moduleId' úspěšně vytvořena", ILogger::INFO);
 
+            // Kontrola, zda modul podporuje AJAX
+            if (!method_exists($moduleInstance, 'handleAjaxRequest')) {
+                $this->logger->log("CHYBA: Modul '$moduleId' nepodporuje AJAX požadavky", ILogger::ERROR);
+                $this->sendJson([
+                    'success' => false,
+                    'error' => "Modul '$moduleId' nepodporuje AJAX požadavky"
+                ]);
+                return;
+            }
+
+            $this->logger->log("Modul '$moduleId' podporuje AJAX, volám handleAjaxRequest...", ILogger::INFO);
+
             // Příprava závislostí pro modul
             $dependencies = $this->prepareDependencies();
             
-            // Příprava parametrů z HTTP požadavku
+            // Příprava parametrů
             $parameters = $this->prepareParameters();
+            
+            // Přidání user_id pokud je uživatel přihlášen
+            if ($this->getUser()->isLoggedIn()) {
+                $identity = $this->getUser()->getIdentity();
+                if ($identity && $identity->id) {
+                    $parameters['user_id'] = $identity->id;
+                }
+            }
 
-            $this->logger->log("Volám handleAjaxRequest na modulu '$moduleId' s akcí '$action'", ILogger::INFO);
+            $this->logger->log("Volám handleAjaxRequest s akcí '$action'", ILogger::INFO);
 
-            // Zavolání AJAX metody na modulu
+            // Volání metody modulu
             $result = $moduleInstance->handleAjaxRequest($action, $parameters, $dependencies);
+            
+            $this->logger->log("AJAX akce '$action' úspěšně dokončena", ILogger::INFO);
+            $this->logger->log("=== KONEC OBECNÉHO AJAX VOLÁNÍ ===", ILogger::INFO);
 
-            $this->logger->log("AJAX akce úspěšně zpracována, odesílám výsledek", ILogger::INFO);
             $this->sendJson([
                 'success' => true,
                 'data' => $result
             ]);
-            
-        } catch (Nette\Application\AbortException $e) {
-            // AbortException je normální ukončení po sendJson() - nelogujeme jako chybu
-            $this->logger->log("AJAX volání úspěšně ukončeno (AbortException je normální)", ILogger::INFO);
-            throw $e; // Necháme ji projít, je to očekávané chování
-            
+
         } catch (\Throwable $e) {
-            $this->logger->log("=== SKUTEČNÁ CHYBA V OBECNÉM AJAX VOLÁNÍ ===", ILogger::ERROR);
-            $this->logger->log("Exception: " . get_class($e), ILogger::ERROR);
+            $this->logger->log("=== CHYBA V OBECNÉM AJAX VOLÁNÍ ===", ILogger::ERROR);
+            $this->logger->log("Exception type: " . get_class($e), ILogger::ERROR);
             $this->logger->log("Message: " . $e->getMessage(), ILogger::ERROR);
             $this->logger->log("File: " . $e->getFile() . " (line " . $e->getLine() . ")", ILogger::ERROR);
             $this->logger->log("Stack trace: " . $e->getTraceAsString(), ILogger::ERROR);
@@ -162,17 +199,30 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * NOVÁ METODA: Vytvoří instanci modulu
+     * NOVÁ METODA: Vytvoří instanci modulu - OPRAVENÁ PRO TENANT-SPECIFIC CESTY
      */
     private function createModuleInstance(string $moduleId): ?\App\Modules\IModule
     {
         try {
             $this->logger->log("Vytvářím instanci modulu '$moduleId'", ILogger::INFO);
             
-            // Cesta k hlavnímu souboru modulu
-            $modulePath = dirname(__DIR__, 2) . '/Modules/' . $moduleId;
-            $moduleFile = $modulePath . '/Module.php';
+            // Získáme info o modulu z ModuleManager
+            $activeModules = $this->moduleManager->getActiveModules();
+            $moduleInfo = $activeModules[$moduleId] ?? null;
             
+            if (!$moduleInfo) {
+                $this->logger->log("CHYBA: Modul '$moduleId' nenalezen v aktivních modulech", ILogger::ERROR);
+                return null;
+            }
+            
+            // Používáme physical_path z moduleInfo
+            $modulePath = $moduleInfo['physical_path'] ?? null;
+            if (!$modulePath) {
+                $this->logger->log("CHYBA: Modul '$moduleId' nemá physical_path", ILogger::ERROR);
+                return null;
+            }
+            
+            $moduleFile = $modulePath . '/Module.php';
             $this->logger->log("Hledám soubor modulu: $moduleFile", ILogger::INFO);
             
             if (!file_exists($moduleFile)) {
@@ -185,8 +235,9 @@ final class ModuleAdminPresenter extends BasePresenter
             // Načtení souboru modulu
             require_once $moduleFile;
             
-            // Vytvoření názvu třídy (namespace podle ID modulu)
-            $moduleClassName = 'Modules\\' . ucfirst($moduleId) . '\\Module';
+            // Vytvoření názvu třídy (používáme skutečné ID modulu, ne klíč)
+            $realModuleId = $moduleInfo['id'] ?? $moduleId;
+            $moduleClassName = 'Modules\\' . ucfirst($realModuleId) . '\\Module';
             
             $this->logger->log("Kontroluji existenci třídy: $moduleClassName", ILogger::INFO);
             
@@ -258,8 +309,12 @@ final class ModuleAdminPresenter extends BasePresenter
     {
         $this->template->title = "Správa modulů";
 
-        // Načtení všech modulů
-        $this->template->modules = $this->moduleManager->getAllModules();
+        // OPRAVA: Všichni uživatelé (i super admin) vidí pouze svoje vlastní moduly v "Správa vlastních modulů"
+        $modules = $this->moduleManager->getActiveModules();
+        $this->logger->log("Správa vlastních modulů: Načítám moduly pro aktuálního uživatele", ILogger::INFO);
+        
+        $this->template->modules = $modules;
+        $this->logger->log("Načteno " . count($modules) . " modulů pro zobrazení", ILogger::INFO);
 
         // Získání maximální velikosti souboru pro nahrávání
         $maxUploadSize = $this->getMaxUploadSize();
@@ -270,6 +325,73 @@ final class ModuleAdminPresenter extends BasePresenter
         $this->template->debugInfo = $this->getPhpUploadDebugInfo();
     }
 
+    /**
+     * NOVÉ: Přehled uživatelských modulů (pouze pro super admina)
+     */
+    public function renderUsers(): void
+    {
+        // Kontrola oprávnění - pouze super admin
+        if (!$this->isSuperAdmin()) {
+            $this->flashMessage('Nemáte oprávnění pro přístup k této stránce.', 'danger');
+            $this->redirect('default');
+        }
+
+        $this->template->title = "Správa uživatelských modulů";
+
+        // Načteme všechny uživatele s jejich moduly
+        $usersWithModules = [];
+        
+        try {
+            // Načteme všechny uživatele
+            $users = $this->database->table('users')->order('username ASC')->fetchAll();
+            
+            foreach ($users as $user) {
+                // Pro každého uživatele načteme jeho moduly
+                $userModules = $this->database->table('user_modules')
+                    ->where('user_id', $user->id)
+                    ->order('module_name ASC')
+                    ->fetchAll();
+
+                $modules = [];
+                foreach ($userModules as $userModule) {
+                    $modules[] = [
+                        'id' => $userModule->module_id,
+                        'name' => $userModule->module_name,
+                        'version' => $userModule->module_version,
+                        'path' => $userModule->module_path,
+                        'is_active' => $userModule->is_active,
+                        'installed_at' => $userModule->installed_at,
+                        'last_used' => $userModule->last_used,
+                        'tenant_id' => $userModule->tenant_id
+                    ];
+                }
+
+                $usersWithModules[] = [
+                    'user' => $user,
+                    'modules' => $modules,
+                    'modules_count' => count($modules),
+                    'active_modules_count' => count(array_filter($modules, function($m) { return $m['is_active']; }))
+                ];
+            }
+
+            $this->template->usersWithModules = $usersWithModules;
+            $this->template->totalUsers = count($usersWithModules);
+            $this->template->totalModules = array_sum(array_column($usersWithModules, 'modules_count'));
+            
+            $this->logger->log("Super admin: Načten přehled modulů pro " . count($usersWithModules) . " uživatelů", ILogger::INFO);
+            
+        } catch (\Exception $e) {
+            $this->logger->log("Chyba při načítání přehledu uživatelských modulů: " . $e->getMessage(), ILogger::ERROR);
+            $this->flashMessage('Chyba při načítání dat uživatelů.', 'danger');
+            $this->template->usersWithModules = [];
+            $this->template->totalUsers = 0;
+            $this->template->totalModules = 0;
+        }
+    }
+
+    /**
+     * OPRAVENÁ METODA: renderDetail - používá tenant-specific cesty
+     */
     public function renderDetail(string $id): void
     {
         $allModules = $this->moduleManager->getActiveModules();
@@ -278,30 +400,49 @@ final class ModuleAdminPresenter extends BasePresenter
             $this->redirect('Home:default');
         }
 
-        $this->template->moduleInfo = $allModules[$id];
+        $moduleInfo = $allModules[$id];
+        $this->template->moduleInfo = $moduleInfo;
         $this->template->moduleId = $id;
 
+        // OPRAVA: Používáme physical_path z moduleInfo místo ručního sestavování
+        $modulePath = $moduleInfo['physical_path'] ?? null;
+        
+        if (!$modulePath || !is_dir($modulePath)) {
+            $this->logger->log("Modul $id nemá platnou physical_path: " . ($modulePath ?? 'null'), ILogger::ERROR);
+            $this->flashMessage('Cesta k modulu nebyla nalezena.', 'danger');
+            $this->redirect('Home:default');
+        }
+
         // Zkopírování/aktualizace assets při každém zobrazení detailu
-        $this->updateModuleAssets($id);
+        $this->updateModuleAssets($id, $modulePath);
 
-        // Přidání CSS stylu modulu, pokud existuje
-        $cssPath = '/Modules/' . $id . '/assets/css/style.css';
-        $cssFullPath = WWW_DIR . $cssPath;
-        if (file_exists($cssFullPath)) {
-            $this->template->moduleCss = $cssPath;
+        // OPRAVA: Používáme tenant-specific cestu pro assets
+        $tenantId = $moduleInfo['tenant_id'] ?? null;
+        if ($tenantId) {
+            // CSS cesta
+            $cssPath = "/Modules/tenant_{$tenantId}/{$id}/assets/css/style.css";
+            $cssFullPath = WWW_DIR . $cssPath;
+            if (file_exists($cssFullPath)) {
+                $this->template->moduleCss = $cssPath;
+            }
+
+            // JS cesta
+            $jsPath = "/Modules/tenant_{$tenantId}/{$id}/assets/js/script.js";
+            $jsFullPath = WWW_DIR . $jsPath;
+            if (file_exists($jsFullPath)) {
+                $this->template->moduleJs = $jsPath;
+            }
         }
 
-        // Přidání JS scriptu modulu, pokud existuje
-        $jsPath = '/Modules/' . $id . '/assets/js/script.js';
-        $jsFullPath = WWW_DIR . $jsPath;
-        if (file_exists($jsFullPath)) {
-            $this->template->moduleJs = $jsPath;
-        }
-
-        // Načtení šablony modulu
-        $templatePath = dirname(__DIR__, 2) . '/Modules/' . $id . '/templates/dashboard.latte';
+        // OPRAVA: Používáme physical_path pro šablonu
+        $templatePath = $modulePath . '/templates/dashboard.latte';
+        $this->logger->log("Hledám šablonu modulu $id na cestě: $templatePath", ILogger::DEBUG);
+        
         if (file_exists($templatePath)) {
             $this->template->moduleTemplatePath = $templatePath;
+            $this->logger->log("Šablona modulu $id nalezena: $templatePath", ILogger::INFO);
+        } else {
+            $this->logger->log("Šablona modulu $id nenalezena: $templatePath", ILogger::WARNING);
         }
 
         // OBECNÉ: AJAX URL pro všechny moduly
@@ -309,16 +450,26 @@ final class ModuleAdminPresenter extends BasePresenter
             'moduleId' => $id, 
             'action' => 'getAllData'
         ]);
-        $this->template->moduleId = $id;
     }
 
     /**
-     * Aktualizuje assets modulu - vždy překopíruje nejnovější verzi
+     * OPRAVENÁ METODA: Aktualizuje assets modulu - pro tenant-specific cesty
      */
-    private function updateModuleAssets(string $moduleId): void
+    private function updateModuleAssets(string $moduleId, string $modulePath): void
     {
-        $moduleAssetsDir = dirname(__DIR__, 2) . '/Modules/' . $moduleId . '/assets';
-        $wwwModuleDir = WWW_DIR . '/Modules/' . $moduleId;
+        $moduleAssetsDir = $modulePath . '/assets';
+        
+        // Určíme tenant ID z module info
+        $allModules = $this->moduleManager->getActiveModules();
+        $moduleInfo = $allModules[$moduleId] ?? null;
+        $tenantId = $moduleInfo['tenant_id'] ?? null;
+        
+        if (!$tenantId) {
+            $this->logger->log("Modul '$moduleId' nemá tenant_id - přeskakuji aktualizaci assets", ILogger::WARNING);
+            return;
+        }
+
+        $wwwModuleDir = WWW_DIR . "/Modules/tenant_{$tenantId}/{$moduleId}";
 
         // Pokud zdrojové assets neexistují, nic neděláme
         if (!is_dir($moduleAssetsDir)) {
@@ -441,142 +592,266 @@ final class ModuleAdminPresenter extends BasePresenter
             ", post_max_size: " . $this->formatBytes($postMaxSize) .
             ", memory_limit: " . $this->formatBytes($memoryLimit), ILogger::INFO);
 
-        // Použije menší z upload a post hodnot
-        $serverLimit = min($uploadMaxFilesize, $postMaxSize);
+        // Vrátí nejmenší hodnotu (kromě memory_limit pokud je nekonečný)
+        $limits = [$uploadMaxFilesize, $postMaxSize];
+        if ($memoryLimit > 0) { // memory_limit = -1 znamená nekonečno
+            $limits[] = $memoryLimit;
+        }
 
-        // Pro lokální development nastavíme vyšší limit
-        // V produkci můžeme snížit podle potřeby
-        $desiredLimit = 50 * 1024 * 1024; // 50 MB pro development
-
-        $finalLimit = min($serverLimit, $desiredLimit);
-
-        $this->logger->log("Final upload limit: " . $this->formatBytes($finalLimit), ILogger::INFO);
-
-        return $finalLimit;
+        $maxSize = min($limits);
+        $this->logger->log("Výsledná maximální velikost souboru: " . $this->formatBytes($maxSize), ILogger::INFO);
+        
+        return $maxSize;
     }
 
     /**
-     * Získá debug informace o PHP upload limitech
-     */
-    private function getPhpUploadDebugInfo(): array
-    {
-        return [
-            'upload_max_filesize_raw' => ini_get('upload_max_filesize'),
-            'upload_max_filesize_bytes' => $this->parseSize(ini_get('upload_max_filesize')),
-            'upload_max_filesize_formatted' => $this->formatBytes($this->parseSize(ini_get('upload_max_filesize'))),
-
-            'post_max_size_raw' => ini_get('post_max_size'),
-            'post_max_size_bytes' => $this->parseSize(ini_get('post_max_size')),
-            'post_max_size_formatted' => $this->formatBytes($this->parseSize(ini_get('post_max_size'))),
-
-            'memory_limit_raw' => ini_get('memory_limit'),
-            'memory_limit_bytes' => $this->parseSize(ini_get('memory_limit')),
-            'memory_limit_formatted' => $this->formatBytes($this->parseSize(ini_get('memory_limit'))),
-
-            'max_execution_time' => ini_get('max_execution_time'),
-            'max_input_time' => ini_get('max_input_time'),
-
-            'final_limit' => $this->getMaxUploadSize(),
-            'final_limit_formatted' => $this->formatBytes($this->getMaxUploadSize())
-        ];
-    }
-
-    /**
-     * Převede řetězec s velikostí (např. "2M") na integer (bytes)
+     * Převede textovou hodnotu velikosti na byty
      */
     private function parseSize(string $size): int
     {
-        $unit = preg_replace('/[^bkmgtpezy]/i', '', $size);
-        $size = preg_replace('/[^0-9\.]/', '', $size);
+        $size = trim($size);
+        $last = strtolower($size[strlen($size) - 1]);
+        $value = (int)$size;
 
-        if ($unit) {
-            $size *= pow(1024, stripos('bkmgtpezy', $unit[0]));
+        switch ($last) {
+            case 'g':
+                $value *= 1024;
+                // fall through
+            case 'm':
+                $value *= 1024;
+                // fall through
+            case 'k':
+                $value *= 1024;
         }
 
-        return (int) $size;
+        return $value;
     }
 
     /**
-     * Formátuje velikost v bytech na čitelný formát
+     * Formátuje velikost v bytech na lidsky čitelnou formu
      */
     private function formatBytes(int $bytes, int $precision = 2): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
-        $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-        $pow = min($pow, count($units) - 1);
-
-        $bytes /= pow(1024, $pow);
-
-        return round($bytes, $precision) . ' ' . $units[$pow];
-    }
-
-    /**
-     * Zpracování formuláře pro nahrání modulu
-     */
-    public function uploadFormSucceeded(Form $form, \stdClass $values): void
-    {
-        $file = $values->moduleZip;
-
-        if ($file->isOk() && $file->getSize() > 0) {
-            try {
-                // Zavolání metody pro instalaci modulu
-                $result = $this->moduleManager->installModule($file);
-
-                if ($result['success']) {
-                    $this->flashMessage('Modul byl úspěšně nainstalován: ' . $result['message'], 'success');
-                } else {
-                    $this->flashMessage('Chyba při instalaci modulu: ' . $result['message'], 'danger');
-                }
-            } catch (\Exception $e) {
-                $this->logger->log('Chyba při instalaci modulu: ' . $e->getMessage(), ILogger::ERROR);
-                $this->flashMessage('Nastala chyba při instalaci modulu: ' . $e->getMessage(), 'danger');
-            }
-        } else {
-            $this->flashMessage('Neplatný soubor nebo chyba při nahrávání.', 'danger');
+        for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
+            $bytes /= 1024;
         }
 
-        $this->redirect('default');
+        return round($bytes, $precision) . ' ' . $units[$i];
     }
 
     /**
-     * Akce pro aktivaci/deaktivaci modulu
+     * Získá debug informace o PHP limitech pro nahrávání
+     */
+    private function getPhpUploadDebugInfo(): array
+    {
+        $uploadMaxFilesize = $this->parseSize(ini_get('upload_max_filesize'));
+        $postMaxSize = $this->parseSize(ini_get('post_max_size'));
+        $memoryLimit = $this->parseSize(ini_get('memory_limit'));
+        
+        // Vypočítáme finální limit (nejmenší hodnotu)
+        $limits = [$uploadMaxFilesize, $postMaxSize];
+        if ($memoryLimit > 0) { // memory_limit = -1 znamená nekonečno
+            $limits[] = $memoryLimit;
+        }
+        $finalLimit = min($limits);
+        
+        return [
+            'upload_max_filesize' => ini_get('upload_max_filesize'),
+            'upload_max_filesize_formatted' => $this->formatBytes($uploadMaxFilesize),
+            'upload_max_filesize_raw' => ini_get('upload_max_filesize'),
+            'post_max_size' => ini_get('post_max_size'),
+            'post_max_size_formatted' => $this->formatBytes($postMaxSize),
+            'post_max_size_raw' => ini_get('post_max_size'),
+            'memory_limit' => ini_get('memory_limit'),
+            'memory_limit_formatted' => $memoryLimit > 0 ? $this->formatBytes($memoryLimit) : 'Neomezeno',
+            'memory_limit_raw' => ini_get('memory_limit'),
+            'final_limit_formatted' => $this->formatBytes($finalLimit),
+            'max_execution_time' => ini_get('max_execution_time'),
+            'max_input_time' => ini_get('max_input_time'),
+        ];
+    }
+
+    /**
+     * Zpracování nahraného modulu
+     */
+    public function uploadFormSucceeded(Form $form): void
+    {
+        $values = $form->getValues();
+        $file = $values->moduleZip;
+
+        if (!$file->isOk()) {
+            $this->flashMessage('Chyba při nahrávání souboru.', 'danger');
+            return;
+        }
+
+        $identity = $this->getUser()->getIdentity();
+        if (!$identity) {
+            $this->flashMessage('Nejste přihlášen.', 'danger');
+            return;
+        }
+
+        $result = $this->moduleManager->installModuleForUser(
+            $file,
+            $identity->id,
+            null, // tenant ID se určí automaticky z kontextu
+            $identity->username
+        );
+
+        if ($result['success']) {
+            $this->flashMessage($result['message'], 'success');
+        } else {
+            $this->flashMessage($result['message'], 'danger');
+        }
+
+        $this->redirect('this');
+    }
+
+    /**
+     * NOVÉ: Synchronizace modulů - oprava databáze podle fyzických souborů
+     */
+    public function handleSyncModules(): void
+    {
+        if (!$this->isSuperAdmin()) {
+            $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
+            $this->redirect('this');
+        }
+
+        try {
+            $syncCount = 0;
+            
+            // Projdeme všechny tenant adresáře
+            if (is_dir($this->moduleManager->getBaseModulesDir())) {
+                $tenantDirectories = array_diff(scandir($this->moduleManager->getBaseModulesDir()), ['.', '..']);
+                
+                foreach ($tenantDirectories as $tenantDir) {
+                    if (!preg_match('/^tenant_(\d+)$/', $tenantDir, $matches)) {
+                        continue;
+                    }
+                    
+                    $tenantId = (int)$matches[1];
+                    $tenantModulesDir = $this->moduleManager->getBaseModulesDir() . '/' . $tenantDir;
+                    
+                    if (!is_dir($tenantModulesDir)) {
+                        continue;
+                    }
+                    
+                    $moduleDirectories = array_diff(scandir($tenantModulesDir), ['.', '..']);
+                    
+                    foreach ($moduleDirectories as $moduleDir) {
+                        $moduleInfoFile = $tenantModulesDir . '/' . $moduleDir . '/module.json';
+                        
+                        if (file_exists($moduleInfoFile)) {
+                            $moduleInfo = json_decode(file_get_contents($moduleInfoFile), true);
+                            
+                            if ($moduleInfo && isset($moduleInfo['id'])) {
+                                // Najdeme uživatele pro tento tenant
+                                $user = $this->database->table('users')->where('tenant_id', $tenantId)->fetch();
+                                
+                                if ($user) {
+                                    // Zkontrolujeme, zda už záznam existuje
+                                    $existingModule = $this->database->table('user_modules')
+                                        ->where('user_id', $user->id)
+                                        ->where('module_id', $moduleInfo['id'])
+                                        ->fetch();
+                                    
+                                    if (!$existingModule) {
+                                        // Vytvoříme chybějící záznam
+                                        $this->database->table('user_modules')->insert([
+                                            'user_id' => $user->id,
+                                            'tenant_id' => $tenantId,
+                                            'module_id' => $moduleInfo['id'],
+                                            'module_name' => $moduleInfo['name'] ?? $moduleInfo['id'],
+                                            'module_version' => $moduleInfo['version'] ?? '1.0.0',
+                                            'module_path' => "Modules/tenant_{$tenantId}/{$moduleInfo['id']}",
+                                            'is_active' => 1,
+                                            'installed_at' => new \DateTime(),
+                                            'installed_by' => 'system_sync',
+                                            'config_data' => null,
+                                            'last_used' => null
+                                        ]);
+                                        
+                                        $syncCount++;
+                                        $this->logger->log("SYNC: Přidán záznam pro modul {$moduleInfo['id']} uživatele {$user->username} (tenant $tenantId)", ILogger::INFO);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if ($syncCount > 0) {
+                $this->flashMessage("Úspěšně synchronizováno {$syncCount} modulů.", 'success');
+            } else {
+                $this->flashMessage("Všechny moduly jsou již synchronizovány.", 'info');
+            }
+            
+        } catch (\Exception $e) {
+            $this->logger->log("Chyba při synchronizaci modulů: " . $e->getMessage(), ILogger::ERROR);
+            $this->flashMessage('Chyba při synchronizaci modulů.', 'danger');
+        }
+
+        $this->redirect('this');
+    }
+
+    /**
+     * NOVÉ: Handler pro aktivaci/deaktivaci modulu
      */
     public function handleToggleModule(string $id): void
     {
+        if (!$this->isAdmin()) {
+            $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
+            $this->redirect('this');
+        }
+
+        $identity = $this->getUser()->getIdentity();
+        if (!$identity) {
+            $this->flashMessage('Nejste přihlášen.', 'danger');
+            $this->redirect('this');
+        }
+
         try {
-            $result = $this->moduleManager->toggleModule($id);
+            $result = $this->moduleManager->toggleModuleForUser($id, $identity->id);
+            
             if ($result['success']) {
                 $this->flashMessage($result['message'], 'success');
             } else {
                 $this->flashMessage($result['message'], 'danger');
             }
         } catch (\Exception $e) {
-            $this->logger->log('Chyba při přepínání modulu: ' . $e->getMessage(), ILogger::ERROR);
-            $this->flashMessage('Nastala chyba při přepínání modulu: ' . $e->getMessage(), 'danger');
+            $this->logger->log("Chyba při přepínání modulu '$id': " . $e->getMessage(), ILogger::ERROR);
+            $this->flashMessage('Chyba při přepínání modulu.', 'danger');
         }
 
-        $this->redirect('default');
+        $this->redirect('this');
     }
 
     /**
-     * Akce pro odstranění modulu
+     * NOVÉ: Handler pro odinstalaci modulu
      */
     public function handleUninstallModule(string $id): void
     {
-        try {
-            $result = $this->moduleManager->uninstallModule($id);
-            if ($result['success']) {
-                $this->flashMessage($result['message'], 'success');
-            } else {
-                $this->flashMessage($result['message'], 'danger');
-            }
-        } catch (\Exception $e) {
-            $this->logger->log('Chyba při odinstalaci modulu: ' . $e->getMessage(), ILogger::ERROR);
-            $this->flashMessage('Nastala chyba při odinstalaci modulu: ' . $e->getMessage(), 'danger');
+        if (!$this->isAdmin()) {
+            $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
+            $this->redirect('this');
         }
 
-        $this->redirect('default');
+        $identity = $this->getUser()->getIdentity();
+        if (!$identity) {
+            $this->flashMessage('Nejste přihlášen.', 'danger');
+            $this->redirect('this');
+        }
+
+        try {
+            // TODO: Implementovat uninstallModuleForUser v ModuleManager
+            $this->flashMessage('Funkce odinstalace bude implementována později.', 'info');
+        } catch (\Exception $e) {
+            $this->logger->log("Chyba při odinstalaci modulu '$id': " . $e->getMessage(), ILogger::ERROR);
+            $this->flashMessage('Chyba při odinstalaci modulu.', 'danger');
+        }
+
+        $this->redirect('this');
     }
 }

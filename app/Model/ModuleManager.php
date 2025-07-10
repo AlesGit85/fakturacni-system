@@ -186,7 +186,59 @@ class ModuleManager
     }
 
     /**
+     * Získání aktivních modulů pro super admina (ze všech tenantů) - NOVÁ METODA
+     */
+    public function getAllModulesForSuperAdmin(): array
+    {
+        $allModules = [];
+        
+        // Projdeme všechny tenant adresáře
+        if (is_dir($this->baseModulesDir)) {
+            $tenantDirectories = array_diff(scandir($this->baseModulesDir), ['.', '..']);
+            
+            foreach ($tenantDirectories as $tenantDir) {
+                if (!preg_match('/^tenant_(\d+)$/', $tenantDir, $matches)) {
+                    continue; // Přeskočíme adresáře, které nejsou tenant_X
+                }
+                
+                $tenantId = (int)$matches[1];
+                $tenantModulesDir = $this->baseModulesDir . '/' . $tenantDir;
+                
+                if (!is_dir($tenantModulesDir)) {
+                    continue;
+                }
+                
+                $moduleDirectories = array_diff(scandir($tenantModulesDir), ['.', '..']);
+                
+                foreach ($moduleDirectories as $moduleDir) {
+                    $moduleInfoFile = $tenantModulesDir . '/' . $moduleDir . '/module.json';
+                    
+                    if (file_exists($moduleInfoFile)) {
+                        $moduleInfo = json_decode(file_get_contents($moduleInfoFile), true);
+                        
+                        if ($moduleInfo && isset($moduleInfo['id'])) {
+                            // Přidáme informaci o tenant
+                            $moduleInfo['tenant_id'] = $tenantId;
+                            $moduleInfo['tenant_path'] = $tenantDir . '/' . $moduleDir;
+                            $moduleInfo['physical_path'] = $tenantModulesDir . '/' . $moduleDir;
+                            
+                            // Klíč bude jedinečný pro kombinaci tenant + modul
+                            $key = "tenant_{$tenantId}_{$moduleInfo['id']}";
+                            $allModules[$key] = $moduleInfo;
+                        }
+                    }
+                }
+            }
+        }
+        
+        $this->logger->log("Super admin: Načteno " . count($allModules) . " modulů ze všech tenantů", ILogger::INFO);
+        
+        return $allModules;
+    }
+
+    /**
      * Získání aktivních modulů pro aktuálního uživatele
+     * OPRAVA: I super admin vidí pouze svoje vlastní moduly
      */
     public function getActiveModules(): array
     {
@@ -196,12 +248,8 @@ class ModuleManager
             return [];
         }
 
-        // Super admin vidí všechny moduly ze všech tenantů (upraveno)
-        if ($this->isSuperAdmin) {
-            return $this->getAllModulesForSuperAdmin();
-        }
-
-        // Normální uživatelé vidí pouze své aktivní moduly
+        // OPRAVA: Všichni uživatelé (i super admin) vidí pouze své aktivní moduly
+        // Super admin uvidí všechny moduly pouze přes speciální metodu getAllModulesForSuperAdmin()
         return $this->getActiveModulesForUser($this->currentUserId);
     }
 
@@ -210,88 +258,107 @@ class ModuleManager
      */
     public function getActiveModulesForUser(int $userId): array
     {
+        $this->logger->log("=== NAČÍTÁNÍ MODULŮ PRO UŽIVATELE $userId ===", ILogger::DEBUG);
+        
         $userModules = $this->database->table('user_modules')
             ->where('user_id', $userId)
             ->where('is_active', 1)
             ->fetchAll();
 
+        $this->logger->log("Nalezeno " . count($userModules) . " aktivních záznamů v user_modules pro uživatele $userId", ILogger::DEBUG);
+
         $activeModules = [];
 
         foreach ($userModules as $userModule) {
+            $this->logger->log("Zpracovávám modul: ID={$userModule->module_id}, tenant_id={$userModule->tenant_id}, name={$userModule->module_name}", ILogger::DEBUG);
+            
             // Načteme informace o modulu ze souboru (z tenant-specific adresáře)
             $moduleInfo = $this->getModuleInfoFromFile($userModule->module_id, $userModule->tenant_id);
             
             if ($moduleInfo) {
+                $this->logger->log("Module info úspěšně načteno pro {$userModule->module_id}", ILogger::DEBUG);
+                
                 // Kombinujeme data z databáze a ze souboru
                 $moduleInfo['user_module_id'] = $userModule->id;
                 $moduleInfo['installed_at'] = $userModule->installed_at;
                 $moduleInfo['last_used'] = $userModule->last_used;
                 $moduleInfo['config_data'] = $userModule->config_data ? json_decode($userModule->config_data, true) : null;
+                $moduleInfo['tenant_id'] = $userModule->tenant_id;
+                $moduleInfo['physical_path'] = $this->getTenantModulesDir($userModule->tenant_id) . '/' . $userModule->module_id;
                 
                 $activeModules[$userModule->module_id] = $moduleInfo;
+                $this->logger->log("Modul {$userModule->module_id} přidán do výsledků", ILogger::DEBUG);
+            } else {
+                $this->logger->log("CHYBA: Module info se nepodařilo načíst pro {$userModule->module_id} z tenant {$userModule->tenant_id}", ILogger::WARNING);
             }
         }
 
-        $this->logger->log("Načteno " . count($activeModules) . " aktivních modulů pro uživatele $userId", ILogger::INFO);
+        $this->logger->log("=== KONEC: Uživatel $userId má " . count($activeModules) . " aktivních modulů ===", ILogger::DEBUG);
+
         return $activeModules;
     }
 
+    // =====================================================
+    // POMOCNÉ METODY (AKTUALIZOVANÉ)
+    // =====================================================
+
     /**
-     * Získá všechny moduly pro super admina (kombinuje databázi + filesystem)
+     * Načte informace o modulu ze souboru module.json (tenant-specific) - DOKONČENÁ METODA
      */
-    private function getAllModulesForSuperAdmin(): array
+    private function getModuleInfoFromFile(string $moduleId, int $tenantId): ?array
     {
-        // Kombinujeme moduly z databáze se všemi dostupnými moduly
-        $allModules = $this->getAllModules(); // Z filesystému (všechny tenanty)
-        $userModules = $this->database->table('user_modules')->fetchAll();
-
-        // Přidáme informace o tom, kdo má jaké moduly nainstalované
-        foreach ($userModules as $userModule) {
-            $moduleKey = "tenant_{$userModule->tenant_id}_{$userModule->module_id}";
-            
-            if (isset($allModules[$moduleKey])) {
-                // Přidáme informace o instalacích
-                if (!isset($allModules[$moduleKey]['installations'])) {
-                    $allModules[$moduleKey]['installations'] = [];
-                }
-                
-                $allModules[$moduleKey]['installations'][] = [
-                    'user_id' => $userModule->user_id,
-                    'tenant_id' => $userModule->tenant_id,
-                    'is_active' => $userModule->is_active,
-                    'installed_at' => $userModule->installed_at,
-                    'last_used' => $userModule->last_used
-                ];
-            }
+        $tenantModulesDir = $this->getTenantModulesDir($tenantId);
+        $moduleInfoFile = $tenantModulesDir . '/' . $moduleId . '/module.json';
+        
+        $this->logger->log("Načítám modul info ze souboru: $moduleInfoFile", ILogger::DEBUG);
+        
+        if (!file_exists($moduleInfoFile)) {
+            $this->logger->log("Soubor module.json nenalezen: $moduleInfoFile", ILogger::WARNING);
+            return null;
         }
+        
+        $moduleInfo = json_decode(file_get_contents($moduleInfoFile), true);
+        
+        if (!$moduleInfo || !isset($moduleInfo['id'])) {
+            $this->logger->log("Neplatný module.json soubor: $moduleInfoFile", ILogger::WARNING);
+            return null;
+        }
+        
+        $this->logger->log("Úspěšně načten modul {$moduleInfo['id']} z tenant $tenantId", ILogger::DEBUG);
+        
+        return $moduleInfo;
+    }
 
-        return $allModules;
+    /**
+     * Aktualizuje čas posledního použití modulu
+     */
+    public function updateLastUsed(string $moduleId, int $userId): void
+    {
+        $this->database->table('user_modules')
+            ->where('user_id', $userId)
+            ->where('module_id', $moduleId)
+            ->update(['last_used' => new \DateTime()]);
     }
 
     // =====================================================
-    // METODY PRO SPRÁVU UŽIVATELSKÝCH MODULŮ (AKTUALIZOVANÉ)
+    // INSTALACE MODULŮ (ZACHOVANÉ PŮVODNÍ METODY)
     // =====================================================
 
     /**
-     * Nainstaluje modul pro konkrétního uživatele (z nahraného ZIP)
+     * Nainstaluje modul pro uživatele z nahraného souboru
      */
-    public function installModuleForUser(Nette\Http\FileUpload $file, int $userId, ?int $installedBy = null): array
+    public function installModuleForUser(Nette\Http\FileUpload $file, int $userId, ?int $tenantId = null, ?string $installedBy = null): array
     {
         try {
-            // Získáme informace o uživateli pro tenant_id
-            $user = $this->database->table('users')->get($userId);
-            if (!$user) {
-                return [
-                    'success' => false,
-                    'message' => 'Uživatel neexistuje'
-                ];
+            // Pokud není zadán tenant ID, použijeme aktuální tenant z kontextu
+            if ($tenantId === null) {
+                $tenantId = $this->currentTenantId;
             }
 
-            $tenantId = $user->tenant_id;
-            if (!$tenantId) {
+            if ($tenantId === null) {
                 return [
                     'success' => false,
-                    'message' => 'Uživatel nemá přiřazen tenant'
+                    'message' => 'Není možné určit tenant pro instalaci modulu'
                 ];
             }
 
@@ -518,51 +585,6 @@ class ModuleManager
     }
 
     /**
-     * Odinstaluje modul pro uživatele
-     */
-    public function uninstallModuleForUser(string $moduleId, int $userId): array
-    {
-        try {
-            $userModule = $this->database->table('user_modules')
-                ->where('user_id', $userId)
-                ->where('module_id', $moduleId)
-                ->fetch();
-
-            if (!$userModule) {
-                return [
-                    'success' => false,
-                    'message' => 'Nemáte tento modul nainstalovaný'
-                ];
-            }
-
-            $tenantId = $userModule->tenant_id;
-
-            // Smazání záznamu z databáze
-            $this->database->table('user_modules')
-                ->where('id', $userModule->id)
-                ->delete();
-
-            // Smazání fyzických souborů modulu
-            $this->removeModuleFiles($moduleId, $tenantId);
-
-            $this->logger->log("Modul '$moduleId' byl odinstalován pro uživatele $userId", ILogger::INFO);
-            
-            return [
-                'success' => true,
-                'message' => "Modul '{$userModule->module_name}' byl odinstalován"
-            ];
-
-        } catch (\Exception $e) {
-            $this->logger->log("Chyba při odinstalaci modulu: " . $e->getMessage(), ILogger::ERROR);
-            
-            return [
-                'success' => false,
-                'message' => 'Chyba při odinstalaci modulu: ' . $e->getMessage()
-            ];
-        }
-    }
-
-    /**
      * Odstraní fyzické soubory modulu
      */
     private function removeModuleFiles(string $moduleId, int $tenantId): void
@@ -583,70 +605,71 @@ class ModuleManager
     }
 
     // =====================================================
-    // POMOCNÉ METODY (AKTUALIZOVANÉ)
+    // POMOCNÉ UTILITY METODY
     // =====================================================
 
     /**
-     * Načte informace o modulu ze souboru module.json (tenant-specific)
+     * Rekurzivně smaže adresář
      */
-    private function getModuleInfoFromFile(string $moduleId, int $tenantId): ?array
+    private function rrmdir(string $dir): bool
     {
-        $tenantModulesDir = $this->getTenantModulesDir($tenantId);
-        $moduleInfoFile = $tenantModulesDir . '/' . $moduleId . '/module.json';
-        
-        if (!file_exists($moduleInfoFile)) {
-            return null;
+        if (!is_dir($dir)) {
+            return false;
         }
         
-        $moduleInfo = json_decode(file_get_contents($moduleInfoFile), true);
-        
-        return $moduleInfo && isset($moduleInfo['id']) ? $moduleInfo : null;
-    }
-
-    /**
-     * Aktualizuje čas posledního použití modulu
-     */
-    public function updateLastUsed(string $moduleId, int $userId): void
-    {
-        $this->database->table('user_modules')
-            ->where('user_id', $userId)
-            ->where('module_id', $moduleId)
-            ->update(['last_used' => new \DateTime()]);
-    }
-
-    // =====================================================
-    // ZACHOVANÉ PŮVODNÍ METODY PRO ZPĚTNOU KOMPATIBILITU
-    // =====================================================
-
-    /**
-     * Starý způsob instalace (pro zpětnou kompatibilitu)
-     * POZOR: Tato metoda je deprecated!
-     */
-    public function installModule(Nette\Http\FileUpload $file): array
-    {
-        if ($this->currentUserId && $this->currentTenantId) {
-            return $this->installModuleForUser($file, $this->currentUserId, null);
+        $files = array_diff(scandir($dir), ['.', '..']);
+        foreach ($files as $file) {
+            $path = $dir . '/' . $file;
+            if (is_dir($path)) {
+                $this->rrmdir($path);
+            } else {
+                unlink($path);
+            }
         }
         
-        return [
-            'success' => false,
-            'message' => 'Není nastaven kontext uživatele pro instalaci modulu'
-        ];
+        return rmdir($dir);
     }
 
-    // =====================================================
-    // POMOCNÉ METODY (ZACHOVANÉ)
-    // =====================================================
+    /**
+     * Kopíruje adresář rekurzivně
+     */
+    private function copyDirectory(string $source, string $destination): bool
+    {
+        if (!is_dir($source)) {
+            return false;
+        }
+        
+        if (!is_dir($destination)) {
+            mkdir($destination, 0755, true);
+        }
+        
+        $files = array_diff(scandir($source), ['.', '..']);
+        foreach ($files as $file) {
+            $sourcePath = $source . '/' . $file;
+            $destPath = $destination . '/' . $file;
+            
+            if (is_dir($sourcePath)) {
+                $this->copyDirectory($sourcePath, $destPath);
+            } else {
+                copy($sourcePath, $destPath);
+            }
+        }
+        
+        return true;
+    }
 
-    private function findModuleJson(string $directory): ?string
+    /**
+     * Najde soubor module.json v adresáři
+     */
+    private function findModuleJson(string $dir): ?string
     {
         $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($directory),
+            new \RecursiveDirectoryIterator($dir),
             \RecursiveIteratorIterator::SELF_FIRST
         );
         
         foreach ($iterator as $file) {
-            if ($file->isFile() && $file->getFilename() === 'module.json') {
+            if ($file->isFile() && $file->getBasename() === 'module.json') {
                 return $file->getPathname();
             }
         }
@@ -654,80 +677,28 @@ class ModuleManager
         return null;
     }
 
-    private function moveDirectory(string $source, string $destination): void
+    /**
+     * Přesune adresář
+     */
+    private function moveDirectory(string $source, string $destination): bool
     {
         if (!is_dir($source)) {
-            throw new \Exception("Zdrojový adresář neexistuje: $source");
+            return false;
         }
         
-        if (is_dir($destination)) {
-            $this->rrmdir($destination);
-        }
+        $this->copyDirectory($source, $destination);
+        $this->rrmdir($source);
         
-        if (!rename($source, $destination)) {
-            throw new \Exception("Nepodařilo se přesunout adresář z $source do $destination");
-        }
+        return true;
     }
 
-    private function copyDirectory(string $source, string $destination): void
+    /**
+     * Vyčistí dočasný adresář
+     */
+    private function cleanup(string $dir): void
     {
-        if (!is_dir($source)) {
-            return;
-        }
-        
-        if (!is_dir($destination)) {
-            mkdir($destination, 0755, true);
-        }
-        
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
-        
-        foreach ($files as $file) {
-            $relativePath = str_replace($source . DIRECTORY_SEPARATOR, '', $file->getPathname());
-            $targetPath = $destination . DIRECTORY_SEPARATOR . $relativePath;
-            
-            if ($file->isDir()) {
-                if (!is_dir($targetPath)) {
-                    mkdir($targetPath, 0755, true);
-                }
-            } else {
-                $targetDir = dirname($targetPath);
-                if (!is_dir($targetDir)) {
-                    mkdir($targetDir, 0755, true);
-                }
-                copy($file->getPathname(), $targetPath);
-            }
-        }
-    }
-
-    private function rrmdir(string $directory): void
-    {
-        if (!is_dir($directory)) {
-            return;
-        }
-        
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-        
-        foreach ($iterator as $file) {
-            if ($file->isDir()) {
-                rmdir($file->getPathname());
-            } else {
-                unlink($file->getPathname());
-            }
-        }
-        
-        rmdir($directory);
-    }
-
-    private function cleanup(string $directory): void
-    {
-        if (is_dir($directory)) {
-            $this->rrmdir($directory);
+        if (is_dir($dir)) {
+            $this->rrmdir($dir);
         }
     }
 }

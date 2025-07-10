@@ -1,0 +1,79 @@
+/**
+ * Testovací modul - CSS styly
+ */
+
+.test-module-dashboard {
+    padding: 1rem 0;
+}
+
+.test-module-dashboard .card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: all 0.3s ease;
+}
+
+.test-module-dashboard .card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.test-module-dashboard .card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+}
+
+.test-functions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.test-result-success {
+    background-color: rgba(177, 210, 53, 0.1);
+    border-color: #B1D235;
+    color: #95B11F;
+}
+
+.test-module-dashboard pre {
+    font-size: 0.875rem;
+    margin-bottom: 0;
+}
+
+.test-module-dashboard .list-group-item {
+    border: none;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.test-module-dashboard .list-group-item:last-child {
+    border-bottom: none;
+}
+
+/* Animace pro tlačítka */
+.test-functions .btn {
+    transition: all 0.3s ease;
+}
+
+.test-functions .btn:hover {
+    transform: scale(1.02);
+}
+
+.test-functions .btn:active {
+    transform: scale(0.98);
+}
+
+/* Animace pro výsledek testu */
+#testResult {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
