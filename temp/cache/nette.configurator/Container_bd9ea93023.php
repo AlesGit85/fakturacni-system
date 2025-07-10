@@ -258,7 +258,6 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'NetteModule\ErrorPresenter' => [2 => ['application.11']],
 		'NetteModule\MicroPresenter' => [2 => ['application.12']],
 		'App\Core\RouterFactory' => [['09']],
-		'Modules\Financial_reports\FinancialReportsService' => [['010']],
 	];
 
 
@@ -306,7 +305,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 
 	public function createService07(): App\Model\ModuleManager
 	{
-		return new App\Model\ModuleManager($this->getService('tracy.logger'));
+		return new App\Model\ModuleManager($this->getService('tracy.logger'), $this->getService('database.default.explorer'));
 	}
 
 
@@ -319,16 +318,6 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	public function createService09(): App\Core\RouterFactory
 	{
 		return new App\Core\RouterFactory;
-	}
-
-
-	public function createService010(): Modules\Financial_reports\FinancialReportsService
-	{
-		return new Modules\Financial_reports\FinancialReportsService(
-			$this->getService('02'),
-			$this->getService('03'),
-			$this->getService('database.default.explorer'),
-		);
 	}
 
 

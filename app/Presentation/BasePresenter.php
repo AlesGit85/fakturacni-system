@@ -58,6 +58,13 @@ abstract class BasePresenter extends Presenter
             $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
         }
 
+        // =====================================================
+        // NASTAVENÍ MODULU KONTEXTU (NOVÉ!)
+        // =====================================================
+        if ($this->requiresLogin && $this->getUser()->isLoggedIn()) {
+            $this->setupModuleContext();
+        }
+
         // Kontrola rolí na úrovni presenteru
         if ($this->requiresLogin && !empty($this->requiredRoles)) {
             $identity = $this->getUser()->getIdentity();
@@ -90,6 +97,32 @@ abstract class BasePresenter extends Presenter
                 }
             }
         }
+    }
+
+    // =====================================================
+    // NOVÁ METODA PRO NASTAVENÍ MODULU KONTEXTU
+    // =====================================================
+
+    /**
+     * Nastaví kontext uživatele v ModuleManager
+     */
+    private function setupModuleContext(): void
+    {
+        if (!$this->moduleManager || !$this->getUser()->isLoggedIn()) {
+            return;
+        }
+
+        $identity = $this->getUser()->getIdentity();
+        if (!$identity) {
+            return;
+        }
+
+        // Nastavíme kontext: userID, tenantID, isSuperAdmin
+        $this->moduleManager->setUserContext(
+            $identity->id,
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
     }
 
     // =====================================================
@@ -230,6 +263,7 @@ abstract class BasePresenter extends Presenter
 
     /**
      * Získá menu položky z aktivních modulů
+     * AKTUALIZOVÁNO: Nyní používá nový multi-tenancy systém
      */
     protected function getModuleMenuItems(): array
     {
@@ -237,64 +271,170 @@ abstract class BasePresenter extends Presenter
             return [];
         }
 
+        // DŮLEŽITÉ: Kontext by už měl být nastaven v startup(), ale pro jistotu zkontrolujeme
+        if ($this->getUser()->isLoggedIn()) {
+            $this->setupModuleContext();
+        }
+
         $menuItems = [];
-        $activeModules = $this->moduleManager->getActiveModules();
         
-        foreach ($activeModules as $moduleId => $moduleInfo) {
-            try {
-                // Pokusíme se načíst modul a získat jeho menu položky
-                $modulePath = dirname(__DIR__) . '/Modules/' . $moduleId;
-                $moduleFile = $modulePath . '/Module.php';
-                
-                if (file_exists($moduleFile)) {
-                    require_once $moduleFile;
-                    $moduleClassName = 'Modules\\' . ucfirst($moduleId) . '\\Module';
+        try {
+            // Načteme aktivní moduly pro aktuálního uživatele
+            $activeModules = $this->moduleManager->getActiveModules();
+            
+            foreach ($activeModules as $moduleId => $moduleInfo) {
+                try {
+                    // Aktualizujeme čas posledního použití při každém zobrazení menu
+                    if ($this->getUser()->isLoggedIn()) {
+                        $identity = $this->getUser()->getIdentity();
+                        if ($identity && $identity->id) {
+                            $this->moduleManager->updateLastUsed($moduleId, $identity->id);
+                        }
+                    }
+
+                    // Pokusíme se načíst modul a získat jeho menu položky
+                    $modulePath = dirname(__DIR__) . '/Modules/' . $moduleId;
+                    $moduleFile = $modulePath . '/Module.php';
                     
-                    if (class_exists($moduleClassName)) {
-                        $moduleInstance = new $moduleClassName();
+                    if (file_exists($moduleFile)) {
+                        require_once $moduleFile;
+                        $moduleClassName = 'Modules\\' . ucfirst($moduleId) . '\\Module';
                         
-                        if (method_exists($moduleInstance, 'getMenuItems')) {
-                            $moduleMenuItems = $moduleInstance->getMenuItems();
+                        if (class_exists($moduleClassName)) {
+                            $moduleInstance = new $moduleClassName();
                             
-                            if (!empty($moduleMenuItems)) {
-                                // Zpracujeme menu položky a vygenerujeme odkazy
-                                $processedMenuItems = [];
+                            if (method_exists($moduleInstance, 'getMenuItems')) {
+                                $moduleMenuItems = $moduleInstance->getMenuItems();
                                 
-                                foreach ($moduleMenuItems as $menuItem) {
-                                    $processedItem = $menuItem;
+                                if (!empty($moduleMenuItems)) {
+                                    // Zpracujeme menu položky a vygenerujeme odkazy
+                                    $processedMenuItems = [];
                                     
-                                    // Pokud má presenter a action, vygenerujeme Nette link
-                                    if (isset($menuItem['presenter']) && isset($menuItem['action'])) {
-                                        $params = $menuItem['params'] ?? [];
-                                        $processedItem['link'] = $this->link($menuItem['presenter'] . ':' . $menuItem['action'], $params);
-                                        $processedItem['linkType'] = 'nette';
-                                    } elseif (isset($menuItem['onclick'])) {
-                                        $processedItem['linkType'] = 'javascript';
-                                    } elseif (isset($menuItem['link'])) {
-                                        $processedItem['linkType'] = 'direct';
+                                    foreach ($moduleMenuItems as $menuItem) {
+                                        $processedItem = $menuItem;
+                                        
+                                        // Pokud má presenter a action, vygenerujeme Nette link
+                                        if (isset($menuItem['presenter']) && isset($menuItem['action'])) {
+                                            $params = $menuItem['params'] ?? [];
+                                            $processedItem['link'] = $this->link($menuItem['presenter'] . ':' . $menuItem['action'], $params);
+                                            $processedItem['linkType'] = 'nette';
+                                        } elseif (isset($menuItem['onclick'])) {
+                                            $processedItem['linkType'] = 'javascript';
+                                        } elseif (isset($menuItem['link'])) {
+                                            $processedItem['linkType'] = 'direct';
+                                        }
+                                        
+                                        $processedMenuItems[] = $processedItem;
                                     }
                                     
-                                    $processedMenuItems[] = $processedItem;
+                                    $menuItems[$moduleId] = [
+                                        'moduleInfo' => $moduleInfo,
+                                        'menuItems' => $processedMenuItems
+                                    ];
                                 }
-                                
-                                $menuItems[$moduleId] = [
-                                    'moduleInfo' => $moduleInfo,
-                                    'menuItems' => $processedMenuItems
-                                ];
                             }
                         }
                     }
+                } catch (\Throwable $e) {
+                    // Logujeme chybu, ale pokračujeme
+                    if (isset($this->securityLogger)) {
+                        $this->securityLogger->logSecurityEvent('module_menu_error', 
+                            "Chyba při načítání menu z modulu $moduleId: " . $e->getMessage());
+                    }
                 }
-            } catch (\Throwable $e) {
-                // Logujeme chybu, ale pokračujeme
-                if (isset($this->securityLogger)) {
-                    $this->securityLogger->logSecurityEvent('module_menu_error', 
-                        "Chyba při načítání menu z modulu $moduleId: " . $e->getMessage());
-                }
+            }
+        } catch (\Throwable $e) {
+            // Logujeme kritickou chybu s moduly
+            if (isset($this->securityLogger)) {
+                $this->securityLogger->logSecurityEvent('module_system_error', 
+                    "Kritická chyba modulového systému: " . $e->getMessage());
             }
         }
         
         return $menuItems;
+    }
+
+    /**
+     * Připraví proměnné pro šablonu
+     */
+    public function beforeRender(): void
+    {
+        parent::beforeRender();
+        
+        // Informace o uživateli
+        if ($this->getUser()->isLoggedIn()) {
+            $this->template->add('userLoggedIn', true);
+            $identity = $this->getUser()->getIdentity();
+            $this->template->add('currentUser', $identity);
+            $this->template->add('currentUserRole', $identity && isset($identity->role) ? $identity->role : 'readonly');
+        } else {
+            $this->template->add('userLoggedIn', false);
+            $this->template->add('currentUser', null);
+            $this->template->add('currentUserRole', 'readonly');
+        }
+        
+        // Helper funkce pro šablony (ROZŠÍŘENO)
+        $this->template->add('isUserAdmin', $this->isAdmin());
+        $this->template->add('isUserAccountant', $this->isAccountant());
+        $this->template->add('isUserReadonly', $this->isReadonly());
+        $this->template->add('isSuperAdmin', $this->isSuperAdmin()); // NOVÉ!
+        
+        // Multi-tenancy informace (NOVÉ!)
+        $this->template->add('currentTenantId', $this->getCurrentTenantId());
+        $this->template->add('currentTenant', $this->getCurrentTenant());
+        
+        // Přidání helper funkcí pro skloňování do šablony
+        $this->template->addFunction('pluralizeInvoices', [$this, 'pluralizeInvoices']);
+        $this->template->addFunction('getInvoiceCountText', [$this, 'getInvoiceCountText']);
+        
+        // Přidání helper funkce pro vokativ do šablony
+        $this->template->addFunction('vocative', [$this, 'getVocativeName']);
+        
+        // DŮLEŽITÉ: Přidání menu položek z modulů do šablony
+        // Kontext je nastaven v startup(), takže teď budou moduly načteny správně
+        $this->template->add('moduleMenuItems', $this->getModuleMenuItems());
+    }
+
+    /**
+     * Získá aktuální roli uživatele
+     */
+    private function getCurrentUserRole(): string
+    {
+        if (!$this->getUser()->isLoggedIn()) {
+            return 'guest';
+        }
+
+        $identity = $this->getUser()->getIdentity();
+        return $identity && isset($identity->role) ? $identity->role : 'readonly';
+    }
+    
+    /**
+     * Kontroluje, zda má uživatel přístup k akci na základě jeho role
+     * OPRAVENO: nullable parameter
+     */
+    protected function checkAccess(string $resource, ?string $privilege = null): bool
+    {
+        if (!$this->getUser()->isLoggedIn()) {
+            return false;
+        }
+        
+        $role = $this->getCurrentUserRole();
+        
+        // Super admin může všechno (NOVÉ!)
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+        
+        // Pro zjednodušení používáme hierarchii rolí
+        // Admin může všechno
+        if ($role === 'admin') {
+            return true;
+        }
+        
+        // Podle potřeby zde můžete implementovat složitější logiku
+        // např. kontrolu na úrovni objektů, vlastnictví záznamů atd.
+        
+        return false;
     }
 
     /**
@@ -456,25 +596,80 @@ abstract class BasePresenter extends Presenter
             'hana' => 'Hano',
             'martina' => 'Martino',
             'tereza' => 'Terezo',
-            'lucie' => 'Lucie',
+            'lucie' => 'Lucko',
+            'jitka' => 'Jitko',
             'barbora' => 'Barbaro',
-            'veronika' => 'Veroniko',
-            'kristýna' => 'Kristýno',
-            'nikola' => 'Nikolo',
-            'simona' => 'Simono',
-            'monika' => 'Moniko',
             'klára' => 'Kláro',
-            'adéla' => 'Adélo',
-            'denisa' => 'Deniso',
-            'pavlína' => 'Pavlíno',
-            'markéta' => 'Markéto',
             'ivana' => 'Ivano',
-            'helena' => 'Heleno',
-            'jiřina' => 'Jiřino',
             'dagmar' => 'Dagmar',
+            'simona' => 'Simono',
+            'andrea' => 'Andreo',
+            'romana' => 'Romano',
+            'vendula' => 'Vendulo',
+            'nikola' => 'Nikolo',
+            'denisa' => 'Deniso',
+            'markéta' => 'Markéto',
+            'radka' => 'Radko',
+            'monika' => 'Moniko',
+            'kristýna' => 'Kristýno',
+            'gabriela' => 'Gabrielo',
+            'silvie' => 'Silvie',
+            'renata' => 'Renato',
+            'štěpánka' => 'Štěpánko',
+            'božena' => 'Boženo',
+            'vlasta' => 'Vlasto',
+            'jarmila' => 'Jarmilo',
+            'milada' => 'Milado',
+            'libuše' => 'Libuše',
+            'růžena' => 'Růženo',
+            'ludmila' => 'Ludmilo',
+            'naděžda' => 'Naděždo',
+            'květa' => 'Květo',
+            'jiřina' => 'Jiřino',
+            'irena' => 'Ireno',
+            'helena' => 'Heleno',
+            'olga' => 'Olgo',
+            'františka' => 'Františko',
+            'božena' => 'Boženo',
+            'anežka' => 'Anežko',
+            'blanka' => 'Blanko',
+            'zdenka' => 'Zdenko',
+            'milena' => 'Mileno',
+            'drahomíra' => 'Drahomíro',
+            'blažena' => 'Blaženo',
+            'kamila' => 'Kamilo',
+            'stanislava' => 'Stanisalvo',
+            'miroslava' => 'Miroslavo',
+            'jaroslava' => 'Jaroslavo',
+            'vladimíra' => 'Vladimíro',
+            'miloslava' => 'Miloslavo',
+            'bohumila' => 'Bohumilo',
+            'jindřiška' => 'Jindřiško',
+            'dominika' => 'Dominiko',
+            'veronika' => 'Veroniko',
+            'sabina' => 'Sabino',
+            'adéla' => 'Adélo',
+            'ema' => 'Emo',
+            'julie' => 'Julie',
+            'natálie' => 'Natálie',
+            'eliška' => 'Eliško',
+            'karolína' => 'Karolíno',
+            'laura' => 'Lauro',
+            'nela' => 'Nelo',
+            'sofie' => 'Sofie',
+            'viktorie' => 'Viktorie',
+            'amálie' => 'Amálie',
+            'adéla' => 'Adélo',
+            'aneta' => 'Aneto',
+            'nikol' => 'Nikol',
+            'patricie' => 'Patricie',
+            'daniela' => 'Danielo',
+            'nikolka' => 'Nikolko',
+            'sandra' => 'Sandro',
+            'lenka' => 'Lenko',
         ];
 
-        // Nejdříve zkusíme najít v předdefinovaných slovnících
+        // Pokud je jméno ve slovníku, vrátíme správný vokativ
         if (isset($maleNames[$lowerName])) {
             return $maleNames[$lowerName];
         }
@@ -483,113 +678,37 @@ abstract class BasePresenter extends Presenter
             return $femaleNames[$lowerName];
         }
 
-        // Pokud jméno není ve slovníku, použijeme základní pravidla
-        $lastChar = mb_substr($name, -1, 1, 'UTF-8');
+        // Pokud jméno není ve slovníku, pokusíme se odhadnout podle koncovky
         
-        // Základní pravidla pro mužská jména
-        if (mb_substr($lowerName, -1) === 'š') {
-            return $name . 'i';
-        }
-        
-        if (in_array($lastChar, ['l', 'r', 'n', 't', 'd', 'k', 'm', 'p', 'b', 'v', 'f', 'g', 'h', 's', 'z'])) {
-            return $name . 'e';
-        }
-        
-        // Základní pravidla pro ženská jména končící na -a
-        if ($lastChar === 'a') {
+        // Ženská jména končící na 'a' -> změna na 'o'
+        if (mb_substr($lowerName, -1, 1, 'UTF-8') === 'a') {
             return mb_substr($name, 0, -1, 'UTF-8') . 'o';
         }
         
-        // Ženská jména končící na -e zůstávají stejná
-        if ($lastChar === 'e') {
+        // Ženská jména končící na 'e' -> zůstávají stejně
+        if (mb_substr($lowerName, -1, 1, 'UTF-8') === 'e') {
             return $name;
         }
         
-        // Pokud nepoznáme vzor, vrátíme původní jméno
+        // Mužská jména končící na souhlásku
+        $lastChar = mb_substr($lowerName, -1, 1, 'UTF-8');
+        
+        // Některé specifické koncovky pro mužská jména
+        if (in_array($lastChar, ['k', 'h', 'g'], true)) {
+            return $name . 'u';
+        }
+        
+        // Tvrdé souhlásky
+        if (in_array($lastChar, ['p', 'b', 't', 'd', 'n', 'l', 'm', 'r', 'v', 's', 'z'], true)) {
+            return $name . 'e';
+        }
+        
+        // Měkké souhlásky
+        if (in_array($lastChar, ['j', 'c', 'č', 'š', 'ž', 'ň', 'ť', 'ď', 'ř'], true)) {
+            return $name . 'i';
+        }
+        
+        // Pokud si nejsme jisti, necháme jméno beze změny
         return $name;
-    }
-
-    /**
-     * Template helper pro kontrolu rolí v šablonách
-     * ROZŠÍŘENO: přidány multi-tenancy proměnné
-     */
-    public function beforeRender(): void
-    {
-        parent::beforeRender();
-        
-        // Nastavení uživatelských dat pro šablonu
-        $user = $this->getUser();
-        $this->template->add('userLoggedIn', $user->isLoggedIn());
-        
-        if ($user->isLoggedIn()) {
-            $identity = $user->getIdentity();
-            $this->template->add('currentUser', $identity);
-            $this->template->add('currentUserRole', $identity && isset($identity->role) ? $identity->role : 'readonly');
-        } else {
-            $this->template->add('currentUser', null);
-            $this->template->add('currentUserRole', 'readonly');
-        }
-        
-        // Helper funkce pro šablony (ROZŠÍŘENO)
-        $this->template->add('isUserAdmin', $this->isAdmin());
-        $this->template->add('isUserAccountant', $this->isAccountant());
-        $this->template->add('isUserReadonly', $this->isReadonly());
-        $this->template->add('isSuperAdmin', $this->isSuperAdmin()); // NOVÉ!
-        
-        // Multi-tenancy informace (NOVÉ!)
-        $this->template->add('currentTenantId', $this->getCurrentTenantId());
-        $this->template->add('currentTenant', $this->getCurrentTenant());
-        
-        // Přidání helper funkcí pro skloňování do šablony
-        $this->template->addFunction('pluralizeInvoices', [$this, 'pluralizeInvoices']);
-        $this->template->addFunction('getInvoiceCountText', [$this, 'getInvoiceCountText']);
-        
-        // Přidání helper funkce pro vokativ do šablony
-        $this->template->addFunction('vocative', [$this, 'getVocativeName']);
-        
-        // Přidání menu položek z modulů do šablony
-        $this->template->add('moduleMenuItems', $this->getModuleMenuItems());
-    }
-
-    /**
-     * Získá aktuální roli uživatele
-     */
-    private function getCurrentUserRole(): string
-    {
-        if (!$this->getUser()->isLoggedIn()) {
-            return 'guest';
-        }
-
-        $identity = $this->getUser()->getIdentity();
-        return $identity && isset($identity->role) ? $identity->role : 'readonly';
-    }
-    
-    /**
-     * Kontroluje, zda má uživatel přístup k akci na základě jeho role
-     * OPRAVENO: nullable parameter
-     */
-    protected function checkAccess(string $resource, ?string $privilege = null): bool
-    {
-        if (!$this->getUser()->isLoggedIn()) {
-            return false;
-        }
-        
-        $role = $this->getCurrentUserRole();
-        
-        // Super admin může všechno (NOVÉ!)
-        if ($this->isSuperAdmin()) {
-            return true;
-        }
-        
-        // Pro zjednodušení používáme hierarchii rolí
-        // Admin může všechno
-        if ($role === 'admin') {
-            return true;
-        }
-        
-        // Podle potřeby zde můžete implementovat složitější logiku
-        // např. kontrolu na úrovni objektů, vlastnictví záznamů atd.
-        
-        return false;
     }
 }

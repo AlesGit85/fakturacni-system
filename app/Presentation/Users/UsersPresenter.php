@@ -75,17 +75,25 @@ final class UsersPresenter extends BasePresenter
             $searchResults = $this->performUserSearch($searchQuery);
             $this->template->searchResults = $searchResults;
             $this->template->groupedUsers = [];
+            
+            // Pro search výsledky spočítáme count
+            $this->template->totalUsers = count($searchResults);
         } else {
             // NORMÁLNÍ ZOBRAZENÍ - seskupení podle tenantů
             $groupedUsers = $this->getUsersGroupedByTenants();
             $this->template->groupedUsers = $groupedUsers;
             $this->template->searchResults = [];
+            
+            // Spočítáme celkový počet uživatelů ze všech tenantů
+            $totalUsers = 0;
+            foreach ($groupedUsers as $tenantGroup) {
+                $totalUsers += $tenantGroup['user_count'];
+            }
+            $this->template->totalUsers = $totalUsers;
         }
 
-        // Celkové statistiky pro super admina
-        $superAdminStats = $this->getSuperAdminStatistics();
-        $this->template->superAdminStats = $superAdminStats;
-        $this->template->totalUsers = $superAdminStats['total_users'];
+        // Statistiky pro super admina
+        $this->template->superAdminStats = $this->getSuperAdminStatistics();
     }
 
     /**
@@ -93,36 +101,31 @@ final class UsersPresenter extends BasePresenter
      */
     private function prepareNormalAdminView(): void
     {
-        // Získání uživatelů z aktuálního tenanta
-        $tenantId = $this->getCurrentTenantId();
-        $users = $this->userManager->getAll($tenantId, false);
-
+        $users = $this->userManager->getAll();
         $this->template->users = $users;
         $this->template->totalUsers = $users->count();
-        $this->template->searchQuery = null;
-        $this->template->searchResults = [];
         $this->template->groupedUsers = [];
-        $this->template->superAdminStats = [];
+        $this->template->searchResults = [];
     }
 
     /**
-     * Provede vyhledávání uživatelů (pouze pro super admina)
+     * Vyhledá uživatele podle různých kritérií
      */
     private function performUserSearch(string $query): array
     {
-        if (!$this->isSuperAdmin()) {
-            return [];
+        $searchResults = [];
+        $queryLower = mb_strtolower(trim($query), 'UTF-8');
+
+        if (empty($queryLower)) {
+            return $searchResults;
         }
 
-        $searchResults = [];
-        $queryLower = strtolower($query);
-
-        // SQL dotaz pro vyhledávání napříč všemi tenapty
+        // SQL dotaz pro vyhledávání
         $sql = "
             SELECT u.*, t.name as tenant_name, c.name as company_name
             FROM users u
             LEFT JOIN tenants t ON u.tenant_id = t.id  
-            LEFT JOIN companies c ON t.id = c.tenant_id
+            LEFT JOIN company_info c ON c.tenant_id = u.tenant_id
             WHERE 
                 LOWER(u.username) LIKE ? OR
                 LOWER(u.email) LIKE ? OR
@@ -259,6 +262,7 @@ final class UsersPresenter extends BasePresenter
             $this->error('Uživatel nebyl nalezen');
         }
 
+        // OPRAVENO: Přidáno nastavení proměnné pro šablonu
         $this->template->profileUser = $user;
         $this['profileForm']->setDefaults($user);
     }
@@ -312,88 +316,31 @@ final class UsersPresenter extends BasePresenter
         $this->redirect('default');
     }
 
-    // =============================================================
-    // KOMPONENTY - FORMULÁŘE
-    // =============================================================
-
     /**
-     * Vytvoří formulář pro vyhledávání (pouze pro super admina)
-     */
-    protected function createComponentSearchForm(): Form
-    {
-        $form = new Form;
-        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
-
-        $form->addText('search', 'Vyhledávání')
-            ->setHtmlAttribute('placeholder', 'Zadejte jméno, e-mail, firmu nebo tenanta...')
-            ->setRequired(false);
-
-        $form->addSubmit('send', 'Hledat')
-            ->setHtmlAttribute('class', 'btn btn-primary');
-
-        $form->addSubmit('clear', 'Vymazat')
-            ->setHtmlAttribute('class', 'btn btn-outline-secondary')
-            ->setValidationScope([]);
-
-        $form->onSuccess[] = [$this, 'searchFormSucceeded'];
-
-        return $form;
-    }
-
-    public function searchFormSucceeded(Form $form, \stdClass $data): void
-    {
-        if ($form->isSubmittedBy($form['clear'])) {
-            // Vymazání vyhledávání
-            $this->redirect('default');
-        } else {
-            // Provedení vyhledávání
-            $searchQuery = trim($data->search);
-            if ($searchQuery) {
-                $this->redirect('default', ['search' => $searchQuery]);
-            } else {
-                $this->redirect('default');
-            }
-        }
-    }
-
-    /**
-     * Vytvoří formulář pro přesunutí uživatele do jiného tenanta (pouze pro super admina)
+     * Formulář pro přesouvání uživatele mezi tenanty (pouze super admin)
      */
     protected function createComponentMoveTenantForm(): Form
     {
-        if (!$this->isSuperAdmin()) {
-            throw new \Nette\Application\ForbiddenRequestException('Pouze super admin může přesouvat uživatele mezi tenanty.');
-        }
-
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
         $form->addHidden('user_id');
 
-        // Načtení seznamu tenantů s informacemi o firmách
+        // Získáme všechny tenanty pro výběr
         $tenants = [];
-        $tenantsQuery = $this->database->query('
-        SELECT 
-            t.id as tenant_id,
-            t.name as tenant_name,
-            c.name as company_name
-        FROM tenants t
-        LEFT JOIN company_info c ON c.tenant_id = t.id
-        WHERE t.status = "active"
-        ORDER BY c.name ASC, t.name ASC
-    ');
-
-        foreach ($tenantsQuery as $tenant) {
-            // Vytvoříme pěkný popisek: "Název firmy - Tenant (ID: 123)"
-            $companyName = $tenant->company_name ?: $tenant->tenant_name;
+        foreach ($this->database->table('tenants')->order('name ASC') as $tenant) {
+            // Získáme i informace o společnosti pro lepší zobrazení
+            $company = $this->database->table('company_info')->where('tenant_id', $tenant->id)->fetch();
+            
+            $companyName = $company ? $company->name : $tenant->name;
             $label = sprintf(
                 '%s - %s (ID: %d)',
                 $companyName,
-                $tenant->tenant_name,
-                $tenant->tenant_id
+                $tenant->name,
+                $tenant->id
             );
 
-            $tenants[$tenant->tenant_id] = $label;
+            $tenants[$tenant->id] = $label;
         }
 
         $form->addSelect('new_tenant_id', 'Cílový tenant:')
@@ -577,7 +524,7 @@ final class UsersPresenter extends BasePresenter
             } else {
                 // Přidání - předáme základní parametry podle původní metody
                 $tenantId = $this->isSuperAdmin() ? null : $this->getCurrentTenantId();
-                $this->userManager->add($userData['username'], $userData['email'], $userData['password'], $userData['role'], $adminId, $adminName, $tenantId);
+                $this->userManager->add($userData['username'], $userData['email'], $userData['password'], $userData['role'], $tenantId, $adminId, $adminName);
                 $this->flashMessage('Uživatel byl úspěšně přidán.', 'success');
             }
 
@@ -588,7 +535,7 @@ final class UsersPresenter extends BasePresenter
     }
 
     /**
-     * Formulář pro úpravu profilu
+     * Formulář pro úpravu profilu - OPRAVENÁ VERZE s currentPassword
      */
     protected function createComponentProfileForm(): Form
     {
@@ -608,17 +555,25 @@ final class UsersPresenter extends BasePresenter
         $form->addText('last_name', 'Příjmení:')
             ->setRequired(false);
 
+        // PŘIDÁNO: Pole pro současné heslo
+        $currentPasswordField = $form->addPassword('currentPassword', 'Současné heslo:')
+            ->setRequired(false);
+
         $passwordField = $form->addPassword('password', 'Nové heslo:')
             ->setRequired(false);
 
         $passwordField->addCondition($form::FILLED)
-            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 8);
+            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 6);
 
         $form->addPassword('passwordVerify', 'Nové heslo znovu:')
             ->setRequired(false)
             ->addConditionOn($passwordField, $form::FILLED)
             ->setRequired('Zadejte heslo znovu pro kontrolu')
             ->addRule(Form::EQUAL, 'Hesla se neshodují', $passwordField);
+
+        // Pokud je vyplněno nové heslo, vyžadujeme i současné heslo
+        $currentPasswordField->addConditionOn($passwordField, $form::FILLED)
+            ->setRequired('Pro změnu hesla musíte zadat současné heslo');
 
         $form->addSubmit('send', 'Uložit změny');
 
@@ -632,6 +587,28 @@ final class UsersPresenter extends BasePresenter
         $userId = $this->getUser()->getId();
 
         try {
+            // Nejdříve získáme aktuální uživatele
+            $currentUser = $this->userManager->getById($userId);
+            if (!$currentUser) {
+                $this->flashMessage('Uživatel nebyl nalezen.', 'danger');
+                return;
+            }
+
+            // Kontrola hesla (jen pokud se mění)
+            $passwordWillChange = !empty($data->password);
+            if ($passwordWillChange) {
+                if (empty($data->currentPassword)) {
+                    $form->addError('Pro změnu hesla musíte zadat současné heslo.');
+                    return;
+                }
+
+                if (!password_verify($data->currentPassword, $currentUser->password)) {
+                    $form->addError('Současné heslo není správné.');
+                    return;
+                }
+            }
+
+            // Připravíme data pro update
             $userData = [
                 'username' => $data->username,
                 'email' => $data->email,
@@ -639,14 +616,76 @@ final class UsersPresenter extends BasePresenter
                 'last_name' => $data->last_name,
             ];
 
-            if (!empty($data->password)) {
+            if ($passwordWillChange) {
                 $userData['password'] = password_hash($data->password, PASSWORD_DEFAULT);
             }
 
+            // Provedeme update
             $this->userManager->update($userId, $userData);
+            
+            // Pokud se změnilo heslo - okamžitý logout a redirect
+            if ($passwordWillChange) {
+                $this->flashMessage('Heslo bylo úspěšně změněno. Z bezpečnostních důvodů budete odhlášeni.', 'success');
+                $this->getUser()->logout();
+                $this->redirect('Sign:in');
+            }
+            
+            // Kontrola změny uživatelského jména
+            if ($data->username !== $this->getUser()->getIdentity()->username) {
+                $this->flashMessage('Vaše uživatelské jméno bylo změněno. Budete odhlášeni.', 'info');
+                $this->getUser()->logout();
+                $this->redirect('Sign:in');
+            }
+            
+            // Pouze změna osobních údajů - zůstáváme přihlášeni
             $this->flashMessage('Váš profil byl úspěšně aktualizován.', 'success');
+            
+        } catch (\Nette\Application\AbortException $e) {
+            // AbortException je NORMÁLNÍ při redirectu - necháme ji projít!
+            throw $e;
         } catch (\Exception $e) {
+            // Jen skutečné chyby
             $this->flashMessage('Chyba při ukládání profilu: ' . $e->getMessage(), 'danger');
+        }
+    }
+
+    /**
+     * Formulář pro vyhledávání uživatelů (pouze pro super admina)
+     */
+    protected function createComponentSearchForm(): Form
+    {
+        $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+
+        $form->addText('search', 'Hledat:')
+            ->setHtmlAttribute('placeholder', 'Uživatelské jméno, email, jméno, firma...')
+            ->setHtmlAttribute('autocomplete', 'off');
+
+        $form->addSubmit('send', 'Vyhledat')
+            ->setHtmlAttribute('class', 'btn btn-primary');
+
+        $form->addSubmit('clear', 'Vymazat')
+            ->setHtmlAttribute('class', 'btn btn-outline-secondary')
+            ->setValidationScope([]);
+
+        $form->onSuccess[] = [$this, 'searchFormSucceeded'];
+
+        return $form;
+    }
+
+    public function searchFormSucceeded(Form $form, \stdClass $data): void
+    {
+        if ($form['clear']->isSubmittedBy()) {
+            // Vymazání vyhledávání
+            $this->redirect('default');
+        } else {
+            // Vyhledávání
+            $searchQuery = trim($data->search);
+            if (!empty($searchQuery)) {
+                $this->redirect('default', ['search' => $searchQuery]);
+            } else {
+                $this->redirect('default');
+            }
         }
     }
 }

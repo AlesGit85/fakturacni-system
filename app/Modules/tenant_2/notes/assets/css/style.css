@@ -1,0 +1,138 @@
+/**
+ * Poznámky modul - CSS styly
+ */
+
+.notes-dashboard {
+    padding: 1rem 0;
+}
+
+.notes-dashboard .card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: all 0.3s ease;
+}
+
+.notes-dashboard .card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.notes-dashboard .card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+}
+
+/* Statistiky */
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Poznámky seznam */
+.note-item {
+    border: 1px solid #e9ecef;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.note-item:hover {
+    border-color: #B1D235;
+    box-shadow: 0 0.25rem 0.5rem rgba(177, 210, 53, 0.1);
+}
+
+.note-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.5rem;
+}
+
+.note-content {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.note-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #adb5bd;
+}
+
+.note-date {
+    font-style: italic;
+}
+
+.note-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Formulář pro novou poznámku */
+.note-form {
+    background-color: #f8f9fa;
+    border: 1px solid #B1D235;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: none;
+}
+
+.note-form.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+/* Tlačítka */
+.notes-dashboard .btn {
+    transition: all 0.3s ease;
+}
+
+.notes-dashboard .btn:hover {
+    transform: scale(1.02);
+}
+
+.notes-dashboard .btn:active {
+    transform: scale(0.98);
+}
+
+/* Animace */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responzivní úpravy */
+@media (max-width: 768px) {
+    .notes-dashboard {
+        padding: 0.5rem 0;
+    }
+    
+    .note-item {
+        padding: 0.75rem;
+    }
+    
+    .note-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
