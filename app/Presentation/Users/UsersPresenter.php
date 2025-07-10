@@ -587,7 +587,7 @@ final class UsersPresenter extends BasePresenter
         $userId = $this->getUser()->getId();
 
         try {
-            // Nejdříve získáme aktuální uživatele
+            // Získáme aktuální uživatele
             $currentUser = $this->userManager->getById($userId);
             if (!$currentUser) {
                 $this->flashMessage('Uživatel nebyl nalezen.', 'danger');
@@ -608,7 +608,7 @@ final class UsersPresenter extends BasePresenter
                 }
             }
 
-            // Připravíme data pro update
+            // Příprava dat
             $userData = [
                 'username' => $data->username,
                 'email' => $data->email,
@@ -620,21 +620,21 @@ final class UsersPresenter extends BasePresenter
                 $userData['password'] = password_hash($data->password, PASSWORD_DEFAULT);
             }
 
-            // Provedeme update
+            // Update uživatele
             $this->userManager->update($userId, $userData);
             
             // Pokud se změnilo heslo - okamžitý logout a redirect
             if ($passwordWillChange) {
                 $this->flashMessage('Heslo bylo úspěšně změněno. Z bezpečnostních důvodů budete odhlášeni.', 'success');
                 $this->getUser()->logout();
-                $this->redirect('Sign:in');
+                $this->redirect('Sign:in'); // AbortException se vyhodí ZDE - to je NORMÁLNÍ!
             }
             
             // Kontrola změny uživatelského jména
             if ($data->username !== $this->getUser()->getIdentity()->username) {
                 $this->flashMessage('Vaše uživatelské jméno bylo změněno. Budete odhlášeni.', 'info');
                 $this->getUser()->logout();
-                $this->redirect('Sign:in');
+                $this->redirect('Sign:in'); // AbortException se vyhodí ZDE - to je NORMÁLNÍ!
             }
             
             // Pouze změna osobních údajů - zůstáváme přihlášeni
@@ -646,46 +646,6 @@ final class UsersPresenter extends BasePresenter
         } catch (\Exception $e) {
             // Jen skutečné chyby
             $this->flashMessage('Chyba při ukládání profilu: ' . $e->getMessage(), 'danger');
-        }
-    }
-
-    /**
-     * Formulář pro vyhledávání uživatelů (pouze pro super admina)
-     */
-    protected function createComponentSearchForm(): Form
-    {
-        $form = new Form;
-        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
-
-        $form->addText('search', 'Hledat:')
-            ->setHtmlAttribute('placeholder', 'Uživatelské jméno, email, jméno, firma...')
-            ->setHtmlAttribute('autocomplete', 'off');
-
-        $form->addSubmit('send', 'Vyhledat')
-            ->setHtmlAttribute('class', 'btn btn-primary');
-
-        $form->addSubmit('clear', 'Vymazat')
-            ->setHtmlAttribute('class', 'btn btn-outline-secondary')
-            ->setValidationScope([]);
-
-        $form->onSuccess[] = [$this, 'searchFormSucceeded'];
-
-        return $form;
-    }
-
-    public function searchFormSucceeded(Form $form, \stdClass $data): void
-    {
-        if ($form['clear']->isSubmittedBy()) {
-            // Vymazání vyhledávání
-            $this->redirect('default');
-        } else {
-            // Vyhledávání
-            $searchQuery = trim($data->search);
-            if (!empty($searchQuery)) {
-                $this->redirect('default', ['search' => $searchQuery]);
-            } else {
-                $this->redirect('default');
-            }
         }
     }
 }
