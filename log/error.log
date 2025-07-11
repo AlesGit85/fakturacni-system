@@ -49,3 +49,7 @@
 [2025-07-10 13-43-51] Chyba při instalaci modulu pro uživatele: SQLSTATE[HY000]: General error: 1366 Incorrect integer value: 'Aleš' for column 'installed_by' at row 1  @  http://localhost:8000/moduleadmin/ 
 [2025-07-10 13-47-35] Chyba při instalaci modulu pro uživatele: SQLSTATE[HY000]: General error: 1366 Incorrect integer value: 'test.admin' for column 'installed_by' at row 1  @  http://localhost:8000/moduleadmin/ 
 [2025-07-10 13-50-41] Chyba při instalaci modulu pro uživatele: SQLSTATE[HY000]: General error: 1366 Incorrect integer value: 'Aleš' for column 'installed_by' at row 1  @  http://localhost:8000/moduleadmin/ 
+[2025-07-11 07-04-40] Chyba při instalaci modulu pro uživatele: SQLSTATE[HY000]: General error: 1366 Incorrect integer value: 'Aleš' for column 'installed_by' at row 1  @  http://localhost:8000/moduleadmin/ 
+[2025-07-11 07-15-46] Chyba při instalaci modulu pro uživatele: SQLSTATE[HY000]: General error: 1366 Incorrect integer value: 'Aleš' for column 'installed_by' at row 1  @  http://localhost:8000/moduleadmin/ 
+[2025-07-11 07-18-22] Chyba při instalaci modulu pro uživatele: SQLSTATE[HY000]: General error: 1366 Incorrect integer value: 'Aleš' for column 'installed_by' at row 1  @  http://localhost:8000/moduleadmin/ 
+[2025-07-11 07-20-13] Chyba při instalaci modulu pro uživatele: SQLSTATE[HY000]: General error: 1366 Incorrect integer value: 'Aleš' for column 'installed_by' at row 1  @  http://localhost:8000/moduleadmin/ 

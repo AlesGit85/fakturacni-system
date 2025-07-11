@@ -1,0 +1,33 @@
+{
+    "id": "test_module",
+    "name": "Testovac\u00ed modul",
+    "version": "1.4.2",
+    "description": "Modul pro uk\u00e1zku jednoduch\u00e9 instalace a spr\u00e1vy modul\u016f v syst\u00e9mu",
+    "author": "QRdoklad System",
+    "icon": "bi bi-star-fill",
+    "active": true,
+    "demo_mode": true,
+    "requirements": {
+        "php": ">=8.0",
+        "qrdoklad": ">=1.0.0"
+    },
+    "features": [
+        "Vlastn\u00ed dashboard template",
+        "CSS styly s animacemi",
+        "JavaScript funkcionalita",
+        "Integrace do hlavn\u00edho menu",
+        "Uk\u00e1zka spr\u00e1vy modul\u016f",
+        "Demo testovac\u00ed funkce"
+    ],
+    "menu_items": [
+        {
+            "presenter": "ModuleAdmin",
+            "action": "detail",
+            "params": {
+                "id": "test_module"
+            },
+            "label": "Test modul",
+            "icon": "bi bi-star-fill"
+        }
+    ]
+}

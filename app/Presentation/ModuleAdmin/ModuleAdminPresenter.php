@@ -305,16 +305,29 @@ final class ModuleAdminPresenter extends BasePresenter
         return $parameters;
     }
 
+    /**
+     * KLÍČOVÁ OPRAVA: renderDefault - nyní zobrazuje všechny nainstalované moduly
+     */
     public function renderDefault(): void
     {
         $this->template->title = "Správa modulů";
 
-        // OPRAVA: Všichni uživatelé (i super admin) vidí pouze svoje vlastní moduly v "Správa vlastních modulů"
-        $modules = $this->moduleManager->getActiveModules();
-        $this->logger->log("Správa vlastních modulů: Načítám moduly pro aktuálního uživatele", ILogger::INFO);
+        // HLAVNÍ ZMĚNA: Používáme getAllInstalledModules() místo getActiveModules()
+        $modules = $this->moduleManager->getAllInstalledModules();
+        $this->logger->log("Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele", ILogger::INFO);
         
         $this->template->modules = $modules;
-        $this->logger->log("Načteno " . count($modules) . " modulů pro zobrazení", ILogger::INFO);
+        $this->logger->log("Načteno " . count($modules) . " modulů pro zobrazení (aktivních i neaktivních)", ILogger::INFO);
+
+        // NOVÉ: Přidáme statistiky pro šablonu
+        $activeCount = count(array_filter($modules, function($module) {
+            return $module['is_active'] ?? false;
+        }));
+        $inactiveCount = count($modules) - $activeCount;
+        
+        $this->template->activeModulesCount = $activeCount;
+        $this->template->inactiveModulesCount = $inactiveCount;
+        $this->template->totalModulesCount = count($modules);
 
         // Získání maximální velikosti souboru pro nahrávání
         $maxUploadSize = $this->getMaxUploadSize();
@@ -323,6 +336,8 @@ final class ModuleAdminPresenter extends BasePresenter
 
         // DEBUG: Přidáme informace o PHP limitech pro debugging
         $this->template->debugInfo = $this->getPhpUploadDebugInfo();
+        
+        $this->logger->log("Statistiky modulů: Aktivní: $activeCount, Neaktivní: $inactiveCount, Celkem: " . count($modules), ILogger::INFO);
     }
 
     /**
@@ -390,17 +405,25 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * OPRAVENÁ METODA: renderDetail - používá tenant-specific cesty
+     * OPRAVENÁ METODA: renderDetail - používá getAllInstalledModules ale kontroluje aktivní stav
      */
     public function renderDetail(string $id): void
     {
-        $allModules = $this->moduleManager->getActiveModules();
+        // ZMĚNA: Používáme getAllInstalledModules místo getActiveModules
+        $allModules = $this->moduleManager->getAllInstalledModules();
         if (!isset($allModules[$id])) {
             $this->flashMessage('Modul nebyl nalezen.', 'danger');
             $this->redirect('Home:default');
         }
 
         $moduleInfo = $allModules[$id];
+        
+        // NOVÁ KONTROLA: Ověříme, že je modul aktivní pro detail
+        if (!$moduleInfo['is_active']) {
+            $this->flashMessage('Modul není aktivní. Nejdříve jej aktivujte.', 'warning');
+            $this->redirect('default');
+        }
+
         $this->template->moduleInfo = $moduleInfo;
         $this->template->moduleId = $id;
 
@@ -460,7 +483,7 @@ final class ModuleAdminPresenter extends BasePresenter
         $moduleAssetsDir = $modulePath . '/assets';
         
         // Určíme tenant ID z module info
-        $allModules = $this->moduleManager->getActiveModules();
+        $allModules = $this->moduleManager->getAllInstalledModules();
         $moduleInfo = $allModules[$moduleId] ?? null;
         $tenantId = $moduleInfo['tenant_id'] ?? null;
         
@@ -674,7 +697,7 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * OPRAVENÁ METODA: Zpracování nahraného modulu - nyní předává správné user ID
+     * OPRAVENÁ METODA: Zpracování nahraného modulu - oprava parametru installedBy
      */
     public function uploadFormSucceeded(Form $form): void
     {
@@ -692,12 +715,12 @@ final class ModuleAdminPresenter extends BasePresenter
             return;
         }
 
-        // OPRAVA: Nyní předáváme $identity->id místo $identity->username
+        // OPRAVA: Čtvrtý parametr musí být user ID (int), protože databázový sloupec je INTEGER
         $result = $this->moduleManager->installModuleForUser(
             $file,
             $identity->id,
             null, // tenant ID se určí automaticky z kontextu
-            $identity->id  // ZMĚNA: předáváme user ID místo username
+            $identity->id  // OPRAVA: předáváme user ID (int) místo username (string)
         );
 
         if ($result['success']) {
@@ -723,8 +746,9 @@ final class ModuleAdminPresenter extends BasePresenter
             $syncCount = 0;
             
             // Projdeme všechny tenant adresáře
-            if (is_dir($this->moduleManager->getBaseModulesDir())) {
-                $tenantDirectories = array_diff(scandir($this->moduleManager->getBaseModulesDir()), ['.', '..']);
+            $baseModulesDir = dirname(__DIR__, 2) . '/Modules';
+            if (is_dir($baseModulesDir)) {
+                $tenantDirectories = array_diff(scandir($baseModulesDir), ['.', '..']);
                 
                 foreach ($tenantDirectories as $tenantDir) {
                     if (!preg_match('/^tenant_(\d+)$/', $tenantDir, $matches)) {
@@ -732,7 +756,7 @@ final class ModuleAdminPresenter extends BasePresenter
                     }
                     
                     $tenantId = (int)$matches[1];
-                    $tenantModulesDir = $this->moduleManager->getBaseModulesDir() . '/' . $tenantDir;
+                    $tenantModulesDir = $baseModulesDir . '/' . $tenantDir;
                     
                     if (!is_dir($tenantModulesDir)) {
                         continue;
@@ -758,7 +782,6 @@ final class ModuleAdminPresenter extends BasePresenter
                                         ->fetch();
                                     
                                     if (!$existingModule) {
-                                        // OPRAVA: Nyní ukládáme user ID místo stringu
                                         $this->database->table('user_modules')->insert([
                                             'user_id' => $user->id,
                                             'tenant_id' => $tenantId,
@@ -768,7 +791,7 @@ final class ModuleAdminPresenter extends BasePresenter
                                             'module_path' => "Modules/tenant_{$tenantId}/{$moduleInfo['id']}",
                                             'is_active' => 1,
                                             'installed_at' => new \DateTime(),
-                                            'installed_by' => $user->id,  // ZMĚNA: používáme user ID místo 'system_sync'
+                                            'installed_by' => $user->id,  // OPRAVA: user ID místo username
                                             'config_data' => null,
                                             'last_used' => null
                                         ]);
@@ -830,7 +853,7 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * NOVÉ: Handler pro odinstalaci modulu
+     * IMPLEMENTOVANÁ METODA: Handler pro odinstalaci modulu
      */
     public function handleUninstallModule(string $id): void
     {
@@ -846,8 +869,13 @@ final class ModuleAdminPresenter extends BasePresenter
         }
 
         try {
-            // TODO: Implementovat uninstallModuleForUser v ModuleManager
-            $this->flashMessage('Funkce odinstalace bude implementována později.', 'info');
+            $result = $this->moduleManager->uninstallModuleForUser($id, $identity->id);
+            
+            if ($result['success']) {
+                $this->flashMessage($result['message'], 'success');
+            } else {
+                $this->flashMessage($result['message'], 'danger');
+            }
         } catch (\Exception $e) {
             $this->logger->log("Chyba při odinstalaci modulu '$id': " . $e->getMessage(), ILogger::ERROR);
             $this->flashMessage('Chyba při odinstalaci modulu.', 'danger');

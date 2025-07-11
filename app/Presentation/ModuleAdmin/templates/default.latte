@@ -172,7 +172,7 @@
                         <td>{$module['version']}</td>
                         <td>{$module['author']}</td>
                         <td>
-                            {if isset($module['active']) && $module['active']}
+                            {if isset($module['is_active']) && $module['is_active']}
                                 <span class="status-badge status-badge-success">
                                     <i class="bi bi-check-circle-fill me-1 text-success"></i>
                                     Aktivní
@@ -189,7 +189,7 @@
                                 <a href="{link detail, id => $id}" class="btn btn-icon" title="Detail modulu">
                                     <i class="bi bi-eye"></i>
                                 </a>
-                                {if isset($module['active']) && $module['active']}
+                                {if isset($module['is_active']) && $module['is_active']}
                                     <a href="{link toggleModule!, id => $id}" class="btn btn-icon text-warning" onclick="return confirm('Opravdu chcete deaktivovat modul?')" title="Deaktivovat modul">
                                         <i class="bi bi-power"></i>
                                     </a>
@@ -209,7 +209,7 @@
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
-                                        {if isset($module['active']) && $module['active']}
+                                        {if isset($module['is_active']) && $module['is_active']}
                                             <li>
                                                 <a href="{link toggleModule!, id => $id}" class="dropdown-item" onclick="return confirm('Opravdu chcete deaktivovat modul?')">
                                                     <i class="bi bi-power text-warning me-2"></i> Deaktivovat

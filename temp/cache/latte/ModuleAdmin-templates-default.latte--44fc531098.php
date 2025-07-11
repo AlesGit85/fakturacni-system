@@ -271,7 +271,7 @@ final class Template_44fc531098 extends Latte\Runtime\Template
 				echo '</td>
                         <td>
 ';
-				if (isset($module['active']) && $module['active']) /* line 175 */ {
+				if (isset($module['is_active']) && $module['is_active']) /* line 175 */ {
 					echo '                                <span class="status-badge status-badge-success">
                                     <i class="bi bi-check-circle-fill me-1 text-success"></i>
                                     Aktivní
@@ -293,7 +293,7 @@ final class Template_44fc531098 extends Latte\Runtime\Template
                                     <i class="bi bi-eye"></i>
                                 </a>
 ';
-				if (isset($module['active']) && $module['active']) /* line 192 */ {
+				if (isset($module['is_active']) && $module['is_active']) /* line 192 */ {
 					echo '                                    <a href="';
 					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('toggleModule!', ['id' => $id])) /* line 193 */;
 					echo '" class="btn btn-icon text-warning" onclick="return confirm(\'Opravdu chcete deaktivovat modul?\')" title="Deaktivovat modul">
@@ -326,7 +326,7 @@ final class Template_44fc531098 extends Latte\Runtime\Template
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
 ';
-				if (isset($module['active']) && $module['active']) /* line 212 */ {
+				if (isset($module['is_active']) && $module['is_active']) /* line 212 */ {
 					echo '                                            <li>
                                                 <a href="';
 					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('toggleModule!', ['id' => $id])) /* line 214 */;

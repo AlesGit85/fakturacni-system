@@ -45,7 +45,7 @@ return array (
     'App\\Model\\ModuleManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ModuleManager.php',
-      1 => 1752157080,
+      1 => 1752218465,
     ),
     'App\\Model\\QrPaymentService' => 
     array (
@@ -67,15 +67,30 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748950316,
     ),
+    'Modules\\Financial_reports\\FinancialReportsService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
+      1 => 1752157085,
+    ),
+    'Modules\\Financial_reports\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
+      1 => 1752157085,
+    ),
+    'Modules\\Test_module\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\test_module\\Module.php',
+      1 => 1750843952,
+    ),
     'Modules\\Notes\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_2\\notes\\Module.php',
-      1 => 1748954244,
+      1 => 1752157143,
     ),
     'Modules\\Notes\\NotesManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_2\\notes\\NotesManager.php',
-      1 => 1748954134,
+      1 => 1752157143,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -120,7 +135,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1752156927,
+      1 => 1752218431,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -162,7 +177,6 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
-    'Modules\\Financial_reports\\FinancialReportsService' => 2,
     'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
     'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
