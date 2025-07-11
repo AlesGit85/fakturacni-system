@@ -220,3 +220,24 @@ function getContrastColor(hexColor) {
     // Vrátíme černou pro světlé pozadí, bílou pro tmavé
     return luminance > 0.5 ? '#000000' : '#ffffff';
 }
+
+// DIČ toggle funkce
+document.addEventListener('DOMContentLoaded', function() {
+    const vatPayerCheckbox = document.getElementById('vat-payer-checkbox');
+    const dicContainer = document.getElementById('dic-container');
+    
+    if (vatPayerCheckbox && dicContainer) {
+        vatPayerCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                dicContainer.style.display = 'block';
+            } else {
+                dicContainer.style.display = 'none';
+                // Vyčistit DIČ pokud není plátce DPH
+                const dicField = document.getElementById('dic-field');
+                if (dicField) {
+                    dicField.value = '';
+                }
+            }
+        });
+    }
+});

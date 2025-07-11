@@ -12,5 +12,6 @@
 @import url('responsive.css');
 @import url('print.css');
 @import url('auth.css');
+@import url('settings.css');
 
 /* Případné další specifické styly, které nepatří do žádné kategorie */

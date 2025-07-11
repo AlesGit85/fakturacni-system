@@ -449,6 +449,9 @@ final class Template_edb0410b9d extends Latte\Runtime\Template
 	<script src="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 290 */;
 		echo '/js/modules.js"></script>
+	<script src="';
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 291 */;
+		echo '/js/invoices.js"></script>
 	
 	<script>
 		// Hierarchické dropdown menu
