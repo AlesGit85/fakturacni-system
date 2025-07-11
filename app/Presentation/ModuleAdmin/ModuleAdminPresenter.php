@@ -36,6 +36,8 @@ final class ModuleAdminPresenter extends BasePresenter
         'users' => [], // Správa uživatelských modulů - kontrola v metodě (pouze super admin)
         'toggleModule' => ['admin'], // Aktivace/deaktivace - pouze admin
         'uninstallModule' => ['admin'], // Odinstalace - pouze admin
+        'toggleUserModule' => [], // Aktivace/deaktivace modulu jiného uživatele - kontrola v metodě (pouze super admin)
+        'deleteUserModule' => [], // Smazání modulu jiného uživatele - kontrola v metodě (pouze super admin)
         'moduleData' => ['readonly', 'accountant', 'admin'], // AJAX data z modulů - všichni
     ];
 
@@ -357,8 +359,11 @@ final class ModuleAdminPresenter extends BasePresenter
         $usersWithModules = [];
         
         try {
-            // Načteme všechny uživatele
-            $users = $this->database->table('users')->order('username ASC')->fetchAll();
+            // OPRAVA: Načteme pouze administrátory (admin role nebo super admin)
+            $users = $this->database->table('users')
+                ->where('role = ? OR is_super_admin = ?', 'admin', 1)
+                ->order('username ASC')
+                ->fetchAll();
             
             foreach ($users as $user) {
                 // Pro každého uživatele načteme jeho moduly
@@ -393,7 +398,7 @@ final class ModuleAdminPresenter extends BasePresenter
             $this->template->totalUsers = count($usersWithModules);
             $this->template->totalModules = array_sum(array_column($usersWithModules, 'modules_count'));
             
-            $this->logger->log("Super admin: Načten přehled modulů pro " . count($usersWithModules) . " uživatelů", ILogger::INFO);
+            $this->logger->log("Super admin: Načten přehled modulů pro " . count($usersWithModules) . " administrátorů", ILogger::INFO);
             
         } catch (\Exception $e) {
             $this->logger->log("Chyba při načítání přehledu uživatelských modulů: " . $e->getMessage(), ILogger::ERROR);
@@ -882,5 +887,59 @@ final class ModuleAdminPresenter extends BasePresenter
         }
 
         $this->redirect('this');
+    }
+
+    /**
+     * NOVÝ: Handler pro aktivaci/deaktivaci modulu jiného uživatele (pouze super admin)
+     */
+    public function handleToggleUserModule(string $moduleId, int $userId): void
+    {
+        if (!$this->isSuperAdmin()) {
+            $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
+            $this->redirect('users');
+        }
+
+        try {
+            $result = $this->moduleManager->toggleModuleForUser($moduleId, $userId);
+            
+            if ($result['success']) {
+                $this->flashMessage($result['message'], 'success');
+                $this->logger->log("Super admin přepnul modul '$moduleId' pro uživatele $userId", ILogger::INFO);
+            } else {
+                $this->flashMessage($result['message'], 'danger');
+            }
+        } catch (\Exception $e) {
+            $this->logger->log("Chyba při přepínání modulu '$moduleId' uživatele $userId: " . $e->getMessage(), ILogger::ERROR);
+            $this->flashMessage('Chyba při přepínání modulu.', 'danger');
+        }
+
+        $this->redirect('users');
+    }
+
+    /**
+     * NOVÝ: Handler pro smazání modulu jiného uživatele (pouze super admin)
+     */
+    public function handleDeleteUserModule(string $moduleId, int $userId): void
+    {
+        if (!$this->isSuperAdmin()) {
+            $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
+            $this->redirect('users');
+        }
+
+        try {
+            $result = $this->moduleManager->uninstallModuleForUser($moduleId, $userId);
+            
+            if ($result['success']) {
+                $this->flashMessage($result['message'], 'success');
+                $this->logger->log("Super admin smazal modul '$moduleId' uživateli $userId", ILogger::INFO);
+            } else {
+                $this->flashMessage($result['message'], 'danger');
+            }
+        } catch (\Exception $e) {
+            $this->logger->log("Chyba při mazání modulu '$moduleId' uživatele $userId: " . $e->getMessage(), ILogger::ERROR);
+            $this->flashMessage('Chyba při mazání modulu.', 'danger');
+        }
+
+        $this->redirect('users');
     }
 }

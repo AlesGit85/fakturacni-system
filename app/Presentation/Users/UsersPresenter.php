@@ -648,4 +648,38 @@ final class UsersPresenter extends BasePresenter
             $this->flashMessage('Chyba při ukládání profilu: ' . $e->getMessage(), 'danger');
         }
     }
+
+    /**
+     * OPRAVENÝ: Formulář pro vyhledávání s přidaným tlačítkem "Vymazat"
+     */
+    protected function createComponentSearchForm(): Form
+    {
+        $form = new Form;
+
+        $form->addText('search', 'Hledat uživatele:')
+            ->setHtmlAttribute('placeholder', 'Jméno, email, firma, tenant...')
+            ->setHtmlAttribute('class', 'form-control form-control-lg');
+
+        $form->addSubmit('send', 'Vyhledat')
+            ->setHtmlAttribute('class', 'btn btn-primary btn-lg');
+
+        $form->addSubmit('clear', 'Vymazat')
+            ->setHtmlAttribute('class', 'btn btn-outline-secondary btn-lg')
+            ->setValidationScope([]);
+
+        $form->onSuccess[] = function (Form $form, \stdClass $values) {
+            if ($form->isSubmitted() === $form['clear']) {
+                // Bylo kliknuto na "Vymazat" - přesměruj na stránku bez vyhledávání
+                $this->redirect('default');
+            } elseif (!empty($values->search)) {
+                // Bylo kliknuto na "Vyhledat" a je zadán vyhledávací text
+                $this->redirect('default', ['search' => $values->search]);
+            } else {
+                // Bylo kliknuto na "Vyhledat" ale není zadán text - přesměruj na výchozí stránku
+                $this->redirect('default');
+            }
+        };
+
+        return $form;
+    }
 }

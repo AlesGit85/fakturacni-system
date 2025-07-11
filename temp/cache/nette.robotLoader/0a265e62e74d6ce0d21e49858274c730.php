@@ -135,7 +135,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1752218431,
+      1 => 1752219373,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -150,7 +150,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1752137822,
+      1 => 1752219885,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
@@ -177,16 +177,18 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
     'App\\Presentation\\Users\\UsersEditTemplate' => 2,
     'Modules\\Tenant_2_notes\\Module' => 3,
     'App\\Presentation\\Extensions\\ExtensionsDefaultTemplate' => 3,
     'App\\Presentation\\Extensions\\ExtensionsTemplate' => 3,
     'App\\Presentation\\Extensions\\ExtensionsPresenter' => 2,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 3,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 2,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 2,
   ),
   2 => 
   array (
