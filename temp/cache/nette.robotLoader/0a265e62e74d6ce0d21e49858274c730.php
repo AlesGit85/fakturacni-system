@@ -187,8 +187,8 @@ return array (
     'App\\Presentation\\Extensions\\ExtensionsTemplate' => 3,
     'App\\Presentation\\Extensions\\ExtensionsPresenter' => 2,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 2,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 2,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
   ),
   2 => 
   array (

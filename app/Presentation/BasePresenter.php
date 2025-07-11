@@ -47,7 +47,7 @@ abstract class BasePresenter extends Presenter
     public function startup(): void
     {
         parent::startup();
-        
+
         // Kontrola přihlášení
         if ($this->requiresLogin && !$this->getUser()->isLoggedIn()) {
             if ($this->getUser()->getLogoutReason() === Nette\Security\UserStorage::LOGOUT_INACTIVITY) {
@@ -74,7 +74,7 @@ abstract class BasePresenter extends Presenter
                     // Logování pokusu o neoprávněný přístup
                     $resource = $this->getName() . ':' . $this->getAction();
                     $this->securityLogger->logUnauthorizedAccess($resource, $identity->id, $identity->username);
-                    
+
                     $this->flashMessage('Nemáte oprávnění pro přístup k této stránce.', 'danger');
                     $this->redirect('Home:default');
                 }
@@ -91,7 +91,7 @@ abstract class BasePresenter extends Presenter
                     // Logování pokusu o neoprávněný přístup k akci
                     $resource = $this->getName() . ':' . $action;
                     $this->securityLogger->logUnauthorizedAccess($resource, $identity->id, $identity->username);
-                    
+
                     $this->flashMessage('Nemáte oprávnění pro provedení této akce.', 'danger');
                     $this->redirect('Home:default');
                 }
@@ -240,7 +240,7 @@ abstract class BasePresenter extends Presenter
         }
 
         $requiredRoles = $this->actionRoles[$action];
-        
+
         // Hierarchie rolí:
         // - admin: má přístup ke všemu (admin, accountant, readonly akce)
         // - accountant: má přístup k accountant a readonly akcím
@@ -250,14 +250,14 @@ abstract class BasePresenter extends Presenter
             'accountant' => ['accountant', 'readonly'],
             'readonly' => ['readonly']
         ];
-        
+
         // Kontrola, zda uživatelská role je v seznamu povolených rolí pro akci
         foreach ($requiredRoles as $requiredRole) {
             if (in_array($requiredRole, $roleHierarchy[$userRole] ?? [])) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -268,20 +268,24 @@ abstract class BasePresenter extends Presenter
     protected function getModuleMenuItems(): array
     {
         if (!$this->moduleManager) {
-            $this->securityLogger->logSecurityEvent('module_menu_error', 
-                "ModuleManager není dostupný v getModuleMenuItems()");
+            $this->securityLogger->logSecurityEvent(
+                'module_menu_error',
+                "ModuleManager není dostupný v getModuleMenuItems()"
+            );
             return [];
         }
 
         $menuItems = [];
-        
+
         try {
             // Načteme aktivní moduly pro aktuálního uživatele
             $activeModules = $this->moduleManager->getActiveModules();
-            
-            $this->securityLogger->logSecurityEvent('module_menu_debug', 
-                "Načítání menu z " . count($activeModules) . " aktivních modulů");
-            
+
+            $this->securityLogger->logSecurityEvent(
+                'module_menu_debug',
+                "Načítání menu z " . count($activeModules) . " aktivních modulů"
+            );
+
             foreach ($activeModules as $moduleId => $moduleInfo) {
                 try {
                     // Aktualizujeme čas posledního použití při každém zobrazení menu
@@ -294,44 +298,52 @@ abstract class BasePresenter extends Presenter
 
                     // KLÍČOVÁ OPRAVA: Používáme physical_path z moduleInfo
                     $modulePath = $moduleInfo['physical_path'] ?? null;
-                    
+
                     if (!$modulePath || !is_dir($modulePath)) {
-                        $this->securityLogger->logSecurityEvent('module_menu_warning', 
-                            "Modul $moduleId nemá platnou physical_path: " . ($modulePath ?? 'null'));
+                        $this->securityLogger->logSecurityEvent(
+                            'module_menu_warning',
+                            "Modul $moduleId nemá platnou physical_path: " . ($modulePath ?? 'null')
+                        );
                         continue;
                     }
-                    
+
                     $moduleFile = $modulePath . '/Module.php';
-                    
-                    $this->securityLogger->logSecurityEvent('module_menu_debug', 
-                        "Hledám Module.php pro $moduleId na cestě: $moduleFile");
-                    
+
+                    $this->securityLogger->logSecurityEvent(
+                        'module_menu_debug',
+                        "Hledám Module.php pro $moduleId na cestě: $moduleFile"
+                    );
+
                     if (file_exists($moduleFile)) {
                         require_once $moduleFile;
-                        
+
                         // OPRAVA: Používáme skutečné ID modulu místo klíče (který může být tenant_X_moduleId)
                         $realModuleId = $moduleInfo['id'] ?? $moduleId;
                         $moduleClassName = 'Modules\\' . ucfirst($realModuleId) . '\\Module';
-                        
-                        $this->securityLogger->logSecurityEvent('module_menu_debug', 
-                            "Vytvářím instanci třídy: $moduleClassName pro modul: $realModuleId");
-                        
+
+                        $this->securityLogger->logSecurityEvent(
+                            'module_menu_debug',
+                            "Vytvářím instanci třídy: $moduleClassName pro modul: $realModuleId"
+                        );
+
                         if (class_exists($moduleClassName)) {
                             $moduleInstance = new $moduleClassName();
-                            
+
                             if (method_exists($moduleInstance, 'getMenuItems')) {
                                 $moduleMenuItems = $moduleInstance->getMenuItems();
-                                
-                                $this->securityLogger->logSecurityEvent('module_menu_debug', 
-                                    "Modul $moduleId vrátil " . count($moduleMenuItems) . " menu položek");
-                                
+
+                                $this->securityLogger->logSecurityEvent(
+                                    'module_menu_debug',
+                                    "Modul $moduleId vrátil " . count($moduleMenuItems) . " menu položek"
+                                );
+
                                 if (!empty($moduleMenuItems)) {
                                     // Zpracujeme menu položky a vygenerujeme odkazy
                                     $processedMenuItems = [];
-                                    
+
                                     foreach ($moduleMenuItems as $menuItem) {
                                         $processedItem = $menuItem;
-                                        
+
                                         // Pokud má presenter a action, vygenerujeme Nette link
                                         if (isset($menuItem['presenter']) && isset($menuItem['action'])) {
                                             $params = $menuItem['params'] ?? [];
@@ -342,45 +354,59 @@ abstract class BasePresenter extends Presenter
                                         } elseif (isset($menuItem['link'])) {
                                             $processedItem['linkType'] = 'direct';
                                         }
-                                        
+
                                         $processedMenuItems[] = $processedItem;
                                     }
-                                    
+
                                     $menuItems[$moduleId] = [
                                         'moduleInfo' => $moduleInfo,
                                         'menuItems' => $processedMenuItems
                                     ];
-                                    
-                                    $this->securityLogger->logSecurityEvent('module_menu_success', 
-                                        "Úspěšně zpracován modul $moduleId s " . count($processedMenuItems) . " menu položkami");
+
+                                    $this->securityLogger->logSecurityEvent(
+                                        'module_menu_success',
+                                        "Úspěšně zpracován modul $moduleId s " . count($processedMenuItems) . " menu položkami"
+                                    );
                                 }
                             } else {
-                                $this->securityLogger->logSecurityEvent('module_menu_info', 
-                                    "Modul $moduleId nemá metodu getMenuItems()");
+                                $this->securityLogger->logSecurityEvent(
+                                    'module_menu_info',
+                                    "Modul $moduleId nemá metodu getMenuItems()"
+                                );
                             }
                         } else {
-                            $this->securityLogger->logSecurityEvent('module_menu_warning', 
-                                "Třída $moduleClassName pro modul $moduleId neexistuje");
+                            $this->securityLogger->logSecurityEvent(
+                                'module_menu_warning',
+                                "Třída $moduleClassName pro modul $moduleId neexistuje"
+                            );
                         }
                     } else {
-                        $this->securityLogger->logSecurityEvent('module_menu_warning', 
-                            "Soubor Module.php pro modul $moduleId neexistuje: $moduleFile");
+                        $this->securityLogger->logSecurityEvent(
+                            'module_menu_warning',
+                            "Soubor Module.php pro modul $moduleId neexistuje: $moduleFile"
+                        );
                     }
                 } catch (\Throwable $e) {
                     // Logujeme chybu, ale pokračujeme
-                    $this->securityLogger->logSecurityEvent('module_menu_error', 
-                        "Chyba při načítání menu z modulu $moduleId: " . $e->getMessage());
+                    $this->securityLogger->logSecurityEvent(
+                        'module_menu_error',
+                        "Chyba při načítání menu z modulu $moduleId: " . $e->getMessage()
+                    );
                 }
             }
         } catch (\Throwable $e) {
             // Logujeme kritickou chybu s moduly
-            $this->securityLogger->logSecurityEvent('module_system_error', 
-                "Kritická chyba modulového systému: " . $e->getMessage());
+            $this->securityLogger->logSecurityEvent(
+                'module_system_error',
+                "Kritická chyba modulového systému: " . $e->getMessage()
+            );
         }
-        
-        $this->securityLogger->logSecurityEvent('module_menu_final', 
-            "Finální počet modulů s menu: " . count($menuItems));
-        
+
+        $this->securityLogger->logSecurityEvent(
+            'module_menu_final',
+            "Finální počet modulů s menu: " . count($menuItems)
+        );
+
         return $menuItems;
     }
 
@@ -390,7 +416,7 @@ abstract class BasePresenter extends Presenter
     public function beforeRender(): void
     {
         parent::beforeRender();
-        
+
         // Informace o uživateli
         if ($this->getUser()->isLoggedIn()) {
             $this->template->add('userLoggedIn', true);
@@ -402,28 +428,28 @@ abstract class BasePresenter extends Presenter
             $this->template->add('currentUser', null);
             $this->template->add('currentUserRole', 'readonly');
         }
-        
+
         // Helper funkce pro šablony (ROZŠÍŘENO)
         $this->template->add('isUserAdmin', $this->isAdmin());
         $this->template->add('isUserAccountant', $this->isAccountant());
         $this->template->add('isUserReadonly', $this->isReadonly());
         $this->template->add('isSuperAdmin', $this->isSuperAdmin()); // NOVÉ!
-        
+
         // Multi-tenancy informace (NOVÉ!)
         $this->template->add('currentTenantId', $this->getCurrentTenantId());
         $this->template->add('currentTenant', $this->getCurrentTenant());
-        
+
         // Přidání helper funkcí pro skloňování do šablony
         $this->template->addFunction('pluralizeInvoices', [$this, 'pluralizeInvoices']);
         $this->template->addFunction('getInvoiceCountText', [$this, 'getInvoiceCountText']);
-        
+
         // Přidání helper funkce pro vokativ do šablony
         $this->template->addFunction('vocative', [$this, 'getVocativeName']);
-        
+
         // DŮLEŽITÉ: Přidání menu položek z modulů do šablony
         $moduleMenuItems = $this->getModuleMenuItems();
         $this->template->add('moduleMenuItems', $moduleMenuItems);
-        
+
         // DEBUG: Přidáme informaci o počtu menu položek do šablony pro ladění
         $this->template->add('moduleMenuItemsCount', count($moduleMenuItems));
     }
@@ -440,7 +466,7 @@ abstract class BasePresenter extends Presenter
         $identity = $this->getUser()->getIdentity();
         return $identity && isset($identity->role) ? $identity->role : 'readonly';
     }
-    
+
     /**
      * Kontroluje, zda má uživatel přístup k akci na základě jeho role
      * OPRAVENO: nullable parameter
@@ -450,23 +476,23 @@ abstract class BasePresenter extends Presenter
         if (!$this->getUser()->isLoggedIn()) {
             return false;
         }
-        
+
         $role = $this->getCurrentUserRole();
-        
+
         // Super admin může všechno (NOVÉ!)
         if ($this->isSuperAdmin()) {
             return true;
         }
-        
+
         // Pro zjednodušení používáme hierarchii rolí
         // Admin může všechno
         if ($role === 'admin') {
             return true;
         }
-        
+
         // Podle potřeby zde můžete implementovat složitější logiku
         // např. kontrolu na úrovni objektů, vlastnictví záznamů atd.
-        
+
         return false;
     }
 
@@ -501,7 +527,7 @@ abstract class BasePresenter extends Presenter
         }
 
         $userRole = $identity->role;
-        
+
         // Hierarchie rolí
         $roleHierarchy = [
             'admin' => ['admin', 'accountant', 'readonly'],
@@ -578,7 +604,7 @@ abstract class BasePresenter extends Presenter
 
         $name = trim($name);
         $lowerName = mb_strtolower($name, 'UTF-8');
-        
+
         // Slovník nejčastějších mužských jmen a jejich vokativů
         $maleNames = [
             'aleš' => 'Aleši',
@@ -706,41 +732,41 @@ abstract class BasePresenter extends Presenter
         if (isset($maleNames[$lowerName])) {
             return $maleNames[$lowerName];
         }
-        
+
         if (isset($femaleNames[$lowerName])) {
             return $femaleNames[$lowerName];
         }
 
         // Pokud jméno není ve slovníku, pokusíme se odhadnout podle koncovky
-        
+
         // Ženská jména končící na 'a' -> změna na 'o'
         if (mb_substr($lowerName, -1, 1, 'UTF-8') === 'a') {
             return mb_substr($name, 0, -1, 'UTF-8') . 'o';
         }
-        
+
         // Ženská jména končící na 'e' -> zůstávají stejně
         if (mb_substr($lowerName, -1, 1, 'UTF-8') === 'e') {
             return $name;
         }
-        
+
         // Mužská jména končící na souhlásku
         $lastChar = mb_substr($lowerName, -1, 1, 'UTF-8');
-        
+
         // Některé specifické koncovky pro mužská jména
         if (in_array($lastChar, ['k', 'h', 'g'], true)) {
             return $name . 'u';
         }
-        
+
         // Tvrdé souhlásky
         if (in_array($lastChar, ['p', 'b', 't', 'd', 'n', 'l', 'm', 'r', 'v', 's', 'z'], true)) {
             return $name . 'e';
         }
-        
+
         // Měkké souhlásky
         if (in_array($lastChar, ['j', 'c', 'č', 'š', 'ž', 'ň', 'ť', 'ď', 'ř'], true)) {
             return $name . 'i';
         }
-        
+
         // Pokud si nejsme jisti, necháme jméno beze změny
         return $name;
     }

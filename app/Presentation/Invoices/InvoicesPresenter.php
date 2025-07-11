@@ -229,9 +229,9 @@ public function actionPdf(int $id): void
         $fakturaTextHeight = 10; // Výška textu "FAKTURA"
 
         // Logo společnosti - nyní vertikálně vycentrované
-        if ($company->logo && file_exists(WWW_DIR . '/uploads/logo/' . $company->logo) && $invoice->show_logo) {
+        if ($company->logo && file_exists(WWW_DIR . '/www/uploads/logo/' . $company->logo) && $invoice->show_logo) {
             // Získáme rozměry loga
-            $logoInfo = getimagesize(WWW_DIR . '/uploads/logo/' . $company->logo);
+            $logoInfo = getimagesize(WWW_DIR . '/www/uploads/logo/' . $company->logo);
             $logoWidth = 40; // Šířka loga v mm
             $logoHeight = 15; // Předpokládaná výška loga v mm
 
@@ -245,7 +245,7 @@ public function actionPdf(int $id): void
             $logoY = $headerStartY + ($fakturaTextHeight - $logoHeight) / 2;
 
             // Vykreslení loga vycentrovaného vertikálně
-            $pdf->Image(WWW_DIR . '/uploads/logo/' . $company->logo, 15, $logoY, $logoWidth);
+            $pdf->Image(WWW_DIR . '/www/uploads/logo/' . $company->logo, 15, $logoY, $logoWidth);
         } else {
             // Pokud logo neexistuje nebo nemá být zobrazeno, zobrazíme název společnosti stylizovaně
             $pdf->SetFont('dejavusans', 'B', 20);

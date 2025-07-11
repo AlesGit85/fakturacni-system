@@ -178,16 +178,36 @@ class SettingsPresenter extends BasePresenter
 
         // Zpracování nahrávání logo
         if ($data->logo && $data->logo->isOk()) {
-            $logoName = $this->processUploadedFile($data->logo, 'logo');
-            $values['logo'] = $logoName;
+            try {
+                $logoName = $this->processUploadedFile($data->logo, 'logo');
+                if ($logoName) {
+                    $values['logo'] = $logoName;
+                } else {
+                    $this->flashMessage('Chyba při nahrávání loga', 'error');
+                    return;
+                }
+            } catch (\Exception $e) {
+                $this->flashMessage('Chyba při nahrávání loga: ' . $e->getMessage(), 'error');
+                return;
+            }
         } else {
             unset($values['logo']);
         }
 
         // Zpracování nahrávání podpisu
         if ($data->signature && $data->signature->isOk()) {
-            $signatureName = $this->processUploadedFile($data->signature, 'signature');
-            $values['signature'] = $signatureName;
+            try {
+                $signatureName = $this->processUploadedFile($data->signature, 'signature');
+                if ($signatureName) {
+                    $values['signature'] = $signatureName;
+                } else {
+                    $this->flashMessage('Chyba při nahrávání podpisu', 'error');
+                    return;
+                }
+            } catch (\Exception $e) {
+                $this->flashMessage('Chyba při nahrávání podpisu: ' . $e->getMessage(), 'error');
+                return;
+            }
         } else {
             unset($values['signature']);
         }
@@ -228,18 +248,67 @@ class SettingsPresenter extends BasePresenter
         return preg_match('/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color);
     }
 
-    private function processUploadedFile(Nette\Http\FileUpload $file, string $type): string
+    /**
+     * Zpracování nahrávání souborů
+     */
+    private function processUploadedFile(Nette\Http\FileUpload $file, string $type): ?string
     {
-        $uploadDir = WWW_DIR . '/uploads/' . $type;
-
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
+        // Kontrola, zda je soubor v pořádku
+        if (!$file->isOk()) {
+            throw new \Exception('Soubor nebyl úspěšně nahrán (error: ' . $file->getError() . ')');
         }
 
-        $fileName = uniqid() . '.' . $file->getImageFileExtension();
+        // Kontrola, zda je to opravdu obrázek
+        if (!$file->isImage()) {
+            throw new \Exception('Soubor musí být obrázek');
+        }
+
+        // Vytvoření upload adresáře, pokud neexistuje
+        $uploadDir = WWW_DIR . '/www/uploads/' . $type;
+        
+        if (!is_dir($uploadDir)) {
+            if (!mkdir($uploadDir, 0755, true)) {
+                throw new \Exception('Nepodařilo se vytvořit adresář pro nahrávání: ' . $uploadDir);
+            }
+        }
+
+        // Kontrola, zda je adresář zapisovatelný
+        if (!is_writable($uploadDir)) {
+            throw new \Exception('Adresář pro nahrávání není zapisovatelný: ' . $uploadDir);
+        }
+
+        // Získání přípony souboru bezpečným způsobem
+        $originalName = $file->getName();
+        $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+        
+        // Kontrola povolených přípon
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+        if (!in_array($extension, $allowedExtensions)) {
+            throw new \Exception('Nepodporovaný formát obrázku. Povolené formáty: ' . implode(', ', $allowedExtensions));
+        }
+
+        // Vytvoření jedinečného názvu souboru
+        $fileName = uniqid() . '_' . time() . '.' . $extension;
         $fullPath = $uploadDir . '/' . $fileName;
         
-        $file->move($fullPath);
+        // Pokus o přesunutí souboru
+        try {
+            $file->move($fullPath);
+        } catch (\Exception $e) {
+            throw new \Exception('Nepodařilo se uložit soubor: ' . $e->getMessage());
+        }
+
+        // Ověření, že se soubor skutečně uložil
+        if (!file_exists($fullPath)) {
+            throw new \Exception('Soubor se nepodařilo úspěšně uložit');
+        }
+
+        // Kontrola velikosti nahraného souboru
+        $fileSize = filesize($fullPath);
+        if ($fileSize === false || $fileSize === 0) {
+            unlink($fullPath); // Smažeme prázdný soubor
+            throw new \Exception('Nahraný soubor je prázdný');
+        }
 
         return $fileName;
     }
@@ -252,7 +321,7 @@ class SettingsPresenter extends BasePresenter
         $company = $this->companyManager->getCompanyInfo();
 
         if ($company && $company->logo) {
-            $logoPath = WWW_DIR . '/uploads/logo/' . $company->logo;
+            $logoPath = WWW_DIR . '/www/uploads/logo/' . $company->logo;
 
             // Smažeme fyzický soubor
             if (file_exists($logoPath)) {
@@ -278,7 +347,7 @@ class SettingsPresenter extends BasePresenter
         $company = $this->companyManager->getCompanyInfo();
 
         if ($company && $company->signature) {
-            $signaturePath = WWW_DIR . '/uploads/signature/' . $company->signature;
+            $signaturePath = WWW_DIR . '/www/uploads/signature/' . $company->signature;
 
             // Smažeme fyzický soubor
             if (file_exists($signaturePath)) {
