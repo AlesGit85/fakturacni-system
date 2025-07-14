@@ -64,7 +64,7 @@ final class Template_750e895e20 extends Latte\Runtime\Template
     <div>
         <a href="';
 		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 20 */;
-		echo '" class="btn btn-primary-custom">
+		echo '" class="btn btn-primary">
             <i class="bi bi-plus-circle me-2"></i>
             Vytvořit nový tenant
         </a>
@@ -109,9 +109,9 @@ final class Template_750e895e20 extends Latte\Runtime\Template
     </div>
 </div>
 
-<div class="main-card">
-    <div class="card-header-custom">
-        <h5 class="card-title-custom">
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
             <i class="bi bi-list-ul me-2" style="color: #B1D235;"></i>
             Seznam všech tenantů (';
 		echo LR\Filters::escapeHtmlText(count($tenants)) /* line 58 */;
@@ -309,7 +309,7 @@ final class Template_750e895e20 extends Latte\Runtime\Template
                 <p class="tenant-detail">Začněte vytvořením prvního tenanta pro vaše zákazníky.</p>
                 <a href="';
 			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 191 */;
-			echo '" class="btn btn-primary-custom">
+			echo '" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-2"></i>
                     Vytvořit první tenant
                 </a>
@@ -415,29 +415,9 @@ final class Template_750e895e20 extends Latte\Runtime\Template
     </div>
 </div>
 
-<script>
-let currentTenantId = null;
-
-function deactivateTenant(tenantId, tenantName) {
-    currentTenantId = tenantId;
-    document.getElementById(\'deactivate-tenant-name\').textContent = tenantName;
-    new bootstrap.Modal(document.getElementById(\'deactivateModal\')).show();
-}
-
-function confirmDeactivate() {
-    const reason = document.getElementById(\'deactivate-reason\').value || \'Deaktivace super adminem\';
-    // Redirect na deactivate akci
-    window.location.href = \'/tenants/deactivate/\' + currentTenantId + \'?reason=\' + encodeURIComponent(reason);
-}
-
-function deleteTenant(tenantId, tenantName) {
-    document.getElementById(\'delete-tenant-name\').textContent = tenantName;
-    document.getElementById(\'delete-tenant-id\').value = tenantId;
-    // Nastavíme tenant_id do formuláře
-    document.querySelector(\'#frm-deleteTenantForm input[name="tenant_id"]\').value = tenantId;
-    new bootstrap.Modal(document.getElementById(\'deleteModal\')).show();
-}
-</script>
+<script src="';
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 284 */;
+		echo '/js/tenants.js" defer></script>
 
 ';
 	}
@@ -446,6 +426,13 @@ function deleteTenant(tenantId, tenantName) {
 	/** {block head} on line 4 */
 	public function blockHead(array $ʟ_args): void
 	{
-		echo "\n";
+		extract($this->params);
+		extract($ʟ_args);
+		unset($ʟ_args);
+
+		echo '<link rel="stylesheet" href="';
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 5 */;
+		echo '/css/tenants.css">
+';
 	}
 }

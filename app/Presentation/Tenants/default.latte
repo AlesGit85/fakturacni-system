@@ -1,8 +1,8 @@
 {block content}
 
-{* Přidání konzistentních stylů s celým webem *}
+{* Načtení tenant specifických stylů *}
 {block head}
-
+<link rel="stylesheet" href="{$basePath}/css/tenants.css">
 {/block}
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -17,7 +17,7 @@
         </p>
     </div>
     <div>
-        <a n:href="add" class="btn btn-primary-custom">
+        <a n:href="add" class="btn btn-primary">
             <i class="bi bi-plus-circle me-2"></i>
             Vytvořit nový tenant
         </a>
@@ -51,9 +51,9 @@
 </div>
 
 {* Seznam tenantů *}
-<div class="main-card">
-    <div class="card-header-custom">
-        <h5 class="card-title-custom">
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
             <i class="bi bi-list-ul me-2" style="color: #B1D235;"></i>
             Seznam všech tenantů ({count($tenants)})
         </h5>
@@ -188,7 +188,7 @@
                 </div>
                 <h4 class="tenant-name">Žádní tenanty</h4>
                 <p class="tenant-detail">Začněte vytvořením prvního tenanta pro vaše zákazníky.</p>
-                <a n:href="add" class="btn btn-primary-custom">
+                <a n:href="add" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-2"></i>
                     Vytvořit první tenant
                 </a>
@@ -280,28 +280,7 @@
     </div>
 </div>
 
-<script>
-let currentTenantId = null;
-
-function deactivateTenant(tenantId, tenantName) {
-    currentTenantId = tenantId;
-    document.getElementById('deactivate-tenant-name').textContent = tenantName;
-    new bootstrap.Modal(document.getElementById('deactivateModal')).show();
-}
-
-function confirmDeactivate() {
-    const reason = document.getElementById('deactivate-reason').value || 'Deaktivace super adminem';
-    // Redirect na deactivate akci
-    window.location.href = '/tenants/deactivate/' + currentTenantId + '?reason=' + encodeURIComponent(reason);
-}
-
-function deleteTenant(tenantId, tenantName) {
-    document.getElementById('delete-tenant-name').textContent = tenantName;
-    document.getElementById('delete-tenant-id').value = tenantId;
-    // Nastavíme tenant_id do formuláře
-    document.querySelector('#frm-deleteTenantForm input[name="tenant_id"]').value = tenantId;
-    new bootstrap.Modal(document.getElementById('deleteModal')).show();
-}
-</script>
+{* Načtení tenant JavaScript - BEZ duplicitního kódu *}
+<script src="{$basePath}/js/tenants.js" defer></script>
 
 {/block}

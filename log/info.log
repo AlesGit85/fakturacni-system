@@ -7287,3 +7287,117 @@
 [2025-07-14 09-37-38] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
 [2025-07-14 09-37-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
 [2025-07-14 09-37-45] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-46-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-46-18] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-46-20] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-46-20] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-46-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-07-14 09-46-23] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-07-14 09-46-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-07-14 09-46-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-07-14 09-46-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-46-28] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-50-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-50-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-50-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-50-18] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-50-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-50-41] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-50-47] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-50-47] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 09-52-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-07-14 09-52-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-07-14 09-54-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-07-14 09-54-14] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-07-14 09-54-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-07-14 09-54-17] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-07-14 09-54-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-07-14 09-54-18] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-07-14 09-54-40] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-07-14 09-54-40] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-07-14 09-54-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-07-14 09-54-44] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-07-14 09-54-47] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-07-14 09-54-47] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-07-14 11-22-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-07-14 11-22-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=sr57p&_fid=n6sl 
+[2025-07-14 11-22-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-14 11-22-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=weq2 
+[2025-07-14 11-22-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=weq2 
+[2025-07-14 11-22-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-07-14 11-22-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=iz6fr&_fid=fq4h 
+[2025-07-14 11-22-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-14 11-22-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=o6un 
+[2025-07-14 11-22-07] ModuleManager: Nastaven user context - User ID: 22, Tenant ID: 2, Super Admin: no  @  http://localhost:8000/?_fid=o6un 
+[2025-07-14 11-22-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-22-17] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-23-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-23-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-23-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-23-50] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-24-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-24-23] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-25-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-25-26] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-25-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-25-43] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-25-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-25-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-25-48] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-25-48] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-25-48] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-25-48] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-25-48] Staré REST API - finální výsledek: {"name":"Ale\u0161 Zita","ic":"87894912","dic":"","address":"167","city":"Librantice","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-25-48] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-25-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-25-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-26-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-07-14 11-26-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-07-14 11-26-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-26-15] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-26-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-26-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-26-19] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-26-19] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-26-20] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-26-20] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-26-20] Staré REST API - finální výsledek: {"name":"Ale\u0161 Zita","ic":"87894912","dic":"","address":"167","city":"Librantice","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-26-20] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/tenants/add?do=aresLookup&ico=87894912 
+[2025-07-14 11-27-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-27-14] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-27-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-27-14] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-27-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-27-27] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-34-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-34-14] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-35-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-35-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-35-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-35-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-38-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-38-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-39-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-39-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-39-49] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-39-49] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-39-49] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-39-49] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-40-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-40-13] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-40-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-40-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-40-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-40-24] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-40-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-40-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-41-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-41-23] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-41-52] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-41-52] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-42-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-42-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-43-20] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-43-20] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/add 
+[2025-07-14 11-43-20] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-07-14 11-43-20] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
