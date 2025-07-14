@@ -10,7 +10,7 @@ final class Template_750e895e20 extends Latte\Runtime\Template
 	public const Source = 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Tenants/default.latte';
 
 	public const Blocks = [
-		['content' => 'blockContent', 'head' => 'blockHead'],
+		['content' => 'blockContent'],
 	];
 
 
@@ -32,7 +32,7 @@ final class Template_750e895e20 extends Latte\Runtime\Template
 		extract($this->params);
 
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
-			foreach (array_intersect_key(['tenantData' => '75'], $this->params) as $ʟ_v => $ʟ_l) {
+			foreach (array_intersect_key(['tenant' => '71'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
@@ -47,8 +47,6 @@ final class Template_750e895e20 extends Latte\Runtime\Template
 		extract($ʟ_args);
 		unset($ʟ_args);
 
-		echo "\n";
-		$this->renderBlock('head', get_defined_vars()) /* line 4 */;
 		echo '
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
@@ -63,8 +61,8 @@ final class Template_750e895e20 extends Latte\Runtime\Template
     </div>
     <div>
         <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 20 */;
-		echo '" class="btn btn-primary">
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 15 */;
+		echo '" class="btn btn-primary-custom">
             <i class="bi bi-plus-circle me-2"></i>
             Vytvořit nový tenant
         </a>
@@ -74,58 +72,59 @@ final class Template_750e895e20 extends Latte\Runtime\Template
 <div class="stats-grid">
     <div class="stats-card">
         <div class="stats-number" style="color: #B1D235;">';
-		echo LR\Filters::escapeHtmlText($dashboardStats['total_tenants']) /* line 30 */;
+		echo LR\Filters::escapeHtmlText($dashboardStats['total_tenants']) /* line 25 */;
 		echo '</div>
         <div class="stats-label">Celkem tenantů</div>
     </div>
     <div class="stats-card">
         <div class="stats-number" style="color: #95B11F;">';
-		echo LR\Filters::escapeHtmlText($dashboardStats['active_tenants']) /* line 34 */;
+		echo LR\Filters::escapeHtmlText($dashboardStats['active_tenants']) /* line 29 */;
 		echo '</div>
         <div class="stats-label">Aktivní</div>
     </div>
     <div class="stats-card">
         <div class="stats-number" style="color: #6c757d;">';
-		echo LR\Filters::escapeHtmlText($dashboardStats['total_users']) /* line 38 */;
+		echo LR\Filters::escapeHtmlText($dashboardStats['total_users']) /* line 33 */;
 		echo '</div>
         <div class="stats-label">Celkem uživatelů</div>
     </div>
     <div class="stats-card">
         <div class="stats-number" style="color: #212529;">';
-		echo LR\Filters::escapeHtmlText($dashboardStats['total_invoices']) /* line 42 */;
+		echo LR\Filters::escapeHtmlText($dashboardStats['total_invoices']) /* line 37 */;
 		echo '</div>
         <div class="stats-label">Celkem faktur</div>
     </div>
     <div class="stats-card">
         <div class="stats-number" style="color: #95B11F;">
             ';
-		if ($dashboardStats['monthly_growth'] > 0) /* line 47 */ {
+		if ($dashboardStats['monthly_growth'] > 0) /* line 42 */ {
 			echo '+';
 		}
-		echo LR\Filters::escapeHtmlText(($this->filters->number)($dashboardStats['monthly_growth'], 1)) /* line 47 */;
+		echo LR\Filters::escapeHtmlText(($this->filters->number)($dashboardStats['monthly_growth'], 1)) /* line 42 */;
 		echo '%
         </div>
         <div class="stats-label">Měsíční růst</div>
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        <h5 class="mb-0">
+<div class="main-card">
+    <div class="card-header-custom">
+        <h5 class="card-title-custom">
             <i class="bi bi-list-ul me-2" style="color: #B1D235;"></i>
             Seznam všech tenantů (';
-		echo LR\Filters::escapeHtmlText(count($tenants)) /* line 58 */;
+		echo LR\Filters::escapeHtmlText(count($tenants)) /* line 53 */;
 		echo ')
         </h5>
     </div>
     <div class="p-0">
 ';
-		if (count($tenants) > 0) /* line 62 */ {
+		if (count($tenants) > 0) /* line 57 */ {
 			echo '            <div class="table-responsive">
                 <table class="table table-modern mb-0">
                     <thead>
                         <tr>
                             <th>Tenant</th>
+                            <th>Společnost</th>
                             <th>Administrátor</th>
                             <th>Statistiky</th>
                             <th>Stav</th>
@@ -134,157 +133,137 @@ final class Template_750e895e20 extends Latte\Runtime\Template
                     </thead>
                     <tbody>
 ';
-			foreach ($tenants as $tenantData) /* line 75 */ {
-				$tenant = $tenantData['tenant'] /* line 76 */;
-				$stats = $tenantData['stats'] /* line 77 */;
-				$admin = $tenantData['admin_user'] /* line 78 */;
-				$company = $tenantData['company'] /* line 79 */;
-				$lastActivity = $tenantData['last_activity'] /* line 80 */;
-				echo '                            
-                            <tr>
+			foreach ($tenants as $tenant) /* line 71 */ {
+				echo '                            <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-3">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center" 
-                                                 style="width: 32px; height: 32px; background: linear-gradient(135deg, #B1D235 0%, #95B11F 100%);">
-                                                <i class="bi bi-building text-white" style="font-size: 14px;"></i>
-                                            </div>
+                                        <div class="tenant-icon me-3">
+                                            <i class="bi bi-building" style="color: #B1D235; font-size: 1.5rem;"></i>
                                         </div>
-                                        <div class="flex-grow-1 min-width-0">
-                                            <div class="tenant-name">';
-				echo LR\Filters::escapeHtmlText($tenant['name']) /* line 92 */;
-				echo '</div>
-';
-				if ($company) /* line 93 */ {
-					echo '                                                <div class="tenant-detail">';
-					echo LR\Filters::escapeHtmlText($company['name']) /* line 94 */;
-					echo '</div>
-';
+                                        <div>
+                                            <h6 class="mb-0">';
+				echo LR\Filters::escapeHtmlText($tenant['tenant']['name']) /* line 79 */;
+				echo '</h6>
+                                            <small class="text-muted">
+                                                Tenant-';
+				echo LR\Filters::escapeHtmlText($tenant['tenant']['id']) /* line 81 */;
+				echo "\n";
+				if ($tenant['tenant']['domain']) /* line 82 */ {
+					echo '                                                    • ';
+					echo LR\Filters::escapeHtmlText($tenant['tenant']['domain']) /* line 83 */;
+					echo "\n";
 				}
-				if ($tenant['domain']) /* line 96 */ {
-					echo '                                                <div class="tenant-detail">
-                                                    <i class="bi bi-globe me-1"></i>';
-					echo LR\Filters::escapeHtmlText($tenant['domain']) /* line 98 */;
-					echo '
-                                                </div>
-';
-				}
-				echo '                                        </div>
+				echo '                                            </small>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
 ';
-				if ($admin) /* line 105 */ {
-					echo '                                        <div class="tenant-name">';
-					echo LR\Filters::escapeHtmlText($admin['first_name']) /* line 106 */;
-					echo ' ';
-					echo LR\Filters::escapeHtmlText($admin['last_name']) /* line 106 */;
-					echo '</div>
-                                        <div class="tenant-detail">@';
-					echo LR\Filters::escapeHtmlText($admin['username']) /* line 107 */;
-					echo '</div>
-                                        <div class="tenant-detail">
-                                            <i class="bi bi-envelope me-1"></i>';
-					echo LR\Filters::escapeHtmlText($admin['email']) /* line 109 */;
-					echo '
-                                        </div>
+				if ($tenant['company']) /* line 90 */ {
+					echo '                                        <div>
+                                            <strong>';
+					echo LR\Filters::escapeHtmlText($tenant['company']['name']) /* line 92 */;
+					echo '</strong>
 ';
-					if ($lastActivity) /* line 111 */ {
-						echo '                                            <div class="tenant-detail" style="color: #B1D235;">
-                                                <i class="bi bi-activity me-1"></i>
-                                                ';
-						echo LR\Filters::escapeHtmlText(($this->filters->date)($lastActivity, 'd.m.Y H:i')) /* line 114 */;
-						echo '
-                                            </div>
-';
-					} else /* line 116 */ {
-						echo '                                            <div class="tenant-detail">
-                                                <i class="bi bi-clock me-1"></i>Nikdy nepřihlášen
-                                            </div>
+					if ($tenant['company']['ic']) /* line 93 */ {
+						echo '                                                <br><small class="text-muted">@';
+						echo LR\Filters::escapeHtmlText($tenant['company']['ic']) /* line 94 */;
+						echo '</small>
 ';
 					}
-				} else /* line 121 */ {
-					echo '                                        <span class="tenant-detail">Žádný admin</span>
+					echo '                                        </div>
+';
+				} else /* line 97 */ {
+					echo '                                        <span class="text-muted">Není nastaveno</span>
 ';
 				}
 				echo '                                </td>
                                 <td>
-                                    <div class="d-flex flex-wrap gap-1">
-                                        <span class="badge badge-custom badge-primary-custom" title="Počet uživatelů">
-                                            <i class="bi bi-people me-1"></i>';
-				echo LR\Filters::escapeHtmlText($stats['users_count']) /* line 128 */;
-				echo ' uživatelů
-                                        </span>
-                                        <span class="badge badge-custom badge-secondary-custom" title="Počet faktur">
-                                            <i class="bi bi-receipt me-1"></i>';
-				echo LR\Filters::escapeHtmlText($stats['invoices_count']) /* line 131 */;
-				echo ' faktur
-                                        </span>
-                                        <span class="badge badge-custom badge-neutral" title="Počet klientů">
-                                            <i class="bi bi-person-badge me-1"></i>';
-				echo LR\Filters::escapeHtmlText($stats['clients_count']) /* line 134 */;
-				echo ' klientů
-                                        </span>
-                                        <span class="badge badge-custom badge-dark" title="Počet modulů">
-                                            <i class="bi bi-puzzle me-1"></i>';
-				echo LR\Filters::escapeHtmlText($stats['modules_count']) /* line 137 */;
-				echo ' modulů
-                                        </span>
+';
+				if ($tenant['admin_user']) /* line 102 */ {
+					echo '                                        <div>
+                                            <strong>';
+					echo LR\Filters::escapeHtmlText($tenant['admin_user']['first_name']) /* line 104 */;
+					echo ' ';
+					echo LR\Filters::escapeHtmlText($tenant['admin_user']['last_name']) /* line 104 */;
+					echo '</strong>
+                                            <br><small class="text-muted">@';
+					echo LR\Filters::escapeHtmlText($tenant['admin_user']['username']) /* line 105 */;
+					echo '</small>
+                                            <br><small class="text-muted">✉ ';
+					echo LR\Filters::escapeHtmlText($tenant['admin_user']['email']) /* line 106 */;
+					echo '</small>
+                                            <br><small style="color: #B1D235;">⚡ ';
+					echo LR\Filters::escapeHtmlText(($this->filters->date)($tenant['admin_user']['created_at'], 'd.m.Y H:i')) /* line 107 */;
+					echo '</small>
+                                        </div>
+';
+				} else /* line 109 */ {
+					echo '                                        <span class="text-muted">Bez admina</span>
+';
+				}
+				echo '                                </td>
+                                <td>
+                                    <div class="small">
+                                        <span class="badge" style="background-color: #B1D235; color: #212529;">👥 ';
+				echo LR\Filters::escapeHtmlText($tenant['stats']['users_count']) /* line 115 */;
+				echo ' uživatelů</span><br>
+                                        <span class="badge bg-success">📄 ';
+				echo LR\Filters::escapeHtmlText($tenant['stats']['invoices_count']) /* line 116 */;
+				echo ' faktur</span><br>
+                                        <span class="badge bg-info">🏢 ';
+				echo LR\Filters::escapeHtmlText($tenant['stats']['clients_count']) /* line 117 */;
+				echo ' klientů</span><br>
+                                        <span class="badge" style="background-color: #95B11F; color: white;">🔧 ';
+				echo LR\Filters::escapeHtmlText($tenant['stats']['modules_count']) /* line 118 */;
+				echo ' modulů</span>
                                     </div>
                                 </td>
                                 <td>
 ';
-				if ($tenant['status'] === 'active') /* line 142 */ {
-					echo '                                        <span class="badge badge-custom badge-active">
-                                            <i class="bi bi-check-circle me-1"></i>Aktivní
-                                        </span>
+				if ($tenant['tenant']['status'] === 'active') /* line 122 */ {
+					echo '                                        <span class="badge bg-success">✅ Aktivní</span>
 ';
-				} elseif ($tenant['status'] === 'inactive') /* line 146 */ {
-					echo '                                        <span class="badge badge-custom badge-neutral">
-                                            <i class="bi bi-pause-circle me-1"></i>Neaktivní
-                                        </span>
-';
-				} elseif ($tenant['status'] === 'suspended') /* line 150 */ {
-					echo '                                        <span class="badge badge-custom" style="background-color: #ffc107; color: #212529;">
-                                            <i class="bi bi-exclamation-triangle me-1"></i>Pozastavený
-                                        </span>
+				} else /* line 124 */ {
+					echo '                                        <span class="badge bg-secondary">⏸️ Neaktivní</span>
 ';
 				}
-
-
 				echo '                                </td>
                                 <td>
-                                    <div class="d-flex">
+                                    <div class="d-flex gap-1">
 ';
-				if ($tenant['status'] === 'active') /* line 158 */ {
-					echo '                                            <button type="button" class="btn btn-action btn-warning-outline" 
+				if ($tenant['tenant']['status'] === 'active') /* line 130 */ {
+					echo '                                            <button type="button" class="btn btn-sm btn-outline-warning" 
                                                     onclick="deactivateTenant(';
-					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($tenant['id'])) /* line 160 */;
+					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($tenant['tenant']['id'])) /* line 132 */;
 					echo ', \'';
-					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(($this->filters->escapeHtml)($tenant['name']))) /* line 160 */;
+					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(($this->filters->escapeHtml)($tenant['tenant']['name']))) /* line 132 */;
 					echo '\')"
-                                                    title="Deaktivovat">
+                                                    title="Deaktivovat tenant">
                                                 <i class="bi bi-pause"></i>
                                             </button>
 ';
-				} else /* line 164 */ {
+				} else /* line 136 */ {
 					echo '                                            <a href="';
-					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('activate', ['id' => $tenant['id']])) /* line 165 */;
-					echo '" class="btn btn-action btn-success-outline" title="Aktivovat">
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('activate', ['id' => $tenant['tenant']['id']])) /* line 137 */;
+					echo '" 
+                                               class="btn btn-sm btn-outline-success"
+                                               title="Aktivovat tenant"
+                                               onclick="return confirm(\'Opravdu chcete aktivovat tento tenant?\')">
                                                 <i class="bi bi-play"></i>
                                             </a>
 ';
 				}
 				echo '                                        
 ';
-				if ($tenant['id'] !== 1) /* line 170 */ {
-					echo '                                            <button type="button" class="btn btn-action btn-danger-outline" 
+				if ($tenant['tenant']['id'] !== 1) /* line 145 */ {
+					echo '                                            <button type="button" class="btn btn-sm btn-outline-danger" 
                                                     onclick="deleteTenant(';
-					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($tenant['id'])) /* line 172 */;
+					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($tenant['tenant']['id'])) /* line 147 */;
 					echo ', \'';
-					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(($this->filters->escapeHtml)($tenant['name']))) /* line 172 */;
+					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(($this->filters->escapeHtml)($tenant['tenant']['name']))) /* line 147 */;
 					echo '\')"
-                                                    title="Smazat">
+                                                    title="Smazat tenant">
                                                 <i class="bi bi-trash"></i>
                                             </button>
 ';
@@ -300,16 +279,16 @@ final class Template_750e895e20 extends Latte\Runtime\Template
                 </table>
             </div>
 ';
-		} else /* line 184 */ {
+		} else /* line 159 */ {
 			echo '            <div class="text-center py-5">
                 <div class="display-1 text-muted mb-3">
                     <i class="bi bi-building"></i>
                 </div>
-                <h4 class="tenant-name">Žádní tenanty</h4>
-                <p class="tenant-detail">Začněte vytvořením prvního tenanta pro vaše zákazníky.</p>
+                <h4>Žádní tenanty</h4>
+                <p class="text-muted">Začněte vytvořením prvního tenanta pro vaše zákazníky.</p>
                 <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 191 */;
-			echo '" class="btn btn-primary">
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 166 */;
+			echo '" class="btn btn-primary-custom">
                     <i class="bi bi-plus-circle me-2"></i>
                     Vytvořit první tenant
                 </a>
@@ -361,7 +340,12 @@ final class Template_750e895e20 extends Latte\Runtime\Template
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <form id="delete-form" method="post">
+            
+            ';
+		$form = $this->global->formsStack[] = $this->global->uiControl['deleteTenantForm'] /* line 220 */;
+		Nette\Bridges\FormsLatte\Runtime::initializeForm($form);
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form, []) /* line 220 */;
+		echo '
                 <div class="modal-body">
                     <div class="alert alert-danger">
                         <h6><i class="bi bi-exclamation-triangle me-2"></i>VAROVÁNÍ!</h6>
@@ -376,63 +360,69 @@ final class Template_750e895e20 extends Latte\Runtime\Template
                     </div>
                     
                     ';
-		$form = $this->global->formsStack[] = $this->global->uiControl['deleteTenantForm'] /* line 258 */;
-		Nette\Bridges\FormsLatte\Runtime::initializeForm($form);
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form, []) /* line 258 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('tenant_id', $this->global)->getControl() /* line 234 */;
 		echo '
-                        <input type="hidden" name="tenant_id" id="delete-tenant-id">
-                        
-                        <div class="mb-3">
-                            ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('reason', $this->global)->getLabel())?->addAttributes(['class' => 'form-label fw-bold']) /* line 262 */;
+                    
+                    <div class="mb-3">
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('reason', $this->global)->getLabel())?->addAttributes(['class' => 'form-label fw-bold']) /* line 237 */;
 		echo '
-                            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('reason', $this->global)->getControl() /* line 263 */;
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('reason', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 238 */;
 		echo '
-                        </div>
-                        
-                        <div class="mb-3">
-                            ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('confirmation', $this->global)->getLabel())?->addAttributes(['class' => 'form-label fw-bold']) /* line 267 */;
+                    </div>
+                    
+                    <div class="mb-3">
+                        ';
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('confirmation', $this->global)->getLabel())?->addAttributes(['class' => 'form-label fw-bold']) /* line 242 */;
 		echo '
-                            ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('confirmation', $this->global)->getControl() /* line 268 */;
+                        ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('confirmation', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 243 */;
 		echo '
-                        </div>
-                    ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 270 */;
-
-		echo '
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
-                    <button type="submit" form="frm-deleteTenantForm" class="btn btn-danger">
-                        <i class="bi bi-trash me-2"></i>SMAZAT TENANT
-                    </button>
+                    ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-danger btn-lg', 'value' => 'SMAZAT TENANT']) /* line 248 */;
+		echo '
                 </div>
-            </form>
+            ';
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 250 */;
+
+		echo '
+            
         </div>
     </div>
 </div>
 
-<script src="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 284 */;
-		echo '/js/tenants.js" defer></script>
+<script>
+let currentTenantId = null;
 
-';
-	}
+function deactivateTenant(tenantId, tenantName) {
+    currentTenantId = tenantId;
+    document.getElementById(\'deactivate-tenant-name\').textContent = tenantName;
+    new bootstrap.Modal(document.getElementById(\'deactivateModal\')).show();
+}
 
+function confirmDeactivate() {
+    const reason = document.getElementById(\'deactivate-reason\').value || \'Deaktivace super adminem\';
+    window.location.href = \'/tenants/deactivate/\' + currentTenantId + \'?reason=\' + encodeURIComponent(reason);
+}
 
-	/** {block head} on line 4 */
-	public function blockHead(array $ʟ_args): void
-	{
-		extract($this->params);
-		extract($ʟ_args);
-		unset($ʟ_args);
+function deleteTenant(tenantId, tenantName) {
+    document.getElementById(\'delete-tenant-name\').textContent = tenantName;
+    
+    const tenantIdInput = document.querySelector(\'input[name="tenant_id"]\');
+    if (tenantIdInput) {
+        tenantIdInput.value = tenantId;
+    }
+    
+    const modal = new bootstrap.Modal(document.getElementById(\'deleteModal\'));
+    modal.show();
+}
+</script>
 
-		echo '<link rel="stylesheet" href="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 5 */;
-		echo '/css/tenants.css">
 ';
 	}
 }

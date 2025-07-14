@@ -51,12 +51,6 @@ final class TenantsPresenter extends BasePresenter
     {
         $this->template->tenants = $this->tenantManager->getAllTenantsWithStats();
         $this->template->dashboardStats = $this->tenantManager->getDashboardStats();
-        
-        // Zobrazení debug informací pokud jsou k dispozici
-        if (isset($_SESSION['tenant_debug'])) {
-            $this->template->debugInfo = $_SESSION['tenant_debug'];
-            unset($_SESSION['tenant_debug']);
-        }
     }
 
     public function renderAdd(): void
@@ -97,21 +91,35 @@ final class TenantsPresenter extends BasePresenter
 
     public function actionDelete(int $id): void
     {
+        // ================================================================
+        // DEBUG: DEBUGGING AKCE DELETE
+        // ================================================================
+        
+        Debugger::log("🗑️ DELETE DEBUG: actionDelete() volána s ID: $id", ILogger::INFO);
+        
         // Získáme důvod z parametru
         $reason = $this->getParameter('reason');
+        Debugger::log("🗑️ DELETE DEBUG: Důvod z parametru: " . ($reason ?: 'NULL'), ILogger::INFO);
+        
         if (!$reason) {
+            Debugger::log("🗑️ DELETE DEBUG: CHYBA - Chybí důvod smazání", ILogger::ERROR);
             $this->flashMessage('Je nutné uvést důvod smazání tenanta.', 'danger');
             $this->redirect('default');
         }
 
         $superAdminId = $this->getUser()->getId();
+        Debugger::log("🗑️ DELETE DEBUG: Super admin ID: $superAdminId", ILogger::INFO);
+        Debugger::log("🗑️ DELETE DEBUG: Volám TenantManager->deleteTenant($id, $superAdminId, '$reason')", ILogger::INFO);
         
         if ($this->tenantManager->deleteTenant($id, $superAdminId, $reason)) {
+            Debugger::log("🗑️ DELETE DEBUG: ÚSPĚCH - Tenant byl smazán", ILogger::INFO);
             $this->flashMessage('Tenant byl úspěšně smazán. VŠECHNA DATA BYLA ZTRACENA!', 'warning');
         } else {
+            Debugger::log("🗑️ DELETE DEBUG: CHYBA - Tenant nebyl smazán", ILogger::ERROR);
             $this->flashMessage('Chyba při mazání tenanta.', 'danger');
         }
         
+        Debugger::log("🗑️ DELETE DEBUG: Přesměrovávám na default", ILogger::INFO);
         $this->redirect('default');
     }
 
@@ -368,27 +376,11 @@ final class TenantsPresenter extends BasePresenter
             Debugger::log("📊 TENANT DEBUG: Výsledek z TenantManager: " . json_encode($result, JSON_UNESCAPED_UNICODE), ILogger::INFO);
 
             if ($result['success']) {
-                $debugInfo['status'] = 'SUCCESS';
-                Debugger::log("✅ TENANT DEBUG: ÚSPĚCH! Tenant byl vytvořen", ILogger::INFO);
-                
                 $this->flashMessage($result['message'], 'success');
                 $this->flashMessage("Admin uživatel: {$adminData['username']}, heslo bylo nastaveno podle zadání.", 'info');
-                $this->flashMessage("🔍 Debug: Tenant byl úspěšně vytvořen (zkontroluj log/info.log pro detaily)", 'info');
-                
-                // Uložíme debug info do session pro zobrazení na další stránce
-                $_SESSION['tenant_debug'] = $debugInfo;
-                
                 $this->redirect('default');
             } else {
-                $debugInfo['status'] = 'ERROR';
-                $debugInfo['error_message'] = $result['message'];
-                Debugger::log("❌ TENANT DEBUG: CHYBA! " . $result['message'], ILogger::ERROR);
-                
                 $this->flashMessage('Chyba při vytváření tenanta: ' . $result['message'], 'danger');
-                $this->flashMessage("🔍 Debug: Zkontroluj log/error.log pro detaily", 'warning');
-                
-                // Uložíme debug info do session
-                $_SESSION['tenant_debug'] = $debugInfo;
             }
 
         } catch (Nette\Application\AbortException $e) {
@@ -449,14 +441,26 @@ final class TenantsPresenter extends BasePresenter
 
     public function deleteTenantFormSucceeded(Form $form, \stdClass $data): void
     {
+        // ================================================================
+        // DEBUG: DEBUGGING MAZÁNÍ TENANTA
+        // ================================================================
+        
+        Debugger::log("🗑️ DELETE DEBUG: Formulář pro mazání byl odeslán", ILogger::INFO);
+        Debugger::log("🗑️ DELETE DEBUG: Data z formuláře: " . json_encode((array)$data, JSON_UNESCAPED_UNICODE), ILogger::INFO);
+        
         $tenantId = (int) $data->tenant_id;
         $reason = $data->reason;
+        
+        Debugger::log("🗑️ DELETE DEBUG: Tenant ID: $tenantId", ILogger::INFO);
+        Debugger::log("🗑️ DELETE DEBUG: Důvod: $reason", ILogger::INFO);
 
         if ($tenantId <= 0) {
+            Debugger::log("🗑️ DELETE DEBUG: CHYBA - Neplatné ID tenanta", ILogger::ERROR);
             $this->flashMessage('Neplatné ID tenanta.', 'danger');
             $this->redirect('default');
         }
 
+        Debugger::log("🗑️ DELETE DEBUG: Přesměrovávám na akci delete", ILogger::INFO);
         // Přesměrování na akci delete s parametry
         $this->redirect('delete', ['id' => $tenantId, 'reason' => $reason]);
     }

@@ -55,7 +55,7 @@ return array (
     'App\\Model\\TenantManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\TenantManager.php',
-      1 => 1752495258,
+      1 => 1752497170,
     ),
     'App\\Model\\UserManager' => 
     array (
@@ -155,7 +155,7 @@ return array (
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Tenants\\TenantsPresenter.php',
-      1 => 1752494913,
+      1 => 1752499240,
     ),
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
@@ -189,6 +189,7 @@ return array (
     'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
     'App\\Presentation\\Clients\\ClientsTemplate' => 2,
     'App\\Presentation\\Clients\\ClientsAddTemplate' => 1,
+    'App\\Presentation\\Tenants\\TenantsDeleteTemplate' => 2,
   ),
   2 => 
   array (
