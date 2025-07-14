@@ -384,7 +384,11 @@ class Container_bd9ea93023 extends Nette\DI\Container
 
 	public function createServiceApplication__10(): App\Presentation\Tenants\TenantsPresenter
 	{
-		$service = new App\Presentation\Tenants\TenantsPresenter($this->getService('09'));
+		$service = new App\Presentation\Tenants\TenantsPresenter(
+			$this->getService('09'),
+			$this->getService('06'),
+			$this->getService('tracy.logger'),
+		);
 		$service->injectPrimary(
 			$this->getService('http.request'),
 			$this->getService('http.response'),

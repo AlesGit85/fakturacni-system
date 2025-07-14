@@ -155,7 +155,7 @@ return array (
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Tenants\\TenantsPresenter.php',
-      1 => 1752475555,
+      1 => 1752485508,
     ),
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
@@ -175,14 +175,20 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 1,
-    'null' => 1,
+    'Nette\\Bridges\\Assets\\DIExtension' => 2,
+    'null' => 2,
     'App\\Presentation\\Tenants\\TenantsAddTemplate' => 3,
     'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 2,
-    'App\\Presentation\\Sign\\SignTemplate' => 2,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
-    'App\\Presentation\\Home\\HomeTemplate' => 1,
+    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'App\\Presentation\\Sign\\SignTemplate' => 3,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 2,
+    'App\\Presentation\\Home\\HomeTemplate' => 2,
+    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 2,
+    'App\\Presentation\\Users\\UsersDefaultTemplate' => 1,
+    'App\\Presentation\\Users\\UsersTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 2,
+    'App\\Presentation\\Clients\\ClientsAddTemplate' => 1,
   ),
   2 => 
   array (

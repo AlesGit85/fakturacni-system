@@ -40,7 +40,7 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h1 class="page-title">
-            <i class="bi bi-plus-circle me-2" style="color: #B1D235;"></i>
+            <i class="bi bi-building-add me-2" style="color: #B1D235;"></i>
             Vytvořit nový tenant
         </h1>
         <p class="page-subtitle">
@@ -50,7 +50,7 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
     </div>
     <div>
         <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 269 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 287 */;
 		echo '" class="btn btn-secondary-custom">
             <i class="bi bi-arrow-left me-2"></i>
             Zpět na seznam
@@ -69,9 +69,9 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
             </div>
             <div class="p-4">
                 ';
-		$form = $this->global->formsStack[] = $this->global->uiControl['createTenantForm'] /* line 286 */;
+		$form = $this->global->formsStack[] = $this->global->uiControl['createTenantForm'] /* line 304 */;
 		Nette\Bridges\FormsLatte\Runtime::initializeForm($form);
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form, []) /* line 286 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form, []) /* line 304 */;
 		echo '
                     <div class="form-section">
                         <h6 class="form-section-title section-tenant">
@@ -83,7 +83,7 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
                             <div class="col-md-8 mb-3">
                                 <label class="form-label-custom">Název tenanta</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('name', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 297 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('name', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 315 */;
 		echo '
                                 <div class="form-text-custom">
                                     <i class="bi bi-info-circle me-1" style="color: #95B11F;"></i>
@@ -93,7 +93,7 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
                             <div class="col-md-4 mb-3">
                                 <label class="form-label-custom">Doména (volitelné)</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('domain', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 305 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('domain', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 323 */;
 		echo '
                                 <div class="form-text-custom">
                                     <i class="bi bi-globe me-1" style="color: #95B11F;"></i>
@@ -111,47 +111,62 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
                         
                         <div class="row">
                             <div class="col-md-8 mb-3">
-                                <label class="form-label-custom">Název společnosti</label>
-                                ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('company_name', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 324 */;
-		echo '
-                            </div>
-                            <div class="col-md-4 mb-3">
                                 <label class="form-label-custom">IČO</label>
-                                ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('ic', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 328 */;
+                                <div class="input-group">
+                                    ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('ic', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 344 */;
 		echo '
-                                <div class="form-text-custom">8 číslic</div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label-custom">Telefon</label>
-                                ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('phone', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 336 */;
-		echo '
-                                <div class="form-text-custom">např. +420 123 456 789</div>
+                                    <button type="button" id="load-from-ares" class="btn btn-primary-custom">
+                                        <i class="bi bi-cloud-download"></i> Načíst z ARESu
+                                    </button>
+                                </div>
+                                <div class="form-text-custom">
+                                    <i class="bi bi-info-circle me-1" style="color: #95B11F;"></i>
+                                    Zadejte IČO a načtěte údaje společnosti automaticky z ARESu
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <div class="form-check-custom">
+                                <div class="form-check-custom" style="padding-top: 32px;">
                                     ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('vat_payer', $this->global)->getControl()->addAttributes(['class' => 'form-check-input form-check-input-custom', 'onchange' => 'toggleDic(this)']) /* line 341 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('vat_payer', $this->global)->getControl()->addAttributes(['class' => 'form-check-input form-check-input-custom']) /* line 356 */;
 		echo '
                                     ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('vat_payer', $this->global)->getLabel())?->addAttributes(['class' => 'form-check-label-custom']) /* line 342 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('vat_payer', $this->global)->getLabel())?->addAttributes(['class' => 'form-check-label-custom']) /* line 357 */;
 		echo '
                                 </div>
                             </div>
                         </div>
                         
                         <div class="row" id="dic-row" style="display: none;">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label-custom">DIČ</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('dic', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 350 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('dic', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 366 */;
 		echo '
                                 <div class="form-text-custom">např. CZ12345678</div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="form-label-custom">Název společnosti</label>
+                                ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('company_name', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 375 */;
+		echo '
+                                <div class="form-text-custom">
+                                    <i class="bi bi-magic me-1" style="color: #95B11F;"></i>
+                                    Vyplní se automaticky po načtení z ARESu
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-custom">Telefon</label>
+                                ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('phone', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 387 */;
+		echo '
+                                <div class="form-text-custom">např. +420 123 456 789</div>
                             </div>
                         </div>
                         
@@ -159,20 +174,20 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
                             <div class="col-md-6 mb-3">
                                 <label class="form-label-custom">Adresa</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('address', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom', 'rows' => 2]) /* line 358 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('address', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom', 'rows' => 2]) /* line 395 */;
 		echo '
                                 <div class="form-text-custom">Ulice a číslo popisné</div>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label class="form-label-custom">Město</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('city', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 363 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('city', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 400 */;
 		echo '
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label class="form-label-custom">PSČ</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('zip', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 367 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('zip', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 404 */;
 		echo '
                                 <div class="form-text-custom">123 45</div>
                             </div>
@@ -182,7 +197,7 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
                             <div class="col-md-6 mb-3">
                                 <label class="form-label-custom">Země</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('country', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 375 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('country', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 412 */;
 		echo '
                             </div>
                         </div>
@@ -205,22 +220,16 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
                             <div class="col-md-6 mb-3">
                                 <label class="form-label-custom">Uživatelské jméno</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('username', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 397 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('username', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 434 */;
 		echo '
-                                <div class="form-text-custom">
-                                    <i class="bi bi-person me-1" style="color: #95B11F;"></i>
-                                    Minimálně 3 znaky, bude použito pro přihlášení
-                                </div>
+                                <div class="form-text-custom">Jedinečné uživatelské jméno pro přihlášení</div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label-custom">Email</label>
+                                <label class="form-label-custom">E-mail</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('email', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 405 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('email', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 439 */;
 		echo '
-                                <div class="form-text-custom">
-                                    <i class="bi bi-envelope me-1" style="color: #95B11F;"></i>
-                                    Hlavní kontaktní email
-                                </div>
+                                <div class="form-text-custom">E-mailová adresa administrátora</div>
                             </div>
                         </div>
                         
@@ -228,22 +237,16 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
                             <div class="col-md-6 mb-3">
                                 <label class="form-label-custom">Heslo</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('password', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 416 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('password', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 447 */;
 		echo '
-                                <div class="form-text-custom">
-                                    <i class="bi bi-shield-lock me-1" style="color: #95B11F;"></i>
-                                    Minimálně 6 znaků
-                                </div>
+                                <div class="form-text-custom">Minimálně 6 znaků</div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label-custom">Potvrzení hesla</label>
+                                <label class="form-label-custom">Ověření hesla</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('password_confirm', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 424 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('password_confirm', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 452 */;
 		echo '
-                                <div class="form-text-custom">
-                                    <i class="bi bi-check2-circle me-1" style="color: #95B11F;"></i>
-                                    Hesla se musí shodovat
-                                </div>
+                                <div class="form-text-custom">Zadejte heslo znovu pro ověření</div>
                             </div>
                         </div>
                         
@@ -251,13 +254,13 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
                             <div class="col-md-6 mb-3">
                                 <label class="form-label-custom">Jméno</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('first_name', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 435 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('first_name', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 460 */;
 		echo '
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label-custom">Příjmení</label>
                                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('last_name', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 439 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('last_name', $this->global)->getControl()->addAttributes(['class' => 'form-control form-control-custom']) /* line 464 */;
 		echo '
                             </div>
                         </div>
@@ -270,15 +273,15 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
                         </div>
                         <div class="d-flex gap-2 btn-group-mobile">
                             ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('cancel', $this->global)->getControl()->addAttributes(['class' => 'btn btn-secondary-custom']) /* line 451 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('cancel', $this->global)->getControl()->addAttributes(['class' => 'btn btn-secondary-custom']) /* line 476 */;
 		echo '
                             ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary-custom']) /* line 452 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary-custom']) /* line 477 */;
 		echo '
                         </div>
                     </div>
                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 455 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 480 */;
 
 		echo '
             </div>
@@ -337,66 +340,290 @@ final class Template_ba210bf4b3 extends Latte\Runtime\Template
 </div>
 
 <script>
-function toggleDic(checkbox) {
-    const dicRow = document.getElementById(\'dic-row\');
+// JavaScript pro DIČ toggle v tenant formuláři
+document.addEventListener(\'DOMContentLoaded\', function() {
+    // ZABRÁNĚNÍ KONFLIKTU s ares-lookup.js
+    // Označíme, že tenant formulář má vlastní ARES handling
+    window.tenantFormActive = true;
     
-    if (dicRow) {
-        if (checkbox.checked) {
-            // Zobraz DIČ pole
-            dicRow.style.display = \'block\';
-            dicRow.style.opacity = \'0\';
+    // Počkej chvilku, než se spustí settings.js a pak přeber kontrolu
+    setTimeout(function() {
+        console.log(\'🚀 Tenant form - převzímám kontrolu nad DIČ toggle\');
+        
+        // Najdi checkbox podle skutečného Nette Forms ID
+        var checkbox = document.querySelector(\'input[name="vat_payer"]\') || 
+                      document.getElementById(\'frm-createTenantForm-vat_payer\');
+        var dicRow = document.getElementById(\'dic-row\');
+        
+        console.log(\'Checkbox nalezen:\', !!checkbox);
+        console.log(\'DIČ řádek nalezen:\', !!dicRow);
+        
+        if (checkbox && dicRow) {
+            console.log(\'✅ Nastavujem event listener pro checkbox\');
             
-            // Animace fade in
-            setTimeout(() => {
-                dicRow.style.transition = \'opacity 0.3s ease\';
-                dicRow.style.opacity = \'1\';
-            }, 10);
+            // Odstranit případné existující listenery
+            checkbox.removeEventListener(\'change\', arguments.callee);
             
-            // Nastav required
-            const dicInput = dicRow.querySelector(\'input\');
-            if (dicInput) {
-                dicInput.required = true;
-                // Focus po animaci
-                setTimeout(() => {
-                    dicInput.focus();
-                }, 300);
+            checkbox.addEventListener(\'change\', function() {
+                console.log(\'🔄 Checkbox změněn, checked:\', this.checked);
+                
+                if (this.checked) {
+                    dicRow.style.display = \'block\';
+                    var dicInput = dicRow.querySelector(\'input[name="dic"]\');
+                    if (dicInput) {
+                        dicInput.required = true;
+                        setTimeout(function() { dicInput.focus(); }, 100);
+                    }
+                    console.log(\'✅ DIČ pole zobrazeno\');
+                } else {
+                    dicRow.style.display = \'none\';
+                    var dicInput = dicRow.querySelector(\'input[name="dic"]\');
+                    if (dicInput) {
+                        dicInput.required = false;
+                        dicInput.value = \'\';
+                    }
+                    console.log(\'❌ DIČ pole skryto\');
+                }
+            });
+            
+            // Pokud je checkbox už zaškrtnutý, zobraz DIČ pole
+            if (checkbox.checked) {
+                dicRow.style.display = \'block\';
+                var dicInput = dicRow.querySelector(\'input[name="dic"]\');
+                if (dicInput) {
+                    dicInput.required = true;
+                }
             }
         } else {
-            // Skryj DIČ pole
-            dicRow.style.transition = \'opacity 0.3s ease\';
-            dicRow.style.opacity = \'0\';
-            
-            setTimeout(() => {
-                dicRow.style.display = \'none\';
-            }, 300);
-            
-            // Odstraň required a vymaž hodnotu
-            const dicInput = dicRow.querySelector(\'input\');
-            if (dicInput) {
-                dicInput.required = false;
-                dicInput.value = \'\';
-            }
+            console.error(\'❌ Nenašel jsem potřebné elementy pro DIČ toggle\');
         }
-    } else {
-        console.error(\'DIČ řádek nenalezen!\');
+    }, 100); // Počkej 100ms po načtení
+
+    // ARES funkcionalita pro tenant formulář
+    setTimeout(function() {
+        console.log(\'🌐 Inicializace ARES lookup pro tenant formulář\');
+        
+        // ZABRÁNĚNÍ DVOJÍMU SPUŠTĚNÍ - zablokuj ares-lookup.js
+        if (window.initAresLookup) {
+            console.log(\'🚫 Blokuji ares-lookup.js pro tenant formulář\');
+            window.initAresLookup = function() {
+                console.log(\'🚫 ares-lookup.js zablokován - tenant má vlastní implementaci\');
+            };
+        }
+        
+        initTenantAresLookup();
+    }, 150);
+});
+
+// ARES lookup specificky pro tenant formulář
+function initTenantAresLookup() {
+    var aresButton = document.getElementById(\'load-from-ares\');
+    
+    if (!aresButton) {
+        console.log(\'ARES tlačítko nenalezeno\');
+        return;
     }
+    
+    // Zablokuj původní ares-lookup.js event listenery
+    var newButton = aresButton.cloneNode(true);
+    aresButton.parentNode.replaceChild(newButton, aresButton);
+    aresButton = newButton;
+    
+    console.log(\'ARES tlačítko nalezeno a vyčištěno od konfliktních listenerů\');
+    
+    aresButton.addEventListener(\'click\', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log(\'🖱️ ARES tlačítko kliknuto (tenant verze)\');
+        
+        // Najdi IČO pole v tenant formuláři
+        var icoInput = document.querySelector(\'input[name="ic"]\') ||
+                      document.getElementById(\'frm-createTenantForm-ic\');
+        
+        if (!icoInput || icoInput.value.trim() === \'\') {
+            showTenantMessage(\'Prosím zadejte IČO\', \'danger\');
+            if (icoInput) icoInput.focus();
+            return;
+        }
+        
+        var icoValue = icoInput.value.trim().replace(/\\s/g, \'\');
+        if (!/^\\d{7,8}$/.test(icoValue)) {
+            showTenantMessage(\'IČO musí obsahovat 7 nebo 8 číslic\', \'danger\');
+            icoInput.focus();
+            return;
+        }
+        
+        // Zobraz loading indikátor s CSS fix pro spinner
+        var originalText = aresButton.innerHTML;
+        aresButton.disabled = true;
+        aresButton.innerHTML = \'<i class="bi bi-arrow-repeat spinner-rotate"></i> Načítám z ARESu...\';
+        
+        console.log(\'📡 Odesílám AJAX požadavek pro IČO:\', icoValue);
+        
+        // AJAX požadavek
+        var url = window.location.href.split(\'?\')[0] + \'?do=aresLookup&ico=\' + encodeURIComponent(icoValue);
+        
+        fetch(url, {
+            method: \'GET\',
+            headers: {
+                \'X-Requested-With\': \'XMLHttpRequest\',
+                \'Accept\': \'application/json\'
+            }
+        })
+        .then(function(response) {
+            console.log(\'📥 ARES odpověď přijata, status:\', response.status);
+            return response.json();
+        })
+        .then(function(responseData) {
+            console.log(\'📋 ARES data:\', responseData);
+            
+            if (responseData.error) {
+                showTenantMessage(responseData.error, \'danger\');
+                return;
+            }
+            
+            var data = responseData.data;
+            if (!data || !data.name) {
+                showTenantMessage(\'Neočekávaný formát odpovědi z ARESu\', \'danger\');
+                return;
+            }
+            
+            console.log(\'✅ Začínám vyplňování tenant formuláře...\');
+            
+            // Vyplníme formulářová pole tenant formuláře
+            var filledFields = [];
+            
+            if (fillTenantField(\'company_name\', data.name)) {
+                filledFields.push(\'název společnosti\');
+            }
+            
+            if (fillTenantField(\'address\', data.address)) {
+                filledFields.push(\'adresa\');
+            }
+            
+            if (fillTenantField(\'city\', data.city)) {
+                filledFields.push(\'město\');
+            }
+            
+            if (fillTenantField(\'zip\', data.zip)) {
+                filledFields.push(\'PSČ\');
+            }
+            
+            if (fillTenantField(\'country\', data.country)) {
+                filledFields.push(\'země\');
+            }
+            
+            if (fillTenantField(\'dic\', data.dic)) {
+                filledFields.push(\'DIČ\');
+                // Pokud má DIČ, automaticky zaškrtni "Plátce DPH"
+                var vatCheckbox = document.querySelector(\'input[name="vat_payer"]\');
+                if (vatCheckbox && data.dic) {
+                    vatCheckbox.checked = true;
+                    vatCheckbox.dispatchEvent(new Event(\'change\'));
+                }
+            }
+            
+            if (filledFields.length > 0) {
+                showTenantMessage(\'Data úspěšně načtena z ARESu: \' + filledFields.join(\', \'), \'success\');
+                console.log(\'✅ Formulář vyplněn, pole:\', filledFields);
+            } else {
+                showTenantMessage(\'Data z ARESu byla načtena, ale nepodařilo se vyplnit žádné pole formuláře\', \'warning\');
+            }
+        })
+        .catch(function(error) {
+            console.error(\'❌ Chyba při načítání dat z ARES:\', error);
+            showTenantMessage(\'Nepodařilo se načíst data z ARESu: \' + error.message, \'danger\');
+        })
+        .finally(function() {
+            // Obnov tlačítko a ZASTAVÍ SPINNER
+            console.log(\'🔄 Obnovuji tlačítko\');
+            aresButton.disabled = false;
+            aresButton.innerHTML = originalText;
+        });
+    });
 }
 
-// Inicializace při načtení
-document.addEventListener(\'DOMContentLoaded\', function() {
-    // Najdi checkbox podle správného Nette Forms ID
-    const vatCheckbox = document.getElementById(\'frm-createTenantForm-vat_payer\');
+// Vyplní pole tenant formuláře
+function fillTenantField(fieldName, value) {
+    if (!value) return false;
     
-    if (vatCheckbox && vatCheckbox.checked) {
-        // Pokud je checkbox už zaškrtnutý, zobraz DIČ pole
-        toggleDic(vatCheckbox);
+    var field = document.querySelector(\'input[name="\' + fieldName + \'"], textarea[name="\' + fieldName + \'"], select[name="\' + fieldName + \'"]\');
+    
+    if (field && value.toString().trim() !== \'\') {
+        field.value = value.toString().trim();
+        field.dispatchEvent(new Event(\'input\', { bubbles: true }));
+        field.dispatchEvent(new Event(\'change\', { bubbles: true }));
+        console.log(\'📝 Vyplněno pole\', fieldName + \':\', value);
+        return true;
     }
     
-    // Debug info
-    console.log(\'VAT checkbox:\', vatCheckbox);
-    console.log(\'DIC row:\', document.getElementById(\'dic-row\'));
-});
+    return false;
+}
+
+// Zobrazí zprávu v tenant formuláři - POUZE JEDNU
+function showTenantMessage(message, type) {
+    // Odstraň VŠECHNY staré zprávy (i z ares-lookup.js)
+    var existingMessages = document.querySelectorAll(\'[id^="tenant-ares-message"], [id^="ares-message"], .alert\');
+    existingMessages.forEach(function(msg) { 
+        if (msg.textContent && (msg.textContent.includes(\'ARESu\') || msg.textContent.includes(\'načten\'))) {
+            msg.remove(); 
+        }
+    });
+    
+    var messageElement = document.createElement(\'div\');
+    messageElement.id = \'tenant-ares-message-\' + Date.now();
+    messageElement.className = \'alert alert-\' + type + \' mt-3\';
+    
+    var icon;
+    switch (type) {
+        case \'success\': icon = \'check-circle-fill\'; break;
+        case \'warning\': icon = \'exclamation-triangle-fill\'; break;
+        case \'danger\': icon = \'x-circle-fill\'; break;
+        default: icon = \'info-circle-fill\';
+    }
+    
+    messageElement.innerHTML = \'<i class="bi bi-\' + icon + \' me-2"></i>\' + message;
+    
+    // Vlož zprávu za ARES tlačítko
+    var aresButton = document.getElementById(\'load-from-ares\');
+    if (aresButton) {
+        var container = aresButton.closest(\'.input-group\') || aresButton.closest(\'.mb-3\') || aresButton.parentNode;
+        if (container) {
+            container.appendChild(messageElement);
+        }
+    }
+    
+    console.log(\'💬 Zobrazena zpráva:\', message);
+    
+    // Automatické zmizení po 8 sekundách
+    if (type === \'success\' || type === \'warning\') {
+        setTimeout(function() {
+            if (messageElement.parentNode) {
+                messageElement.style.transition = \'opacity 0.5s ease\';
+                messageElement.style.opacity = \'0\';
+                setTimeout(function() {
+                    if (messageElement.parentNode) {
+                        messageElement.remove();
+                    }
+                }, 500);
+            }
+        }, 8000);
+    }
+}
 </script>
+
+<style>
+/* CSS fix pro spinner animaci */
+.spinner-rotate {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
 
 ';
 	}
@@ -494,8 +721,8 @@ document.addEventListener(\'DOMContentLoaded\', function() {
     
     .form-control-custom:focus {
         border-color: #B1D235;
-        box-shadow: 0 0 0 2px rgba(177, 210, 53, 0.25);
-        outline: none;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.25);
     }
     
     .form-text-custom {
@@ -509,11 +736,17 @@ document.addEventListener(\'DOMContentLoaded\', function() {
     .form-check-custom {
         display: flex;
         align-items: center;
-        margin-top: 1rem;
+        padding: 12px 0;
     }
     
     .form-check-input-custom {
-        margin-right: 8px;
+        width: 18px;
+        height: 18px;
+        margin-right: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        cursor: pointer;
     }
     
     .form-check-input-custom:checked {
@@ -521,59 +754,18 @@ document.addEventListener(\'DOMContentLoaded\', function() {
         border-color: #B1D235;
     }
     
-    .form-check-input-custom:focus {
-        border-color: #95B11F;
-        box-shadow: 0 0 0 2px rgba(149, 177, 31, 0.25);
-    }
-    
     .form-check-label-custom {
         font-family: \'Inter\', sans-serif;
         font-weight: 500;
         font-size: 14px;
         color: #212529;
-    }
-    
-    .btn-primary-custom {
-        background: linear-gradient(135deg, #B1D235 0%, #95B11F 100%);
-        color: #212529;
-        border: none;
-        font-family: \'Inter\', sans-serif;
-        font-weight: 600;
-        font-size: 16px;
-        padding: 10px 20px;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-    }
-    
-    .btn-primary-custom:hover {
-        background: linear-gradient(135deg, #95B11F 0%, #7a9b1a 100%);
-        color: #212529;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(149, 177, 31, 0.3);
-    }
-    
-    .btn-secondary-custom {
-        background: transparent;
-        color: #6c757d;
-        border: 1px solid #e0e0e0;
-        font-family: \'Inter\', sans-serif;
-        font-weight: 500;
-        font-size: 16px;
-        padding: 10px 20px;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-    }
-    
-    .btn-secondary-custom:hover {
-        background: #f8f9fa;
-        color: #495057;
-        border-color: #6c757d;
+        cursor: pointer;
+        margin-bottom: 0;
     }
     
     .alert-custom {
-        background-color: rgba(177, 210, 53, 0.1);
-        border: 1px solid rgba(177, 210, 53, 0.3);
-        border-left: 4px solid #B1D235;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 1px solid #95B11F;
         border-radius: 6px;
         padding: 12px 16px;
     }
@@ -584,10 +776,50 @@ document.addEventListener(\'DOMContentLoaded\', function() {
         font-size: 14px;
         color: #212529;
         margin-bottom: 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #B1D235 0%, #95B11F 100%);
+        border: none;
+        color: #212529;
+        font-family: \'Inter\', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-primary-custom:hover {
+        background: linear-gradient(135deg, #95B11F 0%, #7a9b1a 100%);
+        color: #212529;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(177, 210, 53, 0.3);
+    }
+    
+    .btn-secondary-custom {
+        background: #6c757d;
+        border: none;
+        color: white;
+        font-family: \'Inter\', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-secondary-custom:hover {
+        background: #5a6268;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
     }
     
     .help-card {
-        background: #f8f9fa;
+        background: white;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
@@ -598,11 +830,14 @@ document.addEventListener(\'DOMContentLoaded\', function() {
         font-weight: 600;
         font-size: 16px;
         color: #212529;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
     }
     
     .help-subtitle {
         font-family: \'Inter\', sans-serif;
-        font-weight: 600;
+        font-weight: 500;
         font-size: 14px;
         margin-bottom: 8px;
     }
@@ -616,43 +851,53 @@ document.addEventListener(\'DOMContentLoaded\', function() {
     }
     
     .help-alert {
-        background-color: rgba(255, 193, 7, 0.1);
-        border: 1px solid rgba(255, 193, 7, 0.3);
-        border-radius: 4px;
-        padding: 8px;
+        background: linear-gradient(135deg, #fff3cd 0%, #fdf6d8 100%);
+        border: 1px solid #B1D235;
+        border-radius: 6px;
+        padding: 12px;
     }
     
     .help-alert-text {
         font-family: \'Inter\', sans-serif;
         font-weight: 400;
-        font-size: 12px;
+        font-size: 13px;
         color: #212529;
         margin-bottom: 0;
+        display: flex;
+        align-items: flex-start;
+    }
+    
+    @media (max-width: 768px) {
+        .btn-group-mobile {
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+        
+        .btn-group-mobile .btn {
+            width: 100%;
+        }
+        
+        .page-title {
+            font-size: 24px;
+        }
     }
     
     /* Animace pro DIČ pole */
     #dic-row {
-        transition: opacity 0.3s ease;
+        transition: all 0.3s ease;
+        overflow: hidden;
     }
     
-    @media (max-width: 768px) {
-        .page-title {
-            font-size: 24px;
-        }
-        
-        .form-section-title {
-            font-size: 14px;
-        }
-        
-        .btn-group-mobile {
-            flex-direction: column;
-            width: 100%;
-        }
-        
-        .btn-group-mobile .btn {
-            margin-bottom: 8px;
-            width: 100%;
-        }
+    #dic-row.fade-in {
+        opacity: 1;
+        max-height: 200px;
+    }
+    
+    #dic-row.fade-out {
+        opacity: 0;
+        max-height: 0;
+        margin: 0;
+        padding: 0;
     }
 </style>
 ';

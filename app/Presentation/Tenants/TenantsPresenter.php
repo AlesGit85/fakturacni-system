@@ -7,19 +7,32 @@ namespace App\Presentation\Tenants;
 use Nette;
 use Nette\Application\UI\Form;
 use App\Model\TenantManager;
+use App\Model\AresService;
 use App\Presentation\BasePresenter;
+use Tracy\ILogger;
 
 final class TenantsPresenter extends BasePresenter
 {
     /** @var TenantManager */
     private $tenantManager;
 
+    /** @var AresService */
+    private $aresService;
+
+    /** @var ILogger */
+    private $logger;
+
     // Pouze super admin má přístup k správě tenantů
     protected array $requiredRoles = [];
 
-    public function __construct(TenantManager $tenantManager)
-    {
+    public function __construct(
+        TenantManager $tenantManager,
+        AresService $aresService,
+        ILogger $logger
+    ) {
         $this->tenantManager = $tenantManager;
+        $this->aresService = $aresService;
+        $this->logger = $logger;
     }
 
     public function startup(): void
@@ -43,6 +56,9 @@ final class TenantsPresenter extends BasePresenter
     {
         // Příprava pro šablonu
         $this->template->pageTitle = 'Vytvořit nový tenant';
+        
+        // Přidáme URL pro ARES lookup do šablony
+        $this->template->aresLookupUrl = $this->link('aresLookup!');
     }
 
     public function actionDeactivate(int $id): void
@@ -90,6 +106,61 @@ final class TenantsPresenter extends BasePresenter
         }
         
         $this->redirect('default');
+    }
+
+    /**
+     * Vyhledá firmu v ARESu podle IČO - pro tenant formulář
+     */
+    public function handleAresLookup(): void
+    {
+        try {
+            // Agresivní čištění všech output bufferů
+            while (ob_get_level()) {
+                ob_end_clean();
+            }
+            
+            // Ručně nastavíme content type header
+            if (!headers_sent()) {
+                header('Content-Type: application/json; charset=utf-8');
+            }
+            
+            // Kontrola oprávnění - pouze super admin může vytvářet tenanty
+            if (!$this->isSuperAdmin()) {
+                echo json_encode(['error' => 'Nemáte oprávnění pro vyhledávání v ARESu.']);
+                exit;
+            }
+
+            // Získáme IČO z GET parametrů
+            $ico = $this->getHttpRequest()->getQuery('ico');
+            
+            if (!$ico) {
+                echo json_encode(['error' => 'Nebylo zadáno IČO']);
+                exit;
+            }
+            
+            // Validace IČO
+            $ico = trim($ico);
+            if (!preg_match('/^\d{7,8}$/', $ico)) {
+                echo json_encode(['error' => 'Neplatné IČO. Zadejte 7 nebo 8 číslic.']);
+                exit;
+            }
+            
+            // Načtení dat z ARESu
+            $result = $this->aresService->getCompanyInfo($ico);
+            
+            if ($result) {
+                echo json_encode(['success' => true, 'data' => $result]);
+            } else {
+                echo json_encode(['error' => 'Firma s tímto IČO nebyla v ARESu nalezena.']);
+            }
+            
+        } catch (\Exception $e) {
+            // Logování chyby
+            $this->logger->log("ARES Lookup Error (Tenants): " . $e->getMessage(), ILogger::ERROR);
+            echo json_encode(['error' => 'Došlo k chybě při komunikaci s ARESem: ' . $e->getMessage()]);
+        }
+        
+        exit;
     }
 
     /**
@@ -141,35 +212,37 @@ final class TenantsPresenter extends BasePresenter
             ->setHtmlAttribute('class', 'form-control');
 
         $form->addText('city', 'Město:')
+            ->setHtmlAttribute('placeholder', 'Praha')
             ->setHtmlAttribute('class', 'form-control');
 
         $form->addText('zip', 'PSČ:')
-            ->setHtmlAttribute('placeholder', '123 45')
-            ->setHtmlAttribute('class', 'form-control');
+            ->setHtmlAttribute('placeholder', '110 00')
+            ->setHtmlAttribute('class', 'form-control')
+            ->addRule(Form::PATTERN, 'PSČ musí mít formát XXX XX', '\d{3}\s?\d{2}');
 
         $form->addText('country', 'Země:')
             ->setDefaultValue('Česká republika')
             ->setHtmlAttribute('class', 'form-control');
 
-        // Admin uživatel
+        // Admin údaje
         $form->addGroup('Administrátor tenanta');
         
         $form->addText('username', 'Uživatelské jméno:')
             ->setRequired('Zadejte uživatelské jméno')
             ->setHtmlAttribute('class', 'form-control')
-            ->addRule(Form::MIN_LENGTH, 'Uživatelské jméno musí mít alespoň 3 znaky', 3);
+            ->addRule(Form::MIN_LENGTH, 'Uživatelské jméno musí mít alespoň %d znaků', 3);
 
-        $form->addEmail('email', 'Email:')
-            ->setRequired('Zadejte email')
+        $form->addEmail('email', 'E-mail:')
+            ->setRequired('Zadejte e-mailovou adresu')
             ->setHtmlAttribute('class', 'form-control');
 
         $form->addPassword('password', 'Heslo:')
             ->setRequired('Zadejte heslo')
             ->setHtmlAttribute('class', 'form-control')
-            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň 6 znaků', 6);
+            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 6);
 
-        $form->addPassword('password_confirm', 'Potvrzení hesla:')
-            ->setRequired('Potvrďte heslo')
+        $form->addPassword('password_confirm', 'Ověření hesla:')
+            ->setRequired('Zadejte heslo znovu pro ověření')
             ->setHtmlAttribute('class', 'form-control')
             ->addRule(Form::EQUAL, 'Hesla se neshodují', $form['password']);
 
@@ -182,14 +255,12 @@ final class TenantsPresenter extends BasePresenter
             ->setHtmlAttribute('class', 'form-control');
 
         // Tlačítka
-        $form->addGroup(null);
-        
         $form->addSubmit('send', 'Vytvořit tenant')
-            ->setHtmlAttribute('class', 'btn btn-primary btn-lg me-2');
+            ->setHtmlAttribute('class', 'btn btn-primary');
 
         $form->addSubmit('cancel', 'Zrušit')
-            ->setHtmlAttribute('class', 'btn btn-secondary btn-lg')
-            ->setValidationScope([]);
+            ->setValidationScope([])
+            ->setHtmlAttribute('class', 'btn btn-secondary');
 
         $form->onSuccess[] = [$this, 'createTenantFormSucceeded'];
 
@@ -198,12 +269,11 @@ final class TenantsPresenter extends BasePresenter
 
     public function createTenantFormSucceeded(Form $form, \stdClass $data): void
     {
-        // Kontrola, které tlačítko bylo stisknuto
+        // Kontrola, zda bylo kliknuto na zrušit
         if ($form->isSubmitted('cancel')) {
             $this->redirect('default');
         }
 
-        // Příprava dat pro vytvoření tenanta
         $tenantData = [
             'name' => $data->name,
             'domain' => $data->domain ?: null,
