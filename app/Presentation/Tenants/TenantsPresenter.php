@@ -10,6 +10,7 @@ use App\Model\TenantManager;
 use App\Model\AresService;
 use App\Presentation\BasePresenter;
 use Tracy\ILogger;
+use Tracy\Debugger;
 
 final class TenantsPresenter extends BasePresenter
 {
@@ -50,6 +51,12 @@ final class TenantsPresenter extends BasePresenter
     {
         $this->template->tenants = $this->tenantManager->getAllTenantsWithStats();
         $this->template->dashboardStats = $this->tenantManager->getDashboardStats();
+        
+        // Zobrazení debug informací pokud jsou k dispozici
+        if (isset($_SESSION['tenant_debug'])) {
+            $this->template->debugInfo = $_SESSION['tenant_debug'];
+            unset($_SESSION['tenant_debug']);
+        }
     }
 
     public function renderAdd(): void
@@ -259,7 +266,7 @@ final class TenantsPresenter extends BasePresenter
             ->setHtmlAttribute('class', 'btn btn-primary');
 
         $form->addSubmit('cancel', 'Zrušit')
-            ->setValidationScope([])
+            ->setValidationScope(null)  // OPRAVA: null místo false
             ->setHtmlAttribute('class', 'btn btn-secondary');
 
         $form->onSuccess[] = [$this, 'createTenantFormSucceeded'];
@@ -269,47 +276,146 @@ final class TenantsPresenter extends BasePresenter
 
     public function createTenantFormSucceeded(Form $form, \stdClass $data): void
     {
-        // Kontrola, zda bylo kliknuto na zrušit
-        if ($form->isSubmitted('cancel')) {
-            $this->redirect('default');
-        }
-
-        $tenantData = [
-            'name' => $data->name,
-            'domain' => $data->domain ?: null,
-            'settings' => []
-        ];
-
-        $adminData = [
-            'username' => $data->username,
-            'email' => $data->email,
-            'password' => $data->password,
-            'first_name' => $data->first_name,
-            'last_name' => $data->last_name
-        ];
-
-        $companyData = [
-            'company_name' => $data->company_name,
-            'ic' => $data->ic ?: '',
-            'dic' => $data->dic ?: '',
-            'vat_payer' => $data->vat_payer,
-            'phone' => $data->phone ?: '',
-            'address' => $data->address ?: '',
-            'city' => $data->city ?: '',
-            'zip' => $data->zip ?: '',
-            'country' => $data->country ?: 'Česká republika'
-        ];
-
-        // Vytvoření tenanta
-        $result = $this->tenantManager->createTenant($tenantData, $adminData, $companyData);
-
-        if ($result['success']) {
-            $this->flashMessage($result['message'], 'success');
-            $this->flashMessage("Admin uživatel: {$adminData['username']}, heslo bylo nastaveno podle zadání.", 'info');
-            $this->redirect('default');
+        // ================================================================
+        // DEBUG: ZAČÁTEK - DEBUGGING INFORMACE DO LOGŮ A SESSION
+        // ================================================================
+        
+        $debugInfo = [];
+        $debugInfo['timestamp'] = date('Y-m-d H:i:s');
+        $debugInfo['user'] = $this->getUser()->getIdentity()->username;
+        $debugInfo['user_id'] = $this->getUser()->getId();
+        $debugInfo['is_super_admin'] = $this->isSuperAdmin();
+        
+        // Logování do Tracy
+        Debugger::log("🔍 TENANT DEBUG: Formulář byl odeslán uživatelem {$debugInfo['user']} (ID: {$debugInfo['user_id']})", ILogger::INFO);
+        
+        // DEBUG: Kontrola tlačítek - OPRAVENÁ LOGIKA
+        $postData = $this->getHttpRequest()->getPost();
+        $submittedBy = null;
+        
+        // Místo $form->isSubmitted() kontrolujeme přímo POST data
+        if (isset($postData['send'])) {
+            $submittedBy = 'send (Vytvořit tenant)';
+            $cancelClicked = false;
+        } elseif (isset($postData['cancel'])) {
+            $submittedBy = 'cancel (Zrušit)';
+            $cancelClicked = true;
         } else {
-            $this->flashMessage('Chyba při vytváření tenanta: ' . $result['message'], 'danger');
+            $submittedBy = 'NEZNÁMÉ tlačítko';
+            $cancelClicked = false;
         }
+        
+        Debugger::log("🔍 TENANT DEBUG: Formulář byl odeslán tlačítkem: {$submittedBy}", ILogger::INFO);
+        
+        // Získáme všechna data z POST requestu pro debugging
+        Debugger::log("🔍 TENANT DEBUG: POST data: " . json_encode($postData, JSON_UNESCAPED_UNICODE), ILogger::INFO);
+        
+        // Kontrola, zda bylo kliknuto na zrušit - OPRAVENÁ LOGIKA
+        if ($cancelClicked) {
+            Debugger::log("➡️ TENANT DEBUG: Uživatel kliknul na ZRUŠIT", ILogger::INFO);
+            $this->flashMessage('Vytváření tenanta bylo zrušeno.', 'info');
+            $this->redirect('default');
+        }
+
+        $debugInfo['action'] = 'create_tenant';
+        $debugInfo['form_data'] = (array) $data;
+        // Skryjeme heslo v debug datech
+        $debugInfo['form_data']['password'] = '*** SKRYTO ***';
+        $debugInfo['form_data']['password_confirm'] = '*** SKRYTO ***';
+        
+        Debugger::log("📝 TENANT DEBUG: Přijatá data z formuláře: " . json_encode($debugInfo['form_data'], JSON_UNESCAPED_UNICODE), ILogger::INFO);
+
+        try {
+            $tenantData = [
+                'name' => $data->name,
+                'domain' => $data->domain ?: null,
+                'settings' => []
+            ];
+
+            $adminData = [
+                'username' => $data->username,
+                'email' => $data->email,
+                'password' => $data->password,
+                'first_name' => $data->first_name,
+                'last_name' => $data->last_name
+            ];
+
+            $companyData = [
+                'company_name' => $data->company_name,
+                'ic' => $data->ic ?: '',
+                'dic' => $data->dic ?: '',
+                'vat_payer' => isset($data->vat_payer) ? $data->vat_payer : false,  // OPRAVA: ošetření checkboxu
+                'phone' => $data->phone ?: '',
+                'address' => $data->address ?: '',
+                'city' => $data->city ?: '',
+                'zip' => $data->zip ?: '',
+                'country' => $data->country ?: 'Česká republika'
+            ];
+
+            $debugInfo['tenant_data'] = $tenantData;
+            $debugInfo['admin_data'] = $adminData;
+            $debugInfo['admin_data']['password'] = '*** SKRYTO ***'; // Skryjeme heslo
+            $debugInfo['company_data'] = $companyData;
+
+            Debugger::log("🔄 TENANT DEBUG: Volám TenantManager->createTenant()", ILogger::INFO);
+            Debugger::log("🔄 TENANT DEBUG: Tenant data: " . json_encode($tenantData, JSON_UNESCAPED_UNICODE), ILogger::INFO);
+            Debugger::log("🔄 TENANT DEBUG: Company data: " . json_encode($companyData, JSON_UNESCAPED_UNICODE), ILogger::INFO);
+
+            // Vytvoření tenanta
+            $result = $this->tenantManager->createTenant($tenantData, $adminData, $companyData);
+
+            $debugInfo['result'] = $result;
+            Debugger::log("📊 TENANT DEBUG: Výsledek z TenantManager: " . json_encode($result, JSON_UNESCAPED_UNICODE), ILogger::INFO);
+
+            if ($result['success']) {
+                $debugInfo['status'] = 'SUCCESS';
+                Debugger::log("✅ TENANT DEBUG: ÚSPĚCH! Tenant byl vytvořen", ILogger::INFO);
+                
+                $this->flashMessage($result['message'], 'success');
+                $this->flashMessage("Admin uživatel: {$adminData['username']}, heslo bylo nastaveno podle zadání.", 'info');
+                $this->flashMessage("🔍 Debug: Tenant byl úspěšně vytvořen (zkontroluj log/info.log pro detaily)", 'info');
+                
+                // Uložíme debug info do session pro zobrazení na další stránce
+                $_SESSION['tenant_debug'] = $debugInfo;
+                
+                $this->redirect('default');
+            } else {
+                $debugInfo['status'] = 'ERROR';
+                $debugInfo['error_message'] = $result['message'];
+                Debugger::log("❌ TENANT DEBUG: CHYBA! " . $result['message'], ILogger::ERROR);
+                
+                $this->flashMessage('Chyba při vytváření tenanta: ' . $result['message'], 'danger');
+                $this->flashMessage("🔍 Debug: Zkontroluj log/error.log pro detaily", 'warning');
+                
+                // Uložíme debug info do session
+                $_SESSION['tenant_debug'] = $debugInfo;
+            }
+
+        } catch (Nette\Application\AbortException $e) {
+            // AbortException je normální při redirect - necháme ji projít
+            throw $e;
+        } catch (\Exception $e) {
+            $debugInfo['status'] = 'EXCEPTION';
+            $debugInfo['exception'] = [
+                'type' => get_class($e),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ];
+            
+            Debugger::log("💥 TENANT DEBUG: VÝJIMKA! " . get_class($e) . ": " . $e->getMessage(), ILogger::EXCEPTION);
+            Debugger::log("💥 TENANT DEBUG: Stack trace: " . $e->getTraceAsString(), ILogger::EXCEPTION);
+            
+            $this->flashMessage('Došlo k neočekávané chybě: ' . $e->getMessage(), 'danger');
+            $this->flashMessage("🔍 Debug: Zkontroluj log/exception.log pro plný stack trace", 'warning');
+            
+            // Uložíme debug info do session
+            $_SESSION['tenant_debug'] = $debugInfo;
+        }
+        // ================================================================
+        // DEBUG: KONEC
+        // ================================================================
     }
 
     /**

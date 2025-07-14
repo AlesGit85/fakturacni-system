@@ -68,9 +68,19 @@ class TenantManager
                 throw new \Exception("Uživatel s emailem '{$adminData['email']}' již existuje.");
             }
 
+            // DEBUG: Bod 1 - před vytvořením tenanta
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 1 - kontroly unikátnosti prošly", \Tracy\ILogger::INFO);
+
             // 2. Vytvoření tenanta
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 2 - vkládám do tabulky 'tenants'", \Tracy\ILogger::INFO);
+            
+            // OPRAVA: Vytvoříme unikátní slug pro tenanta
+            $tenantSlug = $this->createUniqueTenantSlug($tenantData['name']);
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 2 - vytvořen unikátní slug: '$tenantSlug'", \Tracy\ILogger::INFO);
+            
             $tenant = $this->database->table('tenants')->insert([
                 'name' => $tenantData['name'],
+                'slug' => $tenantSlug,  // OPRAVA: Přidáno chybějící pole
                 'domain' => $tenantData['domain'] ?? null,
                 'status' => 'active',
                 'created_at' => new \DateTime(),
@@ -78,10 +88,12 @@ class TenantManager
             ]);
 
             $tenantId = $tenant->id;
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 2 - tenant vytvořen s ID: $tenantId", \Tracy\ILogger::INFO);
 
             // 3. Vytvoření admin uživatele pro tento tenant
             $hashedPassword = $this->passwords->hash($adminData['password']);
             
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 3 - vkládám do tabulky 'users'", \Tracy\ILogger::INFO);
             $adminUser = $this->database->table('users')->insert([
                 'username' => $adminData['username'],
                 'email' => $adminData['email'],
@@ -93,8 +105,10 @@ class TenantManager
                 'is_super_admin' => 0,
                 'created_at' => new \DateTime()
             ]);
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 3 - admin user vytvořen s ID: " . $adminUser->id, \Tracy\ILogger::INFO);
 
             // 4. Vytvoření firemních údajů
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 4 - vkládám do tabulky 'company_info'", \Tracy\ILogger::INFO);
             $this->database->table('company_info')->insert([
                 'name' => $companyData['company_name'] ?? $tenantData['name'],
                 'ic' => $companyData['ic'] ?? '',
@@ -106,16 +120,24 @@ class TenantManager
                 'zip' => $companyData['zip'] ?? '',
                 'country' => $companyData['country'] ?? 'Česká republika',
                 'vat_payer' => $companyData['vat_payer'] ?? false,
+                'bank_account' => $companyData['bank_account'] ?? '',  // OPRAVA: Přidáno chybějící pole
+                'bank_name' => $companyData['bank_name'] ?? '',        // OPRAVA: Přidáno chybějící pole
                 'tenant_id' => $tenantId
             ]);
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 4 - company_info vytvořeno", \Tracy\ILogger::INFO);
 
             // 5. Vytvoření adresářové struktury pro moduly
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 5 - vytvářím adresáře", \Tracy\ILogger::INFO);
             $this->createTenantDirectories($tenantId);
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 5 - adresáře vytvořeny", \Tracy\ILogger::INFO);
 
             // 6. Zkopírování základních modulů
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 6 - nastavuji moduly", \Tracy\ILogger::INFO);
             $this->setupDefaultModules($tenantId, $adminUser->id);
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 6 - moduly nastaveny", \Tracy\ILogger::INFO);
 
             $this->database->commit();
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Krok 7 - transakce potvrzena", \Tracy\ILogger::INFO);
 
             // 7. Logování vytvoření tenanta
             $this->securityLogger->logSecurityEvent(
@@ -132,6 +154,9 @@ class TenantManager
 
         } catch (\Exception $e) {
             $this->database->rollback();
+            
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: CHYBA - " . $e->getMessage(), \Tracy\ILogger::ERROR);
+            \Tracy\Debugger::log("🔍 TENANT DEBUG: Stack trace - " . $e->getTraceAsString(), \Tracy\ILogger::ERROR);
             
             $this->securityLogger->logSecurityEvent(
                 'tenant_creation_failed',
@@ -164,10 +189,15 @@ class TenantManager
 
     /**
      * Nastaví základní moduly pro nový tenant
+     * OPRAVENO: Nový tenant začíná prázdný, bez kopírování modulů
      */
     private function setupDefaultModules(int $tenantId, int $adminUserId): void
     {
-        // Zkopírujeme základní moduly z tenant_1 (pokud existují)
+        // OPRAVA: Nový tenant začíná čistý - ŽÁDNÉ kopírování modulů
+        \Tracy\Debugger::log("🔍 TENANT DEBUG: Tenant $tenantId začíná bez modulů (čistý start)", \Tracy\ILogger::INFO);
+        
+        // ZAKÁZÁNO: Nekopírujeme moduly z tenant_1
+        /*
         $defaultModulesDir = $this->modulesDir . '/tenant_1';
         $newTenantDir = $this->modulesDir . '/tenant_' . $tenantId;
         $defaultWwwDir = $this->wwwModulesDir . '/tenant_1';
@@ -180,13 +210,17 @@ class TenantManager
         if (is_dir($defaultWwwDir)) {
             $this->copyDirectory($defaultWwwDir, $newWwwDir);
         }
-
-        // Registrujeme moduly v databázi
-        $this->registerModulesFromFilesystem($tenantId, $adminUserId);
+        */
+        
+        // ZAKÁZÁNO: Neregistrujeme žádné moduly - tenant je čistý
+        // $this->registerModulesFromFilesystem($tenantId, $adminUserId);
+        
+        \Tracy\Debugger::log("🔍 TENANT DEBUG: Tenant $tenantId má prázdné adresáře, žádné moduly", \Tracy\ILogger::INFO);
     }
 
     /**
      * Registruje moduly z filesystému do databáze
+     * OPRAVENO: Přidáno chybějící pole 'slug'
      */
     private function registerModulesFromFilesystem(int $tenantId, int $userId): void
     {
@@ -212,13 +246,17 @@ class TenantManager
                         ->fetch();
                     
                     if (!$existingModule) {
+                        // OPRAVA: Odstraněno pole 'slug' - tabulka user_modules ho nemá
+                        $moduleName = $moduleInfo['name'] ?? $moduleInfo['id'];
+                        
                         $this->database->table('user_modules')->insert([
                             'user_id' => $userId,
                             'tenant_id' => $tenantId,
                             'module_id' => $moduleInfo['id'],
-                            'module_name' => $moduleInfo['name'] ?? $moduleInfo['id'],
+                            'module_name' => $moduleName,
                             'module_version' => $moduleInfo['version'] ?? '1.0.0',
                             'module_path' => 'tenant_' . $tenantId . '/' . $moduleInfo['id'],
+                            // 'slug' => $moduleSlug,  // ODSTRANĚNO: tabulka user_modules nemá pole slug
                             'is_active' => true,
                             'installed_at' => new \DateTime(),
                             'installed_by' => $userId
@@ -227,6 +265,55 @@ class TenantManager
                 }
             }
         }
+    }
+
+    /**
+     * Vytvoří URL-friendly slug z názvu
+     * NOVÁ METODA pro generování slug
+     */
+    private function createSlug(string $text): string
+    {
+        // Převedeme na malá písmena
+        $slug = mb_strtolower($text, 'UTF-8');
+        
+        // Nahradíme českou diakritiku
+        $slug = strtr($slug, [
+            'á' => 'a', 'č' => 'c', 'ď' => 'd', 'é' => 'e', 'ě' => 'e',
+            'í' => 'i', 'ň' => 'n', 'ó' => 'o', 'ř' => 'r', 'š' => 's',
+            'ť' => 't', 'ú' => 'u', 'ů' => 'u', 'ý' => 'y', 'ž' => 'z'
+        ]);
+        
+        // Nahradíme mezery a speciální znaky pomlčkami
+        $slug = preg_replace('/[^a-z0-9]+/', '-', $slug);
+        
+        // Odstraníme pomlčky na začátku a konci
+        $slug = trim($slug, '-');
+        
+        // Pokud je slug prázdný, použijeme defaultní
+        if (empty($slug)) {
+            $slug = 'tenant-' . uniqid();
+        }
+        
+        return $slug;
+    }
+
+    /**
+     * Vytvoří unikátní slug pro tenanta
+     * NOVÁ METODA pro zajištění unikátnosti
+     */
+    private function createUniqueTenantSlug(string $name): string
+    {
+        $baseSlug = $this->createSlug($name);
+        $slug = $baseSlug;
+        $counter = 1;
+        
+        // Kontrola, jestli slug už existuje v tabulce tenants
+        while ($this->database->table('tenants')->where('slug', $slug)->fetch()) {
+            $counter++;
+            $slug = $baseSlug . '-' . $counter;
+        }
+        
+        return $slug;
     }
 
     /**
