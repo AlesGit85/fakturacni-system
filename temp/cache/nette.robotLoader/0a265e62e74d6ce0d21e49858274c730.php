@@ -10,7 +10,7 @@ return array (
     'App\\Core\\RouterFactory' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
-      1 => 1748337636,
+      1 => 1752475650,
     ),
     'App\\Mail\\TestMailer' => 
     array (
@@ -51,6 +51,11 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\QrPaymentService.php',
       1 => 1747658804,
+    ),
+    'App\\Model\\TenantManager' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\TenantManager.php',
+      1 => 1752474541,
     ),
     'App\\Model\\UserManager' => 
     array (
@@ -100,7 +105,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1752150081,
+      1 => 1752224652,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -125,7 +130,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1751978562,
+      1 => 1752238635,
     ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (
@@ -140,12 +145,17 @@ return array (
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1751977986,
+      1 => 1752240490,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
       1 => 1751958368,
+    ),
+    'App\\Presentation\\Tenants\\TenantsPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Tenants\\TenantsPresenter.php',
+      1 => 1752475555,
     ),
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
@@ -165,30 +175,14 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 3,
-    'null' => 3,
-    'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
-    'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\Users\\UsersEditTemplate' => 2,
-    'Modules\\Tenant_2_notes\\Module' => 3,
-    'App\\Presentation\\Extensions\\ExtensionsDefaultTemplate' => 3,
-    'App\\Presentation\\Extensions\\ExtensionsTemplate' => 3,
-    'App\\Presentation\\Extensions\\ExtensionsPresenter' => 2,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
+    'Nette\\Bridges\\Assets\\DIExtension' => 1,
+    'null' => 1,
+    'App\\Presentation\\Tenants\\TenantsAddTemplate' => 3,
+    'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
+    'App\\Presentation\\Sign\\SignInTemplate' => 2,
+    'App\\Presentation\\Sign\\SignTemplate' => 2,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
+    'App\\Presentation\\Home\\HomeTemplate' => 1,
   ),
   2 => 
   array (

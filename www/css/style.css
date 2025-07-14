@@ -13,5 +13,6 @@
 @import url('print.css');
 @import url('auth.css');
 @import url('settings.css');
+@import url('hierarchical-menu.css');
 
 /* Případné další specifické styly, které nepatří do žádné kategorie */

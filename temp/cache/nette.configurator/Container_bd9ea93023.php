@@ -73,6 +73,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\Application\Routers\RouteList' => [['router']],
@@ -84,6 +85,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'App\Model\AresService' => [['06']],
 		'App\Model\ModuleManager' => [['07']],
 		'App\Model\EmailService' => [['08']],
+		'App\Model\TenantManager' => [['09']],
 		'Nette\Security\Authenticator' => [['authenticator']],
 		'Nette\Security\IAuthenticator' => [['authenticator']],
 		'App\Model\UserManager' => [['authenticator']],
@@ -97,6 +99,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\Application\UI\Presenter' => [
@@ -110,6 +113,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\Application\UI\Control' => [
@@ -123,6 +127,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\Application\UI\Component' => [
@@ -136,6 +141,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\ComponentModel\Container' => [
@@ -149,6 +155,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\ComponentModel\Component' => [
@@ -162,6 +169,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\ComponentModel\IComponent' => [
@@ -175,6 +183,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\ComponentModel\IContainer' => [
@@ -188,6 +197,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\Application\UI\SignalReceiver' => [
@@ -201,6 +211,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\Application\UI\StatePersistent' => [
@@ -214,6 +225,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\Application\UI\Renderable' => [
@@ -227,6 +239,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.8',
 				'application.9',
 				'application.10',
+				'application.11',
 			],
 		],
 		'Nette\Application\IPresenter' => [
@@ -243,6 +256,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'App\Presentation\Clients\ClientsPresenter' => [2 => ['application.1']],
@@ -254,11 +268,12 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'App\Presentation\ModuleAdmin\ModuleAdminPresenter' => [2 => ['application.7']],
 		'App\Presentation\Settings\SettingsPresenter' => [2 => ['application.8']],
 		'App\Presentation\Sign\SignPresenter' => [2 => ['application.9']],
-		'App\Presentation\Users\UsersPresenter' => [2 => ['application.10']],
-		'NetteModule\ErrorPresenter' => [2 => ['application.11']],
-		'NetteModule\MicroPresenter' => [2 => ['application.12']],
-		'App\Core\RouterFactory' => [['09']],
-		'Modules\Financial_reports\FinancialReportsService' => [['010']],
+		'App\Presentation\Tenants\TenantsPresenter' => [2 => ['application.10']],
+		'App\Presentation\Users\UsersPresenter' => [2 => ['application.11']],
+		'NetteModule\ErrorPresenter' => [2 => ['application.12']],
+		'NetteModule\MicroPresenter' => [2 => ['application.13']],
+		'App\Core\RouterFactory' => [['010']],
+		'Modules\Financial_reports\FinancialReportsService' => [['011']],
 	];
 
 
@@ -316,13 +331,23 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	}
 
 
-	public function createService09(): App\Core\RouterFactory
+	public function createService09(): App\Model\TenantManager
+	{
+		return new App\Model\TenantManager(
+			$this->getService('database.default.explorer'),
+			$this->getService('05'),
+			$this->getService('security.passwords'),
+		);
+	}
+
+
+	public function createService010(): App\Core\RouterFactory
 	{
 		return new App\Core\RouterFactory;
 	}
 
 
-	public function createService010(): Modules\Financial_reports\FinancialReportsService
+	public function createService011(): Modules\Financial_reports\FinancialReportsService
 	{
 		return new Modules\Financial_reports\FinancialReportsService(
 			$this->getService('02'),
@@ -357,7 +382,27 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	}
 
 
-	public function createServiceApplication__10(): App\Presentation\Users\UsersPresenter
+	public function createServiceApplication__10(): App\Presentation\Tenants\TenantsPresenter
+	{
+		$service = new App\Presentation\Tenants\TenantsPresenter($this->getService('09'));
+		$service->injectPrimary(
+			$this->getService('http.request'),
+			$this->getService('http.response'),
+			$this->getService('application.presenterFactory'),
+			$this->getService('router'),
+			$this->getService('session.session'),
+			$this->getService('security.user'),
+			$this->getService('latte.templateFactory'),
+		);
+		$service->injectSecurityLogger($this->getService('05'));
+		$service->injectModuleManager($this->getService('07'));
+		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->invalidLinkMode = 5;
+		return $service;
+	}
+
+
+	public function createServiceApplication__11(): App\Presentation\Users\UsersPresenter
 	{
 		$service = new App\Presentation\Users\UsersPresenter($this->getService('authenticator'));
 		$service->injectPrimary(
@@ -377,13 +422,13 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	}
 
 
-	public function createServiceApplication__11(): NetteModule\ErrorPresenter
+	public function createServiceApplication__12(): NetteModule\ErrorPresenter
 	{
 		return new NetteModule\ErrorPresenter($this->getService('tracy.logger'));
 	}
 
 
-	public function createServiceApplication__12(): NetteModule\MicroPresenter
+	public function createServiceApplication__13(): NetteModule\MicroPresenter
 	{
 		return new NetteModule\MicroPresenter($this, $this->getService('http.request'), $this->getService('router'));
 	}

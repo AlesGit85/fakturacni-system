@@ -1,0 +1,528 @@
+{block content}
+
+{* Přidání konzistentních stylů s celým webem *}
+{block head}
+<style>
+    /* Konzistentní fonty podle celého webu */
+    .page-title {
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 28px;
+        color: #212529;
+        margin-bottom: 8px;
+    }
+    
+    .page-subtitle {
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .stats-card {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1.25rem;
+        text-align: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        transition: all 0.2s ease;
+    }
+    
+    .stats-card:hover {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transform: translateY(-1px);
+    }
+    
+    .stats-number {
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        margin-bottom: 4px;
+    }
+    
+    .stats-label {
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: #6c757d;
+    }
+    
+    .main-card {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .card-header-custom {
+        background: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 1rem 1.5rem;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    .card-title-custom {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 18px;
+        color: #212529;
+        margin-bottom: 0;
+    }
+    
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #B1D235 0%, #95B11F 100%);
+        color: #212529;
+        border: none;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 8px 16px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-primary-custom:hover {
+        background: linear-gradient(135deg, #95B11F 0%, #7a9b1a 100%);
+        color: #212529;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(149, 177, 31, 0.3);
+    }
+    
+    .table-modern {
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+    }
+    
+    .table-modern th {
+        font-weight: 600;
+        font-size: 14px;
+        color: #212529;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 12px;
+    }
+    
+    .table-modern td {
+        padding: 12px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f3f4;
+    }
+    
+    .table-modern tbody tr:hover {
+        background-color: rgba(177, 210, 53, 0.05);
+    }
+    
+    .tenant-name {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        color: #212529;
+    }
+    
+    .tenant-detail {
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: #6c757d;
+    }
+    
+    .badge-custom {
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+    
+    .badge-primary-custom {
+        background-color: #B1D235;
+        color: #212529;
+    }
+    
+    .badge-secondary-custom {
+        background-color: #95B11F;
+        color: #212529;
+    }
+    
+    .badge-neutral {
+        background-color: #6c757d;
+        color: white;
+    }
+    
+    .badge-dark {
+        background-color: #212529;
+        color: white;
+    }
+    
+    .badge-active {
+        background-color: #B1D235;
+        color: #212529;
+        font-weight: 600;
+    }
+    
+    .btn-action {
+        padding: 4px 8px;
+        border-radius: 4px;
+        border: 1px solid;
+        font-size: 12px;
+        margin: 0 2px;
+    }
+    
+    .btn-warning-outline {
+        color: #95B11F;
+        border-color: #95B11F;
+        background: transparent;
+    }
+    
+    .btn-warning-outline:hover {
+        background-color: #95B11F;
+        color: white;
+    }
+    
+    .btn-success-outline {
+        color: #B1D235;
+        border-color: #B1D235;
+        background: transparent;
+    }
+    
+    .btn-success-outline:hover {
+        background-color: #B1D235;
+        color: #212529;
+    }
+    
+    .btn-danger-outline {
+        color: #dc3545;
+        border-color: #dc3545;
+        background: transparent;
+    }
+    
+    .btn-danger-outline:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .page-title {
+            font-size: 24px;
+        }
+        
+        .stats-number {
+            font-size: 20px;
+        }
+    }
+</style>
+{/block}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">
+            <i class="bi bi-building me-2" style="color: #B1D235;"></i>
+            Správa tenantů
+        </h1>
+        <p class="page-subtitle">
+            <i class="bi bi-shield-check me-1" style="color: #95B11F;"></i>
+            Super admin rozhraní pro správu všech tenantů
+        </p>
+    </div>
+    <div>
+        <a n:href="add" class="btn btn-primary-custom">
+            <i class="bi bi-plus-circle me-2"></i>
+            Vytvořit nový tenant
+        </a>
+    </div>
+</div>
+
+{* Kompaktní statistiky *}
+<div class="stats-grid">
+    <div class="stats-card">
+        <div class="stats-number" style="color: #B1D235;">{$dashboardStats['total_tenants']}</div>
+        <div class="stats-label">Celkem tenantů</div>
+    </div>
+    <div class="stats-card">
+        <div class="stats-number" style="color: #95B11F;">{$dashboardStats['active_tenants']}</div>
+        <div class="stats-label">Aktivní</div>
+    </div>
+    <div class="stats-card">
+        <div class="stats-number" style="color: #6c757d;">{$dashboardStats['total_users']}</div>
+        <div class="stats-label">Celkem uživatelů</div>
+    </div>
+    <div class="stats-card">
+        <div class="stats-number" style="color: #212529;">{$dashboardStats['total_invoices']}</div>
+        <div class="stats-label">Celkem faktur</div>
+    </div>
+    <div class="stats-card">
+        <div class="stats-number" style="color: #95B11F;">
+            {if $dashboardStats['monthly_growth'] > 0}+{/if}{$dashboardStats['monthly_growth']|number:1}%
+        </div>
+        <div class="stats-label">Měsíční růst</div>
+    </div>
+</div>
+
+{* Seznam tenantů *}
+<div class="main-card">
+    <div class="card-header-custom">
+        <h5 class="card-title-custom">
+            <i class="bi bi-list-ul me-2" style="color: #B1D235;"></i>
+            Seznam všech tenantů ({count($tenants)})
+        </h5>
+    </div>
+    <div class="p-0">
+        {if count($tenants) > 0}
+            <div class="table-responsive">
+                <table class="table table-modern mb-0">
+                    <thead>
+                        <tr>
+                            <th>Tenant</th>
+                            <th>Administrátor</th>
+                            <th>Statistiky</th>
+                            <th>Stav</th>
+                            <th>Akce</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $tenants as $tenantData}
+                            {var $tenant = $tenantData['tenant']}
+                            {var $stats = $tenantData['stats']}
+                            {var $admin = $tenantData['admin_user']}
+                            {var $company = $tenantData['company']}
+                            {var $lastActivity = $tenantData['last_activity']}
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-3">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                                 style="width: 32px; height: 32px; background: linear-gradient(135deg, #B1D235 0%, #95B11F 100%);">
+                                                <i class="bi bi-building text-white" style="font-size: 14px;"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 min-width-0">
+                                            <div class="tenant-name">{$tenant['name']}</div>
+                                            {if $company}
+                                                <div class="tenant-detail">{$company['name']}</div>
+                                            {/if}
+                                            {if $tenant['domain']}
+                                                <div class="tenant-detail">
+                                                    <i class="bi bi-globe me-1"></i>{$tenant['domain']}
+                                                </div>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {if $admin}
+                                        <div class="tenant-name">{$admin['first_name']} {$admin['last_name']}</div>
+                                        <div class="tenant-detail">@{$admin['username']}</div>
+                                        <div class="tenant-detail">
+                                            <i class="bi bi-envelope me-1"></i>{$admin['email']}
+                                        </div>
+                                        {if $lastActivity}
+                                            <div class="tenant-detail" style="color: #B1D235;">
+                                                <i class="bi bi-activity me-1"></i>
+                                                {$lastActivity|date:'d.m.Y H:i'}
+                                            </div>
+                                        {else}
+                                            <div class="tenant-detail">
+                                                <i class="bi bi-clock me-1"></i>Nikdy nepřihlášen
+                                            </div>
+                                        {/if}
+                                    {else}
+                                        <span class="tenant-detail">Žádný admin</span>
+                                    {/if}
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <span class="badge badge-custom badge-primary-custom" title="Počet uživatelů">
+                                            <i class="bi bi-people me-1"></i>{$stats['users_count']} uživatelů
+                                        </span>
+                                        <span class="badge badge-custom badge-secondary-custom" title="Počet faktur">
+                                            <i class="bi bi-receipt me-1"></i>{$stats['invoices_count']} faktur
+                                        </span>
+                                        <span class="badge badge-custom badge-neutral" title="Počet klientů">
+                                            <i class="bi bi-person-badge me-1"></i>{$stats['clients_count']} klientů
+                                        </span>
+                                        <span class="badge badge-custom badge-dark" title="Počet modulů">
+                                            <i class="bi bi-puzzle me-1"></i>{$stats['modules_count']} modulů
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    {if $tenant['status'] === 'active'}
+                                        <span class="badge badge-custom badge-active">
+                                            <i class="bi bi-check-circle me-1"></i>Aktivní
+                                        </span>
+                                    {elseif $tenant['status'] === 'inactive'}
+                                        <span class="badge badge-custom badge-neutral">
+                                            <i class="bi bi-pause-circle me-1"></i>Neaktivní
+                                        </span>
+                                    {elseif $tenant['status'] === 'suspended'}
+                                        <span class="badge badge-custom" style="background-color: #ffc107; color: #212529;">
+                                            <i class="bi bi-exclamation-triangle me-1"></i>Pozastavený
+                                        </span>
+                                    {/if}
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        {if $tenant['status'] === 'active'}
+                                            <button type="button" class="btn btn-action btn-warning-outline" 
+                                                    onclick="deactivateTenant({$tenant['id']}, '{$tenant['name']|escapeHtml}')"
+                                                    title="Deaktivovat">
+                                                <i class="bi bi-pause"></i>
+                                            </button>
+                                        {else}
+                                            <a n:href="activate, id => $tenant['id']" class="btn btn-action btn-success-outline" title="Aktivovat">
+                                                <i class="bi bi-play"></i>
+                                            </a>
+                                        {/if}
+                                        
+                                        {if $tenant['id'] !== 1}
+                                            <button type="button" class="btn btn-action btn-danger-outline" 
+                                                    onclick="deleteTenant({$tenant['id']}, '{$tenant['name']|escapeHtml}')"
+                                                    title="Smazat">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        {/if}
+                                    </div>
+                                </td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        {else}
+            <div class="text-center py-5">
+                <div class="display-1 text-muted mb-3">
+                    <i class="bi bi-building"></i>
+                </div>
+                <h4 class="tenant-name">Žádní tenanty</h4>
+                <p class="tenant-detail">Začněte vytvořením prvního tenanta pro vaše zákazníky.</p>
+                <a n:href="add" class="btn btn-primary-custom">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Vytvořit první tenant
+                </a>
+            </div>
+        {/if}
+    </div>
+</div>
+
+{* Modal pro potvrzení deaktivace *}
+<div class="modal fade" id="deactivateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #fff3cd;">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                    Potvrzení deaktivace
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">Opravdu chcete deaktivovat tenant <strong id="deactivate-tenant-name"></strong>?</p>
+                <div class="alert alert-warning">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Uživatelé tenanta se nebudou moci přihlásit, dokud tenant znovu neaktivujete.
+                </div>
+                <div class="mb-3">
+                    <label for="deactivate-reason" class="form-label">Důvod deaktivace:</label>
+                    <textarea id="deactivate-reason" class="form-control" rows="3" 
+                              placeholder="Uveďte důvod deaktivace..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
+                <button type="button" class="btn btn-warning" onclick="confirmDeactivate()">
+                    <i class="bi bi-pause me-2"></i>Deaktivovat
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* Modal pro potvrzení smazání *}
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    NEBEZPEČNÁ OPERACE
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="delete-form" method="post">
+                <div class="modal-body">
+                    <div class="alert alert-danger">
+                        <h6><i class="bi bi-exclamation-triangle me-2"></i>VAROVÁNÍ!</h6>
+                        <p class="mb-0">Tato akce <strong>NENÁVRATNĚ SMAŽE</strong> tenant <strong id="delete-tenant-name"></strong> a všechna jeho data:</p>
+                        <ul class="mt-2 mb-0">
+                            <li>Všechny uživatele tenanta</li>
+                            <li>Všechny faktury a jejich položky</li>
+                            <li>Všechny klienty</li>
+                            <li>Firemní údaje</li>
+                            <li>Všechny moduly a jejich data</li>
+                        </ul>
+                    </div>
+                    
+                    {form deleteTenantForm}
+                        <input type="hidden" name="tenant_id" id="delete-tenant-id">
+                        
+                        <div class="mb-3">
+                            {label reason class => 'form-label fw-bold' /}
+                            {input reason}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {label confirmation class => 'form-label fw-bold' /}
+                            {input confirmation}
+                        </div>
+                    {/form}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
+                    <button type="submit" form="frm-deleteTenantForm" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>SMAZAT TENANT
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentTenantId = null;
+
+function deactivateTenant(tenantId, tenantName) {
+    currentTenantId = tenantId;
+    document.getElementById('deactivate-tenant-name').textContent = tenantName;
+    new bootstrap.Modal(document.getElementById('deactivateModal')).show();
+}
+
+function confirmDeactivate() {
+    const reason = document.getElementById('deactivate-reason').value || 'Deaktivace super adminem';
+    // Redirect na deactivate akci
+    window.location.href = '/tenants/deactivate/' + currentTenantId + '?reason=' + encodeURIComponent(reason);
+}
+
+function deleteTenant(tenantId, tenantName) {
+    document.getElementById('delete-tenant-name').textContent = tenantName;
+    document.getElementById('delete-tenant-id').value = tenantId;
+    // Nastavíme tenant_id do formuláře
+    document.querySelector('#frm-deleteTenantForm input[name="tenant_id"]').value = tenantId;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
+
+{/block}
