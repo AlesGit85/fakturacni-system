@@ -497,26 +497,39 @@ final class UsersPresenter extends BasePresenter
                     return;
                 }
 
-                $newUserId = $this->userManager->add(
-                    $data->username,
-                    $data->email,
-                    $data->password,
-                    $data->role,
-                    $tenantId,
-                    $adminId,
-                    $adminName
-                );
+                try {
+                    $newUserId = $this->userManager->add(
+                        $data->username,
+                        $data->email,
+                        $data->password,
+                        $data->role,
+                        $tenantId,
+                        $adminId,
+                        $adminName
+                    );
 
-                if ($newUserId) {
-                    $this->flashMessage('Uživatel byl úspěšně přidán do vašeho firemního účtu.', 'success');
-                } else {
-                    $form->addError('Nepodařilo se přidat uživatele. Zkuste to prosím znovu.');
+                    if ($newUserId) {
+                        $this->flashMessage('Uživatel byl úspěšně přidán do vašeho firemního účtu.', 'success');
+                    } else {
+                        $form->addError('Nepodařilo se přidat uživatele. Zkuste to prosím znovu.');
+                        return;
+                    }
+                } catch (\Exception $addException) {
+                    error_log('Chyba při volání UserManager::add(): ' . $addException->getMessage());
+                    $form->addError('Chyba při vytváření uživatele: ' . $addException->getMessage());
                     return;
                 }
             }
 
+            // Redirect na konci - tady se může vyhodit AbortException
             $this->redirect('default');
+            
+        } catch (Nette\Application\AbortException $e) {
+            // AbortException je normální při redirect - necháme ji projít
+            throw $e;
         } catch (\Exception $e) {
+            error_log('Obecná chyba v userFormSucceeded(): ' . $e->getMessage());
+            error_log('Stack trace: ' . $e->getTraceAsString());
             $form->addError('Chyba při ukládání uživatele: ' . $e->getMessage());
         }
     }

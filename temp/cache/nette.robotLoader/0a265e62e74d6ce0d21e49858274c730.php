@@ -160,7 +160,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1752593950,
+      1 => 1752594118,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
@@ -194,6 +194,8 @@ return array (
     'App\\Presentation\\Sign\\SignOutTemplate' => 1,
     'App\\Presentation\\Users\\UsersProfileTemplate' => 2,
     'App\\Presentation\\Users\\UsersAddTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
   ),
   2 => 
   array (
