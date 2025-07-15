@@ -1,0 +1,62 @@
+MIME-Version: 1.0
+X-Mailer: Nette Framework
+Date: Tue, 15 Jul 2025 15:24:09 +0000
+From: QRdoklad <noreply@allimedia.cz>
+To: tester@allimedia.cz
+Subject: =?UTF-8?B?VsOtdGVqdGUgdiBRUmRva2xhZCAtIHJlZ2lzdHJhY2UgYnk=?=
+	=?UTF-8?B?bGEgw7pzcMSbxaFuw6E=?=
+Message-ID: <nylihlsztg@localhost8000>
+Content-Type: multipart/alternative;
+	boundary="--------15s0bu9uuk"
+
+----------15s0bu9uuk
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Vítejte v QRdoklad!
+
+Váš účet s uživatelským jménem 'Aleš Test' byl úspěšně vytvořen.
+Role: Administrátor
+
+Nyní se můžete přihlásit: http://localhost:8000/sign/in
+
+V případě problémů nás kontaktujte na: info@allimedia.cz
+----------15s0bu9uuk
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset='utf-8'>
+            <style>
+                body { font-family: Arial, sans-serif; color: #212529; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { background: #B1D235; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+                .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; }
+                .btn { background: #B1D235; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 20px 0; }
+                .footer { text-align: center; color: #6c757d; font-size: 12px; margin-top: 30px; }
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>
+                    <h1>Vítejte v QRdoklad!</h1>
+                </div>
+                <div class='content'>
+                    <h2>Registrace byla úspěšná</h2>
+                    <p>Váš účet s uživatelským jménem <strong>Aleš Test</strong> byl úspěšně vytvořen.</p>
+                    <p><strong>Role:</strong> Administrátor</p>
+                    
+                    <p>Nyní se můžete přihlásit a začít používat systém:</p>
+                    <a href='http://localhost:8000/sign/in' class='btn'>Přihlásit se</a>
+                    
+                    <p>V případě problémů nás kontaktujte na: <a href='mailto:info@allimedia.cz'>info@allimedia.cz</a></p>
+                </div>
+                <div class='footer'>
+                    <p>Tento email byl automaticky vygenerován systémem QRdoklad</p>
+                </div>
+            </div>
+        </body>
+        </html>
+----------15s0bu9uuk--

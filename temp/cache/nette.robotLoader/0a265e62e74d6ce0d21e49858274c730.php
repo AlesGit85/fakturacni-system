@@ -150,7 +150,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1751958368,
+      1 => 1752593877,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
@@ -160,7 +160,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1752219885,
+      1 => 1752593950,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
@@ -190,6 +190,10 @@ return array (
     'App\\Presentation\\Clients\\ClientsTemplate' => 2,
     'App\\Presentation\\Clients\\ClientsAddTemplate' => 1,
     'App\\Presentation\\Tenants\\TenantsDeleteTemplate' => 2,
+    'App\\Presentation\\Sign\\SignUpTemplate' => 3,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
+    'App\\Presentation\\Users\\UsersProfileTemplate' => 2,
+    'App\\Presentation\\Users\\UsersAddTemplate' => 3,
   ),
   2 => 
   array (

@@ -583,6 +583,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('authenticator'),
 			$this->getService('05'),
 			$this->getService('08'),
+			$this->getService('09'),
 			$this->getService('database.default.explorer'),
 		);
 		$service->injectPrimary(

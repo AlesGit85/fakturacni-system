@@ -1,6 +1,6 @@
 {layout '../@layout.latte'}
 
-{block title}Registrace{/block}
+{block title}Registrace nového firemního účtu{/block}
 
 {block content}
 <div class="auth-container">
@@ -9,18 +9,10 @@
             <div class="auth-header">
                 <img src="{$basePath}/images/qr-webp-white.webp" alt="QRdoklad" class="auth-logo">
                 <h1 class="auth-title">
-                    {if $isFirstUser}
-                        Vytvoření administrátorského účtu
-                    {else}
-                        Registrace nového uživatele
-                    {/if}
+                    Vytvoření nového firemního účtu
                 </h1>
                 <p class="auth-subtitle">
-                    {if $isFirstUser}
-                        Vytvořte první účet s administrátorskými právy
-                    {else}
-                        Vyplňte údaje pro vytvoření nového účtu
-                    {/if}
+                    Vytvořte si vlastní firemní účet s administrátorským přístupem
                 </p>
             </div>
 
@@ -35,6 +27,48 @@
                             {/foreach}
                         </div>
                     {/if}
+
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Vytváříte nový firemní účet:</strong> Budete automaticky administrátor s plnými právy.
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-muted mb-3">
+                                <i class="bi bi-building me-2 text-primary"></i>
+                                Údaje o firemním účtu
+                            </h6>
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {input company_account_name class => 'form-control'}
+                        <label for="frm-signUpForm-company_account_name" class="form-label">Název firemního účtu</label>
+                        {if $form['company_account_name']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['company_account_name']->getError()}</div>
+                        {/if}
+                        <div class="form-text">Název pro váš firemní účet v systému</div>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        {input company_name class => 'form-control'}
+                        <label for="frm-signUpForm-company_name" class="form-label">Název společnosti</label>
+                        {if $form['company_name']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['company_name']->getError()}</div>
+                        {/if}
+                        <div class="form-text">Oficiální název vaší společnosti</div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <hr class="text-primary">
+                            <h6 class="text-muted mb-3">
+                                <i class="bi bi-person-badge me-2 text-primary"></i>
+                                Administrátorský účet
+                            </h6>
+                        </div>
+                    </div>
                     
                     <div class="form-floating mb-3">
                         {input username class => 'form-control'}
@@ -68,21 +102,11 @@
                         {/if}
                     </div>
 
-                    {* Pole role se zobrazí jen pokud není první uživatel A je přihlášen admin *}
-                    {if !$isFirstUser && $userLoggedIn && $isUserAdmin}
-                    <div class="form-floating mb-3">
-                        {input role class => 'form-select'}
-                        <label for="frm-signUpForm-role" class="form-label">Role</label>
-                        {if $form['role']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['role']->getError()}</div>
-                        {/if}
+                    <div class="alert alert-success mb-3">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <strong>Výsledek:</strong> Bude vytvořen nový firemní účet s administrátorským přístupem. 
+                        Poté se budete moci přihlásit a spravovat faktury, klienty a další uživatele.
                     </div>
-                    {elseif !$isFirstUser}
-                    <div class="alert alert-info mb-3">
-                        <i class="bi bi-info-circle me-2"></i>
-                        Nový účet bude vytvořen s rolí "Pouze čtení". Admin může roli později změnit.
-                    </div>
-                    {/if}
 
                     <div class="d-grid">
                         {input send class => 'btn btn-primary btn-lg'}
@@ -92,9 +116,20 @@
 
             <div class="auth-footer">
                 <p class="text-center text-muted">
-                    Už máte účet? 
+                    Už máte firemní účet? 
                     <a n:href="Sign:in" class="auth-link">Přihlaste se</a>
                 </p>
+                
+                {* Požadavky na heslo *}
+                <div class="alert alert-light mt-3">
+                    <i class="bi bi-shield-check me-2 text-primary"></i>
+                    <strong>Požadavky na heslo:</strong>
+                    <ul class="mb-0 mt-2 small">
+                        <li>Alespoň 8 znaků</li>
+                        <li>Alespoň jedna číslice</li>
+                        <li>Alespoň jedno velké písmeno</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

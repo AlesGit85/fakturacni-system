@@ -316,61 +316,12 @@ final class UsersPresenter extends BasePresenter
         $this->redirect('default');
     }
 
-    /**
-     * Formulář pro přesouvání uživatele mezi tenanty (pouze super admin)
-     */
-    protected function createComponentMoveTenantForm(): Form
-    {
-        $form = new Form;
-        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
-
-        $form->addHidden('user_id');
-
-        // Získáme všechny tenanty pro výběr
-        $tenants = [];
-        foreach ($this->database->table('tenants')->order('name ASC') as $tenant) {
-            // Získáme i informace o společnosti pro lepší zobrazení
-            $company = $this->database->table('company_info')->where('tenant_id', $tenant->id)->fetch();
-            
-            $companyName = $company ? $company->name : $tenant->name;
-            $label = sprintf(
-                '%s - %s (ID: %d)',
-                $companyName,
-                $tenant->name,
-                $tenant->id
-            );
-
-            $tenants[$tenant->id] = $label;
-        }
-
-        $form->addSelect('new_tenant_id', 'Cílový tenant:')
-            ->setItems($tenants)
-            ->setRequired('Vyberte tenant, do kterého chcete uživatele přesunout')
-            ->setHtmlAttribute('class', 'form-select');
-
-        $form->addTextArea('reason', 'Důvod přesunutí:')
-            ->setHtmlAttribute('rows', 3)
-            ->setHtmlAttribute('placeholder', 'Volitelně uveďte důvod přesunutí uživatele...')
-            ->setRequired(false);
-
-        $form->addSubmit('send', 'Přesunout uživatele')
-            ->setHtmlAttribute('class', 'btn btn-warning');
-
-        $form->onSuccess[] = [$this, 'moveTenantFormSucceeded'];
-
-        return $form;
-    }
-
-    public function moveTenantFormSucceeded(Form $form, \stdClass $data): void
+    public function actionMoveUser(int $userId, int $newTenantId, ?string $reason = null): void
     {
         if (!$this->isSuperAdmin()) {
             $this->flashMessage('Pouze super admin může přesouvat uživatele mezi tenanty.', 'danger');
             $this->redirect('default');
         }
-
-        $userId = (int) $data->user_id;
-        $newTenantId = (int) $data->new_tenant_id;
-        $reason = trim($data->reason);
 
         // Kontrola, že máme platné ID
         if ($userId <= 0) {
@@ -433,7 +384,7 @@ final class UsersPresenter extends BasePresenter
     }
 
     /**
-     * Formulář pro úpravu uživatele
+     * Formulář pro úpravu uživatele - OPRAVENÝ pro multi-tenancy
      */
     protected function createComponentUserForm(): Form
     {
@@ -455,27 +406,43 @@ final class UsersPresenter extends BasePresenter
         ])
             ->setRequired('Vyberte roli');
 
-        $passwordField = $form->addPassword('password', 'Nové heslo:')
-            ->setRequired(false);
+        // Heslo je povinné pouze při přidávání nového uživatele
+        $id = $this->getParameter('id');
+        $passwordField = $form->addPassword('password', 'Heslo:')
+            ->setRequired($id ? false : 'Zadejte heslo');
 
-        $passwordField->addCondition($form::FILLED)
-            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 8)
-            ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jednu číslici', '.*[0-9].*')
-            ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jedno velké písmeno', '.*[A-Z].*');
+        if (!$id) {
+            // Pro nového uživatele jsou hesla povinná
+            $passwordField->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 8)
+                ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jednu číslici', '.*[0-9].*')
+                ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jedno velké písmeno', '.*[A-Z].*');
+        } else {
+            // Pro editaci hesla jsou volitelná
+            $passwordField->addCondition($form::FILLED)
+                ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 8)
+                ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jednu číslici', '.*[0-9].*')
+                ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jedno velké písmeno', '.*[A-Z].*');
+        }
 
-        $form->addPassword('passwordVerify', 'Nové heslo znovu:')
-            ->setRequired(false)
+        $form->addPassword('passwordVerify', 'Heslo znovu:')
+            ->setRequired($id ? false : 'Zadejte heslo znovu pro kontrolu')
             ->addConditionOn($passwordField, $form::FILLED)
-            ->setRequired('Zadejte heslo znovu pro kontrolu')
             ->addRule(Form::EQUAL, 'Hesla se neshodují', $passwordField);
 
-        $form->addSubmit('send', 'Uložit změny');
+        if ($id) {
+            $form->addSubmit('send', 'Uložit změny');
+        } else {
+            $form->addSubmit('send', 'Přidat uživatele');
+        }
 
         $form->onSuccess[] = [$this, 'userFormSucceeded'];
 
         return $form;
     }
 
+    /**
+     * OPRAVENÁ metoda pro zpracování formuláře - správné přidávání do tenanta
+     */
     public function userFormSucceeded(Form $form, \stdClass $data): void
     {
         $id = $this->getParameter('id');
@@ -488,7 +455,7 @@ final class UsersPresenter extends BasePresenter
                 ->fetch();
 
             if ($existingUsername) {
-                $this->flashMessage('Uživatelské jméno už existuje.', 'danger');
+                $form->addError('Uživatelské jméno už existuje.');
                 return;
             }
 
@@ -498,19 +465,8 @@ final class UsersPresenter extends BasePresenter
                 ->fetch();
 
             if ($existingEmail) {
-                $this->flashMessage('E-mailová adresa už je používána.', 'danger');
+                $form->addError('E-mailová adresa už je používána.');
                 return;
-            }
-
-            $userData = [
-                'username' => $data->username,
-                'email' => $data->email,
-                'role' => $data->role,
-            ];
-
-            // Přidání hesla pouze pokud bylo zadáno
-            if (!empty($data->password)) {
-                $userData['password'] = password_hash($data->password, PASSWORD_DEFAULT);
             }
 
             // Informace o adminovi pro logování
@@ -518,19 +474,50 @@ final class UsersPresenter extends BasePresenter
             $adminName = $this->getUser()->getIdentity()->username;
 
             if ($id) {
-                // Editace
+                // EDITACE existujícího uživatele
+                $userData = [
+                    'username' => $data->username,
+                    'email' => $data->email,
+                    'role' => $data->role,
+                ];
+
+                // Přidání hesla pouze pokud bylo zadáno
+                if (!empty($data->password)) {
+                    $userData['password'] = $data->password; // UserManager si heslo zahashuje
+                }
+
                 $this->userManager->update($id, $userData, $adminId, $adminName);
                 $this->flashMessage('Uživatel byl úspěšně aktualizován.', 'success');
             } else {
-                // Přidání - předáme základní parametry podle původní metody
-                $tenantId = $this->isSuperAdmin() ? null : $this->getCurrentTenantId();
-                $this->userManager->add($userData['username'], $userData['email'], $userData['password'], $userData['role'], $tenantId, $adminId, $adminName);
-                $this->flashMessage('Uživatel byl úspěšně přidán.', 'success');
+                // PŘIDÁNÍ nového uživatele do aktuálního tenanta
+                $tenantId = $this->getCurrentTenantId();
+                
+                if (!$tenantId) {
+                    $form->addError('Chyba: Nepodařilo se určit aktuální tenant.');
+                    return;
+                }
+
+                $newUserId = $this->userManager->add(
+                    $data->username,
+                    $data->email,
+                    $data->password,
+                    $data->role,
+                    $tenantId,
+                    $adminId,
+                    $adminName
+                );
+
+                if ($newUserId) {
+                    $this->flashMessage('Uživatel byl úspěšně přidán do vašeho firemního účtu.', 'success');
+                } else {
+                    $form->addError('Nepodařilo se přidat uživatele. Zkuste to prosím znovu.');
+                    return;
+                }
             }
 
             $this->redirect('default');
         } catch (\Exception $e) {
-            $this->flashMessage('Chyba při ukládání uživatele: ' . $e->getMessage(), 'danger');
+            $form->addError('Chyba při ukládání uživatele: ' . $e->getMessage());
         }
     }
 
@@ -608,78 +595,209 @@ final class UsersPresenter extends BasePresenter
                 }
             }
 
-            // Příprava dat
-            $userData = [
+            // Kontrola jedinečnosti uživatelského jména a e-mailu
+            $existingUsername = $this->userManager->getAll()
+                ->where('username', $data->username)
+                ->where('id != ?', $userId)
+                ->fetch();
+
+            if ($existingUsername) {
+                $form->addError('Uživatelské jméno už je obsazené.');
+                return;
+            }
+
+            $existingEmail = $this->userManager->getAll()
+                ->where('email', $data->email)
+                ->where('id != ?', $userId)
+                ->fetch();
+
+            if ($existingEmail) {
+                $form->addError('E-mailová adresa už je používána.');
+                return;
+            }
+
+            // Příprava dat pro update
+            $updateData = [
                 'username' => $data->username,
                 'email' => $data->email,
                 'first_name' => $data->first_name,
                 'last_name' => $data->last_name,
             ];
 
+            // Přidání hesla pouze pokud se mění
             if ($passwordWillChange) {
-                $userData['password'] = password_hash($data->password, PASSWORD_DEFAULT);
+                $updateData['password'] = $data->password; // UserManager si heslo zahashuje
             }
 
-            // Update uživatele
-            $this->userManager->update($userId, $userData);
-            
-            // Pokud se změnilo heslo - okamžitý logout a redirect
-            if ($passwordWillChange) {
-                $this->flashMessage('Heslo bylo úspěšně změněno. Z bezpečnostních důvodů budete odhlášeni.', 'success');
-                $this->getUser()->logout();
-                $this->redirect('Sign:in'); // AbortException se vyhodí ZDE - to je NORMÁLNÍ!
+            // Informace o adminovi (v tomto případě uživatel mění svůj vlastní profil)
+            $adminId = $userId;
+            $adminName = $data->username;
+
+            $this->userManager->update($userId, $updateData, $adminId, $adminName);
+
+            // Pokud se změnilo uživatelské jméno, musíme uživatele odhlásit
+            if ($currentUser->username !== $data->username) {
+                $this->flashMessage('Profil byl aktualizován. Kvůli změně uživatelského jména budete odhlášeni.', 'success');
+                $this->redirect('Sign:relogin');
+            } else {
+                $this->flashMessage('Profil byl úspěšně aktualizován.', 'success');
+                $this->redirect('this');
             }
-            
-            // Kontrola změny uživatelského jména
-            if ($data->username !== $this->getUser()->getIdentity()->username) {
-                $this->flashMessage('Vaše uživatelské jméno bylo změněno. Budete odhlášeni.', 'info');
-                $this->getUser()->logout();
-                $this->redirect('Sign:in'); // AbortException se vyhodí ZDE - to je NORMÁLNÍ!
-            }
-            
-            // Pouze změna osobních údajů - zůstáváme přihlášeni
-            $this->flashMessage('Váš profil byl úspěšně aktualizován.', 'success');
-            
-        } catch (\Nette\Application\AbortException $e) {
-            // AbortException je NORMÁLNÍ při redirectu - necháme ji projít!
-            throw $e;
+
         } catch (\Exception $e) {
-            // Jen skutečné chyby
-            $this->flashMessage('Chyba při ukládání profilu: ' . $e->getMessage(), 'danger');
+            $form->addError('Chyba při ukládání profilu: ' . $e->getMessage());
         }
     }
 
     /**
-     * OPRAVENÝ: Formulář pro vyhledávání s přidaným tlačítkem "Vymazat"
+     * Formulář pro přesouvání uživatele mezi tenanty (pouze super admin)
+     */
+    protected function createComponentMoveTenantForm(): Form
+    {
+        $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+
+        $form->addHidden('user_id');
+
+        // Získáme všechny tenanty pro výběr
+        $tenants = [];
+        foreach ($this->database->table('tenants')->order('name ASC') as $tenant) {
+            // Získáme i informace o společnosti pro lepší zobrazení
+            $company = $this->database->table('company_info')->where('tenant_id', $tenant->id)->fetch();
+            
+            $companyName = $company ? $company->name : $tenant->name;
+            $label = sprintf(
+                '%s - %s (ID: %d)',
+                $companyName,
+                $tenant->name,
+                $tenant->id
+            );
+
+            $tenants[$tenant->id] = $label;
+        }
+
+        $form->addSelect('new_tenant_id', 'Cílový tenant:')
+            ->setItems($tenants)
+            ->setRequired('Vyberte tenant, do kterého chcete uživatele přesunout')
+            ->setHtmlAttribute('class', 'form-select');
+
+        $form->addTextArea('reason', 'Důvod přesunutí:')
+            ->setHtmlAttribute('rows', 3)
+            ->setHtmlAttribute('placeholder', 'Volitelně uveďte důvod přesunutí uživatele...')
+            ->setRequired(false);
+
+        $form->addSubmit('send', 'Přesunout uživatele')
+            ->setHtmlAttribute('class', 'btn btn-warning');
+
+        $form->onSuccess[] = [$this, 'moveTenantFormSucceeded'];
+
+        return $form;
+    }
+
+    /**
+     * Vyhledávací formulář pro super admina
      */
     protected function createComponentSearchForm(): Form
     {
         $form = new Form;
+        
+        $form->addText('search', 'Vyhledat uživatele:')
+            ->setHtmlAttribute('placeholder', 'Zadejte jméno, email, tenant...')
+            ->setDefaultValue($this->getParameter('search'));
 
-        $form->addText('search', 'Hledat uživatele:')
-            ->setHtmlAttribute('placeholder', 'Jméno, email, firma, tenant...')
-            ->setHtmlAttribute('class', 'form-control form-control-lg');
-
-        $form->addSubmit('send', 'Vyhledat')
-            ->setHtmlAttribute('class', 'btn btn-primary btn-lg');
+        $form->addSubmit('send', 'Hledat')
+            ->setHtmlAttribute('class', 'btn btn-primary');
 
         $form->addSubmit('clear', 'Vymazat')
-            ->setHtmlAttribute('class', 'btn btn-outline-secondary btn-lg')
+            ->setHtmlAttribute('class', 'btn btn-outline-secondary')
             ->setValidationScope([]);
 
-        $form->onSuccess[] = function (Form $form, \stdClass $values) {
-            if ($form->isSubmitted() === $form['clear']) {
-                // Bylo kliknuto na "Vymazat" - přesměruj na stránku bez vyhledávání
-                $this->redirect('default');
-            } elseif (!empty($values->search)) {
-                // Bylo kliknuto na "Vyhledat" a je zadán vyhledávací text
-                $this->redirect('default', ['search' => $values->search]);
-            } else {
-                // Bylo kliknuto na "Vyhledat" ale není zadán text - přesměruj na výchozí stránku
-                $this->redirect('default');
-            }
-        };
+        $form->onSuccess[] = [$this, 'searchFormSucceeded'];
 
         return $form;
+    }
+
+    public function searchFormSucceeded(Form $form, \stdClass $data): void
+    {
+        $submittedBy = $form->isSubmitted();
+
+        if ($submittedBy === $form['clear']) {
+            // Vymazání vyhledávání
+            $this->redirect('this', ['search' => null]);
+        } else {
+            // Vyhledávání
+            $this->redirect('this', ['search' => $data->search]);
+        }
+    }
+
+    public function moveTenantFormSucceeded(Form $form, \stdClass $data): void
+    {
+        if (!$this->isSuperAdmin()) {
+            $this->flashMessage('Pouze super admin může přesouvat uživatele mezi tenanty.', 'danger');
+            $this->redirect('default');
+        }
+
+        $userId = (int) $data->user_id;
+        $newTenantId = (int) $data->new_tenant_id;
+        $reason = trim($data->reason);
+
+        // Kontrola, že máme platné ID
+        if ($userId <= 0) {
+            $this->flashMessage('Neplatné ID uživatele.', 'danger');
+            $this->redirect('default');
+        }
+
+        if ($newTenantId <= 0) {
+            $this->flashMessage('Neplatné ID tenanta.', 'danger');
+            $this->redirect('default');
+        }
+
+        try {
+            // Ověření, že uživatel existuje
+            $user = $this->userManager->getByIdForSuperAdmin($userId);
+            if (!$user) {
+                $this->flashMessage('Uživatel nebyl nalezen.', 'danger');
+                $this->redirect('default');
+            }
+
+            // Ověření, že tenant existuje
+            $tenant = $this->database->table('tenants')->get($newTenantId);
+            if (!$tenant) {
+                $this->flashMessage('Tenant nebyl nalezen.', 'danger');
+                $this->redirect('default');
+            }
+
+            // Kontrola, zda uživatel už není v tomto tenantu
+            if ($user->tenant_id == $newTenantId) {
+                $this->flashMessage('Uživatel už je v tomto tenantu.', 'warning');
+                $this->redirect('default');
+            }
+
+            // Nelze přesunout sebe sama
+            if ($userId === $this->getUser()->getId()) {
+                $this->flashMessage('Nemůžete přesunout sám sebe.', 'danger');
+                $this->redirect('default');
+            }
+
+            // Provedení přesunutí
+            $adminId = $this->getUser()->getId();
+            $adminName = $this->getUser()->getIdentity()->username;
+
+            $success = $this->userManager->moveUserToTenant($userId, $newTenantId, $adminId, $adminName);
+
+            if ($success) {
+                $message = "Uživatel '{$user->username}' byl úspěšně přesunut do tenanta '{$tenant->name}'.";
+                if ($reason) {
+                    $message .= " Důvod: {$reason}";
+                }
+                $this->flashMessage($message, 'success');
+            } else {
+                $this->flashMessage('Nepodařilo se přesunout uživatele. Zkuste to prosím znovu.', 'danger');
+            }
+        } catch (\Exception $e) {
+            $this->flashMessage('Chyba při přesouvání uživatele: ' . $e->getMessage(), 'danger');
+        }
+
+        $this->redirect('default');
     }
 }

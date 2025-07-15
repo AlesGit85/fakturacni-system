@@ -8,6 +8,7 @@ use Nette;
 use Nette\Application\UI\Form;
 use App\Model\UserManager;
 use App\Model\EmailService;
+use App\Model\TenantManager;
 use App\Presentation\BasePresenter;
 use App\Security\SecurityLogger;
 
@@ -22,17 +23,22 @@ final class SignPresenter extends BasePresenter
     /** @var EmailService */
     private $emailService;
 
+    /** @var TenantManager */
+    private $tenantManager;
+
     protected bool $requiresLogin = false;
 
     public function __construct(
         UserManager $userManager, 
         SecurityLogger $securityLogger,
         EmailService $emailService,
+        TenantManager $tenantManager,
         Nette\Database\Explorer $database
     ) {
         $this->userManager = $userManager;
         $this->securityLogger = $securityLogger;
         $this->emailService = $emailService;
+        $this->tenantManager = $tenantManager;
         $this->database = $database;
     }
 
@@ -59,27 +65,9 @@ final class SignPresenter extends BasePresenter
             $this->redirect('Home:default');
         }
 
-        // Kontrola, zda už existuje nějaký uživatel
-        $userCount = 0;
-        try {
-            $allUsers = $this->userManager->getAll();
-            if ($allUsers && method_exists($allUsers, 'count')) {
-                $userCount = $allUsers->count();
-            } elseif (is_array($allUsers)) {
-                $userCount = count($allUsers);
-            }
-        } catch (\Exception $e) {
-            // V případě chyby předpokládáme, že uživatelé neexistují
-            $userCount = 0;
-        }
-
-        if ($userCount === 0) {
-            // První uživatel bude automaticky admin
-            $this->template->isFirstUser = true;
-        } else {
-            // Registrace dalších uživatelů
-            $this->template->isFirstUser = false;
-        }
+        // Registrace = vždy vytvoření nového firemního účtu
+        // Neřešíme, jestli už existují jiní uživatelé
+        $this->template->isNewCompanyRegistration = true;
     }
 
     /**
@@ -95,7 +83,7 @@ final class SignPresenter extends BasePresenter
     public function renderTestEmail(): void
     {
         // Explicitně nastavíme šablonu (pokud chceš zachovat název s pomlčkou)
-        $this->template->setFile(__DIR__ . '/test-email.latte');
+        $this->template->setFile(__DIR__ . '/templates/test-email.latte');
     }
 
     public function actionOut(): void
@@ -182,6 +170,15 @@ final class SignPresenter extends BasePresenter
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
+        // VŽDY přidáme pole pro nový firemní účet
+        $form->addText('company_account_name', 'Název firemního účtu:')
+            ->setRequired('Zadejte název vašeho firemního účtu')
+            ->setHtmlAttribute('placeholder', 'např. Firma ABC s.r.o.');
+            
+        $form->addText('company_name', 'Název společnosti:')
+            ->setRequired('Zadejte název společnosti')
+            ->setHtmlAttribute('placeholder', 'např. Firma ABC s.r.o.');
+
         $form->addText('username', 'Uživatelské jméno:')
             ->setRequired('Zadejte uživatelské jméno')
             ->addRule(Form::MIN_LENGTH, 'Uživatelské jméno musí mít alespoň %d znaků', 3)
@@ -189,30 +186,6 @@ final class SignPresenter extends BasePresenter
 
         $form->addEmail('email', 'E-mail:')
             ->setRequired('Zadejte e-mailovou adresu');
-
-        // Role se zobrazí pouze pokud už existují uživatelé a je přihlášen admin
-        $userCount = 0;
-        try {
-            $allUsers = $this->userManager->getAll();
-            if ($allUsers && method_exists($allUsers, 'count')) {
-                $userCount = $allUsers->count();
-            } elseif (is_array($allUsers)) {
-                $userCount = count($allUsers);
-            }
-        } catch (\Exception $e) {
-            $userCount = 0;
-        }
-
-        // Přidáme role select pouze pokud už existují uživatelé a je přihlášen admin
-        if ($userCount > 0 && $this->getUser()->isLoggedIn() && $this->isAdmin()) {
-            $form->addSelect('role', 'Role:', [
-                'readonly' => 'Pouze čtení',
-                'accountant' => 'Účetní',
-                'admin' => 'Administrátor'
-            ])
-                ->setRequired('Vyberte roli')
-                ->setDefaultValue('readonly');
-        }
 
         $passwordField = $form->addPassword('password', 'Heslo:')
             ->setRequired('Zadejte heslo')
@@ -225,7 +198,7 @@ final class SignPresenter extends BasePresenter
             ->addConditionOn($passwordField, $form::VALID)
             ->addRule(Form::EQUAL, 'Hesla se neshodují', $passwordField);
 
-        $form->addSubmit('send', 'Zaregistrovat se');
+        $form->addSubmit('send', 'Vytvořit firemní účet');
 
         $form->onSuccess[] = [$this, 'signUpFormSucceeded'];
 
@@ -266,100 +239,169 @@ final class SignPresenter extends BasePresenter
     public function signUpFormSucceeded(Form $form, \stdClass $data): void
     {
         try {
-            // Kontrola jedinečnosti uživatelského jména a e-mailu
-            $existingUsername = null;
-            $existingEmail = null;
+            // VŽDY vytváříme nový firemní účet (tenant) s admin uživatelem
+            $this->processNewCompanyRegistration($form, $data);
 
-            try {
-                $existingUsername = $this->userManager->getAll()
-                    ->where('username', $data->username)
-                    ->fetch();
-
-                $existingEmail = $this->userManager->getAll()
-                    ->where('email', $data->email)
-                    ->fetch();
-            } catch (\Exception $e) {
-                error_log('Chyba při kontrole uživatele: ' . $e->getMessage());
-            }
-
-            if ($existingUsername) {
-                /** @var Nette\Forms\Controls\TextInput $usernameField */
-                $usernameField = $form['username'];
-                $usernameField->addError('Uživatelské jméno už je obsazené.');
-                return;
-            }
-
-            if ($existingEmail) {
-                /** @var Nette\Forms\Controls\TextInput $emailField */
-                $emailField = $form['email'];
-                $emailField->addError('E-mailová adresa už je registrovaná.');
-                return;
-            }
-
-            // Určení role
-            $userCount = 0;
-            try {
-                $allUsers = $this->userManager->getAll();
-                if ($allUsers && method_exists($allUsers, 'count')) {
-                    $userCount = $allUsers->count();
-                } elseif (is_array($allUsers)) {
-                    $userCount = count($allUsers);
-                }
-            } catch (\Exception $e) {
-                $userCount = 0;
-            }
-
-            if ($userCount === 0) {
-                // První uživatel je automaticky admin
-                $role = 'admin';
-            } else {
-                $role = isset($data->role) ? $data->role : 'readonly';
-            }
-
-            // Admin ID a jméno pro logování (null pro samoregistraci)
-            $adminId = null;
-            $adminName = null;
-
-            // Pokud je přihlášen admin, který vytváří uživatele
-            if ($this->getUser()->isLoggedIn() && $this->isAdmin()) {
-                $adminId = $this->getUser()->getId();
-                $adminName = $this->getUser()->getIdentity()->username;
-            }
-
-            // Vytvoření uživatele
-            $newUserId = $this->userManager->add($data->username, $data->email, $data->password, $role, $adminId, $adminName);
-
-            // Kontrola, zda se uživatel skutečně vytvořil
-            if ($newUserId && $newUserId > 0) {
-                // ** NOVĚ: Odesílání emailů **
-                try {
-                    // Potvrzení registrace uživateli
-                    $this->emailService->sendRegistrationConfirmation($data->email, $data->username, $role);
-                    
-                    // Upozornění adminovi (pouze pokud to není první uživatel)
-                    if ($userCount > 0) {
-                        $this->emailService->sendAdminNotification($data->username, $data->email, $role);
-                    }
-                } catch (\Exception $e) {
-                    // Email se nepodařilo odeslat, ale registrace proběhla úspěšně
-                    error_log('Chyba při odesílání emailu: ' . $e->getMessage());
-                    $this->flashMessage('Registrace byla úspěšná, ale nepodařilo se odeslat potvrzovací email.', 'warning');
-                    $this->redirect('Sign:in');
-                    return;
-                }
-
-                $this->flashMessage('Registrace byla úspěšná. Na váš email bylo odesláno potvrzení. Nyní se můžete přihlásit.', 'success');
-                $this->redirect('Sign:in');
-            } else {
-                $form->addError('Nepodařilo se vytvořit uživatelský účet. Zkuste to prosím znovu.');
-            }
         } catch (Nette\Application\AbortException $e) {
             // AbortException je normální při redirect - necháme ji projít
             throw $e;
         } catch (\Exception $e) {
             // Logování pouze závažných chyb
             error_log('Chyba při registraci: ' . $e->getMessage());
-            $form->addError('Při registraci došlo k neočekávané chybě. Zkuste to prosím znovu.');
+            $form->addError('Při registraci došlo k neočekávané chybě: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Zpracuje registraci nového firemního účtu - vytvoří tenant a admin uživatele
+     */
+    private function processNewCompanyRegistration(Form $form, \stdClass $data): void
+    {
+        // Kontrola jedinečnosti uživatelského jména a e-mailu napříč všemi tenanty
+        $existingUsername = $this->database->table('users')
+            ->where('username', $data->username)
+            ->fetch();
+
+        $existingEmail = $this->database->table('users')
+            ->where('email', $data->email)
+            ->fetch();
+
+        if ($existingUsername) {
+            /** @var Nette\Forms\Controls\TextInput $usernameField */
+            $usernameField = $form['username'];
+            $usernameField->addError('Uživatelské jméno už je obsazené.');
+            return;
+        }
+
+        if ($existingEmail) {
+            /** @var Nette\Forms\Controls\TextInput $emailField */
+            $emailField = $form['email'];
+            $emailField->addError('E-mailová adresa už je registrovaná.');
+            return;
+        }
+
+        // Příprava dat pro vytvoření tenanta
+        $tenantData = [
+            'name' => $data->company_account_name,
+            'domain' => null, // Zatím nevyžadujeme doménu
+            'settings' => []
+        ];
+
+        $adminData = [
+            'username' => $data->username,
+            'email' => $data->email,
+            'password' => $data->password,
+            'first_name' => null,
+            'last_name' => null
+        ];
+
+        $companyData = [
+            'company_name' => $data->company_name,
+            'ic' => '',
+            'dic' => '',
+            'phone' => '',
+            'address' => '',
+            'city' => '',
+            'zip' => '',
+            'country' => 'Česká republika',
+            'vat_payer' => false
+        ];
+
+        // Vytvoření tenanta pomocí TenantManager
+        $result = $this->tenantManager->createTenant($tenantData, $adminData, $companyData);
+
+        if ($result['success']) {
+            // Odeslání emailů
+            try {
+                $this->emailService->sendRegistrationConfirmation($data->email, $data->username, 'admin');
+            } catch (\Exception $e) {
+                error_log('Chyba při odesílání emailu: ' . $e->getMessage());
+            }
+
+            $this->flashMessage(
+                'Firemní účet "' . $data->company_account_name . '" byl úspěšně vytvořen! Nyní se můžete přihlásit jako administrátor.',
+                'success'
+            );
+            $this->redirect('Sign:in');
+        } else {
+            $form->addError($result['message'] ?? 'Nepodařilo se vytvořit firemní účet.');
+        }
+    }
+
+    /**
+     * Zpracuje běžnou registraci dalšího uživatele
+     */
+    private function processRegularUserRegistration(Form $form, \stdClass $data, int $userCount): void
+    {
+        // Kontrola jedinečnosti uživatelského jména a e-mailu
+        $existingUsername = null;
+        $existingEmail = null;
+
+        try {
+            $existingUsername = $this->userManager->getAll()
+                ->where('username', $data->username)
+                ->fetch();
+
+            $existingEmail = $this->userManager->getAll()
+                ->where('email', $data->email)
+                ->fetch();
+        } catch (\Exception $e) {
+            error_log('Chyba při kontrole uživatele: ' . $e->getMessage());
+        }
+
+        if ($existingUsername) {
+            /** @var Nette\Forms\Controls\TextInput $usernameField */
+            $usernameField = $form['username'];
+            $usernameField->addError('Uživatelské jméno už je obsazené.');
+            return;
+        }
+
+        if ($existingEmail) {
+            /** @var Nette\Forms\Controls\TextInput $emailField */
+            $emailField = $form['email'];
+            $emailField->addError('E-mailová adresa už je registrovaná.');
+            return;
+        }
+
+        // Určení role
+        $role = isset($data->role) ? $data->role : 'readonly';
+
+        // Admin ID a jméno pro logování (null pro samoregistraci)
+        $adminId = null;
+        $adminName = null;
+
+        // Pokud je přihlášen admin, který vytváří uživatele
+        if ($this->getUser()->isLoggedIn() && $this->isAdmin()) {
+            $adminId = $this->getUser()->getId();
+            $adminName = $this->getUser()->getIdentity()->username;
+        }
+
+        // Vytvoření uživatele
+        $newUserId = $this->userManager->add($data->username, $data->email, $data->password, $role, null, $adminId, $adminName);
+
+        // Kontrola, zda se uživatel skutečně vytvořil
+        if ($newUserId && $newUserId > 0) {
+            // Odesílání emailů
+            try {
+                // Potvrzení registrace uživateli
+                $this->emailService->sendRegistrationConfirmation($data->email, $data->username, $role);
+                
+                // Upozornění adminovi (pouze pokud to není první uživatel)
+                if ($userCount > 0) {
+                    $this->emailService->sendAdminNotification($data->username, $data->email, $role);
+                }
+            } catch (\Exception $e) {
+                // Email se nepodařilo odeslat, ale registrace proběhla úspěšně
+                error_log('Chyba při odesílání emailu: ' . $e->getMessage());
+                $this->flashMessage('Registrace byla úspěšná, ale nepodařilo se odeslat potvrzovací email.', 'warning');
+                $this->redirect('Sign:in');
+                return;
+            }
+
+            $this->flashMessage('Registrace byla úspěšná. Na váš email bylo odesláno potvrzení. Nyní se můžete přihlásit.', 'success');
+            $this->redirect('Sign:in');
+        } else {
+            $form->addError('Nepodařilo se vytvořit uživatelský účet. Zkuste to prosím znovu.');
         }
     }
 
@@ -527,6 +569,20 @@ final class SignPresenter extends BasePresenter
         } catch (\Exception $e) {
             error_log('Chyba při změně hesla: ' . $e->getMessage());
             $form->addError('Při změně hesla došlo k chybě. Zkuste to prosím znovu.');
+        }
+    }
+
+    /**
+     * Získá celkový počet uživatelů v systému (bez tenant filtru)
+     * Používáme přímý databázový dotaz, abychom obešli tenant filtrování
+     */
+    private function getTotalUserCount(): int
+    {
+        try {
+            return $this->database->table('users')->count();
+        } catch (\Exception $e) {
+            // V případě chyby předpokládáme, že uživatelé neexistují
+            return 0;
         }
     }
 }

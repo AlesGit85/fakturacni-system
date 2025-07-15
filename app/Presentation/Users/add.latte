@@ -1,13 +1,36 @@
+{layout '../@layout.latte'}
+
+{block title}Přidat uživatele{/block}
+
 {block content}
 <div class="user-form-container">
     <div class="page-header">
-        <h1 class="main-title">Přidat nového uživatele</h1>
-        <p class="text-muted">Vyplňte údaje pro vytvoření nového uživatelského účtu</p>
+        <h1 class="main-title">Přidání nového uživatele</h1>
+        <p class="text-muted">Vyplňte údaje pro vytvoření nového uživatele v rámci vašeho fireního účtu</p>
     </div>
 
     <div class="card shadow-sm rounded-lg border-0">
         <div class="card-body p-4">
-            {form addUserForm class => 'row g-4'}
+            {form userForm class => 'row g-4'}
+                {* Zobrazení globálních chyb formuláře *}
+                {if $form->hasErrors()}
+                    <div class="col-12">
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            {foreach $form->getErrors() as $error}
+                                {$error}
+                            {/foreach}
+                        </div>
+                    </div>
+                {/if}
+
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Nový uživatel bude přidán do vašeho firemního účtu.</strong> 
+                    </div>
+                </div>
+
                 <!-- Základní údaje -->
                 <div class="col-12">
                     <div class="section-header">
@@ -19,21 +42,37 @@
                 <div class="col-md-6">
                     <div class="form-floating">
                         {input username class => 'form-control'}
-                        {label username class => 'form-label' /}
+                        <label for="frm-userForm-username" class="form-label">Uživatelské jméno</label>
+                        {if $form['username']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['username']->getError()}</div>
+                        {/if}
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
                         {input email class => 'form-control'}
-                        {label email class => 'form-label' /}
+                        <label for="frm-userForm-email" class="form-label">E-mail</label>
+                        {if $form['email']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['email']->getError()}</div>
+                        {/if}
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
                         {input role class => 'form-select'}
-                        {label role class => 'form-label' /}
+                        <label for="frm-userForm-role" class="form-label">Role</label>
+                        {if $form['role']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['role']->getError()}</div>
+                        {/if}
+                    </div>
+                    <div class="form-text mt-2">
+                        <small class="text-muted">
+                            <strong>Readonly:</strong> Může pouze prohlížet data |
+                            <strong>Účetní:</strong> Může vytvářet faktury a klienty |
+                            <strong>Admin:</strong> Má plný přístup včetně správy uživatelů
+                        </small>
                     </div>
                 </div>
                 
@@ -48,14 +87,33 @@
                 <div class="col-md-6">
                     <div class="form-floating">
                         {input password class => 'form-control'}
-                        {label password class => 'form-label' /}
+                        <label for="frm-userForm-password" class="form-label">Heslo</label>
+                        {if $form['password']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['password']->getError()}</div>
+                        {/if}
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
                         {input passwordVerify class => 'form-control'}
-                        {label passwordVerify class => 'form-label' /}
+                        <label for="frm-userForm-passwordVerify" class="form-label">Heslo znovu</label>
+                        {if $form['passwordVerify']->hasErrors()}
+                            <div class="text-danger mt-1">{$form['passwordVerify']->getError()}</div>
+                        {/if}
+                    </div>
+                </div>
+
+                <!-- Požadavky na heslo -->
+                <div class="col-12">
+                    <div class="alert alert-light">
+                        <i class="bi bi-shield-check me-2 text-primary"></i>
+                        <strong>Požadavky na heslo:</strong>
+                        <ul class="mb-0 mt-2 small">
+                            <li>Alespoň 8 znaků</li>
+                            <li>Alespoň jedna číslice</li>
+                            <li>Alespoň jedno velké písmeno</li>
+                        </ul>
                     </div>
                 </div>
                 
@@ -63,9 +121,7 @@
                     <a n:href="default" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Zpět na seznam uživatelů
                     </a>
-                    <button n:name="send" class="btn btn-primary">
-                        <i class="bi bi-check-lg"></i> Přidat uživatele
-                    </button>
+                    {input send class => 'btn btn-primary'}
                 </div>
             {/form}
         </div>
