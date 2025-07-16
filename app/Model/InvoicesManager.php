@@ -301,7 +301,7 @@ class InvoicesManager
             ->where('id', $id)
             ->update([
                 'status' => 'paid',
-                'paid_date' => new \DateTime()
+                'payment_date' => new \DateTime()
             ]);
     }
 
@@ -320,7 +320,7 @@ class InvoicesManager
             ->where('id', $id)
             ->update([
                 'status' => 'created',
-                'paid_date' => null
+                'payment_date' => null
             ]);
     }
 
