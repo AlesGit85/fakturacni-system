@@ -212,40 +212,46 @@ final class Template_750e895e20 extends Latte\Runtime\Template
                         <div class="action-buttons">
 ';
 				if ($tenantData['tenant']['status'] === 'active') /* line 123 */ {
-					echo '                                <button type="button" class="btn btn-sm" style="color: var(--grey-color); border-color: var(--grey-color);" 
-                                        onmouseover="this.style.backgroundColor=\'var(--grey-color)\'; this.style.color=\'white\';"
-                                        onmouseout="this.style.backgroundColor=\'transparent\'; this.style.color=\'var(--grey-color)\';"
-                                        onclick="if(confirm(\'Opravdu chcete deaktivovat tenant ';
-					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($tenantData['tenant']['name'])) /* line 127 */;
-					echo '?\')) window.location.href=\'';
-					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($this->global->uiControl->link('deactivate', [$tenantData['tenant']['id']]))) /* line 127 */;
-					echo '\'"
-                                        title="Deaktivovat tenant">
+					echo '                                <a href="';
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('deactivate!', ['id' => $tenantData['tenant']['id']])) /* line 124 */;
+					echo '" 
+                                   class="btn btn-sm" style="color: var(--grey-color); border-color: var(--grey-color);" 
+                                   onmouseover="this.style.backgroundColor=\'var(--grey-color)\'; this.style.color=\'white\';"
+                                   onmouseout="this.style.backgroundColor=\'transparent\'; this.style.color=\'var(--grey-color)\';"
+                                   onclick="return confirm(\'Opravdu chcete deaktivovat tenant ';
+					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($tenantData['tenant']['name'])) /* line 128 */;
+					echo '?\')"
+                                   title="Deaktivovat tenant">
                                     <i class="bi bi-pause"></i>
-                                </button>
+                                </a>
 ';
-				} else /* line 131 */ {
-					echo '                                <button type="button" class="btn btn-sm btn-outline-success"
-                                        onclick="if(confirm(\'Opravdu chcete aktivovat tenant ';
-					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($tenantData['tenant']['name'])) /* line 133 */;
-					echo '?\')) window.location.href=\'';
-					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($this->global->uiControl->link('activate', [$tenantData['tenant']['id']]))) /* line 133 */;
-					echo '\'"
-                                        title="Aktivovat tenant">
+				} else /* line 132 */ {
+					echo '                                <a href="';
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('activate!', ['id' => $tenantData['tenant']['id']])) /* line 133 */;
+					echo '" 
+                                   class="btn btn-sm" 
+                                   style="color: var(--primary-color); border-color: var(--primary-color);"
+                                   onmouseover="this.style.backgroundColor=\'var(--primary-color)\'; this.style.color=\'white\';"
+                                   onmouseout="this.style.backgroundColor=\'transparent\'; this.style.color=\'var(--primary-color)\';"
+                                   onclick="return confirm(\'Opravdu chcete aktivovat tenant ';
+					echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($tenantData['tenant']['name'])) /* line 138 */;
+					echo '?\')"
+                                   title="Aktivovat tenant">
                                     <i class="bi bi-play"></i>
-                                </button>
+                                </a>
 ';
 				}
 				echo '                            
-                            <button type="button" class="btn btn-sm btn-outline-danger"
-                                    onclick="if(confirm(\'POZOR! Opravdu chcete smazat tenant ';
-				echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($tenantData['tenant']['name'])) /* line 140 */;
-				echo '? Tato akce je nevratná!\')) window.location.href=\'';
-				echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($this->global->uiControl->link('delete', [$tenantData['tenant']['id']]))) /* line 140 */;
-				echo '\'"
-                                    title="Smazat tenant">
+                            <a href="';
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete!', ['id' => $tenantData['tenant']['id']])) /* line 144 */;
+				echo '" 
+                               class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm(\'POZOR! Opravdu chcete smazat tenant ';
+				echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($tenantData['tenant']['name'])) /* line 146 */;
+				echo '? Tata akce je nevratná!\')"
+                               title="Smazat tenant">
                                 <i class="bi bi-trash"></i>
-                            </button>
+                            </a>
                         </div>
                     </td>
                 </tr>
@@ -257,7 +263,7 @@ final class Template_750e895e20 extends Latte\Runtime\Template
         </table>
     </div>
 ';
-		} else /* line 151 */ {
+		} else /* line 157 */ {
 			echo '    <div class="empty-state">
         <div class="empty-state-icon">
             <i class="bi bi-building"></i>
@@ -265,7 +271,7 @@ final class Template_750e895e20 extends Latte\Runtime\Template
         <h3>Žádní tenanti</h3>
         <p>V systému zatím nejsou žádní tenanti.</p>
         <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 158 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 164 */;
 			echo '" class="btn btn-primary">
             <i class="bi bi-plus-circle me-2"></i>
             Vytvořit prvního tenanta

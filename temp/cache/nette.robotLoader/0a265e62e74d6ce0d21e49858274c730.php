@@ -40,7 +40,7 @@ return array (
     'App\\Model\\InvoicesManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\InvoicesManager.php',
-      1 => 1751964565,
+      1 => 1752666609,
     ),
     'App\\Model\\ModuleManager' => 
     array (
@@ -60,7 +60,7 @@ return array (
     'App\\Model\\UserManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\UserManager.php',
-      1 => 1752071720,
+      1 => 1752668405,
     ),
     'App\\Modules\\BaseModule' => 
     array (
@@ -105,7 +105,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1752224652,
+      1 => 1752670750,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -150,12 +150,12 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1752593877,
+      1 => 1752670933,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Tenants\\TenantsPresenter.php',
-      1 => 1752499240,
+      1 => 1752667676,
     ),
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
@@ -177,28 +177,18 @@ return array (
   array (
     'Nette\\Bridges\\Assets\\DIExtension' => 3,
     'null' => 3,
-    'App\\Presentation\\Tenants\\TenantsAddTemplate' => 3,
+    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
     'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Sign\\SignTemplate' => 3,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
-    'App\\Presentation\\Tenants\\TenantsDeleteTemplate' => 2,
-    'App\\Presentation\\Sign\\SignUpTemplate' => 3,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 2,
-    'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
-    'App\\Presentation\\Users\\UsersAddTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 3,
+    'App\\Presentation\\Sign\\SignTemplate' => 3,
+    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 2,
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Users\\UsersEditTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
+    'App\\Presentation\\Tenants\\TenantsAddTemplate' => 1,
   ),
   2 => 
   array (

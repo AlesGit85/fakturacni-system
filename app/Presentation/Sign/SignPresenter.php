@@ -29,7 +29,7 @@ final class SignPresenter extends BasePresenter
     protected bool $requiresLogin = false;
 
     public function __construct(
-        UserManager $userManager, 
+        UserManager $userManager,
         SecurityLogger $securityLogger,
         EmailService $emailService,
         TenantManager $tenantManager,
@@ -50,12 +50,35 @@ final class SignPresenter extends BasePresenter
         $this->redirect('Sign:in');
     }
 
+
     public function actionIn(): void
     {
         // Pokud je už přihlášen, přesměruj na hlavní stránku
         if ($this->getUser()->isLoggedIn()) {
             $this->redirect('Home:default');
         }
+
+        // NOVÉ: Kontrola zprávy o deaktivaci z session
+        $section = $this->getSession('deactivation');
+        if (isset($section->message) && isset($section->tenant_id)) {
+            // OPRAVA: Zpráva se zobrazuje trvale (bez časového limitu)
+            $this->template->deactivationMessage = $section->message;
+            $this->template->deactivationType = $section->type ?? 'danger';
+            $this->template->deactivationTenantId = $section->tenant_id;
+        }
+    }
+
+    /**
+     * NOVÉ: Jednoduchá akce pro vymazání zprávy o deaktivaci (místo signálu)
+     */
+    public function actionClearDeactivation(): void
+    {
+        $section = $this->getSession('deactivation');
+        unset($section->message);
+        unset($section->type);
+        unset($section->tenant_id);
+        
+        $this->redirect('Sign:in');
     }
 
     public function actionUp(): void
@@ -151,6 +174,12 @@ final class SignPresenter extends BasePresenter
 
             $this->getUser()->login($data->username, $data->password);
             
+            // NOVÉ: Vymažeme zprávu o deaktivaci při úspěšném přihlášení
+            $section = $this->getSession('deactivation');
+            unset($section->message);
+            unset($section->type);
+            unset($section->tenant_id);
+            
             // Logování úspěšného přihlášení
             $identity = $this->getUser()->getIdentity();
             $this->securityLogger->logLogin($identity->id, $identity->username);
@@ -161,7 +190,7 @@ final class SignPresenter extends BasePresenter
             // Logování neúspěšného pokusu o přihlášení
             $this->securityLogger->logFailedLogin($data->username, $e->getMessage());
             
-            $form->addError('Nesprávné uživatelské jméno nebo heslo.');
+            $form->addError($e->getMessage());
         }
     }
 
@@ -174,7 +203,7 @@ final class SignPresenter extends BasePresenter
         $form->addText('company_account_name', 'Název firemního účtu:')
             ->setRequired('Zadejte název vašeho firemního účtu')
             ->setHtmlAttribute('placeholder', 'např. Firma ABC s.r.o.');
-            
+
         $form->addText('company_name', 'Název společnosti:')
             ->setRequired('Zadejte název společnosti')
             ->setHtmlAttribute('placeholder', 'např. Firma ABC s.r.o.');
@@ -241,7 +270,6 @@ final class SignPresenter extends BasePresenter
         try {
             // VŽDY vytváříme nový firemní účet (tenant) s admin uživatelem
             $this->processNewCompanyRegistration($form, $data);
-
         } catch (Nette\Application\AbortException $e) {
             // AbortException je normální při redirect - necháme ji projít
             throw $e;
@@ -385,7 +413,7 @@ final class SignPresenter extends BasePresenter
             try {
                 // Potvrzení registrace uživateli
                 $this->emailService->sendRegistrationConfirmation($data->email, $data->username, $role);
-                
+
                 // Upozornění adminovi (pouze pokud to není první uživatel)
                 if ($userCount > 0) {
                     $this->emailService->sendAdminNotification($data->username, $data->email, $role);
@@ -495,7 +523,6 @@ final class SignPresenter extends BasePresenter
             // Úspěšné dokončení
             $this->flashMessage('Odkaz pro obnovení hesla byl odeslán na vaši e-mailovou adresu.', 'success');
             $this->redirect('Sign:in');
-
         } catch (Nette\Application\AbortException $e) {
             // AbortException je normální při redirect - necháme ji projít
             throw $e;
@@ -562,7 +589,6 @@ final class SignPresenter extends BasePresenter
 
             $this->flashMessage('Heslo bylo úspěšně změněno. Nyní se můžete přihlásit.', 'success');
             $this->redirect('Sign:in');
-
         } catch (Nette\Application\AbortException $e) {
             // AbortException je normální při redirect - necháme ji projít
             throw $e;

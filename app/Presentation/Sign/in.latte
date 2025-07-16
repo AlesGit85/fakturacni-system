@@ -13,6 +13,20 @@
             </div>
 
             <div class="auth-body">
+                {* NOVÉ: Persistent zpráva o deaktivaci účtu *}
+                {if isset($deactivationMessage)}
+                <div class="alert alert-{$deactivationType} alert-dismissible fade show mb-4" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                        <div>
+                            <strong>Účet deaktivován</strong><br>
+                            {$deactivationMessage}
+                        </div>
+                    </div>
+                    <a href="{link Sign:clearDeactivation}" class="btn-close" aria-label="Close" title="Zavřít zprávu"></a>
+                </div>
+                {/if}
+
                 {form signInForm class => 'auth-form'}
                     {* Zobrazení globální chyby formuláře *}
                     {if $form->hasErrors()}

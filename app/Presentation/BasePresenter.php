@@ -58,6 +58,11 @@ abstract class BasePresenter extends Presenter
             $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
         }
 
+        // NOVÉ: Kontrola statusu tenanta pro přihlášené uživatele
+        if ($this->requiresLogin && $this->getUser()->isLoggedIn()) {
+            $this->checkTenantStatus();
+        }
+
         // =====================================================
         // NASTAVENÍ MODULU KONTEXTU (NOVÉ!)
         // =====================================================
@@ -95,6 +100,41 @@ abstract class BasePresenter extends Presenter
                     $this->flashMessage('Nemáte oprávnění pro provedení této akce.', 'danger');
                     $this->redirect('Home:default');
                 }
+            }
+        }
+    }
+
+/**
+     * NOVÉ: Kontrola statusu tenanta pro přihlášené uživatele
+     */
+    private function checkTenantStatus(): void
+    {
+        $identity = $this->getUser()->getIdentity();
+        
+        // Super admini mají vždy přístup
+        if (!$identity || $this->isSuperAdmin()) {
+            return;
+        }
+
+        // Kontrola statusu tenanta
+        $tenantId = $identity->tenant_id ?? null;
+        if ($tenantId) {
+            $tenant = $this->database->table('tenants')
+                ->where('id', $tenantId)
+                ->fetch();
+            
+            if (!$tenant || $tenant->status !== 'active') {
+                // Tenant je deaktivovaný - odhlásíme uživatele
+                $this->getUser()->logout();
+                
+                // Uložíme důvod do session pro zobrazení na přihlašovací stránce
+                // OPRAVA: Bez časového limitu - zpráva se zobrazuje trvale
+                $section = $this->getSession('deactivation');
+                $section->message = 'Váš účet byl deaktivován. Pro obnovení přístupu kontaktujte správce systému.';
+                $section->type = 'danger';
+                $section->tenant_id = $tenantId;
+                
+                $this->redirect('Sign:in');
             }
         }
     }

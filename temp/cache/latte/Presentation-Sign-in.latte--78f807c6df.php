@@ -37,7 +37,7 @@ final class Template_78f807c6df extends Latte\Runtime\Template
 		extract($this->params);
 
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
-			foreach (array_intersect_key(['error' => '21'], $this->params) as $ʟ_v => $ʟ_l) {
+			foreach (array_intersect_key(['error' => '35'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
@@ -72,18 +72,39 @@ final class Template_78f807c6df extends Latte\Runtime\Template
             </div>
 
             <div class="auth-body">
+';
+		if (isset($deactivationMessage)) /* line 17 */ {
+			echo '                <div class="alert alert-';
+			echo LR\Filters::escapeHtmlAttr($deactivationType) /* line 18 */;
+			echo ' alert-dismissible fade show mb-4" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                        <div>
+                            <strong>Účet deaktivován</strong><br>
+                            ';
+			echo LR\Filters::escapeHtmlText($deactivationMessage) /* line 23 */;
+			echo '
+                        </div>
+                    </div>
+                    <a href="';
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Sign:clearDeactivation')) /* line 26 */;
+			echo '" class="btn-close" aria-label="Close" title="Zavřít zprávu"></a>
+                </div>
+';
+		}
+		echo '
                 ';
-		$form = $this->global->formsStack[] = $this->global->uiControl['signInForm'] /* line 16 */;
+		$form = $this->global->formsStack[] = $this->global->uiControl['signInForm'] /* line 30 */;
 		Nette\Bridges\FormsLatte\Runtime::initializeForm($form);
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form, ['class' => 'auth-form']) /* line 16 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form, ['class' => 'auth-form']) /* line 30 */;
 		echo "\n";
-		if ($form->hasErrors()) /* line 18 */ {
+		if ($form->hasErrors()) /* line 32 */ {
 			echo '                        <div class="alert alert-danger mb-4">
                             <i class="bi bi-exclamation-triangle-fill me-2"></i>
 ';
-			foreach ($form->getErrors() as $error) /* line 21 */ {
+			foreach ($form->getErrors() as $error) /* line 35 */ {
 				echo '                                ';
-				echo LR\Filters::escapeHtmlText($error) /* line 22 */;
+				echo LR\Filters::escapeHtmlText($error) /* line 36 */;
 				echo "\n";
 
 			}
@@ -94,13 +115,13 @@ final class Template_78f807c6df extends Latte\Runtime\Template
 		echo '                    
                     <div class="form-floating mb-3">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('username', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 28 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('username', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 42 */;
 		echo '
                         <label for="frm-signInForm-username" class="form-label">Uživatelské jméno</label>
 ';
-		if ($form['username']->hasErrors()) /* line 30 */ {
+		if ($form['username']->hasErrors()) /* line 44 */ {
 			echo '                            <div class="text-danger mt-1">';
-			echo LR\Filters::escapeHtmlText($form['username']->getError()) /* line 31 */;
+			echo LR\Filters::escapeHtmlText($form['username']->getError()) /* line 45 */;
 			echo '</div>
 ';
 		}
@@ -108,13 +129,13 @@ final class Template_78f807c6df extends Latte\Runtime\Template
 
                     <div class="form-floating mb-3">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('password', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 36 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('password', $this->global)->getControl()->addAttributes(['class' => 'form-control']) /* line 50 */;
 		echo '
                         <label for="frm-signInForm-password" class="form-label">Heslo</label>
 ';
-		if ($form['password']->hasErrors()) /* line 38 */ {
+		if ($form['password']->hasErrors()) /* line 52 */ {
 			echo '                            <div class="text-danger mt-1">';
-			echo LR\Filters::escapeHtmlText($form['password']->getError()) /* line 39 */;
+			echo LR\Filters::escapeHtmlText($form['password']->getError()) /* line 53 */;
 			echo '</div>
 ';
 		}
@@ -122,18 +143,18 @@ final class Template_78f807c6df extends Latte\Runtime\Template
 
                     <div class="form-check mb-4">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('remember', $this->global)->getControl()->addAttributes(['class' => 'form-check-input']) /* line 44 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('remember', $this->global)->getControl()->addAttributes(['class' => 'form-check-input']) /* line 58 */;
 		echo '
                         <label for="frm-signInForm-remember" class="form-check-label">Zůstat přihlášen</label>
                     </div>
 
                     <div class="d-grid">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary btn-lg']) /* line 49 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary btn-lg']) /* line 63 */;
 		echo '
                     </div>
                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 51 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 65 */;
 
 		echo '
             </div>
@@ -142,12 +163,12 @@ final class Template_78f807c6df extends Latte\Runtime\Template
                 <p class="text-center text-muted">
                     Nemáte účet? 
                     <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Sign:up')) /* line 57 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Sign:up')) /* line 71 */;
 		echo '" class="auth-link">Zaregistrujte se</a>
                 </p>
                 <p class="text-center text-muted">
                     <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Sign:forgotPassword')) /* line 60 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Sign:forgotPassword')) /* line 74 */;
 		echo '" class="auth-link">
                         <i class="bi bi-key"></i> Zapomněl jsem heslo
                     </a>

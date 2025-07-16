@@ -81,6 +81,7 @@ class UserManager implements Nette\Security\Authenticator
     /**
      * Přihlášení uživatele
      * ROZŠÍŘENO: Automaticky načítá tenant_id a is_super_admin z databáze
+     * OPRAVENO: Kontroluje status tenanta s lepšími chybovými zprávami
      */
     public function authenticate(string $username, string $password): Nette\Security\SimpleIdentity
     {
@@ -93,12 +94,13 @@ class UserManager implements Nette\Security\Authenticator
             throw new Nette\Security\AuthenticationException('Uživatelské jméno není správné.', self::IDENTITY_NOT_FOUND);
         }
 
-        // Kontrola blokování
+        // Kontrola blokování nejdříve (před kontrolou hesla)
         if ($this->isUserBlocked($row->id)) {
             $this->securityLogger->logFailedLogin($username, 'účet je zablokován');
             throw new Nette\Security\AuthenticationException('Účet je dočasně zablokován kvůli příliš mnoha neúspěšným pokusům o přihlášení. Zkuste to prosím později.', self::INVALID_CREDENTIAL);
         }
 
+        // Kontrola hesla
         if (!$this->passwords->verify($password, $row->password)) {
             // Zaznamenáme neúspěšný pokus o přihlášení
             $this->logFailedLoginAttempt($row->id);
@@ -111,6 +113,23 @@ class UserManager implements Nette\Security\Authenticator
             }
 
             throw new Nette\Security\AuthenticationException('Heslo není správné.', self::INVALID_CREDENTIAL);
+        }
+
+        // NOVÉ: Kontrola statusu tenanta až po ověření hesla (pro lepší UX)
+        if (!$row->is_super_admin && $row->tenant_id) {
+            $tenant = $this->database->table('tenants')
+                ->where('id', $row->tenant_id)
+                ->fetch();
+
+            if (!$tenant) {
+                $this->securityLogger->logFailedLogin($username, 'tenant neexistuje');
+                throw new Nette\Security\AuthenticationException('Váš účet není správně nastaven. Kontaktujte správce systému.', self::INVALID_CREDENTIAL);
+            }
+
+            if ($tenant->status !== 'active') {
+                $this->securityLogger->logFailedLogin($username, 'tenant je deaktivovaný');
+                throw new Nette\Security\AuthenticationException('Váš účet byl dočasně deaktivován. Pro více informací kontaktujte správce systému.', self::INVALID_CREDENTIAL);
+            }
         }
 
         // Reset neúspěšných pokusů při úspěšném přihlášení

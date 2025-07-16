@@ -39,7 +39,7 @@ final class TenantsPresenter extends BasePresenter
     public function startup(): void
     {
         parent::startup();
-        
+
         // Kontrola super admin oprávnění pro všechny akce
         if (!$this->isSuperAdmin()) {
             $this->flashMessage('Pouze super admin může spravovat tenanty.', 'danger');
@@ -57,70 +57,74 @@ final class TenantsPresenter extends BasePresenter
     {
         // Příprava pro šablonu
         $this->template->pageTitle = 'Vytvořit nový tenant';
-        
+
         // Přidáme URL pro ARES lookup do šablony
         $this->template->aresLookupUrl = $this->link('aresLookup!');
     }
 
-    public function actionDeactivate(int $id): void
+    /**
+     * Signál pro deaktivaci tenanta
+     */
+    public function handleDeactivate(int $id): void
     {
+        if (!$id) {
+            $this->flashMessage('Neplatné ID tenanta.', 'danger');
+            $this->redirect('this');
+        }
+
         $superAdminId = $this->getUser()->getId();
-        $reason = $this->getParameter('reason') ?? 'Deaktivace super adminem';
-        
+        $reason = 'Deaktivace super adminem';
+
         if ($this->tenantManager->deactivateTenant($id, $superAdminId, $reason)) {
             $this->flashMessage('Tenant byl úspěšně deaktivován.', 'success');
         } else {
             $this->flashMessage('Chyba při deaktivaci tenanta.', 'danger');
         }
-        
-        $this->redirect('default');
+
+        $this->redirect('this');
     }
 
-    public function actionActivate(int $id): void
+    /**
+     * Signál pro aktivaci tenanta
+     */
+    public function handleActivate(int $id): void
     {
+        if (!$id) {
+            $this->flashMessage('Neplatné ID tenanta.', 'danger');
+            $this->redirect('this');
+        }
+
         $superAdminId = $this->getUser()->getId();
-        
+
         if ($this->tenantManager->activateTenant($id, $superAdminId)) {
             $this->flashMessage('Tenant byl úspěšně aktivován.', 'success');
         } else {
             $this->flashMessage('Chyba při aktivaci tenanta.', 'danger');
         }
-        
-        $this->redirect('default');
+
+        $this->redirect('this');
     }
 
-    public function actionDelete(int $id): void
+    /**
+     * Signál pro smazání tenanta
+     */
+    public function handleDelete(int $id): void
     {
-        // ================================================================
-        // DEBUG: DEBUGGING AKCE DELETE
-        // ================================================================
-        
-        Debugger::log("🗑️ DELETE DEBUG: actionDelete() volána s ID: $id", ILogger::INFO);
-        
-        // Získáme důvod z parametru
-        $reason = $this->getParameter('reason');
-        Debugger::log("🗑️ DELETE DEBUG: Důvod z parametru: " . ($reason ?: 'NULL'), ILogger::INFO);
-        
-        if (!$reason) {
-            Debugger::log("🗑️ DELETE DEBUG: CHYBA - Chybí důvod smazání", ILogger::ERROR);
-            $this->flashMessage('Je nutné uvést důvod smazání tenanta.', 'danger');
-            $this->redirect('default');
+        if (!$id) {
+            $this->flashMessage('Neplatné ID tenanta.', 'danger');
+            $this->redirect('this');
         }
 
         $superAdminId = $this->getUser()->getId();
-        Debugger::log("🗑️ DELETE DEBUG: Super admin ID: $superAdminId", ILogger::INFO);
-        Debugger::log("🗑️ DELETE DEBUG: Volám TenantManager->deleteTenant($id, $superAdminId, '$reason')", ILogger::INFO);
-        
+        $reason = 'Smazání super adminem';
+
         if ($this->tenantManager->deleteTenant($id, $superAdminId, $reason)) {
-            Debugger::log("🗑️ DELETE DEBUG: ÚSPĚCH - Tenant byl smazán", ILogger::INFO);
             $this->flashMessage('Tenant byl úspěšně smazán. VŠECHNA DATA BYLA ZTRACENA!', 'warning');
         } else {
-            Debugger::log("🗑️ DELETE DEBUG: CHYBA - Tenant nebyl smazán", ILogger::ERROR);
             $this->flashMessage('Chyba při mazání tenanta.', 'danger');
         }
-        
-        Debugger::log("🗑️ DELETE DEBUG: Přesměrovávám na default", ILogger::INFO);
-        $this->redirect('default');
+
+        $this->redirect('this');
     }
 
     /**
@@ -133,12 +137,12 @@ final class TenantsPresenter extends BasePresenter
             while (ob_get_level()) {
                 ob_end_clean();
             }
-            
+
             // Ručně nastavíme content type header
             if (!headers_sent()) {
                 header('Content-Type: application/json; charset=utf-8');
             }
-            
+
             // Kontrola oprávnění - pouze super admin může vytvářet tenanty
             if (!$this->isSuperAdmin()) {
                 echo json_encode(['error' => 'Nemáte oprávnění pro vyhledávání v ARESu.']);
@@ -147,34 +151,33 @@ final class TenantsPresenter extends BasePresenter
 
             // Získáme IČO z GET parametrů
             $ico = $this->getHttpRequest()->getQuery('ico');
-            
+
             if (!$ico) {
                 echo json_encode(['error' => 'Nebylo zadáno IČO']);
                 exit;
             }
-            
+
             // Validace IČO
             $ico = trim($ico);
             if (!preg_match('/^\d{7,8}$/', $ico)) {
                 echo json_encode(['error' => 'Neplatné IČO. Zadejte 7 nebo 8 číslic.']);
                 exit;
             }
-            
+
             // Načtení dat z ARESu
             $result = $this->aresService->getCompanyInfo($ico);
-            
+
             if ($result) {
                 echo json_encode(['success' => true, 'data' => $result]);
             } else {
                 echo json_encode(['error' => 'Firma s tímto IČO nebyla v ARESu nalezena.']);
             }
-            
         } catch (\Exception $e) {
             // Logování chyby
             $this->logger->log("ARES Lookup Error (Tenants): " . $e->getMessage(), ILogger::ERROR);
             echo json_encode(['error' => 'Došlo k chybě při komunikaci s ARESem: ' . $e->getMessage()]);
         }
-        
+
         exit;
     }
 
@@ -188,7 +191,7 @@ final class TenantsPresenter extends BasePresenter
 
         // Základní údaje tenanta
         $form->addGroup('Základní údaje tenanta');
-        
+
         $form->addText('name', 'Název tenanta:')
             ->setRequired('Zadejte název tenanta')
             ->setHtmlAttribute('placeholder', 'např. Firma ABC s.r.o.')
@@ -200,7 +203,7 @@ final class TenantsPresenter extends BasePresenter
 
         // Firemní údaje
         $form->addGroup('Údaje společnosti');
-        
+
         $form->addText('company_name', 'Název společnosti:')
             ->setRequired('Zadejte název společnosti')
             ->setHtmlAttribute('class', 'form-control');
@@ -241,7 +244,7 @@ final class TenantsPresenter extends BasePresenter
 
         // Admin údaje
         $form->addGroup('Administrátor tenanta');
-        
+
         $form->addText('username', 'Uživatelské jméno:')
             ->setRequired('Zadejte uživatelské jméno')
             ->setHtmlAttribute('class', 'form-control')
@@ -287,20 +290,20 @@ final class TenantsPresenter extends BasePresenter
         // ================================================================
         // DEBUG: ZAČÁTEK - DEBUGGING INFORMACE DO LOGŮ A SESSION
         // ================================================================
-        
+
         $debugInfo = [];
         $debugInfo['timestamp'] = date('Y-m-d H:i:s');
         $debugInfo['user'] = $this->getUser()->getIdentity()->username;
         $debugInfo['user_id'] = $this->getUser()->getId();
         $debugInfo['is_super_admin'] = $this->isSuperAdmin();
-        
+
         // Logování do Tracy
         Debugger::log("🔍 TENANT DEBUG: Formulář byl odeslán uživatelem {$debugInfo['user']} (ID: {$debugInfo['user_id']})", ILogger::INFO);
-        
+
         // DEBUG: Kontrola tlačítek - OPRAVENÁ LOGIKA
         $postData = $this->getHttpRequest()->getPost();
         $submittedBy = null;
-        
+
         // Místo $form->isSubmitted() kontrolujeme přímo POST data
         if (isset($postData['send'])) {
             $submittedBy = 'send (Vytvořit tenant)';
@@ -312,12 +315,12 @@ final class TenantsPresenter extends BasePresenter
             $submittedBy = 'NEZNÁMÉ tlačítko';
             $cancelClicked = false;
         }
-        
+
         Debugger::log("🔍 TENANT DEBUG: Formulář byl odeslán tlačítkem: {$submittedBy}", ILogger::INFO);
-        
+
         // Získáme všechna data z POST requestu pro debugging
         Debugger::log("🔍 TENANT DEBUG: POST data: " . json_encode($postData, JSON_UNESCAPED_UNICODE), ILogger::INFO);
-        
+
         // Kontrola, zda bylo kliknuto na zrušit - OPRAVENÁ LOGIKA
         if ($cancelClicked) {
             Debugger::log("➡️ TENANT DEBUG: Uživatel kliknul na ZRUŠIT", ILogger::INFO);
@@ -330,7 +333,7 @@ final class TenantsPresenter extends BasePresenter
         // Skryjeme heslo v debug datech
         $debugInfo['form_data']['password'] = '*** SKRYTO ***';
         $debugInfo['form_data']['password_confirm'] = '*** SKRYTO ***';
-        
+
         Debugger::log("📝 TENANT DEBUG: Přijatá data z formuláře: " . json_encode($debugInfo['form_data'], JSON_UNESCAPED_UNICODE), ILogger::INFO);
 
         try {
@@ -382,7 +385,6 @@ final class TenantsPresenter extends BasePresenter
             } else {
                 $this->flashMessage('Chyba při vytváření tenanta: ' . $result['message'], 'danger');
             }
-
         } catch (Nette\Application\AbortException $e) {
             // AbortException je normální při redirect - necháme ji projít
             throw $e;
@@ -395,13 +397,13 @@ final class TenantsPresenter extends BasePresenter
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ];
-            
+
             Debugger::log("💥 TENANT DEBUG: VÝJIMKA! " . get_class($e) . ": " . $e->getMessage(), ILogger::EXCEPTION);
             Debugger::log("💥 TENANT DEBUG: Stack trace: " . $e->getTraceAsString(), ILogger::EXCEPTION);
-            
+
             $this->flashMessage('Došlo k neočekávané chybě: ' . $e->getMessage(), 'danger');
             $this->flashMessage("🔍 Debug: Zkontroluj log/exception.log pro plný stack trace", 'warning');
-            
+
             // Uložíme debug info do session
             $_SESSION['tenant_debug'] = $debugInfo;
         }
@@ -444,13 +446,13 @@ final class TenantsPresenter extends BasePresenter
         // ================================================================
         // DEBUG: DEBUGGING MAZÁNÍ TENANTA
         // ================================================================
-        
+
         Debugger::log("🗑️ DELETE DEBUG: Formulář pro mazání byl odeslán", ILogger::INFO);
         Debugger::log("🗑️ DELETE DEBUG: Data z formuláře: " . json_encode((array)$data, JSON_UNESCAPED_UNICODE), ILogger::INFO);
-        
+
         $tenantId = (int) $data->tenant_id;
         $reason = $data->reason;
-        
+
         Debugger::log("🗑️ DELETE DEBUG: Tenant ID: $tenantId", ILogger::INFO);
         Debugger::log("🗑️ DELETE DEBUG: Důvod: $reason", ILogger::INFO);
 

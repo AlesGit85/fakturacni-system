@@ -121,26 +121,32 @@
                     <td class="text-end">
                         <div class="action-buttons">
                             {if $tenantData['tenant']['status'] === 'active'}
-                                <button type="button" class="btn btn-sm" style="color: var(--grey-color); border-color: var(--grey-color);" 
-                                        onmouseover="this.style.backgroundColor='var(--grey-color)'; this.style.color='white';"
-                                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--grey-color)';"
-                                        onclick="if(confirm('Opravdu chcete deaktivovat tenant {$tenantData['tenant']['name']}?')) window.location.href='{link deactivate $tenantData['tenant']['id']}'"
-                                        title="Deaktivovat tenant">
+                                <a n:href="deactivate!, id => $tenantData['tenant']['id']" 
+                                   class="btn btn-sm" style="color: var(--grey-color); border-color: var(--grey-color);" 
+                                   onmouseover="this.style.backgroundColor='var(--grey-color)'; this.style.color='white';"
+                                   onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--grey-color)';"
+                                   onclick="return confirm('Opravdu chcete deaktivovat tenant {$tenantData['tenant']['name']}?')"
+                                   title="Deaktivovat tenant">
                                     <i class="bi bi-pause"></i>
-                                </button>
+                                </a>
                             {else}
-                                <button type="button" class="btn btn-sm btn-outline-success"
-                                        onclick="if(confirm('Opravdu chcete aktivovat tenant {$tenantData['tenant']['name']}?')) window.location.href='{link activate $tenantData['tenant']['id']}'"
-                                        title="Aktivovat tenant">
+                                <a n:href="activate!, id => $tenantData['tenant']['id']" 
+                                   class="btn btn-sm" 
+                                   style="color: var(--primary-color); border-color: var(--primary-color);"
+                                   onmouseover="this.style.backgroundColor='var(--primary-color)'; this.style.color='white';"
+                                   onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--primary-color)';"
+                                   onclick="return confirm('Opravdu chcete aktivovat tenant {$tenantData['tenant']['name']}?')"
+                                   title="Aktivovat tenant">
                                     <i class="bi bi-play"></i>
-                                </button>
+                                </a>
                             {/if}
                             
-                            <button type="button" class="btn btn-sm btn-outline-danger"
-                                    onclick="if(confirm('POZOR! Opravdu chcete smazat tenant {$tenantData['tenant']['name']}? Tato akce je nevratná!')) window.location.href='{link delete $tenantData['tenant']['id']}'"
-                                    title="Smazat tenant">
+                            <a n:href="delete!, id => $tenantData['tenant']['id']" 
+                               class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm('POZOR! Opravdu chcete smazat tenant {$tenantData['tenant']['name']}? Tata akce je nevratná!')"
+                               title="Smazat tenant">
                                 <i class="bi bi-trash"></i>
-                            </button>
+                            </a>
                         </div>
                     </td>
                 </tr>
