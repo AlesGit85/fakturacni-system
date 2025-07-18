@@ -9,6 +9,9 @@ services:
 	- App\Model\ModuleManager
 	- App\Model\EmailService
 	- App\Model\TenantManager
+	- App\Security\SecurityValidator
+	- App\Security\RateLimiter
+	- App\Security\RateLimitCleaner
 	authenticator: App\Model\UserManager
 
 search:

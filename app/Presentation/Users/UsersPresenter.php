@@ -400,13 +400,11 @@ final class UsersPresenter extends BasePresenter
                 return empty($errors) ? true : $errors[0];
             }, '');
 
-        $form->addText('email', 'E-mail:')
+        $form->addEmail('email', 'E-mail:')
             ->setRequired('Zadejte e-mailovou adresu')
-            ->addFilter(function($value) { // ✅ NOVÉ: Sanitizace email
-                return filter_var(trim($value), FILTER_SANITIZE_EMAIL);
-            })
-            ->addRule(function($control) { // ✅ NOVÉ: Bezpečná validace
-                return SecurityValidator::validateEmail($control->getValue());
+            ->addRule(function($control) { // ✅ OPRAVENO: Přímá validace bez sanitizace
+                $email = trim($control->getValue());
+                return SecurityValidator::validateEmail($email);
             }, 'Zadejte platnou e-mailovou adresu.');
 
         // ✅ NOVÉ: Volitelná pole pro jméno a příjmení
@@ -464,13 +462,22 @@ final class UsersPresenter extends BasePresenter
     }
 
     /**
-     * ✅ VYLEPŠENÉ zpracování formuláře s bezpečnostní validací
+     * ✅ VYLEPŠENÉ zpracování formuláře s rate limiting
      */
     public function userFormSucceeded(Form $form, \stdClass $data): void
     {
         $id = $this->getParameter('id');
 
         try {
+            // ✅ NOVÉ: Kontrola rate limitingu pro vytváření uživatelů
+            if (!$id) { // Pouze pro nové uživatele
+                if (!$this->rateLimiter->isAllowed('user_creation', $this->getClientIP())) {
+                    $form->addError('Příliš mnoho pokusů o vytvoření uživatele. Zkuste to později.');
+                    $this->recordFormAttempt(false, 'user_creation');
+                    return;
+                }
+            }
+
             // ✅ NOVÉ: Kompletní sanitizace všech dat
             $sanitizedData = SecurityValidator::sanitizeFormData((array) $data);
             $data = (object) $sanitizedData;
@@ -498,6 +505,12 @@ final class UsersPresenter extends BasePresenter
                 foreach ($validationErrors as $error) {
                     $form->addError($error);
                 }
+                // ✅ NOVÉ: Zaznamenáme neúspěšný pokus
+                if (!$id) {
+                    $this->recordFormAttempt(false, 'user_creation');
+                } else {
+                    $this->recordFormAttempt(false, 'form_submit');
+                }
                 return;
             }
 
@@ -509,6 +522,11 @@ final class UsersPresenter extends BasePresenter
 
             if ($existingUsername) {
                 $form->addError('Uživatelské jméno už existuje.');
+                if (!$id) {
+                    $this->recordFormAttempt(false, 'user_creation');
+                } else {
+                    $this->recordFormAttempt(false, 'form_submit');
+                }
                 return;
             }
 
@@ -519,6 +537,11 @@ final class UsersPresenter extends BasePresenter
 
             if ($existingEmail) {
                 $form->addError('E-mailová adresa už je používána.');
+                if (!$id) {
+                    $this->recordFormAttempt(false, 'user_creation');
+                } else {
+                    $this->recordFormAttempt(false, 'form_submit');
+                }
                 return;
             }
 
@@ -543,12 +566,16 @@ final class UsersPresenter extends BasePresenter
 
                 $this->userManager->update($id, $userData, $adminId, $adminName);
                 $this->flashMessage('Uživatel byl úspěšně aktualizován.', 'success');
+                
+                // ✅ NOVÉ: Zaznamenáme úspěšnou editaci
+                $this->recordFormAttempt(true, 'form_submit');
             } else {
                 // PŘIDÁNÍ nového uživatele do aktuálního tenanta
                 $tenantId = $this->getCurrentTenantId();
                 
                 if (!$tenantId) {
                     $form->addError('Chyba: Nepodařilo se určit aktuální tenant.');
+                    $this->recordFormAttempt(false, 'user_creation');
                     return;
                 }
 
@@ -566,14 +593,25 @@ final class UsersPresenter extends BasePresenter
 
                 if ($newUserId) {
                     $this->flashMessage('Uživatel byl úspěšně přidán do vašeho firemního účtu.', 'success');
+                    
+                    // ✅ NOVÉ: Zaznamenáme úspěšné vytvoření
+                    $this->recordFormAttempt(true, 'user_creation');
                 } else {
                     $form->addError('Nepodařilo se přidat uživatele. Zkuste to prosím znovu.');
+                    $this->recordFormAttempt(false, 'user_creation');
                     return;
                 }
             }
 
             $this->redirect('default');
         } catch (\Exception $e) {
+            // ✅ NOVÉ: Zaznamenáme systémovou chybu
+            if (!$id) {
+                $this->recordFormAttempt(false, 'user_creation');
+            } else {
+                $this->recordFormAttempt(false, 'form_submit');
+            }
+            
             $form->addError('Chyba při ukládání uživatele: ' . $e->getMessage());
         }
     }
@@ -594,13 +632,11 @@ final class UsersPresenter extends BasePresenter
                 return empty($errors) ? true : $errors[0];
             }, '');
 
-        $form->addText('email', 'E-mail:')
+        $form->addEmail('email', 'E-mail:')
             ->setRequired('Zadejte e-mailovou adresu')
-            ->addFilter(function($value) { // ✅ NOVÉ: Sanitizace
-                return filter_var(trim($value), FILTER_SANITIZE_EMAIL);
-            })
-            ->addRule(function($control) { // ✅ NOVÉ: Bezpečná validace
-                return SecurityValidator::validateEmail($control->getValue());
+            ->addRule(function($control) { // ✅ OPRAVENO: Přímá validace
+                $email = trim($control->getValue());
+                return SecurityValidator::validateEmail($email);
             }, 'Zadejte platnou e-mailovou adresu.');
 
         $form->addText('first_name', 'Křestní jméno:')
@@ -643,13 +679,20 @@ final class UsersPresenter extends BasePresenter
     }
 
     /**
-     * ✅ VYLEPŠENÉ zpracování profilu s bezpečnostní validací
+     * ✅ VYLEPŠENÉ zpracování profilu s rate limiting
      */
     public function profileFormSucceeded(Form $form, \stdClass $data): void
     {
         $userId = $this->getUser()->getId();
 
         try {
+            // ✅ NOVÉ: Kontrola rate limitingu pro úpravu profilu
+            if (!$this->rateLimiter->isAllowed('form_submit', $this->getClientIP())) {
+                $form->addError('Příliš mnoho pokusů o úpravu profilu. Zkuste to později.');
+                $this->recordFormAttempt(false, 'form_submit');
+                return;
+            }
+
             // ✅ NOVÉ: Sanitizace dat
             $sanitizedData = SecurityValidator::sanitizeFormData((array) $data);
             $data = (object) $sanitizedData;
@@ -673,6 +716,7 @@ final class UsersPresenter extends BasePresenter
                 foreach ($validationErrors as $error) {
                     $form->addError($error);
                 }
+                $this->recordFormAttempt(false, 'form_submit');
                 return;
             }
 
@@ -680,6 +724,7 @@ final class UsersPresenter extends BasePresenter
             $currentUser = $this->userManager->getById($userId);
             if (!$currentUser) {
                 $this->flashMessage('Uživatel nebyl nalezen.', 'danger');
+                $this->recordFormAttempt(false, 'form_submit');
                 return;
             }
 
@@ -688,11 +733,13 @@ final class UsersPresenter extends BasePresenter
             if ($passwordWillChange) {
                 if (empty($data->currentPassword)) {
                     $form->addError('Pro změnu hesla musíte zadat současné heslo.');
+                    $this->recordFormAttempt(false, 'form_submit');
                     return;
                 }
 
                 if (!password_verify($data->currentPassword, $currentUser->password)) {
                     $form->addError('Současné heslo není správné.');
+                    $this->recordFormAttempt(false, 'form_submit');
                     return;
                 }
             }
@@ -705,6 +752,7 @@ final class UsersPresenter extends BasePresenter
 
             if ($existingUsername) {
                 $form->addError('Uživatelské jméno už existuje.');
+                $this->recordFormAttempt(false, 'form_submit');
                 return;
             }
 
@@ -715,6 +763,7 @@ final class UsersPresenter extends BasePresenter
 
             if ($existingEmail) {
                 $form->addError('E-mailová adresa už je používána.');
+                $this->recordFormAttempt(false, 'form_submit');
                 return;
             }
 
@@ -734,6 +783,9 @@ final class UsersPresenter extends BasePresenter
             // Aktualizace
             $this->userManager->update($userId, $updateData, $userId);
 
+            // ✅ NOVÉ: Zaznamenáme úspěšnou aktualizaci
+            $this->recordFormAttempt(true, 'form_submit');
+
             if ($passwordWillChange) {
                 $this->flashMessage('Profil a heslo byly úspěšně aktualizovány.', 'success');
             } else {
@@ -743,6 +795,7 @@ final class UsersPresenter extends BasePresenter
             $this->redirect('this');
 
         } catch (\Exception $e) {
+            $this->recordFormAttempt(false, 'form_submit');
             $form->addError('Chyba při ukládání profilu: ' . $e->getMessage());
         }
     }
@@ -847,5 +900,84 @@ final class UsersPresenter extends BasePresenter
         
         // Přesměrování na stránku s výsledky vyhledávání
         $this->redirect('default', ['search' => $searchQuery]);
+    }
+
+    /**
+     * ✅ NOVÉ: Akce pro zobrazení rate limiting statistik (pouze super admin)
+     */
+    public function actionRateLimitStats(): void
+    {
+        if (!$this->isSuperAdmin()) {
+            $this->error('Stránka nenalezena', 404);
+        }
+
+        // Získání statistik
+        $this->template->statistics = $this->rateLimiter->getStatistics();
+        
+        // Současné IP adresy s blokováním
+        $blockedIPs = $this->database->table('rate_limit_blocks')
+            ->where('blocked_until > ?', new \DateTime())
+            ->order('blocked_until DESC');
+        
+        $this->template->blockedIPs = $blockedIPs;
+        
+        // Rate limit status pro různé akce
+        $this->template->rateLimitStatuses = [
+            'login' => $this->getRateLimitStatus('login'),
+            'form_submit' => $this->getRateLimitStatus('form_submit'),
+            'user_creation' => $this->getRateLimitStatus('user_creation'),
+            'password_reset' => $this->getRateLimitStatus('password_reset'),
+        ];
+        
+        $this->template->currentIP = $this->getClientIP();
+    }
+
+    /**
+     * ✅ NOVÉ: Vymazání rate limit blokování pro konkrétní IP (pouze super admin)
+     */
+    public function handleClearRateLimit(string $ipAddress): void
+    {
+        if (!$this->isSuperAdmin()) {
+            $this->flashMessage('Nemáte oprávnění k této akci.', 'danger');
+            $this->redirect('this');
+        }
+
+        $adminName = $this->getUser()->getIdentity()->username;
+        
+        if ($this->rateLimiter->clearBlocking($ipAddress, "Vymazáno super adminem {$adminName}")) {
+            $this->flashMessage("Rate limiting vymazán pro IP: {$ipAddress}", 'success');
+        } else {
+            $this->flashMessage('Chyba při mazání rate limitingu.', 'danger');
+        }
+
+        $this->redirect('this');
+    }
+
+    /**
+     * ✅ NOVÉ: Vymazání všech rate limit blokování (pouze super admin)
+     */
+    public function handleClearAllRateLimits(): void
+    {
+        if (!$this->isSuperAdmin()) {
+            $this->flashMessage('Nemáte oprávnění k této akci.', 'danger');
+            $this->redirect('this');
+        }
+
+        try {
+            $deletedBlocks = $this->database->table('rate_limit_blocks')->delete();
+            $deletedAttempts = $this->database->table('rate_limits')->delete();
+            
+            $adminName = $this->getUser()->getIdentity()->username;
+            $this->securityLogger->logSecurityEvent(
+                'all_rate_limits_cleared',
+                "Všechny rate limity vymazány super adminem {$adminName}. Bloky: {$deletedBlocks}, Pokusy: {$deletedAttempts}"
+            );
+            
+            $this->flashMessage("Všechny rate limity vymazány. Bloky: {$deletedBlocks}, Pokusy: {$deletedAttempts}", 'success');
+        } catch (\Exception $e) {
+            $this->flashMessage('Chyba při mazání rate limitů: ' . $e->getMessage(), 'danger');
+        }
+
+        $this->redirect('this');
     }
 }

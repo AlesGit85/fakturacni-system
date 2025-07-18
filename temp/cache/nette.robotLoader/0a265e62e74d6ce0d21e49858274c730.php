@@ -7,6 +7,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Bootstrap.php',
       1 => 1749210801,
     ),
+    'App\\Console\\RateLimitCommand' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Console\\RateLimitCommand.php',
+      1 => 1752848803,
+    ),
     'App\\Core\\RouterFactory' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
@@ -105,7 +110,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1752670750,
+      1 => 1752849329,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -150,7 +155,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1752670933,
+      1 => 1752849332,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
@@ -160,7 +165,17 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1752847860,
+      1 => 1752849333,
+    ),
+    'App\\Security\\RateLimiter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiter.php',
+      1 => 1752848428,
+    ),
+    'App\\Security\\RateLimitCleaner' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiterCleaner.php',
+      1 => 1752848725,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
@@ -175,7 +190,7 @@ return array (
     'App\\Security\\SecurityValidator' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityValidator.php',
-      1 => 1752847853,
+      1 => 1752848128,
     ),
   ),
   1 => 
@@ -200,6 +215,7 @@ return array (
     'App\\Presentation\\Users\\UsersTemplate' => 3,
     'App\\Presentation\\Users\\UsersAddTemplate' => 3,
     'App\\Presentation\\Users\\UsersDeleteTemplate' => 2,
+    'Symfony\\Component\\Console\\Command\\Command' => 3,
   ),
   2 => 
   array (
