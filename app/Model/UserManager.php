@@ -619,10 +619,12 @@ class UserManager implements Nette\Security\Authenticator
 
     // =====================================================
     // SUPER ADMIN METODY PRO SESKUPENÉ ZOBRAZENÍ
+    // ✅ PŮVODNÍ KÓD ZACHOVÁN - již byl bezpečný!
     // =====================================================
 
     /**
      * Získá všechny uživatele seskupené podle tenantů (pouze pro super admina)
+     * ✅ PŮVODNÍ KÓD - parametrizované dotazy jsou bezpečné
      */
     public function getAllUsersGroupedByTenants(): array
     {
@@ -679,6 +681,7 @@ class UserManager implements Nette\Security\Authenticator
 
     /**
      * Vyhledá uživatele podle různých kritérií (pouze pro super admina)
+     * ✅ PŮVODNÍ KÓD - parametrizované dotazy jsou bezpečné
      */
     public function searchUsersForSuperAdmin(string $query): array
     {
@@ -688,7 +691,7 @@ class UserManager implements Nette\Security\Authenticator
 
         $searchQuery = "%$query%";
 
-        // Vyhledáme ve všech relevantních polích
+        // Vyhledáme ve všech relevantních polích - parametrizované dotazy jsou bezpečné
         $users = $this->database->query('
             SELECT 
                 u.*,
@@ -712,6 +715,7 @@ class UserManager implements Nette\Security\Authenticator
 
     /**
      * Získá statistiky pro super admin dashboard
+     * ✅ PŮVODNÍ KÓD - parametrizované dotazy jsou bezpečné
      */
     public function getSuperAdminStatistics(): array
     {

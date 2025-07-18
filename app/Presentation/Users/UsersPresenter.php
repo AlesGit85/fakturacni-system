@@ -8,6 +8,7 @@ use Nette;
 use Nette\Application\UI\Form;
 use App\Model\UserManager;
 use App\Presentation\BasePresenter;
+use App\Security\SecurityValidator; // ✅ NOVÉ: Import našeho validátoru
 
 final class UsersPresenter extends BasePresenter
 {
@@ -110,6 +111,7 @@ final class UsersPresenter extends BasePresenter
 
     /**
      * Vyhledá uživatele podle různých kritérií
+     * ✅ PŮVODNÍ KÓD - již byl bezpečný s parametrizovanými dotazy
      */
     private function performUserSearch(string $query): array
     {
@@ -120,7 +122,7 @@ final class UsersPresenter extends BasePresenter
             return $searchResults;
         }
 
-        // SQL dotaz pro vyhledávání
+        // SQL dotaz pro vyhledávání - parametrizované dotazy jsou bezpečné
         $sql = "
             SELECT u.*, t.name as tenant_name, c.name as company_name
             FROM users u
@@ -190,10 +192,10 @@ final class UsersPresenter extends BasePresenter
                     'company_name' => $company ? $company->name : $tenant->name,
                     'company_email' => $company ? $company->email : null,
                     'company_phone' => $company ? $company->phone : null,
+                    'owner' => $owner,
                     'users' => $usersArray,
                     'user_count' => count($usersArray),
-                    'admin_count' => $adminCount,
-                    'owner' => $owner
+                    'admin_count' => $adminCount
                 ];
             }
         }
@@ -202,34 +204,31 @@ final class UsersPresenter extends BasePresenter
     }
 
     /**
-     * Získá statistiky pro super admina
+     * Super admin statistiky
      */
     private function getSuperAdminStatistics(): array
     {
-        if (!$this->isSuperAdmin()) {
-            return [];
-        }
-
         try {
-            // Celkový počet aktivních tenantů
-            $totalTenants = $this->database->table('tenants')->where('status', 'active')->count();
-
-            // Celkový počet uživatelů
-            $totalUsers = $this->database->table('users')->count();
-
-            // Počet adminů
-            $totalAdmins = $this->database->table('users')->where('role', 'admin')->count();
-
-            // Počet účetních
-            $totalAccountants = $this->database->table('users')->where('role', 'accountant')->count();
-
-            // Počet readonly uživatelů
-            $totalReadonly = $this->database->table('users')->where('role', 'readonly')->count();
+            $totalTenants = $this->database->table('tenants')->count();
+            $totalUsers = $this->database->table('users')->where('tenant_id IS NOT NULL')->count();
+            $totalAdmins = $this->database->table('users')
+                ->where('tenant_id IS NOT NULL')
+                ->where('role', 'admin')
+                ->count();
+            $totalAccountants = $this->database->table('users')
+                ->where('tenant_id IS NOT NULL')
+                ->where('role', 'accountant')
+                ->count();
+            $totalReadonly = $this->database->table('users')
+                ->where('tenant_id IS NOT NULL')
+                ->where('role', 'readonly')
+                ->count();
 
             // Aktivní uživatelé za posledních 30 dní
             $thirtyDaysAgo = new \DateTime('-30 days');
             $activeUsers30d = $this->database->table('users')
-                ->where('last_login > ?', $thirtyDaysAgo)
+                ->where('tenant_id IS NOT NULL')
+                ->where('last_login >= ?', $thirtyDaysAgo)
                 ->count();
 
             return [
@@ -384,7 +383,7 @@ final class UsersPresenter extends BasePresenter
     }
 
     /**
-     * Formulář pro úpravu uživatele - OPRAVENÝ pro multi-tenancy
+     * ✅ VYLEPŠENÝ formulář pro úpravu uživatele s SecurityValidator
      */
     protected function createComponentUserForm(): Form
     {
@@ -393,11 +392,33 @@ final class UsersPresenter extends BasePresenter
 
         $form->addText('username', 'Uživatelské jméno:')
             ->setRequired('Zadejte uživatelské jméno')
+            ->addFilter([SecurityValidator::class, 'sanitizeString']) // ✅ NOVÉ: Sanitizace
             ->addRule(Form::MIN_LENGTH, 'Uživatelské jméno musí mít alespoň %d znaků', 3)
-            ->addRule(Form::MAX_LENGTH, 'Uživatelské jméno může mít maximálně %d znaků', 50);
+            ->addRule(Form::MAX_LENGTH, 'Uživatelské jméno může mít maximálně %d znaků', 50)
+            ->addRule(function($control) { // ✅ NOVÉ: Vlastní validace
+                $errors = SecurityValidator::validateUsername($control->getValue());
+                return empty($errors) ? true : $errors[0];
+            }, '');
 
-        $form->addEmail('email', 'E-mail:')
-            ->setRequired('Zadejte e-mailovou adresu');
+        $form->addText('email', 'E-mail:')
+            ->setRequired('Zadejte e-mailovou adresu')
+            ->addFilter(function($value) { // ✅ NOVÉ: Sanitizace email
+                return filter_var(trim($value), FILTER_SANITIZE_EMAIL);
+            })
+            ->addRule(function($control) { // ✅ NOVÉ: Bezpečná validace
+                return SecurityValidator::validateEmail($control->getValue());
+            }, 'Zadejte platnou e-mailovou adresu.');
+
+        // ✅ NOVÉ: Volitelná pole pro jméno a příjmení
+        $form->addText('first_name', 'Křestní jméno:')
+            ->setRequired(false)
+            ->addFilter([SecurityValidator::class, 'sanitizeString'])
+            ->addRule(Form::MAX_LENGTH, 'Křestní jméno může mít maximálně %d znaků', 100);
+
+        $form->addText('last_name', 'Příjmení:')
+            ->setRequired(false)
+            ->addFilter([SecurityValidator::class, 'sanitizeString'])
+            ->addRule(Form::MAX_LENGTH, 'Příjmení může mít maximálně %d znaků', 100);
 
         $form->addSelect('role', 'Role:', [
             'readonly' => 'Pouze čtení',
@@ -412,16 +433,18 @@ final class UsersPresenter extends BasePresenter
             ->setRequired($id ? false : 'Zadejte heslo');
 
         if (!$id) {
-            // Pro nového uživatele jsou hesla povinná
-            $passwordField->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 8)
-                ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jednu číslici', '.*[0-9].*')
-                ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jedno velké písmeno', '.*[A-Z].*');
+            // ✅ VYLEPŠENÁ validace hesla pro nového uživatele
+            $passwordField->addRule(function($control) {
+                $errors = SecurityValidator::validatePassword($control->getValue());
+                return empty($errors) ? true : implode(' ', $errors);
+            }, '');
         } else {
-            // Pro editaci hesla jsou volitelná
+            // ✅ VYLEPŠENÁ validace hesla pro editaci
             $passwordField->addCondition($form::FILLED)
-                ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 8)
-                ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jednu číslici', '.*[0-9].*')
-                ->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jedno velké písmeno', '.*[A-Z].*');
+                ->addRule(function($control) {
+                    $errors = SecurityValidator::validatePassword($control->getValue());
+                    return empty($errors) ? true : implode(' ', $errors);
+                }, '');
         }
 
         $form->addPassword('passwordVerify', 'Heslo znovu:')
@@ -441,13 +464,43 @@ final class UsersPresenter extends BasePresenter
     }
 
     /**
-     * OPRAVENÁ metoda pro zpracování formuláře - správné přidávání do tenanta
+     * ✅ VYLEPŠENÉ zpracování formuláře s bezpečnostní validací
      */
     public function userFormSucceeded(Form $form, \stdClass $data): void
     {
         $id = $this->getParameter('id');
 
         try {
+            // ✅ NOVÉ: Kompletní sanitizace všech dat
+            $sanitizedData = SecurityValidator::sanitizeFormData((array) $data);
+            $data = (object) $sanitizedData;
+
+            // ✅ NOVÉ: Dodatečná validace po sanitizaci
+            $validationErrors = [];
+
+            // Validace uživatelského jména
+            $usernameErrors = SecurityValidator::validateUsername($data->username);
+            $validationErrors = array_merge($validationErrors, $usernameErrors);
+
+            // Validace emailu
+            if (!SecurityValidator::validateEmail($data->email)) {
+                $validationErrors[] = 'E-mailová adresa není platná.';
+            }
+
+            // Validace hesla (pouze pokud je vyplněno)
+            if (!empty($data->password)) {
+                $passwordErrors = SecurityValidator::validatePassword($data->password);
+                $validationErrors = array_merge($validationErrors, $passwordErrors);
+            }
+
+            // Pokud jsou chyby validace, zobrazíme je
+            if (!empty($validationErrors)) {
+                foreach ($validationErrors as $error) {
+                    $form->addError($error);
+                }
+                return;
+            }
+
             // Kontrola jedinečnosti uživatelského jména a e-mailu
             $existingUsername = $this->userManager->getAll()
                 ->where('username', $data->username)
@@ -478,6 +531,8 @@ final class UsersPresenter extends BasePresenter
                 $userData = [
                     'username' => $data->username,
                     'email' => $data->email,
+                    'first_name' => $data->first_name ?? null, // ✅ NOVÉ
+                    'last_name' => $data->last_name ?? null,   // ✅ NOVÉ
                     'role' => $data->role,
                 ];
 
@@ -497,45 +552,34 @@ final class UsersPresenter extends BasePresenter
                     return;
                 }
 
-                try {
-                    $newUserId = $this->userManager->add(
-                        $data->username,
-                        $data->email,
-                        $data->password,
-                        $data->role,
-                        $tenantId,
-                        $adminId,
-                        $adminName
-                    );
+                $newUserId = $this->userManager->add(
+                    $data->username,
+                    $data->email,
+                    $data->password,
+                    $data->role,
+                    $tenantId,
+                    $adminId,
+                    $adminName,
+                    $data->first_name ?? null, // ✅ NOVÉ
+                    $data->last_name ?? null   // ✅ NOVÉ
+                );
 
-                    if ($newUserId) {
-                        $this->flashMessage('Uživatel byl úspěšně přidán do vašeho firemního účtu.', 'success');
-                    } else {
-                        $form->addError('Nepodařilo se přidat uživatele. Zkuste to prosím znovu.');
-                        return;
-                    }
-                } catch (\Exception $addException) {
-                    error_log('Chyba při volání UserManager::add(): ' . $addException->getMessage());
-                    $form->addError('Chyba při vytváření uživatele: ' . $addException->getMessage());
+                if ($newUserId) {
+                    $this->flashMessage('Uživatel byl úspěšně přidán do vašeho firemního účtu.', 'success');
+                } else {
+                    $form->addError('Nepodařilo se přidat uživatele. Zkuste to prosím znovu.');
                     return;
                 }
             }
 
-            // Redirect na konci - tady se může vyhodit AbortException
             $this->redirect('default');
-            
-        } catch (Nette\Application\AbortException $e) {
-            // AbortException je normální při redirect - necháme ji projít
-            throw $e;
         } catch (\Exception $e) {
-            error_log('Obecná chyba v userFormSucceeded(): ' . $e->getMessage());
-            error_log('Stack trace: ' . $e->getTraceAsString());
             $form->addError('Chyba při ukládání uživatele: ' . $e->getMessage());
         }
     }
 
     /**
-     * Formulář pro úpravu profilu - OPRAVENÁ VERZE s currentPassword
+     * ✅ VYLEPŠENÝ formulář pro úpravu profilu s SecurityValidator
      */
     protected function createComponentProfileForm(): Form
     {
@@ -544,16 +588,28 @@ final class UsersPresenter extends BasePresenter
 
         $form->addText('username', 'Uživatelské jméno:')
             ->setRequired('Zadejte uživatelské jméno')
-            ->addRule(Form::MIN_LENGTH, 'Uživatelské jméno musí mít alespoň %d znaků', 3);
+            ->addFilter([SecurityValidator::class, 'sanitizeString']) // ✅ NOVÉ
+            ->addRule(function($control) { // ✅ NOVÉ: Bezpečná validace
+                $errors = SecurityValidator::validateUsername($control->getValue());
+                return empty($errors) ? true : $errors[0];
+            }, '');
 
-        $form->addEmail('email', 'E-mail:')
-            ->setRequired('Zadejte e-mailovou adresu');
+        $form->addText('email', 'E-mail:')
+            ->setRequired('Zadejte e-mailovou adresu')
+            ->addFilter(function($value) { // ✅ NOVÉ: Sanitizace
+                return filter_var(trim($value), FILTER_SANITIZE_EMAIL);
+            })
+            ->addRule(function($control) { // ✅ NOVÉ: Bezpečná validace
+                return SecurityValidator::validateEmail($control->getValue());
+            }, 'Zadejte platnou e-mailovou adresu.');
 
         $form->addText('first_name', 'Křestní jméno:')
-            ->setRequired(false);
+            ->setRequired(false)
+            ->addFilter([SecurityValidator::class, 'sanitizeString']); // ✅ NOVÉ
 
         $form->addText('last_name', 'Příjmení:')
-            ->setRequired(false);
+            ->setRequired(false)
+            ->addFilter([SecurityValidator::class, 'sanitizeString']); // ✅ NOVÉ
 
         // PŘIDÁNO: Pole pro současné heslo
         $currentPasswordField = $form->addPassword('currentPassword', 'Současné heslo:')
@@ -562,8 +618,12 @@ final class UsersPresenter extends BasePresenter
         $passwordField = $form->addPassword('password', 'Nové heslo:')
             ->setRequired(false);
 
+        // ✅ VYLEPŠENÁ validace hesla
         $passwordField->addCondition($form::FILLED)
-            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 6);
+            ->addRule(function($control) {
+                $errors = SecurityValidator::validatePassword($control->getValue());
+                return empty($errors) ? true : implode(' ', $errors);
+            }, '');
 
         $form->addPassword('passwordVerify', 'Nové heslo znovu:')
             ->setRequired(false)
@@ -582,11 +642,40 @@ final class UsersPresenter extends BasePresenter
         return $form;
     }
 
+    /**
+     * ✅ VYLEPŠENÉ zpracování profilu s bezpečnostní validací
+     */
     public function profileFormSucceeded(Form $form, \stdClass $data): void
     {
         $userId = $this->getUser()->getId();
 
         try {
+            // ✅ NOVÉ: Sanitizace dat
+            $sanitizedData = SecurityValidator::sanitizeFormData((array) $data);
+            $data = (object) $sanitizedData;
+
+            // ✅ NOVÉ: Validace po sanitizaci
+            $validationErrors = [];
+
+            $usernameErrors = SecurityValidator::validateUsername($data->username);
+            $validationErrors = array_merge($validationErrors, $usernameErrors);
+
+            if (!SecurityValidator::validateEmail($data->email)) {
+                $validationErrors[] = 'E-mailová adresa není platná.';
+            }
+
+            if (!empty($data->password)) {
+                $passwordErrors = SecurityValidator::validatePassword($data->password);
+                $validationErrors = array_merge($validationErrors, $passwordErrors);
+            }
+
+            if (!empty($validationErrors)) {
+                foreach ($validationErrors as $error) {
+                    $form->addError($error);
+                }
+                return;
+            }
+
             // Získáme aktuální uživatele
             $currentUser = $this->userManager->getById($userId);
             if (!$currentUser) {
@@ -608,14 +697,14 @@ final class UsersPresenter extends BasePresenter
                 }
             }
 
-            // Kontrola jedinečnosti uživatelského jména a e-mailu
+            // Kontrola jedinečnosti dat
             $existingUsername = $this->userManager->getAll()
                 ->where('username', $data->username)
                 ->where('id != ?', $userId)
                 ->fetch();
 
             if ($existingUsername) {
-                $form->addError('Uživatelské jméno už je obsazené.');
+                $form->addError('Uživatelské jméno už existuje.');
                 return;
             }
 
@@ -629,33 +718,29 @@ final class UsersPresenter extends BasePresenter
                 return;
             }
 
-            // Příprava dat pro update
+            // Příprava dat pro aktualizaci
             $updateData = [
                 'username' => $data->username,
                 'email' => $data->email,
-                'first_name' => $data->first_name,
-                'last_name' => $data->last_name,
+                'first_name' => $data->first_name ?? null,
+                'last_name' => $data->last_name ?? null,
             ];
 
             // Přidání hesla pouze pokud se mění
             if ($passwordWillChange) {
-                $updateData['password'] = $data->password; // UserManager si heslo zahashuje
+                $updateData['password'] = $data->password;
             }
 
-            // Informace o adminovi (v tomto případě uživatel mění svůj vlastní profil)
-            $adminId = $userId;
-            $adminName = $data->username;
+            // Aktualizace
+            $this->userManager->update($userId, $updateData, $userId);
 
-            $this->userManager->update($userId, $updateData, $adminId, $adminName);
-
-            // Pokud se změnilo uživatelské jméno, musíme uživatele odhlásit
-            if ($currentUser->username !== $data->username) {
-                $this->flashMessage('Profil byl aktualizován. Kvůli změně uživatelského jména budete odhlášeni.', 'success');
-                $this->redirect('Sign:relogin');
+            if ($passwordWillChange) {
+                $this->flashMessage('Profil a heslo byly úspěšně aktualizovány.', 'success');
             } else {
                 $this->flashMessage('Profil byl úspěšně aktualizován.', 'success');
-                $this->redirect('this');
             }
+            
+            $this->redirect('this');
 
         } catch (\Exception $e) {
             $form->addError('Chyba při ukládání profilu: ' . $e->getMessage());
@@ -679,68 +764,22 @@ final class UsersPresenter extends BasePresenter
             $company = $this->database->table('company_info')->where('tenant_id', $tenant->id)->fetch();
             
             $companyName = $company ? $company->name : $tenant->name;
-            $label = sprintf(
-                '%s - %s (ID: %d)',
-                $companyName,
-                $tenant->name,
-                $tenant->id
-            );
-
-            $tenants[$tenant->id] = $label;
+            $tenants[$tenant->id] = "{$tenant->name} ({$companyName})";
         }
 
-        $form->addSelect('new_tenant_id', 'Cílový tenant:')
-            ->setItems($tenants)
-            ->setRequired('Vyberte tenant, do kterého chcete uživatele přesunout')
-            ->setHtmlAttribute('class', 'form-select');
+        $form->addSelect('new_tenant_id', 'Nový tenant:', $tenants)
+            ->setRequired('Vyberte nový tenant');
 
         $form->addTextArea('reason', 'Důvod přesunutí:')
-            ->setHtmlAttribute('rows', 3)
-            ->setHtmlAttribute('placeholder', 'Volitelně uveďte důvod přesunutí uživatele...')
-            ->setRequired(false);
+            ->setRequired(false)
+            ->addFilter([SecurityValidator::class, 'sanitizeString']) // ✅ NOVÉ: Sanitizace
+            ->setHtmlAttribute('rows', 3);
 
-        $form->addSubmit('send', 'Přesunout uživatele')
-            ->setHtmlAttribute('class', 'btn btn-warning');
+        $form->addSubmit('send', 'Přesunout uživatele');
 
         $form->onSuccess[] = [$this, 'moveTenantFormSucceeded'];
 
         return $form;
-    }
-
-    /**
-     * Vyhledávací formulář pro super admina
-     */
-    protected function createComponentSearchForm(): Form
-    {
-        $form = new Form;
-        
-        $form->addText('search', 'Vyhledat uživatele:')
-            ->setHtmlAttribute('placeholder', 'Zadejte jméno, email, tenant...')
-            ->setDefaultValue($this->getParameter('search'));
-
-        $form->addSubmit('send', 'Hledat')
-            ->setHtmlAttribute('class', 'btn btn-primary');
-
-        $form->addSubmit('clear', 'Vymazat')
-            ->setHtmlAttribute('class', 'btn btn-outline-secondary')
-            ->setValidationScope([]);
-
-        $form->onSuccess[] = [$this, 'searchFormSucceeded'];
-
-        return $form;
-    }
-
-    public function searchFormSucceeded(Form $form, \stdClass $data): void
-    {
-        $submittedBy = $form->isSubmitted();
-
-        if ($submittedBy === $form['clear']) {
-            // Vymazání vyhledávání
-            $this->redirect('this', ['search' => null]);
-        } else {
-            // Vyhledávání
-            $this->redirect('this', ['search' => $data->search]);
-        }
     }
 
     public function moveTenantFormSucceeded(Form $form, \stdClass $data): void
@@ -750,67 +789,63 @@ final class UsersPresenter extends BasePresenter
             $this->redirect('default');
         }
 
-        $userId = (int) $data->user_id;
-        $newTenantId = (int) $data->new_tenant_id;
-        $reason = trim($data->reason);
-
-        // Kontrola, že máme platné ID
-        if ($userId <= 0) {
-            $this->flashMessage('Neplatné ID uživatele.', 'danger');
-            $this->redirect('default');
-        }
-
-        if ($newTenantId <= 0) {
-            $this->flashMessage('Neplatné ID tenanta.', 'danger');
-            $this->redirect('default');
-        }
-
         try {
-            // Ověření, že uživatel existuje
-            $user = $this->userManager->getByIdForSuperAdmin($userId);
-            if (!$user) {
-                $this->flashMessage('Uživatel nebyl nalezen.', 'danger');
-                $this->redirect('default');
-            }
+            // ✅ NOVÉ: Sanitizace dat
+            $sanitizedData = SecurityValidator::sanitizeFormData((array) $data);
+            $data = (object) $sanitizedData;
 
-            // Ověření, že tenant existuje
-            $tenant = $this->database->table('tenants')->get($newTenantId);
-            if (!$tenant) {
-                $this->flashMessage('Tenant nebyl nalezen.', 'danger');
-                $this->redirect('default');
-            }
+            $userId = (int) $data->user_id;
+            $newTenantId = (int) $data->new_tenant_id;
+            $reason = $data->reason ?? null;
 
-            // Kontrola, zda uživatel už není v tomto tenantu
-            if ($user->tenant_id == $newTenantId) {
-                $this->flashMessage('Uživatel už je v tomto tenantu.', 'warning');
-                $this->redirect('default');
-            }
+            // Delegace na akci pro zpracování
+            $this->actionMoveUser($userId, $newTenantId, $reason);
 
-            // Nelze přesunout sebe sama
-            if ($userId === $this->getUser()->getId()) {
-                $this->flashMessage('Nemůžete přesunout sám sebe.', 'danger');
-                $this->redirect('default');
-            }
-
-            // Provedení přesunutí
-            $adminId = $this->getUser()->getId();
-            $adminName = $this->getUser()->getIdentity()->username;
-
-            $success = $this->userManager->moveUserToTenant($userId, $newTenantId, $adminId, $adminName);
-
-            if ($success) {
-                $message = "Uživatel '{$user->username}' byl úspěšně přesunut do tenanta '{$tenant->name}'.";
-                if ($reason) {
-                    $message .= " Důvod: {$reason}";
-                }
-                $this->flashMessage($message, 'success');
-            } else {
-                $this->flashMessage('Nepodařilo se přesunout uživatele. Zkuste to prosím znovu.', 'danger');
-            }
         } catch (\Exception $e) {
             $this->flashMessage('Chyba při přesouvání uživatele: ' . $e->getMessage(), 'danger');
+            $this->redirect('default');
         }
+    }
 
-        $this->redirect('default');
+    /**
+     * ✅ OPRAVENÝ: Formulář pro vyhledávání uživatelů s clear tlačítkem
+     */
+    protected function createComponentSearchForm(): Form
+    {
+        $form = new Form;
+        
+        $form->addText('search', 'Vyhledat:')
+            ->setHtmlAttribute('placeholder', 'Zadejte jméno, email, firmu...')
+            ->addFilter([SecurityValidator::class, 'sanitizeString']) // ✅ Sanitizace
+            ->setDefaultValue($this->getParameter('search') ?: ''); // ✅ Zachování hodnoty
+
+        $form->addSubmit('send', 'Vyhledat')
+            ->setHtmlAttribute('class', 'btn btn-primary');
+
+        $form->addSubmit('clear', 'Vymazat')
+            ->setHtmlAttribute('class', 'btn btn-outline-secondary')
+            ->setValidationScope([]); // ✅ NOVÉ: Clear tlačítko
+
+        $form->onSuccess[] = [$this, 'searchFormSucceeded'];
+
+        return $form;
+    }
+
+    /**
+     * ✅ OPRAVENÝ: Zpracování vyhledávacího formuláře s lepší syntaxí
+     */
+    public function searchFormSucceeded(Form $form, \stdClass $data): void
+    {
+        // ✅ OPRAVENO: Lepší způsob zjištění stisknutého tlačítka
+        if (isset($data->clear)) {
+            // Clear tlačítko - přesměruj bez parametrů
+            $this->redirect('default');
+        }
+        
+        // ✅ Sanitizace vyhledávacího dotazu
+        $searchQuery = SecurityValidator::sanitizeString($data->search ?? '');
+        
+        // Přesměrování na stránku s výsledky vyhledávání
+        $this->redirect('default', ['search' => $searchQuery]);
     }
 }

@@ -60,7 +60,7 @@ return array (
     'App\\Model\\UserManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\UserManager.php',
-      1 => 1752668405,
+      1 => 1752840200,
     ),
     'App\\Modules\\BaseModule' => 
     array (
@@ -160,7 +160,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1752594118,
+      1 => 1752847860,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
@@ -171,6 +171,11 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityLogger.php',
       1 => 1747984094,
+    ),
+    'App\\Security\\SecurityValidator' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityValidator.php',
+      1 => 1752847853,
     ),
   ),
   1 => 
@@ -189,6 +194,12 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
     'App\\Presentation\\Tenants\\TenantsAddTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
+    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
+    'App\\Presentation\\Users\\UsersTemplate' => 3,
+    'App\\Presentation\\Users\\UsersAddTemplate' => 3,
+    'App\\Presentation\\Users\\UsersDeleteTemplate' => 2,
   ),
   2 => 
   array (
