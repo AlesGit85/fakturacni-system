@@ -127,7 +127,11 @@ final class Template_750e895e20 extends Latte\Runtime\Template
             <tbody>
 ';
 			foreach ($tenants as $tenantData) /* line 67 */ {
-				echo '                <tr class="data-row">
+				echo '                <tr class="data-row';
+				if ($tenantData['tenant']['status'] === 'inactive') /* line 68 */ {
+					echo ' tenant-inactive';
+				}
+				echo '">
                     <td class="company-column">
                         <div class="company-name">
                             <strong>';

@@ -65,7 +65,7 @@
             </thead>
             <tbody>
                 {foreach $tenants as $tenantData}
-                <tr class="data-row">
+                <tr class="data-row{if $tenantData['tenant']['status'] === 'inactive'} tenant-inactive{/if}">
                     <td class="company-column">
                         <div class="company-name">
                             <strong>{$tenantData['tenant']['name']}</strong>
