@@ -186,6 +186,143 @@
 }
 
 /* ==========================================================================
+   OPRAVA: Zlepšení viditelnosti badges v hlavní tabulce
+   ========================================================================== */
+
+.badge-primary-custom {
+    background-color: #B1D235;
+    color: #212529;
+    font-weight: 600;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.badge-neutral {
+    background-color: #6c757d;
+    color: white;
+    font-weight: 600;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+/* ==========================================================================
+   NOVÉ: Styly pro rozbalitelné detaily tenantů
+   ========================================================================== */
+
+.tenant-row {
+    transition: background-color 0.2s ease;
+}
+
+.tenant-expand-icon {
+    transition: transform 0.3s ease !important;
+    font-size: 0.8rem !important;
+    color: #B1D235 !important;
+}
+
+.tenant-details-row {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.tenant-details-cell {
+    padding: 0 !important;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.tenant-details-content {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.detail-section {
+    margin-bottom: 1.5rem; /* ZVĚTŠENO z 1rem na 1.5rem */
+}
+
+.detail-section-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: #212529;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+}
+
+.detail-item {
+    margin-bottom: 1rem; /* ZVĚTŠENO z 0.75rem na 1rem */
+    font-size: 13px;
+}
+
+.detail-item strong {
+    color: #B1D235; /* ZMĚNĚNO na zelenou */
+    font-weight: 600; /* ZMĚNĚNO z 500 na 600 (tučnější) */
+    display: block;
+    margin-bottom: 0.125rem; /* ZMENŠENO z 0.25rem na 0.125rem */
+}
+
+.detail-item span {
+    color: #212529;
+    line-height: 1.4;
+}
+
+.detail-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.stat-number {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Animace pro rozbalení */
+.tenant-details-row {
+    transition: opacity 0.3s ease;
+}
+
+/* Hover efekty pro rozbalitelné řádky */
+.tenant-row:hover .tenant-expand-icon {
+    color: #95B11F !important;
+}
+
+/* Responsivní úpravy pro detaily */
+@media (max-width: 768px) {
+    .tenant-details-content .row > div {
+        margin-bottom: 1.5rem;
+    }
+    
+    .detail-stats {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .stat-item {
+        flex: 1;
+        min-width: calc(50% - 0.25rem);
+    }
+}
+
+/* ==========================================================================
    Tenant detaily
    ========================================================================== */
 
