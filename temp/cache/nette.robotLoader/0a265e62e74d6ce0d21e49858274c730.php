@@ -7,11 +7,6 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Bootstrap.php',
       1 => 1749210801,
     ),
-    'App\\Console\\RateLimitCommand' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Console\\RateLimitCommand.php',
-      1 => 1752848803,
-    ),
     'App\\Core\\RouterFactory' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
@@ -110,7 +105,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1752849329,
+      1 => 1752850641,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -155,7 +150,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1752849332,
+      1 => 1752850474,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
@@ -165,12 +160,12 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1752849333,
+      1 => 1752852109,
     ),
     'App\\Security\\RateLimiter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiter.php',
-      1 => 1752848428,
+      1 => 1752849689,
     ),
     'App\\Security\\RateLimitCleaner' => 
     array (
@@ -204,18 +199,22 @@ return array (
     'App\\Presentation\\Sign\\SignOutTemplate' => 3,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
     'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
-    'App\\Presentation\\Tenants\\TenantsAddTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
+    'App\\Presentation\\Tenants\\TenantsAddTemplate' => 2,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
     'App\\Presentation\\Users\\UsersTemplate' => 3,
     'App\\Presentation\\Users\\UsersAddTemplate' => 3,
     'App\\Presentation\\Users\\UsersDeleteTemplate' => 2,
     'Symfony\\Component\\Console\\Command\\Command' => 3,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
+    'App\\Presentation\\Users\\UsersRateLimitStatsTemplate' => 3,
+    'App\\Presentation\\Users\\UsersRateLimistsStatsTemplate' => 1,
   ),
   2 => 
   array (

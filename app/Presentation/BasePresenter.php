@@ -7,6 +7,7 @@ namespace App\Presentation;
 use Nette;
 use Nette\Application\UI\Presenter;
 use App\Security\SecurityLogger;
+use App\Security\RateLimiter;
 use App\Model\ModuleManager;
 
 abstract class BasePresenter extends Presenter
@@ -20,8 +21,14 @@ abstract class BasePresenter extends Presenter
     /** @var bool Zda presenter vyžaduje přihlášení */
     protected bool $requiresLogin = true;
 
+    /** @var bool Zda má presenter vypnuté rate limiting (pro SignPresenter) */
+    protected bool $disableRateLimit = false;
+
     /** @var SecurityLogger */
     private $securityLogger;
+
+    /** @var RateLimiter */
+    private $rateLimiter;
 
     /** @var ModuleManager */
     private $moduleManager;
@@ -32,6 +39,11 @@ abstract class BasePresenter extends Presenter
     public function injectSecurityLogger(SecurityLogger $securityLogger): void
     {
         $this->securityLogger = $securityLogger;
+    }
+
+    public function injectRateLimiter(RateLimiter $rateLimiter): void
+    {
+        $this->rateLimiter = $rateLimiter;
     }
 
     public function injectModuleManager(ModuleManager $moduleManager): void
@@ -47,6 +59,11 @@ abstract class BasePresenter extends Presenter
     public function startup(): void
     {
         parent::startup();
+
+        // ✅ NOVÉ: Rate Limiting kontrola PŘED všemi ostatními kontrolami
+        if (!$this->disableRateLimit && $this->requiresLogin) {
+            $this->checkRateLimit();
+        }
 
         // Kontrola přihlášení
         if ($this->requiresLogin && !$this->getUser()->isLoggedIn()) {
@@ -104,7 +121,70 @@ abstract class BasePresenter extends Presenter
         }
     }
 
-/**
+    /**
+     * ✅ NOVÉ: Globální Rate Limiting kontrola
+     */
+    private function checkRateLimit(): void
+    {
+        $clientIP = $this->rateLimiter->getClientIP();
+        $action = 'form_submit'; // Obecné rate limiting pro všechny formuláře
+
+        // Kontrola pouze pro POST požadavky (odesílání formulářů)
+        if ($this->getHttpRequest()->isMethod('POST')) {
+            if (!$this->rateLimiter->isAllowed($action, $clientIP)) {
+                $status = $this->rateLimiter->getLimitStatus($action, $clientIP);
+                $blockedUntil = $status['blocked_until'];
+                $timeRemaining = $blockedUntil ? 
+                    $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 
+                    'neznámý čas';
+                
+                $this->flashMessage(
+                    "Příliš mnoho odeslaných formulářů. Zkuste to znovu za {$timeRemaining}.", 
+                    'danger'
+                );
+                
+                // Přesměruj na GET verzi stejné stránky
+                $this->redirect('this');
+            }
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Automatické zaznamenávání formulářových pokusů
+     */
+    public function createComponent($name): ?\Nette\ComponentModel\IComponent
+    {
+        $component = parent::createComponent($name);
+        
+        // Pokud je to formulář, přidáme rate limiting
+        if ($component instanceof Nette\Application\UI\Form && !$this->disableRateLimit) {
+            // Přidáme rate limiting callback pro error
+            $component->onError[] = function($form) {
+                $this->recordFormSubmission(false);
+            };
+            
+            // Přidáme rate limiting callback pro success
+            // Přidáváme na začátek, takže se spustí jako první
+            array_unshift($component->onSuccess, function($form, $values) {
+                $this->recordFormSubmission(true);
+            });
+        }
+        
+        return $component;
+    }
+
+    /**
+     * ✅ NOVÉ: Zaznamenání odeslaného formuláře
+     */
+    private function recordFormSubmission(bool $successful): void
+    {
+        if (!$this->disableRateLimit) {
+            $clientIP = $this->rateLimiter->getClientIP();
+            $this->rateLimiter->recordAttempt('form_submit', $clientIP, $successful);
+        }
+    }
+
+    /**
      * NOVÉ: Kontrola statusu tenanta pro přihlášené uživatele
      */
     private function checkTenantStatus(): void
@@ -479,6 +559,11 @@ abstract class BasePresenter extends Presenter
         $this->template->add('currentTenantId', $this->getCurrentTenantId());
         $this->template->add('currentTenant', $this->getCurrentTenant());
 
+        // ✅ NOVÉ: Rate Limiting informace pro šablony
+        if (!$this->disableRateLimit) {
+            $this->template->add('rateLimitInfo', $this->getRateLimitInfo());
+        }
+
         // Přidání helper funkcí pro skloňování do šablony
         $this->template->addFunction('pluralizeInvoices', [$this, 'pluralizeInvoices']);
         $this->template->addFunction('getInvoiceCountText', [$this, 'getInvoiceCountText']);
@@ -492,6 +577,19 @@ abstract class BasePresenter extends Presenter
 
         // DEBUG: Přidáme informaci o počtu menu položek do šablony pro ladění
         $this->template->add('moduleMenuItemsCount', count($moduleMenuItems));
+    }
+
+    /**
+     * ✅ NOVÉ: Získá informace o rate limitingu pro šablony
+     */
+    private function getRateLimitInfo(): array
+    {
+        $clientIP = $this->rateLimiter->getClientIP();
+        
+        return [
+            'form_submit' => $this->rateLimiter->getLimitStatus('form_submit', $clientIP),
+            'client_ip' => $clientIP,
+        ];
     }
 
     /**
@@ -600,6 +698,42 @@ abstract class BasePresenter extends Presenter
     public function isReadonly(): bool
     {
         return $this->isSuperAdmin() || $this->hasRole('readonly');
+    }
+
+    // =====================================================
+    // ✅ NOVÉ: Rate Limiting Helper Metody
+    // =====================================================
+
+    /**
+     * Helper metoda pro získání RateLimiteru (pro potomky)
+     */
+    protected function getRateLimiter(): RateLimiter
+    {
+        return $this->rateLimiter;
+    }
+
+    /**
+     * Helper metoda pro manuální rate limit kontrolu
+     */
+    protected function checkCustomRateLimit(string $action): bool
+    {
+        if ($this->disableRateLimit) {
+            return true;
+        }
+        
+        $clientIP = $this->rateLimiter->getClientIP();
+        return $this->rateLimiter->isAllowed($action, $clientIP);
+    }
+
+    /**
+     * Helper metoda pro zaznamenání custom akce
+     */
+    protected function recordCustomAttempt(string $action, bool $successful): void
+    {
+        if (!$this->disableRateLimit) {
+            $clientIP = $this->rateLimiter->getClientIP();
+            $this->rateLimiter->recordAttempt($action, $clientIP, $successful);
+        }
     }
 
     /**

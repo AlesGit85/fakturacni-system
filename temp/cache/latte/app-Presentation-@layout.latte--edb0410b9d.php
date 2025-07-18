@@ -255,7 +255,14 @@ final class Template_edb0410b9d extends Latte\Runtime\Template
 						<ul class="dropdown-menu" aria-labelledby="superAdminDropdown">
 							<li>
 								<a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Tenants:default')) /* line 153 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Users:rateLimitStats')) /* line 153 */;
+				echo '" class="dropdown-item">
+									<i class="bi bi-shield-check me-2" style="color: #B1D235;"></i>
+									Rate Limit Dashboard
+								</a>
+							</li>							<li>
+								<a href="';
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Tenants:default')) /* line 158 */;
 				echo '" class="dropdown-item">
 									<i class="bi bi-building me-2" style="color: #B1D235;"></i>
 									Správa tenantů
@@ -263,7 +270,7 @@ final class Template_edb0410b9d extends Latte\Runtime\Template
 							</li>
 							<li>
 								<a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Users:default')) /* line 159 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Users:default')) /* line 164 */;
 				echo '" class="dropdown-item">
 									<i class="bi bi-people me-2" style="color: #95B11F;"></i>
 									Všichni uživatelé
@@ -272,7 +279,7 @@ final class Template_edb0410b9d extends Latte\Runtime\Template
 							<li><hr class="dropdown-divider"></li>
 							<li>
 								<a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Tenants:add')) /* line 166 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Tenants:add')) /* line 171 */;
 				echo '" class="dropdown-item">
 									<i class="bi bi-plus-circle me-2" style="color: #6c757d;"></i>
 									Vytvořit tenant
@@ -289,23 +296,23 @@ final class Template_edb0410b9d extends Latte\Runtime\Template
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							<i class="bi bi-person-circle"></i><span class="nav-text">
 							';
-			if (isset($currentUser) && $currentUser) /* line 180 */ {
-				echo LR\Filters::escapeHtmlText($currentUser->username) /* line 180 */;
-			} else /* line 180 */ {
+			if (isset($currentUser) && $currentUser) /* line 185 */ {
+				echo LR\Filters::escapeHtmlText($currentUser->username) /* line 185 */;
+			} else /* line 185 */ {
 				echo 'Uživatel';
 			}
 			echo "\n";
-			if (isset($currentUserRole)) /* line 181 */ {
-				if ($isSuperAdmin) /* line 182 */ {
+			if (isset($currentUserRole)) /* line 186 */ {
+				if ($isSuperAdmin) /* line 187 */ {
 					echo '								<span class="badge ms-1" style="background-color: #B1D235; color: #212529; font-weight: 600;">Super Admin</span>
 ';
-				} elseif ($currentUserRole === 'admin') /* line 184 */ {
+				} elseif ($currentUserRole === 'admin') /* line 189 */ {
 					echo '								<span class="badge bg-danger ms-1">Admin</span>
 ';
-				} elseif ($currentUserRole === 'accountant') /* line 186 */ {
+				} elseif ($currentUserRole === 'accountant') /* line 191 */ {
 					echo '								<span class="badge bg-warning ms-1">Účetní</span>
 ';
-				} else /* line 188 */ {
+				} else /* line 193 */ {
 					echo '								<span class="badge bg-secondary ms-1">Pouze čtení</span>
 ';
 				}
@@ -316,13 +323,13 @@ final class Template_edb0410b9d extends Latte\Runtime\Template
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<li><a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link(':Users:profile')) /* line 195 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link(':Users:profile')) /* line 200 */;
 			echo '" class="dropdown-item">
 								<i class="bi bi-person"></i> Můj profil
 							</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link(':Sign:out')) /* line 199 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link(':Sign:out')) /* line 204 */;
 			echo '" class="dropdown-item">
 								<i class="bi bi-box-arrow-right"></i> Odhlásit se
 							</a></li>
@@ -337,29 +344,29 @@ final class Template_edb0410b9d extends Latte\Runtime\Template
 		echo '
 	<div class="container">
 ';
-		foreach ($flashes as $flash) /* line 211 */ {
+		foreach ($flashes as $flash) /* line 216 */ {
 			echo '		<div class="alert alert-';
-			echo LR\Filters::escapeHtmlAttr($flash->type) /* line 211 */;
+			echo LR\Filters::escapeHtmlAttr($flash->type) /* line 216 */;
 			echo '">
 ';
-			if ($flash->type === 'success') /* line 212 */ {
+			if ($flash->type === 'success') /* line 217 */ {
 				echo '			<i class="bi bi-check-circle-fill me-2"></i>';
 			}
 			echo "\n";
-			if ($flash->type === 'info') /* line 213 */ {
+			if ($flash->type === 'info') /* line 218 */ {
 				echo '			<i class="bi bi-info-circle-fill me-2"></i>';
 			}
 			echo "\n";
-			if ($flash->type === 'warning') /* line 214 */ {
+			if ($flash->type === 'warning') /* line 219 */ {
 				echo '			<i class="bi bi-exclamation-triangle-fill me-2"></i>';
 			}
 			echo "\n";
-			if ($flash->type === 'danger') /* line 215 */ {
+			if ($flash->type === 'danger') /* line 220 */ {
 				echo '			<i class="bi bi-x-circle-fill me-2"></i>';
 			}
 			echo '
 			';
-			echo LR\Filters::escapeHtmlText($flash->message) /* line 216 */;
+			echo LR\Filters::escapeHtmlText($flash->message) /* line 221 */;
 			echo '
 		</div>
 ';
@@ -367,16 +374,16 @@ final class Template_edb0410b9d extends Latte\Runtime\Template
 		}
 
 		echo "\n";
-		$this->renderBlock('content', [], 'html') /* line 219 */;
+		$this->renderBlock('content', [], 'html') /* line 224 */;
 		echo '	</div>
 
 ';
-		if (isset($userLoggedIn) && $userLoggedIn) /* line 222 */ {
+		if (isset($userLoggedIn) && $userLoggedIn) /* line 227 */ {
 			echo '	<footer class="mt-5 py-4 text-center">
 		<div class="container">
 			<p class="mb-0">
 				QRdoklad (verze 1.9.4) &copy; ';
-			echo LR\Filters::escapeHtmlText(date('Y')) /* line 226 */;
+			echo LR\Filters::escapeHtmlText(date('Y')) /* line 231 */;
 			echo ' | Moderní fakturační systém - Proudly crafted by <a href="https://allimedia.cz">Allimedia.cz</a>
 			</p>
 		</div>
@@ -386,31 +393,31 @@ final class Template_edb0410b9d extends Latte\Runtime\Template
 		echo '
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 233 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 238 */;
 		echo '/js/main.js"></script>
 	<script src="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 234 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 239 */;
 		echo '/js/invoice-form.js"></script>
 	<script src="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 235 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 240 */;
 		echo '/js/settings.js"></script>
 	<script src="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 236 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 241 */;
 		echo '/js/tables.js"></script>
 	<script src="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 237 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 242 */;
 		echo '/js/search.js"></script>
 	<script src="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 238 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 243 */;
 		echo '/js/ares-lookup.js"></script>
 	<script src="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 239 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 244 */;
 		echo '/js/modules.js"></script>
 	<script src="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 240 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 245 */;
 		echo '/js/invoices.js"></script>
 	<script src="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 241 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 246 */;
 		echo '/js/tenants.js"></script>
 	
 	<script>
@@ -461,7 +468,7 @@ final class Template_edb0410b9d extends Latte\Runtime\Template
 		extract($this->params);
 
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
-			foreach (array_intersect_key(['moduleKey' => '56', 'moduleData' => '56', 'menuKey' => '66', 'menuItem' => '66', 'flash' => '211'], $this->params) as $ʟ_v => $ʟ_l) {
+			foreach (array_intersect_key(['moduleKey' => '56', 'moduleData' => '56', 'menuKey' => '66', 'menuItem' => '66', 'flash' => '216'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}

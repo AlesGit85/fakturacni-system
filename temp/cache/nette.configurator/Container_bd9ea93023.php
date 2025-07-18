@@ -86,6 +86,9 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'App\Model\ModuleManager' => [['07']],
 		'App\Model\EmailService' => [['08']],
 		'App\Model\TenantManager' => [['09']],
+		'App\Security\SecurityValidator' => [['010']],
+		'App\Security\RateLimiter' => [['011']],
+		'App\Security\RateLimitCleaner' => [['012']],
 		'Nette\Security\Authenticator' => [['authenticator']],
 		'Nette\Security\IAuthenticator' => [['authenticator']],
 		'App\Model\UserManager' => [['authenticator']],
@@ -272,8 +275,8 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'App\Presentation\Users\UsersPresenter' => [2 => ['application.11']],
 		'NetteModule\ErrorPresenter' => [2 => ['application.12']],
 		'NetteModule\MicroPresenter' => [2 => ['application.13']],
-		'App\Core\RouterFactory' => [['010']],
-		'Modules\Financial_reports\FinancialReportsService' => [['011']],
+		'App\Core\RouterFactory' => [['013']],
+		'Modules\Financial_reports\FinancialReportsService' => [['014']],
 	];
 
 
@@ -341,13 +344,31 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	}
 
 
-	public function createService010(): App\Core\RouterFactory
+	public function createService010(): App\Security\SecurityValidator
+	{
+		return new App\Security\SecurityValidator;
+	}
+
+
+	public function createService011(): App\Security\RateLimiter
+	{
+		return new App\Security\RateLimiter($this->getService('database.default.explorer'), $this->getService('05'));
+	}
+
+
+	public function createService012(): App\Security\RateLimitCleaner
+	{
+		return new App\Security\RateLimitCleaner($this->getService('database.default.explorer'), $this->getService('05'));
+	}
+
+
+	public function createService013(): App\Core\RouterFactory
 	{
 		return new App\Core\RouterFactory;
 	}
 
 
-	public function createService011(): Modules\Financial_reports\FinancialReportsService
+	public function createService014(): Modules\Financial_reports\FinancialReportsService
 	{
 		return new Modules\Financial_reports\FinancialReportsService(
 			$this->getService('02'),
@@ -375,6 +396,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('latte.templateFactory'),
 		);
 		$service->injectSecurityLogger($this->getService('05'));
+		$service->injectRateLimiter($this->getService('011'));
 		$service->injectModuleManager($this->getService('07'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
@@ -399,6 +421,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('latte.templateFactory'),
 		);
 		$service->injectSecurityLogger($this->getService('05'));
+		$service->injectRateLimiter($this->getService('011'));
 		$service->injectModuleManager($this->getService('07'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
@@ -419,6 +442,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('latte.templateFactory'),
 		);
 		$service->injectSecurityLogger($this->getService('05'));
+		$service->injectRateLimiter($this->getService('011'));
 		$service->injectModuleManager($this->getService('07'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
@@ -479,6 +503,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('latte.templateFactory'),
 		);
 		$service->injectSecurityLogger($this->getService('05'));
+		$service->injectRateLimiter($this->getService('011'));
 		$service->injectModuleManager($this->getService('07'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
@@ -504,6 +529,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('latte.templateFactory'),
 		);
 		$service->injectSecurityLogger($this->getService('05'));
+		$service->injectRateLimiter($this->getService('011'));
 		$service->injectModuleManager($this->getService('07'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
@@ -524,6 +550,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('latte.templateFactory'),
 		);
 		$service->injectSecurityLogger($this->getService('05'));
+		$service->injectRateLimiter($this->getService('011'));
 		$service->injectModuleManager($this->getService('07'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
@@ -550,6 +577,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('latte.templateFactory'),
 		);
 		$service->injectSecurityLogger($this->getService('05'));
+		$service->injectRateLimiter($this->getService('011'));
 		$service->injectModuleManager($this->getService('07'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
@@ -570,6 +598,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('latte.templateFactory'),
 		);
 		$service->injectSecurityLogger($this->getService('05'));
+		$service->injectRateLimiter($this->getService('011'));
 		$service->injectModuleManager($this->getService('07'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;
@@ -584,6 +613,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('05'),
 			$this->getService('08'),
 			$this->getService('09'),
+			$this->getService('011'),
 			$this->getService('database.default.explorer'),
 		);
 		$service->injectPrimary(
@@ -596,6 +626,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('latte.templateFactory'),
 		);
 		$service->injectSecurityLogger($this->getService('05'));
+		$service->injectRateLimiter($this->getService('011'));
 		$service->injectModuleManager($this->getService('07'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->invalidLinkMode = 5;

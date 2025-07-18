@@ -57,8 +57,8 @@ class RateLimiter
         $this->database = $database;
         $this->securityLogger = $securityLogger;
         
-        // Zajistíme, že tabulka rate_limits existuje
-        $this->ensureTableExists();
+        // Zajistíme, že tabulky rate_limits existují
+        $this->ensureTablesExist();
     }
 
     /**
@@ -318,41 +318,37 @@ class RateLimiter
                 'attempts_last_24h' => $attemptsLast24h,
                 'failed_attempts_last_24h' => $failedAttemptsLast24h,
                 'success_rate' => $attemptsLast24h > 0 ? 
-                    round((($attemptsLast24h - $failedAttemptsLast24h) / $attemptsLast24h) * 100, 1) : 100,
+                    round((($attemptsLast24h - $failedAttemptsLast24h) / $attemptsLast24h) * 100, 2) : 100,
                 'top_ips' => $topIPs,
             ];
         } catch (\Exception $e) {
             return [
-                'currently_blocked_ips' => 0,
-                'attempts_last_24h' => 0,
-                'failed_attempts_last_24h' => 0,
-                'success_rate' => 100,
-                'top_ips' => [],
-                'error' => $e->getMessage(),
+                'error' => $e->getMessage()
             ];
         }
     }
 
     /**
-     * Získá aktuální IP adresu uživatele
+     * Získá IP adresu klienta (i přes proxy)
      */
-    public static function getClientIP(): string
+    public function getClientIP(): string
     {
-        // Kontrola různých možností získání IP adresy
+        // Kontrola různých hlaviček pro IP adresu
         $ipKeys = [
-            'HTTP_CF_CONNECTING_IP',     // Cloudflare
-            'HTTP_X_FORWARDED_FOR',      // Proxy/Load balancer
-            'HTTP_X_FORWARDED',          // Proxy
-            'HTTP_X_CLUSTER_CLIENT_IP',  // Cluster
-            'HTTP_FORWARDED_FOR',        // Proxy
-            'HTTP_FORWARDED',            // Proxy
-            'REMOTE_ADDR'                // Standardní
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_REAL_IP',
+            'HTTP_CLIENT_IP',
+            'REMOTE_ADDR'
         ];
 
         foreach ($ipKeys as $key) {
             if (!empty($_SERVER[$key])) {
-                $ips = explode(',', $_SERVER[$key]);
-                $ip = trim($ips[0]);
+                $ip = $_SERVER[$key];
+                
+                // Pokud je více IP adres oddělených čárkou, vezmi první
+                if (strpos($ip, ',') !== false) {
+                    $ip = trim(explode(',', $ip)[0]);
+                }
                 
                 // Validace IP adresy
                 if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
@@ -361,18 +357,26 @@ class RateLimiter
             }
         }
 
-        // Fallback - i privátní IP adresy
+        // Fallback na REMOTE_ADDR (i když může být privátní)
         return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
     }
 
     /**
      * Zajistí, že potřebné databázové tabulky existují
      */
-    private function ensureTableExists(): void
+    private function ensureTablesExist(): void
     {
         try {
             // Kontrola existence tabulky rate_limits
             $this->database->query('SELECT 1 FROM rate_limits LIMIT 1');
+        } catch (\Exception $e) {
+            // Tabulka neexistuje, vytvoříme ji
+            $this->createRateLimitTables();
+        }
+
+        try {
+            // Kontrola existence tabulky rate_limit_blocks
+            $this->database->query('SELECT 1 FROM rate_limit_blocks LIMIT 1');
         } catch (\Exception $e) {
             // Tabulka neexistuje, vytvoříme ji
             $this->createRateLimitTables();
