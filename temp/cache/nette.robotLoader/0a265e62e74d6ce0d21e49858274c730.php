@@ -201,8 +201,8 @@ return array (
     'App\\Presentation\\Sign\\SignInTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
-    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
     'App\\Presentation\\Tenants\\TenantsAddTemplate' => 2,
     'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsTemplate' => 3,
@@ -221,6 +221,7 @@ return array (
     'App\\Presentation\\Clients\\ClientsShowTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsEditTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 3,
   ),
   2 => 
   array (

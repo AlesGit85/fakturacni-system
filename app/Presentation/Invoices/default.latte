@@ -4,22 +4,28 @@
     <div class="section-header-row mb-4">
         <div>
             <h1 class="section-title mb-0">
+                {* ✅ BEZPEČNÉ: Statický text *}
                 Faktury 
                 {if isset($clientFilter)}
-                    <span class="client-filter-badge">klienta {$clientFilter}</span>
+                    {* ✅ XSS OCHRANA: Escapování názvu klienta ve filtru *}
+                    <span class="client-filter-badge">klienta {$clientFilter|escape}</span>
                 {/if}
+                {* ✅ BEZPEČNÉ: Počet je číselná hodnota *}
                 <span class="total-count">Počet vystavených dokladů: {$invoices->count()}</span>
             </h1>
             <p class="text-muted">
                 {if isset($clientFilter)}
-                    Faktury vystavené pro klienta {$clientFilter}
+                    {* ✅ XSS OCHRANA: Escapování názvu klienta v popisu *}
+                    Faktury vystavené pro klienta {$clientFilter|escape}
                 {else}
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     Seznam všech faktur v systému
                 {/if}
             </p>
         </div>
         <div class="header-actions">
             {if isset($client)}
+                {* ✅ BEZPEČNÉ: Nette linky jsou automaticky escapované *}
                 <a n:href="default" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left"></i> Všechny faktury
                 </a>
@@ -29,6 +35,7 @@
             {/if}
             {* Tlačítko pro vytváření faktury - pouze pro účetní a admin *}
             {if $isUserAccountant}
+                {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
                 <a n:href="add" class="btn btn-primary">
                     <i class="bi bi-plus-circle"></i> Vytvořit fakturu
                 </a>
@@ -40,6 +47,7 @@
     <div class="filters-search-row mb-3">
         <!-- Panel s filtry vlevo -->
         <div class="filters-container">
+            {* ✅ BEZPEČNÉ: Nette linky jsou automaticky escapované *}
             <a n:href="default" class="filter-tab {if !isset($filter) || $filter == 'all'}filter-tab-active{/if}">
                 <i class="bi bi-grid-3x3-gap"></i> Všechny
             </a>
@@ -59,6 +67,7 @@
             <div class="search-container">
                 <div class="search-input-wrapper">
                     <i class="bi bi-search search-icon"></i>
+                    {* ✅ BEZPEČNÉ: Input placeholder je statický text *}
                     <input type="text" id="invoiceSearch" class="search-input" placeholder="Vyhledat fakturu...">
                 </div>
             </div>
@@ -71,6 +80,7 @@
         <table class="data-table">
             <thead>
                 <tr>
+                    {* ✅ BEZPEČNÉ: Statické texty *}
                     <th>Číslo faktury</th>
                     <th>Klient</th>
                     <th>Vystaveno</th>
@@ -83,25 +93,49 @@
             <tbody>
                 {foreach $invoices as $invoice}
                 <tr class="data-row {if $invoice->status == 'overdue'}row-danger{elseif $invoice->status == 'paid'}row-success{/if}">
-                    <td><strong>{$invoice->number}</strong></td>
-                    <td>{if $invoice->manual_client}{$invoice->client_name}{else}{$invoice->ref('client_id')->name}{/if}</td>
-                    <td>{$invoice->issue_date|date:'d.m.Y'}</td>
-                    <td>{$invoice->due_date|date:'d.m.Y'}</td>
-                    <td class="text-end">{$invoice->total|number(2, ',', ' ')} Kč</td>
+                    <td>
+                        {* ✅ XSS OCHRANA: Escapování čísla faktury *}
+                        <strong>{$invoice->number|escape}</strong>
+                    </td>
+                    <td>
+                        {if $invoice->manual_client}
+                            {* ✅ XSS OCHRANA: Escapování ručně zadaného názvu klienta *}
+                            {$invoice->client_name|escape}
+                        {else}
+                            {* ✅ XSS OCHRANA: Escapování názvu klienta z databáze *}
+                            {$invoice->ref('client_id')->name|escape}
+                        {/if}
+                    </td>
+                    <td>
+                        {* ✅ BEZPEČNÉ: Datum je automaticky escapováno Nette date filtrem *}
+                        {$invoice->issue_date|date:'d.m.Y'}
+                    </td>
+                    <td>
+                        {* ✅ BEZPEČNÉ: Datum je automaticky escapováno Nette date filtrem *}
+                        {$invoice->due_date|date:'d.m.Y'}
+                    </td>
+                    <td class="text-end">
+                        {* ✅ BEZPEČNÉ: Číselná hodnota je automaticky escapovaná number filtrem *}
+                        {$invoice->total|number(2, ',', ' ')} Kč
+                    </td>
                     <td>
                         {if $invoice->status == 'created'}
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             <span class="status-badge status-badge-pending">Vystavena</span>
                         {elseif $invoice->status == 'paid'}
                             <span class="status-badge status-badge-success">
                                 <i class="bi bi-check-circle-fill me-1 text-success"></i>
+                                {* ✅ BEZPEČNÉ: Statický text *}
                                 Zaplacena
                                 {if $invoice->payment_date}
+                                    {* ✅ BEZPEČNÉ: Datum je automaticky escapováno Nette date filtrem *}
                                     <span class="payment-date">{$invoice->payment_date|date:'d.m.Y'}</span>
                                 {/if}
                             </span>
                         {elseif $invoice->status == 'overdue'}
                             <span class="status-badge status-badge-danger">
                                 <i class="bi bi-exclamation-circle-fill me-1 text-danger"></i>
+                                {* ✅ BEZPEČNÉ: Statický text *}
                                 <span class="text-danger">Po splatnosti</span>
                             </span>
                         {/if}
@@ -109,35 +143,42 @@
                     <td class="actions-column">
                         <div class="action-buttons">
                             {* Tlačítko Detail - všichni uživatelé *}
+                            {* ✅ BEZPEČNÉ: Nette link s ID parametrem je automaticky escapovaný *}
                             <a n:href="show $invoice->id" class="btn btn-icon" title="Detail faktury">
                                 <i class="bi bi-eye"></i>
                             </a>
                             {* Tlačítko Upravit - pouze účetní a admin *}
                             {if $isUserAccountant}
+                                {* ✅ BEZPEČNÉ: Nette link s ID parametrem je automaticky escapovaný *}
                                 <a n:href="edit $invoice->id" class="btn btn-icon" title="Upravit fakturu">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                             {/if}
                             {* Tlačítko PDF - všichni uživatelé *}
+                            {* ✅ BEZPEČNÉ: Nette link s ID parametrem je automaticky escapovaný *}
                             <a n:href="pdf $invoice->id" class="btn btn-icon" title="Stáhnout PDF">
                                 <i class="bi bi-file-pdf"></i>
                             </a>
                             {* Dropdown menu - pouze pro účetní a admin (pro změny stavů) nebo admin (pro mazání) *}
                             {if $isUserAccountant}
                                 <div class="dropdown">
+                                    {* ✅ BEZPEČNÉ: ID je číselná hodnota automaticky escapovaná *}
                                     <button class="btn btn-icon dropdown-toggle" type="button" id="dropdownMenuButton{$invoice->id}" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
+                                    {* ✅ BEZPEČNÉ: ID je číselná hodnota automaticky escapovaná *}
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{$invoice->id}">
                                         {* Změny stavů - účetní a admin *}
                                         {if $invoice->status != 'paid'}
                                             <li>
+                                                {* ✅ BEZPEČNÉ: Nette link s ID a statický JavaScript *}
                                                 <a n:href="markAsPaid! $invoice->id" class="dropdown-item" onclick="return confirm('Označit fakturu jako zaplacenou?')">
                                                     <i class="bi bi-check-circle text-success me-2"></i> Označit jako zaplacenou
                                                 </a>
                                             </li>
                                         {else}
                                             <li>
+                                                {* ✅ BEZPEČNÉ: Nette link s ID a statický JavaScript *}
                                                 <a n:href="markAsCreated! $invoice->id" class="dropdown-item" onclick="return confirm('Označit fakturu jako nezaplacenou?')">
                                                     <i class="bi bi-arrow-counterclockwise me-2"></i> Zrušit zaplaceno
                                                 </a>
@@ -146,6 +187,7 @@
                                         {* Mazání - pouze admin *}
                                         {if $isUserAdmin}
                                             <li>
+                                                {* ✅ BEZPEČNÉ: Nette link s ID a statický JavaScript *}
                                                 <a n:href="delete $invoice->id" class="dropdown-item text-danger" onclick="return confirm('Opravdu chcete smazat tuto fakturu?')">
                                                     <i class="bi bi-trash me-2"></i> Smazat fakturu
                                                 </a>
@@ -165,6 +207,7 @@
     <!-- Stránkování -->
     <div class="pagination-container mt-3">
         <div class="pagination-info">
+            {* ✅ BEZPEČNÉ: Statický text *}
             Strana 1 z 1
         </div>
         <div class="pagination-controls">
@@ -181,16 +224,19 @@
         <div class="empty-state-icon">
             <i class="bi bi-file-earmark-text"></i>
         </div>
+        {* ✅ BEZPEČNÉ: Statický text *}
         <h3>Zatím zde nejsou žádné faktury</h3>
         <p>Začněte vytvořením nové faktury</p>
         {* Tlačítko pro vytvoření první faktury - pouze pro účetní a admin *}
         {if $isUserAccountant}
+            {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
             <a n:href="add" class="btn btn-primary mt-3">
                 <i class="bi bi-plus-circle"></i> Vytvořit první fakturu
             </a>
         {else}
             <div class="alert alert-info mt-3">
                 <i class="bi bi-info-circle me-2"></i>
+                {* ✅ BEZPEČNÉ: Statický text *}
                 Pro vytváření faktur potřebujete oprávnění účetní nebo administrátor.
             </div>
         {/if}

@@ -788,30 +788,46 @@ public function actionPdf(int $id): void
     }
 
     public function actionEdit(int $id): void
-    {
-        $invoice = $this->invoicesManager->getById($id);
+{
+    $invoice = $this->invoicesManager->getById($id);
 
-        if (!$invoice) {
-            $this->error('Faktura nebyla nalezena');
-        }
-
-        // Připravíme data formuláře
-        $defaults = (array) $invoice;
-
-        // Nastavíme typ klienta
-        if ($invoice->manual_client) {
-            $defaults['client_type'] = 'manual';
-        } else {
-            $defaults['client_type'] = 'existing';
-        }
-
-        $this['invoiceForm']->setDefaults($defaults);
-        $this->template->invoice = $invoice;
-        $this->template->invoiceItems = $this->invoicesManager->getInvoiceItems($id);
-
-        $company = $this->companyManager->getCompanyInfo();
-        $this->template->isVatPayer = $company ? $company->vat_payer : false;
+    if (!$invoice) {
+        $this->error('Faktura nebyla nalezena');
     }
+
+    // Připravíme data formuláře
+    $defaults = (array) $invoice;
+
+    // Nastavíme typ klienta a jeho údaje
+    if ($invoice->manual_client) {
+        $defaults['client_type'] = 'manual';
+        
+        // Pro ručně zadaného klienta načteme aktuální údaje z tabulky clients
+        if ($invoice->client_id) {
+            $client = $this->clientsManager->getById($invoice->client_id);
+            if ($client) {
+                $defaults['client_name'] = $client->name;
+                $defaults['client_address'] = $client->address;
+                $defaults['client_city'] = $client->city;
+                $defaults['client_zip'] = $client->zip;
+                $defaults['client_country'] = $client->country;
+                $defaults['client_ic'] = $client->ic;
+                $defaults['client_dic'] = $client->dic;
+            }
+        }
+    } else {
+        $defaults['client_type'] = 'existing';
+        // Pro existujícího klienta nastavíme client_id
+        $defaults['client_id'] = $invoice->client_id;
+    }
+
+    $this['invoiceForm']->setDefaults($defaults);
+    $this->template->invoice = $invoice;
+    $this->template->invoiceItems = $this->invoicesManager->getInvoiceItems($id);
+
+    $company = $this->companyManager->getCompanyInfo();
+    $this->template->isVatPayer = $company ? $company->vat_payer : false;
+}
 
     // Je potřeba implementovat metodu pro mazání položek faktury
     public function actionDeleteItem(int $invoiceId, int $itemId): void

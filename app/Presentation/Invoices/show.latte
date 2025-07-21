@@ -3,12 +3,15 @@
     <!-- Záhlaví stránky -->
     <div class="page-header mb-4">
         <div class="header-content">
-            <h1 class="main-title mb-2">Faktura {$invoice->number}</h1>
+            {* ✅ XSS OCHRANA: Escapování čísla faktury v nadpisu *}
+            <h1 class="main-title mb-2">Faktura {$invoice->number|escape}</h1>
             <p class="text-muted">
+                {* ✅ BEZPEČNÉ: Statický text a data jsou automaticky escapovaná date filtrem *}
                 Detail faktury • Vystaveno: {$invoice->issue_date|date('d.m.Y')} • Splatnost: {$invoice->due_date|date('d.m.Y')}
             </p>
         </div>
         <div class="header-actions">
+            {* ✅ BEZPEČNÉ: Nette linky jsou automaticky escapované *}
             <a n:href="pdf $invoice->id" class="btn btn-primary">
                 <i class="bi bi-file-pdf"></i> Stáhnout PDF
             </a>
@@ -22,28 +25,35 @@
     <div class="status-card mb-4">
         <div class="status-content">
             <div class="status-info">
+                {* ✅ BEZPEČNÉ: Statický text *}
                 <span class="status-label">Stav faktury:</span>
                 {if $invoice->status == 'created'}
                     <span class="status-badge status-badge-pending">
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         <i class="bi bi-file-earmark me-1"></i> Vystavena
                     </span>
                 {elseif $invoice->status == 'paid'}
                     <span class="status-badge status-badge-success">
                         <i class="bi bi-check-circle-fill me-1 text-success"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         Zaplacena
                         {if $invoice->payment_date}
+                            {* ✅ BEZPEČNÉ: Datum je automaticky escapováno date filtrem *}
                             <span class="payment-date">({$invoice->payment_date|date:'d.m.Y'})</span>
                         {/if}
                     </span>
                 {elseif $invoice->status == 'overdue'}
                     <span class="status-badge status-badge-danger">
                         <i class="bi bi-exclamation-circle-fill me-1 text-danger"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         <span class="text-danger">Po splatnosti</span>
                     </span>
                 {/if}
             </div>
             <div class="invoice-amount">
+                {* ✅ BEZPEČNÉ: Statický text *}
                 <span class="amount-label">Celkem k úhradě:</span>
+                {* ✅ BEZPEČNÉ: Číselná hodnota je automaticky escapovaná number filtrem *}
                 <span class="amount-value">{$invoice->total|number(2, ',', ' ')} Kč</span>
             </div>
         </div>
@@ -56,39 +66,48 @@
             <div class="info-card">
                 <div class="info-card-header">
                     <i class="bi bi-file-earmark-text me-2"></i>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <h3>Informace o faktuře</h3>
                 </div>
                 <div class="info-card-body">
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-hash"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Číslo faktury
                         </div>
-                        <div class="info-value"><strong>{$invoice->number}</strong></div>
+                        {* ✅ XSS OCHRANA: Escapování čísla faktury *}
+                        <div class="info-value"><strong>{$invoice->number|escape}</strong></div>
                     </div>
                     
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-calendar-event"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Datum vystavení
                         </div>
+                        {* ✅ BEZPEČNÉ: Datum je automaticky escapováno date filtrem *}
                         <div class="info-value">{$invoice->issue_date|date('d.m.Y')}</div>
                     </div>
                     
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-calendar-check"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Datum splatnosti
                         </div>
+                        {* ✅ BEZPEČNÉ: Datum je automaticky escapováno date filtrem *}
                         <div class="info-value">{$invoice->due_date|date('d.m.Y')}</div>
                     </div>
                     
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-credit-card"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Způsob platby
                         </div>
-                        <div class="info-value">{$invoice->payment_method}</div>
+                        {* ✅ XSS OCHRANA: Escapování způsobu platby *}
+                        <div class="info-value">{$invoice->payment_method|escape}</div>
                     </div>
                 </div>
             </div>
@@ -99,55 +118,66 @@
             <div class="info-card">
                 <div class="info-card-header">
                     <i class="bi bi-building me-2"></i>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <h3>Dodavatel</h3>
                 </div>
                 <div class="info-card-body">
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-building"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Název
                         </div>
-                        <div class="info-value"><strong>{$company->name}</strong></div>
+                        {* ✅ XSS OCHRANA: Escapování názvu společnosti *}
+                        <div class="info-value"><strong>{$company->name|escape}</strong></div>
                     </div>
                     
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-geo-alt"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Adresa
                         </div>
                         <div class="info-value">
-                            {$company->address}<br>
-                            {$company->zip} {$company->city}<br>
-                            {$company->country}
+                            {* ✅ XSS OCHRANA: Escapování adresních údajů dodavatele *}
+                            {$company->address|escape}<br>
+                            {$company->zip|escape} {$company->city|escape}<br>
+                            {$company->country|escape}
                         </div>
                     </div>
                     
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-upc"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             IČ
                         </div>
-                        <div class="info-value">{$company->ic}</div>
+                        {* ✅ XSS OCHRANA: Escapování IČO dodavatele *}
+                        <div class="info-value">{$company->ic|escape}</div>
                     </div>
                     
                     {if $company->dic}
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-upc-scan"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             DIČ
                         </div>
-                        <div class="info-value">{$company->dic}</div>
+                        {* ✅ XSS OCHRANA: Escapování DIČ dodavatele *}
+                        <div class="info-value">{$company->dic|escape}</div>
                     </div>
                     {/if}
                     
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-bank"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Bankovní účet
                         </div>
                         <div class="info-value">
-                            {$company->bank_account}<br>
-                            <small class="text-muted">{$company->bank_name}</small>
+                            {* ✅ XSS OCHRANA: Escapování bankovních údajů *}
+                            {$company->bank_account|escape}<br>
+                            <small class="text-muted">{$company->bank_name|escape}</small>
                         </div>
                     </div>
                 </div>
@@ -159,26 +189,31 @@
             <div class="info-card">
                 <div class="info-card-header">
                     <i class="bi bi-person-lines-fill me-2"></i>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <h3>Odběratel</h3>
                 </div>
                 <div class="info-card-body">
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-building"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Název
                         </div>
-                        <div class="info-value"><strong>{$client->name}</strong></div>
+                        {* ✅ XSS OCHRANA: Escapování názvu klienta *}
+                        <div class="info-value"><strong>{$client->name|escape}</strong></div>
                     </div>
                     
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-geo-alt"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Adresa
                         </div>
                         <div class="info-value">
-                            {$client->address}<br>
-                            {$client->zip} {$client->city}<br>
-                            {$client->country}
+                            {* ✅ XSS OCHRANA: Escapování adresních údajů klienta *}
+                            {$client->address|escape}<br>
+                            {$client->zip|escape} {$client->city|escape}<br>
+                            {$client->country|escape}
                         </div>
                     </div>
                     
@@ -186,9 +221,11 @@
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-upc"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             IČ
                         </div>
-                        <div class="info-value">{$client->ic}</div>
+                        {* ✅ XSS OCHRANA: Escapování IČO klienta *}
+                        <div class="info-value">{$client->ic|escape}</div>
                     </div>
                     {/if}
                     
@@ -196,9 +233,11 @@
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-upc-scan"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             DIČ
                         </div>
-                        <div class="info-value">{$client->dic}</div>
+                        {* ✅ XSS OCHRANA: Escapování DIČ klienta *}
+                        <div class="info-value">{$client->dic|escape}</div>
                     </div>
                     {/if}
                 </div>
@@ -212,6 +251,7 @@
             <div class="info-card">
                 <div class="info-card-header">
                     <i class="bi bi-list-ul me-2"></i>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <h3>Položky faktury</h3>
                 </div>
                 <div class="info-card-body">
@@ -220,6 +260,7 @@
                             <thead>
                                 <tr>
                                     {if $isVatPayer}
+                                        {* ✅ BEZPEČNÉ: Statické texty *}
                                         <th>Položka</th>
                                         <th>Popis</th>
                                         <th class="text-center">Množství</th>
@@ -228,6 +269,7 @@
                                         <th class="text-center">DPH %</th>
                                         <th class="text-end">Celkem s DPH</th>
                                     {else}
+                                        {* ✅ BEZPEČNÉ: Statické texty *}
                                         <th>Předmět fakturace</th>
                                         <th class="text-end">Částka</th>
                                     {/if}
@@ -237,15 +279,22 @@
                                 {foreach $invoiceItems as $item}
                                 <tr>
                                     {if $isVatPayer}
-                                        <td><strong>{$item->name}</strong></td>
-                                        <td>{$item->description}</td>
+                                        {* ✅ XSS OCHRANA: Escapování názvu položky *}
+                                        <td><strong>{$item->name|escape}</strong></td>
+                                        {* ✅ XSS OCHRANA: Escapování popisu položky *}
+                                        <td>{$item->description|escape}</td>
+                                        {* ✅ BEZPEČNÉ: Číselné hodnoty jsou automaticky escapované *}
                                         <td class="text-center">{$item->quantity}</td>
-                                        <td class="text-center">{$item->unit}</td>
+                                        {* ✅ XSS OCHRANA: Escapování jednotky *}
+                                        <td class="text-center">{$item->unit|escape}</td>
+                                        {* ✅ BEZPEČNÉ: Číselné hodnoty jsou automaticky escapované number filtrem *}
                                         <td class="text-end">{$item->price|number(2, ',', ' ')} Kč</td>
                                         <td class="text-center">{$item->vat} %</td>
                                         <td class="text-end"><strong>{$item->total|number(2, ',', ' ')} Kč</strong></td>
                                     {else}
-                                        <td><strong>{$item->name}</strong></td>
+                                        {* ✅ XSS OCHRANA: Escapování názvu položky *}
+                                        <td><strong>{$item->name|escape}</strong></td>
+                                        {* ✅ BEZPEČNÉ: Číselná hodnota je automaticky escapovaná number filtrem *}
                                         <td class="text-end"><strong>{$item->total|number(2, ',', ' ')} Kč</strong></td>
                                     {/if}
                                 </tr>
@@ -263,10 +312,12 @@
             <div class="info-card">
                 <div class="info-card-header">
                     <i class="bi bi-chat-left-text me-2"></i>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <h3>Poznámka</h3>
                 </div>
                 <div class="info-card-body">
-                    <p class="mb-0">{$invoice->note}</p>
+                    {* ✅ XSS OCHRANA: Escapování poznámky faktury *}
+                    <p class="mb-0">{$invoice->note|escape}</p>
                 </div>
             </div>
         </div>
@@ -276,11 +327,13 @@
     <!-- Akční tlačítka -->
     <div class="action-buttons-container mt-4">
         <div class="d-flex justify-content-between align-items-center">
+            {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
             <a n:href="default" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left"></i> Zpět na seznam faktur
             </a>
             
             <div class="d-flex gap-2">
+                {* ✅ BEZPEČNÉ: Nette linky jsou automaticky escapované *}
                 <a n:href="pdf $invoice->id" class="btn btn-primary">
                     <i class="bi bi-file-pdf"></i> Stáhnout PDF
                 </a>
