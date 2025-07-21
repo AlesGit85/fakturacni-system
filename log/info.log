@@ -159,3 +159,29 @@
 [2025-07-21 12-28-08] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/clients/add 
 [2025-07-21 12-28-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/?_fid=mb5f 
 [2025-07-21 12-28-08] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/clients/?_fid=mb5f 
+[2025-07-21 12-36-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-21 12-36-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-21 12-36-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/edit/29 
+[2025-07-21 12-36-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/edit/29 
+[2025-07-21 12-37-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-21 12-37-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-21 12-37-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/edit/29 
+[2025-07-21 12-37-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/edit/29 
+[2025-07-21 12-40-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/edit/29 
+[2025-07-21 12-40-23] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/edit/29 
+[2025-07-21 12-40-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/edit/29?do=aresLookup&ico=87894912 
+[2025-07-21 12-40-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/edit/29?do=aresLookup&ico=87894912 
+[2025-07-21 12-40-33] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/edit/29?do=aresLookup&ico=87894912 
+[2025-07-21 12-40-33] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/edit/29?do=aresLookup&ico=87894912 
+[2025-07-21 12-40-33] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/edit/29?do=aresLookup&ico=87894912 
+[2025-07-21 12-40-33] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/edit/29?do=aresLookup&ico=87894912 
+[2025-07-21 12-40-33] Staré REST API - finální výsledek: {"name":"Ale\u0161 Zita","ic":"87894912","dic":"","address":"167","city":"Librantice","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/edit/29?do=aresLookup&ico=87894912 
+[2025-07-21 12-40-33] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/edit/29?do=aresLookup&ico=87894912 
+[2025-07-21 12-40-37] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-21 12-40-37] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-21 12-40-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/edit/29 
+[2025-07-21 12-40-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/edit/29 
+[2025-07-21 12-40-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/edit/29 
+[2025-07-21 12-40-44] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/edit/29 
+[2025-07-21 12-40-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/?_fid=h3pr 
+[2025-07-21 12-40-44] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/?_fid=h3pr 
