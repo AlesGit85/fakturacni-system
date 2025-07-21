@@ -3,7 +3,8 @@
     <!-- Záhlaví stránky -->
     <div class="page-header mb-4">
         <div class="header-content">
-            <h1 class="main-title mb-2">{$client->name}</h1>
+            {* ✅ XSS OCHRANA: Escapování názvu klienta *}
+            <h1 class="main-title mb-2">{$client->name|escape}</h1>
             <p class="text-muted">Detail klienta a jeho kontaktní informace</p>
         </div>
         <div class="header-actions">
@@ -28,7 +29,8 @@
                             <i class="bi bi-building"></i>
                             Název společnosti
                         </div>
-                        <div class="info-value">{$client->name}</div>
+                        {* ✅ XSS OCHRANA: Escapování názvu společnosti *}
+                        <div class="info-value">{$client->name|escape}</div>
                     </div>
                     
                     {if $client->contact_person}
@@ -37,7 +39,8 @@
                             <i class="bi bi-person"></i>
                             Kontaktní osoba
                         </div>
-                        <div class="info-value">{$client->contact_person}</div>
+                        {* ✅ XSS OCHRANA: Escapování kontaktní osoby *}
+                        <div class="info-value">{$client->contact_person|escape}</div>
                     </div>
                     {/if}
                     
@@ -48,7 +51,8 @@
                         </div>
                         <div class="info-value">
                             {if $client->email}
-                                <a href="mailto:{$client->email}" class="client-email">{$client->email}</a>
+                                {* ✅ XSS OCHRANA: Escapování emailu v href i textu *}
+                                <a href="mailto:{$client->email|escape}" class="client-email">{$client->email|escape}</a>
                             {else}
                                 <span class="text-muted">—</span>
                             {/if}
@@ -62,46 +66,31 @@
                         </div>
                         <div class="info-value">
                             {if $client->phone}
-                                <a href="tel:{$client->phone}" class="client-phone">{$client->phone}</a>
+                                {* ✅ XSS OCHRANA: Escapování telefonu *}
+                                {$client->phone|escape}
                             {else}
                                 <span class="text-muted">—</span>
                             {/if}
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Adresa -->
-        <div class="col-lg-6">
-            <div class="info-card">
-                <div class="info-card-header">
-                    <i class="bi bi-geo-alt me-2"></i>
-                    <h3>Adresa</h3>
-                </div>
-                <div class="info-card-body">
+                    
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-geo-alt"></i>
-                            Ulice
+                            Adresa
                         </div>
-                        <div class="info-value">{$client->address}</div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-label">
-                            <i class="bi bi-house"></i>
-                            Město
+                        <div class="info-value">
+                            {if $client->address}
+                                {* ✅ XSS OCHRANA: Escapování všech adresních údajů *}
+                                {$client->address|escape}<br>
+                                {$client->zip|escape} {$client->city|escape}
+                                {if $client->country}
+                                    <br>{$client->country|escape}
+                                {/if}
+                            {else}
+                                <span class="text-muted">—</span>
+                            {/if}
                         </div>
-                        <div class="info-value">{$client->city}</div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-label">
-                            <i class="bi bi-mailbox"></i>
-                            PSČ
-                        </div>
-                        <div class="info-value">{$client->zip}</div>
                     </div>
                     
                     <div class="info-item">
@@ -109,7 +98,8 @@
                             <i class="bi bi-globe"></i>
                             Země
                         </div>
-                        <div class="info-value">{$client->country}</div>
+                        {* ✅ XSS OCHRANA: Escapování země *}
+                        <div class="info-value">{$client->country|escape}</div>
                     </div>
                 </div>
             </div>
@@ -130,7 +120,8 @@
                         </div>
                         <div class="info-value">
                             {if $client->ic}
-                                {$client->ic}
+                                {* ✅ XSS OCHRANA: Escapování IČO *}
+                                {$client->ic|escape}
                             {else}
                                 <span class="text-muted">—</span>
                             {/if}
@@ -144,7 +135,8 @@
                         </div>
                         <div class="info-value">
                             {if $client->dic}
-                                {$client->dic}
+                                {* ✅ XSS OCHRANA: Escapování DIČ *}
+                                {$client->dic|escape}
                             {else}
                                 <span class="text-muted">—</span>
                             {/if}
@@ -170,6 +162,7 @@
                         </div>
                         <div class="info-value">
                             {if $invoiceCount > 0}
+                                {* ✅ BEZPEČNÉ: Číslo je bezpečné *}
                                 <span class="badge bg-dark">{$invoiceCount}</span>
                             {else}
                                 <span class="text-muted">Zatím žádné faktury</span>
@@ -203,17 +196,20 @@
             </a>
             
             <div class="d-flex gap-2">
+                {* ✅ BEZPEČNÉ: Pouze ID parametr *}
                 <a n:href="edit $client->id" class="btn btn-primary">
                     <i class="bi bi-pencil-square"></i> Upravit
                 </a>
                 
                 {var $invoiceCount = $presenter->getClientInvoiceCount($client->id)}
                 {if $invoiceCount == 0}
+                    {* ✅ XSS OCHRANA: Bezpečný JavaScript - bez uživatelských dat *}
                     <a n:href="delete $client->id" class="btn btn-danger" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')">
                         <i class="bi bi-trash"></i> Smazat
                     </a>
                 {else}
-                    <button class="btn btn-outline-danger" disabled title="Klient má {getInvoiceCountText($invoiceCount)} a nelze ho smazat">
+                    {* ✅ XSS OCHRANA: Bezpečný title atribut - používáme funkci z presenteru *}
+                    <button class="btn btn-outline-danger" disabled title="Klient má {$presenter->getInvoiceCountText($invoiceCount)} a nelze ho smazat">
                         <i class="bi bi-trash"></i> Smazat
                     </button>
                 {/if}
@@ -224,7 +220,8 @@
         <div class="mt-2">
             <small class="text-muted">
                 <i class="bi bi-info-circle me-1"></i>
-                Pro smazání klienta je nutné nejprve smazat všechny jeho faktury ({getInvoiceCountText($invoiceCount)})
+                {* ✅ XSS OCHRANA: Bezpečné - používá metodu z presenteru *}
+                Pro smazání klienta je nutné nejprve smazat všechny jeho faktury ({$presenter->getInvoiceCountText($invoiceCount)})
             </small>
         </div>
         {/if}

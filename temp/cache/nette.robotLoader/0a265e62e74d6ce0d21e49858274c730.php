@@ -218,7 +218,7 @@ return array (
     'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 2,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 2,
-    'App\\Presentation\\Clients\\ClientsShowTemplate' => 2,
+    'App\\Presentation\\Clients\\ClientsShowTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsEditTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 3,
   ),
