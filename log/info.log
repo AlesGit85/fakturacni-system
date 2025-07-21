@@ -41,3 +41,15 @@
 [2025-07-21 09-45-20] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/clients/delete/32 
 [2025-07-21 09-45-20] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/?_fid=ny1v 
 [2025-07-21 09-45-20] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/clients/?_fid=ny1v 
+[2025-07-21 09-47-52] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-07-21 09-47-52] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/ 
+[2025-07-21 09-49-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-07-21 09-49-28] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/ 
+[2025-07-21 09-49-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/?_fid=aohz 
+[2025-07-21 09-49-28] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/?_fid=aohz 
+[2025-07-21 09-50-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-07-21 09-50-12] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/ 
+[2025-07-21 09-50-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/?do=deleteLogo 
+[2025-07-21 09-50-32] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/?do=deleteLogo 
+[2025-07-21 09-50-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/?_fid=3j3h 
+[2025-07-21 09-50-32] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/?_fid=3j3h 

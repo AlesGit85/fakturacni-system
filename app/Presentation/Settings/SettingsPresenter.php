@@ -6,6 +6,7 @@ use Nette;
 use Nette\Application\UI\Form;
 use App\Model\CompanyManager;
 use App\Presentation\BasePresenter;
+use App\Security\SecurityValidator;
 
 class SettingsPresenter extends BasePresenter
 {
@@ -46,53 +47,78 @@ class SettingsPresenter extends BasePresenter
         $this->template->company = $this->companyManager->getCompanyInfo();
     }
 
+    /**
+     * ✅ XSS OCHRANA: Vytvoření formuláře pro firemní údaje s bezpečnostními filtry
+     */
     public function createComponentCompanyForm(): Form
     {
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
-        // Základní údaje firmy
-        $form->addText('name', 'Název společnosti:')
-            ->setRequired('Zadejte název společnosti');
+        // ========== Základní údaje firmy ==========
+        $nameField = $form->addText('name', 'Název společnosti:')
+            ->setRequired('Zadejte název společnosti')
+            ->setHtmlAttribute('maxlength', 255);
+        $this->addSecurityFilters($nameField, 'string');
 
-        $form->addTextArea('address', 'Adresa:')
+        $addressField = $form->addTextArea('address', 'Adresa:')
             ->setRequired('Zadejte adresu')
-            ->setHtmlAttribute('rows', 3);
+            ->setHtmlAttribute('rows', 3)
+            ->setHtmlAttribute('maxlength', 500);
+        $this->addSecurityFilters($addressField, 'string');
 
-        $form->addText('city', 'Město:')
-            ->setRequired('Zadejte město');
+        $cityField = $form->addText('city', 'Město:')
+            ->setRequired('Zadejte město')
+            ->setHtmlAttribute('maxlength', 100);
+        $this->addSecurityFilters($cityField, 'string');
 
-        $form->addText('zip', 'PSČ:')
-            ->setRequired('Zadejte PSČ');
+        $zipField = $form->addText('zip', 'PSČ:')
+            ->setRequired('Zadejte PSČ')
+            ->setHtmlAttribute('maxlength', 6);
+        $this->addSecurityFilters($zipField, 'string');
 
-        $form->addText('country', 'Země:')
+        $countryField = $form->addText('country', 'Země:')
             ->setRequired('Zadejte zemi')
-            ->setDefaultValue('Česká republika');
+            ->setDefaultValue('Česká republika')
+            ->setHtmlAttribute('maxlength', 100);
+        $this->addSecurityFilters($countryField, 'string');
 
-        $form->addText('ic', 'IČO:')
-            ->setRequired('Zadejte IČO');
+        $icField = $form->addText('ic', 'IČO:')
+            ->setRequired('Zadejte IČO')
+            ->setHtmlAttribute('maxlength', 8);
+        $this->addSecurityFilters($icField, 'string');
 
-        // DIČ s podmínkou
+        // ========== DIČ s podmínkou ==========
         $form->addCheckbox('vat_payer', 'Jsem plátce DPH');
 
-        $form->addText('dic', 'DIČ:')
-            ->setHtmlAttribute('placeholder', 'Vyplňte pouze jako plátce DPH');
+        $dicField = $form->addText('dic', 'DIČ:')
+            ->setHtmlAttribute('placeholder', 'Vyplňte pouze jako plátce DPH')
+            ->setHtmlAttribute('maxlength', 15);
+        $this->addSecurityFilters($dicField, 'string');
 
-        // Bankovní údaje
-        $form->addText('bank_account', 'Číslo účtu:')
-            ->setHtmlAttribute('placeholder', 'např. 123456789/0100');
+        // ========== Bankovní údaje ==========
+        $bankAccountField = $form->addText('bank_account', 'Číslo účtu:')
+            ->setHtmlAttribute('placeholder', 'např. 123456789/0100')
+            ->setHtmlAttribute('maxlength', 50);
+        $this->addSecurityFilters($bankAccountField, 'string');
 
-        $form->addText('bank_name', 'Název banky:')
-            ->setHtmlAttribute('placeholder', 'např. Komerční banka');
+        $bankNameField = $form->addText('bank_name', 'Název banky:')
+            ->setHtmlAttribute('placeholder', 'např. Komerční banka')
+            ->setHtmlAttribute('maxlength', 100);
+        $this->addSecurityFilters($bankNameField, 'string');
 
-        // Kontaktní údaje
-        $form->addEmail('email', 'E-mail:')
-            ->setRequired('Zadejte e-mail');
+        // ========== Kontaktní údaje ==========
+        $emailField = $form->addEmail('email', 'E-mail:')
+            ->setRequired('Zadejte e-mail')
+            ->setHtmlAttribute('maxlength', 254);
+        $this->addSecurityFilters($emailField, 'email');
 
-        $form->addText('phone', 'Telefon:')
-            ->setHtmlAttribute('placeholder', '+420 123 456 789');
+        $phoneField = $form->addText('phone', 'Telefon:')
+            ->setHtmlAttribute('placeholder', '+420 123 456 789')
+            ->setHtmlAttribute('maxlength', 20);
+        $this->addSecurityFilters($phoneField, 'phone');
 
-        // Nahrávání souborů
+        // ========== Nahrávání souborů ==========
         $form->addUpload('logo', 'Logo společnosti:')
             ->setHtmlAttribute('accept', 'image/*')
             ->addRule(Form::IMAGE, 'Logo musí být obrázek');
@@ -101,28 +127,28 @@ class SettingsPresenter extends BasePresenter
             ->setHtmlAttribute('accept', 'image/*')
             ->addRule(Form::IMAGE, 'Podpis musí být obrázek');
 
-        // Barvy pro faktury - podle vašeho schématu
-        $form->addText('invoice_heading_color', 'Barva nadpisu faktury:')
+        // ========== Barvy pro faktury - podle vašeho schématu ==========
+        $headingColorField = $form->addText('invoice_heading_color', 'Barva nadpisu faktury:')
+            ->setHtmlAttribute('type', 'color')
+            ->setHtmlAttribute('class', 'form-control form-control-color')
+            ->setDefaultValue('#B1D235');
+        
+        $trapezoidBgColorField = $form->addText('invoice_trapezoid_bg_color', 'Barva pozadí lichoběžníku:')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color')
             ->setDefaultValue('#B1D235');
 
-        $form->addText('invoice_trapezoid_bg_color', 'Barva pozadí lichoběžníku:')
-            ->setHtmlAttribute('type', 'color')
-            ->setHtmlAttribute('class', 'form-control form-control-color')
-            ->setDefaultValue('#B1D235');
-
-        $form->addText('invoice_trapezoid_text_color', 'Barva textu v lichoběžníku:')
+        $trapezoidTextColorField = $form->addText('invoice_trapezoid_text_color', 'Barva textu v lichoběžníku:')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color')
             ->setDefaultValue('#212529');
 
-        $form->addText('invoice_labels_color', 'Barva štítků (Dodavatel, Odběratel, apod.):')
+        $labelsColorField = $form->addText('invoice_labels_color', 'Barva štítků (Dodavatel, Odběratel, apod.):')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color')
             ->setDefaultValue('#95B11F');
 
-        $form->addText('invoice_footer_color', 'Barva patičky:')
+        $footerColorField = $form->addText('invoice_footer_color', 'Barva patičky:')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color')
             ->setDefaultValue('#6c757d');
@@ -131,7 +157,7 @@ class SettingsPresenter extends BasePresenter
 
         $form->onSuccess[] = [$this, 'companyFormSucceeded'];
 
-        // Nastavení výchozích hodnot z databáze
+        // ========== Nastavení výchozích hodnot z databáze ==========
         $company = $this->companyManager->getCompanyInfo();
         if ($company) {
             $defaults = (array) $company;
@@ -158,11 +184,51 @@ class SettingsPresenter extends BasePresenter
         return $form;
     }
 
+    /**
+     * ✅ XSS OCHRANA: Zpracování formuláře s bezpečnostní kontrolou
+     */
     public function companyFormSucceeded(Form $form, \stdClass $data): void
     {
-        $values = (array) $data;
+        // ✅ XSS OCHRANA: Základní kontrola XSS pokusů ve formulářových datech
+        $xssDetected = false;
+        foreach ((array)$data as $key => $value) {
+            if (is_string($value) && SecurityValidator::detectXssAttempt($value)) {
+                $xssDetected = true;
+                
+                // Logování XSS pokusu
+                $this->securityLogger->logSecurityEvent(
+                    'xss_attempt_settings_form',
+                    "XSS pokus v poli '{$key}' formuláře nastavení",
+                    [
+                        'field' => $key,
+                        'client_ip' => $this->getHttpRequest()->getRemoteAddress(),
+                        'user_id' => $this->getUser()->getId(),
+                        'value_preview' => SecurityValidator::safeLogString($value, 50)
+                    ]
+                );
+                break;
+            }
+        }
 
-        // Zpracování vat_payer checkboxu (už je v $data)
+        if ($xssDetected) {
+            $this->flashMessage(
+                'Formulář obsahuje nebezpečný obsah (HTML/JavaScript kód). Zkontrolujte zadané údaje a odešlete formulář znovu.',
+                'danger'
+            );
+            return;
+        }
+
+        // ✅ XSS OCHRANA: Sanitizace dat před zpracováním
+        $values = [];
+        foreach ((array)$data as $key => $value) {
+            if (is_string($value)) {
+                $values[$key] = SecurityValidator::sanitizeString($value);
+            } else {
+                $values[$key] = $value;
+            }
+        }
+
+        // ✅ Zpracování vat_payer checkboxu
         $values['vat_payer'] = (bool) $data->vat_payer;
         
         // Pokud není plátce DPH, vymažeme DIČ
@@ -170,13 +236,22 @@ class SettingsPresenter extends BasePresenter
             $values['dic'] = null;
         }
 
-        // Validace DIČ pokud je plátce DPH
+        // ✅ Validace DIČ pokud je plátce DPH
         if ($values['vat_payer'] && empty($values['dic'])) {
             $this->flashMessage('Při zaškrtnutí "Jsem plátce DPH" je nutné vyplnit DIČ', 'error');
             return;
         }
 
-        // Zpracování nahrávání logo
+        // ✅ NOVÉ: Dodatečná validace sanitizovaných dat
+        $validationErrors = $this->validateCompanyData($values);
+        if (!empty($validationErrors)) {
+            foreach ($validationErrors as $error) {
+                $this->flashMessage($error, 'danger');
+            }
+            return;
+        }
+
+        // ========== Zpracování nahrávání logo ==========
         if ($data->logo && $data->logo->isOk()) {
             try {
                 $logoName = $this->processUploadedFile($data->logo, 'logo');
@@ -194,7 +269,7 @@ class SettingsPresenter extends BasePresenter
             unset($values['logo']);
         }
 
-        // Zpracování nahrávání podpisu
+        // ========== Zpracování nahrávání podpisu ==========
         if ($data->signature && $data->signature->isOk()) {
             try {
                 $signatureName = $this->processUploadedFile($data->signature, 'signature');
@@ -212,7 +287,7 @@ class SettingsPresenter extends BasePresenter
             unset($values['signature']);
         }
 
-        // Validace HEX barev
+        // ========== Validace HEX barev ==========
         $colorFields = [
             'invoice_heading_color',
             'invoice_trapezoid_bg_color', 
@@ -228,14 +303,88 @@ class SettingsPresenter extends BasePresenter
             }
         }
 
+        // ========== Uložení do databáze ==========
         try {
             $this->companyManager->save($values);
             $this->flashMessage('Firemní údaje byly úspěšně uloženy', 'success');
+
+            // Logování úspěšného uložení
+            $this->securityLogger->logSecurityEvent(
+                'company_settings_updated',
+                "Firemní nastavení bylo aktualizováno uživatelem {$this->getUser()->getIdentity()->username}",
+                ['user_id' => $this->getUser()->getId()]
+            );
+
+            $this->redirect('default');
+        } catch (Nette\Application\AbortException $e) {
+            // ✅ OPRAVA: AbortException (redirect) necháme projít!
+            throw $e;
         } catch (\Exception $e) {
             $this->flashMessage('Chyba při ukládání: ' . $e->getMessage(), 'error');
+
+            // Logování chyby
+            $this->securityLogger->logSecurityEvent(
+                'company_settings_save_error',
+                "Chyba při ukládání firemních nastavení: " . $e->getMessage(),
+                [
+                    'user_id' => $this->getUser()->getId(),
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]
+            );
         }
-        
-        $this->redirect('default');
+    }
+
+    /**
+     * ✅ NOVÉ: Validace firemních dat
+     */
+    private function validateCompanyData(array $data): array
+    {
+        $errors = [];
+
+        // Validace IČO - základní formát
+        if (!empty($data['ic'])) {
+            $ic = preg_replace('/\D/', '', $data['ic']); // Pouze číslice
+            if (strlen($ic) < 7 || strlen($ic) > 8) {
+                $errors[] = 'IČO musí mít 7 nebo 8 číslic.';
+            }
+        }
+
+        // Validace DIČ - základní formát
+        if (!empty($data['dic'])) {
+            $dic = trim($data['dic']);
+            if (!preg_match('/^(CZ)?[0-9]{8,12}$/', $dic)) {
+                $errors[] = 'DIČ má neplatný formát.';
+            }
+        }
+
+        // Validace emailu
+        if (!empty($data['email'])) {
+            if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'E-mailová adresa má neplatný formát.';
+            }
+        }
+
+        // Validace PSČ - základní formát pro ČR
+        if (!empty($data['zip'])) {
+            $zip = preg_replace('/\s/', '', $data['zip']); // Odstranit mezery
+            if (!preg_match('/^\d{5}$/', $zip)) {
+                $errors[] = 'PSČ musí mít formát 12345.';
+            }
+        }
+
+        // Validace názvu společnosti
+        if (!empty($data['name'])) {
+            $name = trim($data['name']);
+            if (strlen($name) < 2) {
+                $errors[] = 'Název společnosti musí mít alespoň 2 znaky.';
+            }
+            if (strlen($name) > 255) {
+                $errors[] = 'Název společnosti je příliš dlouhý (max. 255 znaků).';
+            }
+        }
+
+        return $errors;
     }
 
     /**
@@ -249,7 +398,7 @@ class SettingsPresenter extends BasePresenter
     }
 
     /**
-     * Zpracování nahrávání souborů
+     * ✅ XSS OCHRANA: Bezpečné zpracování nahrávání souborů
      */
     private function processUploadedFile(Nette\Http\FileUpload $file, string $type): ?string
     {
@@ -262,6 +411,9 @@ class SettingsPresenter extends BasePresenter
         if (!$file->isImage()) {
             throw new \Exception('Soubor musí být obrázek');
         }
+
+        // ✅ XSS OCHRANA: Sanitizace názvu souboru
+        $originalName = SecurityValidator::sanitizeString($file->getName());
 
         // Vytvoření upload adresáře, pokud neexistuje
         $uploadDir = WWW_DIR . '/www/uploads/' . $type;
@@ -278,7 +430,6 @@ class SettingsPresenter extends BasePresenter
         }
 
         // Získání přípony souboru bezpečným způsobem
-        $originalName = $file->getName();
         $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
         
         // Kontrola povolených přípon
@@ -314,54 +465,86 @@ class SettingsPresenter extends BasePresenter
     }
 
     /**
-     * Smaže logo společnosti
+     * ✅ XSS OCHRANA: Bezpečné smazání loga společnosti
      */
     public function handleDeleteLogo(): void
     {
-        $company = $this->companyManager->getCompanyInfo();
+        try {
+            $company = $this->companyManager->getCompanyInfo();
 
-        if ($company && $company->logo) {
-            $logoPath = WWW_DIR . '/www/uploads/logo/' . $company->logo;
+            if ($company && $company->logo) {
+                // ✅ XSS OCHRANA: Sanitizace cesty k souboru
+                $logoPath = WWW_DIR . '/www/uploads/logo/' . basename($company->logo);
 
-            // Smažeme fyzický soubor
-            if (file_exists($logoPath)) {
-                unlink($logoPath);
+                // Smažeme fyzický soubor
+                if (file_exists($logoPath)) {
+                    unlink($logoPath);
+                }
+
+                // Smažeme odkaz v databázi
+                $this->companyManager->save(['logo' => null]);
+
+                $this->flashMessage('Logo bylo úspěšně smazáno', 'success');
+
+                // Logování akce
+                $this->securityLogger->logSecurityEvent(
+                    'company_logo_deleted',
+                    "Logo společnosti bylo smazáno uživatelem {$this->getUser()->getIdentity()->username}",
+                    ['user_id' => $this->getUser()->getId()]
+                );
+            } else {
+                $this->flashMessage('Logo nebylo nalezeno', 'error');
             }
 
-            // Smažeme odkaz v databázi
-            $this->companyManager->save(['logo' => null]);
-
-            $this->flashMessage('Logo bylo úspěšně smazáno', 'success');
-        } else {
-            $this->flashMessage('Logo nebylo nalezeno', 'error');
+            $this->redirect('default');
+        } catch (Nette\Application\AbortException $e) {
+            // AbortException (redirect) necháme projít
+            throw $e;
+        } catch (\Exception $e) {
+            $this->flashMessage('Chyba při mazání loga: ' . $e->getMessage(), 'error');
+            $this->redirect('default');
         }
-
-        $this->redirect('default');
     }
 
     /**
-     * Smaže podpis společnosti
+     * ✅ XSS OCHRANA: Bezpečné smazání podpisu společnosti
      */
     public function handleDeleteSignature(): void
     {
-        $company = $this->companyManager->getCompanyInfo();
+        try {
+            $company = $this->companyManager->getCompanyInfo();
 
-        if ($company && $company->signature) {
-            $signaturePath = WWW_DIR . '/www/uploads/signature/' . $company->signature;
+            if ($company && $company->signature) {
+                // ✅ XSS OCHRANA: Sanitizace cesty k souboru
+                $signaturePath = WWW_DIR . '/www/uploads/signature/' . basename($company->signature);
 
-            // Smažeme fyzický soubor
-            if (file_exists($signaturePath)) {
-                unlink($signaturePath);
+                // Smažeme fyzický soubor
+                if (file_exists($signaturePath)) {
+                    unlink($signaturePath);
+                }
+
+                // Smažeme odkaz v databázi
+                $this->companyManager->save(['signature' => null]);
+
+                $this->flashMessage('Podpis byl úspěšně smazán', 'success');
+
+                // Logování akce
+                $this->securityLogger->logSecurityEvent(
+                    'company_signature_deleted',
+                    "Podpis společnosti byl smazán uživatelem {$this->getUser()->getIdentity()->username}",
+                    ['user_id' => $this->getUser()->getId()]
+                );
+            } else {
+                $this->flashMessage('Podpis nebyl nalezen', 'error');
             }
 
-            // Smažeme odkaz v databázi
-            $this->companyManager->save(['signature' => null]);
-
-            $this->flashMessage('Podpis byl úspěšně smazán', 'success');
-        } else {
-            $this->flashMessage('Podpis nebyl nalezen', 'error');
+            $this->redirect('default');
+        } catch (Nette\Application\AbortException $e) {
+            // AbortException (redirect) necháme projít
+            throw $e;
+        } catch (\Exception $e) {
+            $this->flashMessage('Chyba při mazání podpisu: ' . $e->getMessage(), 'error');
+            $this->redirect('default');
         }
-
-        $this->redirect('default');
     }
 }
