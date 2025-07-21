@@ -9,6 +9,7 @@ use Nette\Application\UI\Presenter;
 use App\Security\SecurityLogger;
 use App\Security\RateLimiter;
 use App\Model\ModuleManager;
+use App\Security\SecurityValidator;
 
 abstract class BasePresenter extends Presenter
 {
@@ -25,16 +26,22 @@ abstract class BasePresenter extends Presenter
     protected bool $disableRateLimit = false;
 
     /** @var SecurityLogger */
-    private $securityLogger;
+    protected $securityLogger;
 
     /** @var RateLimiter */
-    private $rateLimiter;
+    protected $rateLimiter;
 
     /** @var ModuleManager */
     private $moduleManager;
 
     /** @var Nette\Database\Explorer Databáze pro multi-tenancy dotazy */
     protected $database;
+
+    /** @var bool Zapíná automatickou XSS kontrolu formulářů */
+    protected bool $enableXssProtection = true;
+
+    /** @var array Pole pro XSS logování */
+    private array $xssAttempts = [];
 
     public function injectSecurityLogger(SecurityLogger $securityLogger): void
     {
@@ -134,15 +141,15 @@ abstract class BasePresenter extends Presenter
             if (!$this->rateLimiter->isAllowed($action, $clientIP)) {
                 $status = $this->rateLimiter->getLimitStatus($action, $clientIP);
                 $blockedUntil = $status['blocked_until'];
-                $timeRemaining = $blockedUntil ? 
-                    $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 
+                $timeRemaining = $blockedUntil ?
+                    $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') :
                     'neznámý čas';
-                
+
                 $this->flashMessage(
-                    "Příliš mnoho odeslaných formulářů. Zkuste to znovu za {$timeRemaining}.", 
+                    "Příliš mnoho odeslaných formulářů. Zkuste to znovu za {$timeRemaining}.",
                     'danger'
                 );
-                
+
                 // Přesměruj na GET verzi stejné stránky
                 $this->redirect('this');
             }
@@ -155,21 +162,26 @@ abstract class BasePresenter extends Presenter
     public function createComponent($name): ?\Nette\ComponentModel\IComponent
     {
         $component = parent::createComponent($name);
-        
-        // Pokud je to formulář, přidáme rate limiting
+
+        // Pokud je to formulář, přidáme bezpečnostní vrstvy
         if ($component instanceof Nette\Application\UI\Form && !$this->disableRateLimit) {
+            // ✅ NOVÉ: XSS ochrana pro formulář
+            if ($this->enableXssProtection) {
+                $this->addXssProtectionToForm($component);
+            }
+
             // Přidáme rate limiting callback pro error
-            $component->onError[] = function($form) {
+            $component->onError[] = function ($form) {
                 $this->recordFormSubmission(false);
             };
-            
+
             // Přidáme rate limiting callback pro success
             // Přidáváme na začátek, takže se spustí jako první
-            array_unshift($component->onSuccess, function($form, $values) {
+            array_unshift($component->onSuccess, function ($form, $values) {
                 $this->recordFormSubmission(true);
             });
         }
-        
+
         return $component;
     }
 
@@ -190,7 +202,7 @@ abstract class BasePresenter extends Presenter
     private function checkTenantStatus(): void
     {
         $identity = $this->getUser()->getIdentity();
-        
+
         // Super admini mají vždy přístup
         if (!$identity || $this->isSuperAdmin()) {
             return;
@@ -202,18 +214,18 @@ abstract class BasePresenter extends Presenter
             $tenant = $this->database->table('tenants')
                 ->where('id', $tenantId)
                 ->fetch();
-            
+
             if (!$tenant || $tenant->status !== 'active') {
                 // Tenant je deaktivovaný - odhlásíme uživatele
                 $this->getUser()->logout();
-                
+
                 // Uložíme důvod do session pro zobrazení na přihlašovací stránce
                 // OPRAVA: Bez časového limitu - zpráva se zobrazuje trvale
                 $section = $this->getSession('deactivation');
                 $section->message = 'Váš účet byl deaktivován. Pro obnovení přístupu kontaktujte správce systému.';
                 $section->type = 'danger';
                 $section->tenant_id = $tenantId;
-                
+
                 $this->redirect('Sign:in');
             }
         }
@@ -585,7 +597,7 @@ abstract class BasePresenter extends Presenter
     private function getRateLimitInfo(): array
     {
         $clientIP = $this->rateLimiter->getClientIP();
-        
+
         return [
             'form_submit' => $this->rateLimiter->getLimitStatus('form_submit', $clientIP),
             'client_ip' => $clientIP,
@@ -720,7 +732,7 @@ abstract class BasePresenter extends Presenter
         if ($this->disableRateLimit) {
             return true;
         }
-        
+
         $clientIP = $this->rateLimiter->getClientIP();
         return $this->rateLimiter->isAllowed($action, $clientIP);
     }
@@ -943,5 +955,222 @@ abstract class BasePresenter extends Presenter
 
         // Pokud si nejsme jisti, necháme jméno beze změny
         return $name;
+    }
+    /**
+     * ✅ NOVÉ: Přidání XSS ochrany k formuláři
+     */
+    private function addXssProtectionToForm(Nette\Application\UI\Form $form): void
+    {
+        // Přidáme globální validaci na začátek
+        array_unshift($form->onValidate, function ($form) {
+            $this->validateFormAgainstXss($form);
+        });
+    }
+
+    /**
+     * ✅ NOVÉ: Validace formuláře proti XSS útokům
+     */
+    private function validateFormAgainstXss(Nette\Application\UI\Form $form): void
+    {
+        // ✅ OPRAVA: Používáme getHttpData() místo getValues() pro čtení raw dat
+        $httpData = $form->getHttpData();
+        if ($httpData) {
+            $this->checkForXssInData($httpData, $form->getName() ?? 'unknown', '', $form);
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Rekurzivní kontrola XSS v datech
+     */
+    /**
+     * ✅ FINÁLNÍ OPRAVA: Rekurzivní kontrola XSS v datech s flash message
+     */
+    private function checkForXssInData(array $data, string $formName, string $prefix = '', ?Nette\Application\UI\Form $form = null): void
+    {
+        $xssFound = false;
+
+        foreach ($data as $key => $value) {
+            if (is_string($value)) {
+                $fieldName = $prefix ? "{$prefix}.{$key}" : $key;
+
+                // Detekce XSS pokusu
+                if (SecurityValidator::detectXssAttempt($value)) {
+                    // Zalogování XSS pokusu
+                    $this->logXssAttempt($formName, $fieldName, $value);
+
+                    // ✅ NOVÉ: Přidáme chybu do formuláře pro zneplatnění
+                    if ($form !== null) {
+                        $form->addError("Pole '{$fieldName}' obsahuje nebezpečný obsah.");
+                    }
+
+                    // Uložení pro pozdější zpracování
+                    $this->xssAttempts[] = [
+                        'form' => $formName,
+                        'field' => $fieldName,
+                        'value' => SecurityValidator::safeLogString($value)
+                    ];
+
+                    $xssFound = true;
+                }
+            } elseif (is_array($value)) {
+                $this->checkForXssInData($value, $formName, $prefix ? "{$prefix}.{$key}" : $key, $form);
+            }
+        }
+
+        // ✅ NOVÉ: Přidáme flash message pro uživatele
+        if ($xssFound && $form !== null) {
+            $this->flashMessage(
+                'Formulář obsahuje nebezpečný obsah (HTML/JavaScript kód). Zkontrolujte zadané údaje a odešlete formulář znovu.',
+                'danger'
+            );
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Logování XSS pokusu
+     */
+    private function logXssAttempt(string $formName, string $fieldName, string $value): void
+    {
+        $clientIP = $this->rateLimiter->getClientIP();
+        $userAgent = $this->getHttpRequest()->getHeader('User-Agent') ?? 'unknown';
+        $userId = $this->getUser()->isLoggedIn() ? $this->getUser()->getId() : null;
+
+        $this->securityLogger->logSecurityEvent(
+            'xss_attempt',
+            "XSS pokus v formuláři '{$formName}', pole '{$fieldName}' z IP {$clientIP}",
+            [
+                'form_name' => $formName,
+                'field_name' => $fieldName,
+                'client_ip' => $clientIP,
+                'user_agent' => $userAgent,
+                'user_id' => $userId,
+                'value_preview' => SecurityValidator::safeLogString($value, 50),
+                'presenter' => $this->getName(),
+                'action' => $this->getAction()
+            ]
+        );
+    }
+
+    /**
+     * ✅ NOVÉ: Sanitizace formulářových dat
+     */
+    protected function sanitizeFormData(array $data, array $richTextFields = []): array
+    {
+        return SecurityValidator::sanitizeFormData($data);
+    }
+
+    /**
+     * ✅ NOVÉ: Kontrola, zda formulář obsahoval XSS pokusy
+     */
+    protected function hasXssAttempts(): bool
+    {
+        return !empty($this->xssAttempts);
+    }
+
+    /**
+     * ✅ NOVÉ: Získání XSS pokusů pro reporting
+     */
+    protected function getXssAttempts(): array
+    {
+        return $this->xssAttempts;
+    }
+
+    /**
+     * ✅ NOVÉ: Přidání bezpečnostních filtrů k formulářovému poli
+     */
+    protected function addSecurityFilters(Nette\Forms\Controls\BaseControl $control, string $type = 'string'): void
+    {
+        switch ($type) {
+            case 'email':
+                $control->addFilter('trim');
+                break;
+
+            case 'phone':
+                $control->addFilter([SecurityValidator::class, 'sanitizePhoneNumber']);
+                break;
+
+            case 'amount':
+                $control->addFilter([SecurityValidator::class, 'sanitizeAmount']);
+                break;
+
+            case 'invoice_number':
+                $control->addFilter([SecurityValidator::class, 'sanitizeInvoiceNumber']);
+                break;
+
+            case 'rich_text':
+                $control->addFilter([SecurityValidator::class, 'sanitizeRichText']);
+                break;
+
+            case 'url':
+                $control->addFilter([SecurityValidator::class, 'sanitizeUrl']);
+                break;
+
+            default: // 'string'
+                $control->addFilter([SecurityValidator::class, 'sanitizeString']);
+                break;
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Přidání bezpečnostních validací k formulářovému poli
+     */
+    protected function addSecurityValidation(Nette\Forms\Controls\BaseControl $control, string $type = 'string'): void
+    {
+        switch ($type) {
+            case 'email':
+                $control->addRule(function ($control) {
+                    return SecurityValidator::validateEmail(trim($control->getValue()));
+                }, 'Zadejte platnou e-mailovou adresu.');
+                break;
+
+            case 'phone':
+                $control->addRule(function ($control) {
+                    $value = $control->getValue();
+                    return empty($value) || SecurityValidator::validatePhoneNumber($value);
+                }, 'Zadejte platné telefonní číslo.');
+                break;
+
+            case 'username':
+                $control->addRule(function ($control) {
+                    $errors = SecurityValidator::validateUsername($control->getValue());
+                    return empty($errors) ? true : $errors[0];
+                }, '');
+                break;
+
+            case 'password':
+                $control->addRule(function ($control) {
+                    $errors = SecurityValidator::validatePassword($control->getValue());
+                    return empty($errors) ? true : $errors[0];
+                }, '');
+                break;
+
+            case 'ico':
+                $control->addRule(function ($control) {
+                    $value = $control->getValue();
+                    return empty($value) || SecurityValidator::validateICO($value);
+                }, 'Zadejte platné IČO.');
+                break;
+
+            case 'dic':
+                $control->addRule(function ($control) {
+                    $value = $control->getValue();
+                    return empty($value) || SecurityValidator::validateDIC($value);
+                }, 'Zadejte platné DIČ.');
+                break;
+
+            case 'amount':
+                $control->addRule(function ($control) {
+                    $value = $control->getValue();
+                    return empty($value) || SecurityValidator::validateAmount($value);
+                }, 'Zadejte platnou částku.');
+                break;
+
+            case 'company_name':
+                $control->addRule(function ($control) {
+                    $errors = SecurityValidator::validateCompanyName($control->getValue());
+                    return empty($errors) ? true : $errors[0];
+                }, '');
+                break;
+        }
     }
 }

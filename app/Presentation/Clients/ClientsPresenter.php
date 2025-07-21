@@ -3,12 +3,13 @@
 namespace App\Presentation\Clients;
 
 use Nette;
+use Tracy\ILogger;
 use App\Model\AresService;
-use Nette\Application\Responses\JsonResponse;
 use App\Model\ClientsManager;
 use Nette\Application\UI\Form;
 use App\Presentation\BasePresenter;
-use Tracy\ILogger;
+use App\Security\SecurityValidator;
+use Nette\Application\Responses\JsonResponse;
 
 class ClientsPresenter extends BasePresenter
 {
@@ -23,7 +24,7 @@ class ClientsPresenter extends BasePresenter
 
     // Všichni přihlášení uživatelé mají základní přístup ke klientům
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
-    
+
     // Konkrétní role pro jednotlivé akce
     protected array $actionRoles = [
         'default' => ['readonly', 'accountant', 'admin'], // Seznam klientů mohou vidět všichni
@@ -35,8 +36,8 @@ class ClientsPresenter extends BasePresenter
     ];
 
     public function __construct(
-        ClientsManager $clientsManager, 
-        Nette\Database\Explorer $database, 
+        ClientsManager $clientsManager,
+        Nette\Database\Explorer $database,
         AresService $aresService,
         ILogger $logger
     ) {
@@ -52,7 +53,7 @@ class ClientsPresenter extends BasePresenter
     public function startup(): void
     {
         parent::startup();
-        
+
         // Nastavíme tenant kontext v ClientsManager
         $this->clientsManager->setTenantContext(
             $this->getCurrentTenantId(),
@@ -91,51 +92,84 @@ class ClientsPresenter extends BasePresenter
         }
 
         $this['clientForm']->setDefaults($client);
-        
+
         // Přidáme URL pro ARES lookup do šablony
         $this->template->aresLookupUrl = $this->link('aresLookup!');
     }
 
+    /**
+     * ✅ PLNĚ ZABEZPEČENÝ formulář pro klienty s pokročilými validacemi
+     */
     protected function createComponentClientForm(): Form
     {
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
         // === ARES a identifikační údaje (první) ===
-        $form->addText('ic', 'IČ:')
-            ->setHtmlAttribute('placeholder', 'Zadejte IČ a klikněte na načíst z ARESu');
+        $icField = $form->addText('ic', 'IČ:')
+            ->setHtmlAttribute('placeholder', 'Zadejte IČ a klikněte na načíst z ARESu')
+            ->setHtmlAttribute('maxlength', 8);
+        $this->addSecurityFilters($icField, 'string');
+        $this->addSecurityValidation($icField, 'ico');
 
-        $form->addText('name', 'Název společnosti:')
-            ->setRequired('Zadejte název společnosti');
+        $nameField = $form->addText('name', 'Název společnosti:')
+            ->setRequired('Zadejte název společnosti')
+            ->setHtmlAttribute('maxlength', 255);
+        $this->addSecurityFilters($nameField, 'string');
+        $this->addSecurityValidation($nameField, 'company_name');
 
-        $form->addText('dic', 'DIČ:')
-            ->setHtmlAttribute('placeholder', 'Volitelné - vyplní se automaticky z ARESu');
+        $dicField = $form->addText('dic', 'DIČ:')
+            ->setHtmlAttribute('placeholder', 'Volitelné - vyplní se automaticky z ARESu')
+            ->setHtmlAttribute('maxlength', 15);
+        $this->addSecurityFilters($dicField, 'string');
+        $this->addSecurityValidation($dicField, 'dic');
 
         // === Adresa ===
-        $form->addTextArea('address', 'Adresa:')
+        $addressField = $form->addTextArea('address', 'Adresa:')
             ->setRequired('Zadejte adresu')
-            ->setHtmlAttribute('rows', 2);
+            ->setHtmlAttribute('rows', 2)
+            ->setHtmlAttribute('maxlength', 500);
+        $this->addSecurityFilters($addressField, 'string');
 
-        $form->addText('city', 'Město:')
-            ->setRequired('Zadejte město');
+        $cityField = $form->addText('city', 'Město:')
+            ->setRequired('Zadejte město')
+            ->setHtmlAttribute('maxlength', 100);
+        $this->addSecurityFilters($cityField, 'string');
 
-        $form->addText('zip', 'PSČ:')
+        $zipField = $form->addText('zip', 'PSČ:')
             ->setRequired('Zadejte PSČ')
-            ->setHtmlAttribute('placeholder', '12345');
+            ->setHtmlAttribute('placeholder', '12345')
+            ->setHtmlAttribute('maxlength', 6);
+        $this->addSecurityFilters($zipField, 'string');
+        // ✅ NOVÉ: Validace PSČ
+        $zipField->addRule(function ($control) {
+            $value = $control->getValue();
+            return empty($value) || SecurityValidator::validatePostalCode($value, 'CZ');
+        }, 'Zadejte platné PSČ (např. 12345).');
 
-        $form->addText('country', 'Země:')
+        $countryField = $form->addText('country', 'Země:')
             ->setRequired('Zadejte zemi')
-            ->setDefaultValue('Česká republika');
+            ->setDefaultValue('Česká republika')
+            ->setHtmlAttribute('maxlength', 100);
+        $this->addSecurityFilters($countryField, 'string');
 
         // === Kontaktní údaje ===
-        $form->addText('contact_person', 'Kontaktní osoba:')
-            ->setHtmlAttribute('placeholder', 'Jméno kontaktní osoby');
+        $contactField = $form->addText('contact_person', 'Kontaktní osoba:')
+            ->setHtmlAttribute('placeholder', 'Jméno kontaktní osoby')
+            ->setHtmlAttribute('maxlength', 100);
+        $this->addSecurityFilters($contactField, 'string');
 
-        $form->addEmail('email', 'E-mail:')
-            ->setHtmlAttribute('placeholder', 'email@firma.cz');
+        $emailField = $form->addEmail('email', 'E-mail:')
+            ->setHtmlAttribute('placeholder', 'email@firma.cz')
+            ->setHtmlAttribute('maxlength', 254); // RFC limit
+        $this->addSecurityFilters($emailField, 'email');
+        $this->addSecurityValidation($emailField, 'email');
 
-        $form->addText('phone', 'Telefon:')
-            ->setHtmlAttribute('placeholder', '+420 123 456 789');
+        $phoneField = $form->addText('phone', 'Telefon:')
+            ->setHtmlAttribute('placeholder', '+420 123 456 789')
+            ->setHtmlAttribute('maxlength', 20);
+        $this->addSecurityFilters($phoneField, 'phone');
+        $this->addSecurityValidation($phoneField, 'phone');
 
         $form->addSubmit('send', 'Uložit');
 
@@ -144,19 +178,133 @@ class ClientsPresenter extends BasePresenter
         return $form;
     }
 
+    /**
+     * ✅ PLNĚ ZABEZPEČENÉ zpracování formuláře s detailním logováním
+     */
     public function clientFormSucceeded(Form $form, \stdClass $data): void
     {
-        $id = $this->getParameter('id');
+        // ✅ NOVÉ: Kontrola XSS pokusů
+        if ($this->hasXssAttempts()) {
+            $attempts = $this->getXssAttempts();
 
-        if ($id) {
-            $this->clientsManager->save($data, $id);
-            $this->flashMessage('Klient byl úspěšně aktualizován', 'success');
-        } else {
-            $this->clientsManager->save($data);
-            $this->flashMessage('Klient byl úspěšně přidán', 'success');
+            $this->flashMessage(
+                'Formulář obsahuje nebezpečný obsah. Zkontrolujte zadané údaje.',
+                'danger'
+            );
+
+            // Podrobné logování pro admina
+            $this->securityLogger->logSecurityEvent(
+                'form_xss_blocked',
+                'Formulář klienta byl zablokován kvůli XSS pokusu',
+                [
+                    'attempts' => $attempts,
+                    'user_id' => $this->getUser()->getId(),
+                    'client_id' => $this->getParameter('id'),
+                    'form_data_preview' => array_map(function ($value) {
+                        return is_string($value) ? SecurityValidator::safeLogString($value, 30) : $value;
+                    }, (array)$data)
+                ]
+            );
+
+            return; // Zastavíme zpracování
         }
 
-        $this->redirect('default');
+        // ✅ Sanitizace dat před uložením
+        $sanitizedData = $this->sanitizeFormData((array)$data);
+
+        // ✅ NOVÉ: Dodatečná validace sanitizovaných dat
+        $validationErrors = $this->validateClientData($sanitizedData);
+        if (!empty($validationErrors)) {
+            foreach ($validationErrors as $error) {
+                $this->flashMessage($error, 'danger');
+            }
+            return;
+        }
+
+        $id = $this->getParameter('id');
+
+        try {
+            if ($id) {
+                $this->clientsManager->save((object)$sanitizedData, $id);
+                $this->flashMessage('Klient byl úspěšně aktualizován', 'success');
+
+                // Logování úspěšné aktualizace
+                $this->securityLogger->logSecurityEvent(
+                    'client_updated',
+                    "Klient ID:{$id} byl aktualizován uživatelem {$this->getUser()->getIdentity()->username}",
+                    ['client_id' => $id, 'user_id' => $this->getUser()->getId()]
+                );
+            } else {
+                $newClient = $this->clientsManager->save((object)$sanitizedData);
+                $newClientId = $newClient->id ?? 'unknown';
+
+                $this->flashMessage('Klient byl úspěšně přidán', 'success');
+
+                // Logování úspěšného vytvoření
+                $this->securityLogger->logSecurityEvent(
+                    'client_created',
+                    "Nový klient byl vytvořen uživatelem {$this->getUser()->getIdentity()->username}",
+                    ['client_id' => $newClientId, 'user_id' => $this->getUser()->getId()]
+                );
+            }
+
+            $this->redirect('default');
+        } catch (\Exception $e) {
+            $this->flashMessage('Chyba při ukládání klienta: ' . $e->getMessage(), 'danger');
+
+            // Logování chyby
+            $this->securityLogger->logSecurityEvent(
+                'client_save_error',
+                "Chyba při ukládání klienta: " . $e->getMessage(),
+                [
+                    'user_id' => $this->getUser()->getId(),
+                    'client_id' => $id,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]
+            );
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Dodatečná validace dat klienta
+     */
+    private function validateClientData(array $data): array
+    {
+        $errors = [];
+
+        // Validace IČO
+        if (!empty($data['ic']) && !SecurityValidator::validateICO($data['ic'])) {
+            $errors[] = 'IČO má neplatný formát nebo kontrolní součet.';
+        }
+
+        // Validace DIČ
+        if (!empty($data['dic']) && !SecurityValidator::validateDIC($data['dic'])) {
+            $errors[] = 'DIČ má neplatný formát.';
+        }
+
+        // Validace emailu
+        if (!empty($data['email']) && !SecurityValidator::validateEmail($data['email'])) {
+            $errors[] = 'E-mailová adresa má neplatný formát.';
+        }
+
+        // Validace telefonu
+        if (!empty($data['phone']) && !SecurityValidator::validatePhoneNumber($data['phone'])) {
+            $errors[] = 'Telefonní číslo má neplatný formát.';
+        }
+
+        // Validace názvu společnosti
+        if (!empty($data['name'])) {
+            $nameErrors = SecurityValidator::validateCompanyName($data['name']);
+            $errors = array_merge($errors, $nameErrors);
+        }
+
+        // Validace PSČ
+        if (!empty($data['zip']) && !SecurityValidator::validatePostalCode($data['zip'], 'CZ')) {
+            $errors[] = 'PSČ má neplatný formát.';
+        }
+
+        return $errors;
     }
 
     public function actionEdit(int $id): void
@@ -189,7 +337,7 @@ class ClientsPresenter extends BasePresenter
         if ($invoiceCount > 0) {
             // Vytvoření srozumitelné hlášky s správnou gramatikou
             $invoiceText = $this->getInvoiceCountText($invoiceCount);
-            
+
             if ($invoiceCount == 1) {
                 $message = "Klient '{$client->name}' má {$invoiceText} v systému a nelze ho smazat. Nejprve musíte smazat tuto fakturu.";
             } else {
@@ -242,12 +390,12 @@ class ClientsPresenter extends BasePresenter
             while (ob_get_level()) {
                 ob_end_clean();
             }
-            
+
             // Ručně nastavíme content type header
             if (!headers_sent()) {
                 header('Content-Type: application/json; charset=utf-8');
             }
-            
+
             // Explicitní kontrola oprávnění - pouze účetní a admin
             if (!$this->isAccountant()) {
                 echo json_encode(['error' => 'Nemáte oprávnění pro vyhledávání v ARESu.']);
@@ -256,34 +404,33 @@ class ClientsPresenter extends BasePresenter
 
             // Získáme IČO z GET parametrů
             $ico = $this->getHttpRequest()->getQuery('ico');
-            
+
             if (!$ico) {
                 echo json_encode(['error' => 'Nebylo zadáno IČO']);
                 exit;
             }
-            
+
             // Validace IČO
             $ico = trim($ico);
             if (!preg_match('/^\d{7,8}$/', $ico)) {
                 echo json_encode(['error' => 'Neplatné IČO. Zadejte 7 nebo 8 číslic.']);
                 exit;
             }
-            
+
             // PŮVODNÍ VOLÁNÍ - getCompanyInfo (alias který vrací null při neúspěchu)
             $result = $this->aresService->getCompanyInfo($ico);
-            
+
             if ($result) {
                 echo json_encode(['success' => true, 'data' => $result]);
             } else {
                 echo json_encode(['error' => 'Firma s tímto IČO nebyla v ARESu nalezena.']);
             }
-            
         } catch (\Exception $e) {
             // Logování chyby
             $this->logger->log("ARES Lookup Error: " . $e->getMessage(), \Tracy\ILogger::ERROR);
             echo json_encode(['error' => 'Došlo k chybě při komunikaci s ARESem: ' . $e->getMessage()]);
         }
-        
+
         exit;
     }
 }

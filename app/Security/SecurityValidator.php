@@ -7,15 +7,43 @@ namespace App\Security;
 use Nette;
 
 /**
- * Bezpečnostní validátor pro vstupní data
+ * ✅ ROZŠÍŘENÝ Bezpečnostní validátor pro vstupní data
  * Chrání proti XSS, zajišťuje validaci a sanitizaci vstupů
  */
 class SecurityValidator
 {
     use Nette\SmartObject;
 
+    /** @var array ✅ NOVÉ: Nebezpečné XSS výrazy pro detekci útoků */
+    private static array $xssPatterns = [
+        '/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/mi',
+        '/javascript:/i',
+        '/vbscript:/i',
+        '/onload\s*=/i',
+        '/onerror\s*=/i',
+        '/onclick\s*=/i',
+        '/onmouseover\s*=/i',
+        '/onfocus\s*=/i',
+        '/onblur\s*=/i',
+        '/onchange\s*=/i',
+        '/onsubmit\s*=/i',
+        '/<iframe\b[^>]*>/i',
+        '/<object\b[^>]*>/i',
+        '/<embed\b[^>]*>/i',
+        '/<form\b[^>]*>/i',
+        '/<input\b[^>]*>/i',
+        '/<link\b[^>]*>/i',
+        '/<meta\b[^>]*>/i',
+    ];
+
+    /** @var array ✅ NOVÉ: Povolené HTML tagy pro rich text editory */
+    private static array $allowedTags = [
+        'strong', 'b', 'em', 'i', 'u', 'br', 'p', 
+        'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+    ];
+
     /**
-     * Sanitizuje vstupní řetězec proti XSS útokům
+     * ✅ VYLEPŠENO: Sanitizuje vstupní řetězec proti XSS útokům
      */
     public static function sanitizeString(string $input): string
     {
@@ -25,10 +53,116 @@ class SecurityValidator
         // Převod HTML entit
         $input = htmlspecialchars($input, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         
+        // ✅ NOVÉ: Odstranění XSS výrazů
+        $input = self::removeXssPatterns($input);
+        
         // Odstranění přebytečných mezer
         $input = trim($input);
         
         return $input;
+    }
+
+    /**
+     * ✅ NOVÉ: Sanitizace pro rich text (ponechá některé povolené HTML tagy)
+     */
+    public static function sanitizeRichText(string $input): string
+    {
+        // Trim
+        $input = trim($input);
+        
+        // Povolíme pouze bezpečné HTML tagy
+        $allowedTagsString = '<' . implode('><', self::$allowedTags) . '>';
+        $input = strip_tags($input, $allowedTagsString);
+        
+        // Odstranění nebezpečných atributů ze zbývajících tagů
+        $input = self::removeHtmlAttributes($input);
+        
+        // Odstranění nebezpečných výrazů
+        $input = self::removeXssPatterns($input);
+        
+        return $input;
+    }
+
+    /**
+     * ✅ NOVÉ: Detekce XSS pokusu pro logování
+     */
+    public static function detectXssAttempt(string $input): bool
+    {
+        foreach (self::$xssPatterns as $pattern) {
+            if (preg_match($pattern, $input)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * ✅ NOVÉ: Sanitizace URL adresy
+     */
+    public static function sanitizeUrl(string $url): string
+    {
+        $url = trim($url);
+        
+        // Povolíme pouze HTTP a HTTPS protokoly
+        if (!preg_match('/^https?:\/\//', $url)) {
+            return '';
+        }
+        
+        // Validace URL
+        $sanitized = filter_var($url, FILTER_SANITIZE_URL);
+        if (!filter_var($sanitized, FILTER_VALIDATE_URL)) {
+            return '';
+        }
+        
+        return $sanitized;
+    }
+
+    /**
+     * ✅ NOVÉ: Sanitizace názvu souboru
+     */
+    public static function sanitizeFilename(string $filename): string
+    {
+        // Odstranění cesty
+        $filename = basename($filename);
+        
+        // Povolené znaky: písmena, číslice, pomlčka, podtržítko, tečka
+        $filename = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', $filename);
+        
+        // Omezení délky
+        if (strlen($filename) > 255) {
+            $filename = substr($filename, 0, 255);
+        }
+        
+        return $filename;
+    }
+
+    /**
+     * ✅ NOVÉ: Sanitizace pro SQL LIKE dotazy
+     */
+    public static function sanitizeForLike(string $input): string
+    {
+        $input = self::sanitizeString($input);
+        
+        // Escapování SQL LIKE speciálních znaků
+        $input = str_replace(['%', '_'], ['\%', '\_'], $input);
+        
+        return $input;
+    }
+
+    /**
+     * ✅ NOVÉ: Pro účely logování - safe zobrazení potenciálně nebezpečného obsahu
+     */
+    public static function safeLogString(string $input, int $maxLength = 100): string
+    {
+        // Odstranění nebezpečných znaků pro logování
+        $safe = preg_replace('/[\x00-\x1F\x7F]/', '', $input);
+        
+        // Omezení délky
+        if (strlen($safe) > $maxLength) {
+            $safe = substr($safe, 0, $maxLength) . '...';
+        }
+        
+        return $safe;
     }
 
     /**
@@ -340,30 +474,30 @@ class SecurityValidator
         return $amount;
     }
 
-    /**
-     * Validuje PSČ
-     */
-    public static function validatePostalCode(string $postalCode, string $country = 'CZ'): bool
-    {
-        $postalCode = preg_replace('/\s/', '', $postalCode);
-        
-        switch (strtoupper($country)) {
-            case 'CZ':
-                // České PSČ: 5 číslic nebo 3 číslice mezera 2 číslice
-                return preg_match('/^[0-9]{5}$/', $postalCode);
-                
-            case 'SK':
-                // Slovenské PSČ: 5 číslic nebo 3 číslice mezera 2 číslice
-                return preg_match('/^[0-9]{5}$/', $postalCode);
-                
-            default:
-                // Obecná kontrola: 3-10 alfanumerických znaků
-                return preg_match('/^[0-9A-Z]{3,10}$/', strtoupper($postalCode));
-        }
+/**
+ * Validuje PSČ
+ */
+public static function validatePostalCode(string $postalCode, string $country = 'CZ'): bool
+{
+    $postalCode = preg_replace('/\s/', '', $postalCode);
+    
+    switch (strtoupper($country)) {
+        case 'CZ':
+            // České PSČ: 5 číslic nebo 3 číslice mezera 2 číslice
+            return preg_match('/^[0-9]{5}$/', $postalCode) === 1;
+            
+        case 'SK':
+            // Slovenské PSČ: 5 číslic nebo 3 číslice mezera 2 číslice
+            return preg_match('/^[0-9]{5}$/', $postalCode) === 1;
+            
+        default:
+            // Obecná kontrola: 3-10 alfanumerických znaků
+            return preg_match('/^[0-9A-Z]{3,10}$/', strtoupper($postalCode)) === 1;
     }
+}
 
     /**
-     * Kompletní sanitizace všech vstupních dat z formuláře
+     * ✅ VYLEPŠENO: Kompletní sanitizace všech vstupních dat z formuláře
      */
     public static function sanitizeFormData(array $data): array
     {
@@ -371,6 +505,12 @@ class SecurityValidator
         
         foreach ($data as $key => $value) {
             if (is_string($value)) {
+                // ✅ NOVÉ: Detekce XSS pokusů pro logování
+                if (self::detectXssAttempt($value)) {
+                    // Zde by se mělo logovat do SecurityLogger
+                    error_log("XSS pokus detekován v poli '{$key}': " . self::safeLogString($value));
+                }
+                
                 // Speciální zacházení pro různé typy polí
                 switch ($key) {
                     case 'email':
@@ -398,16 +538,71 @@ class SecurityValidator
                         // Hesla se nesanitizují, pouze validují
                         $sanitized[$key] = $value;
                         break;
+
+                    case 'url':
+                    case 'website':
+                        $sanitized[$key] = self::sanitizeUrl($value);
+                        break;
                         
                     default:
                         $sanitized[$key] = self::sanitizeString($value);
                         break;
                 }
+            } elseif (is_array($value)) {
+                // Rekurzivní sanitizace pro vícerozměrná pole
+                $sanitized[$key] = self::sanitizeFormData($value);
             } else {
                 $sanitized[$key] = $value;
             }
         }
         
         return $sanitized;
+    }
+
+    /**
+     * ✅ NOVÉ: Hromadná sanitizace pole dat s možností označit rich text pole
+     */
+    public static function sanitizeArray(array $data, array $richTextFields = []): array
+    {
+        $sanitized = [];
+        
+        foreach ($data as $key => $value) {
+            if (is_string($value)) {
+                if (in_array($key, $richTextFields)) {
+                    $sanitized[$key] = self::sanitizeRichText($value);
+                } else {
+                    $sanitized[$key] = self::sanitizeString($value);
+                }
+            } elseif (is_array($value)) {
+                $sanitized[$key] = self::sanitizeArray($value, $richTextFields);
+            } else {
+                $sanitized[$key] = $value;
+            }
+        }
+        
+        return $sanitized;
+    }
+
+    // =====================================================================
+    // ✅ NOVÉ: Privátní pomocné metody pro XSS ochranu
+    // =====================================================================
+
+    /**
+     * Odstranění nebezpečných XSS výrazů
+     */
+    private static function removeXssPatterns(string $input): string
+    {
+        foreach (self::$xssPatterns as $pattern) {
+            $input = preg_replace($pattern, '', $input);
+        }
+        return $input;
+    }
+
+    /**
+     * Odstranění všech HTML atributů (ponechá pouze tagy)
+     */
+    private static function removeHtmlAttributes(string $input): string
+    {
+        return preg_replace('/<([a-zA-Z0-9]+)[^>]*>/', '<$1>', $input);
     }
 }

@@ -13,7 +13,7 @@
     
     <div class="card">
         <div class="card-header" style="background-color: #B1D235; color: #212529;">
-            <i class="{$moduleInfo['icon']|noescape} me-2"></i>
+            {safeIcon($moduleInfo['icon'])}
             {$moduleInfo['name']}
         </div>
         <div class="card-body" {if isset($ajaxUrl)}data-ajax-url="{$ajaxUrl}"{/if}>

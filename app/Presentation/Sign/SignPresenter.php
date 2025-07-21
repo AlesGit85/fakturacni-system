@@ -19,7 +19,7 @@ final class SignPresenter extends BasePresenter
     private $userManager;
 
     /** @var SecurityLogger */
-    private $securityLogger;
+    protected $securityLogger;
 
     /** @var EmailService */
     private $emailService;
@@ -28,7 +28,7 @@ final class SignPresenter extends BasePresenter
     private $tenantManager;
 
     /** @var RateLimiter */
-    private $rateLimiter;
+    protected $rateLimiter;
 
     protected bool $requiresLogin = false;
     

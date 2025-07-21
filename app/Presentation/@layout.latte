@@ -58,7 +58,7 @@
 									{* Vytvoříme submenu pro každý modul *}
 									<li class="dropdown-submenu">
 										<a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">
-											<i class="{$moduleData['moduleInfo']['icon']|noescape} me-2"></i>
+											{safeIcon($moduleData['moduleInfo']['icon'])}
 											{$moduleData['moduleInfo']['name']}
 											<i class="bi bi-chevron-right ms-auto"></i>
 										</a>
@@ -67,17 +67,18 @@
 												<li>
 													{if $menuItem['linkType'] === 'nette'}
 														<a class="dropdown-item" href="{$menuItem['link']}">
-															{if isset($menuItem['icon'])}<i class="{$menuItem['icon']|noescape} me-2"></i>{/if}
+															{if isset($menuItem['icon'])}{safeIcon($menuItem['icon'])}{/if}
 															{$menuItem['label']}
 														</a>
 													{elseif $menuItem['linkType'] === 'javascript'}
-														<a class="dropdown-item" href="#" onclick="{$menuItem['onclick']|noescape}; return false;">
-															{if isset($menuItem['icon'])}<i class="{$menuItem['icon']|noescape} me-2"></i>{/if}
+														<a class="dropdown-item" href="#" {var $safeOnclick = safeOnclick($menuItem['onclick'])}
+{if $safeOnclick !== ''}onclick="{$safeOnclick}; return false;"{else}href="#" class="disabled"{/if}>
+															{if isset($menuItem['icon'])}{safeIcon($menuItem['icon'])}{/if}
 															{$menuItem['label']}
 														</a>
 													{else}
 														<a class="dropdown-item" href="{$menuItem['link']}">
-															{if isset($menuItem['icon'])}<i class="{$menuItem['icon']|noescape} me-2"></i>{/if}
+															{if isset($menuItem['icon'])}{safeIcon($menuItem['icon'])}{/if}
 															{$menuItem['label']}
 														</a>
 													{/if}
