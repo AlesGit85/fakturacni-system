@@ -19,7 +19,8 @@
                             <i class="bi bi-building"></i>
                             Název společnosti
                         </div>
-                        <div class="info-value">{$company->name}</div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->name|escape}</div>
                     </div>
                     
                     <div class="info-item">
@@ -27,7 +28,8 @@
                             <i class="bi bi-geo-alt"></i>
                             Adresa
                         </div>
-                        <div class="info-value">{$company->address}, {$company->zip} {$company->city}, {$company->country}</div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->address|escape}, {$company->zip|escape} {$company->city|escape}, {$company->country|escape}</div>
                     </div>
                     
                     <div class="info-item">
@@ -35,7 +37,8 @@
                             <i class="bi bi-upc"></i>
                             IČ
                         </div>
-                        <div class="info-value">{$company->ic}</div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->ic|escape}</div>
                     </div>
                     
                     {if $company->dic}
@@ -44,7 +47,8 @@
                             <i class="bi bi-upc-scan"></i>
                             DIČ
                         </div>
-                        <div class="info-value">{$company->dic}</div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->dic|escape}</div>
                     </div>
                     {/if}
                 </div>
@@ -54,7 +58,8 @@
                             <i class="bi bi-envelope"></i>
                             E-mail
                         </div>
-                        <div class="info-value">{$company->email}</div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->email|escape}</div>
                     </div>
                     
                     <div class="info-item">
@@ -62,7 +67,8 @@
                             <i class="bi bi-telephone"></i>
                             Telefon
                         </div>
-                        <div class="info-value">{$company->phone}</div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->phone|escape}</div>
                     </div>
                     
                     <div class="info-item">
@@ -70,7 +76,8 @@
                             <i class="bi bi-bank"></i>
                             Bankovní účet
                         </div>
-                        <div class="info-value">{$company->bank_account} ({$company->bank_name})</div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->bank_account|escape} ({$company->bank_name|escape})</div>
                     </div>
                     
                     {if $company->logo}
@@ -80,7 +87,8 @@
                             Logo
                         </div>
                         <div class="info-value">
-                            <img src="{$basePath}/uploads/logo/{$company->logo}" alt="Logo" style="max-height: 60px;" class="rounded">
+                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                            <img src="{$basePath}/uploads/logo/{$company->logo|escape}" alt="Logo" style="max-height: 60px;" class="rounded">
                         </div>
                     </div>
                     {/if}
@@ -92,7 +100,8 @@
                             Podpis
                         </div>
                         <div class="info-value">
-                            <img src="{$basePath}/uploads/signature/{$company->signature}" alt="Podpis" style="max-height: 60px;" class="rounded">
+                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                            <img src="{$basePath}/uploads/signature/{$company->signature|escape}" alt="Podpis" style="max-height: 60px;" class="rounded">
                         </div>
                     </div>
                     {/if}
@@ -119,6 +128,7 @@
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input name class => 'form-control'}
                         {label name class => 'form-label' /}
                     </div>
@@ -234,7 +244,9 @@
                     
                     {if $company && $company->logo}
                         <div class="mt-2 d-flex align-items-center gap-3">
-                            <img src="{$basePath}/uploads/logo/{$company->logo}" alt="Logo" style="max-height: 60px;" class="rounded">
+                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                            <img src="{$basePath}/uploads/logo/{$company->logo|escape}" alt="Logo" style="max-height: 60px;" class="rounded">
+                            {* ✅ XSS OCHRANA: Bezpečný JavaScript bez uživatelských dat *}
                             <a n:href="deleteLogo!" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat logo?')">
                                 <i class="bi bi-trash"></i> Smazat logo
                             </a>
@@ -247,7 +259,9 @@
                     {input signature class => 'form-control'}
                     {if $company && $company->signature}
                         <div class="mt-2 d-flex align-items-center gap-3">
-                            <img src="{$basePath}/uploads/signature/{$company->signature}" alt="Podpis" style="max-height: 60px;" class="rounded">
+                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                            <img src="{$basePath}/uploads/signature/{$company->signature|escape}" alt="Podpis" style="max-height: 60px;" class="rounded">
+                            {* ✅ XSS OCHRANA: Bezpečný JavaScript bez uživatelských dat *}
                             <a n:href="deleteSignature!" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat podpis?')">
                                 <i class="bi bi-trash"></i> Smazat podpis
                             </a>
@@ -267,6 +281,7 @@
                     <div class="color-setting-item">
                         <label class="form-label">Barva nadpisu faktury</label>
                         <div class="color-input-group">
+                            {* ✅ BEZPEČNÉ: Formulářové prvky jsou automaticky escapované *}
                             {input invoice_heading_color class => 'form-control form-control-color'}
                             <div class="color-preview" style="background-color: #B1D235; color: #212529;">Ukázka barvy</div>
                         </div>
