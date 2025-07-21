@@ -105,12 +105,12 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1753080789,
+      1 => 1753082097,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1753081801,
+      1 => 1753090572,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -150,7 +150,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1752850474,
+      1 => 1753082081,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
@@ -219,7 +219,8 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 2,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 2,
     'App\\Presentation\\Clients\\ClientsShowTemplate' => 2,
-    'App\\Presentation\\Clients\\ClientsEditTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsEditTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 3,
   ),
   2 => 
   array (

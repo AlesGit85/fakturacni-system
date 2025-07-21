@@ -98,9 +98,9 @@ class ClientsPresenter extends BasePresenter
     }
 
     /**
-     * ✅ PLNĚ ZABEZPEČENÝ formulář pro klienty s pokročilými validacemi
+     * ✅ XSS OCHRANA: Vytvoření formuláře pro klienta s bezpečnostními filtry
      */
-    protected function createComponentClientForm(): Form
+    public function createComponentClientForm(): Form
     {
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
@@ -110,19 +110,16 @@ class ClientsPresenter extends BasePresenter
             ->setHtmlAttribute('placeholder', 'Zadejte IČ a klikněte na načíst z ARESu')
             ->setHtmlAttribute('maxlength', 8);
         $this->addSecurityFilters($icField, 'string');
-        $this->addSecurityValidation($icField, 'ico');
 
         $nameField = $form->addText('name', 'Název společnosti:')
             ->setRequired('Zadejte název společnosti')
             ->setHtmlAttribute('maxlength', 255);
         $this->addSecurityFilters($nameField, 'string');
-        $this->addSecurityValidation($nameField, 'company_name');
 
         $dicField = $form->addText('dic', 'DIČ:')
             ->setHtmlAttribute('placeholder', 'Volitelné - vyplní se automaticky z ARESu')
             ->setHtmlAttribute('maxlength', 15);
         $this->addSecurityFilters($dicField, 'string');
-        $this->addSecurityValidation($dicField, 'dic');
 
         // === Adresa ===
         $addressField = $form->addTextArea('address', 'Adresa:')
@@ -141,10 +138,10 @@ class ClientsPresenter extends BasePresenter
             ->setHtmlAttribute('placeholder', '12345')
             ->setHtmlAttribute('maxlength', 6);
         $this->addSecurityFilters($zipField, 'string');
-        // ✅ NOVÉ: Validace PSČ
+        // ✅ Základní validace PSČ
         $zipField->addRule(function ($control) {
-            $value = $control->getValue();
-            return empty($value) || SecurityValidator::validatePostalCode($value, 'CZ');
+            $value = preg_replace('/\s/', '', $control->getValue());
+            return empty($value) || preg_match('/^\d{5}$/', $value);
         }, 'Zadejte platné PSČ (např. 12345).');
 
         $countryField = $form->addText('country', 'Země:')
@@ -163,13 +160,11 @@ class ClientsPresenter extends BasePresenter
             ->setHtmlAttribute('placeholder', 'email@firma.cz')
             ->setHtmlAttribute('maxlength', 254); // RFC limit
         $this->addSecurityFilters($emailField, 'email');
-        $this->addSecurityValidation($emailField, 'email');
 
         $phoneField = $form->addText('phone', 'Telefon:')
             ->setHtmlAttribute('placeholder', '+420 123 456 789')
             ->setHtmlAttribute('maxlength', 20);
         $this->addSecurityFilters($phoneField, 'phone');
-        $this->addSecurityValidation($phoneField, 'phone');
 
         $form->addSubmit('send', 'Uložit');
 
@@ -179,38 +174,48 @@ class ClientsPresenter extends BasePresenter
     }
 
     /**
-     * ✅ PLNĚ ZABEZPEČENÉ zpracování formuláře s detailním logováním
+     * ✅ XSS OCHRANA: Zpracování formuláře s bezpečnostní kontrolou
      */
     public function clientFormSucceeded(Form $form, \stdClass $data): void
     {
-        // ✅ NOVÉ: Kontrola XSS pokusů
-        if ($this->hasXssAttempts()) {
-            $attempts = $this->getXssAttempts();
-
-            $this->flashMessage(
-                'Formulář obsahuje nebezpečný obsah. Zkontrolujte zadané údaje.',
-                'danger'
-            );
-
-            // Podrobné logování pro admina
-            $this->securityLogger->logSecurityEvent(
-                'form_xss_blocked',
-                'Formulář klienta byl zablokován kvůli XSS pokusu',
-                [
-                    'attempts' => $attempts,
-                    'user_id' => $this->getUser()->getId(),
-                    'client_id' => $this->getParameter('id'),
-                    'form_data_preview' => array_map(function ($value) {
-                        return is_string($value) ? SecurityValidator::safeLogString($value, 30) : $value;
-                    }, (array)$data)
-                ]
-            );
-
-            return; // Zastavíme zpracování
+        // ✅ XSS OCHRANA: Základní kontrola XSS pokusů ve formulářových datech
+        $xssDetected = false;
+        foreach ((array)$data as $key => $value) {
+            if (is_string($value) && SecurityValidator::detectXssAttempt($value)) {
+                $xssDetected = true;
+                
+                // Logování XSS pokusu
+                $this->securityLogger->logSecurityEvent(
+                    'xss_attempt_client_form',
+                    "XSS pokus v poli '{$key}' formuláře klienta",
+                    [
+                        'field' => $key,
+                        'client_ip' => $this->getHttpRequest()->getRemoteAddress(),
+                        'user_id' => $this->getUser()->getId(),
+                        'value_preview' => SecurityValidator::safeLogString($value, 50)
+                    ]
+                );
+                break;
+            }
         }
 
-        // ✅ Sanitizace dat před uložením
-        $sanitizedData = $this->sanitizeFormData((array)$data);
+        if ($xssDetected) {
+            $this->flashMessage(
+                'Formulář obsahuje nebezpečný obsah (HTML/JavaScript kód). Zkontrolujte zadané údaje a odešlete formulář znovu.',
+                'danger'
+            );
+            return;
+        }
+
+        // ✅ XSS OCHRANA: Sanitizace dat před uložením
+        $sanitizedData = [];
+        foreach ((array)$data as $key => $value) {
+            if (is_string($value)) {
+                $sanitizedData[$key] = SecurityValidator::sanitizeString($value);
+            } else {
+                $sanitizedData[$key] = $value;
+            }
+        }
 
         // ✅ NOVÉ: Dodatečná validace sanitizovaných dat
         $validationErrors = $this->validateClientData($sanitizedData);
@@ -225,6 +230,7 @@ class ClientsPresenter extends BasePresenter
 
         try {
             if ($id) {
+                // EDITACE - save() vrací počet aktualizovaných řádků, ne objekt
                 $this->clientsManager->save((object)$sanitizedData, $id);
                 $this->flashMessage('Klient byl úspěšně aktualizován', 'success');
 
@@ -234,7 +240,10 @@ class ClientsPresenter extends BasePresenter
                     "Klient ID:{$id} byl aktualizován uživatelem {$this->getUser()->getIdentity()->username}",
                     ['client_id' => $id, 'user_id' => $this->getUser()->getId()]
                 );
+                
+                $this->redirect('default');
             } else {
+                // NOVÝ KLIENT
                 $newClient = $this->clientsManager->save((object)$sanitizedData);
                 $newClientId = $newClient->id ?? 'unknown';
 
@@ -246,10 +255,14 @@ class ClientsPresenter extends BasePresenter
                     "Nový klient byl vytvořen uživatelem {$this->getUser()->getIdentity()->username}",
                     ['client_id' => $newClientId, 'user_id' => $this->getUser()->getId()]
                 );
+                
+                $this->redirect('default');
             }
-
-            $this->redirect('default');
+        } catch (Nette\Application\AbortException $e) {
+            // ✅ OPRAVA: AbortException (redirect) necháme projít!
+            throw $e;
         } catch (\Exception $e) {
+            // Pouze skutečné chyby
             $this->flashMessage('Chyba při ukládání klienta: ' . $e->getMessage(), 'danger');
 
             // Logování chyby
@@ -267,41 +280,52 @@ class ClientsPresenter extends BasePresenter
     }
 
     /**
-     * ✅ NOVÉ: Dodatečná validace dat klienta
+     * ✅ NOVÉ: Zjednodušená validace dat klienta
      */
     private function validateClientData(array $data): array
     {
         $errors = [];
 
-        // Validace IČO
-        if (!empty($data['ic']) && !SecurityValidator::validateICO($data['ic'])) {
-            $errors[] = 'IČO má neplatný formát nebo kontrolní součet.';
+        // Validace IČO - základní formát
+        if (!empty($data['ic'])) {
+            $ic = preg_replace('/\D/', '', $data['ic']); // Pouze číslice
+            if (strlen($ic) < 7 || strlen($ic) > 8) {
+                $errors[] = 'IČO musí mít 7 nebo 8 číslic.';
+            }
         }
 
-        // Validace DIČ
-        if (!empty($data['dic']) && !SecurityValidator::validateDIC($data['dic'])) {
-            $errors[] = 'DIČ má neplatný formát.';
+        // Validace DIČ - základní formát
+        if (!empty($data['dic'])) {
+            $dic = trim($data['dic']);
+            if (!preg_match('/^(CZ)?[0-9]{8,12}$/', $dic)) {
+                $errors[] = 'DIČ má neplatný formát.';
+            }
         }
 
-        // Validace emailu
-        if (!empty($data['email']) && !SecurityValidator::validateEmail($data['email'])) {
-            $errors[] = 'E-mailová adresa má neplatný formát.';
+        // Validace emailu - jen pokud je vyplněn
+        if (!empty($data['email'])) {
+            if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'E-mailová adresa má neplatný formát.';
+            }
         }
 
-        // Validace telefonu
-        if (!empty($data['phone']) && !SecurityValidator::validatePhoneNumber($data['phone'])) {
-            $errors[] = 'Telefonní číslo má neplatný formát.';
+        // Validace PSČ - základní formát pro ČR
+        if (!empty($data['zip'])) {
+            $zip = preg_replace('/\s/', '', $data['zip']); // Odstranit mezery
+            if (!preg_match('/^\d{5}$/', $zip)) {
+                $errors[] = 'PSČ musí mít formát 12345.';
+            }
         }
 
-        // Validace názvu společnosti
+        // Validace názvu společnosti - nesmí být prázdný a nesmí obsahovat jen mezery
         if (!empty($data['name'])) {
-            $nameErrors = SecurityValidator::validateCompanyName($data['name']);
-            $errors = array_merge($errors, $nameErrors);
-        }
-
-        // Validace PSČ
-        if (!empty($data['zip']) && !SecurityValidator::validatePostalCode($data['zip'], 'CZ')) {
-            $errors[] = 'PSČ má neplatný formát.';
+            $name = trim($data['name']);
+            if (strlen($name) < 2) {
+                $errors[] = 'Název společnosti musí mít alespoň 2 znaky.';
+            }
+            if (strlen($name) > 255) {
+                $errors[] = 'Název společnosti je příliš dlouhý (max. 255 znaků).';
+            }
         }
 
         return $errors;
@@ -377,11 +401,25 @@ class ClientsPresenter extends BasePresenter
             ->count();
     }
 
-
+    /**
+     * Vytvoří správný tvar slova "faktura" podle počtu
+     * @param int $count Počet faktur
+     * @return string Správný tvar
+     */
+    public function getInvoiceCountText(int $count): string
+    {
+        if ($count == 1) {
+            return "1 fakturu";
+        } elseif ($count >= 2 && $count <= 4) {
+            return "{$count} faktury";
+        } else {
+            return "{$count} faktur";
+        }
+    }
 
     /**
      * Vyhledá firmu v ARESu podle IČO
-     * VRÁCENA PŮVODNÍ FUNKČNÍ VERZE
+     * ✅ PŮVODNÍ FUNKČNÍ VERZE s XSS ochranou
      */
     public function handleAresLookup(): void
     {
@@ -410,8 +448,10 @@ class ClientsPresenter extends BasePresenter
                 exit;
             }
 
+            // ✅ XSS OCHRANA: Sanitizace IČO
+            $ico = SecurityValidator::sanitizeInvoiceNumber(trim($ico));
+            
             // Validace IČO
-            $ico = trim($ico);
             if (!preg_match('/^\d{7,8}$/', $ico)) {
                 echo json_encode(['error' => 'Neplatné IČO. Zadejte 7 nebo 8 číslic.']);
                 exit;
@@ -421,7 +461,9 @@ class ClientsPresenter extends BasePresenter
             $result = $this->aresService->getCompanyInfo($ico);
 
             if ($result) {
-                echo json_encode(['success' => true, 'data' => $result]);
+                // ✅ XSS OCHRANA: Sanitizace dat z ARES před odesláním
+                $sanitizedResult = SecurityValidator::sanitizeFormData((array)$result);
+                echo json_encode(['success' => true, 'data' => $sanitizedResult]);
             } else {
                 echo json_encode(['error' => 'Firma s tímto IČO nebyla v ARESu nalezena.']);
             }
