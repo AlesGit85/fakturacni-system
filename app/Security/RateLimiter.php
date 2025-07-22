@@ -44,7 +44,7 @@ class RateLimiter
             'lockout' => 3600,      // blokování na 1 hodinu
         ],
         'user_creation' => [
-            'attempts' => 3,        // 3 pokusy o vytvoření uživatele
+            'attempts' => 5,        // 3 pokusy o vytvoření uživatele
             'window' => 1800,       // za 30 minut
             'lockout' => 3600,      // blokování na 1 hodinu
         ]

@@ -234,3 +234,33 @@
 [2025-07-22 07-34-44] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
 [2025-07-22 07-34-44] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/ 
 [2025-07-22 07-34-44] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/ 
+[2025-07-22 07-34-52] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/ 
+[2025-07-22 07-34-52] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/ 
+[2025-07-22 07-34-52] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-07-22 07-34-52] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/ 
+[2025-07-22 07-34-56] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/users/profile 
+[2025-07-22 07-34-56] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/users/profile 
+[2025-07-22 07-34-56] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/users/profile 
+[2025-07-22 07-34-56] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/users/profile 
+[2025-07-22 07-35-02] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/users/profile?_fid=gqne 
+[2025-07-22 07-35-02] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/users/profile?_fid=gqne 
+[2025-07-22 07-35-02] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/users/profile?_fid=gqne 
+[2025-07-22 07-35-02] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/users/profile?_fid=gqne 
+[2025-07-22 07-35-04] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/ 
+[2025-07-22 07-35-04] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/ 
+[2025-07-22 07-35-04] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-07-22 07-35-04] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/ 
+[2025-07-22 07-53-49] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Module info úspěšně načteno pro test_module  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 07-53-49] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/users/rate-limit-stats 
