@@ -43,6 +43,35 @@ abstract class BasePresenter extends Presenter
     /** @var array Pole pro XSS logování */
     private array $xssAttempts = [];
 
+    /**
+     * ✅ NOVÉ: CSRF ochrana - proměnné
+     */
+    private string $csrfTokenSessionKey = '_csrf_token';
+
+    /**
+     * ✅ NOVÉ: Seznam handlerů/akcí které vyžadují CSRF token
+     */
+    protected array $csrfProtectedActions = [
+        'handleMarkAsPaid',
+        'handleMarkAsCreated', 
+        'handleDelete',
+        'handleAresLookup',
+        'actionDelete',
+        'actionDeleteLogo',
+        'actionDeleteSignature'
+    ];
+
+    /**
+     * ✅ NOVÉ: Seznam akcí, které jsou vždy povolené bez CSRF (čtení dat)
+     */
+    protected array $csrfExemptActions = [
+        'actionDefault',
+        'renderDefault',
+        'renderShow',
+        'renderAdd',
+        'renderEdit'
+    ];
+
     public function injectSecurityLogger(SecurityLogger $securityLogger): void
     {
         $this->securityLogger = $securityLogger;
@@ -66,6 +95,11 @@ abstract class BasePresenter extends Presenter
     public function startup(): void
     {
         parent::startup();
+
+        // ✅ NOVÉ: CSRF ochrana PŘED rate limitingem
+        if ($this->requiresLogin) {
+            $this->checkGlobalCsrfProtection();
+        }
 
         // ✅ NOVÉ: Rate Limiting kontrola PŘED všemi ostatními kontrolami
         if (!$this->disableRateLimit && $this->requiresLogin) {
@@ -126,6 +160,143 @@ abstract class BasePresenter extends Presenter
                 }
             }
         }
+    }
+
+    /**
+     * ✅ NOVÉ: Globální CSRF ochrana pro celou aplikaci
+     */
+    private function checkGlobalCsrfProtection(): void
+    {
+        $httpRequest = $this->getHttpRequest();
+        $method = $httpRequest->getMethod();
+        $actionName = $this->getAction();
+
+        // Jen pro nebezpečné HTTP metody
+        if (!in_array($method, ['POST', 'PUT', 'PATCH', 'DELETE'])) {
+            return;
+        }
+
+        // Kontrola, zda je akce v seznamu exemptních akcí (obvykle GET akce)
+        $fullActionName = "action{$actionName}";
+        if (in_array($fullActionName, $this->csrfExemptActions)) {
+            return;
+        }
+
+        // Kontrola pro handlery - zjistíme, zda se jedná o signal
+        $signal = $this->getSignal();
+        if ($signal) {
+            $handlerName = 'handle' . ucfirst($signal[1]);
+            
+            // Pokud handler není v seznamu chráněných, nemusíme kontrolovat CSRF
+            if (!in_array($handlerName, $this->csrfProtectedActions)) {
+                return;
+            }
+        } else {
+            // Pro běžné akce kontrolujeme pouze ty v seznamu chráněných
+            if (!in_array($fullActionName, $this->csrfProtectedActions)) {
+                return;
+            }
+        }
+
+        // ✅ KLÍČOVÁ ČÁST: Kontrola CSRF tokenu
+        $this->validateCsrfToken();
+    }
+
+    /**
+     * ✅ NOVÉ: Validace CSRF tokenu
+     */
+    private function validateCsrfToken(): void
+    {
+        $httpRequest = $this->getHttpRequest();
+        
+        // Získáme token z různých zdrojů (POST data, headers, GET parametry)
+        $submittedToken = null;
+        
+        // 1. Pokusíme se najít token v POST datech
+        $postData = $httpRequest->getPost();
+        if (isset($postData['_csrf_token'])) {
+            $submittedToken = $postData['_csrf_token'];
+        }
+        
+        // 2. Pokud ne, zkusíme hlavičku X-CSRF-Token (pro AJAX)
+        if (!$submittedToken) {
+            $submittedToken = $httpRequest->getHeader('X-CSRF-Token');
+        }
+        
+        // 3. Pokud ne, zkusíme GET parametr (pro odkazy)
+        if (!$submittedToken) {
+            $submittedToken = $httpRequest->getQuery('_csrf_token');
+        }
+
+        // Získáme očekávaný token ze session
+        $expectedToken = $this->getCsrfToken();
+
+        // Validace
+        if (!$submittedToken || !hash_equals($expectedToken, $submittedToken)) {
+            // Logování CSRF pokusu
+            $this->logCsrfAttempt($submittedToken);
+            
+            // Chyba pro uživatele
+            $this->flashMessage(
+                'Bezpečnostní token není platný nebo vypršel. Obnovte stránku a zkuste akci znovu.',
+                'danger'
+            );
+            
+            // Přesměrování zpět
+            $this->redirect('this');
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Získání nebo vytvoření CSRF tokenu
+     */
+    public function getCsrfToken(): string
+    {
+        $session = $this->getSession();
+        $section = $session->getSection('csrf');
+
+        if (!isset($section->token)) {
+            // Vytvoříme nový token
+            $section->token = bin2hex(random_bytes(32));
+        }
+
+        return $section->token;
+    }
+
+    /**
+     * ✅ NOVÉ: Obnovení CSRF tokenu (po úspěšném formuláři)
+     */
+    public function regenerateCsrfToken(): void
+    {
+        $session = $this->getSession();
+        $section = $session->getSection('csrf');
+        $section->token = bin2hex(random_bytes(32));
+    }
+
+    /**
+     * ✅ NOVÉ: Logování CSRF pokusu
+     */
+    private function logCsrfAttempt(?string $submittedToken): void
+    {
+        $clientIP = $this->rateLimiter->getClientIP();
+        $userAgent = $this->getHttpRequest()->getHeader('User-Agent') ?? 'unknown';
+        $userId = $this->getUser()->isLoggedIn() ? $this->getUser()->getId() : null;
+
+        $this->securityLogger->logSecurityEvent(
+            'csrf_attack',
+            "CSRF útok z IP {$clientIP}",
+            [
+                'presenter' => $this->getName(),
+                'action' => $this->getAction(),
+                'signal' => $this->getSignal() ? $this->getSignal()[1] : null,
+                'submitted_token' => $submittedToken ? 'exists_but_invalid' : 'missing',
+                'client_ip' => $clientIP,
+                'user_agent' => $userAgent,
+                'user_id' => $userId,
+                'referer' => $this->getHttpRequest()->getReferer(),
+                'method' => $this->getHttpRequest()->getMethod()
+            ]
+        );
     }
 
     /**
@@ -574,6 +745,17 @@ abstract class BasePresenter extends Presenter
         // ✅ NOVÉ: Rate Limiting informace pro šablony
         if (!$this->disableRateLimit) {
             $this->template->add('rateLimitInfo', $this->getRateLimitInfo());
+        }
+
+        // ✅ NOVÉ: CSRF token pro šablony
+        if ($this->requiresLogin && $this->getUser()->isLoggedIn()) {
+            $this->template->add('csrfToken', $this->getCsrfToken());
+            
+            // Helper funkce pro vytváření bezpečných odkazů
+            $this->template->addFilter('csrfLink', function (string $destination, array $args = []): string {
+                $args['_csrf_token'] = $this->getCsrfToken();
+                return $this->link($destination, $args);
+            });
         }
 
         // Přidání helper funkcí pro skloňování do šablony

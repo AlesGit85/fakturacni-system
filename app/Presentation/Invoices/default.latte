@@ -94,7 +94,7 @@
                 {foreach $invoices as $invoice}
                 <tr class="data-row {if $invoice->status == 'overdue'}row-danger{elseif $invoice->status == 'paid'}row-success{/if}">
                     <td>
-                        {* ✅ XSS OCHRANA: Escapování čísla faktury *}
+                        {* ✅ XSS OCHRANA: Escapování čísla faktury - OPRAVENO: používám 'number' místo 'invoice_number' *}
                         <strong>{$invoice->number|escape}</strong>
                     </td>
                     <td>
@@ -168,27 +168,27 @@
                                     </button>
                                     {* ✅ BEZPEČNÉ: ID je číselná hodnota automaticky escapovaná *}
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{$invoice->id}">
-                                        {* Změny stavů - účetní a admin *}
+                                        {* ✅ CSRF OCHRANA: Změny stavů - účetní a admin *}
                                         {if $invoice->status != 'paid'}
                                             <li>
-                                                {* ✅ BEZPEČNÉ: Nette link s ID a statický JavaScript *}
-                                                <a n:href="markAsPaid! $invoice->id" class="dropdown-item" onclick="return confirm('Označit fakturu jako zaplacenou?')">
+                                                {* ✅ NOVÉ: CSRF token přidán do odkazu *}
+                                                <a href="{link markAsPaid! $invoice->id, '_csrf_token' => $csrfToken}" class="dropdown-item" onclick="return confirm('Označit fakturu jako zaplacenou?')">
                                                     <i class="bi bi-check-circle text-success me-2"></i> Označit jako zaplacenou
                                                 </a>
                                             </li>
                                         {else}
                                             <li>
-                                                {* ✅ BEZPEČNÉ: Nette link s ID a statický JavaScript *}
-                                                <a n:href="markAsCreated! $invoice->id" class="dropdown-item" onclick="return confirm('Označit fakturu jako nezaplacenou?')">
+                                                {* ✅ NOVÉ: CSRF token přidán do odkazu *}
+                                                <a href="{link markAsCreated! $invoice->id, '_csrf_token' => $csrfToken}" class="dropdown-item" onclick="return confirm('Označit fakturu jako nezaplacenou?')">
                                                     <i class="bi bi-arrow-counterclockwise me-2"></i> Zrušit zaplaceno
                                                 </a>
                                             </li>
                                         {/if}
-                                        {* Mazání - pouze admin *}
+                                        {* ✅ CSRF OCHRANA: Mazání - pouze admin *}
                                         {if $isUserAdmin}
                                             <li>
-                                                {* ✅ BEZPEČNÉ: Nette link s ID a statický JavaScript *}
-                                                <a n:href="delete $invoice->id" class="dropdown-item text-danger" onclick="return confirm('Opravdu chcete smazat tuto fakturu?')">
+                                                {* ✅ NOVÉ: CSRF token přidán do odkazu *}
+                                                <a href="{link delete $invoice->id, '_csrf_token' => $csrfToken}" class="dropdown-item text-danger" onclick="return confirm('Opravdu chcete smazat tuto fakturu?')">
                                                     <i class="bi bi-trash me-2"></i> Smazat fakturu
                                                 </a>
                                             </li>
