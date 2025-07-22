@@ -10,7 +10,7 @@ use Nette;
  * Service pro automatické čištění starých rate limiting záznamů
  * Měl by být spuštěn přes cron nebo periodicky
  */
-class RateLimitCleaner
+class RateLimiterCleaner
 {
     use Nette\SmartObject;
 

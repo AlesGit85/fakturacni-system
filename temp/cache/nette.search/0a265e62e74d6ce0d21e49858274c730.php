@@ -142,6 +142,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
       1 => 1753189870,
     ),
+    'App\\Presentation\\Security\\SecurityPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
+      1 => 1753218190,
+    ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
@@ -167,10 +172,10 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiter.php',
       1 => 1753170997,
     ),
-    'App\\Security\\RateLimitCleaner' => 
+    'App\\Security\\RateLimiterCleaner' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiterCleaner.php',
-      1 => 1752848725,
+      1 => 1753218352,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
@@ -186,6 +191,11 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityValidator.php',
       1 => 1753164150,
+    ),
+    'App\\Security\\SQLSecurityAudit' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SQLSecurityAudit.php',
+      1 => 1753218072,
     ),
   ),
   1 => 

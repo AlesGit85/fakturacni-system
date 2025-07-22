@@ -142,6 +142,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
       1 => 1753189870,
     ),
+    'App\\Presentation\\Security\\SecurityPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
+      1 => 1753218543,
+    ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
@@ -167,10 +172,10 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiter.php',
       1 => 1753170997,
     ),
-    'App\\Security\\RateLimitCleaner' => 
+    'App\\Security\\RateLimiterCleaner' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiterCleaner.php',
-      1 => 1752848725,
+      1 => 1753218352,
     ),
     'App\\Security\\SecurityHeaders' => 
     array (
@@ -187,35 +192,26 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityValidator.php',
       1 => 1753164150,
     ),
+    'App\\Security\\SQLSecurityAudit' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SQLSecurityAudit.php',
+      1 => 1753218072,
+    ),
   ),
   1 => 
   array (
     'Nette\\Bridges\\Assets\\DIExtension' => 3,
     'null' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
-    'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Users\\UsersRateLimitStatsTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
-    'App\\Presentation\\Users\\UsersAddTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsEditTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsAddTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsShowTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 2,
-    'App\\Presentation\\Invoices\\InvoicesDeleteTemplate' => 1,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityDefaultTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityTemplate' => 3,
+    'SQLSecurityAudit' => 1,
+    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 3,
+    'App\\Presentation\\Sign\\SignInTemplate' => 2,
+    'App\\Presentation\\Sign\\SignTemplate' => 2,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
+    'App\\Presentation\\Home\\HomeTemplate' => 1,
+    'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 1,
   ),
   2 => 
   array (

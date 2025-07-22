@@ -1,18 +1,59 @@
+# =====================================================
+# SLUŽBY APLIKACE - services.neon
+# =====================================================
+
 services:
+	# Router
 	router: App\Core\RouterFactory::createRouter
+	
+	# Authenticator
+	authenticator: App\Model\UserManager
+
+	# =====================================================
+	# CORE SLUŽBY
+	# =====================================================
+	
+	# SecurityLogger
+	- App\Security\SecurityLogger
+
+	# RateLimiter  
+	- App\Security\RateLimiter
+	
+	# RateLimiterCleaner - OPRAVENO: správný název třídy (s "r")
+	- App\Security\RateLimiterCleaner
+
+	# ModuleManager - OPRAVENO: App\Model\ModuleManager (ne App\Modules\ModuleManager)
+	- App\Model\ModuleManager
+
+	# SecurityValidator
+	- App\Security\SecurityValidator
+
+	# =====================================================
+	# MANAGERY
+	# =====================================================
+	
+	# UserManager už je registrovaný jako authenticator výše
+	- App\Model\InvoicesManager  
 	- App\Model\ClientsManager
-	- App\Model\InvoicesManager
 	- App\Model\CompanyManager
 	- App\Model\QrPaymentService
-	- App\Security\SecurityLogger
 	- App\Model\AresService
-	- App\Model\ModuleManager
 	- App\Model\EmailService
 	- App\Model\TenantManager
-	- App\Security\SecurityValidator
-	- App\Security\RateLimiter
-	- App\Security\RateLimitCleaner
-	authenticator: App\Model\UserManager
+
+	# =====================================================
+	# SQL SECURITY AUDIT - NOVÉ!
+	# =====================================================
+
+	# SQL Security Audit Tool - webová verze (autowiring databáze)
+	sqlSecurityAudit: App\Security\SQLSecurityAudit
+
+	# Explicitní registrace Security Presenteru - OPRAVENO: správný namespace
+	securityPresenter: App\Presentation\Security\SecurityPresenter(@sqlSecurityAudit)
+
+	# =====================================================
+	# AUTO-DISCOVERY
+	# =====================================================
 
 search:
 	-	in: %appDir%

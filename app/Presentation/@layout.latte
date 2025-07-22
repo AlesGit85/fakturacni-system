@@ -109,6 +109,30 @@
 						</a>
 					</li>
 					
+					{* NOVÉ: Bezpečnostní nástroje pro normální adminy *}
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="securityDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="bi bi-shield-lock"></i><span class="nav-text">Bezpečnost</span>
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="securityDropdown">
+							<li>
+								<a class="dropdown-item" n:href="Security:default">
+									<i class="bi bi-house-door me-2"></i>Přehled nástrojů
+								</a>
+							</li>
+							<li>
+								<a class="dropdown-item" n:href="Security:sqlAudit">
+									<i class="bi bi-search me-2"></i>SQL Security Audit
+								</a>
+							</li>
+							<li>
+								<a class="dropdown-item" n:href="Security:dashboard">
+									<i class="bi bi-speedometer2 me-2"></i>Security Dashboard
+								</a>
+							</li>
+						</ul>
+					</li>
+					
 					{* Správa modulů - pouze pro normální admina *}
 					<li class="nav-item">
 						<a class="nav-link" n:href="ModuleAdmin:default">
@@ -123,6 +147,36 @@
 						<a class="nav-link" n:href=":Settings:default">
 							<i class="bi bi-gear"></i><span class="nav-text">Nastavení</span>
 						</a>
+					</li>
+					
+					{* NOVÉ: Bezpečnostní nástroje pro super admina *}
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="securitySuperDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="bi bi-shield-lock"></i><span class="nav-text">Bezpečnost</span>
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="securitySuperDropdown">
+							<li>
+								<a class="dropdown-item" n:href="Security:default">
+									<i class="bi bi-house-door me-2"></i>Přehled nástrojů
+								</a>
+							</li>
+							<li>
+								<a class="dropdown-item" n:href="Security:sqlAudit">
+									<i class="bi bi-search me-2"></i>SQL Security Audit
+								</a>
+							</li>
+							<li>
+								<a class="dropdown-item" n:href="Security:dashboard">
+									<i class="bi bi-speedometer2 me-2"></i>Security Dashboard
+								</a>
+							</li>
+							<li><hr class="dropdown-divider"></li>
+							<li>
+								<a class="dropdown-item" n:href="Security:rateLimitStats">
+									<i class="bi bi-bar-chart me-2"></i>Rate Limit Stats
+								</a>
+							</li>
+						</ul>
 					</li>
 					
 					{* Správa modulů - dropdown s více volbami pro super admina *}
