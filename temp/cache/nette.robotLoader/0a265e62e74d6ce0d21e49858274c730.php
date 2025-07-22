@@ -140,7 +140,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1752219373,
+      1 => 1753189870,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -190,8 +190,8 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 2,
-    'null' => 2,
+    'Nette\\Bridges\\Assets\\DIExtension' => 3,
+    'null' => 3,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
     'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
@@ -205,7 +205,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 2,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 3,
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
@@ -215,6 +215,7 @@ return array (
     'App\\Presentation\\Clients\\ClientsShowTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 2,
     'App\\Presentation\\Invoices\\InvoicesDeleteTemplate' => 1,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
   ),
   2 => 
   array (

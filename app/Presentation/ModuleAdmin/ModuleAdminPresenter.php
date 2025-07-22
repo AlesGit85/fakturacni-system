@@ -10,6 +10,7 @@ use App\Model\ModuleManager;
 use App\Model\InvoicesManager;
 use App\Model\CompanyManager;
 use App\Presentation\BasePresenter;
+use App\Security\SecurityValidator; // ✅ PŘIDÁNO: Import SecurityValidator
 use Tracy\ILogger;
 
 final class ModuleAdminPresenter extends BasePresenter
@@ -103,9 +104,9 @@ final class ModuleAdminPresenter extends BasePresenter
         try {
             $this->logger->log("=== ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===", ILogger::INFO);
             
-            // Čteme parametry přímo z HTTP požadavku
-            $moduleId = $this->getHttpRequest()->getQuery('moduleId');
-            $action = $this->getHttpRequest()->getQuery('action') ?: 'getAllData';
+            // ✅ OPRAVENO: Sanitizace parametrů hned při čtení
+            $moduleId = SecurityValidator::sanitizeString($this->getHttpRequest()->getQuery('moduleId') ?? '');
+            $action = SecurityValidator::sanitizeString($this->getHttpRequest()->getQuery('action') ?? 'getAllData');
             
             $this->logger->log("AJAX parametry - moduleId: '$moduleId', action: '$action'", ILogger::INFO);
 
@@ -114,6 +115,26 @@ final class ModuleAdminPresenter extends BasePresenter
                 $this->sendJson([
                     'success' => false,
                     'error' => 'Nebyl zadán moduleId'
+                ]);
+                return;
+            }
+
+            // ✅ PŘIDÁNO: Základní validace moduleId
+            if (!preg_match('/^[a-zA-Z0-9_-]+$/', $moduleId)) {
+                $this->logger->log("CHYBA: Neplatný formát moduleId: '$moduleId'", ILogger::ERROR);
+                $this->sendJson([
+                    'success' => false,
+                    'error' => 'Neplatný formát moduleId'
+                ]);
+                return;
+            }
+
+            // ✅ PŘIDÁNO: Základní validace action
+            if (!preg_match('/^[a-zA-Z0-9_]+$/', $action)) {
+                $this->logger->log("CHYBA: Neplatný formát action: '$action'", ILogger::ERROR);
+                $this->sendJson([
+                    'success' => false,
+                    'error' => 'Neplatný formát action'
                 ]);
                 return;
             }
@@ -162,7 +183,7 @@ final class ModuleAdminPresenter extends BasePresenter
             // Příprava závislostí pro modul
             $dependencies = $this->prepareDependencies();
             
-            // Příprava parametrů
+            // ✅ OPRAVENO: Bezpečná příprava parametrů
             $parameters = $this->prepareParameters();
             
             // Přidání user_id pokud je uživatel přihlášen
@@ -283,26 +304,54 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * NOVÁ METODA: Připraví parametry z HTTP požadavku
+     * ✅ OPRAVENÁ METODA: Bezpečná příprava parametrů z HTTP požadavku
      */
     private function prepareParameters(): array
     {
         $httpRequest = $this->getHttpRequest();
         
-        // Získáme všechny query parametry kromě základních
+        // ✅ OPRAVENO: Bezpečné získání parametrů s sanitizací
         $parameters = [];
+        
+        // Query parametry
         foreach ($httpRequest->getQuery() as $key => $value) {
             if (!in_array($key, ['do', 'moduleId', 'action'])) {
-                $parameters[$key] = $value;
+                // ✅ PŘIDÁNO: Sanitizace klíče i hodnoty
+                $sanitizedKey = SecurityValidator::sanitizeString($key);
+                $sanitizedValue = is_string($value) ? SecurityValidator::sanitizeString($value) : $value;
+                
+                // ✅ PŘIDÁNO: Základní validace klíče
+                if (preg_match('/^[a-zA-Z0-9_]+$/', $sanitizedKey)) {
+                    $parameters[$sanitizedKey] = $sanitizedValue;
+                } else {
+                    $this->logger->log("Přeskakuji parametr s neplatným klíčem: '$key'", ILogger::WARNING);
+                }
             }
         }
         
-        // Přidáme také POST parametry pokud existují
+        // POST parametry
         foreach ($httpRequest->getPost() as $key => $value) {
-            $parameters[$key] = $value;
+            // ✅ PŘIDÁNO: Sanitizace klíče i hodnoty
+            $sanitizedKey = SecurityValidator::sanitizeString($key);
+            $sanitizedValue = is_string($value) ? SecurityValidator::sanitizeString($value) : $value;
+            
+            // ✅ PŘIDÁNO: Základní validace klíče
+            if (preg_match('/^[a-zA-Z0-9_]+$/', $sanitizedKey)) {
+                $parameters[$sanitizedKey] = $sanitizedValue;
+            } else {
+                $this->logger->log("Přeskakuji POST parametr s neplatným klíčem: '$key'", ILogger::WARNING);
+            }
         }
         
-        $this->logger->log("Připravené parametry: " . json_encode($parameters), ILogger::INFO);
+        // ✅ PŘIDÁNO: Logování pouze bezpečných parametrů
+        $safeParameters = [];
+        foreach ($parameters as $key => $value) {
+            $safeParameters[$key] = is_string($value) ? 
+                SecurityValidator::safeLogString($value, 50) : 
+                $value;
+        }
+        
+        $this->logger->log("Připravené parametry: " . json_encode($safeParameters), ILogger::INFO);
         
         return $parameters;
     }
@@ -414,6 +463,15 @@ final class ModuleAdminPresenter extends BasePresenter
      */
     public function renderDetail(string $id): void
     {
+        // ✅ PŘIDÁNO: Sanitizace ID parametru
+        $id = SecurityValidator::sanitizeString($id);
+        
+        // ✅ PŘIDÁNO: Validace formátu ID
+        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $id)) {
+            $this->flashMessage('Neplatný formát ID modulu.', 'danger');
+            $this->redirect('default');
+        }
+
         // ZMĚNA: Používáme getAllInstalledModules místo getActiveModules
         $allModules = $this->moduleManager->getAllInstalledModules();
         if (!isset($allModules[$id])) {
@@ -830,6 +888,9 @@ final class ModuleAdminPresenter extends BasePresenter
      */
     public function handleToggleModule(string $id): void
     {
+        // ✅ PŘIDÁNO: Sanitizace parametru
+        $id = SecurityValidator::sanitizeString($id);
+        
         if (!$this->isAdmin()) {
             $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
             $this->redirect('this');
@@ -862,6 +923,9 @@ final class ModuleAdminPresenter extends BasePresenter
      */
     public function handleUninstallModule(string $id): void
     {
+        // ✅ PŘIDÁNO: Sanitizace parametru
+        $id = SecurityValidator::sanitizeString($id);
+        
         if (!$this->isAdmin()) {
             $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
             $this->redirect('this');
@@ -894,6 +958,9 @@ final class ModuleAdminPresenter extends BasePresenter
      */
     public function handleToggleUserModule(string $moduleId, int $userId): void
     {
+        // ✅ PŘIDÁNO: Sanitizace parametru
+        $moduleId = SecurityValidator::sanitizeString($moduleId);
+        
         if (!$this->isSuperAdmin()) {
             $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
             $this->redirect('users');
@@ -921,6 +988,9 @@ final class ModuleAdminPresenter extends BasePresenter
      */
     public function handleDeleteUserModule(string $moduleId, int $userId): void
     {
+        // ✅ PŘIDÁNO: Sanitizace parametru
+        $moduleId = SecurityValidator::sanitizeString($moduleId);
+        
         if (!$this->isSuperAdmin()) {
             $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
             $this->redirect('users');
