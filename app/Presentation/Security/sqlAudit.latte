@@ -157,11 +157,11 @@
                     <h5 class="mb-0">
                         <i class="bi bi-list-ul me-2"></i>Všechny nalezené problémy
                     </h5>
-                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#allIssuesContent">
-                        <i class="bi bi-chevron-down"></i> Zobrazit/Skrýt
+                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#allIssuesCollapse">
+                        <i class="bi bi-eye"></i> Zobrazit/Skrýt
                     </button>
                 </div>
-                <div class="collapse" id="allIssuesContent">
+                <div class="collapse show" id="allIssuesCollapse">
                     <div class="card-body">
                         <div id="allIssuesList">
                             {* Zde se dynamicky načtou všechny problémy *}
@@ -172,19 +172,19 @@
         </div>
     </div>
 
-    {* Bezpečné dotazy - příklady *}
+    {* Bezpečné dotazy *}
     <div class="row mb-4" id="safeQueriesSection" style="display: none;">
         <div class="col-12">
             <div class="card border-0 shadow-sm border-start border-success border-4">
                 <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 text-success">
-                        <i class="bi bi-check-circle-fill me-2"></i>Příklady bezpečných dotazů
+                        <i class="bi bi-check-circle-fill me-2"></i>Bezpečné dotazy (ukázka)
                     </h5>
-                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#safeQueriesContent">
-                        <i class="bi bi-chevron-down"></i> Zobrazit/Skrýt
+                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#safeQueriesCollapse">
+                        <i class="bi bi-eye"></i> Zobrazit/Skrýt
                     </button>
                 </div>
-                <div class="collapse" id="safeQueriesContent">
+                <div class="collapse" id="safeQueriesCollapse">
                     <div class="card-body">
                         <div id="safeQueriesList">
                             {* Zde se dynamicky načtou bezpečné dotazy *}
@@ -195,13 +195,13 @@
         </div>
     </div>
 
-    {* Globální doporučení *}
+    {* Doporučení *}
     <div class="row mb-4" id="recommendationsSection" style="display: none;">
         <div class="col-12">
             <div class="card border-0 shadow-sm border-start border-info border-4">
                 <div class="card-header bg-white border-0">
                     <h5 class="mb-0 text-info">
-                        <i class="bi bi-lightbulb-fill me-2"></i>Globální doporučení
+                        <i class="bi bi-lightbulb-fill me-2"></i>Doporučení pro zlepšení bezpečnosti
                     </h5>
                 </div>
                 <div class="card-body">
@@ -212,17 +212,14 @@
             </div>
         </div>
     </div>
-
 </div>
 
-{* Error zobrazení *}
+{* Error stav *}
 <div id="auditError" class="alert alert-danger" style="display: none;">
     <i class="bi bi-exclamation-triangle me-2"></i>
-    <strong>Chyba při spuštění auditu:</strong>
-    <span id="auditErrorMessage"></span>
+    <strong>Chyba:</strong> <span id="auditErrorMessage"></span>
 </div>
 
-{* JavaScript *}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const runAuditBtn = document.getElementById('runAuditBtn');
@@ -232,30 +229,35 @@ document.addEventListener('DOMContentLoaded', function() {
     const auditError = document.getElementById('auditError');
     
     runAuditBtn.addEventListener('click', function() {
-        startSQLAudit();
+        runSqlAudit();
     });
     
-    function startSQLAudit() {
-        // Skryj úvod a zobraz loading
+    function runSqlAudit() {
+        // Skrýt úvodní info a error
         auditIntro.style.display = 'none';
         auditResults.style.display = 'none';
         auditError.style.display = 'none';
+        
+        // Zobrazit loading
         auditLoading.style.display = 'block';
         
-        // Animace progress baru
-        let progress = 0;
+        // Deaktivovat tlačítko
+        runAuditBtn.disabled = true;
+        runAuditBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Probíhá audit...';
+        
+        // Simulace progress baru
         const progressBar = document.getElementById('auditProgress');
+        let progress = 0;
         const progressInterval = setInterval(() => {
             progress += Math.random() * 10;
-            if (progress > 90) progress = 90;
+            if (progress >= 95) {
+                progress = 95;
+                clearInterval(progressInterval);
+            }
             progressBar.style.width = progress + '%';
-        }, 100);
+        }, 200);
         
-        // Disable tlačítko
-        runAuditBtn.disabled = true;
-        runAuditBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Běží audit...';
-        
-        // AJAX volání
+        // AJAX volání na server
         fetch('{link runSqlAudit!}', {
             method: 'POST',
             headers: {
@@ -353,38 +355,36 @@ document.addEventListener('DOMContentLoaded', function() {
             const severity = issue.safety_score < 3 ? 'danger' : 'warning';
             const severityText = issue.safety_score < 3 ? 'KRITICKÉ' : 'STŘEDNÍ';
             
-            const issueHtml = `
-                <div class="alert alert-${severity} mb-3">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <h6 class="alert-heading">
-                                <span class="badge bg-${severity} me-2">${severityText}</span>
-                                📁 ${issue.file}:${issue.line}
-                            </h6>
-                            <div class="bg-light p-2 rounded mb-2">
-                                <code style="color: #212529;">${escapeHtml(issue.query)}</code>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <strong>Problémy:</strong>
-                                    <ul class="mb-0">
-                                        ${issue.issues.map(i => `<li>${escapeHtml(i)}</li>`).join('')}
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <strong>Doporučení:</strong>
-                                    <ul class="mb-0">
-                                        ${issue.recommendations.map(r => `<li>${escapeHtml(r)}</li>`).join('')}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ms-3">
-                            <span class="badge bg-secondary">Skóre: ${issue.safety_score}/10</span>
-                        </div>
-                    </div>
-                </div>
-            `;
+            const issueHtml = '<div class="alert alert-' + severity + ' mb-3">' +
+                '<div class="d-flex justify-content-between align-items-start">' +
+                    '<div class="flex-grow-1">' +
+                        '<h6 class="alert-heading">' +
+                            '<span class="badge bg-' + severity + ' me-2">' + severityText + '</span>' +
+                            '📁 ' + issue.file + ':' + issue.line +
+                        '</h6>' +
+                        '<div class="bg-light p-2 rounded mb-2">' +
+                            '<code style="color: #212529;">' + escapeHtml(issue.query) + '</code>' +
+                        '</div>' +
+                        '<div class="row">' +
+                            '<div class="col-md-6">' +
+                                '<strong>Problémy:</strong>' +
+                                '<ul class="mb-0">' +
+                                    issue.issues.map(i => '<li>' + escapeHtml(i) + '</li>').join('') +
+                                '</ul>' +
+                            '</div>' +
+                            '<div class="col-md-6">' +
+                                '<strong>Doporučení:</strong>' +
+                                '<ul class="mb-0">' +
+                                    issue.recommendations.map(r => '<li>' + escapeHtml(r) + '</li>').join('') +
+                                '</ul>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="ms-3">' +
+                        '<span class="badge bg-secondary">Skóre: ' + issue.safety_score + '/10</span>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
             list.innerHTML += issueHtml;
         });
         
@@ -399,22 +399,19 @@ document.addEventListener('DOMContentLoaded', function() {
         issues.forEach((issue, index) => {
             const severity = issue.safety_score < 3 ? 'danger' : (issue.safety_score < 6 ? 'warning' : 'info');
             
-            const issueHtml = `
-                <div class="border-start border-${severity} border-3 p-3 mb-3 bg-light">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <strong>📁 ${issue.file}:${issue.line}</strong>
-                        <span class="badge bg-${severity}">Skóre: ${issue.safety_score}/10</span>
-                    </div>
-                    <div class="bg-white p-2 rounded mb-2">
-                        <code style="color: #212529; font-size: 0.9em;">${escapeHtml(issue.query)}</code>
-                    </div>
-                    ${issue.issues && issue.issues.length > 0 ? `
-                        <div class="small text-muted">
-                            <strong>Problémy:</strong> ${issue.issues.join(', ')}
-                        </div>
-                    ` : ''}
-                </div>
-            `;
+            const issueHtml = '<div class="border-start border-' + severity + ' border-3 p-3 mb-3 bg-light">' +
+                '<div class="d-flex justify-content-between align-items-center mb-2">' +
+                    '<strong>📁 ' + issue.file + ':' + issue.line + '</strong>' +
+                    '<span class="badge bg-' + severity + '">Skóre: ' + issue.safety_score + '/10</span>' +
+                '</div>' +
+                '<div class="bg-white p-2 rounded mb-2">' +
+                    '<code style="color: #212529; font-size: 0.9em;">' + escapeHtml(issue.query) + '</code>' +
+                '</div>' +
+                (issue.issues && issue.issues.length > 0 ? 
+                    '<div class="small text-muted">' +
+                        '<strong>Problémy:</strong> ' + issue.issues.join(', ') +
+                    '</div>' : '') +
+            '</div>';
             list.innerHTML += issueHtml;
         });
         
@@ -427,17 +424,15 @@ document.addEventListener('DOMContentLoaded', function() {
         
         list.innerHTML = '';
         queries.forEach((query, index) => {
-            const queryHtml = `
-                <div class="border-start border-success border-3 p-3 mb-3 bg-light">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <strong>📁 ${query.file}:${query.line}</strong>
-                        <span class="badge bg-success">Skóre: ${query.safety_score}/10</span>
-                    </div>
-                    <div class="bg-white p-2 rounded">
-                        <code style="color: #212529; font-size: 0.9em;">${escapeHtml(query.query)}</code>
-                    </div>
-                </div>
-            `;
+            const queryHtml = '<div class="border-start border-success border-3 p-3 mb-3 bg-light">' +
+                '<div class="d-flex justify-content-between align-items-center mb-2">' +
+                    '<strong>📁 ' + query.file + ':' + query.line + '</strong>' +
+                    '<span class="badge bg-success">Skóre: ' + query.safety_score + '/10</span>' +
+                '</div>' +
+                '<div class="bg-white p-2 rounded">' +
+                    '<code style="color: #212529; font-size: 0.9em;">' + escapeHtml(query.query) + '</code>' +
+                '</div>' +
+            '</div>';
             list.innerHTML += queryHtml;
         });
         
@@ -452,7 +447,7 @@ document.addEventListener('DOMContentLoaded', function() {
         recommendations.forEach(rec => {
             const isUrgent = rec.includes('URGENT');
             const className = isUrgent ? 'text-danger fw-bold' : 'text-dark';
-            list.innerHTML += `<li class="${className}"><i class="bi bi-lightbulb me-2"></i>${escapeHtml(rec)}</li>`;
+            list.innerHTML += '<li class="' + className + '"><i class="bi bi-lightbulb me-2"></i>' + escapeHtml(rec) + '</li>';
         });
         list.innerHTML += '</ul>';
         

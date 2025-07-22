@@ -1,0 +1,391 @@
+{* Rate Limiting Statistiky *}
+{block title}Rate Limiting Statistiky{/block}
+
+{block content}
+
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3 mb-0">📊 Rate Limiting Statistiky</h1>
+                <p class="text-muted mb-0">Monitoring a správa rate limiting systému</p>
+            </div>
+            <div>
+                <a href="{link Security:dashboard}" class="btn btn-outline-secondary me-2">
+                    <i class="bi bi-arrow-left"></i> Zpět na Dashboard
+                </a>
+                <button id="clearExpiredBtn" class="btn btn-warning">
+                    <i class="bi bi-trash"></i> Vyčistit expirované
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* Statistiky přehled *}
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="text-danger mb-2">
+                    <i class="bi bi-ban display-4"></i>
+                </div>
+                <h5 class="card-title">Aktuálně blokované</h5>
+                <div class="h3 text-danger">{$statistics['currently_blocked_ips'] ?? 0}</div>
+                <small class="text-muted">IP adres</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="text-info mb-2">
+                    <i class="bi bi-activity display-4"></i>
+                </div>
+                <h5 class="card-title">Pokusy za 24h</h5>
+                <div class="h3 text-info">{$statistics['attempts_last_24h'] ?? 0}</div>
+                <small class="text-muted">Celkem</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="text-warning mb-2">
+                    <i class="bi bi-exclamation-triangle display-4"></i>
+                </div>
+                <h5 class="card-title">Neúspěšné pokusy</h5>
+                <div class="h3 text-warning">{$statistics['failed_attempts_last_24h'] ?? 0}</div>
+                <small class="text-muted">Za 24h</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="text-success mb-2">
+                    <i class="bi bi-check-circle display-4"></i>
+                </div>
+                <h5 class="card-title">Úspěšnost</h5>
+                <div class="h3 text-success">{$statistics['success_rate'] ?? 0}%</div>
+                <small class="text-muted">Rate</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* Aktuálně blokované IP adresy *}
+{if count($blockedIPs) > 0}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-ban me-2 text-danger"></i>Aktuálně blokované IP adresy
+                </h5>
+                <span class="badge bg-danger">{count($blockedIPs)} aktivních</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>IP Adresa</th>
+                                <th>Akce</th>
+                                <th>Blokováno do</th>
+                                <th>Počet blokování</th>
+                                <th>Vytvořeno</th>
+                                <th>Akce</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $blockedIPs as $block}
+                            <tr>
+                                <td>
+                                    <code class="text-danger fw-bold">{$block->ip_address}</code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">{$block->action}</span>
+                                </td>
+                                <td>
+                                    {$block->blocked_until|date:'d.m.Y H:i:s'}
+                                    <br><small class="text-muted">
+                                        {if $block->blocked_until > (new DateTime())}
+                                            <span class="text-danger">Aktivní</span>
+                                        {else}
+                                            <span class="text-success">Expirované</span>
+                                        {/if}
+                                    </small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning text-dark">{$block->block_count}x</span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">{$block->created_at|date:'d.m.Y H:i'}</small>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-success clear-block-btn" 
+                                            data-ip="{$block->ip_address}" 
+                                            title="Odblokovat tuto IP">
+                                        <i class="bi bi-unlock"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{else}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm border-start border-success border-4">
+            <div class="card-body text-center py-5">
+                <div class="text-success mb-3">
+                    <i class="bi bi-check-circle display-1"></i>
+                </div>
+                <h4 class="text-success">Žádné aktivní blokování</h4>
+                <p class="text-muted">V tuto chvíli nejsou blokovány žádné IP adresy.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
+
+{* Nejčastější typy blokování *}
+{if count($blockTypes) > 0}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0">
+                <h5 class="mb-0">
+                    <i class="bi bi-bar-chart me-2 text-info"></i>Nejčastější typy blokování (7 dní)
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {foreach $blockTypes as $type}
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="d-flex align-items-center p-3 bg-light rounded">
+                            <div class="flex-grow-1">
+                                <div class="fw-bold">{$type->action}</div>
+                                <small class="text-muted">Typ akce</small>
+                            </div>
+                            <div class="text-end">
+                                <div class="h5 mb-0 text-primary">{$type->count}</div>
+                                <small class="text-muted">blokování</small>
+                            </div>
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
+
+{* TOP IP adresy s nejvíce pokusy - ZJEDNODUŠENÁ VERZE *}
+{if isset($statistics['top_attacking_ips']) && count($statistics['top_attacking_ips']) > 0}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm border-start border-warning border-4">
+            <div class="card-header bg-white border-0">
+                <h5 class="mb-0">
+                    <i class="bi bi-shield-exclamation me-2 text-warning"></i>TOP IP adresy s nejvíce neúspěšnými pokusy
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>IP Adresa</th>
+                                <th>Počet pokusů</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $statistics['top_attacking_ips'] as $topIP}
+                            <tr>
+                                <td><code>{$topIP->ip_address}</code></td>
+                                <td><span class="badge bg-danger">{$topIP->attempt_count}</span></td>
+                                <td>
+                                    <span class="badge bg-secondary">Neznámý</span>
+                                </td>
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
+
+{* Informační panel *}
+<div class="row">
+    <div class="col-12">
+        <div class="card border-info">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-info-circle-fill me-2"></i>Informace o Rate Limiting
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-gear text-primary me-2"></i>Nastavení:</h6>
+                        <ul class="text-muted">
+                            <li><strong>Login:</strong> max 5 pokusů za 15 minut</li>
+                            <li><strong>Password reset:</strong> max 3 pokusy za 30 minut</li>
+                            <li><strong>ARES lookup:</strong> max 10 pokusů za 5 minut</li>
+                            <li><strong>API calls:</strong> max 100 pokusů za hodinu</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-clock text-warning me-2"></i>Délka blokování:</h6>
+                        <ul class="text-muted">
+                            <li><strong>Login:</strong> 30 minut</li>
+                            <li><strong>Password reset:</strong> 60 minut</li>
+                            <li><strong>ARES lookup:</strong> 10 minut</li>
+                            <li><strong>API calls:</strong> 120 minut</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="alert alert-warning mt-3">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <strong>Pozor:</strong> Vyčištění rate limitů by mělo být používáno pouze v případě potřeby. 
+                    Automatické čištění expirovaných záznamů probíhá pravidelně.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* AJAX Loading indikátor *}
+<div id="loadingIndicator" class="text-center py-3" style="display: none;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Načítání...</span>
+    </div>
+    <p class="mt-2 text-muted">Zpracování...</p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Vyčištění expirovaných záznamů
+    const clearExpiredBtn = document.getElementById('clearExpiredBtn');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    
+    if (clearExpiredBtn) {
+        clearExpiredBtn.addEventListener('click', function() {
+            if (confirm('Opravdu chcete vyčistit všechny expirované rate limit záznamy?')) {
+                showLoading();
+                
+                fetch('{link clearRateLimit!}', {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    
+                    if (data.success) {
+                        alert('✅ ' + data.message);
+                        location.reload(); // Obnovíme stránku pro aktualizaci dat
+                    } else {
+                        alert('❌ Chyba: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                    alert('❌ Nastala chyba při komunikaci se serverem: ' + error.message);
+                });
+            }
+        });
+    }
+    
+    // Odblokování konkrétní IP adresy
+    const clearBlockBtns = document.querySelectorAll('.clear-block-btn');
+    clearBlockBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const ip = this.getAttribute('data-ip');
+            
+            if (confirm('Opravdu chcete odblokovat IP adresu ' + ip + '?')) {
+                showLoading();
+                
+                fetch('{link clearRateLimit!}?ip=' + encodeURIComponent(ip), {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    
+                    if (data.success) {
+                        alert('✅ ' + data.message);
+                        location.reload(); // Obnovíme stránku pro aktualizaci dat
+                    } else {
+                        alert('❌ Chyba: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                    alert('❌ Nastala chyba při komunikaci se serverem: ' + error.message);
+                });
+            }
+        });
+    });
+    
+    function showLoading() {
+        loadingIndicator.style.display = 'block';
+        // Zakázat všechna tlačítka
+        document.querySelectorAll('button').forEach(btn => btn.disabled = true);
+    }
+    
+    function hideLoading() {
+        loadingIndicator.style.display = 'none';
+        // Povolit všechna tlačítka
+        document.querySelectorAll('button').forEach(btn => btn.disabled = false);
+    }
+});
+</script>
+
+<style>
+.card {
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.border-start {
+    border-left-width: 4px !important;
+}
+
+.clear-block-btn:hover {
+    transform: scale(1.1);
+}
+
+code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+</style>
+
+{/block}

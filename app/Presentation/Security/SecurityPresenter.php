@@ -161,41 +161,194 @@ class SecurityPresenter extends BasePresenter
     }
 
     /**
-     * Rate limiting statistiky (rozšíření)
+     * Rate limiting statistiky pro tenant-specific monitoring
+     * POUZE pro běžné adminy - vidí jen data svého tenantu
      */
     public function actionRateLimitStats(): void
     {
-        // Kontrola oprávnění - pouze super admin
-        if (!$this->isSuperAdmin()) {
+        // Kontrola oprávnění - pro všechny adminy
+        if (!$this->isAdmin() && !$this->isSuperAdmin()) {
             $this->error('Nemáte oprávnění pro přístup k rate limiting statistikám', 403);
         }
     }
 
     public function renderRateLimitStats(): void
     {
-        $this->template->pageTitle = 'Rate Limiting Statistiky';
+        $this->template->pageTitle = 'Rate Limiting Monitoring';
         
-        // Získání statistik
-        $this->template->statistics = $this->getRateLimiter()->getStatistics();
+        // TENANT-SPECIFIC: Získání statistik pro aktuální tenant
+        $currentTenantId = $this->getCurrentTenantId();
+        $this->template->statistics = $this->getTenantRateLimitStatistics($currentTenantId);
 
-        // Současné IP adresy s blokováním
-        $blockedIPs = $this->database->table('rate_limit_blocks')
-            ->where('blocked_until > ?', new \DateTime())
-            ->order('blocked_until DESC')
-            ->limit(50);
-
+        // TENANT-SPECIFIC: Blokované IP pro aktuální tenant
+        $blockedIPs = $this->getTenantBlockedIPs($currentTenantId);
         $this->template->blockedIPs = $blockedIPs;
 
-        // Nejčastější typy blokování
-        $blockTypes = $this->database->query('
-            SELECT action_type, COUNT(*) as count 
-            FROM rate_limit_blocks 
-            WHERE created_at > ? 
-            GROUP BY action_type 
-            ORDER BY count DESC
-        ', new \DateTime('-7 days'))->fetchAll();
-
+        // TENANT-SPECIFIC: Typy blokování pro tenant
+        $blockTypes = $this->getTenantBlockTypes($currentTenantId);
         $this->template->blockTypes = $blockTypes;
+
+        // Informace o tenantu
+        $this->template->currentTenant = $this->getCurrentTenant();
+        $this->template->isTenantSpecific = !$this->isSuperAdmin();
+    }
+
+    /**
+     * NOVÉ: Tenant-specific rate limit statistiky
+     */
+    private function getTenantRateLimitStatistics(int $tenantId): array
+    {
+        try {
+            // Získáme uživatele z aktuálního tenantu
+            $tenantUserIds = $this->database->table('users')
+                ->where('tenant_id', $tenantId)
+                ->fetchPairs('id', 'id');
+
+            if (empty($tenantUserIds)) {
+                return [
+                    'currently_blocked_ips' => 0,
+                    'attempts_last_24h' => 0,
+                    'failed_attempts_last_24h' => 0,
+                    'success_rate' => 100,
+                    'top_attacking_ips' => []
+                ];
+            }
+
+            $last24h = new \DateTime('-24 hours');
+
+            // Aktuálně blokované IP adresy pro tento tenant
+            $currentlyBlocked = $this->database->table('rate_limit_blocks')
+                ->where('blocked_until > ?', new \DateTime())
+                ->count();
+
+            // Pokusy za posledních 24 hodin pro uživatele z tohoto tenantu
+            // Poznámka: rate_limits neobsahuje tenant_id, takže nemůžeme přímo filtrovat
+            // Použijeme IP adresy z security_logs pro tento tenant
+            $tenantIPs = $this->getTenantIPAddresses($tenantId);
+            
+            $attemptsLast24h = 0;
+            $failedAttemptsLast24h = 0;
+            
+            if (!empty($tenantIPs)) {
+                $attemptsLast24h = $this->database->table('rate_limits')
+                    ->where('created_at > ?', $last24h)
+                    ->where('ip_address', $tenantIPs)
+                    ->count();
+
+                $failedAttemptsLast24h = $this->database->table('rate_limits')
+                    ->where('created_at > ?', $last24h)
+                    ->where('ip_address', $tenantIPs)
+                    ->where('successful', false)
+                    ->count();
+            }
+
+            // TOP IP adresy pro tento tenant
+            $topIPs = [];
+            if (!empty($tenantIPs)) {
+                $topIPs = $this->database->query('
+                    SELECT ip_address, COUNT(*) as attempt_count 
+                    FROM rate_limits 
+                    WHERE created_at > ? AND successful = 0 AND ip_address IN (?)
+                    GROUP BY ip_address 
+                    ORDER BY attempt_count DESC 
+                    LIMIT 5
+                ', $last24h, $tenantIPs)->fetchAll();
+            }
+
+            return [
+                'currently_blocked_ips' => $currentlyBlocked,
+                'attempts_last_24h' => $attemptsLast24h,
+                'failed_attempts_last_24h' => $failedAttemptsLast24h,
+                'success_rate' => $attemptsLast24h > 0 ? 
+                    round((($attemptsLast24h - $failedAttemptsLast24h) / $attemptsLast24h) * 100, 1) : 100,
+                'top_attacking_ips' => $topIPs,
+                'tenant_name' => $this->getCurrentTenant()['name'] ?? 'Neznámý tenant'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'currently_blocked_ips' => 0,
+                'attempts_last_24h' => 0,
+                'failed_attempts_last_24h' => 0,
+                'success_rate' => 100,
+                'top_attacking_ips' => [],
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * NOVÉ: Získá IP adresy používané tímto tenantem z security_logs
+     */
+    private function getTenantIPAddresses(int $tenantId): array
+    {
+        try {
+            // Získáme uživatele z tenantu
+            $tenantUserIds = $this->database->table('users')
+                ->where('tenant_id', $tenantId)
+                ->fetchPairs('id', 'id');
+
+            if (empty($tenantUserIds)) {
+                return [];
+            }
+
+            // Získáme IP adresy z security_logs pro tyto uživatele za posledních 30 dní
+            $ips = $this->database->table('security_logs')
+                ->where('user_id', array_keys($tenantUserIds))
+                ->where('created_at > ?', new \DateTime('-30 days'))
+                ->select('DISTINCT ip_address')
+                ->fetchPairs('ip_address', 'ip_address');
+
+            return array_filter($ips); // Odstraníme null hodnoty
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * NOVÉ: Tenant-specific blokované IP
+     */
+    private function getTenantBlockedIPs(int $tenantId): array
+    {
+        try {
+            $tenantIPs = $this->getTenantIPAddresses($tenantId);
+            
+            if (empty($tenantIPs)) {
+                return [];
+            }
+
+            return $this->database->table('rate_limit_blocks')
+                ->where('blocked_until > ?', new \DateTime())
+                ->where('ip_address', $tenantIPs)
+                ->order('blocked_until DESC')
+                ->limit(50)
+                ->fetchAll();
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * NOVÉ: Tenant-specific typy blokování
+     */
+    private function getTenantBlockTypes(int $tenantId): array
+    {
+        try {
+            $tenantIPs = $this->getTenantIPAddresses($tenantId);
+            
+            if (empty($tenantIPs)) {
+                return [];
+            }
+
+            return $this->database->query('
+                SELECT action, COUNT(*) as count 
+                FROM rate_limit_blocks 
+                WHERE created_at > ? AND ip_address IN (?)
+                GROUP BY action 
+                ORDER BY count DESC
+            ', new \DateTime('-7 days'), $tenantIPs)->fetchAll();
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 
     /**
@@ -290,20 +443,32 @@ class SecurityPresenter extends BasePresenter
     }
 
     /**
-     * AJAX: Vyčištění rate limit blokování
+     * AJAX: Vyčištění rate limit blokování (pouze pro konkrétní tenant)
      */
     public function handleClearRateLimit(): void
     {
-        // Kontrola oprávnění - pouze super admin
-        if (!$this->isSuperAdmin()) {
+        // Kontrola oprávnění
+        if (!$this->isAdmin() && !$this->isSuperAdmin()) {
             $this->sendJson(['success' => false, 'error' => 'Nedostatečná oprávnění']);
             return;
         }
 
         $ip = $this->getParameter('ip');
+        $currentTenantId = $this->getCurrentTenantId();
         
         try {
             if ($ip) {
+                // Ověříme, že IP patří k tomuto tenantu
+                $tenantIPs = $this->getTenantIPAddresses($currentTenantId);
+                
+                if (!in_array($ip, $tenantIPs)) {
+                    $this->sendJson([
+                        'success' => false, 
+                        'error' => 'Nemáte oprávnění vyčistit tuto IP adresu'
+                    ]);
+                    return;
+                }
+
                 // Vyčištění pro konkrétní IP
                 $deleted = $this->database->table('rate_limit_blocks')
                     ->where('ip_address', $ip)
@@ -311,8 +476,8 @@ class SecurityPresenter extends BasePresenter
                     
                 $this->securityLogger->logSecurityEvent(
                     'rate_limit_cleared',
-                    "Rate limit vyčištěn pro IP: {$ip} (administrátorem)",
-                    ['ip_address' => $ip, 'admin_user_id' => $this->getUser()->getId()]
+                    "Rate limit vyčištěn pro IP: {$ip} (administrátorem tenantu {$currentTenantId})",
+                    ['ip_address' => $ip, 'admin_user_id' => $this->getUser()->getId(), 'tenant_id' => $currentTenantId]
                 );
                 
                 $this->sendJson([
@@ -320,20 +485,31 @@ class SecurityPresenter extends BasePresenter
                     'message' => "Rate limit pro IP {$ip} byl vyčištěn ({$deleted} záznamů)"
                 ]);
             } else {
-                // Vyčištění všech starých záznamů
+                // Vyčištění expirovaných záznamů pro tenant
+                $tenantIPs = $this->getTenantIPAddresses($currentTenantId);
+                
+                if (empty($tenantIPs)) {
+                    $this->sendJson([
+                        'success' => true,
+                        'message' => 'Žádné záznamy k vyčištění pro váš tenant'
+                    ]);
+                    return;
+                }
+
                 $deleted = $this->database->table('rate_limit_blocks')
                     ->where('blocked_until < ?', new \DateTime())
+                    ->where('ip_address', $tenantIPs)
                     ->delete();
                     
                 $this->securityLogger->logSecurityEvent(
                     'rate_limit_cleanup',
-                    "Vyčištěny staré rate limit záznamy (administrátorem)",
-                    ['deleted_count' => $deleted, 'admin_user_id' => $this->getUser()->getId()]
+                    "Vyčištěny expirované rate limit záznamy pro tenant {$currentTenantId}",
+                    ['deleted_count' => $deleted, 'admin_user_id' => $this->getUser()->getId(), 'tenant_id' => $currentTenantId]
                 );
                 
                 $this->sendJson([
                     'success' => true,
-                    'message' => "Vyčištěno {$deleted} starých rate limit záznamů"
+                    'message' => "Vyčištěno {$deleted} expirovaných záznamů pro váš tenant"
                 ]);
             }
 

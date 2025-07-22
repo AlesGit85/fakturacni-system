@@ -15,6 +15,9 @@ class RouterFactory
     {
         $router = new RouteList;
         
+        // Specifická routa pro Security presenter (NOVÉ!)
+        $router->addRoute('security/<action>[/<id>]', 'Security:default');
+        
         // Přidáme specifickou routu pro ModuleAdmin
         $router->addRoute('moduleadmin/<action>[/<id>]', 'ModuleAdmin:default');
         

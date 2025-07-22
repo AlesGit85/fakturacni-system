@@ -10,7 +10,7 @@ return array (
     'App\\Core\\RouterFactory' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
-      1 => 1752475650,
+      1 => 1753219116,
     ),
     'App\\Mail\\TestMailer' => 
     array (
@@ -145,7 +145,7 @@ return array (
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
-      1 => 1753218543,
+      1 => 1753220728,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -200,18 +200,18 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 3,
-    'null' => 3,
-    'App\\Presentation\\Security\\SecurityDefaultTemplate' => 3,
+    'Nette\\Bridges\\Assets\\DIExtension' => 2,
+    'null' => 2,
+    'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 3,
     'App\\Presentation\\Security\\SecurityTemplate' => 3,
-    'SQLSecurityAudit' => 1,
     'App\\Presentation\\Security\\SecurityDashboardTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 3,
+    'App\\Presentation\\Users\\UsersRateLimitStatsTemplate' => 1,
+    'App\\Presentation\\Users\\UsersTemplate' => 1,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeTemplate' => 3,
     'App\\Presentation\\Sign\\SignInTemplate' => 2,
     'App\\Presentation\\Sign\\SignTemplate' => 2,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
-    'App\\Presentation\\Home\\HomeTemplate' => 1,
-    'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 1,
   ),
   2 => 
   array (
