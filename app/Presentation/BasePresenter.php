@@ -52,13 +52,27 @@ abstract class BasePresenter extends Presenter
      * ✅ NOVÉ: Seznam handlerů/akcí které vyžadují CSRF token
      */
     protected array $csrfProtectedActions = [
-        'handleMarkAsPaid',
-        'handleMarkAsCreated', 
-        'handleDelete',
-        'handleAresLookup',
-        'actionDelete',
-        'actionDeleteLogo',
-        'actionDeleteSignature'
+        // === INVOICES PRESENTER === ✅ implementováno
+        'handleMarkAsPaid',           // označit fakturu jako zaplacenou
+        'handleMarkAsCreated',        // označit fakturu jako vystavěnou
+        
+        // === CLIENTS PRESENTER === ⚠️ k implementaci
+        'handleAresLookup',           // ARES vyhledávání (AJAX)
+        
+        // === USERS PRESENTER === ⚠️ k implementaci
+        'handleClearRateLimit',       // vymazání rate limit pro IP
+        'handleClearAllRateLimits',   // vymazání všech rate limitů
+        
+        // === MODULE ADMIN PRESENTER === ⚠️ k implementaci  
+        'handleToggleModule',         // aktivace/deaktivace modulu
+        'handleUninstallModule',      // odinstalace modulu
+        'handleToggleUserModule',     // toggle modulu jiného uživatele
+        'handleDeleteUserModule',     // smazání modulu jiného uživatele
+        
+        // === OBECNÉ DELETE AKCE === ⚠️ k implementaci
+        'actionDelete',               // mazání záznamů (Clients, Users, Invoices)
+        'actionDeleteLogo',           // mazání loga (Settings)
+        'actionDeleteSignature'       // mazání podpisu (Settings)
     ];
 
     /**

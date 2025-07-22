@@ -61,7 +61,7 @@ final class Template_01646d2cea extends Latte\Runtime\Template
                 <i class="bi bi-arrow-left"></i> Zpět
             </a>
             <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('clearAllRateLimits!')) /* line 15 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('clearAllRateLimits!', ['_csrf_token' => $csrfToken])) /* line 15 */;
 		echo '" class="btn btn-danger" 
                onclick="return confirm(\'Opravdu chcete vymazat všechny rate limity?\')">
                 <i class="bi bi-trash"></i> Vymazat vše
@@ -195,7 +195,7 @@ final class Template_01646d2cea extends Latte\Runtime\Template
                                                 <i class="bi bi-pause"></i>
                                             </button>
                                             <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('clearRateLimit!', [$block->ip_address])) /* line 147 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('clearRateLimit!', [$block->ip_address, '_csrf_token' => $csrfToken])) /* line 147 */;
 				echo '" 
                                                class="btn btn-sm btn-outline-danger" 
                                                title="Odblokovat"

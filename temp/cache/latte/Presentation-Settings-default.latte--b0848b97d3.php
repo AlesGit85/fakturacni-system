@@ -374,7 +374,7 @@ final class Template_b0848b97d3 extends Latte\Runtime\Template
 			echo LR\Filters::escapeHtmlAttr(($this->filters->escape)($company->logo)) /* line 248 */;
 			echo '" alt="Logo" style="max-height: 60px;" class="rounded">
                             <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('deleteLogo!')) /* line 250 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('deleteLogo!', ['_csrf_token' => $csrfToken])) /* line 250 */;
 			echo '" class="btn btn-sm btn-outline-danger" onclick="return confirm(\'Opravdu chcete smazat logo?\')">
                                 <i class="bi bi-trash"></i> Smazat logo
                             </a>
@@ -396,7 +396,7 @@ final class Template_b0848b97d3 extends Latte\Runtime\Template
 			echo LR\Filters::escapeHtmlAttr(($this->filters->escape)($company->signature)) /* line 263 */;
 			echo '" alt="Podpis" style="max-height: 60px;" class="rounded">
                             <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('deleteSignature!')) /* line 265 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('deleteSignature!', ['_csrf_token' => $csrfToken])) /* line 265 */;
 			echo '" class="btn btn-sm btn-outline-danger" onclick="return confirm(\'Opravdu chcete smazat podpis?\')">
                                 <i class="bi bi-trash"></i> Smazat podpis
                             </a>

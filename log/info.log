@@ -135,3 +135,102 @@
 [2025-07-22 12-15-27] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/default/59?_csrf_token=ec6e8f6f404a6c951676811a03635efbb826351fd84da4f15808bcc7669d7a3d&do=markAsPaid 
 [2025-07-22 12-15-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?_fid=kev1 
 [2025-07-22 12-15-28] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?_fid=kev1 
+[2025-07-22 12-22-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-07-22 12-22-31] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-07-22 12-22-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-22-34] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-22-42] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-22-42] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-22-47] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/edit/22 
+[2025-07-22 12-22-47] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/edit/22 
+[2025-07-22 12-23-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-23-01] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-23-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/add 
+[2025-07-22 12-23-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/add 
+[2025-07-22 12-23-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-23-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-23-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/show/29 
+[2025-07-22 12-23-15] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/show/29 
+[2025-07-22 12-23-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/show/29 
+[2025-07-22 12-23-35] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/show/29 
+[2025-07-22 12-24-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/show/29 
+[2025-07-22 12-24-26] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/show/29 
+[2025-07-22 12-24-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/show/29 
+[2025-07-22 12-24-36] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/show/29 
+[2025-07-22 12-25-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-07-22 12-25-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-07-22 12-25-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-25-09] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-26-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-26-44] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-27-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-27-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-27-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/delete/31?_csrf_token=ec6e8f6f404a6c951676811a03635efbb826351fd84da4f15808bcc7669d7a3d 
+[2025-07-22 12-27-14] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/delete/31?_csrf_token=ec6e8f6f404a6c951676811a03635efbb826351fd84da4f15808bcc7669d7a3d 
+[2025-07-22 12-27-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/?_fid=it0z 
+[2025-07-22 12-27-14] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/?_fid=it0z 
+[2025-07-22 12-28-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/profile 
+[2025-07-22 12-28-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/profile 
+[2025-07-22 12-28-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-07-22 12-28-02] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-07-22 12-28-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-07-22 12-28-17] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-07-22 12-29-37] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-07-22 12-29-37] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-07-22 12-29-40] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-07-22 12-29-40] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-07-22 12-29-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-07-22 12-29-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=3k84k&_fid=euua 
+[2025-07-22 12-29-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-22 12-29-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=zitd 
+[2025-07-22 12-29-46] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=zitd 
+[2025-07-22 12-29-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-07-22 12-29-48] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/ 
+[2025-07-22 12-30-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-07-22 12-30-38] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/ 
+[2025-07-22 12-31-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-07-22 12-31-03] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/ 
+[2025-07-22 12-31-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/?_fid=0v4z 
+[2025-07-22 12-31-03] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/?_fid=0v4z 
+[2025-07-22 12-31-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/?_csrf_token=b1d12220e78c277333e58369c481a6905f78f69d582eb0180e928c0243c4ac01&do=deleteLogo 
+[2025-07-22 12-31-26] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/?_csrf_token=b1d12220e78c277333e58369c481a6905f78f69d582eb0180e928c0243c4ac01&do=deleteLogo 
+[2025-07-22 12-31-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/?_fid=epev 
+[2025-07-22 12-31-26] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/?_fid=epev 
+[2025-07-22 12-31-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/?_fid=epev 
+[2025-07-22 12-31-59] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/?_fid=epev 
+[2025-07-22 12-32-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/?_csrf_token=b1d12220e78c277333e58369c481a6905f78f69d582eb0180e928c0243c4ac01&do=deleteSignature 
+[2025-07-22 12-32-05] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/?_csrf_token=b1d12220e78c277333e58369c481a6905f78f69d582eb0180e928c0243c4ac01&do=deleteSignature 
+[2025-07-22 12-32-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/?_fid=nf1t 
+[2025-07-22 12-32-05] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/?_fid=nf1t 
+[2025-07-22 12-34-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-34-31] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-34-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/show/22 
+[2025-07-22 12-34-38] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/show/22 
+[2025-07-22 12-34-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-34-44] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-34-49] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-07-22 12-34-49] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-07-22 12-34-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-34-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-35-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-35-09] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-35-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/show/22 
+[2025-07-22 12-35-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/show/22 
+[2025-07-22 12-35-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?client=22 
+[2025-07-22 12-35-14] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?client=22 
+[2025-07-22 12-35-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?client=22 
+[2025-07-22 12-35-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?client=22 
+[2025-07-22 12-35-30] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/delete/47?_csrf_token=ec6e8f6f404a6c951676811a03635efbb826351fd84da4f15808bcc7669d7a3d 
+[2025-07-22 12-35-30] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/delete/47?_csrf_token=ec6e8f6f404a6c951676811a03635efbb826351fd84da4f15808bcc7669d7a3d 
+[2025-07-22 12-35-30] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?_fid=4e8p 
+[2025-07-22 12-35-30] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?_fid=4e8p 
+[2025-07-22 12-35-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-07-22 12-35-38] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-07-22 12-35-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/show/22 
+[2025-07-22 12-35-45] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/show/22 
+[2025-07-22 12-35-49] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/delete/22?_csrf_token=ec6e8f6f404a6c951676811a03635efbb826351fd84da4f15808bcc7669d7a3d 
+[2025-07-22 12-35-49] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/delete/22?_csrf_token=ec6e8f6f404a6c951676811a03635efbb826351fd84da4f15808bcc7669d7a3d 
+[2025-07-22 12-35-49] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/?_fid=4k0t 
+[2025-07-22 12-35-49] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/?_fid=4k0t 
+[2025-07-22 12-41-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/rate-limit-stats 
+[2025-07-22 12-41-12] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/rate-limit-stats 

@@ -247,7 +247,7 @@
                             {* ✅ XSS OCHRANA: Přidán escape filtr *}
                             <img src="{$basePath}/uploads/logo/{$company->logo|escape}" alt="Logo" style="max-height: 60px;" class="rounded">
                             {* ✅ XSS OCHRANA: Bezpečný JavaScript bez uživatelských dat *}
-                            <a n:href="deleteLogo!" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat logo?')">
+                            <a href="{link deleteLogo!, '_csrf_token' => $csrfToken}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat logo?')">
                                 <i class="bi bi-trash"></i> Smazat logo
                             </a>
                         </div>
@@ -262,7 +262,7 @@
                             {* ✅ XSS OCHRANA: Přidán escape filtr *}
                             <img src="{$basePath}/uploads/signature/{$company->signature|escape}" alt="Podpis" style="max-height: 60px;" class="rounded">
                             {* ✅ XSS OCHRANA: Bezpečný JavaScript bez uživatelských dat *}
-                            <a n:href="deleteSignature!" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat podpis?')">
+                            <a href="{link deleteSignature!, '_csrf_token' => $csrfToken}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat podpis?')">
                                 <i class="bi bi-trash"></i> Smazat podpis
                             </a>
                         </div>

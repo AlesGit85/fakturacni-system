@@ -204,7 +204,7 @@
                 {var $invoiceCount = $presenter->getClientInvoiceCount($client->id)}
                 {if $invoiceCount == 0}
                     {* ✅ XSS OCHRANA: Bezpečný JavaScript - bez uživatelských dat *}
-                    <a n:href="delete $client->id" class="btn btn-danger" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')">
+                    <a href="{link delete $client->id, '_csrf_token' => $csrfToken}" class="btn btn-danger" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')">
                         <i class="bi bi-trash"></i> Smazat
                     </a>
                 {else}

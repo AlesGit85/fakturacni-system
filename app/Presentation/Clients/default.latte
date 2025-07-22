@@ -44,20 +44,22 @@
             <tbody>
                 {foreach $clients as $client}
                 <tr class="data-row">
-                    <td class="company-column">
-                        <div class="company-name">
-                            {* ✅ XSS OCHRANA: Escapování názvu společnosti *}
-                            <strong>{$client->name|escape}</strong>
-                        </div>
-                        {if $client->city}
-                        <div class="company-location text-muted">
-                            {* ✅ XSS OCHRANA: Escapování města a země *}
-                            <small>{$client->city|escape}, {$client->country|escape}</small>
-                        </div>
+                    <td>
+                        {* ✅ XSS OCHRANA: Escapování názvu společnosti *}
+                        <strong>{$client->name|escape}</strong>
+                        {if $client->address}
+                            {* ✅ XSS OCHRANA: Escapování adresy *}
+                            <br><small class="text-muted">{$client->address|escape}</small>
                         {/if}
                     </td>
-                    {* ✅ XSS OCHRANA: Escapování IČO *}
-                    <td>{$client->ic|escape}</td>
+                    <td>
+                        {if $client->ic}
+                            {* ✅ XSS OCHRANA: Escapování IČO *}
+                            {$client->ic|escape}
+                        {else}
+                            <span class="text-muted">—</span>
+                        {/if}
+                    </td>
                     <td>
                         {if $client->contact_person}
                             {* ✅ XSS OCHRANA: Escapování kontaktní osoby *}
@@ -68,8 +70,8 @@
                     </td>
                     <td>
                         {if $client->email}
-                            {* ✅ XSS OCHRANA: Escapování emailu v href i textu *}
-                            <a href="mailto:{$client->email|escape}" class="client-email">{$client->email|escape}</a>
+                            {* ✅ XSS OCHRANA: Escapování emailu *}
+                            <a href="mailto:{$client->email|escape}">{$client->email|escape}</a>
                         {else}
                             <span class="text-muted">—</span>
                         {/if}
@@ -96,12 +98,12 @@
                                 </a>
                             {/if}
 
-                            {* Tlačítko Smazat - pouze admin a jen pokud nemá faktury *}
+                            {* ✅ CSRF OCHRANA: Tlačítko Smazat - pouze admin a jen pokud nemá faktury *}
                             {if $isUserAdmin}
                                 {var $invoiceCount = $presenter->getClientInvoiceCount($client->id)}
                                 {if $invoiceCount == 0}
-                                    {* ✅ XSS OCHRANA: Bezpečný JavaScript - bez uživatelských dat *}
-                                    <a n:href="delete $client->id" class="btn btn-icon text-danger" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')" title="Smazat klienta">
+                                    {* ✅ NOVÉ: CSRF token přidán do odkazu *}
+                                    <a href="{link delete $client->id, '_csrf_token' => $csrfToken}" class="btn btn-icon text-danger" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')" title="Smazat klienta" style="color: #dc3545;">
                                         <i class="bi bi-trash"></i>
                                     </a>
                                 {else}

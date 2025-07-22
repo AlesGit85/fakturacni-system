@@ -98,59 +98,61 @@ final class Template_e033c46b7e extends Latte\Runtime\Template
 ';
 			foreach ($clients as $client) /* line 45 */ {
 				echo '                <tr class="data-row">
-                    <td class="company-column">
-                        <div class="company-name">
-                            <strong>';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->name)) /* line 50 */;
+                    <td>
+                        <strong>';
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->name)) /* line 49 */;
 				echo '</strong>
-                        </div>
 ';
-				if ($client->city) /* line 52 */ {
-					echo '                        <div class="company-location text-muted">
-                            <small>';
-					echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->city)) /* line 55 */;
-					echo ', ';
-					echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->country)) /* line 55 */;
+				if ($client->address) /* line 50 */ {
+					echo '                            <br><small class="text-muted">';
+					echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->address)) /* line 52 */;
 					echo '</small>
-                        </div>
 ';
 				}
 				echo '                    </td>
-                    <td>';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->ic)) /* line 60 */;
-				echo '</td>
                     <td>
 ';
-				if ($client->contact_person) /* line 62 */ {
+				if ($client->ic) /* line 56 */ {
 					echo '                            ';
-					echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->contact_person)) /* line 64 */;
+					echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->ic)) /* line 58 */;
 					echo "\n";
-				} else /* line 65 */ {
+				} else /* line 59 */ {
 					echo '                            <span class="text-muted">—</span>
 ';
 				}
 				echo '                    </td>
                     <td>
 ';
-				if ($client->email) /* line 70 */ {
+				if ($client->contact_person) /* line 64 */ {
+					echo '                            ';
+					echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->contact_person)) /* line 66 */;
+					echo "\n";
+				} else /* line 67 */ {
+					echo '                            <span class="text-muted">—</span>
+';
+				}
+				echo '                    </td>
+                    <td>
+';
+				if ($client->email) /* line 72 */ {
 					echo '                            <a href="mailto:';
-					echo LR\Filters::escapeHtmlAttr(($this->filters->escape)($client->email)) /* line 72 */;
-					echo '" class="client-email">';
-					echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->email)) /* line 72 */;
+					echo LR\Filters::escapeHtmlAttr(($this->filters->escape)($client->email)) /* line 74 */;
+					echo '">';
+					echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->email)) /* line 74 */;
 					echo '</a>
 ';
-				} else /* line 73 */ {
+				} else /* line 75 */ {
 					echo '                            <span class="text-muted">—</span>
 ';
 				}
 				echo '                    </td>
                     <td>
 ';
-				if ($client->phone) /* line 78 */ {
+				if ($client->phone) /* line 80 */ {
 					echo '                            ';
-					echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->phone)) /* line 80 */;
+					echo LR\Filters::escapeHtmlText(($this->filters->escape)($client->phone)) /* line 82 */;
 					echo "\n";
-				} else /* line 81 */ {
+				} else /* line 83 */ {
 					echo '                            <span class="text-muted">—</span>
 ';
 				}
@@ -158,32 +160,32 @@ final class Template_e033c46b7e extends Latte\Runtime\Template
                     <td class="actions-column">
                         <div class="action-buttons">
                             <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('show', [$client->id])) /* line 89 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('show', [$client->id])) /* line 91 */;
 				echo '" class="btn btn-icon" title="Detail klienta">
                                 <i class="bi bi-eye"></i>
                             </a>
 ';
-				if ($isUserAccountant) /* line 93 */ {
+				if ($isUserAccountant) /* line 95 */ {
 					echo '                                <a href="';
-					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$client->id])) /* line 94 */;
+					echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('edit', [$client->id])) /* line 96 */;
 					echo '" class="btn btn-icon" title="Upravit klienta">
                                     <i class="bi bi-pencil"></i>
                                 </a>
 ';
 				}
 				echo "\n";
-				if ($isUserAdmin) /* line 100 */ {
-					$invoiceCount = $presenter->getClientInvoiceCount($client->id) /* line 101 */;
-					if ($invoiceCount == 0) /* line 102 */ {
+				if ($isUserAdmin) /* line 102 */ {
+					$invoiceCount = $presenter->getClientInvoiceCount($client->id) /* line 103 */;
+					if ($invoiceCount == 0) /* line 104 */ {
 						echo '                                    <a href="';
-						echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$client->id])) /* line 104 */;
-						echo '" class="btn btn-icon text-danger" onclick="return confirm(\'Opravdu chcete smazat tohoto klienta?\')" title="Smazat klienta">
+						echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('delete', [$client->id, '_csrf_token' => $csrfToken])) /* line 106 */;
+						echo '" class="btn btn-icon text-danger" onclick="return confirm(\'Opravdu chcete smazat tohoto klienta?\')" title="Smazat klienta" style="color: #dc3545;">
                                         <i class="bi bi-trash"></i>
                                     </a>
 ';
-					} else /* line 107 */ {
+					} else /* line 109 */ {
 						echo '                                    <a class="btn btn-icon text-muted" title="Klient má ';
-						echo LR\Filters::escapeHtmlAttr($presenter->getInvoiceCountText($invoiceCount)) /* line 109 */;
+						echo LR\Filters::escapeHtmlAttr($presenter->getInvoiceCountText($invoiceCount)) /* line 111 */;
 						echo ' a nelze ho smazat" disabled>
                                         <i class="bi bi-trash"></i>
                                     </a>
@@ -216,7 +218,7 @@ final class Template_e033c46b7e extends Latte\Runtime\Template
         </div>
     </div>
 ';
-		} else /* line 136 */ {
+		} else /* line 138 */ {
 			echo '    <div class="empty-state">
         <div class="empty-state-icon">
             <i class="bi bi-people"></i>
@@ -224,14 +226,14 @@ final class Template_e033c46b7e extends Latte\Runtime\Template
         <h3>Zatím zde nejsou žádní klienti</h3>
         <p>Začněte přidáním nového klienta do systému</p>
 ';
-			if ($isUserAccountant) /* line 144 */ {
+			if ($isUserAccountant) /* line 146 */ {
 				echo '            <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 145 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('add')) /* line 147 */;
 				echo '" class="btn btn-primary mt-3">
                 <i class="bi bi-person-plus"></i> Přidat prvního klienta
             </a>
 ';
-			} else /* line 148 */ {
+			} else /* line 150 */ {
 				echo '            <div class="alert alert-info mt-3">
                 <i class="bi bi-info-circle me-2"></i>
                 Pro přidávání klientů potřebujete oprávnění účetní nebo administrátor.
