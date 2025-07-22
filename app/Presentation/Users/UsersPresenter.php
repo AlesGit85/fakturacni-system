@@ -861,11 +861,13 @@ final class UsersPresenter extends BasePresenter
     }
 
     /**
-     * ✅ OPRAVENÝ: Formulář pro vyhledávání uživatelů s clear tlačítkem
+     * ✅ OPRAVENÝ: Formulář pro vyhledávání uživatelů s CSRF ochranou
      */
     protected function createComponentSearchForm(): Form
     {
         $form = new Form;
+        // ✅ PŘIDÁNA CSRF OCHRANA - jediná změna oproti původnímu souboru
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
         $form->addText('search', 'Vyhledat:')
             ->setHtmlAttribute('placeholder', 'Zadejte jméno, email, firmu...')

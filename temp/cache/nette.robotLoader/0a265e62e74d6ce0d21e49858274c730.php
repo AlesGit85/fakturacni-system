@@ -160,7 +160,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1753167760,
+      1 => 1753189457,
     ),
     'App\\Security\\RateLimiter' => 
     array (
@@ -205,7 +205,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 1,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 2,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 3,
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
