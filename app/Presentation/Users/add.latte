@@ -5,6 +5,7 @@
 {block content}
 <div class="user-form-container">
     <div class="page-header">
+        {* ✅ BEZPEČNÉ: Statický text *}
         <h1 class="main-title">Přidání nového uživatele</h1>
         <p class="text-muted">Vyplňte údaje pro vytvoření nového uživatele v rámci vašeho fireního účtu</p>
     </div>
@@ -18,7 +19,8 @@
                         <div class="alert alert-danger">
                             <i class="bi bi-exclamation-triangle-fill me-2"></i>
                             {foreach $form->getErrors() as $error}
-                                {$error}
+                                {* ✅ XSS OCHRANA: Escapování chybových hlášek formuláře *}
+                                {$error|escape}
                             {/foreach}
                         </div>
                     </div>
@@ -27,6 +29,7 @@
                 <div class="col-12">
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle me-2"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         <strong>Nový uživatel bude přidán do vašeho firemního účtu.</strong> 
                     </div>
                 </div>
@@ -35,40 +38,61 @@
                 <div class="col-12">
                     <div class="section-header">
                         <i class="bi bi-person-vcard"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         <h2 class="section-title">Základní údaje</h2>
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input username class => 'form-control'}
                         <label for="frm-userForm-username" class="form-label">Uživatelské jméno</label>
                         {if $form['username']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['username']->getError()}</div>
-                        {/if}
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        {input email class => 'form-control'}
-                        <label for="frm-userForm-email" class="form-label">E-mail</label>
-                        {if $form['email']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['email']->getError()}</div>
-                        {/if}
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        {input role class => 'form-select'}
-                        <label for="frm-userForm-role" class="form-label">Role</label>
-                        {if $form['role']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['role']->getError()}</div>
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro username *}
+                                {$form['username']->getError()|escape}
+                            </div>
                         {/if}
                     </div>
                     <div class="form-text mt-2">
                         <small class="text-muted">
+                            {* ✅ BEZPEČNÉ: Statický text *}
+                            <i class="bi bi-info-circle me-1"></i>
+                            <strong>Povolené znaky:</strong> písmena, číslice, podtržítka a pomlčky (bez diakritiky)
+                        </small>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
+                        {input email class => 'form-control'}
+                        <label for="frm-userForm-email" class="form-label">E-mail</label>
+                        {if $form['email']->hasErrors()}
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro email *}
+                                {$form['email']->getError()|escape}
+                            </div>
+                        {/if}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
+                        {input role class => 'form-select'}
+                        <label for="frm-userForm-role" class="form-label">Role</label>
+                        {if $form['role']->hasErrors()}
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro role *}
+                                {$form['role']->getError()|escape}
+                            </div>
+                        {/if}
+                    </div>
+                    <div class="form-text mt-2">
+                        <small class="text-muted">
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             <strong>Readonly:</strong> Může pouze prohlížet data |
                             <strong>Účetní:</strong> Může vytvářet faktury a klienty |
                             <strong>Admin:</strong> Má plný přístup včetně správy uživatelů
@@ -80,26 +104,35 @@
                 <div class="col-12 mt-4">
                     <div class="section-header">
                         <i class="bi bi-key"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         <h2 class="section-title">Přihlašovací údaje</h2>
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input password class => 'form-control'}
                         <label for="frm-userForm-password" class="form-label">Heslo</label>
                         {if $form['password']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['password']->getError()}</div>
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro heslo *}
+                                {$form['password']->getError()|escape}
+                            </div>
                         {/if}
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input passwordVerify class => 'form-control'}
                         <label for="frm-userForm-passwordVerify" class="form-label">Heslo znovu</label>
                         {if $form['passwordVerify']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['passwordVerify']->getError()}</div>
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro ověření hesla *}
+                                {$form['passwordVerify']->getError()|escape}
+                            </div>
                         {/if}
                     </div>
                 </div>
@@ -108,6 +141,7 @@
                 <div class="col-12">
                     <div class="alert alert-light">
                         <i class="bi bi-shield-check me-2 text-primary"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         <strong>Požadavky na heslo:</strong>
                         <ul class="mb-0 mt-2 small">
                             <li>Alespoň 8 znaků</li>
@@ -118,9 +152,11 @@
                 </div>
                 
                 <div class="col-12 mt-4 d-flex justify-content-between">
+                    {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
                     <a n:href="default" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Zpět na seznam uživatelů
                     </a>
+                    {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                     {input send class => 'btn btn-primary'}
                 </div>
             {/form}

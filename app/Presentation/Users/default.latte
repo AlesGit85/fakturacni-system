@@ -13,25 +13,31 @@
         <div>
             <h1 class="section-title mb-0">
                 {if $isSuperAdmin}
-                    Správa uživatelů <span class="total-count">Celkem: {$totalUsers} uživatelů ve {$superAdminStats['total_tenants']} tenantů</span>
+                    {* ✅ XSS OCHRANA: Escapování počtu uživatelů a tenantů *}
+                    Správa uživatelů <span class="total-count">Celkem: {$totalUsers|escape} uživatelů ve {$superAdminStats['total_tenants']|escape} tenantů</span>
                 {else}
-                    Uživatelé <span class="total-count">Počet uživatelů v systému: {$totalUsers}</span>
+                    {* ✅ XSS OCHRANA: Escapování počtu uživatelů *}
+                    Uživatelé <span class="total-count">Počet uživatelů v systému: {$totalUsers|escape}</span>
                 {/if}
             </h1>
             <p class="text-muted">
                 {if $isSuperAdmin}
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     Super admin pohled - správa všech uživatelů napříč tenanty
                 {else}
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     Správa uživatelských účtů v systému
                 {/if}
             </p>
         </div>
         <div class="header-actions">
             {if $isSuperAdmin && $searchQuery}
+                {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
                 <a n:href="default" class="btn btn-outline-secondary me-2">
                     <i class="bi bi-arrow-left"></i> Zpět na přehled
                 </a>
             {/if}
+            {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
             <a n:href="add" class="btn btn-primary">
                 <i class="bi bi-person-plus"></i> Přidat uživatele
             </a>
@@ -48,16 +54,19 @@
                         <div class="row g-3 align-items-center">
                             <div class="col-md-8">
                                 <div class="form-floating">
+                                    {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                                     {input search class => 'form-control form-control-lg'}
                                     {label search class => 'form-label' /}
                                 </div>
                                 <small class="form-text text-muted mt-1">
                                     <i class="bi bi-info-circle me-1"></i>
+                                    {* ✅ BEZPEČNÉ: Statický text *}
                                     Vyhledávejte podle jména uživatele, e-mailu, názvu firmy nebo tenanta
                                 </small>
                             </div>
                             <div class="col-md-4">
                                 <div class="d-flex gap-2 justify-content-center">
+                                    {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                                     {input send class => 'btn btn-primary'}
                                     {input clear class => 'btn btn-outline-secondary'}
                                 </div>
@@ -75,37 +84,49 @@
         <div class="row g-3">
             <div class="col-md-2">
                 <div class="stat-card">
-                    <div class="stat-number text-primary">{$superAdminStats['total_tenants']}</div>
+                    {* ✅ XSS OCHRANA: Escapování statistiky tenantů *}
+                    <div class="stat-number text-primary">{$superAdminStats['total_tenants']|escape}</div>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <div class="stat-label">Tenanty</div>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="stat-card">
-                    <div class="stat-number text-secondary">{$superAdminStats['total_users']}</div>
+                    {* ✅ XSS OCHRANA: Escapování statistiky uživatelů *}
+                    <div class="stat-number text-secondary">{$superAdminStats['total_users']|escape}</div>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <div class="stat-label">Uživatelé</div>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="stat-card">
-                    <div class="stat-number text-admin">{$superAdminStats['total_admins']}</div>
+                    {* ✅ XSS OCHRANA: Escapování statistiky adminů *}
+                    <div class="stat-number text-admin">{$superAdminStats['total_admins']|escape}</div>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <div class="stat-label">Admini</div>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="stat-card">
-                    <div class="stat-number text-accountant">{$superAdminStats['total_accountants']}</div>
+                    {* ✅ XSS OCHRANA: Escapování statistiky účetních *}
+                    <div class="stat-number text-accountant">{$superAdminStats['total_accountants']|escape}</div>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <div class="stat-label">Účetní</div>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="stat-card">
-                    <div class="stat-number text-muted">{$superAdminStats['total_readonly']}</div>
+                    {* ✅ XSS OCHRANA: Escapování statistiky readonly *}
+                    <div class="stat-number text-muted">{$superAdminStats['total_readonly']|escape}</div>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <div class="stat-label">Readonly</div>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="stat-card stat-card-primary">
-                    <div class="stat-number text-white">{$superAdminStats['active_users_30d']}</div>
+                    {* ✅ XSS OCHRANA: Escapování statistiky aktivních uživatelů *}
+                    <div class="stat-number text-white">{$superAdminStats['active_users_30d']|escape}</div>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <div class="stat-label text-white">Aktivní (30d)</div>
                 </div>
             </div>
@@ -117,12 +138,14 @@
     {* SUPER ADMIN - Výsledky vyhledávání *}
     {if $isSuperAdmin && $searchQuery && count($searchResults) > 0}
     <div class="search-results mb-4">
-        <h3>Výsledky vyhledávání pro "{$searchQuery}" ({count($searchResults)} výsledků)</h3>
+        {* ✅ XSS OCHRANA: Escapování vyhledávacího dotazu a počtu výsledků *}
+        <h3>Výsledky vyhledávání pro "{$searchQuery|escape}" ({count($searchResults)|escape} výsledků)</h3>
         
         <div class="table-container">
             <table class="data-table">
                 <thead>
                     <tr>
+                        {* ✅ BEZPEČNÉ: Statické texty *}
                         <th>Uživatel</th>
                         <th>Tenant / Firma</th>
                         <th>E-mail</th>
@@ -140,23 +163,28 @@
                                     <i class="bi bi-person-circle text-primary" style="font-size: 2rem;"></i>
                                 </div>
                                 <div>
-                                    <strong>{$userItem->username}</strong>
+                                    {* ✅ XSS OCHRANA: Escapování jména uživatele *}
+                                    <strong>{$userItem->username|escape}</strong>
                                     {if $userItem->first_name || $userItem->last_name}
-                                        <br><small class="text-muted">{$userItem->first_name} {$userItem->last_name}</small>
+                                        {* ✅ XSS OCHRANA: Escapování křestního jména a příjmení *}
+                                        <br><small class="text-muted">{$userItem->first_name|escape} {$userItem->last_name|escape}</small>
                                     {/if}
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div>
-                                <strong>{$userItem->tenant_name}</strong>
+                                {* ✅ XSS OCHRANA: Escapování názvu tenanta *}
+                                <strong>{$userItem->tenant_name|escape}</strong>
                                 {if $userItem->company_name && $userItem->company_name !== $userItem->tenant_name}
-                                    <br><small class="text-muted">{$userItem->company_name}</small>
+                                    {* ✅ XSS OCHRANA: Escapování názvu společnosti *}
+                                    <br><small class="text-muted">{$userItem->company_name|escape}</small>
                                 {/if}
                             </div>
                         </td>
                         <td>
-                            <a href="mailto:{$userItem->email}" class="user-email-link">{$userItem->email}</a>
+                            {* ✅ XSS OCHRANA: Escapování e-mailu (i v href) *}
+                            <a href="mailto:{$userItem->email|escape}" class="user-email-link">{$userItem->email|escape}</a>
                         </td>
                         <td>
                             {if $userItem->is_super_admin}
@@ -171,17 +199,21 @@
                         </td>
                         <td>
                             {if $userItem->last_login}
-                                {$userItem->last_login|date:'d.m.Y H:i'}
+                                {* ✅ XSS OCHRANA: Escapování data posledního přihlášení *}
+                                {$userItem->last_login|date:'d.m.Y H:i'|escape}
                             {else}
+                                {* ✅ BEZPEČNÉ: Statický text *}
                                 <span class="text-muted">Nikdy</span>
                             {/if}
                         </td>
                         <td class="text-end">
                             <div class="action-buttons">
+                                {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
                                 <a n:href="edit $userItem->id" class="btn btn-icon btn-primary" title="Upravit">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove({$userItem->id}, '{$userItem->username}', '{$userItem->tenant_name}')" title="Přesunout do jiného tenanta">
+                                {* ✅ XSS OCHRANA: Escapování parametrů pro JavaScript funkci *}
+                                <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove({$userItem->id|escape}, '{$userItem->username|escape}', '{$userItem->tenant_name|escape}')" title="Přesunout do jiného tenanta">
                                     <i class="bi bi-arrow-left-right"></i>
                                 </button>
                             </div>
@@ -210,27 +242,32 @@
                                 <div class="tenant-info">
                                     <div class="tenant-name">
                                         <i class="bi bi-building me-2 text-primary"></i>
-                                        <strong>{$tenantGroup['company_name']}</strong>
+                                        {* ✅ XSS OCHRANA: Escapování názvu společnosti *}
+                                        <strong>{$tenantGroup['company_name']|escape}</strong>
                                     </div>
                                     <div class="tenant-details mt-1">
                                         <span class="badge bg-light text-dark me-2">
                                             <i class="bi bi-people me-1"></i>
-                                            {$tenantGroup['user_count']} uživatelů
+                                            {* ✅ XSS OCHRANA: Escapování počtu uživatelů *}
+                                            {$tenantGroup['user_count']|escape} uživatelů
                                         </span>
                                         <span class="badge bg-admin me-2">
                                             <i class="bi bi-shield-check me-1"></i>
-                                            {$tenantGroup['admin_count']} adminů
+                                            {* ✅ XSS OCHRANA: Escapování počtu adminů *}
+                                            {$tenantGroup['admin_count']|escape} adminů
                                         </span>
                                         {if $tenantGroup['owner']}
                                             <span class="badge bg-owner me-3">
                                                 <i class="bi bi-crown me-1"></i>
-                                                Majitel: {$tenantGroup['owner']->username}
+                                                {* ✅ XSS OCHRANA: Escapování jména majitele *}
+                                                Majitel: {$tenantGroup['owner']->username|escape}
                                             </span>
                                         {/if}
                                     </div>
                                 </div>
                                 <div class="tenant-meta">
-                                    <span class="badge bg-secondary">ID: {$tenantGroup['tenant_id']}</span>
+                                    {* ✅ XSS OCHRANA: Escapování ID tenanta *}
+                                    <span class="badge bg-secondary">ID: {$tenantGroup['tenant_id']|escape}</span>
                                 </div>
                             </div>
                         </div>
@@ -245,13 +282,15 @@
                             {if $tenantGroup['company_email']}
                                 <span class="me-4">
                                     <i class="bi bi-envelope me-2 text-muted"></i>
-                                    <a href="mailto:{$tenantGroup['company_email']}" class="tenant-contact-link">{$tenantGroup['company_email']}</a>
+                                    {* ✅ XSS OCHRANA: Escapování e-mailu společnosti *}
+                                    <a href="mailto:{$tenantGroup['company_email']|escape}" class="tenant-contact-link">{$tenantGroup['company_email']|escape}</a>
                                 </span>
                             {/if}
                             {if $tenantGroup['company_phone']}
                                 <span>
                                     <i class="bi bi-telephone me-2 text-muted"></i>
-                                    <a href="tel:{$tenantGroup['company_phone']}" class="tenant-contact-link">{$tenantGroup['company_phone']}</a>
+                                    {* ✅ XSS OCHRANA: Escapování telefonu společnosti *}
+                                    <a href="tel:{$tenantGroup['company_phone']|escape}" class="tenant-contact-link">{$tenantGroup['company_phone']|escape}</a>
                                 </span>
                             {/if}
                         </div>
@@ -261,6 +300,7 @@
                             <table class="data-table">
                                 <thead>
                                     <tr>
+                                        {* ✅ BEZPEČNÉ: Statické texty *}
                                         <th>Uživatel</th>
                                         <th>E-mail</th>
                                         <th>Role</th>
@@ -278,18 +318,22 @@
                                                     <i class="bi bi-person-circle text-primary" style="font-size: 2rem;"></i>
                                                 </div>
                                                 <div>
-                                                    <strong>{$userItem->username}</strong>
+                                                    {* ✅ XSS OCHRANA: Escapování jména uživatele *}
+                                                    <strong>{$userItem->username|escape}</strong>
                                                     {if $userItem->first_name || $userItem->last_name}
-                                                        <br><small class="text-muted">{$userItem->first_name} {$userItem->last_name}</small>
+                                                        {* ✅ XSS OCHRANA: Escapování křestního jména a příjmení *}
+                                                        <br><small class="text-muted">{$userItem->first_name|escape} {$userItem->last_name|escape}</small>
                                                     {/if}
                                                     {if $userItem->id === $currentUser->id}
+                                                        {* ✅ BEZPEČNÉ: Statický text *}
                                                         <span class="badge bg-info ms-2">To jste vy</span>
                                                     {/if}
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <a href="mailto:{$userItem->email}" class="user-email-link">{$userItem->email}</a>
+                                            {* ✅ XSS OCHRANA: Escapování e-mailu *}
+                                            <a href="mailto:{$userItem->email|escape}" class="user-email-link">{$userItem->email|escape}</a>
                                         </td>
                                         <td>
                                             {if $userItem->is_super_admin}
@@ -304,29 +348,36 @@
                                         </td>
                                         <td>
                                             {if $userItem->created_at}
-                                                {$userItem->created_at|date:'d.m.Y'}
+                                                {* ✅ XSS OCHRANA: Escapování data vytvoření *}
+                                                {$userItem->created_at|date:'d.m.Y'|escape}
                                             {else}
+                                                {* ✅ BEZPEČNÉ: Statický text *}
                                                 <span class="text-muted">—</span>
                                             {/if}
                                         </td>
                                         <td>
                                             {if $userItem->last_login}
-                                                {$userItem->last_login|date:'d.m.Y H:i'}
+                                                {* ✅ XSS OCHRANA: Escapování data posledního přihlášení *}
+                                                {$userItem->last_login|date:'d.m.Y H:i'|escape}
                                             {else}
+                                                {* ✅ BEZPEČNÉ: Statický text *}
                                                 <span class="text-muted">Nikdy</span>
                                             {/if}
                                         </td>
                                         <td class="text-end">
                                             <div class="action-buttons">
+                                                {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
                                                 <a n:href="edit $userItem->id" class="btn btn-icon btn-primary" title="Upravit">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove({$userItem->id}, '{$userItem->username}', 'Tenant ID: {$userItem->tenant_id}')" title="Přesunout do jiného tenanta">
+                                                {* ✅ XSS OCHRANA: Escapování parametrů pro JavaScript funkci *}
+                                                <button type="button" class="btn btn-icon btn-warning" onclick="loadUserForMove({$userItem->id|escape}, '{$userItem->username|escape}', '{$tenantGroup['company_name']|escape}')" title="Přesunout do jiného tenanta">
                                                     <i class="bi bi-arrow-left-right"></i>
                                                 </button>
                                                 {if $userItem->id !== $currentUser->id}
+                                                    {* ✅ XSS OCHRANA: Escapování jména uživatele v potvrzovacím dialogu *}
                                                     <a n:href="delete $userItem->id" class="btn btn-icon btn-danger" 
-                                                       onclick="return confirm('Opravdu chcete smazat uživatele {$userItem->username}?')" 
+                                                       onclick="return confirm('Opravdu chcete smazat uživatele {$userItem->username|escape}?')" 
                                                        title="Smazat uživatele">
                                                         <i class="bi bi-trash"></i>
                                                     </a>
@@ -352,6 +403,7 @@
         <table class="data-table">
             <thead>
                 <tr>
+                    {* ✅ BEZPEČNÉ: Statické texty *}
                     <th>Uživatel</th>
                     <th>E-mail</th>
                     <th>Role</th>
@@ -369,18 +421,22 @@
                                 <i class="bi bi-person-circle text-primary" style="font-size: 2rem;"></i>
                             </div>
                             <div>
-                                <strong>{$userItem->username}</strong>
+                                {* ✅ XSS OCHRANA: Escapování jména uživatele *}
+                                <strong>{$userItem->username|escape}</strong>
                                 {if $userItem->first_name || $userItem->last_name}
-                                    <br><small class="text-muted">{$userItem->first_name} {$userItem->last_name}</small>
+                                    {* ✅ XSS OCHRANA: Escapování křestního jména a příjmení *}
+                                    <br><small class="text-muted">{$userItem->first_name|escape} {$userItem->last_name|escape}</small>
                                 {/if}
                                 {if $userItem->id === $currentUser->id}
+                                    {* ✅ BEZPEČNÉ: Statický text *}
                                     <span class="badge bg-info ms-2">To jste vy</span>
                                 {/if}
                             </div>
                         </div>
                     </td>
                     <td>
-                        <a href="mailto:{$userItem->email}" class="user-email-link">{$userItem->email}</a>
+                        {* ✅ XSS OCHRANA: Escapování e-mailu *}
+                        <a href="mailto:{$userItem->email|escape}" class="user-email-link">{$userItem->email|escape}</a>
                     </td>
                     <td>
                         {if $userItem->is_super_admin}
@@ -395,26 +451,32 @@
                     </td>
                     <td>
                         {if $userItem->created_at}
-                            {$userItem->created_at|date:'d.m.Y'}
+                            {* ✅ XSS OCHRANA: Escapování data vytvoření *}
+                            {$userItem->created_at|date:'d.m.Y'|escape}
                         {else}
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             <span class="text-muted">—</span>
                         {/if}
                     </td>
                     <td>
                         {if $userItem->last_login}
-                            {$userItem->last_login|date:'d.m.Y H:i'}
+                            {* ✅ XSS OCHRANA: Escapování data posledního přihlášení *}
+                            {$userItem->last_login|date:'d.m.Y H:i'|escape}
                         {else}
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             <span class="text-muted">Nikdy</span>
                         {/if}
                     </td>
                     <td class="text-end">
                         <div class="action-buttons">
+                            {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
                             <a n:href="edit $userItem->id" class="btn btn-icon btn-primary" title="Upravit">
                                 <i class="bi bi-pencil"></i>
                             </a>
                             {if $userItem->id !== $currentUser->id}
+                                {* ✅ XSS OCHRANA: Escapování jména uživatele v potvrzovacím dialogu *}
                                 <a n:href="delete $userItem->id" class="btn btn-icon btn-danger" 
-                                   onclick="return confirm('Opravdu chcete smazat uživatele {$userItem->username}?')" 
+                                   onclick="return confirm('Opravdu chcete smazat uživatele {$userItem->username|escape}?')" 
                                    title="Smazat uživatele">
                                     <i class="bi bi-trash"></i>
                                 </a>
@@ -434,8 +496,10 @@
         <div class="empty-state-icon">
             <i class="bi bi-people"></i>
         </div>
+        {* ✅ BEZPEČNÉ: Statické texty *}
         <h3>Zatím zde nejsou žádní uživatelé</h3>
         <p>Začněte přidáním nového uživatele do systému</p>
+        {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
         <a n:href="add" class="btn btn-primary mt-3">
             <i class="bi bi-person-plus"></i> Přidat prvního uživatele
         </a>
@@ -449,6 +513,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #B1D235; color: #212529;">
+                {* ✅ BEZPEČNÉ: Statický text *}
                 <h5 class="modal-title">
                     <i class="bi bi-arrow-left-right me-2"></i>
                     Přesunout uživatele mezi tenanty
@@ -457,6 +522,7 @@
             </div>
             {form moveTenantForm}
             <div class="modal-body">
+                {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                 {input user_id}
                 
                 {* Místo pro informace o aktuálním uživateli - vyplní se JavaScriptem *}
@@ -464,26 +530,31 @@
                 
                 <div class="alert alert-warning">
                     <i class="bi bi-exclamation-triangle me-2"></i>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <strong>Pozor!</strong> Přesunutí uživatele do jiného tenanta je nevratná operace. 
                     Uživatel ztratí přístup ke všem datům současného tenanta.
                 </div>
                 
                 <div class="row">
                     <div class="col-md-12 mb-3">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {label new_tenant_id class => 'form-label fw-bold' /}
                         {input new_tenant_id class => 'form-select form-select-lg'}
                         <div class="form-text">
                             <i class="bi bi-info-circle me-1"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Formát: Název firmy - Tenant (ID: číslo)
                         </div>
                     </div>
                 </div>
                 
                 <div class="mb-3">
+                    {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                     {label reason class => 'form-label fw-bold' /}
                     {input reason class => 'form-control'}
                     <div class="form-text">
                         <i class="bi bi-pencil me-1"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         Důvod bude zalogován do bezpečnostního protokolu
                     </div>
                 </div>
@@ -492,6 +563,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="bi bi-x-lg me-2"></i>Zrušit
                 </button>
+                {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                 {input send class => 'btn btn-warning btn-lg', value => 'Přesunout uživatele'}
             </div>
             {/form}

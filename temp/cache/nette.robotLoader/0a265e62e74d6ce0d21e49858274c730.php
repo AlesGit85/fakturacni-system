@@ -130,7 +130,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1752238635,
+      1 => 1753103423,
     ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (
@@ -160,7 +160,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1752852109,
+      1 => 1753167760,
     ),
     'App\\Security\\RateLimiter' => 
     array (
@@ -185,7 +185,7 @@ return array (
     'App\\Security\\SecurityValidator' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityValidator.php',
-      1 => 1753081938,
+      1 => 1753164150,
     ),
   ),
   1 => 
@@ -209,7 +209,7 @@ return array (
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
     'App\\Presentation\\Users\\UsersTemplate' => 3,
     'App\\Presentation\\Users\\UsersAddTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDeleteTemplate' => 2,
+    'App\\Presentation\\Users\\UsersDeleteTemplate' => 3,
     'Symfony\\Component\\Console\\Command\\Command' => 3,
     'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsTemplate' => 3,
@@ -222,6 +222,8 @@ return array (
     'App\\Presentation\\Clients\\ClientsEditTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 3,
+    'App\\Presentation\\Users\\UsersEditTemplate' => 3,
+    'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
   ),
   2 => 
   array (

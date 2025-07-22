@@ -361,7 +361,7 @@ final class UsersPresenter extends BasePresenter
                 $this->redirect('default');
             }
 
-            // Provedení přesunutí
+            // ✅ OPRAVENO: Definujeme adminId a adminName
             $adminId = $this->getUser()->getId();
             $adminName = $this->getUser()->getIdentity()->username;
 
@@ -376,11 +376,16 @@ final class UsersPresenter extends BasePresenter
             } else {
                 $this->flashMessage('Nepodařilo se přesunout uživatele. Zkuste to prosím znovu.', 'danger');
             }
+
+            // ✅ OPRAVENO: Redirect na konci try bloku
+            $this->redirect('default');
+        } catch (Nette\Application\AbortException $e) {
+            // ✅ KLÍČOVÁ OPRAVA: AbortException (redirect) necháme projít
+            throw $e;
         } catch (\Exception $e) {
             $this->flashMessage('Chyba při přesouvání uživatele: ' . $e->getMessage(), 'danger');
+            $this->redirect('default');
         }
-
-        $this->redirect('default');
     }
 
     /**
@@ -463,11 +468,12 @@ final class UsersPresenter extends BasePresenter
     }
 
     /**
-     * ✅ OPRAVENÉ zpracování formuláře s rate limiting
+     * ✅ OPRAVENÉ zpracování formuláře - bez zdvojených hlášek
      */
     public function userFormSucceeded(Form $form, \stdClass $data): void
     {
         $id = $this->getParameter('id');
+        $successMessage = null; // Flag pro úspěšnou operaci
 
         try {
             // ✅ OPRAVENO: Kontrola rate limitingu pro vytváření uživatelů
@@ -495,18 +501,17 @@ final class UsersPresenter extends BasePresenter
                 $validationErrors[] = 'E-mailová adresa není platná.';
             }
 
-            // Validace hesla (pouze pokud je vyplněno)
+            // Validace hesla (jen pokud je vyplněno)
             if (!empty($data->password)) {
                 $passwordErrors = SecurityValidator::validatePassword($data->password);
                 $validationErrors = array_merge($validationErrors, $passwordErrors);
             }
 
-            // Pokud jsou chyby validace, zobrazíme je
+            // Pokud jsou chyby validace, zobrazíme je a ukončíme
             if (!empty($validationErrors)) {
                 foreach ($validationErrors as $error) {
                     $form->addError($error);
                 }
-                // ✅ OPRAVENO: Správné pořadí parametrů
                 if (!$id) {
                     $this->recordCustomAttempt('user_creation', false);
                 } else {
@@ -515,38 +520,6 @@ final class UsersPresenter extends BasePresenter
                 return;
             }
 
-            // Kontrola jedinečnosti uživatelského jména a e-mailu
-            $existingUsername = $this->userManager->getAll()
-                ->where('username', $data->username)
-                ->where('id != ?', $id ?: 0)
-                ->fetch();
-
-            if ($existingUsername) {
-                $form->addError('Uživatelské jméno už existuje.');
-                if (!$id) {
-                    $this->recordCustomAttempt('user_creation', false);
-                } else {
-                    $this->recordCustomAttempt('form_submit', false);
-                }
-                return;
-            }
-
-            $existingEmail = $this->userManager->getAll()
-                ->where('email', $data->email)
-                ->where('id != ?', $id ?: 0)
-                ->fetch();
-
-            if ($existingEmail) {
-                $form->addError('E-mailová adresa už je používána.');
-                if (!$id) {
-                    $this->recordCustomAttempt('user_creation', false);
-                } else {
-                    $this->recordCustomAttempt('form_submit', false);
-                }
-                return;
-            }
-
-            // Informace o adminovi pro logování
             $adminId = $this->getUser()->getId();
             $adminName = $this->getUser()->getIdentity()->username;
 
@@ -555,20 +528,18 @@ final class UsersPresenter extends BasePresenter
                 $userData = [
                     'username' => $data->username,
                     'email' => $data->email,
-                    'first_name' => $data->first_name ?? null, // ✅ NOVÉ
-                    'last_name' => $data->last_name ?? null,   // ✅ NOVÉ
+                    'first_name' => $data->first_name ?? null,
+                    'last_name' => $data->last_name ?? null,
                     'role' => $data->role,
                 ];
 
                 // Přidání hesla pouze pokud bylo zadáno
                 if (!empty($data->password)) {
-                    $userData['password'] = $data->password; // UserManager si heslo zahashuje
+                    $userData['password'] = $data->password;
                 }
 
                 $this->userManager->update($id, $userData, $adminId, $adminName);
-                $this->flashMessage('Uživatel byl úspěšně aktualizován.', 'success');
-
-                // ✅ OPRAVENO: Správné pořadí parametrů
+                $successMessage = 'Uživatel byl úspěšně aktualizován.';
                 $this->recordCustomAttempt('form_submit', true);
             } else {
                 // PŘIDÁNÍ nového uživatele do aktuálního tenanta
@@ -588,14 +559,12 @@ final class UsersPresenter extends BasePresenter
                     $tenantId,
                     $adminId,
                     $adminName,
-                    $data->first_name ?? null, // ✅ NOVÉ
-                    $data->last_name ?? null   // ✅ NOVÉ
+                    $data->first_name ?? null,
+                    $data->last_name ?? null
                 );
 
                 if ($newUserId) {
-                    $this->flashMessage('Uživatel byl úspěšně přidán do vašeho firemního účtu.', 'success');
-
-                    // ✅ OPRAVENO: Správné pořadí parametrů
+                    $successMessage = 'Uživatel byl úspěšně přidán do vašeho firemního účtu.';
                     $this->recordCustomAttempt('user_creation', true);
                 } else {
                     $form->addError('Nepodařilo se přidat uživatele. Zkuste to prosím znovu.');
@@ -604,15 +573,23 @@ final class UsersPresenter extends BasePresenter
                 }
             }
 
-            $this->redirect('default');
+            // ✅ OPRAVENO: FlashMessage a redirect až na konci - atomicky
+            if ($successMessage) {
+                $this->flashMessage($successMessage, 'success');
+                $this->redirect('default');
+            }
+        } catch (Nette\Application\AbortException $e) {
+            // ✅ KLÍČOVÁ OPRAVA: AbortException (redirect) necháme projít
+            throw $e;
         } catch (\Exception $e) {
-            // ✅ OPRAVENO: Správné pořadí parametrů pro chybu
+            // ✅ OPRAVENO: Pouze chybové zpracování, žádné dvojité hlášky
             if (!$id) {
                 $this->recordCustomAttempt('user_creation', false);
             } else {
                 $this->recordCustomAttempt('form_submit', false);
             }
 
+            // Pouze chybová hláška - žádný flashMessage už nebyl nastaven
             $form->addError('Chyba při ukládání uživatele: ' . $e->getMessage());
         }
     }
@@ -680,14 +657,14 @@ final class UsersPresenter extends BasePresenter
     }
 
     /**
-     * ✅ OPRAVENÉ zpracování profilu s rate limiting
+     * ✅ OPRAVENÉ zpracování profilu s rate limiting a modal logikou
      */
     public function profileFormSucceeded(Form $form, \stdClass $data): void
     {
         $userId = $this->getUser()->getId();
 
         try {
-            // ✅ OPRAVENO: Použití helper metody bez druhého parametru
+            // ✅ OPRAVENO: Kontrola rate limitingu
             if (!$this->checkCustomRateLimit('form_submit')) {
                 $form->addError('Příliš mnoho pokusů o úpravu profilu. Zkuste to později.');
                 $this->recordCustomAttempt('form_submit', false);
@@ -728,6 +705,10 @@ final class UsersPresenter extends BasePresenter
                 $this->recordCustomAttempt('form_submit', false);
                 return;
             }
+
+            // ✅ NOVÉ: Detekce změny username PŘED aktualizací
+            $usernameChanged = ($currentUser->username !== $data->username);
+            $originalUsername = $currentUser->username;
 
             // Kontrola hesla (jen pokud se mění)
             $passwordWillChange = !empty($data->password);
@@ -783,17 +764,35 @@ final class UsersPresenter extends BasePresenter
 
             // Aktualizace
             $this->userManager->update($userId, $updateData, $userId);
-
-            // ✅ OPRAVENO: Správné pořadí parametrů
             $this->recordCustomAttempt('form_submit', true);
 
-            if ($passwordWillChange) {
-                $this->flashMessage('Profil a heslo byly úspěšně aktualizovány.', 'success');
+            // ✅ NOVÉ: Logika pro změnu username
+            if ($usernameChanged) {
+                // Nastavíme proměnné pro modal
+                $this->template->showLogoutCountdown = true;
+                $this->template->originalUsername = $originalUsername;
+                $this->template->newUsername = $data->username;
+
+                // Úspěšná hláška pro změnu username
+                $this->flashMessage("Uživatelské jméno bylo změněno z '{$originalUsername}' na '{$data->username}'. Budete odhlášeni z bezpečnostních důvodů.", 'success');
             } else {
-                $this->flashMessage('Profil byl úspěšně aktualizován.', 'success');
+                // Normální úspěšná hláška
+                if ($passwordWillChange) {
+                    $this->flashMessage('Profil a heslo byly úspěšně aktualizovány.', 'success');
+                } else {
+                    $this->flashMessage('Profil byl úspěšně aktualizován.', 'success');
+                }
+
+                // Normální redirect
+                $this->redirect('this');
             }
 
-            $this->redirect('this');
+            // ✅ OPRAVENO: Pro změnu username se NEPOUŽÍVÁ redirect (kvůli modalu)
+            // Modal se zobrazí a JavaScript provede odhlášení
+
+        } catch (Nette\Application\AbortException $e) {
+            // ✅ KLÍČOVÁ OPRAVA: AbortException (redirect) necháme projít
+            throw $e;
         } catch (\Exception $e) {
             $this->recordCustomAttempt('form_submit', false);
             $form->addError('Chyba při ukládání profilu: ' . $e->getMessage());
@@ -853,9 +852,11 @@ final class UsersPresenter extends BasePresenter
 
             // Delegace na akci pro zpracování
             $this->actionMoveUser($userId, $newTenantId, $reason);
+        } catch (Nette\Application\AbortException $e) {
+            // ✅ KLÍČOVÁ OPRAVA: AbortException (redirect) necháme projít
+            throw $e;
         } catch (\Exception $e) {
             $this->flashMessage('Chyba při přesouvání uživatele: ' . $e->getMessage(), 'danger');
-            $this->redirect('default');
         }
     }
 

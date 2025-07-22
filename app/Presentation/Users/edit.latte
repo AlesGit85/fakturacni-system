@@ -1,39 +1,91 @@
 {block content}
 <div class="user-form-container">
     <div class="page-header">
-        <h1 class="main-title">Upravit uživatele: {$editUser->username}</h1>
+        {* ✅ XSS OCHRANA: Escapování jména upravovaného uživatele *}
+        <h1 class="main-title">Upravit uživatele: {$editUser->username|escape}</h1>
+        {* ✅ BEZPEČNÉ: Statický text *}
         <p class="text-muted">Úprava údajů uživatelského účtu</p>
     </div>
 
     <div class="card shadow-sm rounded-lg border-0">
         <div class="card-body p-4">
             {form userForm class => 'row g-4'}
+                {* Zobrazení globálních chyb formuláře *}
+                {if $form->hasErrors()}
+                    <div class="col-12">
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            {foreach $form->getErrors() as $error}
+                                {* ✅ XSS OCHRANA: Escapování chybových hlášek formuláře *}
+                                {$error|escape}
+                            {/foreach}
+                        </div>
+                    </div>
+                {/if}
+
                 <!-- Základní údaje -->
                 <div class="col-12">
                     <div class="section-header">
                         <i class="bi bi-person-vcard"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         <h2 class="section-title">Základní údaje</h2>
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input username class => 'form-control'}
                         {label username class => 'form-label' /}
+                        {if $form['username']->hasErrors()}
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro username *}
+                                {$form['username']->getError()|escape}
+                            </div>
+                        {/if}
+                    </div>
+                    <div class="form-text mt-2">
+                        <small class="text-muted">
+                            {* ✅ BEZPEČNÉ: Statický text *}
+                            <i class="bi bi-info-circle me-1"></i>
+                            <strong>Povolené znaky:</strong> písmena bez diakritiky (a-z, A-Z), číslice, podtržítka a pomlčky (bez diakritiky)
+                        </small>
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input email class => 'form-control'}
                         {label email class => 'form-label' /}
+                        {if $form['email']->hasErrors()}
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro email *}
+                                {$form['email']->getError()|escape}
+                            </div>
+                        {/if}
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input role class => 'form-select'}
                         {label role class => 'form-label' /}
+                        {if $form['role']->hasErrors()}
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro role *}
+                                {$form['role']->getError()|escape}
+                            </div>
+                        {/if}
+                    </div>
+                    <div class="form-text mt-2">
+                        <small class="text-muted">
+                            {* ✅ BEZPEČNÉ: Statický text *}
+                            <strong>Readonly:</strong> Může pouze prohlížet data |
+                            <strong>Účetní:</strong> Může vytvářet faktury a klienty |
+                            <strong>Admin:</strong> Má plný přístup včetně správy uživatelů
+                        </small>
                     </div>
                 </div>
                 
@@ -41,32 +93,66 @@
                 <div class="col-12 mt-4">
                     <div class="section-header">
                         <i class="bi bi-key"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         <h2 class="section-title">Změna hesla</h2>
                     </div>
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle me-2"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         Pokud nechcete měnit heslo, ponechte pole prázdná.
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input password class => 'form-control'}
                         {label password class => 'form-label' /}
+                        {if $form['password']->hasErrors()}
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro heslo *}
+                                {$form['password']->getError()|escape}
+                            </div>
+                        {/if}
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input passwordVerify class => 'form-control'}
                         {label passwordVerify class => 'form-label' /}
+                        {if $form['passwordVerify']->hasErrors()}
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro ověření hesla *}
+                                {$form['passwordVerify']->getError()|escape}
+                            </div>
+                        {/if}
+                    </div>
+                </div>
+
+                <!-- Požadavky na heslo -->
+                <div class="col-12">
+                    <div class="alert alert-light">
+                        <i class="bi bi-shield-check me-2 text-primary"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
+                        <strong>Požadavky na heslo (pouze při změně):</strong>
+                        <ul class="mb-0 mt-2 small">
+                            <li>Alespoň 8 znaků</li>
+                            <li>Alespoň jedna číslice</li>
+                            <li>Alespoň jedno velké písmeno</li>
+                            <li>Alespoň jedno malé písmeno</li>
+                            <li>Alespoň jeden speciální znak (!@#$%^&* atd.)</li>
+                        </ul>
                     </div>
                 </div>
                 
                 <div class="col-12 mt-4 d-flex justify-content-between">
+                    {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
                     <a n:href="default" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Zpět na seznam uživatelů
                     </a>
+                    {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                     <button n:name="send" class="btn btn-primary">
                         <i class="bi bi-check-lg"></i> Uložit změny
                     </button>

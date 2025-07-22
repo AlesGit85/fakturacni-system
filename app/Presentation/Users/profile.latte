@@ -1,6 +1,7 @@
 {block content}
 <div class="user-form-container">
     <div class="page-header">
+        {* ✅ BEZPEČNÉ: Statický text *}
         <h1 class="main-title">Můj profil</h1>
         <p class="text-muted">Správa vašeho uživatelského účtu</p>
     </div>
@@ -9,6 +10,7 @@
     <div class="info-card mb-4">
         <div class="info-card-header">
             <i class="bi bi-person-circle me-2"></i>
+            {* ✅ BEZPEČNÉ: Statický text *}
             <h3>Aktuální údaje</h3>
         </div>
         <div class="info-card-body">
@@ -18,11 +20,13 @@
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-person"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Jméno
                         </div>
                         <div class="info-value">
-                            {if $profileUser->first_name}{$profileUser->first_name}{/if}
-                            {if $profileUser->last_name} {$profileUser->last_name}{/if}
+                            {* ✅ XSS OCHRANA: Escapování křestního jména a příjmení *}
+                            {if $profileUser->first_name}{$profileUser->first_name|escape}{/if}
+                            {if $profileUser->last_name} {$profileUser->last_name|escape}{/if}
                         </div>
                     </div>
                     {/if}
@@ -30,27 +34,37 @@
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-at"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Uživatelské jméno
                         </div>
-                        <div class="info-value">{$profileUser->username}</div>
+                        <div class="info-value">
+                            {* ✅ XSS OCHRANA: Escapování uživatelského jména *}
+                            {$profileUser->username|escape}
+                        </div>
                     </div>
                     
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-envelope"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             E-mail
                         </div>
-                        <div class="info-value">{$profileUser->email}</div>
+                        <div class="info-value">
+                            {* ✅ XSS OCHRANA: Escapování e-mailu *}
+                            {$profileUser->email|escape}
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-shield"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Role
                         </div>
                         <div class="info-value">
                             {if $profileUser->is_super_admin}
+                                {* ✅ BEZPEČNÉ: Statický text - role badge *}
                                 <span class="badge" style="background-color: #B1D235; color: #212529; font-weight: 600;">Super Administrátor</span>
                             {elseif $profileUser->role === 'admin'}
                                 <span class="badge bg-danger">Administrátor</span>
@@ -65,12 +79,15 @@
                     <div class="info-item">
                         <div class="info-label">
                             <i class="bi bi-calendar"></i>
+                            {* ✅ BEZPEČNÉ: Statický text *}
                             Registrován
                         </div>
                         <div class="info-value">
                             {if $profileUser->created_at}
-                                {$profileUser->created_at|date:'d.m.Y'}
+                                {* ✅ XSS OCHRANA: Escapování data registrace *}
+                                {$profileUser->created_at|date:'d.m.Y'|escape}
                             {else}
+                                {* ✅ BEZPEČNÉ: Statický text *}
                                 <span class="text-muted">—</span>
                             {/if}
                         </div>
@@ -84,34 +101,57 @@
     <div class="card shadow-sm rounded-lg border-0">
         <div class="card-header">
             <i class="bi bi-pencil-square me-2"></i>
+            {* ✅ BEZPEČNÉ: Statický text *}
             <h3>Upravit profil</h3>
         </div>
         <div class="card-body p-4">
             {form profileForm class => 'row g-4'}
+                {* Zobrazení globálních chyb formuláře *}
+                {if $form->hasErrors()}
+                    <div class="col-12">
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            {foreach $form->getErrors() as $error}
+                                {* ✅ XSS OCHRANA: Escapování chybových hlášek formuláře *}
+                                {$error|escape}
+                            {/foreach}
+                        </div>
+                    </div>
+                {/if}
+
                 <!-- Osobní údaje -->
                 <div class="col-12">
                     <div class="section-header">
                         <i class="bi bi-person-vcard"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         <h2 class="section-title">Osobní údaje</h2>
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input first_name class => 'form-control'}
                         {label first_name class => 'form-label' /}
                         {if $form['first_name']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['first_name']->getError()}</div>
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro křestní jméno *}
+                                {$form['first_name']->getError()|escape}
+                            </div>
                         {/if}
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input last_name class => 'form-control'}
                         {label last_name class => 'form-label' /}
                         {if $form['last_name']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['last_name']->getError()}</div>
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro příjmení *}
+                                {$form['last_name']->getError()|escape}
+                            </div>
                         {/if}
                     </div>
                 </div>
@@ -120,26 +160,42 @@
                 <div class="col-12 mt-4">
                     <div class="section-header">
                         <i class="bi bi-at"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         <h2 class="section-title">Přihlašovací údaje</h2>
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input username class => 'form-control'}
                         {label username class => 'form-label' /}
                         {if $form['username']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['username']->getError()}</div>
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro username *}
+                                {$form['username']->getError()|escape}
+                            </div>
                         {/if}
+                    </div>
+                    <div class="form-text mt-2">
+                        <small class="text-muted">
+                            {* ✅ BEZPEČNÉ: Statický text *}
+                            <i class="bi bi-info-circle me-1"></i>
+                            <strong>Povolené znaky:</strong> písmena bez diakritiky (a-z, A-Z), číslice, podtržítka a pomlčky (bez diakritiky)
+                        </small>
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input email class => 'form-control'}
                         {label email class => 'form-label' /}
                         {if $form['email']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['email']->getError()}</div>
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro email *}
+                                {$form['email']->getError()|escape}
+                            </div>
                         {/if}
                     </div>
                 </div>
@@ -148,57 +204,80 @@
                 <div class="col-12 mt-4">
                     <div class="section-header">
                         <i class="bi bi-key"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
                         <h2 class="section-title">Změna hesla</h2>
                     </div>
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle me-2"></i>
-                        Pro změnu hesla vyplňte všechna tři pole. Heslo musí mít alespoň 6 znaků. Pokud nechcete měnit heslo, ponechte je prázdná.
+                        {* ✅ BEZPEČNÉ: Statický text *}
+                        Pro změnu hesla vyplňte všechna tři pole. Heslo musí splňovat požadavky na bezpečnost. Pokud nechcete měnit heslo, ponechte pole prázdná.
                     </div>
                 </div>
                 
                 <div class="col-md-4">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input currentPassword class => 'form-control'}
                         {label currentPassword class => 'form-label' /}
                         {if $form['currentPassword']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['currentPassword']->getError()}</div>
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro současné heslo *}
+                                {$form['currentPassword']->getError()|escape}
+                            </div>
                         {/if}
                     </div>
                 </div>
                 
                 <div class="col-md-4">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input password class => 'form-control'}
                         {label password class => 'form-label' /}
                         {if $form['password']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['password']->getError()}</div>
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro nové heslo *}
+                                {$form['password']->getError()|escape}
+                            </div>
                         {/if}
                     </div>
                 </div>
                 
                 <div class="col-md-4">
                     <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input passwordVerify class => 'form-control'}
                         {label passwordVerify class => 'form-label' /}
                         {if $form['passwordVerify']->hasErrors()}
-                            <div class="text-danger mt-1">{$form['passwordVerify']->getError()}</div>
+                            <div class="text-danger mt-1">
+                                {* ✅ XSS OCHRANA: Escapování chybové hlášky pro ověření hesla *}
+                                {$form['passwordVerify']->getError()|escape}
+                            </div>
                         {/if}
                     </div>
                 </div>
-                
-                {if $form->hasErrors()}
-                    <div class="col-12">
-                        <div class="alert alert-danger">
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                            Prosím opravte chyby ve formuláři.
-                        </div>
+
+                <!-- Požadavky na heslo -->
+                <div class="col-12">
+                    <div class="alert alert-light">
+                        <i class="bi bi-shield-check me-2 text-primary"></i>
+                        {* ✅ BEZPEČNÉ: Statický text *}
+                        <strong>Požadavky na heslo (pouze při změně):</strong>
+                        <ul class="mb-0 mt-2 small">
+                            <li>Alespoň 8 znaků</li>
+                            <li>Alespoň jedna číslice</li>
+                            <li>Alespoň jedno velké písmeno</li>
+                            <li>Alespoň jedno malé písmeno</li>
+                            <li>Alespoň jeden speciální znak (!@#$%^&* atd.)</li>
+                        </ul>
                     </div>
-                {/if}
+                </div>
                 
                 <div class="col-12 mt-4 d-flex justify-content-between">
+                    {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
                     <a n:href="default" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Zpět na uživatele
                     </a>
+                    {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                     <button n:name="send" class="btn btn-primary">
                         <i class="bi bi-check-lg"></i> Uložit změny
                     </button>
@@ -214,6 +293,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #B1D235; color: #212529;">
+                {* ✅ BEZPEČNÉ: Statický text *}
                 <h5 class="modal-title">
                     <i class="bi bi-check-circle-fill me-2"></i>
                     Uživatelské jméno změněno
@@ -221,20 +301,24 @@
             </div>
             <div class="modal-body text-center">
                 <div class="alert alert-success mb-4">
+                    {* ✅ XSS OCHRANA: Escapování starého a nového uživatelského jména *}
                     <strong>Úspěch!</strong> Vaše uživatelské jméno bylo změněno z 
-                    <strong>{$originalUsername}</strong> na <strong>{$newUsername}</strong>.
+                    <strong>{$originalUsername|escape}</strong> na <strong>{$newUsername|escape}</strong>.
                 </div>
                 
                 <div class="alert alert-warning mb-4">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {* ✅ BEZPEČNÉ: Statický text *}
                     <strong>Bezpečnostní opatření:</strong> Z bezpečnostních důvodů musíte být odhlášeni a přihlásit se znovu s novým uživatelským jménem.
                 </div>
                 
                 <p class="mb-4">
-                    Budete automaticky odhlášeni za <span id="countdown" style="color: #B1D235; font-weight: bold; font-size: 1.2em;">5</span> sekund.
+                    {* ✅ BEZPEČNÉ: Statický text + inline styling *}
+                    Budete automaticky odhlášeni za <span id="countdown" style="color: #B1D235; font-weight: bold; font-size: 1.2em;">10</span> sekund.
                 </p>
                 
                 <div class="d-grid gap-2">
+                    {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
                     <a n:href=":Sign:out" class="btn btn-primary btn-lg" id="logoutBtn">
                         <i class="bi bi-box-arrow-right me-2"></i>
                         Odhlásit se ihned
@@ -246,6 +330,7 @@
 </div>
 
 <script>
+{* ✅ BEZPEČNÉ: JavaScript s pevně danými hodnotami *}
 let countdown = 10;
 let timer;
 const countdownElement = document.getElementById('countdown');
@@ -258,6 +343,7 @@ function startCountdown() {
         
         if (countdown <= 0) {
             clearInterval(timer);
+            // ✅ BEZPEČNÉ: Používáme href z DOM elementu, který byl vytvořen Nette linkem
             window.location.href = logoutBtn.href;
         }
     }, 1000);
