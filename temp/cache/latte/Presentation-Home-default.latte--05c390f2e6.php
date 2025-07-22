@@ -32,7 +32,7 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
 		extract($this->params);
 
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
-			foreach (array_intersect_key(['step' => '63', 'invoice' => '214, 387'], $this->params) as $ʟ_v => $ʟ_l) {
+			foreach (array_intersect_key(['step' => '64', 'invoice' => '215, 388'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
@@ -47,29 +47,30 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
 		extract($ʟ_args);
 		unset($ʟ_args);
 
-		echo '<div class="home-container">
+		echo '
+<div class="home-container">
     <!-- Uvítací sekce -->
     <div class="welcome-section mb-4">
         <div class="row align-items-center">
             <div class="col-md-8">
                 <h1 class="welcome-title mb-2">
 ';
-		if ($userDisplayName) /* line 8 */ {
+		if ($userDisplayName) /* line 9 */ {
 			echo '                        Vítejte zpět, ';
-			echo LR\Filters::escapeHtmlText(($this->filters->escape)($userDisplayName)) /* line 10 */;
+			echo LR\Filters::escapeHtmlText(($this->filters->escape)($userDisplayName)) /* line 11 */;
 			echo '!
 ';
-		} else /* line 11 */ {
+		} else /* line 12 */ {
 			echo '                        Vítejte v QRdokladu!
 ';
 		}
 		echo '                </h1>
                 <p class="welcome-subtitle text-muted">
 ';
-		if ($isSetupComplete) /* line 17 */ {
+		if ($isSetupComplete) /* line 18 */ {
 			echo '                        Váš fakturační systém je připraven k použití
 ';
-		} else /* line 20 */ {
+		} else /* line 21 */ {
 			echo '                        Dokončete nastavení pro plné využití systému
 ';
 		}
@@ -78,17 +79,17 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
             <div class="col-md-4 text-end">
                 <div class="quick-actions">
 ';
-		if ($isUserAccountant) /* line 29 */ {
+		if ($isUserAccountant) /* line 30 */ {
 			echo '                        <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:add')) /* line 31 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:add')) /* line 32 */;
 			echo '" class="btn btn-primary btn-lg">
                             <i class="bi bi-plus-circle me-2"></i>
                             Nová faktura
                         </a>
 ';
-		} else /* line 35 */ {
+		} else /* line 36 */ {
 			echo '                        <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Users:profile')) /* line 38 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Users:profile')) /* line 39 */;
 			echo '" class="btn btn-primary btn-lg">
                             <i class="bi bi-person me-2"></i>
                             Můj profil
@@ -102,7 +103,7 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
 
     <!-- Začínáme sekce (zobrazí se jen pokud není setup kompletní) -->
 ';
-		if (!$isSetupComplete) /* line 49 */ {
+		if (!$isSetupComplete) /* line 50 */ {
 			echo '    <div class="setup-section mb-4">
         <div class="card shadow-sm border-0">
             <div class="card-header bg-light">
@@ -110,33 +111,33 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                     <i class="bi bi-list-check text-primary me-2"></i>
                     <h3 class="mb-0">Začínáme</h3>
                     <span class="badge bg-primary ms-2">';
-			echo LR\Filters::escapeHtmlText(($this->filters->escape)(count($setupSteps))) /* line 58 */;
+			echo LR\Filters::escapeHtmlText(($this->filters->escape)(count($setupSteps))) /* line 59 */;
 			echo ' kroků zbývá</span>
                 </div>
             </div>
             <div class="card-body">
                 <div class="row g-3">
 ';
-			foreach ($setupSteps as $step) /* line 63 */ {
+			foreach ($setupSteps as $step) /* line 64 */ {
 				echo '                    <div class="col-md-4">
                         <div class="setup-step">
                             <div class="step-icon">
                                 <i class="';
-				echo LR\Filters::escapeHtmlAttr(($this->filters->escape)($step['icon'])) /* line 68 */;
+				echo LR\Filters::escapeHtmlAttr(($this->filters->escape)($step['icon'])) /* line 69 */;
 				echo ' text-primary"></i>
                             </div>
                             <div class="step-content">
                                 <h5 class="step-title">';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($step['title'])) /* line 72 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)($step['title'])) /* line 73 */;
 				echo '</h5>
                                 <p class="step-description text-muted">';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($step['description'])) /* line 74 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)($step['description'])) /* line 75 */;
 				echo '</p>
                                 <a href="';
-				echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl(($this->filters->escape)($step['link']))) /* line 76 */;
+				echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl(($this->filters->escape)($step['link']))) /* line 77 */;
 				echo '" class="btn btn-outline-primary btn-sm">
                                     ';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($step['linkText'])) /* line 78 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)($step['linkText'])) /* line 79 */;
 				echo '
                                 </a>
                             </div>
@@ -164,13 +165,13 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                     </div>
                     <div class="stat-content">
                         <div class="stat-number">';
-		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['clients'])) /* line 101 */;
+		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['clients'])) /* line 102 */;
 		echo '</div>
                         <div class="stat-label">Klientů</div>
                     </div>
                     <div class="stat-action">
                         <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Clients:default')) /* line 107 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Clients:default')) /* line 108 */;
 		echo '" class="btn btn-icon-dashboard" title="Zobrazit klienty">
                             <i class="bi bi-eye"></i>
                         </a>
@@ -185,13 +186,13 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                     </div>
                     <div class="stat-content">
                         <div class="stat-number">';
-		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['invoices']['total'])) /* line 121 */;
+		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['invoices']['total'])) /* line 122 */;
 		echo '</div>
                         <div class="stat-label">Celkem faktur</div>
                     </div>
                     <div class="stat-action">
                         <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:default')) /* line 127 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:default')) /* line 128 */;
 		echo '" class="btn btn-icon-dashboard" title="Zobrazit faktury">
                             <i class="bi bi-eye"></i>
                         </a>
@@ -206,13 +207,13 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                     </div>
                     <div class="stat-content">
                         <div class="stat-number">';
-		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['invoices']['paid'])) /* line 141 */;
+		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['invoices']['paid'])) /* line 142 */;
 		echo '</div>
                         <div class="stat-label">Zaplacených</div>
                     </div>
                     <div class="stat-action">
                         <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:default', ['filter' => 'paid'])) /* line 147 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:default', ['filter' => 'paid'])) /* line 148 */;
 		echo '" class="btn btn-icon-dashboard" title="Zobrazit zaplacené faktury">
                             <i class="bi bi-eye"></i>
                         </a>
@@ -227,13 +228,13 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                     </div>
                     <div class="stat-content">
                         <div class="stat-number">';
-		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['invoices']['overdue'])) /* line 161 */;
+		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['invoices']['overdue'])) /* line 162 */;
 		echo '</div>
                         <div class="stat-label">Po splatnosti</div>
                     </div>
                     <div class="stat-action">
                         <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:default', ['filter' => 'overdue'])) /* line 167 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:default', ['filter' => 'overdue'])) /* line 168 */;
 		echo '" class="btn btn-icon-dashboard" title="Zobrazit faktury po splatnosti">
                             <i class="bi bi-eye"></i>
                         </a>
@@ -258,7 +259,7 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                             <small class="text-muted">Faktury splatné do 7 dnů</small>
                         </div>
                         <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:default', ['filter' => 'created'])) /* line 192 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:default', ['filter' => 'created'])) /* line 193 */;
 		echo '" class="btn btn-sm btn-outline-primary">
                             Zobrazit všechny
                         </a>
@@ -266,8 +267,8 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                 </div>
                 <div class="card-body">
 ';
-		$upcomingCount = is_array($upcomingInvoices) ? count($upcomingInvoices) : ($upcomingInvoices ? $upcomingInvoices->count() : 0) /* line 199 */;
-		if ($upcomingCount > 0) /* line 200 */ {
+		$upcomingCount = is_array($upcomingInvoices) ? count($upcomingInvoices) : ($upcomingInvoices ? $upcomingInvoices->count() : 0) /* line 200 */;
+		if ($upcomingCount > 0) /* line 201 */ {
 			echo '                        <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -281,40 +282,40 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                                 </thead>
                                 <tbody>
 ';
-			foreach ($upcomingInvoices as $invoice) /* line 214 */ {
+			foreach ($upcomingInvoices as $invoice) /* line 215 */ {
 				echo '                                    <tr>
                                         <td>
                                             <strong>';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->number)) /* line 218 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->number)) /* line 219 */;
 				echo '</strong>
                                         </td>
                                         <td>
 ';
-				if ($invoice->manual_client) /* line 221 */ {
+				if ($invoice->manual_client) /* line 222 */ {
 					echo '                                                ';
-					echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->client_name)) /* line 223 */;
+					echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->client_name)) /* line 224 */;
 					echo "\n";
-				} else /* line 224 */ {
+				} else /* line 225 */ {
 					echo '                                                ';
-					echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->ref('client_id')->name)) /* line 226 */;
+					echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->ref('client_id')->name)) /* line 227 */;
 					echo "\n";
 				}
 				echo '                                        </td>
                                         <td>
                                             <span class="badge bg-warning text-dark">
                                                 ';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->date)($invoice->due_date, 'd.m.Y'))) /* line 232 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->date)($invoice->due_date, 'd.m.Y'))) /* line 233 */;
 				echo '
                                             </span>
                                         </td>
                                         <td class="text-end">
                                             ';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->number)($invoice->total, 0, ',', ' '))) /* line 237 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->number)($invoice->total, 0, ',', ' '))) /* line 238 */;
 				echo ' Kč
                                         </td>
                                         <td class="text-center">
                                             <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:show', [$invoice->id])) /* line 241 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:show', [$invoice->id])) /* line 242 */;
 				echo '" class="btn btn-sm btn-outline-primary">
                                                 Detail
                                             </a>
@@ -328,7 +329,7 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                             </table>
                         </div>
 ';
-		} else /* line 250 */ {
+		} else /* line 251 */ {
 			echo '                        <div class="empty-state-small">
                             <i class="bi bi-check-circle text-success"></i>
                             <p class="mb-0">Žádné faktury se neblíží splatnosti</p>
@@ -355,7 +356,7 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                             <div class="financial-label">Nezaplaceno celkem</div>
                             <div class="financial-amount text-danger">
                                 ';
-		echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->number)($dashboardStats['invoices']['unpaidAmount'], 0, ',', ' '))) /* line 279 */;
+		echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->number)($dashboardStats['invoices']['unpaidAmount'], 0, ',', ' '))) /* line 280 */;
 		echo ' Kč
                             </div>
                         </div>
@@ -364,7 +365,7 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                             <div class="col-6">
                                 <div class="mini-stat">
                                     <div class="mini-stat-number text-success">';
-		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['invoices']['paid'])) /* line 287 */;
+		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['invoices']['paid'])) /* line 288 */;
 		echo '</div>
                                     <div class="mini-stat-label">Zaplaceno</div>
                                 </div>
@@ -372,7 +373,7 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                             <div class="col-6">
                                 <div class="mini-stat">
                                     <div class="mini-stat-number text-warning">';
-		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['invoices']['overdue'])) /* line 295 */;
+		echo LR\Filters::escapeHtmlText(($this->filters->escape)($dashboardStats['invoices']['overdue'])) /* line 296 */;
 		echo '</div>
                                     <div class="mini-stat-label">Po splatnosti</div>
                                 </div>
@@ -393,32 +394,32 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                 <div class="card-body">
                     <div class="d-grid gap-2">
 ';
-		if ($isUserAccountant) /* line 316 */ {
+		if ($isUserAccountant) /* line 317 */ {
 			echo '                            <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:add')) /* line 319 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:add')) /* line 320 */;
 			echo '" class="btn btn-primary">
                                 <i class="bi bi-plus-circle me-2"></i>
                                 Nová faktura
                             </a>
                             <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Clients:add')) /* line 324 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Clients:add')) /* line 325 */;
 			echo '" class="btn btn-outline-primary">
                                 <i class="bi bi-person-plus me-2"></i>
                                 Nový klient
                             </a>
 ';
-			if ($isUserAdmin) /* line 328 */ {
+			if ($isUserAdmin) /* line 329 */ {
 				echo '                                <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Settings:default')) /* line 330 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Settings:default')) /* line 331 */;
 				echo '" class="btn btn-outline-secondary">
                                     <i class="bi bi-gear me-2"></i>
                                     Nastavení
                                 </a>
 ';
 			}
-		} else /* line 335 */ {
+		} else /* line 336 */ {
 			echo '                            <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Users:profile')) /* line 338 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Users:profile')) /* line 339 */;
 			echo '" class="btn btn-primary">
                                 <i class="bi bi-person me-2"></i>
                                 Upravit můj profil
@@ -437,8 +438,8 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
 
     <!-- Nedávné faktury -->
 ';
-		$recentCount = is_array($recentInvoices) ? count($recentInvoices) : ($recentInvoices ? $recentInvoices->count() : 0) /* line 355 */;
-		if ($recentCount > 0) /* line 356 */ {
+		$recentCount = is_array($recentInvoices) ? count($recentInvoices) : ($recentInvoices ? $recentInvoices->count() : 0) /* line 356 */;
+		if ($recentCount > 0) /* line 357 */ {
 			echo '    <div class="recent-invoices mt-4">
         <div class="card shadow-sm border-0">
             <div class="card-header bg-white">
@@ -448,7 +449,7 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                         Nedávné faktury
                     </h4>
                     <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:default')) /* line 367 */;
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:default')) /* line 368 */;
 			echo '" class="btn btn-sm btn-outline-primary">
                         Zobrazit všechny
                     </a>
@@ -469,39 +470,39 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
                         </thead>
                         <tbody>
 ';
-			foreach ($recentInvoices as $invoice) /* line 387 */ {
+			foreach ($recentInvoices as $invoice) /* line 388 */ {
 				echo '                            <tr>
                                 <td>
                                     <strong>';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->number)) /* line 391 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->number)) /* line 392 */;
 				echo '</strong>
                                 </td>
                                 <td>
 ';
-				if ($invoice->manual_client) /* line 394 */ {
+				if ($invoice->manual_client) /* line 395 */ {
 					echo '                                        ';
-					echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->client_name)) /* line 396 */;
+					echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->client_name)) /* line 397 */;
 					echo "\n";
-				} else /* line 397 */ {
+				} else /* line 398 */ {
 					echo '                                        ';
-					echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->ref('client_id')->name)) /* line 399 */;
+					echo LR\Filters::escapeHtmlText(($this->filters->escape)($invoice->ref('client_id')->name)) /* line 400 */;
 					echo "\n";
 				}
 				echo '                                </td>
                                 <td>
                                     ';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->date)($invoice->issue_date, 'd.m.Y'))) /* line 404 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->date)($invoice->issue_date, 'd.m.Y'))) /* line 405 */;
 				echo '
                                 </td>
                                 <td>
 ';
-				if ($invoice->status == 'created') /* line 407 */ {
+				if ($invoice->status == 'created') /* line 408 */ {
 					echo '                                        <span class="badge bg-secondary">Vystavena</span>
 ';
-				} elseif ($invoice->status == 'paid') /* line 409 */ {
+				} elseif ($invoice->status == 'paid') /* line 410 */ {
 					echo '                                        <span class="badge bg-success">Zaplacena</span>
 ';
-				} elseif ($invoice->status == 'overdue') /* line 411 */ {
+				} elseif ($invoice->status == 'overdue') /* line 412 */ {
 					echo '                                        <span class="badge bg-danger">Po splatnosti</span>
 ';
 				}
@@ -510,12 +511,12 @@ final class Template_05c390f2e6 extends Latte\Runtime\Template
 				echo '                                </td>
                                 <td class="text-end">
                                     ';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->number)($invoice->total, 0, ',', ' '))) /* line 417 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->number)($invoice->total, 0, ',', ' '))) /* line 418 */;
 				echo ' Kč
                                 </td>
                                 <td class="text-center">
                                     <a href="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:show', [$invoice->id])) /* line 421 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Invoices:show', [$invoice->id])) /* line 422 */;
 				echo '" class="btn btn-sm btn-outline-primary">
                                         Detail
                                     </a>

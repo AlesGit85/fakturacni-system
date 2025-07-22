@@ -125,7 +125,7 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1751977848,
+      1 => 1753168934,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
@@ -190,40 +190,12 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 3,
-    'null' => 3,
-    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
-    'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
+    'Nette\\Bridges\\Assets\\DIExtension' => 1,
+    'null' => 1,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 3,
-    'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
-    'App\\Presentation\\Tenants\\TenantsAddTemplate' => 2,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Users\\UsersAddTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDeleteTemplate' => 3,
-    'Symfony\\Component\\Console\\Command\\Command' => 3,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\Users\\UsersRateLimitStatsTemplate' => 3,
-    'App\\Presentation\\Users\\UsersRateLimistsStatsTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 2,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 2,
-    'App\\Presentation\\Clients\\ClientsShowTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsEditTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 3,
-    'App\\Presentation\\Users\\UsersEditTemplate' => 3,
-    'App\\Presentation\\Users\\UsersProfileTemplate' => 3,
+    'App\\Presentation\\Users\\UsersProfileTemplate' => 1,
+    'App\\Presentation\\Users\\UsersTemplate' => 1,
   ),
   2 => 
   array (

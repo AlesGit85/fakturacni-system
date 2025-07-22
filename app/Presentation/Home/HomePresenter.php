@@ -82,17 +82,25 @@ final class HomePresenter extends BasePresenter
             // Informace o společnosti
             $company = $this->companyManager->getCompanyInfo();
 
-            // Informace o aktuálním uživateli
+            // OPRAVENO: Informace o aktuálním uživateli s pátým pádem
             $currentUser = $this->getUser()->getIdentity();
             $userDisplayName = '';
             $userFullName = '';
 
             if ($currentUser) {
-                // Získání informací o uživateli z databáze pro zobrazení celého jména
-                $userData = $this->userManager->getById($currentUser->id);
+                // OPRAVA: Použijeme přímý DB dotaz místo UserManager (který má problém s tenant filtrováním)
+                $userData = $this->database->query('SELECT * FROM users WHERE id = ?', $currentUser->id)->fetch();
                 
                 if ($userData) {
-                    $userDisplayName = $userData->username;
+                    // OPRAVENO: Používáme pouze křestní jméno v pátém pádě, nebo prázdný řetězec
+                    if (!empty($userData->first_name)) {
+                        // Převedeme křestní jméno do pátého pádu pomocí metody z BasePresenter
+                        $userDisplayName = $this->getVocativeName($userData->first_name);
+                    } else {
+                        // Prázdný řetězec - zobrazí se defaultní "Vítejte v QRdokladu!"
+                        $userDisplayName = '';
+                    }
+                    
                     $userFullName = trim($userData->first_name . ' ' . $userData->last_name);
                     
                     // Pokud je celé jméno prázdné, použijeme username
