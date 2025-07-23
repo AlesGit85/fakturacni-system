@@ -105,7 +105,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1753186881,
+      1 => 1753257111,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -145,7 +145,7 @@ return array (
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
-      1 => 1753220728,
+      1 => 1753257385,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -155,7 +155,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1753082081,
+      1 => 1753256879,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
@@ -170,7 +170,7 @@ return array (
     'App\\Security\\RateLimiter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiter.php',
-      1 => 1753170997,
+      1 => 1753255786,
     ),
     'App\\Security\\RateLimiterCleaner' => 
     array (
@@ -200,18 +200,22 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 2,
-    'null' => 2,
+    'Nette\\Bridges\\Assets\\DIExtension' => 3,
+    'null' => 3,
     'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 3,
     'App\\Presentation\\Security\\SecurityTemplate' => 3,
     'App\\Presentation\\Security\\SecurityDashboardTemplate' => 3,
     'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 3,
-    'App\\Presentation\\Users\\UsersRateLimitStatsTemplate' => 1,
-    'App\\Presentation\\Users\\UsersTemplate' => 1,
+    'App\\Presentation\\Users\\UsersRateLimitStatsTemplate' => 3,
+    'App\\Presentation\\Users\\UsersTemplate' => 3,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 2,
-    'App\\Presentation\\Sign\\SignTemplate' => 2,
+    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'App\\Presentation\\Sign\\SignTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityDefaultTemplate' => 3,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
+    'App\\Presentation\\Users\\UsersDefaultTemplate' => 2,
+    'App\\Presentation\\Users\\UsersEditTemplate' => 1,
   ),
   2 => 
   array (

@@ -102,7 +102,7 @@
                 <p class="card-text text-muted">
                     Monitoring a správa rate limitingu. Přehled blokovaných IP adres a statistiky.
                 </p>
-                {if $isSuperAdmin}
+                {if $isSuperAdmin || $isUserAdmin}
                     <a href="{link Security:rateLimitStats}" class="btn btn-warning">
                         <i class="bi bi-bar-chart"></i> Zobrazit Statistiky
                     </a>

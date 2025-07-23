@@ -59,6 +59,9 @@ final class SignPresenter extends BasePresenter
         $this->redirect('Sign:in');
     }
 
+    /**
+     * ✅ AKTUALIZACE: actionIn() - s tenant podporou
+     */
     public function actionIn(): void
     {
         // Pokud je už přihlášen, přesměruj na hlavní stránku
@@ -66,11 +69,10 @@ final class SignPresenter extends BasePresenter
             $this->redirect('Home:default');
         }
 
-        // ✅ NOVÉ: Kontrola rate limiting pro přihlašovací stránku
         $clientIP = $this->rateLimiter->getClientIP();
         
-        // Kontrola rate limiting pro login akci
-        $loginStatus = $this->rateLimiter->getLimitStatus('login', $clientIP);
+        // ✅ ZMĚNA: Pro login checking používáme null tenant_id (uživatel se ještě nepřihlásil)
+        $loginStatus = $this->rateLimiter->getLimitStatus('login', $clientIP, null);
         if ($loginStatus['is_blocked']) {
             $blockedUntil = $loginStatus['blocked_until'];
             $timeRemaining = $blockedUntil ? $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 'neznámý čas';
@@ -107,6 +109,9 @@ final class SignPresenter extends BasePresenter
         $this->redirect('Sign:in');
     }
 
+    /**
+     * ✅ AKTUALIZACE: actionUp() - s tenant podporou
+     */
     public function actionUp(): void
     {
         // Pokud je už přihlášen, přesměruj na hlavní stránku
@@ -114,9 +119,10 @@ final class SignPresenter extends BasePresenter
             $this->redirect('Home:default');
         }
 
-        // ✅ NOVÉ: Rate limiting pro registraci
         $clientIP = $this->rateLimiter->getClientIP();
-        $userCreationStatus = $this->rateLimiter->getLimitStatus('user_creation', $clientIP);
+        
+        // ✅ ZMĚNA: Pro registraci používáme null tenant_id (tenant se teprve vytváří)
+        $userCreationStatus = $this->rateLimiter->getLimitStatus('user_creation', $clientIP, null);
         
         if ($userCreationStatus['is_blocked']) {
             $blockedUntil = $userCreationStatus['blocked_until'];
@@ -201,15 +207,18 @@ final class SignPresenter extends BasePresenter
     }
 
     /**
-     * ✅ VYLEPŠENÁ METODA s kompletním Rate Limiting
+     * ✅ AKTUALIZACE: signInFormSucceeded() - s kompletní tenant podporou
      */
     public function signInFormSucceeded(Form $form, \stdClass $data): void
     {
         $clientIP = $this->rateLimiter->getClientIP();
 
-        // ✅ KROK 1: Kontrola rate limiting PŘED pokusem o přihlášení
-        if (!$this->rateLimiter->isAllowed('login', $clientIP)) {
-            $loginStatus = $this->rateLimiter->getLimitStatus('login', $clientIP);
+        // ✅ NOVÉ: Pokus o získání tenant_id z uživatelských credentials
+        $tenantId = $this->getTenantIdFromCredentials($data->username);
+
+        // ✅ ZMĚNA: Rate limiting kontrola s tenant_id
+        if (!$this->rateLimiter->isAllowed('login', $clientIP, $tenantId)) {
+            $loginStatus = $this->rateLimiter->getLimitStatus('login', $clientIP, $tenantId);
             $blockedUntil = $loginStatus['blocked_until'];
             $timeRemaining = $blockedUntil ? $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 'neznámý čas';
             
@@ -225,11 +234,16 @@ final class SignPresenter extends BasePresenter
                 $this->getUser()->setExpiration('20 minutes', true);
             }
 
-            // ✅ KROK 2: Pokus o přihlášení
+            // Pokus o přihlášení
             $this->getUser()->login($data->username, $data->password);
             
-            // ✅ KROK 3: ÚSPĚŠNÉ přihlášení - zaznamenat úspěšný pokus
-            $this->rateLimiter->recordAttempt('login', $clientIP, true);
+            // ✅ ZMĚNA: Získání skutečných údajů po úspěšném přihlášení
+            $identity = $this->getUser()->getIdentity();
+            $actualTenantId = $identity->tenant_id ?? null;
+            $userId = $identity->id ?? null;
+            
+            // ✅ ZMĚNA: Úspěšné přihlášení s tenant a user parametry
+            $this->rateLimiter->recordAttempt('login', $clientIP, true, $actualTenantId, $userId);
             
             // NOVÉ: Vymažeme zprávu o deaktivaci při úspěšném přihlášení
             $section = $this->getSession('deactivation');
@@ -245,14 +259,14 @@ final class SignPresenter extends BasePresenter
             $this->redirect('Home:default');
             
         } catch (Nette\Security\AuthenticationException $e) {
-            // ✅ KROK 4: NEÚSPĚŠNÉ přihlášení - zaznamenat failed pokus
-            $this->rateLimiter->recordAttempt('login', $clientIP, false);
+            // ✅ ZMĚNA: Neúspěšné přihlášení s tenant parametry
+            $this->rateLimiter->recordAttempt('login', $clientIP, false, $tenantId, null);
             
             // Logování neúspěšného pokusu o přihlášení
             $this->securityLogger->logFailedLogin($data->username, $e->getMessage());
             
             // Zjistíme stav rate limitingu po tomto pokusu
-            $loginStatus = $this->rateLimiter->getLimitStatus('login', $clientIP);
+            $loginStatus = $this->rateLimiter->getLimitStatus('login', $clientIP, $tenantId);
             
             if ($loginStatus['is_blocked']) {
                 // Právě jsme překročili limit
@@ -303,15 +317,15 @@ final class SignPresenter extends BasePresenter
     }
 
     /**
-     * ✅ VYLEPŠENÁ METODA s Rate Limiting pro registraci
+     * ✅ AKTUALIZACE: signUpFormSucceeded() - s tenant podporou a návratovými hodnotami
      */
     public function signUpFormSucceeded(Form $form, \stdClass $data): void
     {
         $clientIP = $this->rateLimiter->getClientIP();
 
-        // ✅ Rate limiting pro user creation
-        if (!$this->rateLimiter->isAllowed('user_creation', $clientIP)) {
-            $userCreationStatus = $this->rateLimiter->getLimitStatus('user_creation', $clientIP);
+        // ✅ ZMĚNA: Pro registraci používáme null tenant_id (tenant se teprve vytváří)
+        if (!$this->rateLimiter->isAllowed('user_creation', $clientIP, null)) {
+            $userCreationStatus = $this->rateLimiter->getLimitStatus('user_creation', $clientIP, null);
             $blockedUntil = $userCreationStatus['blocked_until'];
             $timeRemaining = $blockedUntil ? $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 'neznámý čas';
             
@@ -323,15 +337,18 @@ final class SignPresenter extends BasePresenter
             // Získání celkového počtu uživatelů
             $userCount = $this->getTotalUserCount();
 
-            // Vždy vytváříme nový firemní účet
-            $this->processCompanyAccountCreation($form, $data);
+            // ✅ ZMĚNA: Vždy vytváříme nový firemní účet a získáme výsledek
+            $result = $this->processCompanyAccountCreation($form, $data);
             
-            // ✅ Úspěšná registrace
-            $this->rateLimiter->recordAttempt('user_creation', $clientIP, true);
+            // ✅ ZMĚNA: Úspěšná registrace s nově vytvořenými tenant_id a user_id
+            $newTenantId = $result['tenant_id'] ?? null;
+            $newUserId = $result['user_id'] ?? null;
+            
+            $this->rateLimiter->recordAttempt('user_creation', $clientIP, true, $newTenantId, $newUserId);
             
         } catch (\Exception $e) {
-            // ✅ Neúspěšná registrace
-            $this->rateLimiter->recordAttempt('user_creation', $clientIP, false);
+            // ✅ ZMĚNA: Neúspěšná registrace
+            $this->rateLimiter->recordAttempt('user_creation', $clientIP, false, null, null);
             
             error_log('Chyba při registraci: ' . $e->getMessage());
             $form->addError('Při registraci došlo k chybě. Zkuste to prosím znovu.');
@@ -374,15 +391,18 @@ final class SignPresenter extends BasePresenter
     }
 
     /**
-     * ✅ VYLEPŠENÁ METODA s Rate Limiting pro reset hesla
+     * ✅ AKTUALIZACE: forgotPasswordFormSucceeded() - s tenant podporou
      */
     public function forgotPasswordFormSucceeded(Form $form, \stdClass $data): void
     {
         $clientIP = $this->rateLimiter->getClientIP();
 
-        // ✅ Rate limiting pro password reset
-        if (!$this->rateLimiter->isAllowed('password_reset', $clientIP)) {
-            $passwordResetStatus = $this->rateLimiter->getLimitStatus('password_reset', $clientIP);
+        // ✅ NOVÉ: Pokus o získání tenant_id z emailu
+        $tenantId = $this->getTenantIdFromEmail($data->email);
+
+        // ✅ ZMĚNA: Rate limiting s tenant podporou
+        if (!$this->rateLimiter->isAllowed('password_reset', $clientIP, $tenantId)) {
+            $passwordResetStatus = $this->rateLimiter->getLimitStatus('password_reset', $clientIP, $tenantId);
             $blockedUntil = $passwordResetStatus['blocked_until'];
             $timeRemaining = $blockedUntil ? $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 'neznámý čas';
             
@@ -397,11 +417,15 @@ final class SignPresenter extends BasePresenter
                 ->fetch();
 
             if (!$user) {
-                // ✅ Neúspěšný pokus - email neexistuje
-                $this->rateLimiter->recordAttempt('password_reset', $clientIP, false);
+                // ✅ ZMĚNA: Neúspěšný pokus s tenant parametry
+                $this->rateLimiter->recordAttempt('password_reset', $clientIP, false, $tenantId, null);
                 $form->addError('E-mailová adresa není v systému registrována.');
                 return;
             }
+
+            // ✅ NOVÉ: Získáme skutečný tenant_id z nalezeného uživatele
+            $actualTenantId = $user->tenant_id ?? null;
+            $userId = $user->id ?? null;
 
             // Vytvoř reset token
             $token = bin2hex(random_bytes(32));
@@ -418,15 +442,15 @@ final class SignPresenter extends BasePresenter
             $resetLink = $this->link('//Sign:resetPassword', ['token' => $token]);
             $this->emailService->sendPasswordReset($data->email, $user->username, $token);
 
-            // ✅ Úspěšný pokus
-            $this->rateLimiter->recordAttempt('password_reset', $clientIP, true);
+            // ✅ ZMĚNA: Úspěšný pokus s tenant parametry
+            $this->rateLimiter->recordAttempt('password_reset', $clientIP, true, $actualTenantId, $userId);
 
             $this->flashMessage('Odkaz pro obnovení hesla byl odeslán na váš e-mail.', 'success');
             $this->redirect('Sign:in');
 
         } catch (\Exception $e) {
-            // ✅ Neúspěšný pokus - chyba při odesílání
-            $this->rateLimiter->recordAttempt('password_reset', $clientIP, false);
+            // ✅ ZMĚNA: Neúspěšný pokus s tenant parametry
+            $this->rateLimiter->recordAttempt('password_reset', $clientIP, false, $tenantId, null);
             
             error_log('Chyba při resetování hesla: ' . $e->getMessage());
             $form->addError('Při odesílání emailu došlo k chybě. Zkuste to prosím znovu.');
@@ -524,9 +548,9 @@ final class SignPresenter extends BasePresenter
     }
 
     /**
-     * Zpracuje vytvoření nového firemního účtu
+     * ✅ AKTUALIZACE: processCompanyAccountCreation() - s návratovými hodnotami
      */
-    private function processCompanyAccountCreation(Form $form, \stdClass $data): void
+    private function processCompanyAccountCreation(Form $form, \stdClass $data): array
     {
         // Kontrola jedinečnosti uživatelského jména a e-mailu
         $existingUsername = $this->database->table('users')
@@ -541,14 +565,14 @@ final class SignPresenter extends BasePresenter
             /** @var Nette\Forms\Controls\TextInput $usernameField */
             $usernameField = $form['username'];
             $usernameField->addError('Uživatelské jméno už je obsazené.');
-            return;
+            throw new \Exception('Uživatelské jméno už je obsazené.');
         }
 
         if ($existingEmail) {
             /** @var Nette\Forms\Controls\TextInput $emailField */
             $emailField = $form['email'];
             $emailField->addError('E-mailová adresa už je registrovaná.');
-            return;
+            throw new \Exception('E-mailová adresa už je registrovaná.');
         }
 
         // Příprava dat pro vytvoření tenanta
@@ -594,6 +618,13 @@ final class SignPresenter extends BasePresenter
                 'success'
             );
             $this->redirect('Sign:in');
+            
+            // ✅ NOVÉ: Vrátit tenant_id a user_id pro rate limiting
+            return [
+                'tenant_id' => $result['tenant_id'] ?? null,
+                'user_id' => $result['user_id'] ?? null,
+                'success' => true
+            ];
         } else {
             throw new \Exception($result['message'] ?? 'Nepodařilo se vytvořit firemní účet.');
         }
@@ -612,4 +643,39 @@ final class SignPresenter extends BasePresenter
             return 0;
         }
     }
+
+/**
+     * ✅ NOVÁ: Helper metoda pro získání tenant_id z přihlašovacích údajů
+     */
+    private function getTenantIdFromCredentials(string $username): ?int
+    {
+        try {
+            $user = $this->database->table('users')
+                ->where('username', $username)
+                ->fetch();
+                
+            return $user ? ($user->tenant_id ?? null) : null;
+            
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * ✅ NOVÁ: Helper metoda pro získání tenant_id z emailu
+     */
+    private function getTenantIdFromEmail(string $email): ?int
+    {
+        try {
+            $user = $this->database->table('users')
+                ->where('email', $email)
+                ->fetch();
+                
+            return $user ? ($user->tenant_id ?? null) : null;
+            
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
 }

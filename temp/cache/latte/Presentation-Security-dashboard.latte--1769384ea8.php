@@ -167,7 +167,7 @@ final class Template_1769384ea8 extends Latte\Runtime\Template
                     Monitoring a správa rate limitingu. Přehled blokovaných IP adres a statistiky.
                 </p>
 ';
-		if ($isSuperAdmin) /* line 105 */ {
+		if ($isSuperAdmin || $isUserAdmin) /* line 105 */ {
 			echo '                    <a href="';
 			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Security:rateLimitStats')) /* line 106 */;
 			echo '" class="btn btn-warning">

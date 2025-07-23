@@ -55,20 +55,20 @@ abstract class BasePresenter extends Presenter
         // === INVOICES PRESENTER === ✅ implementováno
         'handleMarkAsPaid',           // označit fakturu jako zaplacenou
         'handleMarkAsCreated',        // označit fakturu jako vystavěnou
-        
+
         // === CLIENTS PRESENTER === ⚠️ k implementaci
         'handleAresLookup',           // ARES vyhledávání (AJAX)
-        
+
         // === USERS PRESENTER === ⚠️ k implementaci
         'handleClearRateLimit',       // vymazání rate limit pro IP
         'handleClearAllRateLimits',   // vymazání všech rate limitů
-        
+
         // === MODULE ADMIN PRESENTER === ⚠️ k implementaci  
         'handleToggleModule',         // aktivace/deaktivace modulu
         'handleUninstallModule',      // odinstalace modulu
         'handleToggleUserModule',     // toggle modulu jiného uživatele
         'handleDeleteUserModule',     // smazání modulu jiného uživatele
-        
+
         // === OBECNÉ DELETE AKCE === ⚠️ k implementaci
         'actionDelete',               // mazání záznamů (Clients, Users, Invoices)
         'actionDeleteLogo',           // mazání loga (Settings)
@@ -200,7 +200,7 @@ abstract class BasePresenter extends Presenter
         $signal = $this->getSignal();
         if ($signal) {
             $handlerName = 'handle' . ucfirst($signal[1]);
-            
+
             // Pokud handler není v seznamu chráněných, nemusíme kontrolovat CSRF
             if (!in_array($handlerName, $this->csrfProtectedActions)) {
                 return;
@@ -222,21 +222,21 @@ abstract class BasePresenter extends Presenter
     private function validateCsrfToken(): void
     {
         $httpRequest = $this->getHttpRequest();
-        
+
         // Získáme token z různých zdrojů (POST data, headers, GET parametry)
         $submittedToken = null;
-        
+
         // 1. Pokusíme se najít token v POST datech
         $postData = $httpRequest->getPost();
         if (isset($postData['_csrf_token'])) {
             $submittedToken = $postData['_csrf_token'];
         }
-        
+
         // 2. Pokud ne, zkusíme hlavičku X-CSRF-Token (pro AJAX)
         if (!$submittedToken) {
             $submittedToken = $httpRequest->getHeader('X-CSRF-Token');
         }
-        
+
         // 3. Pokud ne, zkusíme GET parametr (pro odkazy)
         if (!$submittedToken) {
             $submittedToken = $httpRequest->getQuery('_csrf_token');
@@ -249,13 +249,13 @@ abstract class BasePresenter extends Presenter
         if (!$submittedToken || !hash_equals($expectedToken, $submittedToken)) {
             // Logování CSRF pokusu
             $this->logCsrfAttempt($submittedToken);
-            
+
             // Chyba pro uživatele
             $this->flashMessage(
                 'Bezpečnostní token není platný nebo vypršel. Obnovte stránku a zkuste akci znovu.',
                 'danger'
             );
-            
+
             // Přesměrování zpět
             $this->redirect('this');
         }
@@ -314,17 +314,21 @@ abstract class BasePresenter extends Presenter
     }
 
     /**
-     * ✅ NOVÉ: Globální Rate Limiting kontrola
+     * ✅ AKTUALIZACE: checkRateLimit() - s tenant podporou
      */
     private function checkRateLimit(): void
     {
         $clientIP = $this->rateLimiter->getClientIP();
         $action = 'form_submit'; // Obecné rate limiting pro všechny formuláře
+        
+        // ✅ NOVÉ: Získání tenant a user informací
+        $tenantId = $this->getCurrentTenantId();
+        $userId = $this->getUser()->isLoggedIn() ? $this->getUser()->getId() : null;
 
         // Kontrola pouze pro POST požadavky (odesílání formulářů)
         if ($this->getHttpRequest()->isMethod('POST')) {
-            if (!$this->rateLimiter->isAllowed($action, $clientIP)) {
-                $status = $this->rateLimiter->getLimitStatus($action, $clientIP);
+            if (!$this->rateLimiter->isAllowed($action, $clientIP, $tenantId)) {
+                $status = $this->rateLimiter->getLimitStatus($action, $clientIP, $tenantId);
                 $blockedUntil = $status['blocked_until'];
                 $timeRemaining = $blockedUntil ?
                     $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') :
@@ -332,12 +336,17 @@ abstract class BasePresenter extends Presenter
 
                 $this->flashMessage(
                     "Příliš mnoho odeslaných formulářů. Zkuste to znovu za {$timeRemaining}.",
-                    'danger'
+                    'warning'
                 );
-
-                // Přesměruj na GET verzi stejné stránky
-                $this->redirect('this');
+                
+                // ✅ ROZŠÍŘENO: Záznam neúspěšného pokusu s tenant informacemi
+                $this->rateLimiter->recordAttempt($action, $clientIP, false, $tenantId, $userId);
+                
+                $this->redirect('Home:default');
             }
+            
+            // ✅ ROZŠÍŘENO: Záznam úspěšného pokusu s tenant informacemi  
+            $this->rateLimiter->recordAttempt($action, $clientIP, true, $tenantId, $userId);
         }
     }
 
@@ -764,7 +773,7 @@ abstract class BasePresenter extends Presenter
         // ✅ NOVÉ: CSRF token pro šablony
         if ($this->requiresLogin && $this->getUser()->isLoggedIn()) {
             $this->template->add('csrfToken', $this->getCsrfToken());
-            
+
             // Helper funkce pro vytváření bezpečných odkazů
             $this->template->addFilter('csrfLink', function (string $destination, array $args = []): string {
                 $args['_csrf_token'] = $this->getCsrfToken();
@@ -788,14 +797,15 @@ abstract class BasePresenter extends Presenter
     }
 
     /**
-     * ✅ NOVÉ: Získá informace o rate limitingu pro šablony
+     * ✅ AKTUALIZACE: getRateLimitInfo() - s tenant podporou
      */
     private function getRateLimitInfo(): array
     {
         $clientIP = $this->rateLimiter->getClientIP();
+        $tenantId = $this->getCurrentTenantId();
 
         return [
-            'form_submit' => $this->rateLimiter->getLimitStatus('form_submit', $clientIP),
+            'form_submit' => $this->rateLimiter->getLimitStatus('form_submit', $clientIP, $tenantId),
             'client_ip' => $clientIP,
         ];
     }
@@ -921,7 +931,7 @@ abstract class BasePresenter extends Presenter
     }
 
     /**
-     * Helper metoda pro manuální rate limit kontrolu
+     * ✅ AKTUALIZACE: checkCustomRateLimit() - s tenant podporou
      */
     protected function checkCustomRateLimit(string $action): bool
     {
@@ -930,17 +940,22 @@ abstract class BasePresenter extends Presenter
         }
 
         $clientIP = $this->rateLimiter->getClientIP();
-        return $this->rateLimiter->isAllowed($action, $clientIP);
+        $tenantId = $this->getCurrentTenantId();
+        
+        return $this->rateLimiter->isAllowed($action, $clientIP, $tenantId);
     }
 
     /**
-     * Helper metoda pro zaznamenání custom akce
+     * ✅ AKTUALIZACE: recordCustomAttempt() - s tenant podporou
      */
     protected function recordCustomAttempt(string $action, bool $successful): void
     {
         if (!$this->disableRateLimit) {
             $clientIP = $this->rateLimiter->getClientIP();
-            $this->rateLimiter->recordAttempt($action, $clientIP, $successful);
+            $tenantId = $this->getCurrentTenantId();
+            $userId = $this->getUser()->isLoggedIn() ? $this->getUser()->getId() : null;
+            
+            $this->rateLimiter->recordAttempt($action, $clientIP, $successful, $tenantId, $userId);
         }
     }
 
