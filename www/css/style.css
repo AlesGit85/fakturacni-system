@@ -15,5 +15,6 @@
 @import url('settings.css');
 @import url('hierarchical-menu.css');
 @import url('tenants.css');
+@import url('security.css');
 
 /* Případné další specifické styly, které nepatří do žádné kategorie */

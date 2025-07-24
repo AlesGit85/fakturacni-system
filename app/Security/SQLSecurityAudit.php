@@ -23,28 +23,33 @@ class SQLSecurityAudit
     private $projectRoot;
 
     /** @var array Vzory pro vyhledání potenciálně nebezpečných SQL dotazů */
-    /**
- * ✅ VYLEPŠENÉ: Vzory pro vyhledání skutečných SQL injection problémů
- */
-private $dangerousPatterns = [
-    // SQL dotazy s přímou konkatenací proměnných
-    '/(?:SELECT|INSERT|UPDATE|DELETE)\s+[^;]*\$[a-zA-Z_][a-zA-Z0-9_]*(?!["\'])/i',
-    
-    // WHERE klauzule s přímou konkatenací
-    '/WHERE\s+[^;]*["\'][^"\']*\$[a-zA-Z_][a-zA-Z0-9_]*[^"\']*["\']/',
-    
-    // SQL dotazy v query() metodě s konkatenací
-    '/->query\s*\(\s*["\'][^"\']*\$[a-zA-Z_][a-zA-Z0-9_]*[^"\']*["\']/',
-    
-    // LIKE s přímou konkatenací (časté místo pro injection)
-    '/LIKE\s+["\'][^"\']*\$[a-zA-Z_][a-zA-Z0-9_]*[^"\']*["\']/',
-    
-    // ORDER BY s proměnnou (injection risk)
-    '/ORDER\s+BY\s+\$[a-zA-Z_][a-zA-Z0-9_]*/',
-    
-    // Přímé vložení do SQL bez escapování
-    '/(?:database|db)->query\s*\([^?]*\$[a-zA-Z_]/'
-];
+    /** 
+     * ✅ NOVÉ: Mnohem přesnější vzory pro detekci skutečných SQL injection problémů
+     * Ignoruje parametrizované dotazy a false positives
+     */
+    private $dangerousPatterns = [
+        // 1. Skutečná konkatenace v SQL stringu - nebezpečné
+        '/["\']SELECT[^"\']*["\'][^)]*\.[^)]*\$[a-zA-Z_][a-zA-Z0-9_]*/',
+        '/["\']INSERT[^"\']*["\'][^)]*\.[^)]*\$[a-zA-Z_][a-zA-Z0-9_]*/',
+        '/["\']UPDATE[^"\']*["\'][^)]*\.[^)]*\$[a-zA-Z_][a-zA-Z0-9_]*/',
+        '/["\']DELETE[^"\']*["\'][^)]*\.[^)]*\$[a-zA-Z_][a-zA-Z0-9_]*/',
+        
+        // 2. WHERE s konkatenací - nebezpečné
+        '/WHERE[^"\']*["\'][^"\']*\.[^"\']*\$[a-zA-Z_][a-zA-Z0-9_]*/',
+        
+        // 3. ORDER BY s přímou proměnnou - potenciálně nebezpečné
+        '/ORDER\s+BY\s+["\']?\$[a-zA-Z_][a-zA-Z0-9_]*["\']?(?!\s*[,)])/',
+        
+        // 4. LIKE s konkatenací - častý injection point
+        '/LIKE\s+["\'][^"\']*\.[^"\']*\$[a-zA-Z_][a-zA-Z0-9_]*/',
+        
+        // 5. SQL injection v LIMIT
+        '/LIMIT\s+\$[a-zA-Z_][a-zA-Z0-9_]*(?!\s*[,)])/',
+        
+        // 6. Přímé vložení tabulky nebo sloupce z proměnné
+        '/FROM\s+\$[a-zA-Z_][a-zA-Z0-9_]*/',
+        '/INTO\s+\$[a-zA-Z_][a-zA-Z0-9_]*/',
+    ];
 
     /** @var array Soubory a adresáře k prohledání */
     private $searchPaths = [

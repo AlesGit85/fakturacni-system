@@ -195,7 +195,7 @@ return array (
     'App\\Security\\SQLSecurityAudit' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SQLSecurityAudit.php',
-      1 => 1753337984,
+      1 => 1753359076,
     ),
   ),
   1 => 
@@ -205,12 +205,19 @@ return array (
     'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 3,
     'App\\Presentation\\Security\\SecurityTemplate' => 3,
     'App\\Presentation\\Security\\SecurityTestTemplate' => 2,
-    'App\\Presentation\\Sign\\SignInTemplate' => 2,
-    'App\\Presentation\\Sign\\SignTemplate' => 2,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
-    'App\\Presentation\\Home\\HomeTemplate' => 1,
-    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 2,
-    'App\\Presentation\\Security\\SecurityDefaultTemplate' => 2,
+    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'App\\Presentation\\Sign\\SignTemplate' => 3,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityDefaultTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 2,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 2,
   ),
   2 => 
   array (

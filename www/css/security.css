@@ -1,0 +1,431 @@
+/**
+ * Security Dashboard - Čistý design konzistentní s aplikací
+ * Barvy projektu: primární #B1D235 (pouze pro aktivní stavy), bílé pozadí, minimalistický styl
+ */
+
+/* ============================================
+   SECURITY DASHBOARD - ČISTÝ DESIGN
+   ============================================ */
+
+.security-page-header {
+    padding: 2rem 0 1rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.security-page-header h1 {
+    color: #212529;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+}
+
+.security-page-header p {
+    color: #6c757d;
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* ============================================
+   STATISTICKÉ KARTY - MINIMALISTICKÉ
+   ============================================ */
+
+.security-stat-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    height: 100%;
+}
+
+.security-stat-card:hover {
+    border-color: #B1D235;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.security-stat-card .card-body {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.security-stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.5rem;
+    color: #6c757d;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+.security-stat-card:hover .security-stat-icon {
+    color: #B1D235;
+    background: rgba(177, 210, 53, 0.1);
+    border-color: #B1D235;
+}
+
+.security-stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 0.5rem;
+}
+
+.security-stat-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.25rem;
+}
+
+.security-stat-subtitle {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+/* ============================================
+   NÁSTROJE SEKCE - ČISTÝ STYL
+   ============================================ */
+
+.security-tools-section {
+    margin: 3rem 0;
+}
+
+.security-tools-title {
+    color: #212529;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #B1D235;
+    display: inline-block;
+}
+
+.security-tool-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    height: 100%;
+}
+
+.security-tool-card:hover {
+    border-color: #B1D235;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.security-tool-card .card-body {
+    padding: 2rem;
+    text-align: center;
+}
+
+.security-tool-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    color: #6c757d;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease;
+}
+
+.security-tool-card:hover .security-tool-icon {
+    color: #B1D235;
+    background: rgba(177, 210, 53, 0.1);
+    border-color: #B1D235;
+}
+
+.security-tool-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 1rem;
+}
+
+.security-tool-description {
+    color: #6c757d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+.security-tool-btn {
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.security-tool-btn.btn-primary {
+    background-color: #B1D235;
+    border-color: #B1D235;
+    color: #212529;
+}
+
+.security-tool-btn.btn-primary:hover {
+    background-color: #95B11F;
+    border-color: #95B11F;
+    color: #212529;
+}
+
+.security-tool-btn.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.security-tool-btn.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
+}
+
+.security-tool-btn.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+.security-tool-btn.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: #fff;
+}
+
+.security-tool-btn.disabled {
+    background-color: #f8f9fa;
+    border-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* ============================================
+   UDÁLOSTI TABULKA - STEJNÝ STYL JAKO OSTATNÍ
+   ============================================ */
+
+.security-events-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.security-events-header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 1rem 1.5rem;
+}
+
+.security-events-header h5 {
+    color: #212529;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.125rem;
+}
+
+.security-events-table {
+    margin: 0;
+}
+
+.security-events-table th {
+    background: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-bottom: 1px solid #e9ecef;
+    border-top: none;
+    padding: 0.75rem;
+    vertical-align: middle;
+}
+
+.security-events-table td {
+    padding: 0.75rem;
+    border-top: 1px solid #e9ecef;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+.security-events-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.security-event-badge {
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.security-event-time {
+    font-family: 'SFMono-Regular', 'Monaco', 'Consolas', monospace;
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.security-event-ip {
+    font-family: 'SFMono-Regular', 'Monaco', 'Consolas', monospace;
+    background: #f8f9fa;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #495057;
+    border: 1px solid #e9ecef;
+}
+
+/* ============================================
+   EMPTY STATE - MINIMALISTICKÉ
+   ============================================ */
+
+.security-empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #6c757d;
+}
+
+.security-empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #e9ecef;
+}
+
+.security-empty-state h5 {
+    color: #495057;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.security-empty-state p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   MODAL - STEJNÝ STYL JAKO APLIKACE
+   ============================================ */
+
+.security-modal .modal-content {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.security-modal .modal-header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 1rem 1.5rem;
+    border-radius: 8px 8px 0 0;
+}
+
+.security-modal .modal-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #212529;
+}
+
+.security-modal .modal-body {
+    padding: 1.5rem;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    .security-page-header {
+        padding: 1.5rem 0 1rem 0;
+        text-align: center;
+    }
+    
+    .security-stat-card .card-body {
+        padding: 1.25rem;
+    }
+    
+    .security-tool-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    .security-tool-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.75rem;
+    }
+    
+    .security-stat-number {
+        font-size: 1.75rem;
+    }
+    
+    .security-tools-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+
+.security-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    flex-direction: column;
+}
+
+.security-loading .spinner-border {
+    width: 2rem;
+    height: 2rem;
+    color: #B1D235;
+    margin-bottom: 1rem;
+}
+
+.security-loading p {
+    color: #6c757d;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.text-primary-custom {
+    color: #B1D235 !important;
+}
+
+.bg-primary-custom {
+    background-color: #B1D235 !important;
+}
+
+.border-primary-custom {
+    border-color: #B1D235 !important;
+}
+
+/* ============================================
+   JEMNÉ ANIMACE (minimální)
+   ============================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.3s ease-out;
+}
