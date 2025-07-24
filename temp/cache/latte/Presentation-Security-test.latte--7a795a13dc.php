@@ -23,11 +23,11 @@ final class Template_7a795a13dc extends Latte\Runtime\Template
 			return;
 		}
 
-		$this->renderBlock('content', get_defined_vars()) /* line 1 */;
+		$this->renderBlock('content', get_defined_vars()) /* line 2 */;
 	}
 
 
-	/** {block content} on line 1 */
+	/** {block content} on line 2 */
 	public function blockContent(array $ʟ_args): void
 	{
 		extract($this->params);
@@ -35,29 +35,26 @@ final class Template_7a795a13dc extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '
-<h1>Security Test</h1>
-<p>Pokud vidíš tuto stránku, Security presenter funguje!</p>
-
-<p>Test linku: <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('sqlAudit')) /* line 6 */;
-		echo '">SQL Audit</a></p>
-
-<!-- První tlačítko pro JSON AJAX test -->
-<button onclick="testJsonAjax()" data-url="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('runSqlAudit!')) /* line 9 */;
-		echo '">Test JSON AJAX</button>
-
-<!-- Druhé tlačítko pro simple test -->  
-<button onclick="testSimpleAjax()" data-url="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('simpleTest!')) /* line 12 */;
-		echo '">Test Simple AJAX</button>
-
-<div id="result"></div>
+<div class="container">
+    <h1>SQL Security Audit - TEST</h1>
+    
+    <div class="mb-3">
+        <button onclick="testSqlAudit()" data-url="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('runSqlAudit!')) /* line 8 */;
+		echo '" class="btn btn-primary">
+            Test SQL Audit AJAX
+        </button>
+    </div>
+    
+    <div id="result"></div>
+</div>
 
 <script>
-function testJsonAjax() {
+function testSqlAudit() {
     const button = event.target;
     const url = button.getAttribute(\'data-url\');
+    
+    console.log(\'URL:\', url); // Debug
     
     fetch(url, {
         method: \'POST\',
@@ -66,19 +63,13 @@ function testJsonAjax() {
             \'Content-Type\': \'application/json\'
         }
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
-        document.getElementById(\'result\').innerHTML = \'<pre>\' + data + \'</pre>\';
+        document.getElementById(\'result\').innerHTML = \'<pre>\' + JSON.stringify(data, null, 2) + \'</pre>\';
     })
     .catch(error => {
         document.getElementById(\'result\').innerHTML = \'Chyba: \' + error.message;
     });
-}
-
-function testSimpleAjax() {
-    const button = event.target;
-    const url = button.getAttribute(\'data-url\');
-    window.location.href = url;
 }
 </script>
 

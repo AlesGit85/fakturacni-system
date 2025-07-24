@@ -1028,3 +1028,123 @@
 [2025-07-24 06-20-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?_fid=3feg 
 [2025-07-24 06-20-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test?do=runSqlAudit 
 [2025-07-24 06-20-13] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?do=runSqlAudit 
+[2025-07-24 06-22-30] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/ 
+[2025-07-24 06-22-30] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/ 
+[2025-07-24 06-22-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 06-22-32] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 06-22-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test 
+[2025-07-24 06-22-54] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test 
+[2025-07-24 06-23-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test?do=simpleTest 
+[2025-07-24 06-23-03] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?do=simpleTest 
+[2025-07-24 06-23-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test?_fid=kmth 
+[2025-07-24 06-23-03] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?_fid=kmth 
+[2025-07-24 06-23-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test?do=runSqlAudit 
+[2025-07-24 06-23-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?do=runSqlAudit 
+[2025-07-24 06-34-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 06-34-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 06-35-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test?_fid=kmth 
+[2025-07-24 06-35-03] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?_fid=kmth 
+[2025-07-24 06-39-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 06-39-07] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 07-08-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test 
+[2025-07-24 07-08-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=zkmzr&_fid=vscp 
+[2025-07-24 07-08-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-24 07-08-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=tu96 
+[2025-07-24 07-08-46] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=tu96 
+[2025-07-24 07-08-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test?_fid=kmth 
+[2025-07-24 07-08-54] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?_fid=kmth 
+[2025-07-24 07-08-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test 
+[2025-07-24 07-08-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test 
+[2025-07-24 07-08-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test 
+[2025-07-24 07-08-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test 
+[2025-07-24 07-09-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test?do=simpleTest 
+[2025-07-24 07-09-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?do=simpleTest 
+[2025-07-24 07-09-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test?_fid=jmp2 
+[2025-07-24 07-09-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?_fid=jmp2 
+[2025-07-24 07-09-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test?do=runSqlAudit 
+[2025-07-24 07-09-02] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?do=runSqlAudit 
+[2025-07-24 07-09-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 07-09-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 07-11-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 07-11-06] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 07-11-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 
+[2025-07-24 07-11-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 
+[2025-07-24 07-12-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 07-12-03] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 07-12-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 
+[2025-07-24 07-12-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 
+[2025-07-24 07-12-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 07-12-12] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 07-36-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 07-36-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=v3zed&_fid=52fj 
+[2025-07-24 07-36-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-24 07-36-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=0rjh 
+[2025-07-24 07-36-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=0rjh 
+[2025-07-24 07-36-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/dashboard 
+[2025-07-24 07-36-29] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/dashboard 
+[2025-07-24 07-36-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 07-36-31] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 08-35-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 08-35-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=vta48&_fid=g4h8 
+[2025-07-24 08-35-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-24 08-35-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=f7gb 
+[2025-07-24 08-35-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=f7gb 
+[2025-07-24 08-35-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/dashboard 
+[2025-07-24 08-35-50] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/dashboard 
+[2025-07-24 08-35-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 08-35-51] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 08-36-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 08-36-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 08-38-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 08-38-35] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 08-38-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test 
+[2025-07-24 08-38-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test 
+[2025-07-24 08-39-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test?do=runSqlAudit 
+[2025-07-24 08-39-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?do=runSqlAudit 
+[2025-07-24 08-39-30] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test 
+[2025-07-24 08-39-30] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test 
+[2025-07-24 08-55-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/test?do=runSqlAudit 
+[2025-07-24 08-55-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/test?do=runSqlAudit 
+[2025-07-24 08-55-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 08-55-28] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-53-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-53-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=4z5zx&_fid=si7r 
+[2025-07-24 11-53-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-24 11-53-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=bcet 
+[2025-07-24 11-53-29] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=bcet 
+[2025-07-24 11-53-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/dashboard 
+[2025-07-24 11-53-31] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/dashboard 
+[2025-07-24 11-53-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-53-32] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-54-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-54-02] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-54-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/dashboard 
+[2025-07-24 11-54-06] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/dashboard 
+[2025-07-24 11-54-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/ 
+[2025-07-24 11-54-09] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/ 
+[2025-07-24 11-54-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-54-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-55-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-55-01] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-55-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/ 
+[2025-07-24 11-55-12] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/ 
+[2025-07-24 11-55-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-55-14] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-58-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-58-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-58-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 11-58-13] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 12-00-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 12-00-02] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 12-00-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 
+[2025-07-24 12-00-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 
+[2025-07-24 12-01-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 
+[2025-07-24 12-01-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 
+[2025-07-24 12-02-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 12-02-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 12-02-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 
+[2025-07-24 12-02-12] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 
+[2025-07-24 12-05-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 12-05-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit 
+[2025-07-24 12-06-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 
+[2025-07-24 12-06-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/sql-audit?do=runSqlAudit 

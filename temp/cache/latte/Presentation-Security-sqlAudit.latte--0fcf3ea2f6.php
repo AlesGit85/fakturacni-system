@@ -39,7 +39,7 @@ final class Template_0fcf3ea2f6 extends Latte\Runtime\Template
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h1 class="h3 mb-0">🔒 SQL Security Audit</h1>
+                <h1 class="h3 mb-0" style="color: #212529;">🔒 SQL Security Audit</h1>
                 <p class="text-muted mb-0">Komplexní analýza SQL bezpečnosti projektu</p>
             </div>
             <div>
@@ -48,7 +48,9 @@ final class Template_0fcf3ea2f6 extends Latte\Runtime\Template
 		echo '" class="btn btn-outline-secondary me-2">
                     <i class="bi bi-arrow-left"></i> Zpět na Dashboard
                 </a>
-                <button id="runAuditBtn" class="btn btn-primary">
+                <button id="runAuditBtn" class="btn btn-primary" data-url="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('runSqlAudit!')) /* line 15 */;
+		echo '" style="background-color: #B1D235; border-color: #95B11F; color: #212529;">
                     <i class="bi bi-search"></i> Spustit Audit
                 </button>
             </div>
@@ -57,14 +59,14 @@ final class Template_0fcf3ea2f6 extends Latte\Runtime\Template
 </div>
 
 <div id="auditLoading" class="text-center py-5" style="display: none;">
-    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+    <div class="spinner-border" style="color: #B1D235; width: 3rem; height: 3rem;" role="status">
         <span class="visually-hidden">Načítání...</span>
     </div>
     <div class="mt-3">
-        <h5>Prohledávám projekt...</h5>
+        <h5 style="color: #212529;">Prohledávám projekt...</h5>
         <p class="text-muted">Analyzuji SQL dotazy z hlediska bezpečnosti</p>
         <div class="progress" style="width: 300px; margin: 0 auto;">
-            <div id="auditProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%"></div>
+            <div id="auditProgress" class="progress-bar" style="background-color: #B1D235;" role="progressbar"></div>
         </div>
     </div>
 </div>
@@ -74,9 +76,9 @@ final class Template_0fcf3ea2f6 extends Latte\Runtime\Template
         <div class="card border-0 shadow-sm">
             <div class="card-body text-center py-5">
                 <div class="mb-4">
-                    <i class="bi bi-shield-check display-1 text-primary"></i>
+                    <i class="bi bi-shield-check display-1" style="color: #B1D235;"></i>
                 </div>
-                <h3 class="card-title">SQL Security Audit Tool</h3>
+                <h3 class="card-title" style="color: #212529;">SQL Security Audit Tool</h3>
                 <p class="card-text text-muted mb-4">
                     Tento nástroj prohledá celý projekt a analyzuje všechny SQL dotazy z hlediska bezpečnosti.
                     Detekuje potenciální SQL injection vulnerabilities a poskytuje doporučení pro jejich opravu.
@@ -117,13 +119,13 @@ final class Template_0fcf3ea2f6 extends Latte\Runtime\Template
         <div class="col-12">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-0">
-                    <h5 class="mb-0"><i class="bi bi-graph-up me-2"></i>Shrnutí auditu</h5>
+                    <h5 class="mb-0" style="color: #212529;"><i class="bi bi-graph-up me-2"></i>Shrnutí auditu</h5>
                 </div>
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-md-2 col-6 mb-3">
                             <div class="border-end">
-                                <div class="h3 mb-1 text-primary" id="filesScanned">-</div>
+                                <div class="h3 mb-1" style="color: #B1D235;" id="filesScanned">-</div>
                                 <small class="text-muted">Skenované soubory</small>
                             </div>
                         </div>
@@ -147,14 +149,14 @@ final class Template_0fcf3ea2f6 extends Latte\Runtime\Template
                         </div>
                         <div class="col-md-2 col-6 mb-3">
                             <div class="border-end">
-                                <div class="h3 mb-1" id="safetyPercentage">-</div>
+                                <div class="h3 mb-1 text-info" id="safetyPercentage">-</div>
                                 <small class="text-muted">Bezpečnost</small>
                             </div>
                         </div>
                         <div class="col-md-2 col-6 mb-3">
-                            <div id="overallStatusBadge">
-                                <div class="h5 mb-1"><span class="badge bg-secondary" id="overallStatus">-</span></div>
-                                <small class="text-muted">Celkový stav</small>
+                            <div>
+                                <span id="overallStatus" class="badge">-</span>
+                                <small class="text-muted d-block">Celkový stav</small>
                             </div>
                         </div>
                     </div>
@@ -163,84 +165,76 @@ final class Template_0fcf3ea2f6 extends Latte\Runtime\Template
         </div>
     </div>
 
-    <div class="row mb-4" id="priorityIssuesSection" style="display: none;">
+    <div id="priorityIssuesSection" class="row mb-4" style="display: none;">
         <div class="col-12">
-            <div class="card border-0 shadow-sm border-start border-danger border-4">
+            <div class="card border-0 shadow-sm border-start border-danger border-3">
                 <div class="card-header bg-white border-0">
                     <h5 class="mb-0 text-danger">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Prioritní problémy k opravě
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Prioritní bezpečnostní problémy
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div id="priorityIssuesList">
-                    </div>
+                    <div id="priorityIssuesList"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row mb-4" id="allIssuesSection" style="display: none;">
+    <div id="allIssuesSection" class="row mb-4" style="display: none;">
         <div class="col-12">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">
-                        <i class="bi bi-list-ul me-2"></i>Všechny nalezené problémy
-                    </h5>
-                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#allIssuesCollapse">
-                        <i class="bi bi-eye"></i> Zobrazit/Skrýt
-                    </button>
-                </div>
-                <div class="collapse show" id="allIssuesCollapse">
-                    <div class="card-body">
-                        <div id="allIssuesList">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mb-4" id="safeQueriesSection" style="display: none;">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm border-start border-success border-4">
-                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 text-success">
-                        <i class="bi bi-check-circle-fill me-2"></i>Bezpečné dotazy (ukázka)
-                    </h5>
-                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#safeQueriesCollapse">
-                        <i class="bi bi-eye"></i> Zobrazit/Skrýt
-                    </button>
-                </div>
-                <div class="collapse" id="safeQueriesCollapse">
-                    <div class="card-body">
-                        <div id="safeQueriesList">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mb-4" id="recommendationsSection" style="display: none;">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm border-start border-info border-4">
                 <div class="card-header bg-white border-0">
-                    <h5 class="mb-0 text-info">
-                        <i class="bi bi-lightbulb-fill me-2"></i>Doporučení pro zlepšení bezpečnosti
+                    <h5 class="mb-0 text-warning">
+                        <i class="bi bi-bug me-2"></i>Všechny nalezené problémy
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div id="recommendationsList">
-                    </div>
+                    <div id="allIssuesList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="safeQueriesSection" class="row mb-4" style="display: none;">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <h5 class="mb-0 text-success">
+                        <i class="bi bi-shield-check me-2"></i>Bezpečné SQL dotazy (ukázka)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="safeQueriesList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="recommendationsSection" class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <h5 class="mb-0 text-info">
+                        <i class="bi bi-lightbulb me-2"></i>Doporučení pro zlepšení bezpečnosti
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="recommendationsList"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="auditError" class="alert alert-danger" style="display: none;">
-    <i class="bi bi-exclamation-triangle me-2"></i>
-    <strong>Chyba:</strong> <span id="auditErrorMessage"></span>
+<div id="auditError" style="display: none;">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="alert alert-danger">
+                <h5 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>Chyba při spuštění auditu</h5>
+                <p id="auditErrorMessage" class="mb-0"></p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -251,39 +245,34 @@ document.addEventListener(\'DOMContentLoaded\', function() {
     const auditResults = document.getElementById(\'auditResults\');
     const auditError = document.getElementById(\'auditError\');
     
+    // Event listener pro tlačítko
     runAuditBtn.addEventListener(\'click\', function() {
         runSqlAudit();
     });
     
     function runSqlAudit() {
-        // Skrýt úvodní info a error
+        // Skryj všechny sekce
         auditIntro.style.display = \'none\';
         auditResults.style.display = \'none\';
         auditError.style.display = \'none\';
-        
-        // Zobrazit loading
         auditLoading.style.display = \'block\';
         
-        // Deaktivovat tlačítko
+        // Deaktivuj tlačítko
         runAuditBtn.disabled = true;
-        runAuditBtn.innerHTML = \'<i class="bi bi-hourglass-split"></i> Probíhá audit...\';
+        runAuditBtn.innerHTML = \'<i class="bi bi-hourglass-split"></i> Spouštím audit...\';
         
-        // Simulace progress baru
+        // Progress bar animace
         const progressBar = document.getElementById(\'auditProgress\');
         let progress = 0;
         const progressInterval = setInterval(() => {
-            progress += Math.random() * 10;
-            if (progress >= 95) {
-                progress = 95;
-                clearInterval(progressInterval);
-            }
+            progress += Math.random() * 15;
+            if (progress > 90) progress = 90;
             progressBar.style.width = progress + \'%\';
-        }, 200);
+        }, 300);
         
-        // AJAX volání na server
-        fetch(\'';
-		echo LR\Filters::escapeJs($this->global->uiControl->link('runSqlAudit!')) /* line 261 */;
-		echo '\', {
+        // AJAX volání - používáme getAttribute místo inline generování
+        const url = runAuditBtn.getAttribute(\'data-url\');
+        fetch(url, {
             method: \'POST\',
             headers: {
                 \'X-Requested-With\': \'XMLHttpRequest\',
@@ -334,40 +323,35 @@ document.addEventListener(\'DOMContentLoaded\', function() {
         
         // Overall status badge
         const statusBadge = document.getElementById(\'overallStatus\');
-        const statusColors = {
-            \'EXCELLENT\': \'bg-success\',
-            \'GOOD\': \'bg-info\', 
-            \'NEEDS_ATTENTION\': \'bg-warning\',
-            \'CRITICAL\': \'bg-danger\'
-        };
-        const statusTexts = {
-            \'EXCELLENT\': \'VÝBORNÉ\',
-            \'GOOD\': \'DOBRÉ\',
-            \'NEEDS_ATTENTION\': \'VYŽADUJE POZORNOST\',
-            \'CRITICAL\': \'KRITICKÉ\'
+        const statusConfig = {
+            \'EXCELLENT\': { class: \'bg-success\', text: \'VÝBORNÉ\' },
+            \'GOOD\': { class: \'bg-info\', text: \'DOBRÉ\' },
+            \'NEEDS_ATTENTION\': { class: \'bg-warning\', text: \'VYŽADUJE POZORNOST\' },
+            \'CRITICAL\': { class: \'bg-danger\', text: \'KRITICKÉ\' }
         };
         
-        statusBadge.className = \'badge \' + (statusColors[summary.overall_status] || \'bg-secondary\');
-        statusBadge.textContent = statusTexts[summary.overall_status] || summary.overall_status;
+        const config = statusConfig[summary.overall_status] || { class: \'bg-secondary\', text: \'NEZNÁMÉ\' };
+        statusBadge.className = \'badge \' + config.class;
+        statusBadge.textContent = config.text;
         
-        // Prioritní problémy
+        // Zobrazení prioritních problémů
         if (summary.priority_issues && summary.priority_issues.length > 0) {
             displayPriorityIssues(summary.priority_issues);
         }
         
-        // Všechny problémy
+        // Zobrazení všech problémů
         if (results.potential_issues && results.potential_issues.length > 0) {
             displayAllIssues(results.potential_issues);
         }
         
-        // Bezpečné dotazy
+        // Zobrazení bezpečných dotazů
         if (results.safe_queries && results.safe_queries.length > 0) {
-            displaySafeQueries(results.safe_queries.slice(0, 5)); // Pouze prvních 5
+            displaySafeQueries(results.safe_queries);
         }
         
-        // Doporučení
-        if (summary.recommendations && summary.recommendations.length > 0) {
-            displayRecommendations(summary.recommendations);
+        // Zobrazení doporučení
+        if (results.recommendations && results.recommendations.length > 0) {
+            displayRecommendations(results.recommendations);
         }
     }
     
@@ -385,22 +369,22 @@ document.addEventListener(\'DOMContentLoaded\', function() {
                     \'<div class="flex-grow-1">\' +
                         \'<h6 class="alert-heading">\' +
                             \'<span class="badge bg-\' + severity + \' me-2">\' + severityText + \'</span>\' +
-                            \'📁 \' + issue.file + \':\' + issue.line +
+                            \'📁 \' + escapeHtml(issue.file) + \':\' + issue.line +
                         \'</h6>\' +
                         \'<div class="bg-light p-2 rounded mb-2">\' +
-                            \'<code style="color: #212529;">\' + escapeHtml(issue.query) + \'</code>\' +
+                            \'<code style="color: #212529; font-size: 0.9em;">\' + escapeHtml(issue.matched_text || \'N/A\') + \'</code>\' +
                         \'</div>\' +
                         \'<div class="row">\' +
                             \'<div class="col-md-6">\' +
                                 \'<strong>Problémy:</strong>\' +
                                 \'<ul class="mb-0">\' +
-                                    issue.issues.map(i => \'<li>\' + escapeHtml(i) + \'</li>\').join(\'\') +
+                                    (issue.issues || []).map(i => \'<li>\' + escapeHtml(i) + \'</li>\').join(\'\') +
                                 \'</ul>\' +
                             \'</div>\' +
                             \'<div class="col-md-6">\' +
                                 \'<strong>Doporučení:</strong>\' +
                                 \'<ul class="mb-0">\' +
-                                    issue.recommendations.map(r => \'<li>\' + escapeHtml(r) + \'</li>\').join(\'\') +
+                                    (issue.recommendations || []).map(r => \'<li>\' + escapeHtml(r) + \'</li>\').join(\'\') +
                                 \'</ul>\' +
                             \'</div>\' +
                         \'</div>\' +
@@ -426,11 +410,11 @@ document.addEventListener(\'DOMContentLoaded\', function() {
             
             const issueHtml = \'<div class="border-start border-\' + severity + \' border-3 p-3 mb-3 bg-light">\' +
                 \'<div class="d-flex justify-content-between align-items-center mb-2">\' +
-                    \'<strong>📁 \' + issue.file + \':\' + issue.line + \'</strong>\' +
+                    \'<strong>📁 \' + escapeHtml(issue.file) + \':\' + issue.line + \'</strong>\' +
                     \'<span class="badge bg-\' + severity + \'">Skóre: \' + issue.safety_score + \'/10</span>\' +
                 \'</div>\' +
                 \'<div class="bg-white p-2 rounded mb-2">\' +
-                    \'<code style="color: #212529; font-size: 0.9em;">\' + escapeHtml(issue.query) + \'</code>\' +
+                    \'<code style="color: #212529; font-size: 0.9em;">\' + escapeHtml(issue.matched_text || \'N/A\') + \'</code>\' +
                 \'</div>\' +
                 (issue.issues && issue.issues.length > 0 ? 
                     \'<div class="small text-muted">\' +
@@ -451,11 +435,11 @@ document.addEventListener(\'DOMContentLoaded\', function() {
         queries.forEach((query, index) => {
             const queryHtml = \'<div class="border-start border-success border-3 p-3 mb-3 bg-light">\' +
                 \'<div class="d-flex justify-content-between align-items-center mb-2">\' +
-                    \'<strong>📁 \' + query.file + \':\' + query.line + \'</strong>\' +
+                    \'<strong>📁 \' + escapeHtml(query.file) + \':\' + query.line + \'</strong>\' +
                     \'<span class="badge bg-success">Skóre: \' + query.safety_score + \'/10</span>\' +
                 \'</div>\' +
                 \'<div class="bg-white p-2 rounded">\' +
-                    \'<code style="color: #212529; font-size: 0.9em;">\' + escapeHtml(query.query) + \'</code>\' +
+                    \'<code style="color: #212529; font-size: 0.9em;">\' + escapeHtml(query.query || query.matched_text || \'N/A\') + \'</code>\' +
                 \'</div>\' +
             \'</div>\';
             list.innerHTML += queryHtml;
@@ -465,18 +449,15 @@ document.addEventListener(\'DOMContentLoaded\', function() {
     }
     
     function displayRecommendations(recommendations) {
-        const section = document.getElementById(\'recommendationsSection\');
         const list = document.getElementById(\'recommendationsList\');
         
         list.innerHTML = \'<ul class="list-unstyled">\';
         recommendations.forEach(rec => {
-            const isUrgent = rec.includes(\'URGENT\');
+            const isUrgent = rec.includes(\'URGENT\') || rec.includes(\'okamžitě\');
             const className = isUrgent ? \'text-danger fw-bold\' : \'text-dark\';
             list.innerHTML += \'<li class="\' + className + \'"><i class="bi bi-lightbulb me-2"></i>\' + escapeHtml(rec) + \'</li>\';
         });
         list.innerHTML += \'</ul>\';
-        
-        section.style.display = \'block\';
     }
     
     function displayAuditError(errorMessage) {

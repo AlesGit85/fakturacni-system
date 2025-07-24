@@ -78,61 +78,6 @@ class SecurityPresenter extends BasePresenter
     }
 
     /**
-     * ✅ OPRAVENO: Kompletní AJAX handler pro spuštění SQL auditu
-     */
-    public function handleRunSqlAudit(): void
-{
-    // Kontrola oprávnění
-    if (!$this->isAdmin() && !$this->isSuperAdmin()) {
-        $this->sendJson([
-            'success' => false,
-            'error' => 'Nemáte oprávnění k této akci.'
-        ]);
-        return;
-    }
-
-    try {
-        // Logování spuštění auditu
-        $this->securityLogger->logSecurityEvent(
-            'sql_audit_run',
-            "Uživatel {$this->getUser()->getIdentity()->username} spustil SQL audit",
-            ['user_id' => $this->getUser()->getId()]
-        );
-
-        // Spuštění SQL auditu
-        $auditResults = $this->sqlAudit->runFullAudit();
-        $processedResults = $this->processAuditResults($auditResults);
-        
-        $this->sendJson([
-            'success' => true,
-            'results' => $processedResults
-        ]);
-        
-    } catch (\Nette\Application\AbortException $e) {
-        // ✅ AbortException je NORMÁLNÍ - jen ji přehodíme
-        throw $e;
-        
-    } catch (\Exception $e) {
-        // ✅ Zachycujeme jen skutečné chyby
-        $this->securityLogger->logSecurityEvent(
-            'sql_audit_error',
-            "Chyba při SQL auditu: " . $e->getMessage(),
-            [
-                'user_id' => $this->getUser()->getId(),
-                'error' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]
-        );
-
-        $this->sendJson([
-            'success' => false,
-            'error' => 'Chyba auditu: ' . $e->getMessage()
-        ]);
-    }
-}
-
-    /**
      * ✅ UPRAVENO: Rate limiting statistiky - nyní přístupné i pro normální admina
      */
     public function actionRateLimitStats(): void
@@ -418,6 +363,61 @@ class SecurityPresenter extends BasePresenter
     }
 
     /**
+     * ✅ OPRAVENO: Kompletní AJAX handler pro spuštění SQL auditu
+     */
+    public function handleRunSqlAudit(): void
+    {
+        // Kontrola oprávnění
+        if (!$this->isAdmin() && !$this->isSuperAdmin()) {
+            $this->sendJson([
+                'success' => false,
+                'error' => 'Nemáte oprávnění k této akci.'
+            ]);
+            return;
+        }
+
+        try {
+            // Logování spuštění auditu
+            $this->securityLogger->logSecurityEvent(
+                'sql_audit_run',
+                "Uživatel {$this->getUser()->getIdentity()->username} spustil SQL audit",
+                ['user_id' => $this->getUser()->getId()]
+            );
+
+            // Spuštění SQL auditu
+            $auditResults = $this->sqlAudit->runFullAudit();
+            $processedResults = $this->processAuditResults($auditResults);
+            
+            $this->sendJson([
+                'success' => true,
+                'results' => $processedResults
+            ]);
+            
+        } catch (\Nette\Application\AbortException $e) {
+            // ✅ AbortException je NORMÁLNÍ - jen ji přehodíme
+            throw $e;
+            
+        } catch (\Exception $e) {
+            // ✅ Zachycujeme jen skutečné chyby
+            $this->securityLogger->logSecurityEvent(
+                'sql_audit_error',
+                "Chyba při SQL auditu: " . $e->getMessage(),
+                [
+                    'user_id' => $this->getUser()->getId(),
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]
+            );
+
+            $this->sendJson([
+                'success' => false,
+                'error' => 'Chyba auditu: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
      * ✅ NOVÉ: Zpracuje výsledky auditu pro frontend
      */
     private function processAuditResults(array $results): array
@@ -465,42 +465,44 @@ class SecurityPresenter extends BasePresenter
      * ✅ NOVÉ: Generuje doporučení na základě výsledků auditu
      */
     private function generateRecommendations(array $results): array
-{
-    $recommendations = [];
-    
-    $issueCount = count($results['potential_issues']);
-    $totalQueries = count($results['safe_queries']) + $issueCount;
-    
-    if ($issueCount === 0) {
-        $recommendations[] = 'Výborná bezpečnost! Nebyly nalezeny žádné potenciální bezpečnostní problémy v SQL dotazech.';
-    } else {
-        $recommendations[] = "Nalezeno {$issueCount} potenciálních problémů. Doporučujeme prozkoumat a opravit označené SQL dotazy.";
-    }
+    {
+        $recommendations = [];
+        
+        $issueCount = count($results['potential_issues']);
+        $totalQueries = count($results['safe_queries']) + $issueCount;
+        
+        if ($issueCount === 0) {
+            $recommendations[] = 'Výborná bezpečnost! Nebyly nalezeny žádné potenciální bezpečnostní problémy v SQL dotazech.';
+        } else {
+            $recommendations[] = "Nalezeno {$issueCount} potenciálních problémů. Doporučujeme prozkoumat a opravit označené SQL dotazy.";
+        }
 
-    if ($totalQueries > 0) {
-        $rawQueryCount = 0;
-        foreach (array_merge($results['safe_queries'], $results['potential_issues']) as $query) {
-            // ✅ OPRAVENO: Zpracování obou formátů dat
-            $queryText = $query['query'] ?? $query['matched_text'] ?? '';
-            if (strpos($queryText, '->query(') !== false) {
-                $rawQueryCount++;
+        if ($totalQueries > 0) {
+            $rawQueryCount = 0;
+            foreach (array_merge($results['safe_queries'], $results['potential_issues']) as $query) {
+                // ✅ OPRAVENO: Zpracování obou formátů dat
+                $queryText = $query['query'] ?? $query['matched_text'] ?? '';
+                if (strpos($queryText, '->query(') !== false) {
+                    $rawQueryCount++;
+                }
+            }
+
+            if ($rawQueryCount > 0) {
+                $recommendations[] = "Nalezeno {$rawQueryCount} raw SQL dotazů. Zvažte migraci na Nette Database Selection API pro lepší bezpečnost.";
             }
         }
 
-        if ($rawQueryCount > 0) {
-            $recommendations[] = "Nalezeno {$rawQueryCount} raw SQL dotazů. Zvažte migraci na Nette Database Selection API pro lepší bezpečnost.";
-        }
+        $recommendations[] = 'Doporučujeme spouštět SQL audit alespoň jednou měsíčně.';
+
+        return $recommendations;
     }
 
-    $recommendations[] = 'Doporučujeme spouštět SQL audit alespoň jednou měsíčně.';
-
-    return $recommendations;
-}
-
+    /**
+     * ✅ TESTOVACÍ: Simple AJAX test pro ověření funkcionality
+     */
     public function handleSimpleTest(): void
-{
-    $this->flashMessage('AJAX test funguje!', 'success');
-    $this->redirect('this');
-}
-
+    {
+        $this->flashMessage('AJAX test funguje!', 'success');
+        $this->redirect('this');
+    }
 }
