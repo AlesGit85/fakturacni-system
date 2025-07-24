@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security;
 
 use Nette;
@@ -21,22 +23,28 @@ class SQLSecurityAudit
     private $projectRoot;
 
     /** @var array Vzory pro vyhledání potenciálně nebezpečných SQL dotazů */
-    private $dangerousPatterns = [
-        // Přímé vkládání proměnných do SQL
-        '/\$[a-zA-Z_][a-zA-Z0-9_]*\s*\.\s*["\']/',
-        '/["\'][^"\']*\$[a-zA-Z_][a-zA-Z0-9_]*[^"\']*["\']/',
-        
-        // Konkatenace stringů v SQL
-        '/["\'][^"\']*["\'][^;]*\.[^;]*["\'][^"\']*["\']/',
-        
-        // WHERE bez parametrů
-        '/WHERE\s+[^?]*=\s*["\'][^"\']*\$/',
-        '/WHERE\s+[^?]*LIKE\s*["\'][^"\']*\$/',
-        
-        // INSERT/UPDATE bez parametrů
-        '/INSERT\s+INTO\s+[^?]*VALUES\s*\([^?]*\$/',
-        '/UPDATE\s+[^?]*SET\s+[^?]*=\s*["\'][^"\']*\$/',
-    ];
+    /**
+ * ✅ VYLEPŠENÉ: Vzory pro vyhledání skutečných SQL injection problémů
+ */
+private $dangerousPatterns = [
+    // SQL dotazy s přímou konkatenací proměnných
+    '/(?:SELECT|INSERT|UPDATE|DELETE)\s+[^;]*\$[a-zA-Z_][a-zA-Z0-9_]*(?!["\'])/i',
+    
+    // WHERE klauzule s přímou konkatenací
+    '/WHERE\s+[^;]*["\'][^"\']*\$[a-zA-Z_][a-zA-Z0-9_]*[^"\']*["\']/',
+    
+    // SQL dotazy v query() metodě s konkatenací
+    '/->query\s*\(\s*["\'][^"\']*\$[a-zA-Z_][a-zA-Z0-9_]*[^"\']*["\']/',
+    
+    // LIKE s přímou konkatenací (časté místo pro injection)
+    '/LIKE\s+["\'][^"\']*\$[a-zA-Z_][a-zA-Z0-9_]*[^"\']*["\']/',
+    
+    // ORDER BY s proměnnou (injection risk)
+    '/ORDER\s+BY\s+\$[a-zA-Z_][a-zA-Z0-9_]*/',
+    
+    // Přímé vložení do SQL bez escapování
+    '/(?:database|db)->query\s*\([^?]*\$[a-zA-Z_]/'
+];
 
     /** @var array Soubory a adresáře k prohledání */
     private $searchPaths = [
@@ -91,15 +99,20 @@ class SQLSecurityAudit
      */
     private function scanDirectory(string $directory): void
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::LEAVES_ONLY
-        );
+        try {
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::LEAVES_ONLY
+            );
 
-        foreach ($iterator as $file) {
-            if ($file->isFile() && in_array($file->getExtension(), $this->fileExtensions)) {
-                $this->scanFile($file->getPathname());
+            foreach ($iterator as $file) {
+                if ($file->isFile() && in_array($file->getExtension(), $this->fileExtensions)) {
+                    $this->scanFile($file->getPathname());
+                }
             }
+        } catch (\Exception $e) {
+            // Ignorujeme chyby při čtení adresářů (např. oprávnění)
+            error_log("SQL Audit: Chyba při čtení adresáře {$directory}: " . $e->getMessage());
         }
     }
 
@@ -136,8 +149,10 @@ class SQLSecurityAudit
             foreach ($matches[0] as $match) {
                 $this->auditResults['sql_queries_found']++;
                 
-                $lineNumber = $this->getLineNumber($content, $match[1]);
-                $queryText = $match[0];
+                // ✅ OPRAVENO: Bezpečné získání pozice
+                $offset = isset($match[1]) ? $match[1] : 0;
+                $lineNumber = $this->getLineNumber($content, $offset);
+                $queryText = isset($match[0]) ? $match[0] : '';
                 
                 // Analýza bezpečnosti dotazu
                 $isSafe = $this->analyzeQuerySafety($queryText);
@@ -169,13 +184,16 @@ class SQLSecurityAudit
         foreach ($this->dangerousPatterns as $pattern) {
             if (preg_match_all($pattern, $content, $matches, PREG_OFFSET_CAPTURE)) {
                 foreach ($matches[0] as $match) {
-                    $lineNumber = $this->getLineNumber($content, $match[1]);
+                    // ✅ OPRAVENO: Bezpečné získání pozice
+                    $offset = isset($match[1]) ? $match[1] : 0;
+                    $matchedText = isset($match[0]) ? $match[0] : '';
+                    $lineNumber = $this->getLineNumber($content, $offset);
                     
                     $this->auditResults['potential_issues'][] = [
                         'file' => $filePath,
                         'line' => $lineNumber,
                         'pattern' => $pattern,
-                        'matched_text' => $match[0],
+                        'matched_text' => $matchedText,
                         'context' => trim($lines[$lineNumber - 1] ?? ''),
                         'type' => 'dangerous_pattern',
                         'severity' => 'high',

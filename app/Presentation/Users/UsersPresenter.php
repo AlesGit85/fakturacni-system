@@ -914,6 +914,81 @@ final class UsersPresenter extends BasePresenter
         }
     }
 
+    /**
+     * ✅ NOVÉ: Odblokování uživatele z rate limit blokování (AJAX)
+     */
+    public function handleUnblockUser(int $userId): void
+    {
+        try {
+            // Kontrola oprávnění - pouze admin může odblokovat uživatele
+            if (!$this->isAdmin()) {
+                $this->sendJson([
+                    'success' => false,
+                    'error' => 'Nemáte oprávnění k této akci.'
+                ]);
+                return;
+            }
+
+            // Ověříme, že uživatel existuje a máme k němu přístup
+            $user = $this->userManager->getById($userId);
+            if (!$user) {
+                $this->sendJson([
+                    'success' => false,
+                    'error' => 'Uživatel nebyl nalezen.'
+                ]);
+                return;
+            }
+
+            // Získáme informace o adminovi, který provádí odblokování
+            $adminId = $this->getUser()->getId();
+            $adminName = $this->getUser()->getIdentity()->username;
+
+            // Najdeme všechny rate limit bloky pro tohoto uživatele
+            $blockedRecords = $this->database->table('rate_limit_blocks')
+                ->where('user_id', $userId);
+
+            $unblockedCount = 0;
+            foreach ($blockedRecords as $block) {
+                // Smažeme blokování
+                $block->delete();
+                $unblockedCount++;
+            }
+
+            // Vymažeme také pokusy o přihlášení
+            $this->database->table('login_attempts')
+                ->where('user_id', $userId)
+                ->delete();
+
+            // Vymažeme rate limit pokusy
+            $this->database->table('rate_limits')
+                ->where('user_id', $userId)
+                ->delete();
+
+            // Zalogujeme akci
+            $this->securityLogger->logSecurityEvent(
+                'user_unblocked_by_admin',
+                "Uživatel {$user->username} (ID: {$userId}) byl odblokován adminem {$adminName} (ID: {$adminId}). Odstraněno {$unblockedCount} blokování."
+            );
+
+            $this->sendJson([
+                'success' => true,
+                'message' => "Uživatel '{$user->username}' byl úspěšně odblokován. Odstraněno {$unblockedCount} blokování."
+            ]);
+
+        } catch (\Exception $e) {
+            // Zalogujeme chybu
+            $this->securityLogger->logSecurityEvent(
+                'user_unblock_error',
+                "Chyba při odblokování uživatele ID: {$userId}: " . $e->getMessage()
+            );
+
+            $this->sendJson([
+                'success' => false,
+                'error' => 'Nastala chyba při odblokování uživatele: ' . $e->getMessage()
+            ]);
+        }
+    }
+
     public function renderRateLimitStats(): void
     {
         // Získání statistik

@@ -46,10 +46,8 @@ services:
 	# =====================================================
 
 	# SQL Security Audit Tool - webová verze (autowiring databáze)
-	sqlSecurityAudit: App\Security\SQLSecurityAudit
+	- App\Security\SQLSecurityAudit
 
-	# Explicitní registrace Security Presenteru - OPRAVENO: správný namespace
-	securityPresenter: App\Presentation\Security\SecurityPresenter(@sqlSecurityAudit)
 
 	# =====================================================
 	# AUTO-DISCOVERY

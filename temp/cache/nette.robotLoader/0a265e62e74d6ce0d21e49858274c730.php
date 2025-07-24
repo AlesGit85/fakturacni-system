@@ -10,7 +10,7 @@ return array (
     'App\\Core\\RouterFactory' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
-      1 => 1753219116,
+      1 => 1753259836,
     ),
     'App\\Mail\\TestMailer' => 
     array (
@@ -145,7 +145,7 @@ return array (
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
-      1 => 1753257385,
+      1 => 1753337880,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -165,7 +165,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1753189457,
+      1 => 1753259259,
     ),
     'App\\Security\\RateLimiter' => 
     array (
@@ -195,7 +195,7 @@ return array (
     'App\\Security\\SQLSecurityAudit' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SQLSecurityAudit.php',
-      1 => 1753218072,
+      1 => 1753337984,
     ),
   ),
   1 => 
@@ -204,18 +204,15 @@ return array (
     'null' => 3,
     'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 3,
     'App\\Presentation\\Security\\SecurityTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 3,
-    'App\\Presentation\\Users\\UsersRateLimitStatsTemplate' => 3,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityTestTemplate' => 3,
     'App\\Presentation\\Sign\\SignInTemplate' => 3,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityDefaultTemplate' => 3,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 2,
-    'App\\Presentation\\Users\\UsersEditTemplate' => 1,
+    'App\\Presentation\\Security\\SecurityNullTemplate' => 2,
+    'App\\Presentation\\Users\\UsersRateLimitStatsTemplate' => 2,
+    'App\\Presentation\\Users\\UsersTemplate' => 2,
   ),
   2 => 
   array (

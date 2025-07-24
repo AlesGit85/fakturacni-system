@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Presentation\Security;
 
 use App\Presentation\BasePresenter;
@@ -11,18 +13,22 @@ use App\Security\SQLSecurityAudit;
  * 
  * Barvy projektu: primární #B1D235, sekundární #95B11F, šedá #6c757d, černá #212529
  */
+
 class SecurityPresenter extends BasePresenter
 {
-    /** @var SQLSecurityAudit */
-    private $sqlAudit;
+    private SQLSecurityAudit $sqlAudit;
 
     /** @var array ✅ OPRAVENO: Povolené role pro přístup k bezpečnostním nástrojům */
     protected array $requiredRoles = ['admin'];
 
-    public function __construct(SQLSecurityAudit $sqlAudit)
+    public function injectSqlAudit(SQLSecurityAudit $sqlAudit): void
     {
-        parent::__construct();
         $this->sqlAudit = $sqlAudit;
+    }
+
+    public function actionTest(): void
+    {
+        // Test action
     }
 
     /**
@@ -72,47 +78,59 @@ class SecurityPresenter extends BasePresenter
     }
 
     /**
-     * AJAX: Spuštění SQL auditu
+     * ✅ OPRAVENO: Kompletní AJAX handler pro spuštění SQL auditu
      */
     public function handleRunSqlAudit(): void
-    {
-        // Kontrola oprávnění
-        if (!$this->isAdmin() && !$this->isSuperAdmin()) {
-            $this->sendJson(['success' => false, 'error' => 'Nedostatečná oprávnění']);
-            return;
-        }
-
-        try {
-            $results = $this->sqlAudit->runFullAudit();
-            
-            // Logování výsledků SQL auditu
-            $this->securityLogger->logSecurityEvent(
-                'sql_audit_completed',
-                "SQL audit dokončen - nalezeno {$results['total_issues']} problémů",
-                [
-                    'user_id' => $this->getUser()->getId(),
-                    'total_issues' => $results['total_issues'],
-                    'critical_issues' => $results['critical_issues']
-                ]
-            );
-
-            $this->sendJson([
-                'success' => true,
-                'results' => $results
-            ]);
-        } catch (\Exception $e) {
-            $this->securityLogger->logSecurityEvent(
-                'sql_audit_error',
-                "Chyba při SQL auditu: {$e->getMessage()}",
-                ['user_id' => $this->getUser()->getId(), 'error' => $e->getMessage()]
-            );
-
-            $this->sendJson([
-                'success' => false,
-                'error' => 'Nastala chyba během auditu: ' . $e->getMessage()
-            ]);
-        }
+{
+    // Kontrola oprávnění
+    if (!$this->isAdmin() && !$this->isSuperAdmin()) {
+        $this->sendJson([
+            'success' => false,
+            'error' => 'Nemáte oprávnění k této akci.'
+        ]);
+        return;
     }
+
+    try {
+        // Logování spuštění auditu
+        $this->securityLogger->logSecurityEvent(
+            'sql_audit_run',
+            "Uživatel {$this->getUser()->getIdentity()->username} spustil SQL audit",
+            ['user_id' => $this->getUser()->getId()]
+        );
+
+        // Spuštění SQL auditu
+        $auditResults = $this->sqlAudit->runFullAudit();
+        $processedResults = $this->processAuditResults($auditResults);
+        
+        $this->sendJson([
+            'success' => true,
+            'results' => $processedResults
+        ]);
+        
+    } catch (\Nette\Application\AbortException $e) {
+        // ✅ AbortException je NORMÁLNÍ - jen ji přehodíme
+        throw $e;
+        
+    } catch (\Exception $e) {
+        // ✅ Zachycujeme jen skutečné chyby
+        $this->securityLogger->logSecurityEvent(
+            'sql_audit_error',
+            "Chyba při SQL auditu: " . $e->getMessage(),
+            [
+                'user_id' => $this->getUser()->getId(),
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]
+        );
+
+        $this->sendJson([
+            'success' => false,
+            'error' => 'Chyba auditu: ' . $e->getMessage()
+        ]);
+    }
+}
 
     /**
      * ✅ UPRAVENO: Rate limiting statistiky - nyní přístupné i pro normální admina
@@ -398,4 +416,91 @@ class SecurityPresenter extends BasePresenter
             ]);
         }
     }
+
+    /**
+     * ✅ NOVÉ: Zpracuje výsledky auditu pro frontend
+     */
+    private function processAuditResults(array $results): array
+    {
+        $totalQueries = count($results['safe_queries']) + count($results['potential_issues']);
+        $safeCount = count($results['safe_queries']);
+        $issueCount = count($results['potential_issues']);
+        
+        $safetyPercentage = $totalQueries > 0 ? round(($safeCount / $totalQueries) * 100, 1) : 100;
+        
+        // Určení celkového statusu
+        $overallStatus = 'EXCELLENT';
+        if ($safetyPercentage < 100) {
+            $overallStatus = 'GOOD';
+        }
+        if ($safetyPercentage < 90) {
+            $overallStatus = 'NEEDS_ATTENTION';
+        }
+        if ($safetyPercentage < 70) {
+            $overallStatus = 'CRITICAL';
+        }
+
+        // Generování doporučení
+        $recommendations = $this->generateRecommendations($results);
+
+        return [
+            'timestamp' => $results['timestamp']->format('Y-m-d H:i:s'),
+            'summary' => [
+                'files_scanned' => $results['files_scanned'],
+                'total_queries' => $totalQueries,
+                'safe_queries' => $safeCount,
+                'potential_issues' => $issueCount,
+                'safety_percentage' => $safetyPercentage,
+                'overall_status' => $overallStatus,
+                'priority_issues' => isset($results['summary']['priority_issues']) ? $results['summary']['priority_issues'] : [],
+                'recommendations' => isset($results['summary']['recommendations']) ? $results['summary']['recommendations'] : []
+            ],
+            'potential_issues' => array_slice($results['potential_issues'], 0, 20), // Limit pro UI
+            'safe_queries' => array_slice($results['safe_queries'], 0, 10), // Limit pro UI
+            'recommendations' => $recommendations
+        ];
+    }
+
+    /**
+     * ✅ NOVÉ: Generuje doporučení na základě výsledků auditu
+     */
+    private function generateRecommendations(array $results): array
+{
+    $recommendations = [];
+    
+    $issueCount = count($results['potential_issues']);
+    $totalQueries = count($results['safe_queries']) + $issueCount;
+    
+    if ($issueCount === 0) {
+        $recommendations[] = 'Výborná bezpečnost! Nebyly nalezeny žádné potenciální bezpečnostní problémy v SQL dotazech.';
+    } else {
+        $recommendations[] = "Nalezeno {$issueCount} potenciálních problémů. Doporučujeme prozkoumat a opravit označené SQL dotazy.";
+    }
+
+    if ($totalQueries > 0) {
+        $rawQueryCount = 0;
+        foreach (array_merge($results['safe_queries'], $results['potential_issues']) as $query) {
+            // ✅ OPRAVENO: Zpracování obou formátů dat
+            $queryText = $query['query'] ?? $query['matched_text'] ?? '';
+            if (strpos($queryText, '->query(') !== false) {
+                $rawQueryCount++;
+            }
+        }
+
+        if ($rawQueryCount > 0) {
+            $recommendations[] = "Nalezeno {$rawQueryCount} raw SQL dotazů. Zvažte migraci na Nette Database Selection API pro lepší bezpečnost.";
+        }
+    }
+
+    $recommendations[] = 'Doporučujeme spouštět SQL audit alespoň jednou měsíčně.';
+
+    return $recommendations;
+}
+
+    public function handleSimpleTest(): void
+{
+    $this->flashMessage('AJAX test funguje!', 'success');
+    $this->redirect('this');
+}
+
 }

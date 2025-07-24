@@ -1,0 +1,44 @@
+{block content}
+
+<h1>Security Test</h1>
+<p>Pokud vidíš tuto stránku, Security presenter funguje!</p>
+
+<p>Test linku: <a n:href="sqlAudit">SQL Audit</a></p>
+
+<!-- První tlačítko pro JSON AJAX test -->
+<button onclick="testJsonAjax()" data-url="{link runSqlAudit!}">Test JSON AJAX</button>
+
+<!-- Druhé tlačítko pro simple test -->  
+<button onclick="testSimpleAjax()" data-url="{link simpleTest!}">Test Simple AJAX</button>
+
+<div id="result"></div>
+
+<script>
+function testJsonAjax() {
+    const button = event.target;
+    const url = button.getAttribute('data-url');
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('result').innerHTML = '<pre>' + data + '</pre>';
+    })
+    .catch(error => {
+        document.getElementById('result').innerHTML = 'Chyba: ' + error.message;
+    });
+}
+
+function testSimpleAjax() {
+    const button = event.target;
+    const url = button.getAttribute('data-url');
+    window.location.href = url;
+}
+</script>
+
+{/block}
