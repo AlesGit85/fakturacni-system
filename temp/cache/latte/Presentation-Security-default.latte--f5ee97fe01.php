@@ -10,7 +10,7 @@ final class Template_f5ee97fe01 extends Latte\Runtime\Template
 	public const Source = 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security/default.latte';
 
 	public const Blocks = [
-		['content' => 'blockContent'],
+		['title' => 'blockTitle', 'content' => 'blockContent'],
 	];
 
 
@@ -23,11 +23,22 @@ final class Template_f5ee97fe01 extends Latte\Runtime\Template
 			return;
 		}
 
-		$this->renderBlock('content', get_defined_vars()) /* line 2 */;
+		$this->renderBlock('title', get_defined_vars()) /* line 2 */;
+		echo '
+
+';
+		$this->renderBlock('content', get_defined_vars()) /* line 4 */;
 	}
 
 
-	/** {block content} on line 2 */
+	/** {block title} on line 2 */
+	public function blockTitle(array $ʟ_args): void
+	{
+		echo 'Bezpečnostní nástroje';
+	}
+
+
+	/** {block content} on line 4 */
 	public function blockContent(array $ʟ_args): void
 	{
 		extract($this->params);
@@ -35,132 +46,148 @@ final class Template_f5ee97fe01 extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '
-<div class="row">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1 class="h3 mb-0">🔒 Bezpečnostní nástroje</h1>
-                <p class="text-muted mb-0">Nástroje pro monitoring a audit bezpečnosti systému</p>
-            </div>
+<div class="security-page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1>🔒 Bezpečnostní nástroje</h1>
+            <p>Nástroje pro monitoring a audit bezpečnosti systému</p>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center p-5">
-                <div class="text-primary mb-4">
-                    <i class="bi bi-search" style="font-size: 4rem;"></i>
-                </div>
-                <h4 class="card-title">SQL Security Audit</h4>
-                <p class="card-text text-muted mb-4">
-                    Kompletní analýza všech SQL dotazů v projektu z hlediska bezpečnosti. 
-                    Detekuje potenciální SQL injection vulnerabilities a poskytuje doporučení.
-                </p>
-                <div class="row text-start mb-4">
-                    <div class="col-12">
-                        <h6 class="text-success">
+<div class="security-tools-section">
+    <h2 class="security-tools-title">Hlavní nástroje</h2>
+    
+    <div class="row">
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card security-tool-card security-main-tool">
+                <div class="card-body">
+                    <div class="security-tool-icon security-main-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <h4 class="security-tool-title">SQL Security Audit</h4>
+                    <p class="security-tool-description">
+                        Kompletní analýza všech SQL dotazů v projektu z hlediska bezpečnosti. 
+                        Detekuje potenciální SQL injection vulnerabilities a poskytuje doporučení.
+                    </p>
+                    
+                    <div class="security-features-list">
+                        <h6 class="security-features-title">
                             <i class="bi bi-check-circle me-2"></i>Funkce:
                         </h6>
-                        <ul class="list-unstyled text-muted">
+                        <ul class="security-features">
                             <li>• Skenování raw SQL dotazů</li>
                             <li>• Detekce nebezpečných vzorů</li>
                             <li>• Bezpečnostní skóre</li>
                             <li>• Podrobná doporučení</li>
                         </ul>
                     </div>
+                    
+                    <a href="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Security:sqlAudit')) /* line 45 */;
+		echo '" class="btn security-tool-btn btn-primary">
+                        <i class="bi bi-search me-2"></i>Spustit SQL Audit
+                    </a>
                 </div>
-                <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Security:sqlAudit')) /* line 41 */;
-		echo '" class="btn btn-primary btn-lg">
-                    <i class="bi bi-search"></i> Spustit SQL Audit
-                </a>
             </div>
         </div>
-    </div>
-    
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center p-5">
-                <div class="text-info mb-4">
-                    <i class="bi bi-bar-chart" style="font-size: 4rem;"></i>
-                </div>
-                <h4 class="card-title">Security Dashboard</h4>
-                <p class="card-text text-muted mb-4">
-                    Přehled bezpečnostních statistik, monitoring událostí a rychlý přístup 
-                    ke všem bezpečnostním nástrojům systému.
-                </p>
-                <div class="row text-start mb-4">
-                    <div class="col-12">
-                        <h6 class="text-info">
+        
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card security-tool-card security-main-tool">
+                <div class="card-body">
+                    <div class="security-tool-icon security-main-icon">
+                        <i class="bi bi-speedometer2"></i>
+                    </div>
+                    <h4 class="security-tool-title">Security Dashboard</h4>
+                    <p class="security-tool-description">
+                        Přehled bezpečnostních statistik, monitoring událostí a rychlý přístup 
+                        ke všem bezpečnostním nástrojům systému.
+                    </p>
+                    
+                    <div class="security-features-list">
+                        <h6 class="security-features-title">
                             <i class="bi bi-graph-up me-2"></i>Monitoring:
                         </h6>
-                        <ul class="list-unstyled text-muted">
+                        <ul class="security-features">
                             <li>• Přihlašovací statistiky</li>
                             <li>• XSS pokusy</li>
                             <li>• Rate limiting</li>
                             <li>• Security logy</li>
                         </ul>
                     </div>
+                    
+                    <a href="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Security:dashboard')) /* line 76 */;
+		echo '" class="btn security-tool-btn btn-info">
+                        <i class="bi bi-speedometer2 me-2"></i>Otevřít Dashboard
+                    </a>
                 </div>
-                <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Security:dashboard')) /* line 72 */;
-		echo '" class="btn btn-info btn-lg">
-                    <i class="bi bi-speedometer2"></i> Otevřít Dashboard
-                </a>
             </div>
         </div>
     </div>
 </div>
 
 ';
-		if ($isSuperAdmin) /* line 81 */ {
-			echo '<div class="row">
-    <div class="col-12">
-        <div class="card border-warning">
-            <div class="card-header bg-warning text-dark">
-                <h5 class="mb-0">
-                    <i class="bi bi-shield-exclamation me-2"></i>Super Admin nástroje
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <div class="text-center">
-                            <div class="text-warning mb-2">
-                                <i class="bi bi-stopwatch" style="font-size: 2.5rem;"></i>
+		if ($isSuperAdmin) /* line 86 */ {
+			echo '<div class="security-tools-section">
+    <h2 class="security-tools-title">Super Admin nástroje</h2>
+    
+    <div class="card security-admin-tools-card">
+        <div class="security-admin-tools-header">
+            <h5>
+                <i class="bi bi-shield-exclamation me-2"></i>Super Admin nástroje
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card security-tool-card security-admin-tool">
+                        <div class="card-body">
+                            <div class="security-tool-icon">
+                                <i class="bi bi-stopwatch"></i>
                             </div>
-                            <h6>Rate Limit Monitor</h6>
-                            <p class="text-muted small">Správa a monitoring rate limitingu napříč systémem</p>
+                            <h6 class="security-tool-title">Rate Limit Monitor</h6>
+                            <p class="security-tool-description">
+                                Správa a monitoring rate limitingu napříč systémem
+                            </p>
                             <a href="';
-			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Security:rateLimitStats')) /* line 99 */;
-			echo '" class="btn btn-outline-warning btn-sm">
-                                <i class="bi bi-bar-chart"></i> Statistiky
+			echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Security:rateLimitStats')) /* line 108 */;
+			echo '" class="btn security-tool-btn btn-warning">
+                                <i class="bi bi-bar-chart me-2"></i>Statistiky
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="text-center">
-                            <div class="text-secondary mb-2">
-                                <i class="bi bi-gear" style="font-size: 2.5rem;"></i>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card security-tool-card security-admin-tool">
+                        <div class="card-body">
+                            <div class="security-tool-icon">
+                                <i class="bi bi-gear"></i>
                             </div>
-                            <h6>Pokročilé nastavení</h6>
-                            <p class="text-muted small">Konfigurace bezpečnostních parametrů systému</p>
-                            <button class="btn btn-outline-secondary btn-sm" disabled>
-                                <i class="bi bi-wrench"></i> Připravuje se
+                            <h6 class="security-tool-title">Pokročilé nastavení</h6>
+                            <p class="security-tool-description">
+                                Konfigurace bezpečnostních parametrů systému
+                            </p>
+                            <button class="btn security-tool-btn disabled" disabled>
+                                <i class="bi bi-wrench me-2"></i>Připravuje se
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="text-center">
-                            <div class="text-danger mb-2">
-                                <i class="bi bi-bug" style="font-size: 2.5rem;"></i>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card security-tool-card security-admin-tool">
+                        <div class="card-body">
+                            <div class="security-tool-icon">
+                                <i class="bi bi-bug"></i>
                             </div>
-                            <h6>Penetration Test</h6>
-                            <p class="text-muted small">Automatické testování bezpečnostních slabin</p>
-                            <button class="btn btn-outline-danger btn-sm" disabled>
-                                <i class="bi bi-shield-check"></i> V přípravě
+                            <h6 class="security-tool-title">Penetration Test</h6>
+                            <p class="security-tool-description">
+                                Automatické testování bezpečnostních slabin
+                            </p>
+                            <button class="btn security-tool-btn btn-outline-danger disabled" disabled>
+                                <i class="bi bi-shield-check me-2"></i>V přípravě
                             </button>
                         </div>
                     </div>
@@ -172,28 +199,36 @@ final class Template_f5ee97fe01 extends Latte\Runtime\Template
 ';
 		}
 		echo '
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card border-success">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0">
-                    <i class="bi bi-lightbulb-fill me-2"></i>Bezpečnostní doporučení
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6><i class="bi bi-check-circle text-success me-2"></i>Dobré praktiky:</h6>
-                        <ul class="text-muted">
+<div class="security-tools-section">
+    <h2 class="security-tools-title">Bezpečnostní doporučení</h2>
+    
+    <div class="card security-recommendations-card">
+        <div class="security-recommendations-header">
+            <h5>
+                <i class="bi bi-lightbulb-fill me-2"></i>Bezpečnostní doporučení
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="security-recommendation-section">
+                        <h6 class="security-recommendation-title">
+                            <i class="bi bi-check-circle me-2"></i>Dobré praktiky:
+                        </h6>
+                        <ul class="security-recommendation-list">
                             <li>Pravidelně spouštějte SQL security audit</li>
                             <li>Monitorujte bezpečnostní logy</li>
                             <li>Kontrolujte rate limiting statistiky</li>
                             <li>Udržujte silná hesla pro všechny účty</li>
                         </ul>
                     </div>
-                    <div class="col-md-6">
-                        <h6><i class="bi bi-exclamation-triangle text-warning me-2"></i>Pozor na:</h6>
-                        <ul class="text-muted">
+                </div>
+                <div class="col-md-6">
+                    <div class="security-recommendation-section">
+                        <h6 class="security-recommendation-title">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Pozor na:
+                        </h6>
+                        <ul class="security-recommendation-list">
                             <li>Neobvyklé množství neúspěšných přihlášení</li>
                             <li>XSS pokusy z nových IP adres</li>
                             <li>Abnormální databázovou aktivitu</li>

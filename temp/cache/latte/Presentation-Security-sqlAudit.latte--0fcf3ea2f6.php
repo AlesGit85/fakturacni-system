@@ -10,7 +10,7 @@ final class Template_0fcf3ea2f6 extends Latte\Runtime\Template
 	public const Source = 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security/sqlAudit.latte';
 
 	public const Blocks = [
-		['content' => 'blockContent'],
+		['title' => 'blockTitle', 'content' => 'blockContent'],
 	];
 
 
@@ -23,11 +23,22 @@ final class Template_0fcf3ea2f6 extends Latte\Runtime\Template
 			return;
 		}
 
-		$this->renderBlock('content', get_defined_vars()) /* line 2 */;
+		$this->renderBlock('title', get_defined_vars()) /* line 2 */;
+		echo '
+
+';
+		$this->renderBlock('content', get_defined_vars()) /* line 4 */;
 	}
 
 
-	/** {block content} on line 2 */
+	/** {block title} on line 2 */
+	public function blockTitle(array $ʟ_args): void
+	{
+		echo 'SQL Security Audit';
+	}
+
+
+	/** {block content} on line 4 */
 	public function blockContent(array $ʟ_args): void
 	{
 		extract($this->params);
@@ -35,469 +46,242 @@ final class Template_0fcf3ea2f6 extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '
-<div class="row">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1 class="h3 mb-0" style="color: #212529;">🔒 SQL Security Audit</h1>
-                <p class="text-muted mb-0">Komplexní analýza SQL bezpečnosti projektu</p>
-            </div>
-            <div>
-                <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Security:dashboard')) /* line 12 */;
+<div class="security-page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1>🔒 SQL Security Audit</h1>
+            <p>Komplexní analýza SQL bezpečnosti projektu</p>
+        </div>
+        <div class="security-header-actions">
+            <a href="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Security:dashboard')) /* line 14 */;
 		echo '" class="btn btn-outline-secondary me-2">
-                    <i class="bi bi-arrow-left"></i> Zpět na Dashboard
-                </a>
-                <button id="runAuditBtn" class="btn btn-primary" data-url="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('runSqlAudit!')) /* line 15 */;
-		echo '" style="background-color: #B1D235; border-color: #95B11F; color: #212529;">
-                    <i class="bi bi-search"></i> Spustit Audit
-                </button>
-            </div>
+                <i class="bi bi-arrow-left me-2"></i>Zpět na Dashboard
+            </a>
+            <button id="runAuditBtn" class="btn security-tool-btn btn-primary" data-url="';
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('runSqlAudit!')) /* line 17 */;
+		echo '">
+                <i class="bi bi-search me-2"></i>Spustit Audit
+            </button>
         </div>
     </div>
 </div>
 
-<div id="auditLoading" class="text-center py-5" style="display: none;">
-    <div class="spinner-border" style="color: #B1D235; width: 3rem; height: 3rem;" role="status">
-        <span class="visually-hidden">Načítání...</span>
-    </div>
-    <div class="mt-3">
-        <h5 style="color: #212529;">Prohledávám projekt...</h5>
-        <p class="text-muted">Analyzuji SQL dotazy z hlediska bezpečnosti</p>
-        <div class="progress" style="width: 300px; margin: 0 auto;">
-            <div id="auditProgress" class="progress-bar" style="background-color: #B1D235;" role="progressbar"></div>
+<div id="auditLoading" class="security-loading-section" style="display: none;">
+    <div class="security-loading">
+        <div class="spinner-border security-spinner" role="status">
+            <span class="visually-hidden">Načítání...</span>
         </div>
-    </div>
-</div>
-
-<div id="auditIntro" class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body text-center py-5">
-                <div class="mb-4">
-                    <i class="bi bi-shield-check display-1" style="color: #B1D235;"></i>
-                </div>
-                <h3 class="card-title" style="color: #212529;">SQL Security Audit Tool</h3>
-                <p class="card-text text-muted mb-4">
-                    Tento nástroj prohledá celý projekt a analyzuje všechny SQL dotazy z hlediska bezpečnosti.
-                    Detekuje potenciální SQL injection vulnerabilities a poskytuje doporučení pro jejich opravu.
-                </p>
-                
-                <div class="row text-start">
-                    <div class="col-md-6">
-                        <h6 class="text-success"><i class="bi bi-check-circle me-2"></i>Co kontroluje:</h6>
-                        <ul class="list-unstyled text-muted">
-                            <li>• Raw SQL dotazy (database->query)</li>
-                            <li>• Parametrizované vs. neescapované dotazy</li>
-                            <li>• Nebezpečné vzory konkatenace</li>
-                            <li>• Bezpečnostní skóre každého dotazu</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="text-info"><i class="bi bi-folder me-2"></i>Prohledávané adresáře:</h6>
-                        <ul class="list-unstyled text-muted">
-                            <li>• <code>app/Model/</code></li>
-                            <li>• <code>app/Presentation/</code></li>
-                            <li>• <code>Modules/</code></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="alert alert-warning mt-4">
-                    <i class="bi bi-exclamation-triangle me-2"></i>
-                    <strong>Poznámka:</strong> Audit může trvat několik sekund až minut v závislosti na velikosti projektu.
+        <div class="security-loading-content">
+            <h5>Prohledávám projekt...</h5>
+            <p>Analyzuji SQL dotazy z hlediska bezpečnosti</p>
+            <div class="security-progress-container">
+                <div class="progress security-progress">
+                    <div id="auditProgress" class="progress-bar" role="progressbar"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="auditResults" style="display: none;">
-    
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0">
-                    <h5 class="mb-0" style="color: #212529;"><i class="bi bi-graph-up me-2"></i>Shrnutí auditu</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-md-2 col-6 mb-3">
-                            <div class="border-end">
-                                <div class="h3 mb-1" style="color: #B1D235;" id="filesScanned">-</div>
-                                <small class="text-muted">Skenované soubory</small>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-6 mb-3">
-                            <div class="border-end">
-                                <div class="h3 mb-1 text-info" id="queriesFound">-</div>
-                                <small class="text-muted">SQL dotazy</small>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-6 mb-3">
-                            <div class="border-end">
-                                <div class="h3 mb-1 text-success" id="safeQueries">-</div>
-                                <small class="text-muted">Bezpečné</small>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-6 mb-3">
-                            <div class="border-end">
-                                <div class="h3 mb-1 text-warning" id="potentialIssues">-</div>
-                                <small class="text-muted">Problémy</small>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-6 mb-3">
-                            <div class="border-end">
-                                <div class="h3 mb-1 text-info" id="safetyPercentage">-</div>
-                                <small class="text-muted">Bezpečnost</small>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-6 mb-3">
-                            <div>
-                                <span id="overallStatus" class="badge">-</span>
-                                <small class="text-muted d-block">Celkový stav</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="priorityIssuesSection" class="row mb-4" style="display: none;">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm border-start border-danger border-3">
-                <div class="card-header bg-white border-0">
-                    <h5 class="mb-0 text-danger">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Prioritní bezpečnostní problémy
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div id="priorityIssuesList"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="allIssuesSection" class="row mb-4" style="display: none;">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0">
-                    <h5 class="mb-0 text-warning">
-                        <i class="bi bi-bug me-2"></i>Všechny nalezené problémy
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div id="allIssuesList"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="safeQueriesSection" class="row mb-4" style="display: none;">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0">
-                    <h5 class="mb-0 text-success">
-                        <i class="bi bi-shield-check me-2"></i>Bezpečné SQL dotazy (ukázka)
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div id="safeQueriesList"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="recommendationsSection" class="row mb-4">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0">
-                    <h5 class="mb-0 text-info">
-                        <i class="bi bi-lightbulb me-2"></i>Doporučení pro zlepšení bezpečnosti
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div id="recommendationsList"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="auditError" style="display: none;">
+<div id="auditIntro" class="security-audit-intro">
     <div class="row">
         <div class="col-md-8 mx-auto">
-            <div class="alert alert-danger">
-                <h5 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>Chyba při spuštění auditu</h5>
+            <div class="card security-intro-card">
+                <div class="card-body">
+                    <div class="security-intro-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3 class="security-intro-title">SQL Security Audit Tool</h3>
+                    <p class="security-intro-description">
+                        Tento nástroj prohledá celý projekt a analyzuje všechny SQL dotazy z hlediska bezpečnosti.
+                        Detekuje potenciální SQL injection vulnerabilities a poskytuje doporučení pro jejich opravu.
+                    </p>
+                    
+                    <div class="row security-intro-features">
+                        <div class="col-md-6">
+                            <div class="security-feature-section">
+                                <h6 class="security-feature-title">
+                                    <i class="bi bi-check-circle me-2"></i>Co kontroluje:
+                                </h6>
+                                <ul class="security-feature-list">
+                                    <li>Raw SQL dotazy (database->query)</li>
+                                    <li>Parametrizované vs. neescapované dotazy</li>
+                                    <li>Nebezpečné vzory konkatenace</li>
+                                    <li>Bezpečnostní skóre každého dotazu</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="security-feature-section">
+                                <h6 class="security-feature-title">
+                                    <i class="bi bi-folder me-2"></i>Prohledávané adresáře:
+                                </h6>
+                                <ul class="security-feature-list">
+                                    <li><code>app/Model/</code></li>
+                                    <li><code>app/Presentation/</code></li>
+                                    <li><code>Modules/</code></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="security-intro-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Poznámka:</strong> Audit může trvat několik sekund až minut v závislosti na velikosti projektu.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="auditResults" class="security-audit-results" style="display: none;">
+    
+    <div class="security-tools-section">
+        <h2 class="security-tools-title">Shrnutí auditu</h2>
+        
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card security-summary-card">
+                    <div class="card-body">
+                        <div class="row security-summary-stats">
+                            <div class="col-md-2 col-6 mb-3">
+                                <div class="security-summary-item">
+                                    <div class="security-summary-number" id="filesScanned">-</div>
+                                    <div class="security-summary-label">Skenované soubory</div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-6 mb-3">
+                                <div class="security-summary-item">
+                                    <div class="security-summary-number" id="queriesFound">-</div>
+                                    <div class="security-summary-label">SQL dotazy</div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-6 mb-3">
+                                <div class="security-summary-item">
+                                    <div class="security-summary-number text-success" id="safeQueries">-</div>
+                                    <div class="security-summary-label">Bezpečné</div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-6 mb-3">
+                                <div class="security-summary-item">
+                                    <div class="security-summary-number text-warning" id="potentialIssues">-</div>
+                                    <div class="security-summary-label">Problémy</div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-6 mb-3">
+                                <div class="security-summary-item">
+                                    <div class="security-summary-number text-info" id="safetyPercentage">-</div>
+                                    <div class="security-summary-label">Bezpečnost</div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-6 mb-3">
+                                <div class="security-summary-item">
+                                    <span id="overallStatus" class="badge security-status-badge">-</span>
+                                    <div class="security-summary-label">Celkový stav</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="priorityIssuesSection" class="security-tools-section" style="display: none;">
+        <h2 class="security-tools-title">Prioritní bezpečnostní problémy</h2>
+        
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card security-issues-card priority-issues">
+                    <div class="security-issues-header">
+                        <h5>
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>Prioritní bezpečnostní problémy
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="priorityIssuesList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="allIssuesSection" class="security-tools-section" style="display: none;">
+        <h2 class="security-tools-title">Všechny nalezené problémy</h2>
+        
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card security-issues-card all-issues">
+                    <div class="security-issues-header">
+                        <h5>
+                            <i class="bi bi-bug me-2"></i>Všechny nalezené problémy
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="allIssuesList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="safeQueriesSection" class="security-tools-section" style="display: none;">
+        <h2 class="security-tools-title">Bezpečné SQL dotazy</h2>
+        
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card security-issues-card safe-queries">
+                    <div class="security-issues-header">
+                        <h5>
+                            <i class="bi bi-shield-check me-2"></i>Bezpečné SQL dotazy (ukázka)
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="safeQueriesList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="recommendationsSection" class="security-tools-section">
+        <h2 class="security-tools-title">Doporučení pro zlepšení bezpečnosti</h2>
+        
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card security-recommendations-card">
+                    <div class="security-recommendations-header">
+                        <h5>
+                            <i class="bi bi-lightbulb me-2"></i>Doporučení pro zlepšení bezpečnosti
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="recommendationsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="auditError" class="security-audit-error" style="display: none;">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="alert alert-danger security-error-alert">
+                <h5 class="alert-heading">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Chyba při spuštění auditu
+                </h5>
                 <p id="auditErrorMessage" class="mb-0"></p>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-document.addEventListener(\'DOMContentLoaded\', function() {
-    const runAuditBtn = document.getElementById(\'runAuditBtn\');
-    const auditLoading = document.getElementById(\'auditLoading\');
-    const auditIntro = document.getElementById(\'auditIntro\');
-    const auditResults = document.getElementById(\'auditResults\');
-    const auditError = document.getElementById(\'auditError\');
-    
-    // Event listener pro tlačítko
-    runAuditBtn.addEventListener(\'click\', function() {
-        runSqlAudit();
-    });
-    
-    function runSqlAudit() {
-        // Skryj všechny sekce
-        auditIntro.style.display = \'none\';
-        auditResults.style.display = \'none\';
-        auditError.style.display = \'none\';
-        auditLoading.style.display = \'block\';
-        
-        // Deaktivuj tlačítko
-        runAuditBtn.disabled = true;
-        runAuditBtn.innerHTML = \'<i class="bi bi-hourglass-split"></i> Spouštím audit...\';
-        
-        // Progress bar animace
-        const progressBar = document.getElementById(\'auditProgress\');
-        let progress = 0;
-        const progressInterval = setInterval(() => {
-            progress += Math.random() * 15;
-            if (progress > 90) progress = 90;
-            progressBar.style.width = progress + \'%\';
-        }, 300);
-        
-        // AJAX volání - používáme getAttribute místo inline generování
-        const url = runAuditBtn.getAttribute(\'data-url\');
-        fetch(url, {
-            method: \'POST\',
-            headers: {
-                \'X-Requested-With\': \'XMLHttpRequest\',
-                \'Content-Type\': \'application/json\'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            clearInterval(progressInterval);
-            progressBar.style.width = \'100%\';
-            
-            setTimeout(() => {
-                auditLoading.style.display = \'none\';
-                
-                if (data.success) {
-                    displayAuditResults(data.results);
-                } else {
-                    displayAuditError(data.error);
-                }
-                
-                // Obnovit tlačítko
-                runAuditBtn.disabled = false;
-                runAuditBtn.innerHTML = \'<i class="bi bi-arrow-clockwise"></i> Spustit znovu\';
-            }, 500);
-        })
-        .catch(error => {
-            clearInterval(progressInterval);
-            auditLoading.style.display = \'none\';
-            displayAuditError(\'Nastala chyba při komunikaci se serverem: \' + error.message);
-            
-            // Obnovit tlačítko
-            runAuditBtn.disabled = false;
-            runAuditBtn.innerHTML = \'<i class="bi bi-search"></i> Spustit Audit\';
-        });
-    }
-    
-    function displayAuditResults(results) {
-        auditResults.style.display = \'block\';
-        
-        const summary = results.summary;
-        
-        // Vyplnění základních statistik
-        document.getElementById(\'filesScanned\').textContent = summary.files_scanned;
-        document.getElementById(\'queriesFound\').textContent = summary.total_queries;
-        document.getElementById(\'safeQueries\').textContent = summary.safe_queries;
-        document.getElementById(\'potentialIssues\').textContent = summary.potential_issues;
-        document.getElementById(\'safetyPercentage\').textContent = summary.safety_percentage + \'%\';
-        
-        // Overall status badge
-        const statusBadge = document.getElementById(\'overallStatus\');
-        const statusConfig = {
-            \'EXCELLENT\': { class: \'bg-success\', text: \'VÝBORNÉ\' },
-            \'GOOD\': { class: \'bg-info\', text: \'DOBRÉ\' },
-            \'NEEDS_ATTENTION\': { class: \'bg-warning\', text: \'VYŽADUJE POZORNOST\' },
-            \'CRITICAL\': { class: \'bg-danger\', text: \'KRITICKÉ\' }
-        };
-        
-        const config = statusConfig[summary.overall_status] || { class: \'bg-secondary\', text: \'NEZNÁMÉ\' };
-        statusBadge.className = \'badge \' + config.class;
-        statusBadge.textContent = config.text;
-        
-        // Zobrazení prioritních problémů
-        if (summary.priority_issues && summary.priority_issues.length > 0) {
-            displayPriorityIssues(summary.priority_issues);
-        }
-        
-        // Zobrazení všech problémů
-        if (results.potential_issues && results.potential_issues.length > 0) {
-            displayAllIssues(results.potential_issues);
-        }
-        
-        // Zobrazení bezpečných dotazů
-        if (results.safe_queries && results.safe_queries.length > 0) {
-            displaySafeQueries(results.safe_queries);
-        }
-        
-        // Zobrazení doporučení
-        if (results.recommendations && results.recommendations.length > 0) {
-            displayRecommendations(results.recommendations);
-        }
-    }
-    
-    function displayPriorityIssues(issues) {
-        const section = document.getElementById(\'priorityIssuesSection\');
-        const list = document.getElementById(\'priorityIssuesList\');
-        
-        list.innerHTML = \'\';
-        issues.forEach((issue, index) => {
-            const severity = issue.safety_score < 3 ? \'danger\' : \'warning\';
-            const severityText = issue.safety_score < 3 ? \'KRITICKÉ\' : \'STŘEDNÍ\';
-            
-            const issueHtml = \'<div class="alert alert-\' + severity + \' mb-3">\' +
-                \'<div class="d-flex justify-content-between align-items-start">\' +
-                    \'<div class="flex-grow-1">\' +
-                        \'<h6 class="alert-heading">\' +
-                            \'<span class="badge bg-\' + severity + \' me-2">\' + severityText + \'</span>\' +
-                            \'📁 \' + escapeHtml(issue.file) + \':\' + issue.line +
-                        \'</h6>\' +
-                        \'<div class="bg-light p-2 rounded mb-2">\' +
-                            \'<code style="color: #212529; font-size: 0.9em;">\' + escapeHtml(issue.matched_text || \'N/A\') + \'</code>\' +
-                        \'</div>\' +
-                        \'<div class="row">\' +
-                            \'<div class="col-md-6">\' +
-                                \'<strong>Problémy:</strong>\' +
-                                \'<ul class="mb-0">\' +
-                                    (issue.issues || []).map(i => \'<li>\' + escapeHtml(i) + \'</li>\').join(\'\') +
-                                \'</ul>\' +
-                            \'</div>\' +
-                            \'<div class="col-md-6">\' +
-                                \'<strong>Doporučení:</strong>\' +
-                                \'<ul class="mb-0">\' +
-                                    (issue.recommendations || []).map(r => \'<li>\' + escapeHtml(r) + \'</li>\').join(\'\') +
-                                \'</ul>\' +
-                            \'</div>\' +
-                        \'</div>\' +
-                    \'</div>\' +
-                    \'<div class="ms-3">\' +
-                        \'<span class="badge bg-secondary">Skóre: \' + issue.safety_score + \'/10</span>\' +
-                    \'</div>\' +
-                \'</div>\' +
-            \'</div>\';
-            list.innerHTML += issueHtml;
-        });
-        
-        section.style.display = \'block\';
-    }
-    
-    function displayAllIssues(issues) {
-        const section = document.getElementById(\'allIssuesSection\');
-        const list = document.getElementById(\'allIssuesList\');
-        
-        list.innerHTML = \'\';
-        issues.forEach((issue, index) => {
-            const severity = issue.safety_score < 3 ? \'danger\' : (issue.safety_score < 6 ? \'warning\' : \'info\');
-            
-            const issueHtml = \'<div class="border-start border-\' + severity + \' border-3 p-3 mb-3 bg-light">\' +
-                \'<div class="d-flex justify-content-between align-items-center mb-2">\' +
-                    \'<strong>📁 \' + escapeHtml(issue.file) + \':\' + issue.line + \'</strong>\' +
-                    \'<span class="badge bg-\' + severity + \'">Skóre: \' + issue.safety_score + \'/10</span>\' +
-                \'</div>\' +
-                \'<div class="bg-white p-2 rounded mb-2">\' +
-                    \'<code style="color: #212529; font-size: 0.9em;">\' + escapeHtml(issue.matched_text || \'N/A\') + \'</code>\' +
-                \'</div>\' +
-                (issue.issues && issue.issues.length > 0 ? 
-                    \'<div class="small text-muted">\' +
-                        \'<strong>Problémy:</strong> \' + issue.issues.join(\', \') +
-                    \'</div>\' : \'\') +
-            \'</div>\';
-            list.innerHTML += issueHtml;
-        });
-        
-        section.style.display = \'block\';
-    }
-    
-    function displaySafeQueries(queries) {
-        const section = document.getElementById(\'safeQueriesSection\');
-        const list = document.getElementById(\'safeQueriesList\');
-        
-        list.innerHTML = \'\';
-        queries.forEach((query, index) => {
-            const queryHtml = \'<div class="border-start border-success border-3 p-3 mb-3 bg-light">\' +
-                \'<div class="d-flex justify-content-between align-items-center mb-2">\' +
-                    \'<strong>📁 \' + escapeHtml(query.file) + \':\' + query.line + \'</strong>\' +
-                    \'<span class="badge bg-success">Skóre: \' + query.safety_score + \'/10</span>\' +
-                \'</div>\' +
-                \'<div class="bg-white p-2 rounded">\' +
-                    \'<code style="color: #212529; font-size: 0.9em;">\' + escapeHtml(query.query || query.matched_text || \'N/A\') + \'</code>\' +
-                \'</div>\' +
-            \'</div>\';
-            list.innerHTML += queryHtml;
-        });
-        
-        section.style.display = \'block\';
-    }
-    
-    function displayRecommendations(recommendations) {
-        const list = document.getElementById(\'recommendationsList\');
-        
-        list.innerHTML = \'<ul class="list-unstyled">\';
-        recommendations.forEach(rec => {
-            const isUrgent = rec.includes(\'URGENT\') || rec.includes(\'okamžitě\');
-            const className = isUrgent ? \'text-danger fw-bold\' : \'text-dark\';
-            list.innerHTML += \'<li class="\' + className + \'"><i class="bi bi-lightbulb me-2"></i>\' + escapeHtml(rec) + \'</li>\';
-        });
-        list.innerHTML += \'</ul>\';
-    }
-    
-    function displayAuditError(errorMessage) {
-        auditError.style.display = \'block\';
-        document.getElementById(\'auditErrorMessage\').textContent = errorMessage;
-    }
-    
-    function escapeHtml(text) {
-        const div = document.createElement(\'div\');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-});
-</script>
-
-<style>
-.border-start {
-    border-left-width: 4px !important;
-}
-
-.alert code {
-    color: inherit;
-    background: rgba(255,255,255,0.8);
-    padding: 2px 4px;
-    border-radius: 3px;
-}
-
-#auditProgress {
-    transition: width 0.3s ease;
-}
-
-.card {
-    transition: all 0.2s ease;
-}
-
-.card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-}
-</style>
+<script src="';
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 246 */;
+		echo '/js/security-sql-audit.js"></script>
 
 ';
 	}

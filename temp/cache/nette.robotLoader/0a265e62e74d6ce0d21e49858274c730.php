@@ -211,13 +211,15 @@ return array (
     'App\\Presentation\\Home\\HomeTemplate' => 3,
     'App\\Presentation\\Security\\SecurityDashboardTemplate' => 3,
     'App\\Presentation\\Security\\SecurityDefaultTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 1,
+    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 2,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 2,
+    'App\\Presentation\\Users\\UsersRateLimitStatsTemplate' => 3,
+    'App\\Presentation\\Users\\UsersTemplate' => 3,
   ),
   2 => 
   array (

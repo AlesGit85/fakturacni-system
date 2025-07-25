@@ -468,6 +468,9 @@ final class Template_b7526b7eee extends Latte\Runtime\Template
 	<script src="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 286 */;
 		echo '/js/security.js"></script>
+	<script src="';
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 287 */;
+		echo '/js/security-sql-audit.js"></script>
 	
 	<script>
 		// Hierarchické dropdown menu
