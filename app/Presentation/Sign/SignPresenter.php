@@ -186,25 +186,35 @@ final class SignPresenter extends BasePresenter
      * OPRAVENÁ METODA - checkbox bez duplicitního textu
      */
     protected function createComponentSignInForm(): Form
-    {
-        $form = new Form;
-        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+{
+    $form = new Form;
+    $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+    $this->addAntiSpamProtectionToForm($form);
 
-        $form->addText('username', 'Uživatelské jméno:')
-            ->setRequired('Zadejte uživatelské jméno');
+    $form->addText('username', 'Uživatelské jméno:')
+        ->setRequired('Zadejte uživatelské jméno');
 
-        $form->addPassword('password', 'Heslo:')
-            ->setRequired('Zadejte heslo');
+    $form->addPassword('password', 'Heslo:')
+        ->setRequired('Zadejte heslo');
 
-        // Checkbox BEZ labelu - label se přidá v šabloně
-        $form->addCheckbox('remember');
+    $form->addCheckbox('remember');
 
-        $form->addSubmit('send', 'Přihlásit se');
+    $form->addSubmit('send', 'Přihlásit se');
 
-        $form->onSuccess[] = [$this, 'signInFormSucceeded'];
+    // TEST: Zkusíme přidat pole i manuálně
+    $form->addText('manual_test', 'MANUÁLNÍ TEST - viditelné pole');
 
-        return $form;
+    $form->onSuccess[] = [$this, 'signInFormSucceeded'];
+
+    // === DEBUG NA KONCI ===
+    $components = $form->getComponents();
+    echo "DEBUG FINAL: Počet polí ve formuláři: " . count($components) . "<br>";
+    foreach ($components as $name => $component) {
+        echo "DEBUG FINAL: Pole '$name' - třída: " . get_class($component) . "<br>";
     }
+
+    return $form;
+}
 
     /**
      * ✅ AKTUALIZACE: signInFormSucceeded() - s kompletní tenant podporou

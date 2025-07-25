@@ -28,6 +28,9 @@ services:
 	# SecurityValidator
 	- App\Security\SecurityValidator
 
+	# AntiSpam systém
+	- App\Security\AntiSpam
+
 	# =====================================================
 	# MANAGERY
 	# =====================================================

@@ -10,6 +10,7 @@ use App\Security\SecurityLogger;
 use App\Security\RateLimiter;
 use App\Model\ModuleManager;
 use App\Security\SecurityValidator;
+use App\Security\AntiSpam;
 
 abstract class BasePresenter extends Presenter
 {
@@ -42,6 +43,18 @@ abstract class BasePresenter extends Presenter
 
     /** @var array Pole pro XSS logování */
     private array $xssAttempts = [];
+
+    /** @var AntiSpam ✅ NOVÉ: Anti-spam systém */
+    protected $antiSpam;
+
+    /** @var bool ✅ NOVÉ: Zapíná automatickou honeypot ochranu formulářů */
+    protected bool $enableHoneypotProtection = true;
+
+    /** @var bool ✅ NOVÉ: Zapíná automatickou timing ochranu formulářů */
+    protected bool $enableTimingProtection = true;
+
+    /** @var array ✅ NOVÉ: Pole pro spam logování */
+    private array $spamAttempts = [];
 
     /**
      * ✅ NOVÉ: CSRF ochrana - proměnné
@@ -104,6 +117,11 @@ abstract class BasePresenter extends Presenter
     public function injectDatabase(Nette\Database\Explorer $database): void
     {
         $this->database = $database;
+    }
+
+    public function injectAntiSpam(AntiSpam $antiSpam): void
+    {
+        $this->antiSpam = $antiSpam;
     }
 
     public function startup(): void
@@ -320,7 +338,7 @@ abstract class BasePresenter extends Presenter
     {
         $clientIP = $this->rateLimiter->getClientIP();
         $action = 'form_submit'; // Obecné rate limiting pro všechny formuláře
-        
+
         // ✅ NOVÉ: Získání tenant a user informací
         $tenantId = $this->getCurrentTenantId();
         $userId = $this->getUser()->isLoggedIn() ? $this->getUser()->getId() : null;
@@ -338,13 +356,13 @@ abstract class BasePresenter extends Presenter
                     "Příliš mnoho odeslaných formulářů. Zkuste to znovu za {$timeRemaining}.",
                     'warning'
                 );
-                
+
                 // ✅ ROZŠÍŘENO: Záznam neúspěšného pokusu s tenant informacemi
                 $this->rateLimiter->recordAttempt($action, $clientIP, false, $tenantId, $userId);
-                
+
                 $this->redirect('Home:default');
             }
-            
+
             // ✅ ROZŠÍŘENO: Záznam úspěšného pokusu s tenant informacemi  
             $this->rateLimiter->recordAttempt($action, $clientIP, true, $tenantId, $userId);
         }
@@ -941,7 +959,7 @@ abstract class BasePresenter extends Presenter
 
         $clientIP = $this->rateLimiter->getClientIP();
         $tenantId = $this->getCurrentTenantId();
-        
+
         return $this->rateLimiter->isAllowed($action, $clientIP, $tenantId);
     }
 
@@ -954,7 +972,7 @@ abstract class BasePresenter extends Presenter
             $clientIP = $this->rateLimiter->getClientIP();
             $tenantId = $this->getCurrentTenantId();
             $userId = $this->getUser()->isLoggedIn() ? $this->getUser()->getId() : null;
-            
+
             $this->rateLimiter->recordAttempt($action, $clientIP, $successful, $tenantId, $userId);
         }
     }
@@ -1287,6 +1305,26 @@ abstract class BasePresenter extends Presenter
     }
 
     /**
+     * ✅ NOVÉ: Základní továrna na formuláře s automatickou ochranou
+     */
+    protected function createComponentForm(): \Nette\Application\UI\Form
+    {
+        $form = new \Nette\Application\UI\Form;
+
+        // ✅ NOVÉ: Přidání XSS ochrany k formuláři
+        if ($this->enableXssProtection) {
+            $this->addXssProtectionToForm($form);
+        }
+
+        // ✅ NOVÉ: Přidání anti-spam ochrany k formuláři
+        if ($this->enableHoneypotProtection) {
+            $this->addAntiSpamProtectionToForm($form);
+        }
+
+        return $form;
+    }
+
+    /**
      * ✅ NOVÉ: Přidání bezpečnostních filtrů k formulářovému poli
      */
     protected function addSecurityFilters(Nette\Forms\Controls\BaseControl $control, string $type = 'string'): void
@@ -1383,5 +1421,66 @@ abstract class BasePresenter extends Presenter
                 }, '');
                 break;
         }
+    }
+
+    /**
+     * ✅ NOVÉ: Přidá kompletní anti-spam ochranu k formuláři
+     */
+    protected function addAntiSpamProtectionToForm(Nette\Application\UI\Form $form): void
+    {
+        // 1. Honeypot ochrana
+        if ($this->enableHoneypotProtection) {
+            $honeypotField = $this->antiSpam->addHoneypotToForm($form);
+        }
+
+        // 2. Timing ochrana
+        if ($this->enableTimingProtection) {
+            $this->antiSpam->addTimingProtection($form);
+        }
+
+        // 3. Přidáme anti-spam validaci před odeslání
+        array_unshift($form->onValidate, function ($form) {
+            $this->validateFormAgainstSpam($form);
+        });
+    }
+
+    /**
+     * ✅ NOVÉ: Validace formuláře proti spam pokusům
+     */
+    private function validateFormAgainstSpam(Nette\Application\UI\Form $form): void
+    {
+        // Spustí kompletní validaci anti-spam systému
+        $isValid = $this->antiSpam->validateFormAgainstSpam($form);
+
+        if (!$isValid) {
+            // Spam byl detekován, formulář už má chybovou hlášku
+            $this->spamAttempts[] = [
+                'form' => $form->getName() ?? 'unknown',
+                'timestamp' => date('Y-m-d H:i:s'),
+                'client_ip' => $this->getHttpRequest()->getRemoteAddress()
+            ];
+
+            // Přidáme flash message pro uživatele
+            $this->flashMessage(
+                'Formulář obsahuje podezřelý obsah nebo byl odeslán příliš rychle. Pokud jste člověk, zkuste to znovu za chvilku.',
+                'danger'
+            );
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Getter pro kontrolu spam pokusů
+     */
+    protected function hasSpamAttempts(): bool
+    {
+        return !empty($this->spamAttempts);
+    }
+
+    /**
+     * ✅ NOVÉ: Getter pro spam pokusy
+     */
+    protected function getSpamAttempts(): array
+    {
+        return $this->spamAttempts;
     }
 }

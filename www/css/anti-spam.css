@@ -1,0 +1,181 @@
+/**
+ * Anti-Spam CSS - Skrytí honeypot polí
+ * Fakturační systém - Security modul
+ * Barvy: primární #B1D235, sekundární #95B11F, šedá #6c757d, černá #212529
+ */
+
+/* ===================================
+   HONEYPOT FIELDS - ÚPLNÉ SKRYTÍ
+   =================================== */
+
+.honeypot-field {
+    /* Metoda 1: Absolutní pozice mimo obrazovku */
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    
+    /* Metoda 2: Nulové rozměry */
+    width: 0 !important;
+    height: 0 !important;
+    
+    /* Metoda 3: Průhlednost */
+    opacity: 0 !important;
+    
+    /* Metoda 4: Skrytí před screen readery */
+    visibility: hidden !important;
+    
+    /* Zabránění interakci */
+    pointer-events: none !important;
+    
+    /* Zabránění zobrazení */
+    display: none !important;
+    
+    /* Nulové marginy a paddingy */
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* Alternativní skrytí pro některé boty (méně nápadné) */
+.honeypot-field-alternative {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(100%);
+    white-space: nowrap;
+}
+
+/* ===================================
+   ANTI-SPAM INDIKÁTORY
+   =================================== */
+
+/* Indikátor pro administrátory že je anti-spam aktivní */
+.antispam-enabled::before {
+    content: "🛡️";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 12px;
+    background: #B1D235;
+    color: #212529;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Debug mód - zobrazí honeypot pole (pouze pro vývoj) */
+.debug-antispam .honeypot-field {
+    display: block !important;
+    position: static !important;
+    visibility: visible !important;
+    opacity: 0.3 !important;
+    background-color: #ff0000 !important;
+    border: 2px dashed #ff0000 !important;
+    color: #ff0000 !important;
+    padding: 5px !important;
+    margin: 5px 0 !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.debug-antispam .honeypot-field::before {
+    content: "⚠️ HONEYPOT POLE - NEVYPLŇUJTE! ⚠️";
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* ===================================
+   SPAM DETECTION ALERTS
+   =================================== */
+
+.spam-detected-warning {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid #bd2130;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.spam-detected-warning .icon {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.spam-protection-info {
+    background: linear-gradient(135deg, #B1D235, #95B11F);
+    color: #212529;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin: 10px 0;
+    font-size: 14px;
+    border-left: 4px solid #95B11F;
+}
+
+/* ===================================
+   CAPTCHA PŘÍPRAVA (pro budoucí použití)
+   =================================== */
+
+.captcha-container {
+    margin: 15px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.captcha-container.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.captcha-container .captcha-label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #212529;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+@media (max-width: 768px) {
+    .antispam-enabled::before {
+        display: none; /* Skryjeme indikátor na mobilu */
+    }
+    
+    .spam-detected-warning,
+    .spam-protection-info {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+/* Ujistíme se, že honeypot pole jsou skutečně skrytá před screen readery */
+.honeypot-field[aria-hidden="true"] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Fokus indikace pro debug mód */
+.debug-antispam .honeypot-field:focus {
+    outline: 3px solid #ff0000 !important;
+    outline-offset: 2px !important;
+}

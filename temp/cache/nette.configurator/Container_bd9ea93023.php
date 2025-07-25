@@ -86,14 +86,15 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'App\Security\RateLimiterCleaner' => [['03']],
 		'App\Model\ModuleManager' => [['04']],
 		'App\Security\SecurityValidator' => [['05']],
-		'App\Model\InvoicesManager' => [['06']],
-		'App\Model\ClientsManager' => [['07']],
-		'App\Model\CompanyManager' => [['08']],
-		'App\Model\QrPaymentService' => [['09']],
-		'App\Model\AresService' => [['010']],
-		'App\Model\EmailService' => [['011']],
-		'App\Model\TenantManager' => [['012']],
-		'App\Security\SQLSecurityAudit' => [['013']],
+		'App\Security\AntiSpam' => [['06']],
+		'App\Model\InvoicesManager' => [['07']],
+		'App\Model\ClientsManager' => [['08']],
+		'App\Model\CompanyManager' => [['09']],
+		'App\Model\QrPaymentService' => [['010']],
+		'App\Model\AresService' => [['011']],
+		'App\Model\EmailService' => [['012']],
+		'App\Model\TenantManager' => [['013']],
+		'App\Security\SQLSecurityAudit' => [['014']],
 		'App\Presentation\BasePresenter' => [
 			2 => [
 				'application.1',
@@ -290,8 +291,8 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		'App\Presentation\Users\UsersPresenter' => [2 => ['application.12']],
 		'NetteModule\ErrorPresenter' => [2 => ['application.13']],
 		'NetteModule\MicroPresenter' => [2 => ['application.14']],
-		'App\Core\RouterFactory' => [['014']],
-		'Modules\Financial_reports\FinancialReportsService' => [['015']],
+		'App\Core\RouterFactory' => [['015']],
+		'Modules\Financial_reports\FinancialReportsService' => [['016']],
 	];
 
 
@@ -331,43 +332,49 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	}
 
 
-	public function createService06(): App\Model\InvoicesManager
+	public function createService06(): App\Security\AntiSpam
+	{
+		return new App\Security\AntiSpam($this->getService('01'));
+	}
+
+
+	public function createService07(): App\Model\InvoicesManager
 	{
 		return new App\Model\InvoicesManager($this->getService('database.default.explorer'));
 	}
 
 
-	public function createService07(): App\Model\ClientsManager
+	public function createService08(): App\Model\ClientsManager
 	{
 		return new App\Model\ClientsManager($this->getService('database.default.explorer'));
 	}
 
 
-	public function createService08(): App\Model\CompanyManager
+	public function createService09(): App\Model\CompanyManager
 	{
 		return new App\Model\CompanyManager($this->getService('database.default.explorer'));
 	}
 
 
-	public function createService09(): App\Model\QrPaymentService
+	public function createService010(): App\Model\QrPaymentService
 	{
 		return new App\Model\QrPaymentService;
 	}
 
 
-	public function createService010(): App\Model\AresService
+	public function createService011(): App\Model\AresService
 	{
 		return new App\Model\AresService($this->getService('tracy.logger'));
 	}
 
 
-	public function createService011(): App\Model\EmailService
+	public function createService012(): App\Model\EmailService
 	{
 		return new App\Model\EmailService($this->getService('mail.mailer'), $this->getService('application.linkGenerator'));
 	}
 
 
-	public function createService012(): App\Model\TenantManager
+	public function createService013(): App\Model\TenantManager
 	{
 		return new App\Model\TenantManager(
 			$this->getService('database.default.explorer'),
@@ -377,23 +384,23 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	}
 
 
-	public function createService013(): App\Security\SQLSecurityAudit
+	public function createService014(): App\Security\SQLSecurityAudit
 	{
 		return new App\Security\SQLSecurityAudit($this->getService('database.default.explorer'));
 	}
 
 
-	public function createService014(): App\Core\RouterFactory
+	public function createService015(): App\Core\RouterFactory
 	{
 		return new App\Core\RouterFactory;
 	}
 
 
-	public function createService015(): Modules\Financial_reports\FinancialReportsService
+	public function createService016(): Modules\Financial_reports\FinancialReportsService
 	{
 		return new Modules\Financial_reports\FinancialReportsService(
-			$this->getService('06'),
-			$this->getService('08'),
+			$this->getService('07'),
+			$this->getService('09'),
 			$this->getService('database.default.explorer'),
 		);
 	}
@@ -402,9 +409,9 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	public function createServiceApplication__1(): App\Presentation\Clients\ClientsPresenter
 	{
 		$service = new App\Presentation\Clients\ClientsPresenter(
-			$this->getService('07'),
+			$this->getService('08'),
 			$this->getService('database.default.explorer'),
-			$this->getService('010'),
+			$this->getService('011'),
 			$this->getService('tracy.logger'),
 		);
 		$service->injectPrimary(
@@ -420,6 +427,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service->injectRateLimiter($this->getService('02'));
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->injectAntiSpam($this->getService('06'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -430,8 +438,8 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service = new App\Presentation\Sign\SignPresenter(
 			$this->getService('authenticator'),
 			$this->getService('01'),
-			$this->getService('011'),
 			$this->getService('012'),
+			$this->getService('013'),
 			$this->getService('02'),
 			$this->getService('database.default.explorer'),
 		);
@@ -448,6 +456,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service->injectRateLimiter($this->getService('02'));
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->injectAntiSpam($this->getService('06'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -456,8 +465,8 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	public function createServiceApplication__11(): App\Presentation\Tenants\TenantsPresenter
 	{
 		$service = new App\Presentation\Tenants\TenantsPresenter(
-			$this->getService('012'),
-			$this->getService('010'),
+			$this->getService('013'),
+			$this->getService('011'),
 			$this->getService('tracy.logger'),
 		);
 		$service->injectPrimary(
@@ -473,6 +482,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service->injectRateLimiter($this->getService('02'));
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->injectAntiSpam($this->getService('06'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -494,6 +504,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service->injectRateLimiter($this->getService('02'));
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->injectAntiSpam($this->getService('06'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -537,9 +548,9 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	public function createServiceApplication__4(): App\Presentation\Home\HomePresenter
 	{
 		$service = new App\Presentation\Home\HomePresenter(
-			$this->getService('06'),
 			$this->getService('07'),
 			$this->getService('08'),
+			$this->getService('09'),
 			$this->getService('authenticator'),
 		);
 		$service->injectPrimary(
@@ -555,6 +566,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service->injectRateLimiter($this->getService('02'));
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->injectAntiSpam($this->getService('06'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -563,10 +575,10 @@ class Container_bd9ea93023 extends Nette\DI\Container
 	public function createServiceApplication__5(): App\Presentation\Invoices\InvoicesPresenter
 	{
 		$service = new App\Presentation\Invoices\InvoicesPresenter(
-			$this->getService('06'),
 			$this->getService('07'),
 			$this->getService('08'),
 			$this->getService('09'),
+			$this->getService('010'),
 		);
 		$service->injectPrimary(
 			$this->getService('http.request'),
@@ -581,6 +593,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service->injectRateLimiter($this->getService('02'));
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->injectAntiSpam($this->getService('06'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -602,6 +615,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service->injectRateLimiter($this->getService('02'));
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->injectAntiSpam($this->getService('06'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -612,8 +626,8 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service = new App\Presentation\ModuleAdmin\ModuleAdminPresenter(
 			$this->getService('04'),
 			$this->getService('tracy.logger'),
-			$this->getService('06'),
-			$this->getService('08'),
+			$this->getService('07'),
+			$this->getService('09'),
 			$this->getService('database.default.explorer'),
 		);
 		$service->injectPrimary(
@@ -629,6 +643,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service->injectRateLimiter($this->getService('02'));
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->injectAntiSpam($this->getService('06'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -650,7 +665,8 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service->injectRateLimiter($this->getService('02'));
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
-		$service->injectSqlAudit($this->getService('013'));
+		$service->injectAntiSpam($this->getService('06'));
+		$service->injectSqlAudit($this->getService('014'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -658,7 +674,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 
 	public function createServiceApplication__9(): App\Presentation\Settings\SettingsPresenter
 	{
-		$service = new App\Presentation\Settings\SettingsPresenter($this->getService('08'));
+		$service = new App\Presentation\Settings\SettingsPresenter($this->getService('09'));
 		$service->injectPrimary(
 			$this->getService('http.request'),
 			$this->getService('http.response'),
@@ -672,6 +688,7 @@ class Container_bd9ea93023 extends Nette\DI\Container
 		$service->injectRateLimiter($this->getService('02'));
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->injectAntiSpam($this->getService('06'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}

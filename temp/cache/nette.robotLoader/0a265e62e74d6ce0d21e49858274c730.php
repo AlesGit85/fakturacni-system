@@ -105,12 +105,12 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1753257111,
+      1 => 1753426838,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1753091021,
+      1 => 1753427326,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -167,6 +167,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
       1 => 1753259259,
     ),
+    'App\\Security\\AntiSpam' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\AntiSpam.php',
+      1 => 1753426250,
+    ),
     'App\\Security\\RateLimiter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiter.php',
@@ -200,8 +205,8 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 1,
-    'null' => 1,
+    'Nette\\Bridges\\Assets\\DIExtension' => 2,
+    'null' => 2,
     'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 3,
     'App\\Presentation\\Security\\SecurityTemplate' => 3,
     'App\\Presentation\\Security\\SecurityTestTemplate' => 2,
@@ -224,6 +229,8 @@ return array (
     'App\\Presentation\\Tenants\\TenantsTemplate' => 2,
     'App\\Presentation\\Tenants\\TenantsAddTemplate' => 1,
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
   ),
   2 => 
   array (
