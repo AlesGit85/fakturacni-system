@@ -9,9 +9,11 @@ use Nette\Application\UI\Form;
 use App\Model\UserManager;
 use App\Model\EmailService;
 use App\Model\TenantManager;
+use App\Model\ModuleManager;
 use App\Presentation\BasePresenter;
 use App\Security\SecurityLogger;
 use App\Security\RateLimiter;
+use App\Security\AntiSpam;
 
 final class SignPresenter extends BasePresenter
 {
@@ -41,14 +43,17 @@ final class SignPresenter extends BasePresenter
         EmailService $emailService,
         TenantManager $tenantManager,
         RateLimiter $rateLimiter,
-        Nette\Database\Explorer $database
+        Nette\Database\Explorer $database,
+        ModuleManager $moduleManager,
+        AntiSpam $antiSpam
     ) {
+        // ✅ KRITICKÉ: Volání parent konstruktoru s BasePresenter parametry
+        parent::__construct($securityLogger, $rateLimiter, $moduleManager, $database, $antiSpam);
+        
+        // SignPresenter specifické vlastnosti
         $this->userManager = $userManager;
-        $this->securityLogger = $securityLogger;
         $this->emailService = $emailService;
         $this->tenantManager = $tenantManager;
-        $this->rateLimiter = $rateLimiter;
-        $this->database = $database;
     }
 
     /**
@@ -183,44 +188,64 @@ final class SignPresenter extends BasePresenter
     }
 
     /**
-     * OPRAVENÁ METODA - checkbox bez duplicitního textu
+     * OPRAVENÁ METODA - přihlašovací formulář s anti-spam ochranou
      */
     protected function createComponentSignInForm(): Form
-{
-    $form = new Form;
-    $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
-    $this->addAntiSpamProtectionToForm($form);
+    {
+        $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+        
+        // ✅ DEBUG: Ověření že máme AntiSpam
+        if ($this->antiSpam === null) {
+            echo "CHYBA: antiSpam je NULL!<br>";
+        } else {
+            echo "OK: antiSpam je nastaven<br>";
+        }
+        
+        // ✅ DEBUG: Ověření honeypot protection
+        echo "Honeypot protection enabled: " . ($this->enableHoneypotProtection ? 'ANO' : 'NE') . "<br>";
+        
+        // ✅ PŘIDÁNO: Anti-spam ochrana
+        $this->addAntiSpamProtectionToForm($form);
+        
+        // ✅ DEBUG: Počet polí po anti-spam
+        echo "Počet polí po anti-spam: " . count($form->getComponents()) . "<br>";
 
-    $form->addText('username', 'Uživatelské jméno:')
-        ->setRequired('Zadejte uživatelské jméno');
+        $form->addText('username', 'Uživatelské jméno:')
+            ->setRequired('Zadejte uživatelské jméno');
 
-    $form->addPassword('password', 'Heslo:')
-        ->setRequired('Zadejte heslo');
+        $form->addPassword('password', 'Heslo:')
+            ->setRequired('Zadejte heslo');
 
-    $form->addCheckbox('remember');
+        $form->addCheckbox('remember');
 
-    $form->addSubmit('send', 'Přihlásit se');
+        $form->addSubmit('send', 'Přihlásit se');
 
-    // TEST: Zkusíme přidat pole i manuálně
-    $form->addText('manual_test', 'MANUÁLNÍ TEST - viditelné pole');
+        $form->onSuccess[] = [$this, 'signInFormSucceeded'];
+        
+        // ✅ DEBUG: Finální počet polí
+        echo "FINÁLNÍ počet polí: " . count($form->getComponents()) . "<br>";
+        foreach ($form->getComponents() as $name => $component) {
+            echo "Pole: {$name} - třída: " . get_class($component) . "<br>";
+        }
 
-    $form->onSuccess[] = [$this, 'signInFormSucceeded'];
-
-    // === DEBUG NA KONCI ===
-    $components = $form->getComponents();
-    echo "DEBUG FINAL: Počet polí ve formuláři: " . count($components) . "<br>";
-    foreach ($components as $name => $component) {
-        echo "DEBUG FINAL: Pole '$name' - třída: " . get_class($component) . "<br>";
+        return $form;
     }
 
-    return $form;
-}
-
     /**
-     * ✅ AKTUALIZACE: signInFormSucceeded() - s kompletní tenant podporou
+     * ✅ OPRAVENO: signInFormSucceeded() - s kontrolou validity formuláře před získáním hodnot
      */
     public function signInFormSucceeded(Form $form, \stdClass $data): void
     {
+        // ✅ KRITICKÁ OPRAVA: Nejdříve zkontrolujeme, zda je formulář validní
+        // Pokud honeypot detekuje spam, formulář bude nevalidní a $data nebudou k dispozici
+        if (!$form->isValid()) {
+            // Formulář není validní (např. kvůli honeypot nebo jiným validačním pravidlům)
+            // Nevypisujeme specifickou chybu, jen obecnou zprávu
+            $this->flashMessage('Formulář obsahuje neplatné údaje. Zkuste to prosím znovu.', 'warning');
+            return;
+        }
+
         $clientIP = $this->rateLimiter->getClientIP();
 
         // ✅ NOVÉ: Pokus o získání tenant_id z uživatelských credentials
@@ -416,53 +441,45 @@ final class SignPresenter extends BasePresenter
             $blockedUntil = $passwordResetStatus['blocked_until'];
             $timeRemaining = $blockedUntil ? $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 'neznámý čas';
             
-            $form->addError("Příliš mnoho pokusů o reset hesla. Zkuste to znovu za {$timeRemaining}.");
+            $form->addError("Příliš mnoho pokusů o obnovení hesla. Zkuste to znovu za {$timeRemaining}.");
             return;
         }
 
         try {
-            // Najdi uživatele podle emailu
+            // Najdi uživatele podle e-mailu
             $user = $this->database->table('users')
                 ->where('email', $data->email)
                 ->fetch();
 
             if (!$user) {
-                // ✅ ZMĚNA: Neúspěšný pokus s tenant parametry
-                $this->rateLimiter->recordAttempt('password_reset', $clientIP, false, $tenantId, null);
-                $form->addError('E-mailová adresa není v systému registrována.');
-                return;
+                // Z bezpečnostních důvodů neříkáme, že email neexistuje
+                $this->flashMessage('Pokud je váš e-mail registrovaný, obdržíte odkaz pro obnovení hesla.', 'info');
+                $this->redirect('Sign:in');
             }
 
-            // ✅ NOVÉ: Získáme skutečný tenant_id z nalezeného uživatele
-            $actualTenantId = $user->tenant_id ?? null;
-            $userId = $user->id ?? null;
-
-            // Vytvoř reset token
+            // Vytvoř nový reset token
             $token = bin2hex(random_bytes(32));
-            $expiresAt = new \DateTime('+1 hour');
-
             $this->database->table('password_reset_tokens')->insert([
                 'user_id' => $user->id,
                 'token' => $token,
-                'expires_at' => $expiresAt,
                 'created_at' => new \DateTime(),
+                'expires_at' => new \DateTime('+1 hour'),
             ]);
 
-            // Pošli email s odkazem
-            $resetLink = $this->link('//Sign:resetPassword', ['token' => $token]);
+            // Odešli email s odkazem pro reset
             $this->emailService->sendPasswordReset($data->email, $user->username, $token);
 
-            // ✅ ZMĚNA: Úspěšný pokus s tenant parametry
-            $this->rateLimiter->recordAttempt('password_reset', $clientIP, true, $actualTenantId, $userId);
+            // ✅ ZMĚNA: Úspěšné odeslání s tenant a user parametry
+            $this->rateLimiter->recordAttempt('password_reset', $clientIP, true, $tenantId, $user->id);
 
             $this->flashMessage('Odkaz pro obnovení hesla byl odeslán na váš e-mail.', 'success');
             $this->redirect('Sign:in');
 
         } catch (\Exception $e) {
-            // ✅ ZMĚNA: Neúspěšný pokus s tenant parametry
+            // ✅ ZMĚNA: Neúspěšné odeslání
             $this->rateLimiter->recordAttempt('password_reset', $clientIP, false, $tenantId, null);
-            
-            error_log('Chyba při resetování hesla: ' . $e->getMessage());
+
+            error_log('Chyba při odesílání emailu pro reset hesla: ' . $e->getMessage());
             $form->addError('Při odesílání emailu došlo k chybě. Zkuste to prosím znovu.');
         }
     }
@@ -585,77 +602,23 @@ final class SignPresenter extends BasePresenter
             throw new \Exception('E-mailová adresa už je registrovaná.');
         }
 
-        // Příprava dat pro vytvoření tenanta
-        $tenantData = [
-            'name' => $data->company_account_name,
-            'domain' => null, // Zatím nevyžadujeme doménu
-            'settings' => []
-        ];
+        // Vytvoření nového tenanta a uživatele
+        $result = $this->tenantManager->createTenantWithAdmin(
+            $data->company_account_name,
+            $data->company_name,
+            $data->username,
+            $data->email,
+            $data->password
+        );
 
-        $adminData = [
-            'username' => $data->username,
-            'email' => $data->email,
-            'password' => $data->password,
-            'first_name' => null,
-            'last_name' => null
-        ];
-
-        $companyData = [
-            'company_name' => $data->company_name,
-            'ic' => '',
-            'dic' => '',
-            'phone' => '',
-            'address' => '',
-            'city' => '',
-            'zip' => '',
-            'country' => 'Česká republika',
-            'vat_payer' => false
-        ];
-
-        // Vytvoření tenanta pomocí TenantManager
-        $result = $this->tenantManager->createTenant($tenantData, $adminData, $companyData);
-
-        if ($result['success']) {
-            // Odeslání emailů
-            try {
-                $this->emailService->sendRegistrationConfirmation($data->email, $data->username, 'admin');
-            } catch (\Exception $e) {
-                error_log('Chyba při odesílání emailu: ' . $e->getMessage());
-            }
-
-            $this->flashMessage(
-                'Firemní účet "' . $data->company_account_name . '" byl úspěšně vytvořen! Nyní se můžete přihlásit jako administrátor.',
-                'success'
-            );
-            $this->redirect('Sign:in');
-            
-            // ✅ NOVÉ: Vrátit tenant_id a user_id pro rate limiting
-            return [
-                'tenant_id' => $result['tenant_id'] ?? null,
-                'user_id' => $result['user_id'] ?? null,
-                'success' => true
-            ];
-        } else {
-            throw new \Exception($result['message'] ?? 'Nepodařilo se vytvořit firemní účet.');
-        }
+        $this->flashMessage('Firemní účet byl úspěšně vytvořen. Nyní se můžete přihlásit.', 'success');
+        $this->redirect('Sign:in');
+        
+        return $result; // Vracíme výsledek s tenant_id a user_id
     }
 
     /**
-     * Získá celkový počet uživatelů v systému (bez tenant filtru)
-     * Používáme přímý databázový dotaz, abychom obešli tenant filtrování
-     */
-    private function getTotalUserCount(): int
-    {
-        try {
-            return $this->database->table('users')->count();
-        } catch (\Exception $e) {
-            // V případě chyby předpokládáme, že uživatelé neexistují
-            return 0;
-        }
-    }
-
-/**
-     * ✅ NOVÁ: Helper metoda pro získání tenant_id z přihlašovacích údajů
+     * ✅ AKTUALIZACE: Získání tenant_id z uživatelských credentials
      */
     private function getTenantIdFromCredentials(string $username): ?int
     {
@@ -663,16 +626,16 @@ final class SignPresenter extends BasePresenter
             $user = $this->database->table('users')
                 ->where('username', $username)
                 ->fetch();
-                
-            return $user ? ($user->tenant_id ?? null) : null;
             
+            return $user ? $user->tenant_id : null;
         } catch (\Exception $e) {
+            error_log('Chyba při získávání tenant_id z credentials: ' . $e->getMessage());
             return null;
         }
     }
 
     /**
-     * ✅ NOVÁ: Helper metoda pro získání tenant_id z emailu
+     * ✅ NOVÉ: Získání tenant_id z emailu (pro password reset)
      */
     private function getTenantIdFromEmail(string $email): ?int
     {
@@ -680,12 +643,24 @@ final class SignPresenter extends BasePresenter
             $user = $this->database->table('users')
                 ->where('email', $email)
                 ->fetch();
-                
-            return $user ? ($user->tenant_id ?? null) : null;
             
+            return $user ? $user->tenant_id : null;
         } catch (\Exception $e) {
+            error_log('Chyba při získávání tenant_id z emailu: ' . $e->getMessage());
             return null;
         }
     }
 
+    /**
+     * ✅ NOVÉ: Získání celkového počtu uživatelů (pro registraci)
+     */
+    private function getTotalUserCount(): int
+    {
+        try {
+            return $this->database->table('users')->count();
+        } catch (\Exception $e) {
+            error_log('Chyba při získávání počtu uživatelů: ' . $e->getMessage());
+            return 0;
+        }
+    }
 }

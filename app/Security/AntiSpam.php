@@ -111,6 +111,41 @@ class AntiSpam
     }
 
     /**
+     * ✅ OPRAVENO: Kompletní kontrola formuláře proti spamu - s kontrolou validity
+     */
+    public function validateFormAgainstSpam(Nette\Application\UI\Form $form): bool
+    {
+        // ✅ KRITICKÁ OPRAVA: Nejdříve zkontrolujeme, zda je formulář validní
+        // Pokud honeypot pravidla už označila formulář jako nevalidní, nevoláme getValues()
+        if (!$form->isValid()) {
+            // Formulář už je nevalidní (např. kvůli honeypot), nemusíme kontrolovat další vzory
+            return false;
+        }
+
+        try {
+            $formData = $form->getValues('array');
+            
+            // Kontrola podezřelých vzorů
+            $suspiciousPatterns = $this->detectSpamPatterns($formData);
+            
+            // Pokud najdeme příliš mnoho podezřelých vzorů, označíme jako spam
+            $totalPatterns = array_sum(array_map('count', $suspiciousPatterns));
+            
+            if ($totalPatterns >= 3) { // Práh pro označení jako spam
+                $form->addError('Formulář obsahuje podezřelý obsah. Pokud jste člověk, kontaktujte administrátora.');
+                return false;
+            }
+            
+            return true;
+            
+        } catch (\Exception $e) {
+            // Pokud se něco pokazí, neblokujeme formulář
+            error_log('Chyba při validaci anti-spam: ' . $e->getMessage());
+            return true;
+        }
+    }
+
+    /**
      * ✅ NOVÉ: Kontrola podezřelých vzorů v datech
      */
     public function detectSpamPatterns(array $formData): array
@@ -218,27 +253,6 @@ class AntiSpam
                 'timestamp' => date('Y-m-d H:i:s'),
             ], $details)
         );
-    }
-
-    /**
-     * ✅ NOVÉ: Kompletní kontrola formuláře proti spamu
-     */
-    public function validateFormAgainstSpam(Nette\Application\UI\Form $form): bool
-    {
-        $formData = $form->getValues('array');
-        
-        // Kontrola podezřelých vzorů
-        $suspiciousPatterns = $this->detectSpamPatterns($formData);
-        
-        // Pokud najdeme příliš mnoho podezřelých vzorů, označíme jako spam
-        $totalPatterns = array_sum(array_map('count', $suspiciousPatterns));
-        
-        if ($totalPatterns >= 3) { // Práh pro označení jako spam
-            $form->addError('Formulář obsahuje podezřelý obsah. Pokud jste člověk, kontaktujte administrátora.');
-            return false;
-        }
-        
-        return true;
     }
 
     /**

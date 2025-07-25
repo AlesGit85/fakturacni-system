@@ -442,6 +442,8 @@ class Container_bd9ea93023 extends Nette\DI\Container
 			$this->getService('013'),
 			$this->getService('02'),
 			$this->getService('database.default.explorer'),
+			$this->getService('04'),
+			$this->getService('06'),
 		);
 		$service->injectPrimary(
 			$this->getService('http.request'),

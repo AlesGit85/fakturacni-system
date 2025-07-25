@@ -1438,34 +1438,37 @@ abstract class BasePresenter extends Presenter
             $this->antiSpam->addTimingProtection($form);
         }
 
-        // 3. Přidáme anti-spam validaci před odeslání
-        array_unshift($form->onValidate, function ($form) {
+        // ✅ OPRAVENO: Přidáme anti-spam validaci JAKO POSLEDNÍ (aby se spustila až po honeypot validaci)
+        $form->onValidate[] = function ($form) {
             $this->validateFormAgainstSpam($form);
-        });
+        };
     }
 
     /**
-     * ✅ NOVÉ: Validace formuláře proti spam pokusům
+     * ✅ OPRAVENO: Validace formuláře proti spam pokusům - s lepším handling
      */
     private function validateFormAgainstSpam(Nette\Application\UI\Form $form): void
     {
-        // Spustí kompletní validaci anti-spam systému
-        $isValid = $this->antiSpam->validateFormAgainstSpam($form);
+        // ✅ OPRAVENO: Pouze pokud je formulář stále validní, kontrolujeme další spam vzory
+        if ($form->isValid()) {
+            $isValid = $this->antiSpam->validateFormAgainstSpam($form);
 
-        if (!$isValid) {
-            // Spam byl detekován, formulář už má chybovou hlášku
-            $this->spamAttempts[] = [
-                'form' => $form->getName() ?? 'unknown',
-                'timestamp' => date('Y-m-d H:i:s'),
-                'client_ip' => $this->getHttpRequest()->getRemoteAddress()
-            ];
+            if (!$isValid) {
+                // Spam byl detekován, formulář už má chybovou hlášku
+                $this->spamAttempts[] = [
+                    'form' => $form->getName() ?? 'unknown',
+                    'timestamp' => date('Y-m-d H:i:s'),
+                    'client_ip' => $this->getHttpRequest()->getRemoteAddress()
+                ];
 
-            // Přidáme flash message pro uživatele
-            $this->flashMessage(
-                'Formulář obsahuje podezřelý obsah nebo byl odeslán příliš rychle. Pokud jste člověk, zkuste to znovu za chvilku.',
-                'danger'
-            );
+                // Přidáme flash message pro uživatele
+                $this->flashMessage(
+                    'Formulář obsahuje podezřelý obsah nebo byl odeslán příliš rychle. Pokud jste člověk, zkuste to znovu za chvilku.',
+                    'danger'
+                );
+            }
         }
+        // Pokud formulář už není validní (kvůli honeypot), neděláme nic dalšího
     }
 
     /**
