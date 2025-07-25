@@ -216,10 +216,14 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 2,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 2,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\Users\\UsersRateLimitStatsTemplate' => 3,
     'App\\Presentation\\Users\\UsersTemplate' => 3,
+    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 1,
+    'App\\Presentation\\Tenants\\TenantsTemplate' => 2,
+    'App\\Presentation\\Tenants\\TenantsAddTemplate' => 1,
+    'App\\Presentation\\Users\\UsersDefaultTemplate' => 1,
   ),
   2 => 
   array (
