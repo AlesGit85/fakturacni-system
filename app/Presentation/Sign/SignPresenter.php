@@ -219,20 +219,14 @@ final class SignPresenter extends BasePresenter
     public function signInFormSucceeded(Form $form, \stdClass $data): void
     {
         // ✅ KRITICKÁ OPRAVA: Nejdříve zkontrolujeme, zda je formulář validní
-        // Pokud honeypot detekuje spam, formulář bude nevalidní a $data nebudou k dispozici
         if (!$form->isValid()) {
-            // Formulář není validní (např. kvůli honeypot nebo jiným validačním pravidlům)
-            // Nevypisujeme specifickou chybu, jen obecnou zprávu
             $this->flashMessage('Formulář obsahuje neplatné údaje. Zkuste to prosím znovu.', 'warning');
             return;
         }
 
         $clientIP = $this->rateLimiter->getClientIP();
-
-        // ✅ NOVÉ: Pokus o získání tenant_id z uživatelských credentials
         $tenantId = $this->getTenantIdFromCredentials($data->username);
 
-        // ✅ ZMĚNA: Rate limiting kontrola s tenant_id
         if (!$this->rateLimiter->isAllowed('login', $clientIP, $tenantId)) {
             $loginStatus = $this->rateLimiter->getLimitStatus('login', $clientIP, $tenantId);
             $blockedUntil = $loginStatus['blocked_until'];
@@ -243,52 +237,39 @@ final class SignPresenter extends BasePresenter
         }
 
         try {
-            // Nastavení délky přihlášení podle zaškrtnutí "Zůstat přihlášen"
             if ($data->remember) {
                 $this->getUser()->setExpiration('14 days');
             } else {
                 $this->getUser()->setExpiration('20 minutes', true);
             }
 
-            // Pokus o přihlášení
             $this->getUser()->login($data->username, $data->password);
             
-            // ✅ ZMĚNA: Získání skutečných údajů po úspěšném přihlášení
             $identity = $this->getUser()->getIdentity();
             $actualTenantId = $identity->tenant_id ?? null;
             $userId = $identity->id ?? null;
             
-            // ✅ ZMĚNA: Úspěšné přihlášení s tenant a user parametry
             $this->rateLimiter->recordAttempt('login', $clientIP, true, $actualTenantId, $userId);
             
-            // NOVÉ: Vymažeme zprávu o deaktivaci při úspěšném přihlášení
             $section = $this->getSession('deactivation');
             unset($section->message);
             unset($section->type);
             unset($section->tenant_id);
             
-            // Logování úspěšného přihlášení
-            $identity = $this->getUser()->getIdentity();
             $this->securityLogger->logLogin($identity->id, $identity->username);
             
             $this->flashMessage('Úspěšně jste se přihlásili.', 'success');
             $this->redirect('Home:default');
             
         } catch (Nette\Security\AuthenticationException $e) {
-            // ✅ ZMĚNA: Neúspěšné přihlášení s tenant parametry
             $this->rateLimiter->recordAttempt('login', $clientIP, false, $tenantId, null);
-            
-            // Logování neúspěšného pokusu o přihlášení
             $this->securityLogger->logFailedLogin($data->username, $e->getMessage());
             
-            // Zjistíme stav rate limitingu po tomto pokusu
             $loginStatus = $this->rateLimiter->getLimitStatus('login', $clientIP, $tenantId);
             
             if ($loginStatus['is_blocked']) {
-                // Právě jsme překročili limit
                 $form->addError('Příliš mnoho neúspěšných pokusů. Váš přístup byl dočasně zablokován.');
             } else {
-                // Ještě nejsme blokovaní, ale ukážeme kolik pokusů zbývá
                 $attemptsLeft = $loginStatus['attempts_remaining'];
                 $form->addError($e->getMessage() . " (Zbývá pokusů: {$attemptsLeft})");
             }
