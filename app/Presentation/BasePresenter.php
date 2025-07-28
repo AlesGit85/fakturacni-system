@@ -375,20 +375,16 @@ abstract class BasePresenter extends Presenter
     {
         $component = parent::createComponent($name);
 
-        // Pokud je to formulář, přidáme bezpečnostní vrstvy
         if ($component instanceof Nette\Application\UI\Form && !$this->disableRateLimit) {
-            // ✅ NOVÉ: XSS ochrana pro formulář
+            // Pouze XSS ochrana a rate limiting
             if ($this->enableXssProtection) {
                 $this->addXssProtectionToForm($component);
             }
 
-            // Přidáme rate limiting callback pro error
             $component->onError[] = function ($form) {
                 $this->recordFormSubmission(false);
             };
 
-            // Přidáme rate limiting callback pro success
-            // Přidáváme na začátek, takže se spustí jako první
             array_unshift($component->onSuccess, function ($form, $values) {
                 $this->recordFormSubmission(true);
             });
