@@ -195,21 +195,8 @@ final class SignPresenter extends BasePresenter
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
         
-        // ✅ DEBUG: Ověření že máme AntiSpam
-        if ($this->antiSpam === null) {
-            echo "CHYBA: antiSpam je NULL!<br>";
-        } else {
-            echo "OK: antiSpam je nastaven<br>";
-        }
-        
-        // ✅ DEBUG: Ověření honeypot protection
-        echo "Honeypot protection enabled: " . ($this->enableHoneypotProtection ? 'ANO' : 'NE') . "<br>";
-        
-        // ✅ PŘIDÁNO: Anti-spam ochrana
+        // ✅ Anti-spam ochrana
         $this->addAntiSpamProtectionToForm($form);
-        
-        // ✅ DEBUG: Počet polí po anti-spam
-        echo "Počet polí po anti-spam: " . count($form->getComponents()) . "<br>";
 
         $form->addText('username', 'Uživatelské jméno:')
             ->setRequired('Zadejte uživatelské jméno');
@@ -222,12 +209,6 @@ final class SignPresenter extends BasePresenter
         $form->addSubmit('send', 'Přihlásit se');
 
         $form->onSuccess[] = [$this, 'signInFormSucceeded'];
-        
-        // ✅ DEBUG: Finální počet polí
-        echo "FINÁLNÍ počet polí: " . count($form->getComponents()) . "<br>";
-        foreach ($form->getComponents() as $name => $component) {
-            echo "Pole: {$name} - třída: " . get_class($component) . "<br>";
-        }
 
         return $form;
     }

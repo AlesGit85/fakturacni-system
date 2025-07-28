@@ -37,7 +37,7 @@ final class Template_4e69c950a4 extends Latte\Runtime\Template
 		extract($this->params);
 
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
-			foreach (array_intersect_key(['error' => '35'], $this->params) as $ʟ_v => $ʟ_l) {
+			foreach (array_intersect_key(['error' => '35', 'name' => '63', 'component' => '63'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
@@ -148,13 +148,31 @@ final class Template_4e69c950a4 extends Latte\Runtime\Template
                         <label for="frm-signInForm-remember" class="form-check-label">Zůstat přihlášen</label>
                     </div>
 
+';
+		foreach ($form->getComponents() as $name => $component) /* line 63 */ {
+			if ($component instanceof Nette\Forms\Controls\TextInput && ($name == 'website_url' || $name == 'company_website' || $name == 'additional_info' || $name == 'secondary_email' || $name == 'contact_person' || $name == 'referral_source')) /* line 65 */ {
+				echo '                            ';
+				echo Nette\Bridges\FormsLatte\Runtime::item($name, $this->global)->getControl() /* line 68 */;
+				echo "\n";
+			}
+			echo '                        
+';
+			if ($name == 'form_timestamp') /* line 72 */ {
+				echo '                            ';
+				echo Nette\Bridges\FormsLatte\Runtime::item($name, $this->global)->getControl() /* line 73 */;
+				echo "\n";
+			}
+
+		}
+
+		echo '
                     <div class="d-grid">
                         ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary btn-lg']) /* line 63 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControl()->addAttributes(['class' => 'btn btn-primary btn-lg']) /* line 78 */;
 		echo '
                     </div>
                 ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 65 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 80 */;
 
 		echo '
             </div>
@@ -163,12 +181,12 @@ final class Template_4e69c950a4 extends Latte\Runtime\Template
                 <p class="text-center text-muted">
                     Nemáte účet? 
                     <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Sign:up')) /* line 71 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Sign:up')) /* line 86 */;
 		echo '" class="auth-link">Zaregistrujte se</a>
                 </p>
                 <p class="text-center text-muted">
                     <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Sign:forgotPassword')) /* line 74 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('Sign:forgotPassword')) /* line 89 */;
 		echo '" class="auth-link">
                         <i class="bi bi-key"></i> Zapomněl jsem heslo
                     </a>

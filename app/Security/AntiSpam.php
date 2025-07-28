@@ -24,7 +24,7 @@ class AntiSpam
         'company_website',   // Pro firemní formuláře
         'additional_info',   // Obecné info pole
         'secondary_email',   // Druhý email
-        'backup_phone',      // Záložní telefon
+        'contact_person',    // Kontaktní osoba
         'referral_source',   // Zdroj doporučení
     ];
 

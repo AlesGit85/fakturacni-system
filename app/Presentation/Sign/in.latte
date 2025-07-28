@@ -59,6 +59,21 @@
                         <label for="frm-signInForm-remember" class="form-check-label">Zůstat přihlášen</label>
                     </div>
 
+                    {* ✅ NOVÉ: Automatické vykreslení všech honeypot polí *}
+                    {foreach $form->getComponents() as $name => $component}
+                        {* Honeypot pole mají specifické názvy a jsou typu TextInput *}
+                        {if $component instanceof Nette\Forms\Controls\TextInput && 
+                            ($name == 'website_url' || $name == 'company_website' || $name == 'additional_info' || 
+                             $name == 'secondary_email' || $name == 'contact_person' || $name == 'referral_source')}
+                            {input $name}
+                        {/if}
+                        
+                        {* Timing protection (hidden field) *}
+                        {if $name == 'form_timestamp'}
+                            {input $name}
+                        {/if}
+                    {/foreach}
+
                     <div class="d-grid">
                         {input send class => 'btn btn-primary btn-lg'}
                     </div>

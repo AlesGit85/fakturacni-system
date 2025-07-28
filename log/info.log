@@ -1479,3 +1479,51 @@
 [2025-07-25 08-38-37] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=f34y 
 [2025-07-25 08-38-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
 [2025-07-25 08-40-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 13-11-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-07-28 13-11-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=4ybos&_fid=okyz 
+[2025-07-28 13-22-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=4ybos&_fid=okyz 
+[2025-07-28 13-23-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=4ybos&_fid=okyz 
+[2025-07-28 13-25-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=4ybos&_fid=okyz 
+[2025-07-28 13-26-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=4ybos&_fid=okyz 
+[2025-07-28 13-26-40] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=4ybos&_fid=okyz 
+[2025-07-28 13-28-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=4ybos&_fid=okyz 
+[2025-07-28 13-29-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=4ybos&_fid=okyz 
+[2025-07-28 13-55-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=4ybos&_fid=okyz 
+[2025-07-28 13-55-47] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 13-56-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 13-57-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 13-59-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-05-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-06-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-06-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=ly4l 
+[2025-07-28 14-06-26] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=ly4l 
+[2025-07-28 14-07-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-07-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-07-28 14-07-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-07-28 14-07-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/out 
+[2025-07-28 14-07-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=nd10 
+[2025-07-28 14-07-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-07-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=ws6w 
+[2025-07-28 14-07-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=ws6w 
+[2025-07-28 14-07-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/out 
+[2025-07-28 14-07-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=otai 
+[2025-07-28 14-07-49] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-07-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-08-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-08-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-08-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-08-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-08-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-08-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=rxau 
+[2025-07-28 14-08-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=rxau 
+[2025-07-28 14-08-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/out 
+[2025-07-28 14-08-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=j3pe 
+[2025-07-28 14-10-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-07-28 14-10-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=ggfd3&_fid=5vdn 
+[2025-07-28 14-10-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=ggfd3&_fid=5vdn 
+[2025-07-28 14-10-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-11-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=ggfd3&_fid=5vdn 
+[2025-07-28 14-11-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-13-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-28 14-13-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=rxsj 
+[2025-07-28 14-13-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=rxsj 

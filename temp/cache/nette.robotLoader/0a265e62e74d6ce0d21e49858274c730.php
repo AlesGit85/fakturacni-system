@@ -155,7 +155,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1753432697,
+      1 => 1753711476,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
@@ -170,7 +170,7 @@ return array (
     'App\\Security\\AntiSpam' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\AntiSpam.php',
-      1 => 1753431418,
+      1 => 1753711457,
     ),
     'App\\Security\\RateLimiter' => 
     array (
@@ -205,31 +205,12 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 3,
-    'null' => 3,
-    'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityTestTemplate' => 2,
+    'Nette\\Bridges\\Assets\\DIExtension' => 1,
+    'null' => 1,
     'App\\Presentation\\Sign\\SignInTemplate' => 3,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityDefaultTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\Users\\UsersRateLimitStatsTemplate' => 3,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 1,
-    'App\\Presentation\\Tenants\\TenantsTemplate' => 2,
-    'App\\Presentation\\Tenants\\TenantsAddTemplate' => 1,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
     'App\\Presentation\\Sign\\SignOutTemplate' => 3,
   ),
   2 => 
