@@ -29,7 +29,7 @@ class AntiSpam
     ];
 
     /** @var int Minimální čas vyplnění formuláře (sekundy) */
-    private $minSubmissionTime = 3;
+    private $minSubmissionTime = 1;
 
     /** @var int Maximální čas vyplnění formuláře (sekundy) */
     private $maxSubmissionTime = 3600; // 1 hodina
@@ -69,7 +69,7 @@ class AntiSpam
             }
             
             return true;
-        }, 'Spam detekce aktivní. Pokud jste člověk, kontaktujte administrátora.');
+        }, 'Formulář byl odeslán neočekávaně rychle nebo obsahuje neočekávaná data. Zkuste to prosím znovu.');
 
         return $fieldName;
     }
@@ -107,7 +107,7 @@ class AntiSpam
             }
             
             return true;
-        }, 'Formulář byl odeslán příliš rychle nebo po příliš dlouhém čase. Zkuste to znovu.');
+        }, 'Formulář byl odeslán neočekávaně rychle nebo po příliš dlouhém čase. Zkuste to znovu.');
     }
 
     /**
@@ -131,7 +131,7 @@ class AntiSpam
             // Pokud najdeme příliš mnoho podezřelých vzorů, označíme jako spam
             $totalPatterns = array_sum(array_map('count', $suspiciousPatterns));
             
-            if ($totalPatterns >= 3) { // Práh pro označení jako spam
+            if ($totalPatterns >= 5) { // Práh pro označení jako spam
                 $form->addError('Formulář obsahuje podezřelý obsah. Pokud jste člověk, kontaktujte administrátora.');
                 return false;
             }
