@@ -155,7 +155,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1753961239,
+      1 => 1753961845,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
@@ -215,6 +215,9 @@ return array (
     'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 3,
     'App\\Presentation\\Security\\SecurityTemplate' => 3,
     'App\\Presentation\\Sign\\SignUpTemplate' => 3,
+    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
+    'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
+    'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 2,
   ),
   2 => 
   array (

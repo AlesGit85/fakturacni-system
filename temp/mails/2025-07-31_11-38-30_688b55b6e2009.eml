@@ -1,14 +1,14 @@
 MIME-Version: 1.0
 X-Mailer: Nette Framework
-Date: Wed, 30 Jul 2025 13:37:05 +0000
+Date: Thu, 31 Jul 2025 11:38:30 +0000
 From: QRdoklad <noreply@allimedia.cz>
 To: test@allimedia.cz
 Subject: =?UTF-8?B?T2Jub3ZlbsOtIGhlc2xhIC0gUVJkb2tsYWQ=?=
-Message-ID: <hgvzz4ls5r@localhost8000>
+Message-ID: <gqadfjkr7e@localhost8000>
 Content-Type: multipart/alternative;
-	boundary="--------fu4p8zq6oh"
+	boundary="--------znqiiwkvbk"
 
-----------fu4p8zq6oh
+----------znqiiwkvbk
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -20,12 +20,12 @@ Někdo požádal o obnovení hesla pro váš účet.
 Pokud to nebyli vy, tento email ignorujte.
 
 Pro obnovení hesla klikněte na následující odkaz:
-http://localhost:8000/sign/reset-password?token=e56844a5224c093f7b90518610e63cb212a54bc12be1ac6d05444d71c5cd849c
+http://localhost:8000/sign/reset-password?token=78cae3c3a518723328664460aa3d39969f00bd421667586f4bd0afbf33e97459
 
 Odkaz je platný po dobu 24 hodin.
 
 V případě problémů nás kontaktujte na: info@allimedia.cz
-----------fu4p8zq6oh
+----------znqiiwkvbk
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -56,7 +56,7 @@ Content-Transfer-Encoding: 8bit
                     </div>
                     
                     <p>Pro obnovení hesla klikněte na tlačítko:</p>
-                    <a href='http://localhost:8000/sign/reset-password?token=e56844a5224c093f7b90518610e63cb212a54bc12be1ac6d05444d71c5cd849c' class='btn'>Obnovit heslo</a>
+                    <a href='http://localhost:8000/sign/reset-password?token=78cae3c3a518723328664460aa3d39969f00bd421667586f4bd0afbf33e97459' class='btn'>Obnovit heslo</a>
                     
                     <p><small>Odkaz je platný po dobu 24 hodin.</small></p>
                     <p>V případě problémů nás kontaktujte na: <a href='mailto:info@allimedia.cz'>info@allimedia.cz</a></p>
@@ -64,4 +64,4 @@ Content-Transfer-Encoding: 8bit
             </div>
         </body>
         </html>
-----------fu4p8zq6oh--
+----------znqiiwkvbk--

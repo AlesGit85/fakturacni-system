@@ -327,7 +327,7 @@ final class SignPresenter extends BasePresenter
             $userCreationStatus = $this->rateLimiter->getLimitStatus('user_creation', $clientIP, null);
             $blockedUntil = $userCreationStatus['blocked_until'];
             $timeRemaining = $blockedUntil ? $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 'neznámý čas';
-            
+
             $form->addError("Příliš mnoho pokusů o registraci. Zkuste to znovu za {$timeRemaining}.");
             return;
         }
@@ -338,20 +338,19 @@ final class SignPresenter extends BasePresenter
 
             // ✅ ZMĚNA: Vždy vytváříme nový firemní účet a získáme výsledek
             $result = $this->processCompanyAccountCreation($form, $data);
-            
+
             // ✅ ZMĚNA: Úspěšná registrace s nově vytvořenými tenant_id a user_id
             $newTenantId = $result['tenant_id'] ?? null;
             $newUserId = $result['user_id'] ?? null;
-            
+
             $this->rateLimiter->recordAttempt('user_creation', $clientIP, true, $newTenantId, $newUserId);
-            
         } catch (Nette\Application\AbortException $e) {
             // ✅ KLÍČOVÁ OPRAVA: AbortException (redirect/forward) necháme projít - to je normální
             throw $e;
         } catch (\Exception $e) {
             // ✅ OPRAVENO: Pouze skutečné chyby (ne redirect)
             $this->rateLimiter->recordAttempt('user_creation', $clientIP, false, null, null);
-            
+
             error_log('Chyba při registraci: ' . $e->getMessage());
             $form->addError('Při registraci došlo k chybě. Zkuste to prosím znovu.');
         }
@@ -380,6 +379,9 @@ final class SignPresenter extends BasePresenter
     {
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+
+        // ✅ Anti-spam ochrana
+        $this->addAntiSpamProtectionToForm($form);
 
         $form->addEmail('email', 'E-mailová adresa:')
             ->setRequired('Zadejte váš e-mail')
@@ -441,8 +443,11 @@ final class SignPresenter extends BasePresenter
 
             $this->flashMessage('Odkaz pro obnovení hesla byl odeslán na váš e-mail.', 'success');
             $this->redirect('Sign:in');
+        } catch (Nette\Application\AbortException $e) {
+            // ✅ KLÍČOVÁ OPRAVA: AbortException (redirect/forward) necháme projít - to je normální
+            throw $e;
         } catch (\Exception $e) {
-            // ✅ ZMĚNA: Neúspěšné odeslání
+            // ✅ OPRAVENO: Pouze skutečné chyby (ne redirect)
             $this->rateLimiter->recordAttempt('password_reset', $clientIP, false, $tenantId, null);
 
             error_log('Chyba při odesílání emailu pro reset hesla: ' . $e->getMessage());
