@@ -55,6 +55,9 @@ class SettingsPresenter extends BasePresenter
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
+        // ✅ Anti-spam ochrana
+        $this->addAntiSpamProtectionToForm($form);
+
         // ========== Základní údaje firmy ==========
         $nameField = $form->addText('name', 'Název společnosti:')
             ->setRequired('Zadejte název společnosti')

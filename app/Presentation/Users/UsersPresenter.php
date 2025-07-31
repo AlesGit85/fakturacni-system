@@ -396,6 +396,9 @@ final class UsersPresenter extends BasePresenter
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
+        // ✅ Anti-spam ochrana
+        $this->addAntiSpamProtectionToForm($form);
+
         $form->addText('username', 'Uživatelské jméno:')
             ->setRequired('Zadejte uživatelské jméno')
             ->addFilter([SecurityValidator::class, 'sanitizeString']) // ✅ NOVÉ: Sanitizace

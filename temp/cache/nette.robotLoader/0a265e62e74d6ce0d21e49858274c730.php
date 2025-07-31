@@ -110,7 +110,7 @@ return array (
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1753427326,
+      1 => 1753962214,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -130,7 +130,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1753103423,
+      1 => 1753962179,
     ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (
@@ -150,7 +150,7 @@ return array (
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1753091231,
+      1 => 1753962255,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
@@ -165,7 +165,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1753259259,
+      1 => 1753962292,
     ),
     'App\\Security\\AntiSpam' => 
     array (
@@ -218,6 +218,10 @@ return array (
     'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
     'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
     'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
   ),
   2 => 
   array (

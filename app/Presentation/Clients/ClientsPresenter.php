@@ -105,6 +105,9 @@ class ClientsPresenter extends BasePresenter
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
+        // ✅ Anti-spam ochrana
+        $this->addAntiSpamProtectionToForm($form);
+
         // === ARES a identifikační údaje (první) ===
         $icField = $form->addText('ic', 'IČ:')
             ->setHtmlAttribute('placeholder', 'Zadejte IČ a klikněte na načíst z ARESu')

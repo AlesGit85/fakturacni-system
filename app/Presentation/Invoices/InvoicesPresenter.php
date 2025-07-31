@@ -27,7 +27,7 @@ class InvoicesPresenter extends BasePresenter
 
     // Všichni přihlášení uživatelé mají základní přístup k fakturám
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
-    
+
     // Konkrétní role pro jednotlivé akce
     protected array $actionRoles = [
         'default' => ['readonly', 'accountant', 'admin'], // Seznam faktur mohou vidět všichni
@@ -58,18 +58,18 @@ class InvoicesPresenter extends BasePresenter
     public function startup(): void
     {
         parent::startup();
-        
+
         // Nastavíme tenant kontext v manažerech
         $this->invoicesManager->setTenantContext(
             $this->getCurrentTenantId(),
             $this->isSuperAdmin()
         );
-        
+
         $this->clientsManager->setTenantContext(
             $this->getCurrentTenantId(),
             $this->isSuperAdmin()
         );
-        
+
         // PŘIDÁNO: CompanyManager také potřebuje tenant kontext pro zobrazení faktur
         $this->companyManager->setTenantContext(
             $this->getCurrentTenantId(),
@@ -126,13 +126,13 @@ class InvoicesPresenter extends BasePresenter
         $this->redirect('default');
     }
 
-public function actionPdf(int $id): void
+    public function actionPdf(int $id): void
     {
         // Čištění output bufferů
         while (ob_get_level()) {
             ob_end_clean();
         }
-        
+
         $invoice = $this->invoicesManager->getById($id);
 
         if (!$invoice) {
@@ -606,6 +606,9 @@ public function actionPdf(int $id): void
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
 
+        // ✅ Anti-spam ochrana
+        $this->addAntiSpamProtectionToForm($form);
+
         // Přepínač mezi existujícím a ručně zadaným klientem
         $clientTypeRadio = $form->addRadioList('client_type', 'Klient:', [
             'existing' => 'Vybrat existujícího klienta',
@@ -788,46 +791,46 @@ public function actionPdf(int $id): void
     }
 
     public function actionEdit(int $id): void
-{
-    $invoice = $this->invoicesManager->getById($id);
+    {
+        $invoice = $this->invoicesManager->getById($id);
 
-    if (!$invoice) {
-        $this->error('Faktura nebyla nalezena');
-    }
-
-    // Připravíme data formuláře
-    $defaults = (array) $invoice;
-
-    // Nastavíme typ klienta a jeho údaje
-    if ($invoice->manual_client) {
-        $defaults['client_type'] = 'manual';
-        
-        // Pro ručně zadaného klienta načteme aktuální údaje z tabulky clients
-        if ($invoice->client_id) {
-            $client = $this->clientsManager->getById($invoice->client_id);
-            if ($client) {
-                $defaults['client_name'] = $client->name;
-                $defaults['client_address'] = $client->address;
-                $defaults['client_city'] = $client->city;
-                $defaults['client_zip'] = $client->zip;
-                $defaults['client_country'] = $client->country;
-                $defaults['client_ic'] = $client->ic;
-                $defaults['client_dic'] = $client->dic;
-            }
+        if (!$invoice) {
+            $this->error('Faktura nebyla nalezena');
         }
-    } else {
-        $defaults['client_type'] = 'existing';
-        // Pro existujícího klienta nastavíme client_id
-        $defaults['client_id'] = $invoice->client_id;
+
+        // Připravíme data formuláře
+        $defaults = (array) $invoice;
+
+        // Nastavíme typ klienta a jeho údaje
+        if ($invoice->manual_client) {
+            $defaults['client_type'] = 'manual';
+
+            // Pro ručně zadaného klienta načteme aktuální údaje z tabulky clients
+            if ($invoice->client_id) {
+                $client = $this->clientsManager->getById($invoice->client_id);
+                if ($client) {
+                    $defaults['client_name'] = $client->name;
+                    $defaults['client_address'] = $client->address;
+                    $defaults['client_city'] = $client->city;
+                    $defaults['client_zip'] = $client->zip;
+                    $defaults['client_country'] = $client->country;
+                    $defaults['client_ic'] = $client->ic;
+                    $defaults['client_dic'] = $client->dic;
+                }
+            }
+        } else {
+            $defaults['client_type'] = 'existing';
+            // Pro existujícího klienta nastavíme client_id
+            $defaults['client_id'] = $invoice->client_id;
+        }
+
+        $this['invoiceForm']->setDefaults($defaults);
+        $this->template->invoice = $invoice;
+        $this->template->invoiceItems = $this->invoicesManager->getInvoiceItems($id);
+
+        $company = $this->companyManager->getCompanyInfo();
+        $this->template->isVatPayer = $company ? $company->vat_payer : false;
     }
-
-    $this['invoiceForm']->setDefaults($defaults);
-    $this->template->invoice = $invoice;
-    $this->template->invoiceItems = $this->invoicesManager->getInvoiceItems($id);
-
-    $company = $this->companyManager->getCompanyInfo();
-    $this->template->isVatPayer = $company ? $company->vat_payer : false;
-}
 
     // Je potřeba implementovat metodu pro mazání položek faktury
     public function actionDeleteItem(int $invoiceId, int $itemId): void

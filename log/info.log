@@ -1632,3 +1632,16 @@
 [2025-07-31 11-38-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
 [2025-07-31 11-38-30] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
 [2025-07-31 11-38-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=pvgg 
+[2025-07-31 11-41-57] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-31 11-41-57] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=wefj 
+[2025-07-31 11-41-57] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=wefj 
+[2025-07-31 11-46-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-07-31 11-46-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-07-31 11-46-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/add 
+[2025-07-31 11-46-02] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/add 
+[2025-07-31 11-46-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/add 
+[2025-07-31 11-46-29] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/add 
+[2025-07-31 11-46-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/62?_fid=2tfj 
+[2025-07-31 11-46-29] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/62?_fid=2tfj 
+[2025-07-31 11-46-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/pdf/62 
+[2025-07-31 11-46-31] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/pdf/62 
