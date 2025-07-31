@@ -222,6 +222,9 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
+    'App\\Presentation\\Users\\UsersDefaultTemplate' => 2,
+    'App\\Presentation\\Users\\UsersTemplate' => 3,
+    'App\\Presentation\\Users\\UsersAddTemplate' => 3,
   ),
   2 => 
   array (
