@@ -165,7 +165,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1753962292,
+      1 => 1753962765,
     ),
     'App\\Security\\AntiSpam' => 
     array (
@@ -217,7 +217,7 @@ return array (
     'App\\Presentation\\Sign\\SignUpTemplate' => 3,
     'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
     'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
-    'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 2,
+    'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,

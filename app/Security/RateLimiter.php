@@ -113,8 +113,24 @@ class RateLimiter
             'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
         ]);
 
-        // Pokud nebyl úspěšný, zkontrolujme limity
-        if (!$successful) {
+        // ✅ OPRAVENO: Různé akce mají různé pravidla blokování
+        $shouldCheckLimits = false;
+        
+        // Akce, které se blokují pouze po neúspěšných pokusech
+        $failureOnlyActions = ['login', 'api_request'];
+        
+        // Akce, které se blokují po jakýxkoliv pokusech (i úspěšných)
+        $allAttemptsActions = ['password_reset', 'form_submit', 'user_creation'];
+        
+        if (in_array($action, $failureOnlyActions)) {
+            $shouldCheckLimits = !$successful; // Pouze neúspěšné
+        } elseif (in_array($action, $allAttemptsActions)) {
+            $shouldCheckLimits = true; // Všechny pokusy
+        } else {
+            $shouldCheckLimits = !$successful; // Výchozí: pouze neúspěšné
+        }
+        
+        if ($shouldCheckLimits) {
             $currentAttempts = $this->getAttemptCount($action, $ipAddress, $limit['window'], $tenantId);
             
             if ($currentAttempts >= $limit['attempts']) {
