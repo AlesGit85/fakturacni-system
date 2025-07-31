@@ -10,7 +10,7 @@ return array (
     'App\\Core\\RouterFactory' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
-      1 => 1753259836,
+      1 => 1753883462,
     ),
     'App\\Mail\\TestMailer' => 
     array (
@@ -105,7 +105,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1753431522,
+      1 => 1753878789,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -145,7 +145,7 @@ return array (
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
-      1 => 1753340879,
+      1 => 1753883462,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -155,7 +155,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1753710919,
+      1 => 1753883527,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
@@ -170,7 +170,7 @@ return array (
     'App\\Security\\AntiSpam' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\AntiSpam.php',
-      1 => 1753710927,
+      1 => 1753883662,
     ),
     'App\\Security\\RateLimiter' => 
     array (

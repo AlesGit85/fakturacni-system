@@ -1545,3 +1545,60 @@
 [2025-07-28 14-24-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
 [2025-07-28 14-25-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=ymi7 
 [2025-07-28 14-25-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=ymi7 
+[2025-07-30 13-54-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-07-30 13-54-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-07-30 13-55-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-07-30 13-55-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-07-30 13-55-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=pr8f 
+[2025-07-30 13-55-26] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=pr8f 
+[2025-07-30 13-55-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-07-30 13-55-31] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-07-31 11-17-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-07-31 11-17-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=oj4gx&_fid=wvz1 
+[2025-07-31 11-18-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-07-31 11-18-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=06pjy&_fid=d10a 
+[2025-07-31 11-22-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-07-31 11-22-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=n7ve 
+[2025-07-31 11-22-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=n7ve 
+[2025-07-31 11-22-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-07-31 11-22-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-07-31 11-24-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/out 
+[2025-07-31 11-24-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=8fnk 
+[2025-07-31 11-24-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-07-31 11-27-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-07-31 11-28-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-07-31 11-29-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-26] 🔍 TENANT DEBUG: Krok 1 - kontroly unikátnosti prošly  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-26] 🔍 TENANT DEBUG: Krok 2 - vkládám do tabulky 'tenants'  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-26] 🔍 TENANT DEBUG: Krok 2 - vytvořen unikátní slug: 'firemni-ucet-as01'  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-26] 🔍 TENANT DEBUG: Krok 2 - tenant vytvořen s ID: 16  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-27] 🔍 TENANT DEBUG: Krok 3 - vkládám do tabulky 'users'  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-27] 🔍 TENANT DEBUG: Krok 3 - admin user vytvořen s ID: 73  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-27] 🔍 TENANT DEBUG: Krok 4 - vkládám do tabulky 'company_info'  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-27] 🔍 TENANT DEBUG: Krok 4 - company_info vytvořeno  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-27] 🔍 TENANT DEBUG: Krok 5 - vytvářím adresáře  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-27] 🔍 TENANT DEBUG: Krok 5 - adresáře vytvořeny  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-27] 🔍 TENANT DEBUG: Krok 6 - nastavuji moduly  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-27] 🔍 TENANT DEBUG: Tenant 16 začíná bez modulů (čistý start)  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-27] 🔍 TENANT DEBUG: Tenant 16 má prázdné adresáře, žádné moduly  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-27] 🔍 TENANT DEBUG: Krok 6 - moduly nastaveny  @  http://localhost:8000/sign/up 
+[2025-07-31 11-30-27] 🔍 TENANT DEBUG: Krok 7 - transakce potvrzena  @  http://localhost:8000/sign/up 
+[2025-07-31 11-32-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 1 - kontroly unikátnosti prošly  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 2 - vkládám do tabulky 'tenants'  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 2 - vytvořen unikátní slug: 'firemni-ucet-as02'  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 2 - tenant vytvořen s ID: 17  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 3 - vkládám do tabulky 'users'  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 3 - admin user vytvořen s ID: 74  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 4 - vkládám do tabulky 'company_info'  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 4 - company_info vytvořeno  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 5 - vytvářím adresáře  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 5 - adresáře vytvořeny  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 6 - nastavuji moduly  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Tenant 17 začíná bez modulů (čistý start)  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Tenant 17 má prázdné adresáře, žádné moduly  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 6 - moduly nastaveny  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] 🔍 TENANT DEBUG: Krok 7 - transakce potvrzena  @  http://localhost:8000/sign/up 
+[2025-07-31 11-33-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=fr8f 

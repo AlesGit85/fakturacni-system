@@ -33,7 +33,7 @@ final class SignPresenter extends BasePresenter
     protected $rateLimiter;
 
     protected bool $requiresLogin = false;
-    
+
     /** @var bool Vypnutí globálního rate limitingu - SignPresenter má vlastní */
     protected bool $disableRateLimit = true;
 
@@ -49,7 +49,7 @@ final class SignPresenter extends BasePresenter
     ) {
         // ✅ KRITICKÉ: Volání parent konstruktoru s BasePresenter parametry
         parent::__construct($securityLogger, $rateLimiter, $moduleManager, $database, $antiSpam);
-        
+
         // SignPresenter specifické vlastnosti
         $this->userManager = $userManager;
         $this->emailService = $emailService;
@@ -75,13 +75,13 @@ final class SignPresenter extends BasePresenter
         }
 
         $clientIP = $this->rateLimiter->getClientIP();
-        
+
         // ✅ ZMĚNA: Pro login checking používáme null tenant_id (uživatel se ještě nepřihlásil)
         $loginStatus = $this->rateLimiter->getLimitStatus('login', $clientIP, null);
         if ($loginStatus['is_blocked']) {
             $blockedUntil = $loginStatus['blocked_until'];
             $timeRemaining = $blockedUntil ? $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 'neznámý čas';
-            
+
             $this->template->rateLimitBlocked = true;
             $this->template->blockedUntil = $blockedUntil;
             $this->template->timeRemaining = $timeRemaining;
@@ -110,7 +110,7 @@ final class SignPresenter extends BasePresenter
         unset($section->message);
         unset($section->type);
         unset($section->tenant_id);
-        
+
         $this->redirect('Sign:in');
     }
 
@@ -125,14 +125,14 @@ final class SignPresenter extends BasePresenter
         }
 
         $clientIP = $this->rateLimiter->getClientIP();
-        
+
         // ✅ ZMĚNA: Pro registraci používáme null tenant_id (tenant se teprve vytváří)
         $userCreationStatus = $this->rateLimiter->getLimitStatus('user_creation', $clientIP, null);
-        
+
         if ($userCreationStatus['is_blocked']) {
             $blockedUntil = $userCreationStatus['blocked_until'];
             $timeRemaining = $blockedUntil ? $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 'neznámý čas';
-            
+
             $this->flashMessage("Příliš mnoho pokusů o registraci. Zkuste to znovu za {$timeRemaining}.", 'danger');
             $this->redirect('Sign:in');
         }
@@ -194,7 +194,7 @@ final class SignPresenter extends BasePresenter
     {
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
-        
+
         // ✅ Anti-spam ochrana
         $this->addAntiSpamProtectionToForm($form);
 
@@ -231,7 +231,7 @@ final class SignPresenter extends BasePresenter
             $loginStatus = $this->rateLimiter->getLimitStatus('login', $clientIP, $tenantId);
             $blockedUntil = $loginStatus['blocked_until'];
             $timeRemaining = $blockedUntil ? $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 'neznámý čas';
-            
+
             $form->addError("Příliš mnoho neúspěšných pokusů o přihlášení. Zkuste to znovu za {$timeRemaining}.");
             return;
         }
@@ -244,29 +244,28 @@ final class SignPresenter extends BasePresenter
             }
 
             $this->getUser()->login($data->username, $data->password);
-            
+
             $identity = $this->getUser()->getIdentity();
             $actualTenantId = $identity->tenant_id ?? null;
             $userId = $identity->id ?? null;
-            
+
             $this->rateLimiter->recordAttempt('login', $clientIP, true, $actualTenantId, $userId);
-            
+
             $section = $this->getSession('deactivation');
             unset($section->message);
             unset($section->type);
             unset($section->tenant_id);
-            
+
             $this->securityLogger->logLogin($identity->id, $identity->username);
-            
+
             $this->flashMessage('Úspěšně jste se přihlásili.', 'success');
             $this->redirect('Home:default');
-            
         } catch (Nette\Security\AuthenticationException $e) {
             $this->rateLimiter->recordAttempt('login', $clientIP, false, $tenantId, null);
             $this->securityLogger->logFailedLogin($data->username, $e->getMessage());
-            
+
             $loginStatus = $this->rateLimiter->getLimitStatus('login', $clientIP, $tenantId);
-            
+
             if ($loginStatus['is_blocked']) {
                 $form->addError('Příliš mnoho neúspěšných pokusů. Váš přístup byl dočasně zablokován.');
             } else {
@@ -280,6 +279,9 @@ final class SignPresenter extends BasePresenter
     {
         $form = new Form;
         $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+
+        // ✅ Anti-spam ochrana
+        $this->addAntiSpamProtectionToForm($form);
 
         // VŽDY přidáme pole pro nový firemní účet
         $form->addText('company_account_name', 'Název firemního účtu:')
@@ -302,7 +304,7 @@ final class SignPresenter extends BasePresenter
             ->setRequired('Zadejte heslo')
             ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 6);
 
-        $form->addPassword('password_confirm', 'Heslo znovu:')
+        $form->addPassword('passwordVerify', 'Heslo znovu:')
             ->setRequired('Zadejte heslo znovu')
             ->addRule(Form::EQUAL, 'Hesla se neshodují', $form['password']);
 
@@ -343,8 +345,11 @@ final class SignPresenter extends BasePresenter
             
             $this->rateLimiter->recordAttempt('user_creation', $clientIP, true, $newTenantId, $newUserId);
             
+        } catch (Nette\Application\AbortException $e) {
+            // ✅ KLÍČOVÁ OPRAVA: AbortException (redirect/forward) necháme projít - to je normální
+            throw $e;
         } catch (\Exception $e) {
-            // ✅ ZMĚNA: Neúspěšná registrace
+            // ✅ OPRAVENO: Pouze skutečné chyby (ne redirect)
             $this->rateLimiter->recordAttempt('user_creation', $clientIP, false, null, null);
             
             error_log('Chyba při registraci: ' . $e->getMessage());
@@ -402,7 +407,7 @@ final class SignPresenter extends BasePresenter
             $passwordResetStatus = $this->rateLimiter->getLimitStatus('password_reset', $clientIP, $tenantId);
             $blockedUntil = $passwordResetStatus['blocked_until'];
             $timeRemaining = $blockedUntil ? $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 'neznámý čas';
-            
+
             $form->addError("Příliš mnoho pokusů o obnovení hesla. Zkuste to znovu za {$timeRemaining}.");
             return;
         }
@@ -436,7 +441,6 @@ final class SignPresenter extends BasePresenter
 
             $this->flashMessage('Odkaz pro obnovení hesla byl odeslán na váš e-mail.', 'success');
             $this->redirect('Sign:in');
-
         } catch (\Exception $e) {
             // ✅ ZMĚNA: Neúspěšné odeslání
             $this->rateLimiter->recordAttempt('password_reset', $clientIP, false, $tenantId, null);
@@ -460,7 +464,7 @@ final class SignPresenter extends BasePresenter
             ->setRequired('Zadejte nové heslo')
             ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků', 6);
 
-        $form->addPassword('password_confirm', 'Heslo znovu:')
+        $form->addPassword('passwordVerify', 'Heslo znovu:')
             ->setRequired('Zadejte heslo znovu')
             ->addRule(Form::EQUAL, 'Hesla se neshodují', $form['password']);
 
@@ -564,19 +568,38 @@ final class SignPresenter extends BasePresenter
             throw new \Exception('E-mailová adresa už je registrovaná.');
         }
 
-        // Vytvoření nového tenanta a uživatele
-        $result = $this->tenantManager->createTenantWithAdmin(
-            $data->company_account_name,
-            $data->company_name,
-            $data->username,
-            $data->email,
-            $data->password
-        );
+        // ✅ OPRAVENO: Použití správné metody createTenant() místo createTenantWithAdmin()
+        $tenantData = [
+            'name' => $data->company_account_name,
+            'domain' => null,
+            'settings' => []
+        ];
 
-        $this->flashMessage('Firemní účet byl úspěšně vytvořen. Nyní se můžete přihlásit.', 'success');
-        $this->redirect('Sign:in');
-        
-        return $result; // Vracíme výsledek s tenant_id a user_id
+        $adminData = [
+            'username' => $data->username,
+            'email' => $data->email,
+            'password' => $data->password,
+            'first_name' => '',
+            'last_name' => ''
+        ];
+
+        $companyData = [
+            'company_name' => $data->company_name
+        ];
+
+        $result = $this->tenantManager->createTenant($tenantData, $adminData, $companyData);
+
+        if ($result['success']) {
+            $this->flashMessage('Firemní účet byl úspěšně vytvořen. Nyní se můžete přihlásit.', 'success');
+            $this->redirect('Sign:in');
+
+            return [
+                'tenant_id' => $result['tenant_id'],
+                'user_id' => $result['admin_user_id']
+            ];
+        } else {
+            throw new \Exception($result['message']);
+        }
     }
 
     /**
@@ -588,7 +611,7 @@ final class SignPresenter extends BasePresenter
             $user = $this->database->table('users')
                 ->where('username', $username)
                 ->fetch();
-            
+
             return $user ? $user->tenant_id : null;
         } catch (\Exception $e) {
             error_log('Chyba při získávání tenant_id z credentials: ' . $e->getMessage());
@@ -605,7 +628,7 @@ final class SignPresenter extends BasePresenter
             $user = $this->database->table('users')
                 ->where('email', $email)
                 ->fetch();
-            
+
             return $user ? $user->tenant_id : null;
         } catch (\Exception $e) {
             error_log('Chyba při získávání tenant_id z emailu: ' . $e->getMessage());
