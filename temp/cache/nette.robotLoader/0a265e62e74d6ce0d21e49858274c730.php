@@ -145,7 +145,7 @@ return array (
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
-      1 => 1753883462,
+      1 => 1754028162,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -165,7 +165,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1753962765,
+      1 => 1754027365,
     ),
     'App\\Security\\AntiSpam' => 
     array (
@@ -175,7 +175,7 @@ return array (
     'App\\Security\\RateLimiter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiter.php',
-      1 => 1753255786,
+      1 => 1753964343,
     ),
     'App\\Security\\RateLimiterCleaner' => 
     array (
@@ -205,26 +205,16 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 2,
-    'null' => 2,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
-    'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 3,
+    'Nette\\Bridges\\Assets\\DIExtension' => 1,
+    'null' => 1,
     'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 3,
     'App\\Presentation\\Security\\SecurityTemplate' => 3,
-    'App\\Presentation\\Sign\\SignUpTemplate' => 3,
-    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
-    'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
+    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'App\\Presentation\\Sign\\SignTemplate' => 3,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 2,
+    'App\\Presentation\\Home\\HomeTemplate' => 2,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
     'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
-    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 2,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Users\\UsersAddTemplate' => 3,
   ),
   2 => 
   array (

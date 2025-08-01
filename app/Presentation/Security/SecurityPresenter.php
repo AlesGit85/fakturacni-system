@@ -91,25 +91,24 @@ class SecurityPresenter extends BasePresenter
     public function renderRateLimitStats(): void
     {
         $this->template->pageTitle = 'Rate Limiting Statistiky';
-        
-        // ✅ ZMĚNA: Informace o typu uživatele pro šablonu
+
+        // ✅ Informace o typu uživatele pro šablonu
         $this->template->isSuperAdmin = $this->isSuperAdmin();
         $this->template->isAdmin = $this->isAdmin();
-        
-        // ✅ ZÁKLADNÍ: Statistiky bez tenant funkcí (dokud nepřidáme sloupce)
+
+        // ✅ Základní statistiky
         $this->template->statistics = $this->getBasicRateLimitStatistics();
 
-        // ✅ ZÁKLADNÍ: Současné IP adresy s blokováním (bez tenant informací)
+        // ✅ Současné IP adresy s blokováním
         $blockedIPs = $this->getBasicBlockedIPs();
         $this->template->blockedIPs = $blockedIPs;
 
-        // ✅ ZÁKLADNÍ: Nejčastější typy blokování (bez tenant statistik)
+        // ✅ Nejčastější typy blokování
         $blockTypes = $this->getBasicBlockTypes();
         $this->template->blockTypes = $blockTypes;
 
-        // ✅ PŘIPRAVENO: Prázdné pole pro tenant data (implementujeme v příštím kroku)
-        $this->template->tenantStats = [];
-        $this->template->topAttackingIPs = [];
+        // ✅ Aktuální IP uživatele
+        $this->template->currentIP = $this->getRateLimiter()->getClientIP();
     }
 
     /**
@@ -118,12 +117,11 @@ class SecurityPresenter extends BasePresenter
     private function getBasicRateLimitStatistics(): array
     {
         try {
-            // ✅ NOVÉ: Určení tenant kontextu
+            // ✅ Určení tenant kontextu
             $tenantId = $this->isSuperAdmin() ? null : $this->getCurrentTenantId();
-            
-            // ✅ NOVÉ: Použití RateLimiter metody s tenant podporou
-            return $this->getRateLimiter()->getStatistics($tenantId);
 
+            // ✅ Použití RateLimiter metody s tenant podporou
+            return $this->getRateLimiter()->getStatistics($tenantId);
         } catch (\Exception $e) {
             // Pokud tabulky neexistují, vrátíme výchozí hodnoty
             return [
@@ -144,10 +142,9 @@ class SecurityPresenter extends BasePresenter
         try {
             $query = $this->database->table('rate_limit_blocks')
                 ->where('blocked_until > ?', new \DateTime())
-                ->order('blocked_until DESC')
-                ->limit(50);
+                ->order('blocked_until DESC');
 
-            // ✅ NOVÉ: Filtrování podle tenanta pro normální adminy
+            // ✅ Tenant filtrace pro normálního admina
             if (!$this->isSuperAdmin()) {
                 $tenantId = $this->getCurrentTenantId();
                 if ($tenantId) {
@@ -155,9 +152,9 @@ class SecurityPresenter extends BasePresenter
                 }
             }
 
-            return $query->fetchAll();
-
+            return iterator_to_array($query);
         } catch (\Exception $e) {
+            // Pokud tabulka neexistuje, vrátíme prázdné pole
             return [];
         }
     }
@@ -168,28 +165,23 @@ class SecurityPresenter extends BasePresenter
     private function getBasicBlockTypes(): array
     {
         try {
-            $query = 'SELECT 
-                        action as action,
-                        COUNT(*) as count,
-                        COUNT(DISTINCT ip_address) as unique_ips
-                      FROM rate_limit_blocks 
-                      WHERE created_at > ?';
-            
-            $params = [new \DateTime('-7 days')];
+            $query = "SELECT action, COUNT(*) as total_blocks 
+                 FROM rate_limit_blocks 
+                 WHERE created_at > ? AND blocked_until > ?";
+            $params = [new \DateTime('-24 hours'), new \DateTime()];
 
-            // ✅ NOVÉ: Filtrování podle tenanta pro normální adminy
             if (!$this->isSuperAdmin()) {
                 $tenantId = $this->getCurrentTenantId();
                 if ($tenantId) {
-                    $query .= ' AND tenant_id = ?';
+                    $query .= " AND tenant_id = ?";
                     $params[] = $tenantId;
                 }
             }
 
-            $query .= ' GROUP BY action ORDER BY count DESC';
+            $query .= " GROUP BY action ORDER BY total_blocks DESC LIMIT 10";
 
-            return $this->database->query($query, ...$params)->fetchAll();
-
+            $result = $this->database->query($query, ...$params)->fetchAll();
+            return iterator_to_array($result);
         } catch (\Exception $e) {
             return [];
         }
@@ -229,17 +221,17 @@ class SecurityPresenter extends BasePresenter
                     ->where('event_type', 'login_attempt')
                     ->where('created_at > ?', new \DateTime('today'))
                     ->count(),
-                    
+
                 'failed_logins_today' => $this->database->table('security_logs')
                     ->where('event_type', 'login_failure')
                     ->where('created_at > ?', new \DateTime('today'))
                     ->count(),
-                    
+
                 'xss_attempts_today' => $this->database->table('security_logs')
                     ->where('event_type', 'xss_attempt')
                     ->where('created_at > ?', new \DateTime('today'))
                     ->count(),
-                    
+
                 'rate_limit_blocks_today' => $this->getSafeRateLimitCount(),
             ];
         } catch (\Exception $e) {
@@ -290,75 +282,211 @@ class SecurityPresenter extends BasePresenter
      * ✅ AKTUALIZACE: handleClearRateLimit() - s tenant podporou
      */
     public function handleClearRateLimit(): void
-    {
+    {    
+        // Kontrola oprávnění
         if (!$this->isAdmin() && !$this->isSuperAdmin()) {
-            $this->sendJson(['success' => false, 'error' => 'Nedostatečná oprávnění']);
-            return;
+            if ($this->isAjax()) {
+                $this->sendJson([
+                    'success' => false,
+                    'error' => 'Nemáte oprávnění k této akci.'
+                ]);
+                return;
+            }
+
+            $this->flashMessage('Nemáte oprávnění k této akci.', 'danger');
+            $this->redirect('this');
         }
 
-        $ip = $this->getParameter('ip');
-        
         try {
+            $ip = $this->getParameter('ip');
+            $adminName = $this->getUser()->getIdentity()->username;
+            $tenantId = $this->isSuperAdmin() ? null : $this->getCurrentTenantId();
+
             if ($ip) {
-                // ✅ NOVÉ: Určení tenant kontextu
-                $tenantId = $this->isSuperAdmin() ? null : $this->getCurrentTenantId();
-                
-                // ✅ NOVÉ: Použití RateLimiter metody s tenant podporou
-                $adminName = $this->getUser()->getIdentity()->username;
+                // Vymazání konkrétní IP adresy
                 $adminNote = "Vymazáno administrátorem {$adminName}";
-                
+
                 if ($this->getRateLimiter()->clearBlocking($ip, $adminNote, $tenantId)) {
-                    $tenantInfo = $tenantId ? " (tenant: {$tenantId})" : " (všichni tenanti)";
-                    $this->sendJson([
-                        'success' => true,
-                        'message' => "Rate limit pro IP {$ip} byl vyčištěn{$tenantInfo}"
-                    ]);
+                    $tenantInfo = $tenantId ? " (tenant {$tenantId})" : " (všechny tenants)";
+
+                    $this->securityLogger->logSecurityEvent(
+                        'rate_limit_ip_cleared',
+                        "IP {$ip} odblokována administrátorem {$adminName}{$tenantInfo}"
+                    );
+
+                    $message = "Rate limiting vymazán pro IP: {$ip}";
+
+                    if ($this->isAjax()) {
+                        $this->sendJson([
+                            'success' => true,
+                            'message' => $message
+                        ]);
+                        return;
+                    }
+
+                    $this->flashMessage($message, 'success');
                 } else {
-                    $this->sendJson([
-                        'success' => false,
-                        'error' => 'Chyba při mazání rate limitingu'
-                    ]);
+                    $errorMessage = "Chyba při mazání rate limitingu pro IP: {$ip}";
+
+                    if ($this->isAjax()) {
+                        $this->sendJson([
+                            'success' => false,
+                            'error' => $errorMessage
+                        ]);
+                        return;
+                    }
+
+                    $this->flashMessage($errorMessage, 'danger');
                 }
             } else {
-                // ✅ OMEZENÍ: Vyčištění všech starých záznamů pouze pro super admina
-                if (!$this->isSuperAdmin()) {
+                // Vymazání expirovaných záznamů
+                $now = new \DateTime();
+
+                // Smazání expirovaných bloků
+                $blocksQuery = $this->database->table('rate_limit_blocks')
+                    ->where('blocked_until < ?', $now);
+
+                if (!$this->isSuperAdmin() && $tenantId) {
+                    $blocksQuery->where('tenant_id', $tenantId);
+                }
+
+                $deletedExpired = $blocksQuery->delete();
+
+                // Smazání starých pokusů (starší než 24 hodin)
+                $attemptsQuery = $this->database->table('rate_limits')
+                    ->where('created_at < ?', new \DateTime('-24 hours'));
+
+                if (!$this->isSuperAdmin() && $tenantId) {
+                    $attemptsQuery->where('tenant_id', $tenantId);
+                }
+
+                $deletedOldAttempts = $attemptsQuery->delete();
+
+                $tenantInfo = $tenantId ? " (tenant {$tenantId})" : " (všechny tenants)";
+
+                $this->securityLogger->logSecurityEvent(
+                    'expired_rate_limits_cleared',
+                    "Expirované rate limity vymazány administrátorem {$adminName}{$tenantInfo}. Bloky: {$deletedExpired}, Staré pokusy: {$deletedOldAttempts}"
+                );
+
+                $message = "Expirované záznamy vymazány. Bloky: {$deletedExpired}, Staré pokusy: {$deletedOldAttempts}";
+
+                if ($this->isAjax()) {
                     $this->sendJson([
-                        'success' => false, 
-                        'error' => 'Vyčištění všech záznamů je povoleno pouze super adminovi'
+                        'success' => true,
+                        'message' => $message
                     ]);
                     return;
                 }
 
-                // ✅ NOVÉ: Vyčištění všech expirovaných záznamů
-                $deletedBlocks = $this->database->table('rate_limit_blocks')
-                    ->where('blocked_until < ?', new \DateTime())
-                    ->delete();
+                $this->flashMessage($message, 'success');
+            }
+        } catch (\Exception $e) {
+            $errorMessage = 'Chyba při mazání rate limitingu: ' . $e->getMessage();
 
-                $deletedAttempts = $this->database->table('rate_limits')
-                    ->where('created_at < ?', new \DateTime('-24 hours'))
-                    ->delete();
-                    
-                $this->securityLogger->logSecurityEvent(
-                    'rate_limit_cleanup',
-                    "Vyčištěny staré rate limit záznamy (super adminem)",
-                    [
-                        'deleted_blocks' => $deletedBlocks,
-                        'deleted_attempts' => $deletedAttempts,
-                        'admin_user_id' => $this->getUser()->getId()
-                    ]
-                );
-                
+            // Logování chyby
+            $this->securityLogger->logSecurityEvent(
+                'rate_limit_clear_error',
+                "Chyba při mazání rate limitingu: " . $e->getMessage(),
+                [
+                    'admin_id' => $this->getUser()->getId(),
+                    'ip_parameter' => $this->getParameter('ip'),
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]
+            );
+
+            if ($this->isAjax()) {
                 $this->sendJson([
-                    'success' => true,
-                    'message' => "Vyčištěno {$deletedBlocks} bloků a {$deletedAttempts} pokusů"
+                    'success' => false,
+                    'error' => $errorMessage
                 ]);
+                return;
             }
 
+            $this->flashMessage($errorMessage, 'danger');
+        }
+
+        // Pokud není AJAX, přesměruj
+        if (!$this->isAjax()) {
+            $this->redirect('this');
+        }
+    }
+
+    /**
+     * ✅ NOVÁ: handleClearAllRateLimits() - kompletně vymaže všechny rate limity
+     */
+    public function handleClearAllRateLimits(): void
+    {
+        // Kontrola oprávnění - pouze super admin
+        if (!$this->isSuperAdmin()) {
+            if ($this->isAjax()) {
+                $this->sendJson([
+                    'success' => false,
+                    'error' => 'Nemáte oprávnění k této akci. Vyžaduje se Super Admin.'
+                ]);
+                return;
+            }
+
+            $this->flashMessage('Nemáte oprávnění k této akci. Vyžaduje se Super Admin.', 'danger');
+            $this->redirect('this');
+        }
+
+        try {
+            // Vymazání všech rate limit záznamů
+            $deletedBlocks = $this->database->table('rate_limit_blocks')->delete();
+            $deletedAttempts = $this->database->table('rate_limits')->delete();
+
+            // Vymazání přihlašovacích pokusů pro důkladné vyčištění
+            $deletedLoginAttempts = $this->database->table('login_attempts')->delete();
+
+            $adminName = $this->getUser()->getIdentity()->username;
+            $this->securityLogger->logSecurityEvent(
+                'all_rate_limits_cleared',
+                "Všechny rate limity vymazány super adminem {$adminName}. Bloky: {$deletedBlocks}, Pokusy: {$deletedAttempts}, Login pokusy: {$deletedLoginAttempts}"
+            );
+
+            $message = "⚠️ Všechny rate limity vymazány! Bloky: {$deletedBlocks}, Pokusy: {$deletedAttempts}, Login pokusy: {$deletedLoginAttempts}";
+
+            if ($this->isAjax()) {
+                $this->sendJson([
+                    'success' => true,
+                    'message' => $message
+                ]);
+                return;
+            }
+
+            $this->flashMessage($message, 'warning');
         } catch (\Exception $e) {
-            $this->sendJson([
-                'success' => false,
-                'error' => 'Chyba při čištění: ' . $e->getMessage()
-            ]);
+            $errorMessage = 'Chyba při mazání všech rate limitů: ' . $e->getMessage();
+
+            // Logování chyby
+            $this->securityLogger->logSecurityEvent(
+                'all_rate_limits_clear_error',
+                "Chyba při mazání všech rate limitů: " . $e->getMessage(),
+                [
+                    'admin_id' => $this->getUser()->getId(),
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]
+            );
+
+            if ($this->isAjax()) {
+                $this->sendJson([
+                    'success' => false,
+                    'error' => $errorMessage
+                ]);
+                return;
+            }
+
+            $this->flashMessage($errorMessage, 'danger');
+        }
+
+        // Pokud není AJAX, přesměruj
+        if (!$this->isAjax()) {
+            $this->redirect('this');
         }
     }
 
@@ -387,16 +515,14 @@ class SecurityPresenter extends BasePresenter
             // Spuštění SQL auditu
             $auditResults = $this->sqlAudit->runFullAudit();
             $processedResults = $this->processAuditResults($auditResults);
-            
+
             $this->sendJson([
                 'success' => true,
                 'results' => $processedResults
             ]);
-            
         } catch (\Nette\Application\AbortException $e) {
             // ✅ AbortException je NORMÁLNÍ - jen ji přehodíme
             throw $e;
-            
         } catch (\Exception $e) {
             // ✅ Zachycujeme jen skutečné chyby
             $this->securityLogger->logSecurityEvent(
@@ -425,9 +551,9 @@ class SecurityPresenter extends BasePresenter
         $totalQueries = count($results['safe_queries']) + count($results['potential_issues']);
         $safeCount = count($results['safe_queries']);
         $issueCount = count($results['potential_issues']);
-        
+
         $safetyPercentage = $totalQueries > 0 ? round(($safeCount / $totalQueries) * 100, 1) : 100;
-        
+
         // Určení celkového statusu
         $overallStatus = 'EXCELLENT';
         if ($safetyPercentage < 100) {
@@ -467,10 +593,10 @@ class SecurityPresenter extends BasePresenter
     private function generateRecommendations(array $results): array
     {
         $recommendations = [];
-        
+
         $issueCount = count($results['potential_issues']);
         $totalQueries = count($results['safe_queries']) + $issueCount;
-        
+
         if ($issueCount === 0) {
             $recommendations[] = 'Výborná bezpečnost! Nebyly nalezeny žádné potenciální bezpečnostní problémy v SQL dotazech.';
         } else {

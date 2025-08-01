@@ -1,11 +1,14 @@
 /**
  * Rate Limit Statistics - JavaScript funkcionalita
  * Fakturační systém - Security modul
+ * Barvy: primární #B1D235, sekundární #95B11F, šedá #6c757d, černá #212529
  */
 
 document.addEventListener('DOMContentLoaded', function() {
     const clearExpiredBtn = document.getElementById('clearExpiredBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
     const loadingIndicator = document.getElementById('loadingIndicator');
+    const loadingText = document.getElementById('loadingText');
     const clearBlockBtns = document.querySelectorAll('.clear-block-btn');
     
     // Zkontroluj zda elementy existují
@@ -19,12 +22,22 @@ document.addEventListener('DOMContentLoaded', function() {
         clearExpiredRateLimits();
     });
     
+    // Event listener pro vyčištění všech záznamů
+    if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', function() {
+            clearAllRateLimits();
+        });
+    }
+    
     // Event listenery pro odblokování konkrétních IP adres
     clearBlockBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             const ip = this.getAttribute('data-ip');
-            if (ip) {
-                clearSpecificIPBlock(ip);
+            const url = this.getAttribute('data-url');
+            if (ip && url) {
+                clearSpecificIPBlock(ip, url);
+            } else {
+                console.error('Chybí data-ip nebo data-url atribut na tlačítku');
             }
         });
     });
@@ -41,15 +54,27 @@ document.addEventListener('DOMContentLoaded', function() {
         
         showLoading('Čistím expirované záznamy...');
         
-        // Získej URL z Nette linkingu
-        const url = generateClearRateLimitUrl();
+        // Získáme URL z data-url atributu tlačítka
+        const url = clearExpiredBtn.getAttribute('data-url');
+        
+        if (!url) {
+            hideLoading();
+            showErrorMessage('❌ Chyba: URL pro clearing není definované');
+            return;
+        }
+        
+        // Vytvoř FormData s CSRF tokenem
+        const formData = new FormData();
+        if (window.csrfToken) {
+            formData.append('_csrf_token', window.csrfToken);
+        }
         
         fetch(url, {
             method: 'POST',
             headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/json'
-            }
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
         })
         .then(response => {
             if (!response.ok) {
@@ -62,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (data.success) {
                 showSuccessMessage('✅ ' + data.message);
-                setTimeout(() => location.reload(), 1000); // Obnovíme stránku po 1 sekundě
+                setTimeout(() => location.reload(), 1000);
             } else {
                 showErrorMessage('❌ Chyba: ' + (data.error || 'Neznámá chyba'));
             }
@@ -75,27 +100,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     /**
-     * Odblokuje konkrétní IP adresu
-     * @param {string} ip - IP adresa k odblokování
+     * Vyčistí všechny rate limit záznamy
      */
-    function clearSpecificIPBlock(ip) {
-        const confirmed = confirm(`Opravdu chcete odblokovat IP adresu ${ip}?`);
+    function clearAllRateLimits() {
+        const confirmed = confirm('⚠️ POZOR! Tato akce vymaže VŠECHNY rate limit záznamy!\n\nOpravdu chcete pokračovat?');
         
         if (!confirmed) {
             return;
         }
         
-        showLoading(`Odblokovávám IP ${ip}...`);
+        showLoading('Mažu všechny rate limit záznamy...');
         
-        // Získej URL s parametrem IP
-        const url = generateClearRateLimitUrl() + '?ip=' + encodeURIComponent(ip);
+        // Získáme URL z data-url atributu tlačítka
+        const url = clearAllBtn.getAttribute('data-url');
+        
+        if (!url) {
+            hideLoading();
+            showErrorMessage('❌ Chyba: URL pro clearing není definované');
+            return;
+        }
+        
+        // Vytvoř FormData s CSRF tokenem
+        const formData = new FormData();
+        if (window.csrfToken) {
+            formData.append('_csrf_token', window.csrfToken);
+        }
         
         fetch(url, {
             method: 'POST',
             headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/json'
-            }
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
         })
         .then(response => {
             if (!response.ok) {
@@ -108,7 +144,60 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (data.success) {
                 showSuccessMessage('✅ ' + data.message);
-                setTimeout(() => location.reload(), 1000); // Obnovíme stránku po 1 sekundě
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showErrorMessage('❌ Chyba: ' + (data.error || 'Neznámá chyba'));
+            }
+        })
+        .catch(error => {
+            console.error('Clear All Rate Limits Error:', error);
+            hideLoading();
+            showErrorMessage('❌ Nastala chyba při komunikaci se serverem: ' + error.message);
+        });
+    }
+    
+    /**
+     * Odblokuje konkrétní IP adresu
+     * @param {string} ip - IP adresa k odblokování
+     * @param {string} url - URL pro odblokování
+     */
+    function clearSpecificIPBlock(ip, url) {
+        const confirmed = confirm(`Opravdu chcete odblokovat IP adresu ${ip}?`);
+        
+        if (!confirmed) {
+            return;
+        }
+        
+        showLoading(`Odblokovávám IP ${ip}...`);
+        
+        // Přidáme IP parametr k URL
+        const fullUrl = url + (url.includes('?') ? '&' : '?') + 'ip=' + encodeURIComponent(ip);
+        
+        // Vytvoř FormData s CSRF tokenem
+        const formData = new FormData();
+        if (window.csrfToken) {
+            formData.append('_csrf_token', window.csrfToken);
+        }
+        
+        fetch(fullUrl, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            hideLoading();
+            
+            if (data.success) {
+                showSuccessMessage('✅ ' + data.message);
+                setTimeout(() => location.reload(), 1000);
             } else {
                 showErrorMessage('❌ Chyba: ' + (data.error || 'Neznámá chyba'));
             }
@@ -121,42 +210,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     /**
-     * Generuje URL pro clearRateLimit akci
-     * Fallback pokud Nette linking nefunguje
-     * @returns {string}
-     */
-    function generateClearRateLimitUrl() {
-        // Zkusíme najít URL z nějakého linku na stránce
-        // Fallback: sestavíme URL manuálně
-        const currentUrl = window.location.href;
-        const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-        
-        // Pokud jsme na /Security/rateLimitStats, přidáme clearRateLimit action
-        if (currentUrl.includes('rateLimitStats')) {
-            return baseUrl.replace('rateLimitStats', 'clearRateLimit');
-        }
-        
-        // Fallback URL
-        return baseUrl + '/clearRateLimit';
-    }
-    
-    /**
      * Zobrazí loading indikátor
      * @param {string} message - Zpráva k zobrazení
      */
-    function showLoading(message = 'Zpracování...') {
-        if (loadingIndicator) {
-            // Aktualizuj zprávu
-            const messageElement = loadingIndicator.querySelector('.security-loading-content p');
-            if (messageElement) {
-                messageElement.textContent = message;
-            }
-            
-            loadingIndicator.style.display = 'block';
+    function showLoading(message) {
+        if (loadingIndicator && loadingText) {
+            loadingText.textContent = message;
+            loadingIndicator.classList.remove('d-none');
         }
         
-        // Zakázat všechna tlačítka
-        disableAllButtons();
+        // Deaktivuj všechna tlačítka
+        clearExpiredBtn.disabled = true;
+        if (clearAllBtn) clearAllBtn.disabled = true;
+        clearBlockBtns.forEach(btn => btn.disabled = true);
     }
     
     /**
@@ -164,104 +230,99 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     function hideLoading() {
         if (loadingIndicator) {
-            loadingIndicator.style.display = 'none';
+            loadingIndicator.classList.add('d-none');
         }
         
-        // Povolit všechna tlačítka
-        enableAllButtons();
-    }
-    
-    /**
-     * Zakáže všechna tlačítka na stránce
-     */
-    function disableAllButtons() {
-        document.querySelectorAll('button').forEach(btn => {
-            btn.disabled = true;
-            btn.classList.add('disabled');
-        });
-        
-        document.querySelectorAll('a.btn').forEach(btn => {
-            btn.classList.add('disabled');
-            btn.style.pointerEvents = 'none';
-        });
-    }
-    
-    /**
-     * Povolí všechna tlačítka na stránce
-     */
-    function enableAllButtons() {
-        document.querySelectorAll('button').forEach(btn => {
-            btn.disabled = false;
-            btn.classList.remove('disabled');
-        });
-        
-        document.querySelectorAll('a.btn').forEach(btn => {
-            btn.classList.remove('disabled');
-            btn.style.pointerEvents = '';
-        });
+        // Aktivuj všechna tlačítka
+        clearExpiredBtn.disabled = false;
+        if (clearAllBtn) clearAllBtn.disabled = false;
+        clearBlockBtns.forEach(btn => btn.disabled = false);
     }
     
     /**
      * Zobrazí úspěšnou zprávu
-     * @param {string} message 
+     * @param {string} message - Zpráva k zobrazení
      */
     function showSuccessMessage(message) {
-        // Pro jednoduchost používáme alert, ale lze rozšířit o toast notifikace
-        alert(message);
+        // Vytvoříme dočasné upozornění
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-success alert-dismissible fade show position-fixed';
+        alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        alert.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(alert);
+        
+        // Automatické odstranění po 5 sekundách
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 5000);
     }
     
     /**
      * Zobrazí chybovou zprávu
-     * @param {string} message 
+     * @param {string} message - Zpráva k zobrazení
      */
     function showErrorMessage(message) {
-        // Pro jednoduchost používáme alert, ale lze rozšířit o toast notifikace
-        alert(message);
+        // Vytvoříme dočasné upozornění
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-danger alert-dismissible fade show position-fixed';
+        alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        alert.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(alert);
+        
+        // Automatické odstranění po 8 sekundách (déle pro chyby)
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 8000);
     }
     
     /**
-     * Refresh stránky s animací
+     * Zobrazí obecnou zprávu
+     * @param {string} message - Zpráva k zobrazení
+     * @param {string} type - Typ zprávy (success, danger, warning, info)
      */
-    function refreshPageWithAnimation() {
-        // Přidat fade out efekt před refresh
-        document.body.style.opacity = '0.7';
-        document.body.style.transition = 'opacity 0.3s ease';
+    function showMessage(message, type = 'info') {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        alert.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(alert);
         
         setTimeout(() => {
-            location.reload();
-        }, 300);
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 5000);
     }
-    
-    // Periodické obnovení statistik (každých 30 sekund)
-    // Pouze pokud není aktivní loading
-    setInterval(() => {
-        if (!loadingIndicator || loadingIndicator.style.display === 'none') {
-            // Tichá aktualizace statistik bez full refresh
-            updateStatisticsQuietly();
-        }
-    }, 30000); // 30 sekund
-    
-    /**
-     * Tichá aktualizace statistik bez reload stránky
-     */
-    function updateStatisticsQuietly() {
-        // Tuto funkcionalitu lze implementovat později
-        // Pro teď pouze refresh stránky
-        console.log('Automatická aktualizace statistik...');
-    }
-    
-    // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        // Ctrl+R nebo F5 - refresh stránky
-        if ((e.ctrlKey && e.key === 'r') || e.key === 'F5') {
-            e.preventDefault();
-            refreshPageWithAnimation();
-        }
-        
-        // Escape - zrušit loading (pokud je možné)
-        if (e.key === 'Escape' && loadingIndicator && loadingIndicator.style.display !== 'none') {
-            // Můžeme přidat abort functionality později
-            console.log('Loading přerušen uživatelem');
-        }
-    });
 });
+
+/**
+ * Globální funkce pro debug a testing
+ */
+window.rateLimitStatsDebug = {
+    testNotification: function() {
+        document.dispatchEvent(new Event('DOMContentLoaded'));
+    },
+    
+    showTestMessage: function(message, type = 'info') {
+        const event = new CustomEvent('showMessage', {
+            detail: { message, type }
+        });
+        document.dispatchEvent(event);
+    }
+};

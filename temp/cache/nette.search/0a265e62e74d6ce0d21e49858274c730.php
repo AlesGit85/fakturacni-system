@@ -110,7 +110,7 @@ return array (
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1753427326,
+      1 => 1753962214,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -130,7 +130,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1753103423,
+      1 => 1753962179,
     ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (
@@ -145,17 +145,17 @@ return array (
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
-      1 => 1753883462,
+      1 => 1754028162,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1753091231,
+      1 => 1753962255,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1753883527,
+      1 => 1753961845,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
@@ -165,7 +165,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1753259259,
+      1 => 1754027365,
     ),
     'App\\Security\\AntiSpam' => 
     array (
@@ -175,7 +175,7 @@ return array (
     'App\\Security\\RateLimiter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiter.php',
-      1 => 1753255786,
+      1 => 1753964343,
     ),
     'App\\Security\\RateLimiterCleaner' => 
     array (
