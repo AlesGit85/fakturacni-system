@@ -78,3 +78,8 @@
 [2025-08-11 13-22-35] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats?do=clearRateLimit&ip=%3A%3A1 
 [2025-08-11 13-22-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
 [2025-08-11 13-22-36] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 14-04-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-11 14-04-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=vy1xg&_fid=mwyf 
+[2025-08-11 14-04-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-11 14-04-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=mxvp 

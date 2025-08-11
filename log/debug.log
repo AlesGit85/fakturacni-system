@@ -198,3 +198,18 @@
 [2025-08-11 13-22-36] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
 [2025-08-11 13-22-36] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
 [2025-08-11 13-22-36] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 14-04-06] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?backlink=vy1xg&_fid=mwyf 
+[2025-08-11 14-04-10] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Module info úspěšně načteno pro test_module  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=mxvp 
+[2025-08-11 14-04-10] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/?_fid=mxvp 
