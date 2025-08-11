@@ -5,7 +5,7 @@ return array (
     'App\\Bootstrap' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Bootstrap.php',
-      1 => 1749210801,
+      1 => 1754922084,
     ),
     'App\\Core\\RouterFactory' => 
     array (
@@ -45,7 +45,7 @@ return array (
     'App\\Model\\ModuleManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ModuleManager.php',
-      1 => 1752218465,
+      1 => 1754922344,
     ),
     'App\\Model\\QrPaymentService' => 
     array (
@@ -105,7 +105,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1753878789,
+      1 => 1754922229,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -145,12 +145,12 @@ return array (
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
-      1 => 1754031862,
+      1 => 1754918531,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1753962255,
+      1 => 1754922438,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
@@ -165,7 +165,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1754897156,
+      1 => 1754897779,
     ),
     'App\\Security\\AntiSpam' => 
     array (
@@ -175,7 +175,7 @@ return array (
     'App\\Security\\RateLimiter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiter.php',
-      1 => 1753964343,
+      1 => 1754898102,
     ),
     'App\\Security\\RateLimiterCleaner' => 
     array (
@@ -205,16 +205,29 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 1,
-    'null' => 1,
+    'Nette\\Bridges\\Assets\\DIExtension' => 3,
+    'null' => 3,
     'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 3,
     'App\\Presentation\\Security\\SecurityTemplate' => 3,
     'App\\Presentation\\Sign\\SignInTemplate' => 3,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 2,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 3,
     'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 2,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 2,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 1,
+    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 1,
+    'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 1,
+    'App\\Presentation\\Security\\SecurityDefaultTemplate' => 1,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 2,
   ),
   2 => 
   array (

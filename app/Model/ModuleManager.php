@@ -52,7 +52,7 @@ class ModuleManager
         $this->database = $database;
         $this->baseModulesDir = dirname(__DIR__) . '/Modules';
         $this->uploadsDir = dirname(__DIR__, 2) . '/temp/module_uploads';
-        $this->baseWwwModulesDir = dirname(__DIR__, 2) . '/www/Modules';
+        $this->baseWwwModulesDir = dirname(__DIR__, 2) . '/web/Modules';
         
         // Vytvoření základních adresářů
         if (!is_dir($this->baseModulesDir)) {

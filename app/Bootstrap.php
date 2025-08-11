@@ -34,9 +34,9 @@ class Bootstrap
 
         // Vytvoření složky pro přístup k assets modulů
         $modulesDir = __DIR__ . '/Modules';
-        $wwwModulesDir = dirname(__DIR__) . '/www/Modules';
+        $webModulesDir = dirname(__DIR__) . '/web/Modules';
 
-        if (!is_dir($wwwModulesDir)) {
+        if (!is_dir($webModulesDir)) {
             if (!is_dir($modulesDir)) {
                 mkdir($modulesDir, 0755, true);
             }
@@ -44,10 +44,10 @@ class Bootstrap
             // Na Windows můžeme potřebovat kopírovat místo symlinku
             if (PHP_OS_FAMILY === 'Windows') {
                 // Vytvoříme pouze prázdný adresář, který bude později naplněn
-                mkdir($wwwModulesDir, 0755, true);
+                mkdir($webModulesDir, 0755, true);
             } else {
                 // Na Linuxu/macOS můžeme použít symlink
-                symlink($modulesDir, $wwwModulesDir);
+                symlink($modulesDir, $webModulesDir);
             }
         }
 

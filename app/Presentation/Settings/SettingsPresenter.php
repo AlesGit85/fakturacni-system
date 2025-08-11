@@ -419,7 +419,7 @@ class SettingsPresenter extends BasePresenter
         $originalName = SecurityValidator::sanitizeString($file->getName());
 
         // Vytvoření upload adresáře, pokud neexistuje
-        $uploadDir = WWW_DIR . '/www/uploads/' . $type;
+        $uploadDir = WWW_DIR . '/web/uploads/' . $type;
         
         if (!is_dir($uploadDir)) {
             if (!mkdir($uploadDir, 0755, true)) {

@@ -1572,7 +1572,7 @@ abstract class BasePresenter extends Presenter
      * @param string $errorMessage Zpráva při chybě (volitelné)
      * @return bool True pokud je AJAX (a už byla odeslána odpověď), False pokud pokračovat s non-AJAX
      */
-    protected function handleAjaxResponse(string $successMessage, string $errorMessage = ''): bool
+    public function handleAjaxResponse(string $successMessage, string $errorMessage = ''): bool
     {
         if ($this->isAjax()) {
             if ($errorMessage) {
