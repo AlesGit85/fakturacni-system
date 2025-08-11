@@ -1,150 +1,200 @@
-[2025-08-01 06-28-28] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-28-28] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-29-19] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-32-27] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-34] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?backlink=2mobe&_fid=5x4h 
-[2025-08-01 06-54-36] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Module info úspěšně načteno pro test_module  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-36] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/?_fid=1akk 
-[2025-08-01 06-54-39] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-54-39] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-56-10] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-32] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-57-39] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=r8fr 
-[2025-08-01 06-57-40] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
-[2025-08-01 06-57-41] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
-[2025-08-01 06-57-41] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
-[2025-08-01 06-57-41] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
-[2025-08-01 06-57-47] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=xckt 
-[2025-08-01 06-57-51] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=61xq 
-[2025-08-01 06-57-55] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=q251 
-[2025-08-01 06-57-58] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
-[2025-08-01 06-58-04] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Module info úspěšně načteno pro test_module  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-04] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/?_fid=4wgl 
-[2025-08-01 06-58-09] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-58-09] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
-[2025-08-01 06-59-08] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-55-40] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-56-35] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-53] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-57-56] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 12-57-56] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 12-57-57] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 12-57-57] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 12-58-00] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=bg6q 
+[2025-08-11 12-58-04] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=zc1p 
+[2025-08-11 12-58-06] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=1q7n 
+[2025-08-11 12-58-13] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 12-58-16] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-58-16] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-39] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 12-59-43] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 12-59-43] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 12-59-44] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 12-59-44] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 12-59-49] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=xyp0 
+[2025-08-11 12-59-52] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=yb6z 
+[2025-08-11 12-59-54] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=ci1b 
+[2025-08-11 13-00-01] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 13-00-03] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-03] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-00-17] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-03-50] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 13-03-50] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 13-03-50] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 13-03-50] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 13-03-54] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=sutm 
+[2025-08-11 13-03-57] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=4mda 
+[2025-08-11 13-04-01] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=l065 
+[2025-08-11 13-04-04] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 13-04-09] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-09] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-04-13] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-13] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-16] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 13-22-16] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 13-22-16] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 13-22-16] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 13-22-19] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=wpf9 
+[2025-08-11 13-22-22] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=zmv8 
+[2025-08-11 13-22-26] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=khws 
+[2025-08-11 13-22-29] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-08-11 13-22-32] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-32] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] === KONEC: Uživatel 1 má 2 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-11 13-22-36] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/security/rate-limit-stats 

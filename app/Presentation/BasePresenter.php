@@ -1482,4 +1482,107 @@ abstract class BasePresenter extends Presenter
     {
         return $this->spamAttempts;
     }
+
+    // =====================================================
+    // ✅ NOVÉ: Clean AJAX Response Helper Metody
+    // =====================================================
+
+    /**
+     * ✅ NOVÉ: Bezpečné odeslání JSON odpovědi s čištěním output bufferu
+     * Řeší problémy s Tracy debuggerem a dalšími systémy, které kontaminují output buffer
+     */
+    protected function sendCleanJson(array $data): void
+    {
+        // Vyčištění všech output bufferů (Tracy, PHP output buffering, atd.)
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        // Nastavení správných headers pro JSON
+        header('Content-Type: application/json; charset=utf-8');
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        // Odeslání JSON odpovědi s UTF-8 podporou
+        echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        exit;
+    }
+
+    /**
+     * ✅ NOVÉ: Zkratka pro úspěšné AJAX odpovědi
+     * 
+     * @param string $message Zpráva pro uživatele
+     * @param array $data Dodatečná data (volitelné)
+     */
+    protected function sendSuccess(string $message, array $data = []): void
+    {
+        $response = array_merge([
+            'success' => true,
+            'message' => $message,
+            'timestamp' => date('Y-m-d H:i:s')
+        ], $data);
+
+        $this->sendCleanJson($response);
+    }
+
+    /**
+     * ✅ NOVÉ: Zkratka pro chybové AJAX odpovědi
+     * 
+     * @param string $error Chybová zpráva pro uživatele
+     * @param array $data Dodatečná data (volitelné)
+     */
+    protected function sendError(string $error, array $data = []): void
+    {
+        $response = array_merge([
+            'success' => false,
+            'error' => $error,
+            'timestamp' => date('Y-m-d H:i:s')
+        ], $data);
+
+        $this->sendCleanJson($response);
+    }
+
+    /**
+     * ✅ NOVÉ: Zkratka pro AJAX odpovědi s přesměrováním
+     * 
+     * @param string $message Zpráva pro uživatele
+     * @param string $redirectUrl URL pro přesměrování (volitelné)
+     */
+    protected function sendSuccessWithRedirect(string $message, string $redirectUrl = ''): void
+    {
+        $data = [
+            'success' => true,
+            'message' => $message,
+            'redirect' => true,
+            'timestamp' => date('Y-m-d H:i:s')
+        ];
+
+        if ($redirectUrl) {
+            $data['redirect_url'] = $redirectUrl;
+        }
+
+        $this->sendCleanJson($data);
+    }
+
+    /**
+     * ✅ NOVÉ: Helper pro kontrolu AJAX požadavku s automatickou odpovědí
+     * 
+     * @param string $successMessage Zpráva při úspěchu
+     * @param string $errorMessage Zpráva při chybě (volitelné)
+     * @return bool True pokud je AJAX (a už byla odeslána odpověď), False pokud pokračovat s non-AJAX
+     */
+    protected function handleAjaxResponse(string $successMessage, string $errorMessage = ''): bool
+    {
+        if ($this->isAjax()) {
+            if ($errorMessage) {
+                $this->sendError($errorMessage);
+            } else {
+                $this->sendSuccess($successMessage);
+            }
+            return true; // AJAX zpracován
+        }
+
+        return false; // Pokračuj s non-AJAX logikou
+    }
 }

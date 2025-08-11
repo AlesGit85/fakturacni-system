@@ -282,19 +282,15 @@ class SecurityPresenter extends BasePresenter
      * ✅ AKTUALIZACE: handleClearRateLimit() - s tenant podporou
      */
     public function handleClearRateLimit(): void
-    {    
+    {
         // Kontrola oprávnění
         if (!$this->isAdmin() && !$this->isSuperAdmin()) {
             if ($this->isAjax()) {
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Nemáte oprávnění k této akci.'
-                ]);
-                return;
+                $this->sendError('Nemáte oprávnění k této akci.');
             }
-
             $this->flashMessage('Nemáte oprávnění k této akci.', 'danger');
             $this->redirect('this');
+            return;
         }
 
         try {
@@ -303,7 +299,6 @@ class SecurityPresenter extends BasePresenter
             $tenantId = $this->isSuperAdmin() ? null : $this->getCurrentTenantId();
 
             if ($ip) {
-                // Vymazání konkrétní IP adresy
                 $adminNote = "Vymazáno administrátorem {$adminName}";
 
                 if ($this->getRateLimiter()->clearBlocking($ip, $adminNote, $tenantId)) {
@@ -314,103 +309,37 @@ class SecurityPresenter extends BasePresenter
                         "IP {$ip} odblokována administrátorem {$adminName}{$tenantInfo}"
                     );
 
-                    $message = "Rate limiting vymazán pro IP: {$ip}";
+                    $message = "Rate limiting úspěšně vymazán pro IP: {$ip}";
 
                     if ($this->isAjax()) {
-                        $this->sendJson([
-                            'success' => true,
-                            'message' => $message
-                        ]);
-                        return;
+                        $this->sendSuccess($message);
                     }
 
                     $this->flashMessage($message, 'success');
+                    $this->redirect('this');
+                    return;
                 } else {
-                    $errorMessage = "Chyba při mazání rate limitingu pro IP: {$ip}";
+                    $errorMessage = "Rate limiting se nepodařilo vymazat pro IP: {$ip}";
 
                     if ($this->isAjax()) {
-                        $this->sendJson([
-                            'success' => false,
-                            'error' => $errorMessage
-                        ]);
-                        return;
+                        $this->sendError($errorMessage);
                     }
 
-                    $this->flashMessage($errorMessage, 'danger');
-                }
-            } else {
-                // Vymazání expirovaných záznamů
-                $now = new \DateTime();
-
-                // Smazání expirovaných bloků
-                $blocksQuery = $this->database->table('rate_limit_blocks')
-                    ->where('blocked_until < ?', $now);
-
-                if (!$this->isSuperAdmin() && $tenantId) {
-                    $blocksQuery->where('tenant_id', $tenantId);
-                }
-
-                $deletedExpired = $blocksQuery->delete();
-
-                // Smazání starých pokusů (starší než 24 hodin)
-                $attemptsQuery = $this->database->table('rate_limits')
-                    ->where('created_at < ?', new \DateTime('-24 hours'));
-
-                if (!$this->isSuperAdmin() && $tenantId) {
-                    $attemptsQuery->where('tenant_id', $tenantId);
-                }
-
-                $deletedOldAttempts = $attemptsQuery->delete();
-
-                $tenantInfo = $tenantId ? " (tenant {$tenantId})" : " (všechny tenants)";
-
-                $this->securityLogger->logSecurityEvent(
-                    'expired_rate_limits_cleared',
-                    "Expirované rate limity vymazány administrátorem {$adminName}{$tenantInfo}. Bloky: {$deletedExpired}, Staré pokusy: {$deletedOldAttempts}"
-                );
-
-                $message = "Expirované záznamy vymazány. Bloky: {$deletedExpired}, Staré pokusy: {$deletedOldAttempts}";
-
-                if ($this->isAjax()) {
-                    $this->sendJson([
-                        'success' => true,
-                        'message' => $message
-                    ]);
+                    $this->flashMessage($errorMessage, 'warning');
+                    $this->redirect('this');
                     return;
                 }
-
-                $this->flashMessage($message, 'success');
             }
         } catch (\Exception $e) {
             $errorMessage = 'Chyba při mazání rate limitingu: ' . $e->getMessage();
 
-            // Logování chyby
-            $this->securityLogger->logSecurityEvent(
-                'rate_limit_clear_error',
-                "Chyba při mazání rate limitingu: " . $e->getMessage(),
-                [
-                    'admin_id' => $this->getUser()->getId(),
-                    'ip_parameter' => $this->getParameter('ip'),
-                    'error' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine()
-                ]
-            );
-
             if ($this->isAjax()) {
-                $this->sendJson([
-                    'success' => false,
-                    'error' => $errorMessage
-                ]);
-                return;
+                $this->sendError($errorMessage);
             }
 
             $this->flashMessage($errorMessage, 'danger');
-        }
-
-        // Pokud není AJAX, přesměruj
-        if (!$this->isAjax()) {
             $this->redirect('this');
+            return;
         }
     }
 

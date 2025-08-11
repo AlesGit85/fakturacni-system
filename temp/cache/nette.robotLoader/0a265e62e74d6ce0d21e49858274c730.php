@@ -145,7 +145,7 @@ return array (
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
-      1 => 1754028162,
+      1 => 1754031862,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -165,7 +165,7 @@ return array (
     'App\\Presentation\\Users\\UsersPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1754027365,
+      1 => 1754897156,
     ),
     'App\\Security\\AntiSpam' => 
     array (
@@ -211,9 +211,9 @@ return array (
     'App\\Presentation\\Security\\SecurityTemplate' => 3,
     'App\\Presentation\\Sign\\SignInTemplate' => 3,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 2,
-    'App\\Presentation\\Home\\HomeTemplate' => 2,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeTemplate' => 3,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 2,
     'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 3,
   ),
   2 => 

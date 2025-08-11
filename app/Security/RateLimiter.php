@@ -56,7 +56,7 @@ class RateLimiter
     ) {
         $this->database = $database;
         $this->securityLogger = $securityLogger;
-        
+
         // Zajistíme, že tabulky rate_limits existují
         $this->ensureTablesExist();
     }
@@ -76,18 +76,18 @@ class RateLimiter
         }
 
         $limit = $this->limits[$action];
-        
+
         // Vyčistíme staré záznamy
         $this->cleanupOldRecords($action, $ipAddress, $limit['window'], $tenantId);
-        
+
         // Zkontrolujeme aktivní blokování
         if ($this->isBlocked($action, $ipAddress, $tenantId)) {
             return false;
         }
-        
+
         // Spočítáme aktuální počet pokusů v časovém okně
         $currentAttempts = $this->getAttemptCount($action, $ipAddress, $limit['window'], $tenantId);
-        
+
         return $currentAttempts < $limit['attempts'];
     }
 
@@ -101,7 +101,7 @@ class RateLimiter
         }
 
         $limit = $this->limits[$action];
-        
+
         // Zaznamenáme pokus s tenant informacemi
         $this->database->table('rate_limits')->insert([
             'ip_address' => $ipAddress,
@@ -115,13 +115,13 @@ class RateLimiter
 
         // ✅ OPRAVENO: Různé akce mají různé pravidla blokování
         $shouldCheckLimits = false;
-        
+
         // Akce, které se blokují pouze po neúspěšných pokusech
         $failureOnlyActions = ['login', 'api_request'];
-        
+
         // Akce, které se blokují po jakýxkoliv pokusech (i úspěšných)
         $allAttemptsActions = ['password_reset', 'form_submit', 'user_creation'];
-        
+
         if (in_array($action, $failureOnlyActions)) {
             $shouldCheckLimits = !$successful; // Pouze neúspěšné
         } elseif (in_array($action, $allAttemptsActions)) {
@@ -129,14 +129,14 @@ class RateLimiter
         } else {
             $shouldCheckLimits = !$successful; // Výchozí: pouze neúspěšné
         }
-        
+
         if ($shouldCheckLimits) {
             $currentAttempts = $this->getAttemptCount($action, $ipAddress, $limit['window'], $tenantId);
-            
+
             if ($currentAttempts >= $limit['attempts']) {
                 // Překročen limit - aktivujeme blokování
                 $this->activateBlocking($action, $ipAddress, $limit['lockout'], $tenantId, $userId);
-                
+
                 $this->securityLogger->logSecurityEvent(
                     'rate_limit_exceeded',
                     "Rate limit překročen pro akci '{$action}' z IP: {$ipAddress}, tenant: " . ($tenantId ?? 'NULL') . ". Pokusů: {$currentAttempts}/{$limit['attempts']}"
@@ -261,7 +261,7 @@ class RateLimiter
         $limit = $this->limits[$action];
         $currentAttempts = $this->getAttemptCount($action, $ipAddress, $limit['window'], $tenantId);
         $isBlocked = $this->isBlocked($action, $ipAddress, $tenantId);
-        
+
         $blockedUntil = null;
         if ($isBlocked) {
             $query = $this->database->table('rate_limit_blocks')
@@ -274,7 +274,7 @@ class RateLimiter
             }
 
             $blocking = $query->fetch();
-            
+
             if ($blocking) {
                 $blockedUntil = $blocking->blocked_until;
             }
@@ -300,9 +300,9 @@ class RateLimiter
             $blocksQuery = $this->database->table('rate_limit_blocks')
                 ->where('ip_address', $ipAddress);
 
+            // ✅ OPRAVENO: Mazání VŠECH záznamů pro IP, ne jen neúspěšných
             $attemptsQuery = $this->database->table('rate_limits')
-                ->where('ip_address', $ipAddress)
-                ->where('successful', false);
+                ->where('ip_address', $ipAddress);
 
             // Filtrujeme podle tenanta pokud je zadán
             if ($tenantId !== null) {
@@ -340,33 +340,33 @@ class RateLimiter
             // Aktuálně zablokované IP adresy
             $blocksQuery = $this->database->table('rate_limit_blocks')
                 ->where('blocked_until > ?', new \DateTime());
-            
+
             if ($tenantId !== null) {
                 $blocksQuery->where('tenant_id', $tenantId);
             }
-            
+
             $currentlyBlocked = $blocksQuery->count();
 
             // Pokusy za posledních 24 hodin
             $last24h = new \DateTime('-24 hours');
             $attemptsQuery = $this->database->table('rate_limits')
                 ->where('created_at > ?', $last24h);
-            
+
             if ($tenantId !== null) {
                 $attemptsQuery->where('tenant_id', $tenantId);
             }
-            
+
             $attemptsLast24h = $attemptsQuery->count();
 
             // Neúspěšné pokusy za posledních 24 hodin
             $failedAttemptsQuery = $this->database->table('rate_limits')
                 ->where('created_at > ?', $last24h)
                 ->where('successful', false);
-            
+
             if ($tenantId !== null) {
                 $failedAttemptsQuery->where('tenant_id', $tenantId);
             }
-            
+
             $failedAttemptsLast24h = $failedAttemptsQuery->count();
 
             // Top 5 IP adres s nejvíce pokusy
@@ -381,18 +381,17 @@ class RateLimiter
             }
 
             $topIPsQuery .= ' GROUP BY ip_address ORDER BY attempt_count DESC LIMIT 5';
-            
+
             $topIPs = $this->database->query($topIPsQuery, ...$params)->fetchAll();
 
             return [
                 'currently_blocked_ips' => $currentlyBlocked,
                 'attempts_last_24h' => $attemptsLast24h,
                 'failed_attempts_last_24h' => $failedAttemptsLast24h,
-                'success_rate' => $attemptsLast24h > 0 ? 
+                'success_rate' => $attemptsLast24h > 0 ?
                     round((($attemptsLast24h - $failedAttemptsLast24h) / $attemptsLast24h) * 100, 1) : 100,
                 'top_attacking_ips' => $topIPs,
             ];
-
         } catch (\Exception $e) {
             // V případě chyby vrátíme výchozí hodnoty
             return [
@@ -412,7 +411,7 @@ class RateLimiter
     {
         // Kontrola různých headerů pro skutečnou IP
         $ipKeys = ['HTTP_CF_CONNECTING_IP', 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED'];
-        
+
         foreach ($ipKeys as $key) {
             if (array_key_exists($key, $_SERVER) === true) {
                 $ip = $_SERVER[$key];
@@ -425,7 +424,7 @@ class RateLimiter
                 }
             }
         }
-        
+
         return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
     }
 
@@ -496,7 +495,6 @@ class RateLimiter
                 'rate_limit_tables_created',
                 'Rate limiting tabulky byly automaticky vytvořeny s multi-tenancy podporou'
             );
-
         } catch (\Exception $e) {
             error_log('Chyba při vytváření rate limiting tabulek: ' . $e->getMessage());
         }
