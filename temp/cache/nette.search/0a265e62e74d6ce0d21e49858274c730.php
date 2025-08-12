@@ -45,7 +45,7 @@ return array (
     'App\\Model\\ModuleManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ModuleManager.php',
-      1 => 1752218465,
+      1 => 1754922344,
     ),
     'App\\Model\\QrPaymentService' => 
     array (
@@ -71,16 +71,6 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748950316,
-    ),
-    'Modules\\Financial_reports\\FinancialReportsService' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
-      1 => 1752157085,
-    ),
-    'Modules\\Financial_reports\\Module' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
-      1 => 1752157085,
     ),
     'Modules\\Test_module\\Module' => 
     array (
@@ -130,7 +120,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1753962179,
+      1 => 1754980247,
     ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (
@@ -140,7 +130,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1753189870,
+      1 => 1754981069,
     ),
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
@@ -150,7 +140,7 @@ return array (
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1753962255,
+      1 => 1754979861,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
@@ -170,7 +160,7 @@ return array (
     'App\\Security\\AntiSpam' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\AntiSpam.php',
-      1 => 1753883662,
+      1 => 1754979837,
     ),
     'App\\Security\\RateLimiter' => 
     array (

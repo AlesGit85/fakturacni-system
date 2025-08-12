@@ -46,7 +46,7 @@ class AntiSpam
     {
         // Vybere náhodný název honeypot pole
         $fieldName = $this->getRandomHoneypotFieldName();
-        
+
         // Přidá skryté pole s instrukcí pro screen readery
         $honeypotField = $form->addText($fieldName, 'Nevyplňujte toto pole (anti-spam)')
             ->setHtmlAttribute('class', 'honeypot-field')
@@ -57,7 +57,7 @@ class AntiSpam
         // Přidá validační pravidlo
         $honeypotField->addRule(function ($control) use ($fieldName) {
             $value = trim($control->getValue());
-            
+
             // Pokud je pole vyplněné, jedná se o spam
             if (!empty($value)) {
                 $this->logSpamAttempt('honeypot', $fieldName, [
@@ -67,7 +67,7 @@ class AntiSpam
                 ]);
                 return false;
             }
-            
+
             return true;
         }, 'Formulář byl odeslán neočekávaně rychle nebo obsahuje neočekávaná data. Zkuste to prosím znovu.');
 
@@ -81,13 +81,13 @@ class AntiSpam
     {
         // Přidá hidden field s timestamp
         $timestampField = $form->addHidden('form_timestamp', (string)time());
-        
+
         // Přidá validaci času
         $timestampField->addRule(function ($control) {
             $timestamp = (int)$control->getValue();
             $currentTime = time();
             $submissionTime = $currentTime - $timestamp;
-            
+
             // Příliš rychlé odeslání (bot)
             if ($submissionTime < $this->minSubmissionTime) {
                 $this->logSpamAttempt('timing_too_fast', '', [
@@ -96,7 +96,7 @@ class AntiSpam
                 ]);
                 return false;
             }
-            
+
             // Příliš dlouhé čekání (možná útok)
             if ($submissionTime > $this->maxSubmissionTime) {
                 $this->logSpamAttempt('timing_too_slow', '', [
@@ -105,7 +105,7 @@ class AntiSpam
                 ]);
                 return false;
             }
-            
+
             return true;
         }, 'Formulář byl odeslán neočekávaně rychle nebo po příliš dlouhém čase. Zkuste to znovu.');
     }
@@ -124,20 +124,19 @@ class AntiSpam
 
         try {
             $formData = $form->getValues('array');
-            
+
             // Kontrola podezřelých vzorů
             $suspiciousPatterns = $this->detectSpamPatterns($formData);
-            
+
             // Pokud najdeme příliš mnoho podezřelých vzorů, označíme jako spam
             $totalPatterns = array_sum(array_map('count', $suspiciousPatterns));
-            
-            if ($totalPatterns >= 5) { // Práh pro označení jako spam
+
+            if ($totalPatterns >= 10) { // Práh pro označení jako spam
                 $form->addError('Formulář obsahuje podezřelý obsah. Pokud jste člověk, kontaktujte administrátora.');
                 return false;
             }
-            
+
             return true;
-            
         } catch (\Exception $e) {
             // Pokud se něco pokazí, neblokujeme formulář
             error_log('Chyba při validaci anti-spam: ' . $e->getMessage());
@@ -151,26 +150,36 @@ class AntiSpam
     public function detectSpamPatterns(array $formData): array
     {
         $suspiciousPatterns = [];
-        
+
         foreach ($formData as $fieldName => $value) {
+            // ✅ NOVÉ: Přeskočit kontrolu pro upload pole
+            if (is_object($value) && $value instanceof \Nette\Http\FileUpload) {
+                continue; // Nekontrolujem upload soubory
+            }
+
             if (!is_string($value)) {
                 continue;
             }
-            
+
             $value = trim($value);
-            
+
             // Prázdné hodnoty přeskočíme
             if (empty($value)) {
                 continue;
             }
-            
+
+            // ✅ NOVÉ: Přeskočit příliš krátké texty (méně než 20 znaků)
+            if (strlen($value) < 20) {
+                continue;
+            }
+
             // Detekce podezřelých vzorů
             $patterns = $this->checkSpamPatterns($value);
             if (!empty($patterns)) {
                 $suspiciousPatterns[$fieldName] = $patterns;
             }
         }
-        
+
         // Logování pokud najdeme podezřelé vzory
         if (!empty($suspiciousPatterns)) {
             $this->logSpamAttempt('suspicious_patterns', '', [
@@ -178,7 +187,7 @@ class AntiSpam
                 'form_data_preview' => $this->getFormDataPreview($formData)
             ]);
         }
-        
+
         return $suspiciousPatterns;
     }
 
@@ -188,7 +197,7 @@ class AntiSpam
     private function checkSpamPatterns(string $text): array
     {
         $foundPatterns = [];
-        
+
         // Vzory typické pro spam
         $spamPatterns = [
             'excessive_urls' => '/https?:\/\/[^\s]+.*https?:\/\/[^\s]+/', // Více URL
@@ -201,13 +210,13 @@ class AntiSpam
             'gambling_terms' => '/\b(casino|poker|lottery|jackpot|betting)\b/i', // Hazardní termíny
             'financial_scam' => '/\b(loan|money|cash|investment|profit|rich)\b/i', // Finanční spam
         ];
-        
+
         foreach ($spamPatterns as $patternName => $pattern) {
             if (preg_match($pattern, $text)) {
                 $foundPatterns[] = $patternName;
             }
         }
-        
+
         return $foundPatterns;
     }
 
@@ -225,7 +234,7 @@ class AntiSpam
     private function getFormDataPreview(array $formData): array
     {
         $preview = [];
-        
+
         foreach ($formData as $key => $value) {
             if (is_string($value)) {
                 $preview[$key] = substr($value, 0, 50) . (strlen($value) > 50 ? '...' : '');
@@ -233,7 +242,7 @@ class AntiSpam
                 $preview[$key] = gettype($value);
             }
         }
-        
+
         return $preview;
     }
 

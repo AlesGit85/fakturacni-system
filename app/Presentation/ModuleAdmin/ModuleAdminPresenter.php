@@ -507,14 +507,14 @@ final class ModuleAdminPresenter extends BasePresenter
         if ($tenantId) {
             // CSS cesta
             $cssPath = "/Modules/tenant_{$tenantId}/{$id}/assets/css/style.css";
-            $cssFullPath = WWW_DIR . $cssPath;
+            $cssFullPath = WWW_DIR . '/web' . $cssPath;
             if (file_exists($cssFullPath)) {
                 $this->template->moduleCss = $cssPath;
             }
 
             // JS cesta
             $jsPath = "/Modules/tenant_{$tenantId}/{$id}/assets/js/script.js";
-            $jsFullPath = WWW_DIR . $jsPath;
+            $jsFullPath = WWW_DIR . '/web' . $jsPath;
             if (file_exists($jsFullPath)) {
                 $this->template->moduleJs = $jsPath;
             }
@@ -555,7 +555,7 @@ final class ModuleAdminPresenter extends BasePresenter
             return;
         }
 
-        $wwwModuleDir = WWW_DIR . "/Modules/tenant_{$tenantId}/{$moduleId}";
+        $wwwModuleDir = WWW_DIR . "/web/Modules/tenant_{$tenantId}/{$moduleId}";
 
         // Pokud zdrojové assets neexistují, nic neděláme
         if (!is_dir($moduleAssetsDir)) {

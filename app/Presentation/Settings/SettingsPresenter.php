@@ -23,6 +23,10 @@ class SettingsPresenter extends BasePresenter
         'deleteSignature' => ['admin'],
     ];
 
+    // ✅ PŘIDEJ TYTO ŘÁDKY: Vypnout anti-spam pro upload formuláře
+    protected bool $enableHoneypotProtection = false;
+    protected bool $enableTimingProtection = false;
+
     public function __construct(CompanyManager $companyManager)
     {
         $this->companyManager = $companyManager;
@@ -477,7 +481,7 @@ class SettingsPresenter extends BasePresenter
 
             if ($company && $company->logo) {
                 // ✅ XSS OCHRANA: Sanitizace cesty k souboru
-                $logoPath = WWW_DIR . '/www/uploads/logo/' . basename($company->logo);
+                $logoPath = WWW_DIR . '/web/uploads/logo/' . basename($company->logo);
 
                 // Smažeme fyzický soubor
                 if (file_exists($logoPath)) {
@@ -519,7 +523,7 @@ class SettingsPresenter extends BasePresenter
 
             if ($company && $company->signature) {
                 // ✅ XSS OCHRANA: Sanitizace cesty k souboru
-                $signaturePath = WWW_DIR . '/www/uploads/signature/' . basename($company->signature);
+                $signaturePath = WWW_DIR . '/web/uploads/signature/' . basename($company->signature);
 
                 // Smažeme fyzický soubor
                 if (file_exists($signaturePath)) {
