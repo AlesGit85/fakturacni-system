@@ -10,9 +10,9 @@ services:
 # 	nette.mailer:
 # 		factory: Nette\Mail\SmtpMailer
 # 		arguments:
-# 			host: mail.allimedia.cz
-# 			port: 587
-# 			username: noreply@allimedia.cz
+# 			host: smtp.seznam.cz
+# 			port: 465
+# 			username: noreply@qrdoklad.cz
 # 			password: your_smtp_password
 # 			secure: tls
 

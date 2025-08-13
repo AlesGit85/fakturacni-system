@@ -292,6 +292,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 		'NetteModule\ErrorPresenter' => [2 => ['application.13']],
 		'NetteModule\MicroPresenter' => [2 => ['application.14']],
 		'App\Core\RouterFactory' => [['015']],
+		'Modules\Financial_reports\FinancialReportsService' => [['016']],
 	];
 
 
@@ -392,6 +393,16 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	public function createService015(): App\Core\RouterFactory
 	{
 		return new App\Core\RouterFactory;
+	}
+
+
+	public function createService016(): Modules\Financial_reports\FinancialReportsService
+	{
+		return new Modules\Financial_reports\FinancialReportsService(
+			$this->getService('07'),
+			$this->getService('09'),
+			$this->getService('database.default.explorer'),
+		);
 	}
 
 
@@ -764,8 +775,8 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 		$service = new Nette\Database\Connection(
 			'mysql:host=127.0.0.1;dbname=fakturacni_system',
 			/*sensitive{*/'root'/*}*/,
-			null,
-			['lazy' => true],
+			/*sensitive{*/''/*}*/,
+			['lazy' => true, 'charset' => 'utf8mb4'],
 		);
 		Nette\Bridges\DatabaseTracy\ConnectionPanel::initialize(
 			$service,

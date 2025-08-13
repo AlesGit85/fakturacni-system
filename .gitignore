@@ -1,0 +1,65 @@
+# =====================================================
+# GITIGNORE PRO QRDOKLAD
+# =====================================================
+
+# Environment files - CITLIVÉ ÚDAJE
+.env
+.env.local
+.env.production
+.env.dev
+
+# Composer
+vendor/
+composer.phar
+
+# Nette temp & cache
+temp/cache/
+temp/sessions/
+temp/*.tmp
+
+# Logs
+log/*.log
+log/*.html
+!log/.gitkeep
+
+# Uploads - uživatelské soubory
+web/uploads/*
+!web/uploads/.gitkeep
+
+# Module assets (generují se automaticky)
+web/Modules/*
+!web/Modules/.gitkeep
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*.sql
+
+# Temporary files
+*.tmp
+*.temp
+
+# Node.js (pokud by se v budoucnu používal)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+tests/temp/
+coverage/
+
+# Deployment files
+deploy.php
+deploy.sh

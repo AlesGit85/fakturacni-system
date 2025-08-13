@@ -5,7 +5,7 @@ return array (
     'App\\Bootstrap' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Bootstrap.php',
-      1 => 1754922084,
+      1 => 1755003531,
     ),
     'App\\Core\\RouterFactory' => 
     array (
@@ -72,10 +72,15 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748950316,
     ),
-    'Modules\\Test_module\\Module' => 
+    'Modules\\Financial_reports\\FinancialReportsService' => 
     array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\test_module\\Module.php',
-      1 => 1750843952,
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
+      1 => 1748942352,
+    ),
+    'Modules\\Financial_reports\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
+      1 => 1748950824,
     ),
     'Modules\\Notes\\Module' => 
     array (

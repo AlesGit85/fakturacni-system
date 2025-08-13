@@ -1,8 +1,15 @@
 includes:
 	- mail.neon
+# Pro lokální vývoj se neinkluduje nic navíc
+	# local.neon se inkluduje jen na produkci
+	# dev.neon se inkluduje jen na DEV serveru
 
 parameters:
-
+	# Databáze podle prostředí (nastaveno v local.neon na produkci)
+	database:
+		dsn: 'mysql:host=127.0.0.1;dbname=fakturacni_system'
+		user: 'root'
+		password: ''
 
 application:
 	errorPresenter:
@@ -10,35 +17,29 @@ application:
 		5xx: Error:Error5xx
 	mapping: App\Presentation\*\**Presenter
 
-
 database:
-	dsn: 'mysql:host=127.0.0.1;dbname=fakturacni_system'
-	user: root
-	password: 
+	dsn: %database.dsn%
+	user: %database.user%
+	password: %database.password%
 	options:
 		lazy: true
-
+		charset: utf8mb4
 
 session:
 	expiration: 20 minutes
 	autoStart: true
 	name: fakturacni_system_session
 	cookieHttponly: true
-	cookieSamesite: Strict  # Změněno z Lax na Strict pro lepší bezpečnost
-	# Odstraňujeme secure parametr pro vývojové prostředí
-	# V produkci byste měli nastavit secure: true
-
+	cookieSamesite: Strict
 
 security:
 	users: []
-
 
 latte:
 	strictTypes: yes
 	strictParsing: yes
 	extensions:
 		- App\Presentation\Accessory\LatteExtension
-
 
 di:
 	export:

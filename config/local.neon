@@ -1,11 +1,11 @@
-# config/local.neon - Produkční konfigurace pro inv.allimedia.cz
+# config/local.neon - Produkční konfigurace pro qrdoklad.cz
 parameters:
 	production: true
 	
 database:
-	dsn: 'mysql:host=localhost;dbname=c4invallimedia'
+	dsn: 'mysql:host=localhost;dbname=c4qrdoklad'
 	user: 'c4alpho'
-	password: 'nzsm_YJH6'
+	password: 'HESLO'
 	options:
 		lazy: true
 		charset: utf8mb4

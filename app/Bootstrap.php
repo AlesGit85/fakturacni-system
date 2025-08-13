@@ -32,41 +32,49 @@ class Bootstrap
         $httpResponse = $container->getByType(Nette\Http\Response::class);
         SecurityHeaders::apply($httpResponse);
 
-        // Vytvoření složky pro přístup k assets modulů
-        $modulesDir = __DIR__ . '/Modules';
-        $webModulesDir = dirname(__DIR__) . '/web/Modules';
+        // OPRAVENO: Bezpečnější vytvoření složky pro moduly bez symlinků
+        $this->createModulesDirectorySafely();
 
-        if (!is_dir($webModulesDir)) {
+        return $container;
+    }
+
+    /**
+     * Bezpečné vytvoření adresáře pro moduly bez symlinků
+     */
+    private function createModulesDirectorySafely(): void
+    {
+        try {
+            $modulesDir = __DIR__ . '/Modules';
+            $webModulesDir = dirname(__DIR__) . '/web/Modules';
+
+            // Vytvoření základních adresářů pokud neexistují
             if (!is_dir($modulesDir)) {
                 mkdir($modulesDir, 0755, true);
             }
 
-            // Na Windows můžeme potřebovat kopírovat místo symlinku
-            if (PHP_OS_FAMILY === 'Windows') {
-                // Vytvoříme pouze prázdný adresář, který bude později naplněn
+            if (!is_dir($webModulesDir)) {
                 mkdir($webModulesDir, 0755, true);
-            } else {
-                // Na Linuxu/macOS můžeme použít symlink
-                symlink($modulesDir, $webModulesDir);
             }
-        }
 
-        // OPRAVENO: Debug mode jen na localhost/developmentu
-        // $this->configurator->setDebugMode(true); // <-- SMAZÁNO!
-        
-        return $container;
+            // Na produkčním serveru nepoužíváme symlinky - pouze vytvoříme adresář
+            // Moduly si později zkopírují své assets podle potřeby
+
+        } catch (\Exception $e) {
+            // Logování chyby, ale nepřerušujeme načítání aplikace
+            error_log("Bootstrap: Chyba při vytváření adresáře pro moduly: " . $e->getMessage());
+        }
     }
 
 
     public function initializeEnvironment(): void
     {
+        // OPRAVENO: Správná definice WWW_DIR pro produkční server
         define('WWW_DIR', dirname(__DIR__));
-        
-        // OPRAVENO: Debug mode jen pro specifické IP nebo localhost
-        // Pro produkci zakomentováno:
-        // $this->configurator->setDebugMode('secret@23.75.345.200');
-        
-        // Tracy jen pro development (na produkci bude vypnutá local.neon)
+
+        // OPRAVENO: Debug mode pouze pro localhost
+        // Na produkci je vyřízeno přes config/local.neon
+
+        // Tracy jen pro development (na produkci bude vypnutá přes local.neon)
         $this->configurator->enableTracy($this->rootDir . '/log');
 
         $this->configurator->createRobotLoader()

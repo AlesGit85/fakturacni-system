@@ -5,7 +5,7 @@ return array (
     'App\\Bootstrap' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Bootstrap.php',
-      1 => 1754922084,
+      1 => 1755026965,
     ),
     'App\\Core\\RouterFactory' => 
     array (
@@ -72,10 +72,15 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748950316,
     ),
-    'Modules\\Test_module\\Module' => 
+    'Modules\\Financial_reports\\FinancialReportsService' => 
     array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\test_module\\Module.php',
-      1 => 1750843952,
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
+      1 => 1748942352,
+    ),
+    'Modules\\Financial_reports\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
+      1 => 1748950824,
     ),
     'Modules\\Notes\\Module' => 
     array (
@@ -205,8 +210,8 @@ return array (
     'App\\Presentation\\Home\\HomeTemplate' => 3,
     'App\\Presentation\\Sign\\SignOutTemplate' => 3,
     'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
@@ -220,7 +225,8 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
-    'Modules\\Financial_reports\\FinancialReportsService' => 2,
+    'App\\Presentation\\Phpmyadmin\\PhpmyadminPresenter' => 2,
+    'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
   ),
   2 => 
   array (
