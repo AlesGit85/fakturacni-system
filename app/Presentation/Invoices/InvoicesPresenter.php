@@ -229,9 +229,9 @@ class InvoicesPresenter extends BasePresenter
         $fakturaTextHeight = 10; // Výška textu "FAKTURA"
 
         // Logo společnosti - nyní vertikálně vycentrované
-        if ($company->logo && file_exists(WWW_DIR . '/web/uploads/logo/' . $company->logo) && $invoice->show_logo) {
+        if ($company->logo && file_exists(WWW_DIR . '/uploads/logo/' . $company->logo) && $invoice->show_logo) {
             // Získáme rozměry loga
-            $logoInfo = getimagesize(WWW_DIR . '/web/uploads/logo/' . $company->logo);
+            $logoInfo = getimagesize(WWW_DIR . '/uploads/logo/' . $company->logo);
             $logoWidth = 40; // Šířka loga v mm
             $logoHeight = 15; // Předpokládaná výška loga v mm
 
@@ -245,7 +245,7 @@ class InvoicesPresenter extends BasePresenter
             $logoY = $headerStartY + ($fakturaTextHeight - $logoHeight) / 2;
 
             // Vykreslení loga vycentrovaného vertikálně
-            $pdf->Image(WWW_DIR . '/web/uploads/logo/' . $company->logo, 15, $logoY, $logoWidth);
+            $pdf->Image(WWW_DIR . '/uploads/logo/' . $company->logo, 15, $logoY, $logoWidth);
         } else {
             // Pokud logo neexistuje nebo nemá být zobrazeno, zobrazíme název společnosti stylizovaně
             $pdf->SetFont('dejavusans', 'B', 20);
@@ -329,59 +329,67 @@ class InvoicesPresenter extends BasePresenter
         // Mezera před platebními údaji
         $pdf->Ln(5);
 
-        // Forma úhrady
+        // ✅ OPRAVENO: Převod způsobu platby na správný tvar pro PDF
+        $paymentMethodText = '';
+        switch ($invoice->payment_method) {
+            case 'Bankovní převod':
+                $paymentMethodText = 'bankovním převodem';
+                break;
+            case 'Hotovost':
+                $paymentMethodText = 'v hotovosti';
+                break;
+            case 'Karta':
+            case 'Platební karta':
+                $paymentMethodText = 'platební kartou';
+                break;
+            default:
+                $paymentMethodText = strtolower($invoice->payment_method);
+                break;
+        }
+
+        // Forma úhrady - nyní s dynamickým textem
         $pdf->SetXY($leftMargin, $pdf->GetY());
         $pdf->SetFont('dejavusans', '', 10);
         $pdf->Cell($labelWidth, $rowHeight, 'Forma úhrady:', 0, 0, 'L');
         $pdf->SetX($valueX);
         $pdf->SetFont('dejavusans', '', 10);
-        $pdf->Cell($valueWidth, $rowHeight, 'bankovním převodem', 0, 1, 'L');
+        $pdf->Cell($valueWidth, $rowHeight, $paymentMethodText, 0, 1, 'L');
 
-        // Číslo účtu
-        $pdf->SetXY($leftMargin, $pdf->GetY());
-        $pdf->SetFont('dejavusans', '', 10);
-        $pdf->Cell($labelWidth, $rowHeight, 'Číslo účtu:', 0, 0, 'L');
-        $pdf->SetX($valueX);
-        $pdf->SetFont('dejavusans', 'B', 10);
-        $pdf->Cell($valueWidth, $rowHeight, $company->bank_account, 0, 1, 'L');
+        // ✅ VYLEPŠENO: Bankovní údaje zobrazujeme pouze pro bankovní převod
+        if ($invoice->payment_method === 'Bankovní převod') {
+            // Číslo účtu
+            $pdf->SetXY($leftMargin, $pdf->GetY());
+            $pdf->SetFont('dejavusans', '', 10);
+            $pdf->Cell($labelWidth, $rowHeight, 'Číslo účtu:', 0, 0, 'L');
+            $pdf->SetX($valueX);
+            $pdf->SetFont('dejavusans', 'B', 10);
+            $pdf->Cell($valueWidth, $rowHeight, $company->bank_account, 0, 1, 'L');
 
-        // Mezera před variabilním symbolem
-        $pdf->Ln(2);
+            // Mezera před variabilním symbolem
+            $pdf->Ln(2);
 
-        // Variabilní symbol
-        $pdf->SetXY($leftMargin, $pdf->GetY());
-        $pdf->SetFont('dejavusans', '', 10);
-        $pdf->Cell($labelWidth, $rowHeight, 'Variabilní symbol:', 0, 0, 'L');
-        $pdf->SetX($valueX);
-        $pdf->SetFont('dejavusans', '', 10);
-        $pdf->Cell($valueWidth, $rowHeight, $invoice->number, 0, 1, 'L');
+            // Variabilní symbol
+            $pdf->SetXY($leftMargin, $pdf->GetY());
+            $pdf->SetFont('dejavusans', '', 10);
+            $pdf->Cell($labelWidth, $rowHeight, 'Variabilní symbol:', 0, 0, 'L');
+            $pdf->SetX($valueX);
+            $pdf->SetFont('dejavusans', '', 10);
+            $pdf->Cell($valueWidth, $rowHeight, $invoice->number, 0, 1, 'L');
 
-        // Datum vystavení
-        $pdf->SetXY($leftMargin, $pdf->GetY());
-        $pdf->SetFont('dejavusans', '', 10);
-        $pdf->Cell($labelWidth, $rowHeight, 'Datum vystavení:', 0, 0, 'L');
-        $pdf->SetX($valueX);
-        $pdf->SetFont('dejavusans', '', 10);
-        $pdf->Cell($valueWidth, $rowHeight, date('d. m. Y', strtotime($invoice->issue_date)), 0, 1, 'L');
+            // Mezera před dalšími údaji  
+            $pdf->Ln(2);
 
-        // Datum splatnosti
-        $pdf->SetXY($leftMargin, $pdf->GetY());
-        $pdf->SetFont('dejavusans', '', 10);
-        $pdf->Cell($labelWidth, $rowHeight, 'Datum splatnosti:', 0, 0, 'L');
-        $pdf->SetX($valueX);
-        $pdf->SetFont('dejavusans', 'B', 10);
-        $pdf->Cell($valueWidth, $rowHeight, date('d. m. Y', strtotime($invoice->due_date)), 0, 1, 'L');
-
-        // Mezera před dalšími údaji
-        $pdf->Ln(2);
-
-        // Banka
-        $pdf->SetXY($leftMargin, $pdf->GetY());
-        $pdf->SetFont('dejavusans', '', 10);
-        $pdf->Cell($labelWidth, $rowHeight, 'Banka:', 0, 0, 'L');
-        $pdf->SetX($valueX);
-        $pdf->SetFont('dejavusans', '', 10);
-        $pdf->Cell($valueWidth, $rowHeight, $company->bank_name, 0, 1, 'L');
+            // Banka
+            $pdf->SetXY($leftMargin, $pdf->GetY());
+            $pdf->SetFont('dejavusans', '', 10);
+            $pdf->Cell($labelWidth, $rowHeight, 'Banka:', 0, 0, 'L');
+            $pdf->SetX($valueX);
+            $pdf->SetFont('dejavusans', '', 10);
+            $pdf->Cell($valueWidth, $rowHeight, $company->bank_name, 0, 1, 'L');
+        } else {
+            // Pro jiné způsoby platby přidáme jen malou mezeru
+            $pdf->Ln(2);
+        }
 
         // QR kód pro platbu
         if ($invoice->qr_payment) {
@@ -509,6 +517,53 @@ class InvoicesPresenter extends BasePresenter
         $pdf->SetFont('dejavusans', 'B', 10);
         $pdf->Cell(50, 8, number_format($invoice->total, 0, ',', ' ') . ' Kč', 0, 1, 'L');
 
+        // ------------------------------------------------
+        // PODPIS SPOLEČNOSTI
+        // ------------------------------------------------
+
+        // Zobrazení podpisu, pokud existuje a má být zobrazen
+        if ($company->signature && file_exists(WWW_DIR . '/uploads/signature/' . $company->signature) && $invoice->show_signature) {
+            $pdf->Ln(15); // Mezera před podpisem
+
+            // Popisek "Podpis:" - stejná barva jako ostatní štítky
+            $pdf->SetTextColor($labelsColor[0], $labelsColor[1], $labelsColor[2]);
+            $pdf->SetFont('dejavusans', '', 10);
+            $pdf->Cell(180, 8, 'Podpis:', 0, 1, 'L');
+
+            // Malá mezera mezi popiskem a podpisem
+            $pdf->Ln(2);
+
+            // Získáme rozměry podpisu
+            $signatureInfo = getimagesize(WWW_DIR . '/uploads/signature/' . $company->signature);
+            $signatureWidth = 60; // Šířka podpisu v mm
+            $signatureHeight = 20; // Předpokládaná výška podpisu v mm
+
+            if ($signatureInfo) {
+                // Výpočet poměru stran a skutečné výšky pro zachování poměru stran
+                $signatureRatio = $signatureInfo[1] / $signatureInfo[0];
+                $signatureHeight = $signatureWidth * $signatureRatio;
+
+                // Omezíme maximální výšku podpisu
+                if ($signatureHeight > 30) {
+                    $signatureHeight = 30;
+                    $signatureWidth = 30 / $signatureRatio;
+                }
+            }
+
+            // Pozice podpisu - zarovnáno vlevo s malým odsazením
+            $signatureX = 20;
+            $signatureY = $pdf->GetY();
+
+            // Vykreslení podpisu
+            $pdf->Image(WWW_DIR . '/uploads/signature/' . $company->signature, $signatureX, $signatureY, $signatureWidth, $signatureHeight);
+
+            // Posuneme Y pozici za podpis
+            $pdf->SetY($signatureY + $signatureHeight + 5);
+
+            // Obnovíme černou barvu textu pro další obsah
+            $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        }
+
         // Přidáme poznámku, pokud existuje
         if (!empty($invoice->note)) {
             $pdf->Ln(10);
@@ -609,6 +664,15 @@ class InvoicesPresenter extends BasePresenter
         // ✅ Anti-spam ochrana
         $this->addAntiSpamProtectionToForm($form);
 
+        // ✅ OPRAVENO: Načtení preferencí na začátku metody
+        $lastInvoice = $this->invoicesManager->getLastUserInvoice($this->getUser()->getId());
+
+        // Výchozí hodnoty - pokud uživatel ještě nemá žádnou fakturu, použije se výchozí nastavení
+        $defaultQrPayment = $lastInvoice ? (bool)$lastInvoice->qr_payment : true;
+        $defaultShowLogo = $lastInvoice ? (bool)$lastInvoice->show_logo : true;
+        $defaultShowSignature = $lastInvoice ? (bool)$lastInvoice->show_signature : false;
+        $defaultPaymentMethod = $lastInvoice ? $lastInvoice->payment_method : 'Bankovní převod';
+
         // Přepínač mezi existujícím a ručně zadaným klientem
         $clientTypeRadio = $form->addRadioList('client_type', 'Klient:', [
             'existing' => 'Vybrat existujícího klienta',
@@ -672,22 +736,24 @@ class InvoicesPresenter extends BasePresenter
             ->setDefaultValue(date('Y-m-d', strtotime('+14 days')))
             ->setHtmlType('date');
 
+        // ✅ OPRAVENO: Způsob platby s výchozí hodnotou přímo při vytváření
         $form->addSelect('payment_method', 'Způsob platby:', [
             'Bankovní převod' => 'Bankovní převod',
             'Hotovost' => 'Hotovost',
             'Karta' => 'Platební karta',
         ])
-            ->setRequired('Vyberte způsob platby');
+            ->setRequired('Vyberte způsob platby')
+            ->setDefaultValue($defaultPaymentMethod);
 
-        // Možnosti zobrazení - všechny checkboxy na jednom místě
-        $form->addCheckbox('qr_payment', 'Generovat QR kód pro platbu')
-            ->setDefaultValue(true);
+        // ✅ OPRAVENO: Možnosti zobrazení s prázdnými labely pro moderní design
+        $form->addCheckbox('qr_payment', '')
+            ->setDefaultValue($defaultQrPayment);
 
-        $form->addCheckbox('show_logo', 'Zobrazit logo na faktuře')
-            ->setDefaultValue(true);
+        $form->addCheckbox('show_logo', '')
+            ->setDefaultValue($defaultShowLogo);
 
-        $form->addCheckbox('show_signature', 'Zobrazit podpis na faktuře')
-            ->setDefaultValue(true);
+        $form->addCheckbox('show_signature', '')
+            ->setDefaultValue($defaultShowSignature);
 
         $form->addTextArea('note', 'Poznámka:')
             ->setHtmlAttribute('rows', 3);

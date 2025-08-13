@@ -422,8 +422,8 @@ class SettingsPresenter extends BasePresenter
         // ✅ XSS OCHRANA: Sanitizace názvu souboru
         $originalName = SecurityValidator::sanitizeString($file->getName());
 
-        // Vytvoření upload adresáře, pokud neexistuje
-        $uploadDir = WWW_DIR . '/web/uploads/' . $type;
+        // ✅ OPRAVENO: Vytvoření upload adresáře - bez zdvojení "web"
+        $uploadDir = WWW_DIR . '/uploads/' . $type;
         
         if (!is_dir($uploadDir)) {
             if (!mkdir($uploadDir, 0755, true)) {
@@ -480,8 +480,8 @@ class SettingsPresenter extends BasePresenter
             $company = $this->companyManager->getCompanyInfo();
 
             if ($company && $company->logo) {
-                // ✅ XSS OCHRANA: Sanitizace cesty k souboru
-                $logoPath = WWW_DIR . '/web/uploads/logo/' . basename($company->logo);
+                // ✅ OPRAVENO: Správná cesta k souboru
+                $logoPath = WWW_DIR . '/uploads/logo/' . basename($company->logo);
 
                 // Smažeme fyzický soubor
                 if (file_exists($logoPath)) {
@@ -522,8 +522,8 @@ class SettingsPresenter extends BasePresenter
             $company = $this->companyManager->getCompanyInfo();
 
             if ($company && $company->signature) {
-                // ✅ XSS OCHRANA: Sanitizace cesty k souboru
-                $signaturePath = WWW_DIR . '/web/uploads/signature/' . basename($company->signature);
+                // ✅ OPRAVENO: Správná cesta k souboru
+                $signaturePath = WWW_DIR . '/uploads/signature/' . basename($company->signature);
 
                 // Smažeme fyzický soubor
                 if (file_exists($signaturePath)) {

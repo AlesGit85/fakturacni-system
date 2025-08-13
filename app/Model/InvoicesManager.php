@@ -433,4 +433,18 @@ class InvoicesManager
             ->where('client_id', $clientId)
             ->count();
     }
+
+    /**
+     * Získá poslední fakturu konkrétního uživatele (pro načtení preferencí)
+     */
+    public function getLastUserInvoice(int $userId)
+    {
+        $selection = $this->database->table('invoices')
+            ->where('user_id', $userId)
+            ->order('id DESC')
+            ->limit(1);
+            
+        $filteredSelection = $this->applyTenantFilter($selection);
+        return $filteredSelection->fetch();
+    }
 }

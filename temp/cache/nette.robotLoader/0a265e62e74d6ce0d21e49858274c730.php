@@ -40,7 +40,7 @@ return array (
     'App\\Model\\InvoicesManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\InvoicesManager.php',
-      1 => 1752666609,
+      1 => 1755075250,
     ),
     'App\\Model\\ModuleManager' => 
     array (
@@ -105,7 +105,7 @@ return array (
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1753962214,
+      1 => 1755071191,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -125,7 +125,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1754980247,
+      1 => 1755075286,
     ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (
@@ -223,10 +223,11 @@ return array (
     'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 1,
     'App\\Presentation\\Security\\SecurityDefaultTemplate' => 1,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
-    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
     'App\\Presentation\\Phpmyadmin\\PhpmyadminPresenter' => 2,
     'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 3,
   ),
   2 => 
   array (

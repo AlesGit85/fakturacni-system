@@ -186,7 +186,7 @@ class ClientsPresenter extends BasePresenter
         foreach ((array)$data as $key => $value) {
             if (is_string($value) && SecurityValidator::detectXssAttempt($value)) {
                 $xssDetected = true;
-                
+
                 // Logování XSS pokusu
                 $this->securityLogger->logSecurityEvent(
                     'xss_attempt_client_form',
@@ -210,9 +210,30 @@ class ClientsPresenter extends BasePresenter
             return;
         }
 
-        // ✅ XSS OCHRANA: Sanitizace dat před uložením
-        $sanitizedData = [];
+        // ✅ NOVÉ: Filtrování pouze platných polí pro klienty (odstraníme honeypot pole)
+        $allowedFields = [
+            'name',
+            'address',
+            'city',
+            'zip',
+            'country',
+            'ic',
+            'dic',
+            'contact_person',
+            'email',
+            'phone'
+        ];
+
+        $filteredData = [];
         foreach ((array)$data as $key => $value) {
+            if (in_array($key, $allowedFields, true)) {
+                $filteredData[$key] = $value;
+            }
+        }
+
+        // ✅ XSS OCHRANA: Sanitizace pouze platných dat před uložením
+        $sanitizedData = [];
+        foreach ($filteredData as $key => $value) {
             if (is_string($value)) {
                 $sanitizedData[$key] = SecurityValidator::sanitizeString($value);
             } else {
@@ -243,7 +264,7 @@ class ClientsPresenter extends BasePresenter
                     "Klient ID:{$id} byl aktualizován uživatelem {$this->getUser()->getIdentity()->username}",
                     ['client_id' => $id, 'user_id' => $this->getUser()->getId()]
                 );
-                
+
                 $this->redirect('default');
             } else {
                 // NOVÝ KLIENT
@@ -258,7 +279,7 @@ class ClientsPresenter extends BasePresenter
                     "Nový klient byl vytvořen uživatelem {$this->getUser()->getIdentity()->username}",
                     ['client_id' => $newClientId, 'user_id' => $this->getUser()->getId()]
                 );
-                
+
                 $this->redirect('default');
             }
         } catch (Nette\Application\AbortException $e) {
@@ -453,7 +474,7 @@ class ClientsPresenter extends BasePresenter
 
             // ✅ XSS OCHRANA: Sanitizace IČO
             $ico = SecurityValidator::sanitizeInvoiceNumber(trim($ico));
-            
+
             // Validace IČO
             if (!preg_match('/^\d{7,8}$/', $ico)) {
                 echo json_encode(['error' => 'Neplatné IČO. Zadejte 7 nebo 8 číslic.']);

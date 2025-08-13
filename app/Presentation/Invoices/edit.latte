@@ -158,12 +158,18 @@
                         <h3>Možnosti zobrazení</h3>
                     </div>
                     <div class="card-body">
+                        {* ✅ ŘEŠENÍ: Skryté Nette checkboxy *}
+                        <div style="display: none;">
+                            {input qr_payment}
+                            {input show_logo}
+                            {input show_signature}
+                        </div>
+                        
                         <div class="row g-4">
                             <div class="col-md-4">
-                                <div class="modern-checkbox-wrapper">
-                                    {* ✅ BEZPEČNÉ: Nette formulářová pole jsou automaticky escapovaná *}
-                                    <input type="checkbox" id="qr_payment_checkbox" name="qr_payment" value="1" {if $form['qr_payment']->value}checked{/if} class="modern-checkbox">
-                                    <label for="qr_payment_checkbox" class="modern-checkbox-label">
+                                <div class="modern-checkbox-wrapper" data-checkbox="qr_payment">
+                                    <input type="checkbox" id="qr_payment_visual" class="modern-checkbox">
+                                    <label for="qr_payment_visual" class="modern-checkbox-label">
                                         <div class="checkbox-content">
                                             <i class="bi bi-qr-code checkbox-icon"></i>
                                             <div class="checkbox-text">
@@ -176,10 +182,9 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="modern-checkbox-wrapper">
-                                    {* ✅ BEZPEČNÉ: Nette formulářová pole jsou automaticky escapovaná *}
-                                    <input type="checkbox" id="show_logo_checkbox" name="show_logo" value="1" {if $form['show_logo']->value}checked{/if} class="modern-checkbox">
-                                    <label for="show_logo_checkbox" class="modern-checkbox-label">
+                                <div class="modern-checkbox-wrapper" data-checkbox="show_logo">
+                                    <input type="checkbox" id="show_logo_visual" class="modern-checkbox">
+                                    <label for="show_logo_visual" class="modern-checkbox-label">
                                         <div class="checkbox-content">
                                             <i class="bi bi-image checkbox-icon"></i>
                                             <div class="checkbox-text">
@@ -192,10 +197,9 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="modern-checkbox-wrapper">
-                                    {* ✅ BEZPEČNÉ: Nette formulářová pole jsou automaticky escapovaná *}
-                                    <input type="checkbox" id="show_signature_checkbox" name="show_signature" value="1" {if $form['show_signature']->value}checked{/if} class="modern-checkbox">
-                                    <label for="show_signature_checkbox" class="modern-checkbox-label">
+                                <div class="modern-checkbox-wrapper" data-checkbox="show_signature">
+                                    <input type="checkbox" id="show_signature_visual" class="modern-checkbox">
+                                    <label for="show_signature_visual" class="modern-checkbox-label">
                                         <div class="checkbox-content">
                                             <i class="bi bi-pen checkbox-icon"></i>
                                             <div class="checkbox-text">
@@ -210,6 +214,35 @@
                         </div>
                     </div>
                 </div>
+
+                {* JavaScript pro propojení moderních checkboxů s Nette formulářem *}
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Najdeme všechny moderní checkbox wrappery
+                    const modernCheckboxes = document.querySelectorAll('.modern-checkbox-wrapper[data-checkbox]');
+                    
+                    modernCheckboxes.forEach(function(wrapper) {
+                        const checkboxName = wrapper.getAttribute('data-checkbox');
+                        const visualCheckbox = wrapper.querySelector('.modern-checkbox');
+                        const netteCheckbox = document.querySelector('input[name="' + checkboxName + '"]');
+                        
+                        if (visualCheckbox && netteCheckbox) {
+                            // Nastavíme výchozí stav podle Nette checkboxu
+                            visualCheckbox.checked = netteCheckbox.checked;
+                            
+                            // Při kliknutí na vizuální checkbox aktualizujeme Nette checkbox
+                            visualCheckbox.addEventListener('change', function() {
+                                netteCheckbox.checked = this.checked;
+                            });
+                            
+                            // Pokud se změní Nette checkbox (např. programově), aktualizujeme vizuální
+                            netteCheckbox.addEventListener('change', function() {
+                                visualCheckbox.checked = this.checked;
+                            });
+                        }
+                    });
+                });
+                </script>
                 
                 {if $isVatPayer}
                 <!-- Formulář pro plátce DPH - s položkami a DPH -->

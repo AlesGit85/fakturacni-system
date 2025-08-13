@@ -232,15 +232,23 @@ final class Template_24541d2dc7 extends Latte\Runtime\Template
                         <h3>Možnosti zobrazení</h3>
                     </div>
                     <div class="card-body">
+                        <div style="display: none;">
+                            ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('qr_payment', $this->global)->getControl() /* line 163 */;
+		echo '
+                            ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('show_logo', $this->global)->getControl() /* line 164 */;
+		echo '
+                            ';
+		echo Nette\Bridges\FormsLatte\Runtime::item('show_signature', $this->global)->getControl() /* line 165 */;
+		echo '
+                        </div>
+                        
                         <div class="row g-4">
                             <div class="col-md-4">
-                                <div class="modern-checkbox-wrapper">
-                                    <input type="checkbox" id="qr_payment_checkbox" name="qr_payment" value="1" ';
-		if ($form['qr_payment']->value) /* line 165 */ {
-			echo 'checked';
-		}
-		echo ' class="modern-checkbox">
-                                    <label for="qr_payment_checkbox" class="modern-checkbox-label">
+                                <div class="modern-checkbox-wrapper" data-checkbox="qr_payment">
+                                    <input type="checkbox" id="qr_payment_visual" class="modern-checkbox">
+                                    <label for="qr_payment_visual" class="modern-checkbox-label">
                                         <div class="checkbox-content">
                                             <i class="bi bi-qr-code checkbox-icon"></i>
                                             <div class="checkbox-text">
@@ -252,13 +260,9 @@ final class Template_24541d2dc7 extends Latte\Runtime\Template
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="modern-checkbox-wrapper">
-                                    <input type="checkbox" id="show_logo_checkbox" name="show_logo" value="1" ';
-		if ($form['show_logo']->value) /* line 181 */ {
-			echo 'checked';
-		}
-		echo ' class="modern-checkbox">
-                                    <label for="show_logo_checkbox" class="modern-checkbox-label">
+                                <div class="modern-checkbox-wrapper" data-checkbox="show_logo">
+                                    <input type="checkbox" id="show_logo_visual" class="modern-checkbox">
+                                    <label for="show_logo_visual" class="modern-checkbox-label">
                                         <div class="checkbox-content">
                                             <i class="bi bi-image checkbox-icon"></i>
                                             <div class="checkbox-text">
@@ -270,13 +274,9 @@ final class Template_24541d2dc7 extends Latte\Runtime\Template
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="modern-checkbox-wrapper">
-                                    <input type="checkbox" id="show_signature_checkbox" name="show_signature" value="1" ';
-		if ($form['show_signature']->value) /* line 197 */ {
-			echo 'checked';
-		}
-		echo ' class="modern-checkbox">
-                                    <label for="show_signature_checkbox" class="modern-checkbox-label">
+                                <div class="modern-checkbox-wrapper" data-checkbox="show_signature">
+                                    <input type="checkbox" id="show_signature_visual" class="modern-checkbox">
+                                    <label for="show_signature_visual" class="modern-checkbox-label">
                                         <div class="checkbox-content">
                                             <i class="bi bi-pen checkbox-icon"></i>
                                             <div class="checkbox-text">
@@ -290,9 +290,37 @@ final class Template_24541d2dc7 extends Latte\Runtime\Template
                         </div>
                     </div>
                 </div>
+
+                <script>
+                document.addEventListener(\'DOMContentLoaded\', function() {
+                    // Najdeme všechny moderní checkbox wrappery
+                    const modernCheckboxes = document.querySelectorAll(\'.modern-checkbox-wrapper[data-checkbox]\');
+                    
+                    modernCheckboxes.forEach(function(wrapper) {
+                        const checkboxName = wrapper.getAttribute(\'data-checkbox\');
+                        const visualCheckbox = wrapper.querySelector(\'.modern-checkbox\');
+                        const netteCheckbox = document.querySelector(\'input[name="\' + checkboxName + \'"]\');
+                        
+                        if (visualCheckbox && netteCheckbox) {
+                            // Nastavíme výchozí stav podle Nette checkboxu
+                            visualCheckbox.checked = netteCheckbox.checked;
+                            
+                            // Při kliknutí na vizuální checkbox aktualizujeme Nette checkbox
+                            visualCheckbox.addEventListener(\'change\', function() {
+                                netteCheckbox.checked = this.checked;
+                            });
+                            
+                            // Pokud se změní Nette checkbox (např. programově), aktualizujeme vizuální
+                            netteCheckbox.addEventListener(\'change\', function() {
+                                visualCheckbox.checked = this.checked;
+                            });
+                        }
+                    });
+                });
+                </script>
                 
 ';
-		if ($isVatPayer) /* line 214 */ {
+		if ($isVatPayer) /* line 247 */ {
 			echo '                <!-- Formulář pro plátce DPH - s položkami a DPH -->
                 <div class="card shadow-sm rounded-lg border-0 mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -350,7 +378,7 @@ final class Template_24541d2dc7 extends Latte\Runtime\Template
                     </div>
                 </div>
 ';
-		} else /* line 288 */ {
+		} else /* line 321 */ {
 			echo '                <!-- Formulář pro neplátce DPH - zjednodušený bez DPH -->
                 <div class="card shadow-sm rounded-lg border-0 mb-4">
                     <div class="card-header">
@@ -388,10 +416,10 @@ final class Template_24541d2dc7 extends Latte\Runtime\Template
                     <div class="card-body">
                         <div class="form-floating">
                             ';
-		echo Nette\Bridges\FormsLatte\Runtime::item('note', $this->global)->getControl()->addAttributes(['class' => 'form-control', 'style' => 'height: 100px']) /* line 331 */;
+		echo Nette\Bridges\FormsLatte\Runtime::item('note', $this->global)->getControl()->addAttributes(['class' => 'form-control', 'style' => 'height: 100px']) /* line 364 */;
 		echo '
                             ';
-		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('note', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 332 */;
+		echo ($ʟ_label = Nette\Bridges\FormsLatte\Runtime::item('note', $this->global)->getLabel())?->addAttributes(['class' => 'form-label']) /* line 365 */;
 		echo '
                         </div>
                     </div>
@@ -401,19 +429,19 @@ final class Template_24541d2dc7 extends Latte\Runtime\Template
                 <div class="action-buttons-container">
                     <div class="d-flex justify-content-between">
                         <a href="';
-		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 341 */;
+		echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('default')) /* line 374 */;
 		echo '" class="btn btn-outline-secondary">
                             <i class="bi bi-arrow-left"></i> Zpět na seznam faktur
                         </a>
                         <button';
-		echo ($ʟ_elem = Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControlPart())->addAttributes(['class' => null])->attributes() /* line 345 */;
+		echo ($ʟ_elem = Nette\Bridges\FormsLatte\Runtime::item('send', $this->global)->getControlPart())->addAttributes(['class' => null])->attributes() /* line 378 */;
 		echo ' class="btn btn-primary">
                             <i class="bi bi-check-lg"></i> Vytvořit fakturu
                         </button>
                     </div>
                 </div>
             ';
-		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 350 */;
+		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack)) /* line 383 */;
 
 		echo '
         </div>
