@@ -26,7 +26,6 @@ final class UsersPresenter extends BasePresenter
         'edit' => ['admin'], // Upravit uživatele může jen admin
         'delete' => ['admin'], // Smazat uživatele může jen admin
         'moveUser' => ['admin'], // Přesunout uživatele může jen admin (ale reálně jen super admin)
-        'rateLimitStats' => ['admin'], // ✅ NOVÉ: Rate limit statistiky pouze pro adminy
     ];
 
     public function __construct(UserManager $userManager)
@@ -992,86 +991,5 @@ final class UsersPresenter extends BasePresenter
                 'error' => 'Nastala chyba při odblokování uživatele: ' . $e->getMessage()
             ]);
         }
-    }
-
-    public function renderRateLimitStats(): void
-    {
-        // Získání statistik
-        $this->template->statistics = $this->getRateLimiter()->getStatistics();
-
-        // Současné IP adresy s blokováním
-        $blockedIPs = $this->database->table('rate_limit_blocks')
-            ->where('blocked_until > ?', new \DateTime())
-            ->order('blocked_until DESC');
-
-        $this->template->blockedIPs = $blockedIPs;
-
-        // Rate limit status pro různé akce
-        $this->template->rateLimitStatuses = [
-            'login' => $this->getRateLimitStatus('login'),
-            'form_submit' => $this->getRateLimitStatus('form_submit'),
-            'user_creation' => $this->getRateLimitStatus('user_creation'),
-            'password_reset' => $this->getRateLimitStatus('password_reset'),
-        ];
-
-        // ✅ OPRAVENO: Správné volání getClientIP
-        $this->template->currentIP = $this->getRateLimiter()->getClientIP();
-    }
-
-    /**
-     * ✅ OPRAVENÉ: Helper metoda pro získání rate limit statusu
-     */
-    private function getRateLimitStatus(string $action): array
-    {
-        return $this->getRateLimiter()->getLimitStatus($action, $this->getRateLimiter()->getClientIP());
-    }
-
-    /**
-     * ✅ NOVÉ: Vymazání rate limit blokování pro konkrétní IP (pouze super admin)
-     */
-    public function handleClearRateLimit(string $ipAddress): void
-    {
-        if (!$this->isSuperAdmin()) {
-            $this->flashMessage('Nemáte oprávnění k této akci.', 'danger');
-            $this->redirect('this');
-        }
-
-        $adminName = $this->getUser()->getIdentity()->username;
-
-        if ($this->getRateLimiter()->clearBlocking($ipAddress, "Vymazáno super adminem {$adminName}")) {
-            $this->flashMessage("Rate limiting vymazán pro IP: {$ipAddress}", 'success');
-        } else {
-            $this->flashMessage('Chyba při mazání rate limitingu.', 'danger');
-        }
-
-        $this->redirect('this');
-    }
-
-    /**
-     * ✅ NOVÉ: Vymazání všech rate limit blokování (pouze super admin)
-     */
-    public function handleClearAllRateLimits(): void
-    {
-        if (!$this->isSuperAdmin()) {
-            $this->flashMessage('Nemáte oprávnění k této akci.', 'danger');
-            $this->redirect('this');
-        }
-
-        try {
-            $deletedBlocks = $this->database->table('rate_limit_blocks')->delete();
-            $deletedAttempts = $this->database->table('rate_limits')->delete();
-
-            $adminName = $this->getUser()->getIdentity()->username;
-            $this->securityLogger->logSecurityEvent(
-                'all_rate_limits_cleared',
-                "Všechny rate limity vymazány super adminem {$adminName}. Bloky: {$deletedBlocks}, Pokusy: {$deletedAttempts}"
-            );
-
-            $this->flashMessage("Všechny rate limity vymazány. Bloky: {$deletedBlocks}, Pokusy: {$deletedAttempts}", 'success');
-        } catch (\Exception $e) {
-            $this->flashMessage('Chyba při mazání rate limitů: ' . $e->getMessage(), 'danger');
-        }
-
-        $this->redirect('this');
     }
 }

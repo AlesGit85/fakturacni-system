@@ -586,3 +586,46 @@
 [2025-08-18 12-49-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
 [2025-08-18 12-50-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
 [2025-08-18 12-50-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-12-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-18 22-12-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=yd6id&_fid=w8bb 
+[2025-08-18 22-12-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-18 22-12-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=tnqu 
+[2025-08-18 22-12-29] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=tnqu 
+[2025-08-18 22-14-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-18 22-14-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=0htvi&_fid=oa3u 
+[2025-08-18 22-14-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-18 22-14-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=x2yu 
+[2025-08-18 22-14-02] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=x2yu 
+[2025-08-18 22-14-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/ 
+[2025-08-18 22-14-14] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/security/ 
+[2025-08-18 22-14-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/ 
+[2025-08-18 22-14-24] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/security/ 
+[2025-08-18 22-14-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/dashboard 
+[2025-08-18 22-14-28] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/security/dashboard 
+[2025-08-18 22-14-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-14-32] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-15-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/rate-limit-stats 
+[2025-08-18 22-15-45] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/users/rate-limit-stats 
+[2025-08-18 22-15-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-15-59] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-16-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-16-27] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-21-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=tnqu 
+[2025-08-18 22-21-09] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=tnqu 
+[2025-08-18 22-22-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-22-46] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-25-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/out 
+[2025-08-18 22-25-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=mlsi 
+[2025-08-18 22-25-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-08-18 22-25-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-08-18 22-25-30] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-08-18 22-25-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-08-18 22-25-52] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-08-18 22-25-52] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=y55o 
+[2025-08-18 22-25-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-08-18 22-25-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=sl1x 
+[2025-08-18 22-25-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-08-18 22-25-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=pxod 
+[2025-08-18 22-26-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-08-18 22-26-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-26-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
