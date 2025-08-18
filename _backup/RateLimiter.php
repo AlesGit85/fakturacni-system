@@ -334,7 +334,7 @@ class RateLimiter
     /**
      * ✅ ROZŠÍŘENO: Získá statistiky rate limitingu pro dashboard s tenant podporou
      */
-    public function getStatistics(?int $tenantId = null, bool $includeGeneral = false): array
+    public function getStatistics(?int $tenantId = null): array
     {
         try {
             // Aktuálně zablokované IP adresy
@@ -342,15 +342,8 @@ class RateLimiter
                 ->where('blocked_until > ?', new \DateTime());
 
             if ($tenantId !== null) {
-                if ($includeGeneral) {
-                    // Pro normální adminy - vidí své + obecné
-                    $blocksQuery->where('tenant_id = ? OR tenant_id IS NULL', $tenantId);
-                } else {
-                    // Jen konkrétní tenant
-                    $blocksQuery->where('tenant_id', $tenantId);
-                }
+                $blocksQuery->where('tenant_id', $tenantId);
             }
-            // Pro super admina (tenantId = null) - bez filtrování
 
             $currentlyBlocked = $blocksQuery->count();
 
@@ -360,11 +353,7 @@ class RateLimiter
                 ->where('created_at > ?', $last24h);
 
             if ($tenantId !== null) {
-                if ($includeGeneral) {
-                    $attemptsQuery->where('tenant_id = ? OR tenant_id IS NULL', $tenantId);
-                } else {
-                    $attemptsQuery->where('tenant_id', $tenantId);
-                }
+                $attemptsQuery->where('tenant_id', $tenantId);
             }
 
             $attemptsLast24h = $attemptsQuery->count();
@@ -375,11 +364,7 @@ class RateLimiter
                 ->where('successful', false);
 
             if ($tenantId !== null) {
-                if ($includeGeneral) {
-                    $failedAttemptsQuery->where('tenant_id = ? OR tenant_id IS NULL', $tenantId);
-                } else {
-                    $failedAttemptsQuery->where('tenant_id', $tenantId);
-                }
+                $failedAttemptsQuery->where('tenant_id', $tenantId);
             }
 
             $failedAttemptsLast24h = $failedAttemptsQuery->count();
@@ -391,13 +376,8 @@ class RateLimiter
             $params = [$last24h];
 
             if ($tenantId !== null) {
-                if ($includeGeneral) {
-                    $topIPsQuery .= ' AND (tenant_id = ? OR tenant_id IS NULL)';
-                    $params[] = $tenantId;
-                } else {
-                    $topIPsQuery .= ' AND tenant_id = ?';
-                    $params[] = $tenantId;
-                }
+                $topIPsQuery .= ' AND tenant_id = ?';
+                $params[] = $tenantId;
             }
 
             $topIPsQuery .= ' GROUP BY ip_address ORDER BY attempt_count DESC LIMIT 5';
