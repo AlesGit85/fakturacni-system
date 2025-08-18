@@ -219,7 +219,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 2,
-    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 2,
+    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 3,
     'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 1,
     'App\\Presentation\\Security\\SecurityDefaultTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,

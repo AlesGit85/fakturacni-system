@@ -36,7 +36,7 @@ final class Template_169a361c6c extends Latte\Runtime\Template
 		extract($this->params);
 
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
-			foreach (array_intersect_key(['block' => '130', 'type' => '196'], $this->params) as $ʟ_v => $ʟ_l) {
+			foreach (array_intersect_key(['block' => '131', 'type' => '201'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
@@ -196,20 +196,21 @@ final class Template_169a361c6c extends Latte\Runtime\Template
                                 <th>IP Adresa</th>
                                 <th>Typ blokování</th>
                                 <th>Počet pokusů</th>
+                                <th>Blokováno od</th>
                                 <th>Zablokováno do</th>
                                 <th>Akce</th>
                             </tr>
                         </thead>
                         <tbody>
 ';
-			foreach ($blockedIPs as $block) /* line 130 */ {
+			foreach ($blockedIPs as $block) /* line 131 */ {
 				echo '                                <tr>
                                     <td>
                                         <code class="security-code">';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($block->ip_address)) /* line 133 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)($block->ip_address)) /* line 134 */;
 				echo '</code>
 ';
-				if (isset($currentIP) && $block->ip_address === $currentIP) /* line 134 */ {
+				if (isset($currentIP) && $block->ip_address === $currentIP) /* line 135 */ {
 					echo '                                            <span class="badge bg-warning text-dark ms-1">
                                                 <i class="bi bi-person-fill me-1"></i>Vaše IP
                                             </span>
@@ -217,23 +218,32 @@ final class Template_169a361c6c extends Latte\Runtime\Template
 				}
 				echo '                                    </td>
                                     <td>
-                                        <span class="badge security-badge rate-limit">
+                                        <span class="badge" style="background-color: #B1D235; color: #212529; font-weight: 600;">
                                             ';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($block->action ?? 'general')) /* line 142 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)($block->action ?? 'general')) /* line 143 */;
 				echo '
                                         </span>
                                     </td>
                                     <td>
                                         <span class="security-metric-number text-warning">
                                             ';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($block->block_count ?? 1)) /* line 147 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)($block->block_count ?? 1)) /* line 148 */;
 				echo '
                                         </span>
                                     </td>
                                     <td>
                                         <span class="text-muted">
+                                            <i class="bi bi-clock-history me-1"></i>
                                             ';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->date)($block->blocked_until, 'd.m.Y H:i:s'))) /* line 152 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->date)($block->created_at, 'd.m.Y H:i:s'))) /* line 154 */;
+				echo '
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>
+                                            ';
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)(($this->filters->date)($block->blocked_until, 'd.m.Y H:i:s'))) /* line 160 */;
 				echo '
                                         </span>
                                     </td>
@@ -241,16 +251,13 @@ final class Template_169a361c6c extends Latte\Runtime\Template
                                         <div class="security-actions">
                                             <button class="clear-block-btn btn btn-outline-danger btn-sm" 
                                                     data-url="';
-				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('clearRateLimit!')) /* line 158 */;
+				echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link('clearRateLimit!')) /* line 166 */;
 				echo '"
                                                     data-ip="';
-				echo LR\Filters::escapeHtmlAttr(($this->filters->escape)($block->ip_address)) /* line 159 */;
+				echo LR\Filters::escapeHtmlAttr(($this->filters->escape)($block->ip_address)) /* line 167 */;
 				echo '"
-                                                    title="Odblokovat IP ';
-				echo LR\Filters::escapeHtmlAttr(($this->filters->escape)($block->ip_address)) /* line 160 */;
-				echo '">
-                                                <i class="bi bi-trash me-1"></i>
-                                                Odblokovat
+                                                    title="Vymazat rate limiting pro tuto IP">
+                                                <i class="bi bi-trash"></i>
                                             </button>
                                         </div>
                                     </td>
@@ -263,13 +270,11 @@ final class Template_169a361c6c extends Latte\Runtime\Template
                     </table>
                 </div>
 ';
-		} else /* line 171 */ {
-			echo '                <div class="security-empty-state text-center py-5">
-                    <i class="bi bi-shield-check security-empty-icon text-success"></i>
-                    <h6 class="security-empty-title text-success mt-3">Žádné blokované IP adresy</h6>
-                    <p class="security-empty-subtitle text-muted">
-                        Systém je v pořádku, žádné bezpečnostní hrozby nejsou detekovány.
-                    </p>
+		} else /* line 178 */ {
+			echo '                <div class="text-center py-5">
+                    <i class="bi bi-shield-check text-success" style="font-size: 3rem;"></i>
+                    <h6 class="text-success mt-3">Žádné zablokované IP adresy</h6>
+                    <p class="text-muted fs-6">Systém je v pořádku, žádné bezpečnostní hrozby</p>
                 </div>
 ';
 		}
@@ -287,16 +292,16 @@ final class Template_169a361c6c extends Latte\Runtime\Template
         </div>
         <div class="security-issues-body">
 ';
-		if ($blockTypes && count($blockTypes) > 0) /* line 194 */ {
+		if ($blockTypes && count($blockTypes) > 0) /* line 199 */ {
 			echo '                <div class="row">
 ';
-			foreach ($blockTypes as $type) /* line 196 */ {
+			foreach ($blockTypes as $type) /* line 201 */ {
 				echo '                        <div class="col-md-6 col-lg-4 mb-3">
                             <div class="rate-limit-block-type">
                                 <div class="rate-limit-block-type-content">
                                     <div class="rate-limit-block-type-label">
                                         ';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($type->action)) /* line 201 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)($type->action)) /* line 206 */;
 				echo '
                                     </div>
                                     <div class="rate-limit-block-type-subtitle">
@@ -306,7 +311,7 @@ final class Template_169a361c6c extends Latte\Runtime\Template
                                 <div class="rate-limit-block-type-number">
                                     <div class="rate-limit-block-type-count">
                                         ';
-				echo LR\Filters::escapeHtmlText(($this->filters->escape)($type->total_blocks)) /* line 209 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->escape)($type->total_blocks)) /* line 214 */;
 				echo '
                                     </div>
                                     <div class="rate-limit-block-type-unit">
@@ -321,7 +326,7 @@ final class Template_169a361c6c extends Latte\Runtime\Template
 
 			echo '                </div>
 ';
-		} else /* line 219 */ {
+		} else /* line 224 */ {
 			echo '                <div class="security-empty-state text-center py-4">
                     <i class="bi bi-graph-up security-empty-icon text-muted"></i>
                     <h6 class="security-empty-title text-muted mt-3">Žádné blokování za posledních 24h</h6>
@@ -382,9 +387,9 @@ final class Template_169a361c6c extends Latte\Runtime\Template
 </div>
 
 <script src="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 280 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 285 */;
 		echo '/js/security-rate-limit-stats.js?v=';
-		echo LR\Filters::escapeHtmlAttr(time()) /* line 280 */;
+		echo LR\Filters::escapeHtmlAttr(time()) /* line 285 */;
 		echo '"></script>
 
 <script>

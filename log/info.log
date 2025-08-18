@@ -629,3 +629,16 @@
 [2025-08-18 22-26-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
 [2025-08-18 22-26-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
 [2025-08-18 22-26-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-27-49] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-27-49] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-30-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-30-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-37-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-18 22-37-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=x9bj 
+[2025-08-18 22-37-09] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=x9bj 
+[2025-08-18 22-37-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/ 
+[2025-08-18 22-37-12] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/security/ 
+[2025-08-18 22-37-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/dashboard 
+[2025-08-18 22-37-16] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/security/dashboard 
+[2025-08-18 22-37-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 22-37-17] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/security/rate-limit-stats 

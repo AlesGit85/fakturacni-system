@@ -122,7 +122,6 @@
                                 <th>IP Adresa</th>
                                 <th>Typ blokování</th>
                                 <th>Počet pokusů</th>
-                                <th>Blokováno od</th>
                                 <th>Zablokováno do</th>
                                 <th>Akce</th>
                             </tr>
@@ -139,7 +138,7 @@
                                         {/if}
                                     </td>
                                     <td>
-                                        <span class="badge" style="background-color: #B1D235; color: #212529; font-weight: 600;">
+                                        <span class="badge security-badge rate-limit">
                                             {$block->action ?? 'general'|escape}
                                         </span>
                                     </td>
@@ -150,13 +149,6 @@
                                     </td>
                                     <td>
                                         <span class="text-muted">
-                                            <i class="bi bi-clock-history me-1"></i>
-                                            {$block->created_at|date:'d.m.Y H:i:s'|escape}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="text-muted">
-                                            <i class="bi bi-clock me-1"></i>
                                             {$block->blocked_until|date:'d.m.Y H:i:s'|escape}
                                         </span>
                                     </td>
@@ -165,8 +157,9 @@
                                             <button class="clear-block-btn btn btn-outline-danger btn-sm" 
                                                     data-url="{link clearRateLimit!}"
                                                     data-ip="{$block->ip_address|escape}"
-                                                    title="Vymazat rate limiting pro tuto IP">
-                                                <i class="bi bi-trash"></i>
+                                                    title="Odblokovat IP {$block->ip_address|escape}">
+                                                <i class="bi bi-trash me-1"></i>
+                                                Odblokovat
                                             </button>
                                         </div>
                                     </td>
@@ -176,10 +169,12 @@
                     </table>
                 </div>
             {else}
-                <div class="text-center py-5">
-                    <i class="bi bi-shield-check text-success" style="font-size: 3rem;"></i>
-                    <h6 class="text-success mt-3">Žádné zablokované IP adresy</h6>
-                    <p class="text-muted fs-6">Systém je v pořádku, žádné bezpečnostní hrozby</p>
+                <div class="security-empty-state text-center py-5">
+                    <i class="bi bi-shield-check security-empty-icon text-success"></i>
+                    <h6 class="security-empty-title text-success mt-3">Žádné blokované IP adresy</h6>
+                    <p class="security-empty-subtitle text-muted">
+                        Systém je v pořádku, žádné bezpečnostní hrozby nejsou detekovány.
+                    </p>
                 </div>
             {/if}
         </div>
