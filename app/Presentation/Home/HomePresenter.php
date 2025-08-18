@@ -9,6 +9,7 @@ use App\Model\InvoicesManager;
 use App\Model\ClientsManager;
 use App\Model\CompanyManager;
 use App\Model\UserManager;
+use App\Model\ModuleManager;
 use App\Presentation\BasePresenter;
 
 final class HomePresenter extends BasePresenter
@@ -25,18 +26,23 @@ final class HomePresenter extends BasePresenter
     /** @var UserManager */
     private $userManager;
 
+    /** @var ModuleManager */
+    private $moduleManager;
+
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
 
     public function __construct(
         InvoicesManager $invoicesManager,
         ClientsManager $clientsManager,
         CompanyManager $companyManager,
-        UserManager $userManager
+        UserManager $userManager,
+        ModuleManager $moduleManager
     ) {
         $this->invoicesManager = $invoicesManager;
         $this->clientsManager = $clientsManager;
         $this->companyManager = $companyManager;
         $this->userManager = $userManager;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -63,11 +69,23 @@ final class HomePresenter extends BasePresenter
             $this->getCurrentTenantId(),
             $this->isSuperAdmin()
         );
+
+        // AKTUALIZOVÁNO: UserManager má nyní multi-tenancy
+        $this->userManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
     }
 
     public function renderDefault(): void
     {
         try {
+            // NOVÉ: Pokud je uživatel super admin, zobrazíme jiný dashboard
+            if ($this->isSuperAdmin()) {
+                $this->renderSuperAdminDashboard();
+                return;
+            }
+
             // Kontrola faktur po splatnosti (pouze pro účetní a admin)
             if ($this->isAccountant()) {
                 $this->invoicesManager->checkOverdueDates();
@@ -89,28 +107,16 @@ final class HomePresenter extends BasePresenter
 
             if ($currentUser) {
                 // OPRAVA: Použijeme přímý DB dotaz místo UserManager (který má problém s tenant filtrováním)
-                $userData = $this->database->query('SELECT * FROM users WHERE id = ?', $currentUser->id)->fetch();
+                $userData = $this->database->query('SELECT * FROM users WHERE id = ?', $currentUser->getId())->fetch();
                 
                 if ($userData) {
-                    // OPRAVENO: Používáme pouze křestní jméno v pátém pádě, nebo prázdný řetězec
-                    if (!empty($userData->first_name)) {
-                        // Převedeme křestní jméno do pátého pádu pomocí metody z BasePresenter
-                        $userDisplayName = $this->getVocativeName($userData->first_name);
-                    } else {
-                        // Prázdný řetězec - zobrazí se defaultní "Vítejte v QRdokladu!"
-                        $userDisplayName = '';
-                    }
-                    
+                    // Pátý pád (vokativ) pro oslovení
+                    $userDisplayName = $this->getVocativeName($userData->first_name);
                     $userFullName = trim($userData->first_name . ' ' . $userData->last_name);
-                    
-                    // Pokud je celé jméno prázdné, použijeme username
-                    if (empty($userFullName)) {
-                        $userFullName = $userData->username;
-                    }
                 }
             }
 
-            // Příprava dat pro dashboard
+            // Předání dat do šablony
             $this->template->dashboardStats = [
                 'clients' => $clientsCount,
                 'invoices' => [
@@ -175,9 +181,190 @@ final class HomePresenter extends BasePresenter
             $this->template->userFullName = '';
             
             // Zobrazíme chybovou hlášku
-            $this->flashMessage('Došlo k chybě při načítání dashboardu. Zkuste to prosím znovu.', 'warning');
+            $this->flashMessage('Došlo k chybě při načítání dashboardu. Zkuste to prosím znovu.', 'danger');
         }
     }
+
+    /**
+     * NOVÁ METODA: Vykreslení super admin dashboardu
+     */
+    public function renderSuperAdminDashboard(): void
+    {
+        try {
+            // Získání super admin statistik
+            $superAdminStats = $this->getSuperAdminStatistics();
+            
+            // Informace o aktuálním uživateli (i pro super admina)
+            $currentUser = $this->getUser()->getIdentity();
+            $userDisplayName = '';
+            $userFullName = '';
+
+            if ($currentUser) {
+                $userData = $this->database->query('SELECT * FROM users WHERE id = ?', $currentUser->getId())->fetch();
+                
+                if ($userData) {
+                    $userDisplayName = $this->getVocativeName($userData->first_name);
+                    $userFullName = trim($userData->first_name . ' ' . $userData->last_name);
+                }
+            }
+            
+            // Předání dat do šablony
+            $this->template->superAdminStats = $superAdminStats;
+            $this->template->isSuperAdmin = true;
+            $this->template->currentUserData = $currentUser;
+            $this->template->userDisplayName = $userDisplayName;
+            $this->template->userFullName = $userFullName;
+            
+            // Super admin nepotřebuje tyto sekce, ale nastavíme je pro kompatibilitu šablony
+            $this->template->dashboardStats = [
+                'clients' => 0,
+                'invoices' => [
+                    'total' => 0,
+                    'paid' => 0,
+                    'overdue' => 0,
+                    'unpaidAmount' => 0
+                ]
+            ];
+            $this->template->setupSteps = [];
+            $this->template->isSetupComplete = true;
+            $this->template->upcomingInvoices = [];
+            $this->template->recentInvoices = [];
+            $this->template->company = null;
+            
+        } catch (\Exception $e) {
+            error_log('Chyba v super admin dashboardu: ' . $e->getMessage());
+            
+            // Fallback hodnoty pro super admin
+            $this->template->superAdminStats = [
+                'total_tenants' => 0,
+                'total_users' => 0,
+                'total_clients' => 0,
+                'total_active_modules' => 0,
+                'total_invoices' => 0,
+                'latest_tenant_registration' => null,
+                'blocked_ips_count' => 0,
+                'failed_attempts_24h' => 0
+            ];
+            $this->template->isSuperAdmin = true;
+            $this->template->currentUserData = null;
+            $this->template->userDisplayName = '';
+            $this->template->userFullName = '';
+            $this->template->dashboardStats = [
+                'clients' => 0,
+                'invoices' => [
+                    'total' => 0,
+                    'paid' => 0,
+                    'overdue' => 0,
+                    'unpaidAmount' => 0
+                ]
+            ];
+            $this->template->setupSteps = [];
+            $this->template->isSetupComplete = true;
+            $this->template->upcomingInvoices = [];
+            $this->template->recentInvoices = [];
+            $this->template->company = null;
+            
+            $this->flashMessage('Došlo k chybě při načítání super admin dashboardu.', 'danger');
+        }
+    }
+
+    /**
+     * NOVÁ METODA: Získání statistik pro super admin dashboard
+     */
+    private function getSuperAdminStatistics(): array
+    {
+        try {
+            // Počet tenantů
+            $totalTenants = $this->database->table('tenants')->count();
+            
+            // Počet všech uživatelů v systému
+            $totalUsers = $this->database->table('users')
+                ->where('tenant_id IS NOT NULL')
+                ->count();
+            
+            // Počet všech klientů v systému
+            $totalClients = $this->database->table('clients')->count();
+            
+            // Celkový počet aktivních modulů
+            $totalActiveModules = $this->database->table('user_modules')
+                ->where('is_active', 1)
+                ->count();
+            
+            // Celkový počet faktur v systému
+            $totalInvoices = $this->database->table('invoices')->count();
+            
+            // Datum registrace posledního tenanta
+            $latestTenant = $this->database->table('tenants')
+                ->order('created_at DESC')
+                ->limit(1)
+                ->fetch();
+            $latestTenantRegistration = $latestTenant ? $latestTenant->created_at : null;
+            
+            // Počet aktuálně blokovaných IP adres
+            $blockedIpsCount = $this->getSafeBlockedIpsCount();
+            
+            // Počet neúspěšných pokusů za 24h
+            $failedAttempts24h = $this->getSafeFailedAttempts24h();
+            
+            return [
+                'total_tenants' => $totalTenants,
+                'total_users' => $totalUsers,
+                'total_clients' => $totalClients,
+                'total_active_modules' => $totalActiveModules,
+                'total_invoices' => $totalInvoices,
+                'latest_tenant_registration' => $latestTenantRegistration,
+                'blocked_ips_count' => $blockedIpsCount,
+                'failed_attempts_24h' => $failedAttempts24h
+            ];
+            
+        } catch (\Exception $e) {
+            error_log('Chyba při načítání super admin statistik: ' . $e->getMessage());
+            
+            return [
+                'total_tenants' => 0,
+                'total_users' => 0,
+                'total_clients' => 0,
+                'total_active_modules' => 0,
+                'total_invoices' => 0,
+                'latest_tenant_registration' => null,
+                'blocked_ips_count' => 0,
+                'failed_attempts_24h' => 0
+            ];
+        }
+    }
+
+    /**
+     * POMOCNÁ METODA: Bezpečné načtení počtu blokovaných IP adres
+     */
+    private function getSafeBlockedIpsCount(): int
+    {
+        try {
+            $now = new \DateTime();
+            return $this->database->table('rate_limit_blocks')
+                ->where('blocked_until > ?', $now)
+                ->count();
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * POMOCNÁ METODA: Bezpečné načtení počtu neúspěšných pokusů za 24h
+     */
+    private function getSafeFailedAttempts24h(): int
+    {
+        try {
+            $yesterday = new \DateTime('-24 hours');
+            return $this->database->table('rate_limits')
+                ->where('successful', 0)
+                ->where('created_at > ?', $yesterday)
+                ->count();
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+
 
     /**
      * Získá kroky pro dokončení nastavení systému
@@ -186,51 +373,36 @@ final class HomePresenter extends BasePresenter
     {
         $steps = [];
 
-        // Krok 1: Nastavení údajů společnosti
-        if (!$company || empty($company->name) || empty($company->address) || empty($company->ic)) {
+        // Kontrola údajů o společnosti
+        if (!$company || empty($company->name) || empty($company->address)) {
             $steps[] = [
-                'title' => 'Doplňte údaje vaší společnosti',
-                'description' => 'Nastavte název, adresu, IČO a další informace o vaší firmě.',
+                'title' => 'Dokončete údaje o společnosti',
+                'description' => 'Vyplňte název, adresu a další kontaktní údaje vaší společnosti.',
                 'link' => $this->link('Settings:default'),
-                'linkText' => 'Nastavit údaje',
                 'icon' => 'bi-building',
                 'priority' => 1
             ];
         }
 
-        // Krok 2: Nastavení bankovního účtu
-        if (!$company || empty($company->bank_account)) {
+        // Kontrola klientů
+        if ($clientsCount === 0) {
             $steps[] = [
-                'title' => 'Nastavte bankovní účet',
-                'description' => 'Přidejte číslo bankovního účtu pro platby faktur.',
-                'link' => $this->link('Settings:default'),
-                'linkText' => 'Přidat účet',
-                'icon' => 'bi-bank',
+                'title' => 'Přidejte prvního klienta',
+                'description' => 'Vytvořte záznam o vašem prvním klientovi pro snadnější fakturaci.',
+                'link' => $this->link('Clients:add'),
+                'icon' => 'bi-person-plus',
                 'priority' => 2
             ];
         }
 
-        // Krok 3: Přidání prvního klienta
-        if ($clientsCount === 0) {
-            $steps[] = [
-                'title' => 'Přidejte prvního klienta',
-                'description' => 'Vytvořte záznam o vašem prvním klientovi.',
-                'link' => $this->link('Clients:add'),
-                'linkText' => 'Přidat klienta',
-                'icon' => 'bi-person-plus',
-                'priority' => 3
-            ];
-        }
-
-        // Krok 4: Vytvoření první faktury
-        if ($invoicesCount === 0) {
+        // Kontrola faktur
+        if ($invoicesCount === 0 && $clientsCount > 0) {
             $steps[] = [
                 'title' => 'Vytvořte první fakturu',
-                'description' => 'Vystavte svou první fakturu a vyzkoušejte si systém.',
+                'description' => 'Zkuste si vytvořit vaši první fakturu v systému.',
                 'link' => $this->link('Invoices:add'),
-                'linkText' => 'Vytvořit fakturu',
                 'icon' => 'bi-file-earmark-plus',
-                'priority' => 4
+                'priority' => 3
             ];
         }
 
@@ -243,17 +415,15 @@ final class HomePresenter extends BasePresenter
     }
 
     /**
-     * Získá faktury s blížící se splatností (do 7 dnů)
+     * Získá faktury splatné do 7 dnů
      */
     private function getUpcomingDueInvoices()
     {
         $sevenDaysFromNow = new \DateTime('+7 days');
-        $today = new \DateTime();
-
+        
         return $this->invoicesManager->getAll()
-            ->where('status', 'created')
-            ->where('due_date >= ?', $today->format('Y-m-d'))
-            ->where('due_date <= ?', $sevenDaysFromNow->format('Y-m-d'))
+            ->where('status', ['created', 'overdue'])
+            ->where('due_date <= ?', $sevenDaysFromNow)
             ->order('due_date ASC')
             ->limit(5);
     }

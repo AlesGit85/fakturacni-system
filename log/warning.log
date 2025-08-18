@@ -57,3 +57,5 @@
 [2025-08-18 22-25-55] ModuleManager: Nebyl nastaven user context pro getAllInstalledModules()  @  http://localhost:8000/sign/in?_fid=sl1x 
 [2025-08-18 22-25-58] ModuleManager: Nebyl nastaven user context pro getAllInstalledModules()  @  http://localhost:8000/sign/in?_fid=pxod 
 [2025-08-18 22-26-01] ModuleManager: Nebyl nastaven user context pro getAllInstalledModules()  @  http://localhost:8000/sign/forgot-password 
+[2025-08-18 23-29-42] ModuleManager: Nebyl nastaven user context pro getAllInstalledModules()  @  http://localhost:8000/sign/in?backlink=n3m91&_fid=e3sk 
+[2025-08-18 23-32-49] ModuleManager: Nebyl nastaven user context pro getAllInstalledModules()  @  http://localhost:8000/sign/in?backlink=8dmsh&_fid=ydj6 

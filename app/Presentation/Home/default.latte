@@ -1,5 +1,311 @@
 {block content}
 
+{* SUPER ADMIN DASHBOARD - úplně jiné zobrazení *}
+{if isset($isSuperAdmin) && $isSuperAdmin}
+
+<div class="home-container">
+    <!-- Super Admin uvítací sekce -->
+    <div class="welcome-section mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="welcome-title mb-2">
+                    {if $userDisplayName}
+                        {* ✅ XSS OCHRANA: Escapování jména uživatele *}
+                        Vítejte zpět, {$userDisplayName|escape}!
+                    {else}
+                        {* ✅ BEZPEČNÉ: Statický text *}
+                        Vítejte v QRdokladu!
+                    {/if}
+                </h1>
+                <p class="welcome-subtitle text-muted">
+                    <i class="bi bi-shield-check me-2" style="color: #B1D235;"></i>
+                    Super Admin Dashboard - Správa celého fakturačního systému
+                </p>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="quick-actions">
+                    <a n:href="Tenants:default" class="btn btn-primary btn-lg">
+                        <i class="bi bi-building me-2"></i>
+                        Správa tenantů
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Super Admin statistiky -->
+    <div class="statistics-section mb-4">
+        <div class="row g-4">
+            <!-- Počet tenantů -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-primary">
+                    <div class="stat-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">{$superAdminStats['total_tenants']|escape}</div>
+                        <div class="stat-label">Tenantů</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="Tenants:default" class="btn btn-icon-dashboard" title="Správa tenantů">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Počet uživatelů -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-info">
+                    <div class="stat-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">{$superAdminStats['total_users']|escape}</div>
+                        <div class="stat-label">Uživatelů</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="Users:default" class="btn btn-icon-dashboard" title="Správa uživatelů">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Počet klientů -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-success">
+                    <div class="stat-icon">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">{$superAdminStats['total_clients']|escape}</div>
+                        <div class="stat-label">Klientů</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="Clients:default" class="btn btn-icon-dashboard" title="Všichni klienti">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Počet faktur -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-warning">
+                    <div class="stat-icon">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">{$superAdminStats['total_invoices']|escape}</div>
+                        <div class="stat-label">Faktur</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="Invoices:default" class="btn btn-icon-dashboard" title="Všechny faktury">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Druhý řádek statistik -->
+    <div class="statistics-section mb-4">
+        <div class="row g-4">
+            <!-- Aktivní moduly -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card" style="border-color: #B1D235;">
+                    <div class="stat-icon" style="color: #B1D235;">
+                        <i class="bi bi-gear-fill"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" style="color: #B1D235;">{$superAdminStats['total_active_modules']|escape}</div>
+                        <div class="stat-label">Aktivních modulů</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="ModuleAdmin:users" class="btn btn-icon-dashboard" title="Správa uživatelských modulů">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blokované IP adresy -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card" style="border-color: #dc3545;">
+                    <div class="stat-icon" style="color: #dc3545;">
+                        <i class="bi bi-ban"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" style="color: #dc3545;">{$superAdminStats['blocked_ips_count']|escape}</div>
+                        <div class="stat-label">Blokovaných IP</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="Security:rateLimitStats" class="btn btn-icon-dashboard" title="Rate limit statistiky">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Neúspěšné pokusy za 24h -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card" style="border-color: #ffc107;">
+                    <div class="stat-icon" style="color: #ffc107;">
+                        <i class="bi bi-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" style="color: #ffc107;">{$superAdminStats['failed_attempts_24h']|escape}</div>
+                        <div class="stat-label">Neúspěšné pokusy 24h</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="Security:dashboard" class="btn btn-icon-dashboard" title="Security dashboard">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Poslední tenant -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card" style="border-color: #6c757d;">
+                    <div class="stat-icon" style="color: #6c757d;">
+                        <i class="bi bi-calendar-plus"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" style="color: #6c757d; font-size: 1.2rem;">
+                            {if $superAdminStats['latest_tenant_registration']}
+                                {$superAdminStats['latest_tenant_registration']|date:'d.m.Y'|escape}
+                            {else}
+                                N/A
+                            {/if}
+                        </div>
+                        <div class="stat-label">Poslední tenant</div>
+                    </div>
+                    <div class="stat-action">
+                        <a n:href="Tenants:default" class="btn btn-icon-dashboard" title="Správa tenantů">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Super Admin rychlé akce -->
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-lightning-fill text-primary me-2"></i>
+                        Rychlé akce
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <a n:href="Tenants:add" class="quick-action-card text-decoration-none">
+                                <div class="d-flex align-items-center p-3 border rounded">
+                                    <div class="quick-action-icon me-3">
+                                        <i class="bi bi-building-add" style="color: #B1D235; font-size: 1.5rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Vytvořit nový tenant</h6>
+                                        <small class="text-muted">Založení nové firmy v systému</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a n:href="Users:default" class="quick-action-card text-decoration-none">
+                                <div class="d-flex align-items-center p-3 border rounded">
+                                    <div class="quick-action-icon me-3">
+                                        <i class="bi bi-people-fill" style="color: #95B11F; font-size: 1.5rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Správa uživatelů</h6>
+                                        <small class="text-muted">Všichni uživatelé napříč tenanty</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a n:href="Security:dashboard" class="quick-action-card text-decoration-none">
+                                <div class="d-flex align-items-center p-3 border rounded">
+                                    <div class="quick-action-icon me-3">
+                                        <i class="bi bi-shield-check" style="color: #dc3545; font-size: 1.5rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Security Dashboard</h6>
+                                        <small class="text-muted">Bezpečnostní monitoring systému</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a n:href="ModuleAdmin:users" class="quick-action-card text-decoration-none">
+                                <div class="d-flex align-items-center p-3 border rounded">
+                                    <div class="quick-action-icon me-3">
+                                        <i class="bi bi-gear-fill" style="color: #6c757d; font-size: 1.5rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Správa modulů</h6>
+                                        <small class="text-muted">Moduly napříč všemi tenanty</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-info-circle text-info me-2"></i>
+                        Systémové informace
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="system-info">
+                        <div class="system-info-item mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Verze systému:</span>
+                                <span class="fw-bold">QRdoklad 1.9.4</span>
+                            </div>
+                        </div>
+                        <div class="system-info-item mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Přihlášen jako:</span>
+                                <span class="fw-bold text-success">Super Admin</span>
+                            </div>
+                        </div>
+                        <div class="system-info-item mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Poslední přihlášení:</span>
+                                <span class="fw-bold">{date('d.m.Y H:i')}</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="d-grid gap-2">
+                            <a n:href="Settings:default" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-gear me-2"></i>Systémové nastavení
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* BĚŽNÝ DASHBOARD - původní obsah pro normální uživatele *}
+{else}
+
 <div class="home-container">
     <!-- Uvítací sekce -->
     <div class="welcome-section mb-4">
@@ -54,42 +360,47 @@
                 <div class="d-flex align-items-center">
                     <i class="bi bi-list-check text-primary me-2"></i>
                     {* ✅ BEZPEČNÉ: Statický text *}
-                    <h3 class="mb-0">Začínáme</h3>
-                    {* ✅ XSS OCHRANA: Escapování počtu kroků *}
-                    <span class="badge bg-primary ms-2">{count($setupSteps)|escape} kroků zbývá</span>
+                    <h4 class="mb-0">Začínáme</h4>
                 </div>
             </div>
             <div class="card-body">
-                <div class="row g-3">
+                <div class="row">
                     {foreach $setupSteps as $step}
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-3">
                         <div class="setup-step">
-                            <div class="step-icon">
-                                {* ✅ XSS OCHRANA: Escapování CSS třídy ikony *}
-                                <i class="{$step['icon']|escape} text-primary"></i>
+                            <div class="setup-step-icon">
+                                {* ✅ BEZPEČNÉ: Ikony jsou ze statického setu *}
+                                <i class="bi {$step['icon']}"></i>
                             </div>
-                            <div class="step-content">
-                                {* ✅ XSS OCHRANA: Escapování názvu kroku *}
-                                <h5 class="step-title">{$step['title']|escape}</h5>
-                                {* ✅ XSS OCHRANA: Escapování popisu kroku *}
-                                <p class="step-description text-muted">{$step['description']|escape}</p>
-                                {* ✅ XSS OCHRANA: Escapování odkazu *}
-                                <a href="{$step['link']|escape}" class="btn btn-outline-primary btn-sm">
-                                    {* ✅ XSS OCHRANA: Escapování textu odkazu *}
-                                    {$step['linkText']|escape}
+                            <div class="setup-step-content">
+                                {* ✅ XSS OCHRANA: Escapování názvu a popisu kroku *}
+                                <h6>{$step['title']|escape}</h6>
+                                <p class="text-muted small">{$step['description']|escape}</p>
+                                {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
+                                <a href="{$step['link']}" class="btn btn-sm btn-outline-primary">
+                                    Dokončit
                                 </a>
                             </div>
                         </div>
                     </div>
                     {/foreach}
                 </div>
+                {if !$isUserAccountant}
+                    <div class="alert alert-info mt-3 mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Upozornění:</strong>
+                        {* ✅ BEZPEČNÉ: Statický text *}
+                        <small>Máte pouze oprávnění ke čtení. 
+                        Pro vytváření faktur a klientů kontaktujte administrátora.</small>
+                    </div>
+                {/if}
             </div>
         </div>
     </div>
     {/if}
 
-<!-- Dashboard statistiky -->
-    <div class="dashboard-stats mb-4">
+    <!-- Statistiky -->
+    <div class="statistics-section mb-4">
         <div class="row g-4">
             <!-- Celkové statistiky -->
             <div class="col-lg-3 col-md-6">
@@ -196,15 +507,21 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    {* Bezpečná kontrola pro count() - funguje pro pole i pro Selection objekty *}
-                    {var $upcomingCount = is_array($upcomingInvoices) ? count($upcomingInvoices) : ($upcomingInvoices ? $upcomingInvoices->count() : 0)}
+                    {if is_array($upcomingInvoices)}
+                        {var $upcomingCount = count($upcomingInvoices)}
+                    {elseif $upcomingInvoices}
+                        {var $upcomingCount = $upcomingInvoices->count()}
+                    {else}
+                        {var $upcomingCount = 0}
+                    {/if}
+                    
                     {if $upcomingCount > 0}
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
                                         {* ✅ BEZPEČNÉ: Statické texty *}
-                                        <th>Faktura</th>
+                                        <th>Číslo</th>
                                         <th>Klient</th>
                                         <th>Splatnost</th>
                                         <th class="text-end">Částka</th>
@@ -215,27 +532,26 @@
                                     {foreach $upcomingInvoices as $invoice}
                                     <tr>
                                         <td>
-                                            {* ✅ XSS OCHRANA: Escapování čísla faktury *}
+                                            {* ✅ XSS OCHRANA: Escapování čísla faktury - OPRAVENO: používám 'number' místo 'invoice_number' *}
                                             <strong>{$invoice->number|escape}</strong>
                                         </td>
                                         <td>
+                                            {* ✅ XSS OCHRANA: Escapování názvu klienta *}
                                             {if $invoice->manual_client}
-                                                {* ✅ XSS OCHRANA: Escapování jména manuálního klienta *}
                                                 {$invoice->client_name|escape}
                                             {else}
-                                                {* ✅ XSS OCHRANA: Escapování jména klienta z databáze *}
                                                 {$invoice->ref('client_id')->name|escape}
                                             {/if}
                                         </td>
                                         <td>
+                                            {* ✅ XSS OCHRANA: Escapování data splatnosti *}
                                             <span class="badge bg-warning text-dark">
-                                                {* ✅ XSS OCHRANA: Escapování data splatnosti *}
                                                 {$invoice->due_date|date:'d.m.Y'|escape}
                                             </span>
                                         </td>
                                         <td class="text-end">
-                                            {* ✅ XSS OCHRANA: Escapování celkové částky *}
-                                            {$invoice->total|number(0, ',', ' ')|escape} Kč
+                                            {* ✅ XSS OCHRANA: Escapování částky *}
+                                            <strong>{$invoice->total|number(0, ',', ' ')|escape} Kč</strong>
                                         </td>
                                         <td class="text-center">
                                             {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
@@ -249,24 +565,23 @@
                             </table>
                         </div>
                     {else}
-                        <div class="empty-state-small">
-                            <i class="bi bi-check-circle text-success"></i>
+                        <div class="text-center text-muted py-4">
+                            <i class="bi bi-calendar-check display-4 text-success"></i>
                             {* ✅ BEZPEČNÉ: Statický text *}
-                            <p class="mb-0">Žádné faktury se neblíží splatnosti</p>
+                            <p class="mt-2">Žádné faktury se neblíží splatnosti</p>
                         </div>
                     {/if}
                 </div>
             </div>
         </div>
 
-        <!-- Rychlé akce a přehled -->
+        <!-- Finanční přehled -->
         <div class="col-lg-4">
-            <!-- Finanční přehled -->
-            <div class="card shadow-sm border-0 mb-4">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-header bg-white">
                     {* ✅ BEZPEČNÉ: Statický text *}
                     <h4 class="mb-0">
-                        <i class="bi bi-currency-exchange text-success me-2"></i>
+                        <i class="bi bi-graph-up text-success me-2"></i>
                         Finanční přehled
                     </h4>
                 </div>
@@ -302,58 +617,17 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Rychlé akce -->
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white">
-                    {* ✅ BEZPEČNÉ: Statický text *}
-                    <h4 class="mb-0">
-                        <i class="bi bi-lightning text-primary me-2"></i>
-                        Rychlé akce
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        {if $isUserAccountant}
-                            {* Účetní a Admin vidí akce pro vytváření *}
-                            {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                            <a n:href="Invoices:add" class="btn btn-primary">
-                                <i class="bi bi-plus-circle me-2"></i>
-                                Nová faktura
-                            </a>
-                            {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                            <a n:href="Clients:add" class="btn btn-outline-primary">
-                                <i class="bi bi-person-plus me-2"></i>
-                                Nový klient
-                            </a>
-                            {if $isUserAdmin}
-                                {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                                <a n:href="Settings:default" class="btn btn-outline-secondary">
-                                    <i class="bi bi-gear me-2"></i>
-                                    Nastavení
-                                </a>
-                            {/if}
-                        {else}
-                            {* Readonly uživatel vidí pouze tlačítko na profil *}
-                            {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                            <a n:href="Users:profile" class="btn btn-primary">
-                                <i class="bi bi-person me-2"></i>
-                                Upravit můj profil
-                            </a>
-                            <div class="alert alert-info">
-                                <i class="bi bi-info-circle me-2"></i>
-                                {* ✅ BEZPEČNÉ: Statický text *}
-                                <small>Máte oprávnění pouze pro čtení. Pro vytváření faktur a klientů kontaktujte administrátora.</small>
-                            </div>
-                        {/if}
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
     <!-- Nedávné faktury -->
-    {var $recentCount = is_array($recentInvoices) ? count($recentInvoices) : ($recentInvoices ? $recentInvoices->count() : 0)}
+    {if is_array($recentInvoices)}
+        {var $recentCount = count($recentInvoices)}
+    {elseif $recentInvoices}
+        {var $recentCount = $recentInvoices->count()}
+    {else}
+        {var $recentCount = 0}
+    {/if}
     {if $recentCount > 0}
     <div class="recent-invoices mt-4">
         <div class="card shadow-sm border-0">
@@ -388,34 +662,34 @@
                             {foreach $recentInvoices as $invoice}
                             <tr>
                                 <td>
-                                    {* ✅ XSS OCHRANA: Escapování čísla faktury *}
+                                    {* ✅ XSS OCHRANA: Escapování čísla faktury - OPRAVENO: používám 'number' místo 'invoice_number' *}
                                     <strong>{$invoice->number|escape}</strong>
                                 </td>
                                 <td>
+                                    {* ✅ XSS OCHRANA: Escapování názvu klienta *}
                                     {if $invoice->manual_client}
-                                        {* ✅ XSS OCHRANA: Escapování jména manuálního klienta *}
                                         {$invoice->client_name|escape}
                                     {else}
-                                        {* ✅ XSS OCHRANA: Escapování jména klienta z databáze *}
                                         {$invoice->ref('client_id')->name|escape}
                                     {/if}
                                 </td>
                                 <td>
-                                    {* ✅ XSS OCHRANA: Escapování data vystavení *}
-                                    {$invoice->issue_date|date:'d.m.Y'|escape}
+                                    {* ✅ XSS OCHRANA: Escapování data vytvoření *}
+                                    {$invoice->created_at|date:'d.m.Y'|escape}
                                 </td>
                                 <td>
-                                    {if $invoice->status == 'created'}
-                                        <span class="badge bg-secondary">Vystavena</span>
-                                    {elseif $invoice->status == 'paid'}
-                                        <span class="badge bg-success">Zaplacena</span>
-                                    {elseif $invoice->status == 'overdue'}
+                                    {* ✅ BEZPEČNÉ: Status badges s předem definovanými hodnotami *}
+                                    {if $invoice->status === 'paid'}
+                                        <span class="badge bg-success">Zaplaceno</span>
+                                    {elseif $invoice->status === 'overdue'}
                                         <span class="badge bg-danger">Po splatnosti</span>
+                                    {else}
+                                        <span class="badge bg-warning text-dark">Vytvořeno</span>
                                     {/if}
                                 </td>
                                 <td class="text-end">
-                                    {* ✅ XSS OCHRANA: Escapování celkové částky *}
-                                    {$invoice->total|number(0, ',', ' ')|escape} Kč
+                                    {* ✅ XSS OCHRANA: Escapování částky *}
+                                    <strong>{$invoice->total|number(0, ',', ' ')|escape} Kč</strong>
                                 </td>
                                 <td class="text-center">
                                     {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
@@ -433,4 +707,5 @@
     </div>
     {/if}
 </div>
-{/block}
+
+{/if}

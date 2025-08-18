@@ -554,6 +554,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 			$this->getService('08'),
 			$this->getService('09'),
 			$this->getService('authenticator'),
+			$this->getService('04'),
 		);
 		$service->injectPrimary(
 			$this->getService('http.request'),

@@ -100,7 +100,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1754922229,
+      1 => 1755552433,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -120,7 +120,7 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1753169637,
+      1 => 1755552711,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
@@ -140,7 +140,7 @@ return array (
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
-      1 => 1755549836,
+      1 => 1755551153,
     ),
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
@@ -218,7 +218,7 @@ return array (
     'App\\Presentation\\Settings\\SettingsTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 2,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 3,
     'App\\Presentation\\Security\\SecurityDashboardTemplate' => 3,
     'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 1,
     'App\\Presentation\\Security\\SecurityDefaultTemplate' => 3,
@@ -228,6 +228,11 @@ return array (
     'App\\Presentation\\Phpmyadmin\\PhpmyadminPresenter' => 2,
     'App\\Presentation\\Clients\\ClientsAddTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 3,
+    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 1,
+    'App\\Presentation\\Tenants\\TenantsTemplate' => 2,
+    'App\\Presentation\\Users\\UsersDefaultTemplate' => 1,
+    'App\\Presentation\\Users\\UsersTemplate' => 1,
+    'App\\Presentation\\Tenants\\TenantsAddTemplate' => 1,
   ),
   2 => 
   array (

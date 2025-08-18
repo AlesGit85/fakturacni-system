@@ -25,3 +25,421 @@
 [2025-08-18 22-59-11] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
 [2025-08-18 22-59-11] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
 [2025-08-18 22-59-11] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-29-42] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?backlink=n3m91&_fid=e3sk 
+[2025-08-18 23-29-44] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-29-44] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-29-44] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-29-44] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-29-44] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-29-44] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-29-44] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-29-44] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-29-44] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-04] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-04] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-04] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-04] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-04] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-04] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-04] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-04] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-04] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-54] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-54] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-54] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-54] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-54] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-54] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-54] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-54] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-31-54] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-32-49] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?backlink=8dmsh&_fid=ydj6 
+[2025-08-18 23-32-51] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/?_fid=qmna 
+[2025-08-18 23-32-51] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/?_fid=qmna 
+[2025-08-18 23-32-51] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=qmna 
+[2025-08-18 23-32-51] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/?_fid=qmna 
+[2025-08-18 23-32-54] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-32-54] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-32-54] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-32-54] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-32-56] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-32-56] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-32-56] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-32-56] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-33-07] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-33-07] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-33-07] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-33-07] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-33-14] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-33-14] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-33-14] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-33-14] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-35-31] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/ 
+[2025-08-18 23-35-31] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/ 
+[2025-08-18 23-35-31] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-35-31] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-36-48] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-36-48] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-36-48] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-36-48] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-36-48] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-36-48] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-36-48] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-36-48] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-36-48] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-36-52] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/ 
+[2025-08-18 23-36-52] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/ 
+[2025-08-18 23-36-52] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-36-52] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-38-42] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-38-42] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-38-42] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-38-42] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-38-42] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-38-42] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-38-42] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-38-42] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-38-42] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-01] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-01] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-01] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-01] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-01] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-01] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-01] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-01] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-01] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-33] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-33] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-33] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-33] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-33] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-33] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-33] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-33] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-33] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-56] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-56] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-56] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-56] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-56] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-56] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-56] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-56] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-39-56] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-11] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-11] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-11] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-11] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-11] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-11] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-11] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-11] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-11] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-19] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-19] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-19] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-19] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-19] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-19] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-19] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-19] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-19] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-45] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-45] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-45] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-45] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-45] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-45] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-45] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-45] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-41-45] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-00] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-00] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-00] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-00] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-00] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-00] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-00] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-00] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-00] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-26] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-26] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-26] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-26] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-26] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-26] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-26] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-26] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-26] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-44] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-44] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-43-46] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-46] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-46] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-46] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-46] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-46] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-46] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-46] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-46] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-48] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-43-48] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-43-48] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-43-48] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-43-48] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-43-48] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-43-48] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-43-48] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-43-48] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-43-50] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-50] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-50] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-50] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-50] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-50] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-50] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-50] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-50] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-51] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-43-51] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-43-51] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-43-51] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-43-51] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-43-51] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-43-51] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-43-51] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-43-51] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-43-57] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-57] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-57] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-57] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-57] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-57] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-57] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-57] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-57] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-43-59] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/tenants/ 
+[2025-08-18 23-43-59] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/tenants/ 
+[2025-08-18 23-43-59] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/tenants/ 
+[2025-08-18 23-43-59] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/tenants/ 
+[2025-08-18 23-43-59] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/tenants/ 
+[2025-08-18 23-43-59] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/tenants/ 
+[2025-08-18 23-43-59] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/tenants/ 
+[2025-08-18 23-43-59] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/tenants/ 
+[2025-08-18 23-43-59] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/tenants/ 
+[2025-08-18 23-44-07] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-44-07] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-44-07] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-44-07] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-44-07] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-44-07] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-44-07] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-44-07] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-44-07] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/?_fid=ou2v 
+[2025-08-18 23-46-49] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-46-49] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-18 23-47-15] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-15] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-15] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/ 
+[2025-08-18 23-47-15] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/ 
+[2025-08-18 23-47-15] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-15] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/ 
+[2025-08-18 23-47-15] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-08-18 23-47-15] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-15] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-47-17] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-17] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-17] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-17] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-17] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-17] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-17] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-17] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-17] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-19] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-19] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-19] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/ 
+[2025-08-18 23-47-19] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/ 
+[2025-08-18 23-47-19] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-19] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/ 
+[2025-08-18 23-47-19] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-08-18 23-47-19] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-19] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-47-20] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-20] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-20] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-20] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-20] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-20] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-20] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-20] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-20] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 23-47-21] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-21] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-21] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/ 
+[2025-08-18 23-47-21] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/ 
+[2025-08-18 23-47-21] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-21] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/ 
+[2025-08-18 23-47-21] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-08-18 23-47-21] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-21] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-47-23] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-47-23] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-47-23] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-47-23] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-47-23] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-47-23] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-47-23] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-47-23] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-47-23] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/security/dashboard 
+[2025-08-18 23-47-24] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-24] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-24] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/ 
+[2025-08-18 23-47-24] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/ 
+[2025-08-18 23-47-24] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-24] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/ 
+[2025-08-18 23-47-24] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-08-18 23-47-24] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-24] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-47-25] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/users/ 
+[2025-08-18 23-47-25] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/users/ 
+[2025-08-18 23-47-25] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/users/ 
+[2025-08-18 23-47-25] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/users/ 
+[2025-08-18 23-47-25] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/users/ 
+[2025-08-18 23-47-25] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/users/ 
+[2025-08-18 23-47-25] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/users/ 
+[2025-08-18 23-47-25] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/users/ 
+[2025-08-18 23-47-25] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/users/ 
+[2025-08-18 23-47-26] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-26] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-26] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/ 
+[2025-08-18 23-47-26] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/ 
+[2025-08-18 23-47-26] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-26] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/ 
+[2025-08-18 23-47-26] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-08-18 23-47-26] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-26] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-47-27] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/tenants/add 
+[2025-08-18 23-47-27] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/tenants/add 
+[2025-08-18 23-47-27] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/tenants/add 
+[2025-08-18 23-47-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/tenants/add 
+[2025-08-18 23-47-27] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/tenants/add 
+[2025-08-18 23-47-27] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/tenants/add 
+[2025-08-18 23-47-27] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/tenants/add 
+[2025-08-18 23-47-27] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/tenants/add 
+[2025-08-18 23-47-27] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/tenants/add 
+[2025-08-18 23-47-28] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-28] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-28] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/ 
+[2025-08-18 23-47-28] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/ 
+[2025-08-18 23-47-28] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-28] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/ 
+[2025-08-18 23-47-28] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-08-18 23-47-28] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-28] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-47-52] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-47-52] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-47-52] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-47-52] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-47-52] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-47-52] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-47-52] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-47-52] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-47-52] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 23-47-54] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-54] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-54] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/ 
+[2025-08-18 23-47-54] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/ 
+[2025-08-18 23-47-54] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/ 
+[2025-08-18 23-47-54] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/ 
+[2025-08-18 23-47-54] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-08-18 23-47-54] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-47-54] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-50-46] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/ 
+[2025-08-18 23-50-46] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/ 
+[2025-08-18 23-50-46] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-50-46] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-50-48] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/ 
+[2025-08-18 23-50-48] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/ 
+[2025-08-18 23-50-48] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-50-48] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-50-49] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/ 
+[2025-08-18 23-50-49] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/ 
+[2025-08-18 23-50-49] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-50-49] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-50-54] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/ 
+[2025-08-18 23-50-54] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/ 
+[2025-08-18 23-50-54] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/ 
+[2025-08-18 23-50-54] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/ 
+[2025-08-18 23-50-54] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/ 
+[2025-08-18 23-50-54] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/ 
+[2025-08-18 23-50-54] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-08-18 23-50-54] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-50-54] Filtrováno 1 aktivních modulů z 1 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-53-33] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/ 
+[2025-08-18 23-53-33] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/ 
+[2025-08-18 23-53-33] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-53-33] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-54-04] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/ 
+[2025-08-18 23-54-04] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/ 
+[2025-08-18 23-54-04] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-54-04] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-54-31] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/ 
+[2025-08-18 23-54-31] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/ 
+[2025-08-18 23-54-31] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-54-31] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-54-38] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/clients/ 
+[2025-08-18 23-54-38] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/clients/ 
+[2025-08-18 23-54-38] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/clients/ 
+[2025-08-18 23-54-38] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/clients/ 
+[2025-08-18 23-54-39] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/ 
+[2025-08-18 23-54-39] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/ 
+[2025-08-18 23-54-39] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-08-18 23-54-39] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/ 
+[2025-08-18 23-54-40] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/clients/ 
+[2025-08-18 23-54-40] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/clients/ 
+[2025-08-18 23-54-40] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/clients/ 
+[2025-08-18 23-54-40] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/clients/ 
+[2025-08-18 23-54-40] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/invoices/ 
+[2025-08-18 23-54-40] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/invoices/ 
+[2025-08-18 23-54-40] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/invoices/ 
+[2025-08-18 23-54-40] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/invoices/ 
+[2025-08-18 23-54-41] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/settings/ 
+[2025-08-18 23-54-41] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/settings/ 
+[2025-08-18 23-54-41] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/settings/ 
+[2025-08-18 23-54-41] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/settings/ 
+[2025-08-18 23-54-51] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/settings/ 
+[2025-08-18 23-54-51] Nalezeno 0 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/settings/ 
+[2025-08-18 23-54-51] === KONEC: Uživatel 57 má 0 nainstalovaných modulů ===  @  http://localhost:8000/settings/ 
+[2025-08-18 23-54-51] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/settings/ 
