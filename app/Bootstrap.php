@@ -68,6 +68,9 @@ class Bootstrap
 
     public function initializeEnvironment(): void
     {
+        // NOVÉ: Nastavení časového pásma pro celou aplikaci
+        date_default_timezone_set('Europe/Prague');
+
         // OPRAVENO: Správná definice WWW_DIR pro produkční server
         define('WWW_DIR', dirname(__DIR__));
 

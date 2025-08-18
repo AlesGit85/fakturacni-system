@@ -574,3 +574,15 @@
 [2025-08-13 09-32-47] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=gtuo 
 [2025-08-13 09-32-47] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
 [2025-08-13 09-32-47] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-18 12-42-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-18 12-42-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-08-18 12-42-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 12-42-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 12-42-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 12-42-08] Super admin: Načten přehled modulů pro 5 administrátorů  @  http://localhost:8000/moduleadmin/users 
+[2025-08-18 12-42-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 12-42-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 12-49-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 12-49-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 12-50-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/rate-limit-stats 
+[2025-08-18 12-50-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/rate-limit-stats 
