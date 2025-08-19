@@ -148,11 +148,6 @@ abstract class BasePresenter extends Presenter
             $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
         }
 
-        // 🔒 NOVÉ: Session security kontroly
-        if ($this->requiresLogin && $this->getUser()->isLoggedIn()) {
-            $this->checkSessionSecurity();
-        }
-
         // NOVÉ: Kontrola statusu tenanta pro přihlášené uživatele
         if ($this->requiresLogin && $this->getUser()->isLoggedIn()) {
             $this->checkTenantStatus();
@@ -1589,68 +1584,5 @@ abstract class BasePresenter extends Presenter
         }
 
         return false; // Pokračuj s non-AJAX logikou
-    }
-
-    /**
-     * 🔒 NOVÉ: Kontrola session security
-     */
-    private function checkSessionSecurity(): void
-{
-    $session = $this->getSession();
-    $securitySection = $session->getSection('security');
-    $now = time();
-
-    // 🔒 NOVÉ: Ochrana proti vícenásobné inicializaci během jednoho requestu
-    static $alreadyChecked = false;
-    if ($alreadyChecked) {
-        return;
-    }
-    $alreadyChecked = true;
-
-    // 1. Nastavení session security údajů při prvním přístupu
-    if (!isset($securitySection->initialized)) {
-        $securitySection->initialized = true;
-        $securitySection->loginTime = $now;
-        $securitySection->lastActivity = $now;
-        $securitySection->lastRegeneration = $now;
-        $securitySection->loginIP = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-        
-        // Regenerace session ID po přihlášení
-        $session->regenerateId();
-        
-        return; // ← DŮLEŽITÉ: ukončit, nekontroluji timeout při inicializaci
-    }
-
-    // 🔒 NOVÉ: Grace period - prvních 60 sekund po přihlášení nekontroluji timeout
-    if (($now - $securitySection->loginTime) < 60) {
-        $securitySection->lastActivity = $now;
-        return;
-    }
-
-    // 2. Kontrola timeoutu neaktivity (30 minut)
-    $inactivityTimeout = 1800; // 30 minut
-    if (($now - $securitySection->lastActivity) > $inactivityTimeout) {
-        $this->getUser()->logout(true);
-        $this->flashMessage('Byli jste odhlášeni z důvodu neaktivity (30 minut).', 'warning');
-        $this->redirect('Sign:in');
-    }
-
-        // 3. Kontrola maximální doby života session (4 hodiny)
-        $maxLifetime = 14400; // 4 hodiny
-        if (($now - $securitySection->loginTime) > $maxLifetime) {
-            $this->getUser()->logout(true);
-            $this->flashMessage('Byli jste odhlášeni z důvodu překročení maximální doby přihlášení (4 hodiny).', 'warning');
-            $this->redirect('Sign:in');
-        }
-
-        // 4. Periodická regenerace session ID (každých 15 minut)
-        $regenerationInterval = 900; // 15 minut
-        if (($now - $securitySection->lastRegeneration) > $regenerationInterval) {
-            $session->regenerateId();
-            $securitySection->lastRegeneration = $now;
-        }
-
-        // 5. Aktualizace poslední aktivity
-        $securitySection->lastActivity = $now;
     }
 }
