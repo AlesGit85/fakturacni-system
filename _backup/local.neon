@@ -5,7 +5,7 @@ parameters:
 database:
 	dsn: 'mysql:host=localhost;dbname=c4qrdoklad'
 	user: 'c4alpho'
-	password: '%env.DB_PASSWORD%'
+	password: 'nzsm_YJH6'
 	options:
 		lazy: true
 		charset: utf8mb4

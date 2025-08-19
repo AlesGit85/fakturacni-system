@@ -5,7 +5,7 @@ return array (
     'App\\Bootstrap' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Bootstrap.php',
-      1 => 1755522000,
+      1 => 1755598283,
     ),
     'App\\Core\\RouterFactory' => 
     array (

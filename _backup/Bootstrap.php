@@ -7,7 +7,6 @@ namespace App;
 use Nette;
 use Nette\Bootstrap\Configurator;
 use App\Security\SecurityHeaders;
-use Dotenv\Dotenv;
 
 class Bootstrap
 {
@@ -69,20 +68,16 @@ class Bootstrap
 
     public function initializeEnvironment(): void
     {
-        // NOVÉ: Načtení .env souboru
-        $envPath = $this->rootDir . '/.env';
-        if (file_exists($envPath)) {
-            $dotenv = Dotenv::createImmutable($this->rootDir);
-            $dotenv->load();
-        }
-
-        // Nastavení časového pásma pro celou aplikaci
+        // NOVÉ: Nastavení časového pásma pro celou aplikaci
         date_default_timezone_set('Europe/Prague');
 
-        // Správná definice WWW_DIR pro produkční server
+        // OPRAVENO: Správná definice WWW_DIR pro produkční server
         define('WWW_DIR', dirname(__DIR__));
 
-        // Tracy jen pro development
+        // OPRAVENO: Debug mode pouze pro localhost
+        // Na produkci je vyřízeno přes config/local.neon
+
+        // Tracy jen pro development (na produkci bude vypnutá přes local.neon)
         $this->configurator->enableTracy($this->rootDir . '/log');
 
         $this->configurator->createRobotLoader()
