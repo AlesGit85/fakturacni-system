@@ -6,6 +6,9 @@ namespace App\Security;
 
 use Nette;
 
+/**
+ * Třída pro nastavení bezpečnostních HTTP hlaviček
+ */
 class SecurityHeaders
 {
     /**
@@ -13,25 +16,23 @@ class SecurityHeaders
      */
     public static function apply(Nette\Http\Response $httpResponse): void
     {
-        // 🔒 HTTPS Enforcement (jen v produkci)
-        self::enforceHttpsInProduction();
-        
         // Zakáže MIME-sniffing v prohlížečích
         $httpResponse->setHeader('X-Content-Type-Options', 'nosniff');
-        
+
         // Chrání před clickjacking útoky
         $httpResponse->setHeader('X-Frame-Options', 'DENY');
-        
+
         // Nastavuje politiku referrerů
         $httpResponse->setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-        
-        // Chrání před XSS útoky
+
+        // Chrání před XSS útoky (může být potřeba upravit podle potřeb aplikace)
         $httpResponse->setHeader('X-XSS-Protection', '1; mode=block');
-        
-        // Content Security Policy
+
+        // Content Security Policy - nastavuje pravidla pro načítání zdrojů
+        // Toto je základní konfigurace, kterou můžete upravit podle potřeb vaší aplikace
         $cspDirectives = [
             "default-src 'self'",
-            "script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com 'unsafe-inline'", 
+            "script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com 'unsafe-inline'",
             "style-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com 'unsafe-inline'",
             "img-src 'self' data:",
             "font-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.gstatic.com",
@@ -40,41 +41,40 @@ class SecurityHeaders
             "object-src 'none'",
             "base-uri 'self'"
         ];
-        
+
         $httpResponse->setHeader('Content-Security-Policy', implode('; ', $cspDirectives));
-        
-        // 🔒 HSTS header (jen pokud už je HTTPS)
-        if (self::isHttpsRequest()) {
-            $httpResponse->setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-        }
-        
+
+        // Ochrana proti CSRF útokům (již implementováno v Nette)
         // Ochrana před odhalením informací o serveru
         $httpResponse->setHeader('Server', '');
+
+        // HTTP Strict Transport Security - vynutí HTTPS (pro produkční nasazení)
+        // $httpResponse->setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
     }
-    
+
     /**
-     * 🔒 Vynutí HTTPS pouze v produkčním prostředí
+     * 🔒 NOVÉ: Vynutí HTTPS pouze v produkčním prostředí
      */
     private static function enforceHttpsInProduction(): void
     {
         // Kontrola prostředí - jen produkce
         if (!self::isProductionEnvironment()) {
-            return;
+            return; // Na localhostu/dev nic nedělá
         }
-        
+
         // Kontrola, zda už je HTTPS
         if (self::isHttpsRequest()) {
-            return;
+            return; // Už je HTTPS, OK
         }
-        
+
         // Redirect HTTP → HTTPS
         $httpsUrl = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . ($_SERVER['REQUEST_URI'] ?? '/');
         header('Location: ' . $httpsUrl, true, 301);
         exit;
     }
-    
+
     /**
-     * 🔒 Kontroluje, zda je požadavek přes HTTPS
+     * 🔒 NOVÉ: Kontroluje, zda je požadavek přes HTTPS
      */
     private static function isHttpsRequest(): bool
     {
@@ -84,21 +84,20 @@ class SecurityHeaders
             (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
         );
     }
-    
+
     /**
-     * 🔒 Kontroluje, zda je produkční prostředí
+     * 🔒 NOVÉ: Kontroluje, zda je produkční prostředí
      */
     private static function isProductionEnvironment(): bool
     {
+        // Kontrola domény
         $host = $_SERVER['HTTP_HOST'] ?? '';
-        
-        // Localhost = ne produkce
         if (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false) {
-            return false;
+            return false; // Localhost = ne produkce
         }
-        
+
         // Kontrola .env
-        $environment = $_ENV['ENVIRONMENT'] ?? 'development';
-        return $environment === 'production';
+        $isProduction = $_ENV['ENVIRONMENT'] ?? 'development';
+        return $isProduction === 'production';
     }
 }
