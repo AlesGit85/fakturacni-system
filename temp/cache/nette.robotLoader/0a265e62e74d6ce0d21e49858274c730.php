@@ -100,12 +100,12 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1755552433,
+      1 => 1755607440,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1755071191,
+      1 => 1755610732,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -180,7 +180,7 @@ return array (
     'App\\Security\\SecurityHeaders' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityHeaders.php',
-      1 => 1747982255,
+      1 => 1755608093,
     ),
     'App\\Security\\SecurityLogger' => 
     array (
@@ -233,6 +233,7 @@ return array (
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 1,
     'App\\Presentation\\Users\\UsersTemplate' => 1,
     'App\\Presentation\\Tenants\\TenantsAddTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsShowTemplate' => 3,
   ),
   2 => 
   array (

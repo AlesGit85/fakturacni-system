@@ -1,147 +1,113 @@
 {block content}
 <div class="client-form-container">
-    <div class="page-header">
-        {* ✅ BEZPEČNÉ: Statický text *}
-        <h1 class="main-title">Přidat nového klienta</h1>
-        <p class="text-muted">Vyplňte IČ a načtěte data z ARESu, nebo vyplňte ručně</p>
+    <div class="page-header mb-4">
+        <div class="header-content">
+            <h1 class="main-title mb-2">Přidat nového klienta</h1>
+            <p class="text-muted">Vyplňte údaje nového klienta</p>
+        </div>
     </div>
 
-    <div class="card shadow-sm rounded-lg border-0">
-        <div class="card-body p-4">
-            {* ✅ BEZPEČNÉ: Nette formulář je automaticky chráněný proti XSS *}
-            {form clientForm class => 'row g-4'}
-                <!-- Sekce pro načítání z ARESu -->
-                <div class="col-12">
-                    <div class="section-header">
-                        <i class="bi bi-cloud-download"></i>
-                        <h2 class="section-title">Načítání z ARESu</h2>
-                    </div>
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle me-2"></i>
-                        {* ✅ BEZPEČNÉ: Statický text *}
-                        <strong>Tip:</strong> Zadejte IČ společnosti a klikněte na "Načíst z ARESu" pro automatické vyplnění údajů.
-                    </div>
-                </div>
-                
-                <div class="col-md-8">
-                    <div class="mb-3">
-                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
-                        {label ic /}
-                        <div class="input-group">
-                            {input ic class => 'form-control', placeholder => 'Zadejte 7 nebo 8 číslic IČ'}
-                            <button type="button" id="load-from-ares" class="btn btn-primary">
-                                <i class="bi bi-cloud-download"></i> Načíst z ARESu
-                            </button>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            {form clientForm}
+                <div class="row g-3">
+                    <!-- ARES sekce -->
+                    <div class="col-12">
+                        <div class="ares-section">
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    <div class="form-floating">
+                                        {input ic class => 'form-control'}
+                                        {label ic class => 'form-label' /}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-outline-primary w-100 h-100" onclick="loadFromAres()">
+                                        <i class="bi bi-download"></i> Načíst z ARESu
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        {* ✅ BEZPEČNÉ: Statický text *}
-                        <small class="form-text text-muted">Zadejte IČ a klikněte na tlačítko pro načtení údajů z ARESu</small>
                     </div>
-                </div>
-                
-                <!-- Sekce se základními údaji -->
-                <div class="col-12 mt-4">
-                    <div class="section-header">
-                        <i class="bi bi-building"></i>
-                        <h2 class="section-title">Základní údaje společnosti</h2>
+
+                    <!-- Základní údaje -->
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {input name class => 'form-control'}
+                            {label name class => 'form-label' /}
+                        </div>
                     </div>
-                </div>
-                
-                <div class="col-md-8">
-                    <div class="form-floating">
-                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
-                        {input name class => 'form-control'}
-                        {label name class => 'form-label' /}
+                    
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            {input dic class => 'form-control'}
+                            {label dic class => 'form-label' /}
+                        </div>
                     </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="form-floating">
-                        {input dic class => 'form-control'}
-                        {label dic class => 'form-label' /}
+
+                    <!-- Adresa -->
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {input address class => 'form-control'}
+                            {label address class => 'form-label' /}
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Sekce s adresou -->
-                <div class="col-12 mt-4">
-                    <div class="section-header">
-                        <i class="bi bi-geo-alt"></i>
-                        <h2 class="section-title">Adresa společnosti</h2>
+                    
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            {input city class => 'form-control'}
+                            {label city class => 'form-label' /}
+                        </div>
                     </div>
-                </div>
-                
-                <div class="col-12">
-                    <div class="form-floating">
-                        {input address class => 'form-control'}
-                        {label address class => 'form-label' /}
+                    
+                    <div class="col-md-3">
+                        <div class="form-floating">
+                            {input zip class => 'form-control'}
+                            {label zip class => 'form-label' /}
+                        </div>
                     </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="form-floating">
-                        {input city class => 'form-control'}
-                        {label city class => 'form-label' /}
+                    
+                    <div class="col-md-3">
+                        <div class="form-floating">
+                            {input country class => 'form-control'}
+                            {label country class => 'form-label' /}
+                        </div>
                     </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="form-floating">
-                        {input zip class => 'form-control'}
-                        {label zip class => 'form-label' /}
+
+                    <!-- Kontaktní údaje -->
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            {* ✅ OPRAVA: Změněno z contact_person na client_contact_person *}
+                            {input client_contact_person class => 'form-control'}
+                            {label client_contact_person class => 'form-label' /}
+                        </div>
                     </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="form-floating">
-                        {input country class => 'form-control'}
-                        {label country class => 'form-label' /}
+                    
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            {input email class => 'form-control'}
+                            {label email class => 'form-label' /}
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Kontaktní údaje -->
-                <div class="col-12 mt-4">
-                    <div class="section-header">
-                        <i class="bi bi-person-lines-fill"></i>
-                        <h2 class="section-title">Kontaktní údaje</h2>
+                    
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            {input phone class => 'form-control'}
+                            {label phone class => 'form-label' /}
+                        </div>
                     </div>
-                    <div class="alert alert-light">
-                        <i class="bi bi-info-circle me-2"></i>
-                        {* ✅ BEZPEČNÉ: Statický text *}
-                        Tyto údaje jsou volitelné a slouží pro lepší komunikaci s klientem.
+                    
+                    <div class="col-12 mt-4 d-flex justify-content-between">
+                        {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
+                        <a n:href="default" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Zpět na seznam klientů
+                        </a>
+                        {* ✅ BEZPEČNÉ: Nette formulářové tlačítko *}
+                        <button n:name="send" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> Uložit klienta
+                        </button>
                     </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        {input contact_person class => 'form-control'}
-                        {label contact_person class => 'form-label' /}
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        {input email class => 'form-control'}
-                        {label email class => 'form-label' /}
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        {input phone class => 'form-control'}
-                        {label phone class => 'form-label' /}
-                    </div>
-                </div>
-                
-                <div class="col-12 mt-4 d-flex justify-content-between">
-                    {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                    <a n:href="default" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left"></i> Zpět na seznam klientů
-                    </a>
-                    {* ✅ BEZPEČNÉ: Nette formulářové tlačítko *}
-                    <button n:name="send" class="btn btn-primary">
-                        <i class="bi bi-check-lg"></i> Uložit klienta
-                    </button>
-                </div>
-            {/form}
+                {/form}
         </div>
     </div>
 </div>

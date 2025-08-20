@@ -2,8 +2,8 @@
 <div class="client-form-container">
     <div class="page-header">
         {* ✅ BEZPEČNÉ: Statický text *}
-        <h1 class="main-title">Upravit klienta</h1>
-        <p class="text-muted">Můžete znovu načíst data z ARESu nebo upravit údaje ručně</p>
+        <h1 class="main-title">Přidat nového klienta</h1>
+        <p class="text-muted">Vyplňte IČ a načtěte data z ARESu, nebo vyplňte ručně</p>
     </div>
 
     <div class="card shadow-sm rounded-lg border-0">
@@ -16,10 +16,10 @@
                         <i class="bi bi-cloud-download"></i>
                         <h2 class="section-title">Načítání z ARESu</h2>
                     </div>
-                    <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
                         {* ✅ BEZPEČNÉ: Statický text *}
-                        <strong>Upozornění:</strong> Načtení z ARESu přepíše aktuální údaje společnosti (kromě kontaktních údajů).
+                        <strong>Tip:</strong> Zadejte IČ společnosti a klikněte na "Načíst z ARESu" pro automatické vyplnění údajů.
                     </div>
                 </div>
                 
@@ -34,7 +34,7 @@
                             </button>
                         </div>
                         {* ✅ BEZPEČNÉ: Statický text *}
-                        <small class="form-text text-muted">Změňte IČ a klikněte na tlačítko pro načtení nových údajů z ARESu</small>
+                        <small class="form-text text-muted">Zadejte IČ a klikněte na tlačítko pro načtení údajů z ARESu</small>
                     </div>
                 </div>
                 
@@ -56,7 +56,6 @@
                 
                 <div class="col-md-4">
                     <div class="form-floating">
-                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input dic class => 'form-control'}
                         {label dic class => 'form-label' /}
                     </div>
@@ -72,7 +71,6 @@
                 
                 <div class="col-12">
                     <div class="form-floating">
-                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input address class => 'form-control'}
                         {label address class => 'form-label' /}
                     </div>
@@ -80,7 +78,6 @@
                 
                 <div class="col-md-4">
                     <div class="form-floating">
-                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input city class => 'form-control'}
                         {label city class => 'form-label' /}
                     </div>
@@ -88,7 +85,6 @@
                 
                 <div class="col-md-4">
                     <div class="form-floating">
-                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input zip class => 'form-control'}
                         {label zip class => 'form-label' /}
                     </div>
@@ -96,7 +92,6 @@
                 
                 <div class="col-md-4">
                     <div class="form-floating">
-                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input country class => 'form-control'}
                         {label country class => 'form-label' /}
                     </div>
@@ -111,21 +106,19 @@
                     <div class="alert alert-light">
                         <i class="bi bi-info-circle me-2"></i>
                         {* ✅ BEZPEČNÉ: Statický text *}
-                        Kontaktní údaje se při načítání z ARESu nezmění - zůstanou zachovány.
+                        Tyto údaje jsou volitelné a slouží pro lepší komunikaci s klientem.
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
-                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
-                        {input client_contact_person class => 'form-control'}
-                        {label client_contact_person class => 'form-label' /}
+                        {input contact_person class => 'form-control'}
+                        {label contact_person class => 'form-label' /}
                     </div>
                 </div>
                 
                 <div class="col-md-6">
                     <div class="form-floating">
-                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input email class => 'form-control'}
                         {label email class => 'form-label' /}
                     </div>
@@ -133,7 +126,6 @@
                 
                 <div class="col-md-6">
                     <div class="form-floating">
-                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input phone class => 'form-control'}
                         {label phone class => 'form-label' /}
                     </div>
@@ -146,7 +138,7 @@
                     </a>
                     {* ✅ BEZPEČNÉ: Nette formulářové tlačítko *}
                     <button n:name="send" class="btn btn-primary">
-                        <i class="bi bi-check-lg"></i> Uložit změny
+                        <i class="bi bi-check-lg"></i> Uložit klienta
                     </button>
                 </div>
             {/form}
