@@ -677,7 +677,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 
 	public function createServiceApplication__9(): App\Presentation\Settings\SettingsPresenter
 	{
-		$service = new App\Presentation\Settings\SettingsPresenter($this->getService('09'));
+		$service = new App\Presentation\Settings\SettingsPresenter($this->getService('09'), $this->getService('tracy.logger'));
 		$service->injectPrimary(
 			$this->getService('http.request'),
 			$this->getService('http.response'),
