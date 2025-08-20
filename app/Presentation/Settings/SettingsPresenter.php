@@ -19,7 +19,7 @@ class SettingsPresenter extends BasePresenter
 
     // Pouze admin má přístup k nastavení
     protected array $requiredRoles = ['admin'];
-    
+
     // Všechny akce v nastavení jsou pouze pro admina
     protected array $actionRoles = [
         'default' => ['admin'],
@@ -43,7 +43,7 @@ class SettingsPresenter extends BasePresenter
     public function startup(): void
     {
         parent::startup();
-        
+
         // Nastavíme tenant kontext v CompanyManager
         $this->companyManager->setTenantContext(
             $this->getCurrentTenantId(),
@@ -132,19 +132,17 @@ class SettingsPresenter extends BasePresenter
 
         // ========== Nahrávání souborů ==========
         $form->addUpload('logo', 'Logo společnosti:')
-            ->setHtmlAttribute('accept', 'image/*')
-            ->addRule(Form::IMAGE, 'Logo musí být obrázek');
+            ->setHtmlAttribute('accept', 'image/*');
 
         $form->addUpload('signature', 'Podpis:')
-            ->setHtmlAttribute('accept', 'image/*')
-            ->addRule(Form::IMAGE, 'Podpis musí být obrázek');
+            ->setHtmlAttribute('accept', 'image/*');
 
         // ========== Barvy pro faktury - podle vašeho schématu ==========
         $headingColorField = $form->addText('invoice_heading_color', 'Barva nadpisu faktury:')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color')
             ->setDefaultValue('#B1D235');
-        
+
         $trapezoidBgColorField = $form->addText('invoice_trapezoid_bg_color', 'Barva pozadí lichoběžníku:')
             ->setHtmlAttribute('type', 'color')
             ->setHtmlAttribute('class', 'form-control form-control-color')
@@ -173,14 +171,14 @@ class SettingsPresenter extends BasePresenter
         $company = $this->companyManager->getCompanyInfo();
         if ($company) {
             $defaults = (array) $company;
-            
+
             // Nastavení výchozích barev podle vašeho schématu, pokud nejsou v databázi
             $defaults['invoice_heading_color'] = $company->invoice_heading_color ?? '#B1D235';
             $defaults['invoice_trapezoid_bg_color'] = $company->invoice_trapezoid_bg_color ?? '#B1D235';
             $defaults['invoice_trapezoid_text_color'] = $company->invoice_trapezoid_text_color ?? '#212529';
             $defaults['invoice_labels_color'] = $company->invoice_labels_color ?? '#95B11F';
             $defaults['invoice_footer_color'] = $company->invoice_footer_color ?? '#6c757d';
-            
+
             $form->setDefaults($defaults);
         } else {
             // Výchozí hodnoty pro nový záznam podle vašeho barevného schématu
@@ -201,12 +199,13 @@ class SettingsPresenter extends BasePresenter
      */
     public function companyFormSucceeded(Form $form, \stdClass $data): void
     {
+
         // ✅ XSS OCHRANA: Základní kontrola XSS pokusů ve formulářových datech
         $xssDetected = false;
         foreach ((array)$data as $key => $value) {
             if (is_string($value) && SecurityValidator::detectXssAttempt($value)) {
                 $xssDetected = true;
-                
+
                 // Logování XSS pokusu
                 $this->securityLogger->logSecurityEvent(
                     'xss_attempt_settings_form',
@@ -242,7 +241,7 @@ class SettingsPresenter extends BasePresenter
 
         // ✅ Zpracování vat_payer checkboxu
         $values['vat_payer'] = (bool) $data->vat_payer;
-        
+
         // Pokud není plátce DPH, vymažeme DIČ
         if (!$values['vat_payer']) {
             $values['dic'] = null;
@@ -264,7 +263,7 @@ class SettingsPresenter extends BasePresenter
         }
 
         // ========== Zpracování nahrávání logo ==========
-        if ($data->logo && $data->logo->isOk()) {
+        if ($data->logo && $data->logo->getName() !== '') {
             try {
                 $logoName = $this->processUploadedFile($data->logo, 'logo');
                 if ($logoName) {
@@ -274,7 +273,7 @@ class SettingsPresenter extends BasePresenter
                     return;
                 }
             } catch (\Exception $e) {
-                $this->flashMessage('Chyba při nahrávání loga: ' . $e->getMessage(), 'error');
+                $this->flashMessage('Chyba při nahrávání loga: ' . $e->getMessage(), 'danger');
                 return;
             }
         } else {
@@ -282,7 +281,7 @@ class SettingsPresenter extends BasePresenter
         }
 
         // ========== Zpracování nahrávání podpisu ==========
-        if ($data->signature && $data->signature->isOk()) {
+        if ($data->signature && $data->signature->getName() !== '') {
             try {
                 $signatureName = $this->processUploadedFile($data->signature, 'signature');
                 if ($signatureName) {
@@ -292,7 +291,7 @@ class SettingsPresenter extends BasePresenter
                     return;
                 }
             } catch (\Exception $e) {
-                $this->flashMessage('Chyba při nahrávání podpisu: ' . $e->getMessage(), 'error');
+                $this->flashMessage('Chyba při nahrávání podpisu: ' . $e->getMessage(), 'danger');
                 return;
             }
         } else {
@@ -302,7 +301,7 @@ class SettingsPresenter extends BasePresenter
         // ========== Validace HEX barev ==========
         $colorFields = [
             'invoice_heading_color',
-            'invoice_trapezoid_bg_color', 
+            'invoice_trapezoid_bg_color',
             'invoice_trapezoid_text_color',
             'invoice_labels_color',
             'invoice_footer_color'
@@ -418,7 +417,7 @@ class SettingsPresenter extends BasePresenter
             // ✅ NOVÉ: Pokročilá validace pomocí SecurityValidator
             $maxFileSize = 5 * 1024 * 1024; // 5MB limit
             $validationErrors = SecurityValidator::validateFileUpload($file, 'image', $maxFileSize);
-            
+
             if (!empty($validationErrors)) {
                 throw new \Exception(implode(' ', $validationErrors));
             }
@@ -428,7 +427,7 @@ class SettingsPresenter extends BasePresenter
 
             // ✅ VYLEPŠENO: Vytvoření upload adresáře s lepší kontrolou
             $uploadDir = WWW_DIR . '/uploads/' . $type;
-            
+
             if (!is_dir($uploadDir)) {
                 if (!mkdir($uploadDir, 0755, true)) {
                     throw new \Exception('Nepodařilo se vytvořit adresář pro nahrávání: ' . $uploadDir);
@@ -441,7 +440,7 @@ class SettingsPresenter extends BasePresenter
             }
 
             $fullPath = $uploadDir . '/' . $safeFilename;
-            
+
             // ✅ VYLEPŠENO: Bezpečnější přesun souboru
             try {
                 $file->move($fullPath);
@@ -479,7 +478,6 @@ class SettingsPresenter extends BasePresenter
             ),  'info');
 
             return $safeFilename;
-
         } catch (\Exception $e) {
             // ✅ NOVÉ: Detailní logování chyb
             $this->logger->log(sprintf(
@@ -579,12 +577,15 @@ class SettingsPresenter extends BasePresenter
             if ($success) {
                 $this->logger->log(sprintf(
                     'Obrázek optimalizován: %s -> %dx%d (z %dx%d)',
-                    basename($filePath), $newWidth, $newHeight, $width, $height
+                    basename($filePath),
+                    $newWidth,
+                    $newHeight,
+                    $width,
+                    $height
                 ), 'info');
-                
+
                 return $optimizedPath;
             }
-
         } catch (\Exception $e) {
             $this->logger->log(
                 'Chyba při optimalizaci obrázku: ' . $e->getMessage(),

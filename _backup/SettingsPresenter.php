@@ -7,11 +7,15 @@ use Nette\Application\UI\Form;
 use App\Model\CompanyManager;
 use App\Presentation\BasePresenter;
 use App\Security\SecurityValidator;
+use Tracy\ILogger;
 
 class SettingsPresenter extends BasePresenter
 {
     /** @var CompanyManager */
     private $companyManager;
+
+    /** @var ILogger */
+    private $logger;
 
     // Pouze admin má přístup k nastavení
     protected array $requiredRoles = ['admin'];
@@ -27,9 +31,10 @@ class SettingsPresenter extends BasePresenter
     protected bool $enableHoneypotProtection = false;
     protected bool $enableTimingProtection = false;
 
-    public function __construct(CompanyManager $companyManager)
+    public function __construct(CompanyManager $companyManager, ILogger $logger)
     {
         $this->companyManager = $companyManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -405,70 +410,226 @@ class SettingsPresenter extends BasePresenter
     }
 
     /**
-     * ✅ XSS OCHRANA: Bezpečné zpracování nahrávání souborů
+     * ✅ VYLEPŠENÉ: Bezpečné zpracování nahrávání souborů s pokročilou validací
      */
     private function processUploadedFile(Nette\Http\FileUpload $file, string $type): ?string
     {
-        // Kontrola, zda je soubor v pořádku
-        if (!$file->isOk()) {
-            throw new \Exception('Soubor nebyl úspěšně nahrán (error: ' . $file->getError() . ')');
-        }
-
-        // Kontrola, zda je to opravdu obrázek
-        if (!$file->isImage()) {
-            throw new \Exception('Soubor musí být obrázek');
-        }
-
-        // ✅ XSS OCHRANA: Sanitizace názvu souboru
-        $originalName = SecurityValidator::sanitizeString($file->getName());
-
-        // ✅ OPRAVENO: Vytvoření upload adresáře - bez zdvojení "web"
-        $uploadDir = WWW_DIR . '/uploads/' . $type;
-        
-        if (!is_dir($uploadDir)) {
-            if (!mkdir($uploadDir, 0755, true)) {
-                throw new \Exception('Nepodařilo se vytvořit adresář pro nahrávání: ' . $uploadDir);
-            }
-        }
-
-        // Kontrola, zda je adresář zapisovatelný
-        if (!is_writable($uploadDir)) {
-            throw new \Exception('Adresář pro nahrávání není zapisovatelný: ' . $uploadDir);
-        }
-
-        // Získání přípony souboru bezpečným způsobem
-        $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
-        
-        // Kontrola povolených přípon
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
-        if (!in_array($extension, $allowedExtensions)) {
-            throw new \Exception('Nepodporovaný formát obrázku. Povolené formáty: ' . implode(', ', $allowedExtensions));
-        }
-
-        // Vytvoření jedinečného názvu souboru
-        $fileName = uniqid() . '_' . time() . '.' . $extension;
-        $fullPath = $uploadDir . '/' . $fileName;
-        
-        // Pokus o přesunutí souboru
         try {
-            $file->move($fullPath);
+            // ✅ NOVÉ: Pokročilá validace pomocí SecurityValidator
+            $maxFileSize = 5 * 1024 * 1024; // 5MB limit
+            $validationErrors = SecurityValidator::validateFileUpload($file, 'image', $maxFileSize);
+            
+            if (!empty($validationErrors)) {
+                throw new \Exception(implode(' ', $validationErrors));
+            }
+
+            // ✅ NOVÉ: Generování bezpečného názvu souboru
+            $safeFilename = SecurityValidator::generateSafeFilename($file->getName(), $type . '_');
+
+            // ✅ VYLEPŠENO: Vytvoření upload adresáře s lepší kontrolou
+            $uploadDir = WWW_DIR . '/uploads/' . $type;
+            
+            if (!is_dir($uploadDir)) {
+                if (!mkdir($uploadDir, 0755, true)) {
+                    throw new \Exception('Nepodařilo se vytvořit adresář pro nahrávání: ' . $uploadDir);
+                }
+            }
+
+            // Kontrola, zda je adresář zapisovatelný
+            if (!is_writable($uploadDir)) {
+                throw new \Exception('Adresář pro nahrávání není zapisovatelný: ' . $uploadDir);
+            }
+
+            $fullPath = $uploadDir . '/' . $safeFilename;
+            
+            // ✅ VYLEPŠENO: Bezpečnější přesun souboru
+            try {
+                $file->move($fullPath);
+            } catch (\Exception $e) {
+                throw new \Exception('Nepodařilo se uložit soubor: ' . $e->getMessage());
+            }
+
+            // ✅ NOVÉ: Dodatečná validace po uložení
+            if (!file_exists($fullPath)) {
+                throw new \Exception('Soubor se nepodařilo úspěšně uložit');
+            }
+
+            // Kontrola velikosti nahraného souboru
+            $fileSize = filesize($fullPath);
+            if ($fileSize === false || $fileSize === 0) {
+                unlink($fullPath); // Smažeme prázdný soubor
+                throw new \Exception('Nahraný soubor je prázdný');
+            }
+
+            // ✅ NOVÉ: Optimalizace obrázku (pokud je to obrázek)
+            if ($type === 'logo' || $type === 'signature') {
+                $optimizedFile = $this->optimizeImage($fullPath, $type);
+                if ($optimizedFile) {
+                    $safeFilename = basename($optimizedFile);
+                }
+            }
+
+            // ✅ NOVÉ: Logování úspěšného uploadu
+            $this->logger->log(sprintf(
+                'Soubor úspěšně nahrán: %s, typ: %s, velikost: %s, uživatel: %s',
+                $safeFilename,
+                $type,
+                $this->formatBytes($fileSize),
+                $this->getUser()->getId()
+            ),  'info');
+
+            return $safeFilename;
+
         } catch (\Exception $e) {
-            throw new \Exception('Nepodařilo se uložit soubor: ' . $e->getMessage());
+            // ✅ NOVÉ: Detailní logování chyb
+            $this->logger->log(sprintf(
+                'Chyba při nahrávání souboru: %s, typ: %s, uživatel: %s, soubor: %s',
+                $e->getMessage(),
+                $type,
+                $this->getUser()->getId(),
+                $file->getName()
+            ),  'error');
+
+            // Vyhození chyby dál pro zpracování v presenteru
+            throw $e;
+        }
+    }
+
+    /**
+     * ✅ NOVÁ: Optimalizace obrázku (zmenšení a komprese)
+     */
+    private function optimizeImage(string $filePath, string $type): ?string
+    {
+        try {
+            $imageInfo = getimagesize($filePath);
+            if ($imageInfo === false) {
+                return null; // Není platný obrázek
+            }
+
+            [$width, $height, $imageType] = $imageInfo;
+
+            // Určení maximálních rozměrů podle typu
+            $maxDimensions = [
+                'logo' => ['width' => 800, 'height' => 400],
+                'signature' => ['width' => 600, 'height' => 200],
+                'default' => ['width' => 1024, 'height' => 768]
+            ];
+
+            $maxWidth = $maxDimensions[$type]['width'] ?? $maxDimensions['default']['width'];
+            $maxHeight = $maxDimensions[$type]['height'] ?? $maxDimensions['default']['height'];
+
+            // Pokud je obrázek dostatečně malý, neměníme ho
+            if ($width <= $maxWidth && $height <= $maxHeight) {
+                return null; // Vrátíme null = používej původní soubor
+            }
+
+            // Výpočet nových rozměrů (zachování poměru stran)
+            $ratio = min($maxWidth / $width, $maxHeight / $height);
+            $newWidth = (int)($width * $ratio);
+            $newHeight = (int)($height * $ratio);
+
+            // Vytvoření nového obrázku
+            $sourceImage = $this->createImageFromFile($filePath, $imageType);
+            if ($sourceImage === null) {
+                return null;
+            }
+
+            $newImage = imagecreatetruecolor($newWidth, $newHeight);
+            if ($newImage === false) {
+                imagedestroy($sourceImage);
+                return null;
+            }
+
+            // Zachování průhlednosti pro PNG/GIF
+            if ($imageType === IMAGETYPE_PNG || $imageType === IMAGETYPE_GIF) {
+                imagealphablending($newImage, false);
+                imagesavealpha($newImage, true);
+                $transparent = imagecolorallocatealpha($newImage, 0, 0, 0, 127);
+                imagefill($newImage, 0, 0, $transparent);
+            }
+
+            // Změna velikosti
+            imagecopyresampled($newImage, $sourceImage, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+            // Uložení optimalizovaného obrázku
+            $optimizedPath = $filePath; // Přepíšeme původní soubor
+            $success = false;
+
+            switch ($imageType) {
+                case IMAGETYPE_JPEG:
+                    $success = imagejpeg($newImage, $optimizedPath, 85); // 85% kvalita
+                    break;
+                case IMAGETYPE_PNG:
+                    $success = imagepng($newImage, $optimizedPath, 6); // Komprese 6
+                    break;
+                case IMAGETYPE_GIF:
+                    $success = imagegif($newImage, $optimizedPath);
+                    break;
+                case IMAGETYPE_WEBP:
+                    if (function_exists('imagewebp')) {
+                        $success = imagewebp($newImage, $optimizedPath, 85);
+                    }
+                    break;
+            }
+
+            // Uvolnění paměti
+            imagedestroy($sourceImage);
+            imagedestroy($newImage);
+
+            if ($success) {
+                $this->logger->log(sprintf(
+                    'Obrázek optimalizován: %s -> %dx%d (z %dx%d)',
+                    basename($filePath), $newWidth, $newHeight, $width, $height
+                ), 'info');
+                
+                return $optimizedPath;
+            }
+
+        } catch (\Exception $e) {
+            $this->logger->log(
+                'Chyba při optimalizaci obrázku: ' . $e->getMessage(),
+                'warning'
+            );
         }
 
-        // Ověření, že se soubor skutečně uložil
-        if (!file_exists($fullPath)) {
-            throw new \Exception('Soubor se nepodařilo úspěšně uložit');
-        }
+        return null; // Při chybě vrátíme null = použij původní soubor
+    }
 
-        // Kontrola velikosti nahraného souboru
-        $fileSize = filesize($fullPath);
-        if ($fileSize === false || $fileSize === 0) {
-            unlink($fullPath); // Smažeme prázdný soubor
-            throw new \Exception('Nahraný soubor je prázdný');
+    /**
+     * ✅ NOVÁ: Vytvoření image resource z souboru
+     */
+    private function createImageFromFile(string $filePath, int $imageType)
+    {
+        switch ($imageType) {
+            case IMAGETYPE_JPEG:
+                return imagecreatefromjpeg($filePath);
+            case IMAGETYPE_PNG:
+                return imagecreatefrompng($filePath);
+            case IMAGETYPE_GIF:
+                return imagecreatefromgif($filePath);
+            case IMAGETYPE_WEBP:
+                if (function_exists('imagecreatefromwebp')) {
+                    return imagecreatefromwebp($filePath);
+                }
+                break;
         }
+        return null;
+    }
 
-        return $fileName;
+    /**
+     * ✅ NOVÁ: Formátování velikosti souborů
+     */
+    private function formatBytes(int $bytes): string
+    {
+        if ($bytes >= 1073741824) {
+            return number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        } else {
+            return $bytes . ' B';
+        }
     }
 
     /**
