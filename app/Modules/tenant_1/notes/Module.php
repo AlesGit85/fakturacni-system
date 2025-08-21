@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Notes;
+namespace Modules\Tenant1\Notes;
 
 use App\Modules\BaseModule;
 use Nette\Database\Explorer;

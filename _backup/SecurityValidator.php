@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Security;
 
+use Nette\Http\FileUpload;
 use Nette;
 
 /**
@@ -34,6 +35,55 @@ class SecurityValidator
         '/<input\b[^>]*>/i',
         '/<link\b[^>]*>/i',
         '/<meta\b[^>]*>/i',
+    ];
+
+    /** @var array Povolené MIME typy pro obrázky */
+    private static array $allowedImageMimes = [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/webp'
+    ];
+
+    /** @var array Povolené MIME typy pro dokumenty */
+    private static array $allowedDocumentMimes = [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'text/plain',
+        'text/csv'
+    ];
+
+    /** @var array Povolené MIME typy pro archivy */
+    private static array $allowedArchiveMimes = [
+        'application/zip',
+        'application/x-zip-compressed',
+        'application/x-rar-compressed',
+        'application/gzip'
+    ];
+
+    /** @var array Nebezpečné file extensions */
+    private static array $dangerousExtensions = [
+        'exe',
+        'bat',
+        'cmd',
+        'com',
+        'pif',
+        'scr',
+        'vbs',
+        'js',
+        'jar',
+        'php',
+        'asp',
+        'aspx',
+        'jsp',
+        'cgi',
+        'pl',
+        'py',
+        'rb',
+        'sh'
     ];
 
     /** @var array ✅ NOVÉ: Povolené HTML tagy pro rich text editory */
@@ -646,5 +696,469 @@ class SecurityValidator
     private static function removeHtmlAttributes(string $input): string
     {
         return preg_replace('/<([a-zA-Z0-9]+)[^>]*>/', '<$1>', $input);
+    }
+
+    /**
+     * ✅ NOVÁ: Kompletní validace nahraného souboru
+     * @param FileUpload $file Nahraný soubor
+     * @param string $allowedType Typ: 'image', 'document', 'archive'
+     * @param int $maxSize Maximální velikost v bytech (0 = bez limitu)
+     * @return array Seznam chyb (prázdný = vše OK)
+     */
+    public static function validateFileUpload(FileUpload $file, string $allowedType = 'image', int $maxSize = 0): array
+    {
+        $errors = [];
+
+        try {
+            // 1. Základní kontroly
+            if (!$file->isOk()) {
+                $errors[] = self::getFileUploadErrorMessage($file->getError());
+                return $errors; // Pokud soubor není OK, další kontroly nemají smysl
+            }
+
+            if ($file->getSize() === 0) {
+                $errors[] = 'Soubor je prázdný.';
+                return $errors;
+            }
+
+            // 2. Kontrola velikosti souboru
+            if ($maxSize > 0 && $file->getSize() > $maxSize) {
+                $errors[] = sprintf('Soubor je příliš velký. Maximální velikost je %s.', self::formatBytes($maxSize));
+            }
+
+            // 3. Kontrola názvu souboru
+            $filename = $file->getName();
+            if (empty($filename)) {
+                $errors[] = 'Název souboru je prázdný.';
+                return $errors;
+            }
+
+            // 4. Kontrola nebezpečných přípon
+            $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+            if (in_array($extension, self::$dangerousExtensions, true)) {
+                $errors[] = 'Typ souboru není povolen z bezpečnostních důvodů.';
+            }
+
+            // 5. Kontrola MIME typu podle client
+            $clientMimeType = $file->getContentType();
+            $allowedMimes = self::getAllowedMimeTypes($allowedType);
+
+            if (!in_array($clientMimeType, $allowedMimes, true)) {
+                $errors[] = sprintf(
+                    'Nepovolený typ souboru: %s. Povolené typy: %s',
+                    $clientMimeType,
+                    implode(', ', $allowedMimes)
+                );
+            }
+
+            // 6. Kontrola skutečného MIME typu (magic bytes)
+            $realMimeType = self::getRealMimeType($file->getTemporaryFile());
+            if ($realMimeType && !in_array($realMimeType, $allowedMimes, true)) {
+                $errors[] = 'Soubor neodpovídá deklarovanému typu (možný pokus o podvržení).';
+            }
+
+            // 7. Specifické kontroly podle typu
+            switch ($allowedType) {
+                case 'image':
+                    $imageErrors = self::validateImageFile($file);
+                    $errors = array_merge($errors, $imageErrors);
+                    break;
+
+                case 'archive':
+                    $archiveErrors = self::validateArchiveFile($file);
+                    $errors = array_merge($errors, $archiveErrors);
+                    break;
+            }
+
+            // 8. Virus scan (pokud je dostupný)
+            $virusErrors = self::performVirusScan($file->getTemporaryFile());
+            $errors = array_merge($errors, $virusErrors);
+
+            // 9. Kontrola XSS v názvu souboru
+            $cleanFilename = self::sanitizeString($filename);
+            if ($cleanFilename !== $filename) {
+                $errors[] = 'Název souboru obsahuje nebezpečné znaky.';
+            }
+        } catch (\Exception $e) {
+            $errors[] = 'Chyba při validaci souboru: ' . $e->getMessage();
+        }
+
+        return $errors;
+    }
+
+    /**
+     * ✅ NOVÁ: Získání skutečného MIME typu pomocí magic bytes
+     */
+    private static function getRealMimeType(string $filepath): ?string
+    {
+        if (!function_exists('finfo_open')) {
+            return null; // finfo rozšíření není dostupné
+        }
+
+        try {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            if ($finfo === false) {
+                return null;
+            }
+
+            $mimeType = finfo_file($finfo, $filepath);
+            finfo_close($finfo);
+
+            return $mimeType !== false ? $mimeType : null;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * ✅ NOVÁ: Validace obrázku
+     */
+    private static function validateImageFile(FileUpload $file): array
+    {
+        $errors = [];
+
+        try {
+            // Kontrola pomocí getimagesize - ověří skutečnou strukturu obrázku
+            $imageInfo = getimagesize($file->getTemporaryFile());
+
+            if ($imageInfo === false) {
+                $errors[] = 'Soubor není platný obrázek.';
+                return $errors;
+            }
+
+            // Kontrola rozměrů (max 4096x4096 px)
+            [$width, $height] = $imageInfo;
+            if ($width > 4096 || $height > 4096) {
+                $errors[] = 'Obrázek je příliš velký (max. 4096x4096 pixelů).';
+            }
+
+            if ($width < 1 || $height < 1) {
+                $errors[] = 'Neplatné rozměry obrázku.';
+            }
+
+            // Kontrola počtu barev (prevence problematických obrázků)
+            if (isset($imageInfo['bits']) && $imageInfo['bits'] > 32) {
+                $errors[] = 'Nepodporovaný formát obrázku.';
+            }
+        } catch (\Exception $e) {
+            $errors[] = 'Chyba při validaci obrázku.';
+        }
+
+        return $errors;
+    }
+
+    /**
+     * ✅ NOVÁ: Validace archivního souboru
+     */
+    private static function validateArchiveFile(FileUpload $file): array
+    {
+        $errors = [];
+
+        try {
+            $extension = strtolower(pathinfo($file->getName(), PATHINFO_EXTENSION));
+
+            // Základní kontrola ZIP archivů
+            if ($extension === 'zip') {
+                $zip = new \ZipArchive();
+                $result = $zip->open($file->getTemporaryFile());
+
+                if ($result !== true) {
+                    $errors[] = 'ZIP archiv je poškozen nebo neplatný.';
+                    return $errors;
+                }
+
+                // Kontrola počtu souborů (max 1000)
+                if ($zip->numFiles > 1000) {
+                    $errors[] = 'ZIP archiv obsahuje příliš mnoho souborů (max. 1000).';
+                }
+
+                // Kontrola názvů souborů v archivu
+                for ($i = 0; $i < $zip->numFiles; $i++) {
+                    $filename = $zip->getNameIndex($i);
+
+                    // Kontrola nebezpečných cest
+                    if (strpos($filename, '../') !== false || strpos($filename, '..\\') !== false) {
+                        $errors[] = 'ZIP archiv obsahuje nebezpečné cesty k souborům.';
+                        break;
+                    }
+
+                    // Kontrola nebezpečných přípon
+                    $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                    if (in_array($fileExtension, self::$dangerousExtensions, true)) {
+                        $errors[] = sprintf('ZIP archiv obsahuje nebezpečný soubor: %s', $filename);
+                        break;
+                    }
+                }
+
+                $zip->close();
+            }
+        } catch (\Exception $e) {
+            $errors[] = 'Chyba při validaci archivu.';
+        }
+
+        return $errors;
+    }
+
+    /**
+     * ✅ OPRAVENÉ: Virus scan pomocí dostupných nástrojů
+     */
+    private static function performVirusScan(string $filepath): array
+    {
+        $errors = [];
+
+        try {
+            // 1. ClamAV přes PHP extension (pokud je dostupné)
+            if (function_exists('clamav_scan_file')) {
+
+                // Definujeme konstanty pokud nejsou definované
+                if (!defined('CL_CLEAN')) {
+                    define('CL_CLEAN', 0);
+                }
+                if (!defined('CL_VIRUS')) {
+                    define('CL_VIRUS', 1);
+                }
+
+                try {
+                    $functionName = 'clamav_scan_file';
+                    $scanResult = $functionName($filepath);
+
+                    // Kontrola výsledku
+                    if ($scanResult !== CL_CLEAN) {
+                        $errors[] = 'Soubor obsahuje malware nebo virus (ClamAV PHP extension).';
+                    }
+
+                    // Pokud PHP extension funguje, vrátíme výsledek
+                    return $errors;
+                } catch (\Exception $e) {
+                    // PHP extension selhalo, zkusíme command line
+                    error_log('ClamAV PHP extension failed: ' . $e->getMessage());
+                }
+            }
+
+            // 2. ClamAV přes command line (pokud je dostupné)
+            if (self::isClamAVAvailable()) {
+                try {
+                    $output = [];
+                    $returnCode = 0;
+
+                    // Spustíme clamscan s timeout 30 sekund
+                    $command = 'timeout 30 clamscan --no-summary --infected --quiet ' . escapeshellarg($filepath) . ' 2>&1';
+                    exec($command, $output, $returnCode);
+
+                    // ClamAV return codes:
+                    // 0 = čistý soubor
+                    // 1 = virus nalezen
+                    // 2+ = chyba
+
+                    if ($returnCode === 1) {
+                        $errors[] = 'Soubor obsahuje malware nebo virus (ClamAV command line).';
+                    } elseif ($returnCode > 1) {
+                        // Chyba při skenování, ale neblokujeme upload
+                        error_log('ClamAV scan error (code ' . $returnCode . '): ' . implode(' ', $output));
+                    }
+
+                    // Pokud command line funguje, vrátíme výsledek
+                    return $errors;
+                } catch (\Exception $e) {
+                    error_log('ClamAV command line failed: ' . $e->getMessage());
+                }
+            }
+
+            // 3. Základní heuristická kontrola jako fallback
+            $heuristicErrors = self::performHeuristicScan($filepath);
+            $errors = array_merge($errors, $heuristicErrors);
+        } catch (\Exception $e) {
+            // Pokud se celý virus scan nepodaří, pouze logujeme chybu
+            // NEBLOKUJEME upload - bezpečnost je i v dalších kontrolách
+            error_log('Virus scan completely failed: ' . $e->getMessage());
+        }
+
+        return $errors;
+    }
+
+    /**
+     * ✅ VYLEPŠENÉ: Kontrola dostupnosti ClamAV s timeout
+     */
+    private static function isClamAVAvailable(): bool
+    {
+        try {
+            $output = [];
+            $returnCode = 0;
+
+            // Zkusíme najít clamscan s timeout
+            exec('timeout 5 which clamscan 2>/dev/null', $output, $returnCode);
+
+            return $returnCode === 0 && !empty($output);
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * ✅ VYLEPŠENÉ: Základní heuristická kontrola souboru
+     */
+    private static function performHeuristicScan(string $filepath): array
+    {
+        $errors = [];
+
+        try {
+            // Kontrola velikosti souboru (ochrana proti DoS)
+            $fileSize = filesize($filepath);
+            if ($fileSize === false || $fileSize > 50 * 1024 * 1024) { // 50MB limit pro scan
+                return $errors; // Příliš velký soubor, přeskočit heuristickou kontrolu
+            }
+
+            // Přečíst prvních 2KB souboru pro analýzu
+            $handle = fopen($filepath, 'rb');
+            if ($handle === false) {
+                return $errors;
+            }
+
+            $header = fread($handle, 2048);
+            fclose($handle);
+
+            if ($header === false || strlen($header) === 0) {
+                return $errors;
+            }
+
+            // Kontrola podezřelých binárních vzorů a signatur
+            $suspiciousPatterns = [
+                // Executable signatures
+                '/MZ.{0,100}PE/' => 'Soubor obsahuje Windows executable signaturu',
+                '/\x7fELF/' => 'Soubor obsahuje Linux executable signaturu',
+
+                // Script injections v obrázcích
+                '/\xff\xd8\xff.{0,20}(<\?php|<script|javascript:)/i' => 'JPEG obsahuje podezřelý script',
+                '/GIF8[79]a.{0,20}(<\?php|<script|javascript:)/i' => 'GIF obsahuje podezřelý script',
+                '/\x89PNG.{0,20}(<\?php|<script|javascript:)/i' => 'PNG obsahuje podezřelý script',
+
+                // HTML/JavaScript v binárních souborech
+                '/(<html|<script|<iframe|javascript:|vbscript:)/i' => 'Binární soubor obsahuje web kód',
+
+                // Podezřelé PHP tagy
+                '/(<\?php|<\?=|\?>)/' => 'Soubor obsahuje PHP kód',
+
+                // Base64 encoded scripts (časté u malware)
+                '/eval\s*\(\s*base64_decode/i' => 'Podezřelý Base64 encoded kód',
+
+                // Common malware strings
+                '/(malware|trojan|backdoor|shell|payload)/i' => 'Podezřelé řetězce v souboru',
+            ];
+
+            foreach ($suspiciousPatterns as $pattern => $message) {
+                if (preg_match($pattern, $header)) {
+                    $errors[] = $message;
+                    break; // Stačí první nalezená hrozba
+                }
+            }
+
+            // Dodatečná kontrola: podezřelě vysoký podíl neASCII znaků
+            $nonAsciiCount = 0;
+            $headerLength = strlen($header);
+
+            for ($i = 0; $i < $headerLength; $i++) {
+                $byte = ord($header[$i]);
+                if ($byte > 127 && $byte < 160) { // Podezřelý rozsah
+                    $nonAsciiCount++;
+                }
+            }
+
+            // Pokud je více než 30% podezřelých bytů, může jít o obfuskovaný kód
+            if ($headerLength > 100 && ($nonAsciiCount / $headerLength) > 0.3) {
+                $errors[] = 'Soubor obsahuje neobvykle vysoký podíl podezřelých bytů';
+            }
+        } catch (\Exception $e) {
+            // Heuristická kontrola selhala, ale neblokujeme upload
+            error_log('Heuristic scan failed: ' . $e->getMessage());
+        }
+
+        return $errors;
+    }
+
+    /**
+     * ✅ NOVÁ: Získání povolených MIME typů podle kategorie
+     */
+    private static function getAllowedMimeTypes(string $type): array
+    {
+        switch ($type) {
+            case 'image':
+                return self::$allowedImageMimes;
+            case 'document':
+                return self::$allowedDocumentMimes;
+            case 'archive':
+                return self::$allowedArchiveMimes;
+            default:
+                return self::$allowedImageMimes; // Výchozí: obrázky
+        }
+    }
+
+    /**
+     * ✅ NOVÁ: Získání chybové zprávy pro upload error
+     */
+    private static function getFileUploadErrorMessage(int $errorCode): string
+    {
+        switch ($errorCode) {
+            case UPLOAD_ERR_INI_SIZE:
+                return 'Soubor překračuje maximální povolenou velikost na serveru.';
+            case UPLOAD_ERR_FORM_SIZE:
+                return 'Soubor překračuje maximální velikost specifikovanou ve formuláři.';
+            case UPLOAD_ERR_PARTIAL:
+                return 'Soubor byl nahrán pouze částečně.';
+            case UPLOAD_ERR_NO_FILE:
+                return 'Nebyl vybrán žádný soubor.';
+            case UPLOAD_ERR_NO_TMP_DIR:
+                return 'Chybí dočasný adresář pro upload.';
+            case UPLOAD_ERR_CANT_WRITE:
+                return 'Soubor se nepodařilo zapsat na disk.';
+            case UPLOAD_ERR_EXTENSION:
+                return 'Upload souboru byl zastaven rozšířením PHP.';
+            default:
+                return 'Nastala neznámá chyba při nahrávání souboru.';
+        }
+    }
+
+    /**
+     * ✅ NOVÁ: Formátování velikosti v bytech
+     */
+    private static function formatBytes(int $bytes): string
+    {
+        if ($bytes >= 1073741824) {
+            return number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        } else {
+            return $bytes . ' B';
+        }
+    }
+
+    /**
+     * ✅ NOVÁ: Bezpečné generování názvu souboru
+     */
+    public static function generateSafeFilename(string $originalName, string $prefix = ''): string
+    {
+        // Získat příponu
+        $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+
+        // Sanitizace původního názvu
+        $basename = pathinfo($originalName, PATHINFO_FILENAME);
+        $basename = self::sanitizeString($basename);
+        $basename = preg_replace('/[^a-zA-Z0-9\-_]/', '', $basename);
+
+        // Omezit délku
+        if (strlen($basename) > 50) {
+            $basename = substr($basename, 0, 50);
+        }
+
+        // Pokud není název validní, použijeme timestamp
+        if (empty($basename)) {
+            $basename = 'file_' . time();
+        }
+
+        // Sestavit finální název
+        $filename = $prefix . $basename . '_' . uniqid() . '.' . $extension;
+
+        return $filename;
     }
 }

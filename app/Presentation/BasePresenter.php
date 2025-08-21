@@ -664,7 +664,15 @@ abstract class BasePresenter extends Presenter
 
                         // OPRAVA: Používáme skutečné ID modulu místo klíče (který může být tenant_X_moduleId)
                         $realModuleId = $moduleInfo['id'] ?? $moduleId;
-                        $moduleClassName = 'Modules\\' . ucfirst($realModuleId) . '\\Module';
+                        // ✅ OPRAVENO: Používáme tenant-specific namespace
+                        $tenantId = $moduleInfo['tenant_id'] ?? 1;
+                        $moduleNameForClass = ucfirst($realModuleId); // např. "Financial_reports"
+                        $moduleClassName = "Modules\\Tenant{$tenantId}\\{$moduleNameForClass}\\Module";
+
+                        $this->securityLogger->logSecurityEvent(
+                            'module_menu_debug',
+                            "Vytvářím instanci tenant-specific třídy: $moduleClassName pro modul: $realModuleId (tenant: $tenantId)"
+                        );
 
                         $this->securityLogger->logSecurityEvent(
                             'module_menu_debug',

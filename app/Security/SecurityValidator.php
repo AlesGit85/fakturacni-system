@@ -1161,4 +1161,190 @@ class SecurityValidator
 
         return $filename;
     }
+
+    /**
+     * ✅ NOVÉ: Pokročilá validace ZIP souborů pro moduly
+     */
+    public static function validateZipFileUpload(FileUpload $file, int $maxFileSize = 10485760): array // 10MB default
+    {
+        $errors = [];
+
+        // Základní kontroly souboru
+        if (!$file->isOk()) {
+            $errors[] = 'Soubor nebyl úspěšně nahrán.';
+            return $errors;
+        }
+
+        // Kontrola velikosti souboru
+        if ($file->getSize() > $maxFileSize) {
+            $maxSizeMB = round($maxFileSize / 1048576, 2);
+            $errors[] = 'Soubor je příliš velký. Maximální velikost je ' . $maxSizeMB . ' MB.';
+        }
+
+        if ($file->getSize() === 0) {
+            $errors[] = 'Soubor je prázdný.';
+        }
+
+        // Kontrola MIME typu
+        $allowedMimeTypes = [
+            'application/zip',
+            'application/x-zip-compressed',
+            'multipart/x-zip'
+        ];
+
+        if (!in_array($file->getContentType(), $allowedMimeTypes)) {
+            $errors[] = 'Neplatný typ souboru. Povoleny jsou pouze ZIP soubory.';
+        }
+
+        // Kontrola přípony souboru
+        $filename = $file->getName();
+        if (!preg_match('/\.zip$/i', $filename)) {
+            $errors[] = 'Soubor musí mít příponu .zip.';
+        }
+
+        // ✅ KLÍČOVÁ KONTROLA: Magic bytes validace pro ZIP
+        if ($file->getTemporaryFile()) {
+            $handle = fopen($file->getTemporaryFile(), 'rb');
+            if ($handle) {
+                $magicBytes = fread($handle, 4);
+                fclose($handle);
+
+                // ZIP magic bytes: PK (0x504B)
+                if (substr($magicBytes, 0, 2) !== "PK") {
+                    $errors[] = 'Soubor není platný ZIP archiv.';
+                }
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * ✅ NOVÉ: Bezpečná validace ZIP obsahu před extrakcí
+     */
+    public static function validateZipContents(string $zipPath): array
+    {
+        $errors = [];
+
+        try {
+            $zip = new \ZipArchive();
+            $result = $zip->open($zipPath);
+
+            if ($result !== TRUE) {
+                $errors[] = 'Nepodařilo se otevřít ZIP soubor (kód: ' . $result . ').';
+                return $errors;
+            }
+
+            $numFiles = $zip->numFiles;
+            $totalSize = 0;
+            $hasModuleJson = false;
+
+            // Kontrola každého souboru v archivu
+            for ($i = 0; $i < $numFiles; $i++) {
+                $stat = $zip->statIndex($i);
+                $filename = $stat['name'];
+                $size = $stat['size'];
+
+                // ✅ BEZPEČNOST: Kontrola path traversal
+                if (strpos($filename, '../') !== false || strpos($filename, '..\\') !== false) {
+                    $errors[] = 'ZIP obsahuje nebezpečné cesty (path traversal): ' . $filename;
+                    continue;
+                }
+
+                // ✅ BEZPEČNOST: Kontrola na absolútní cesty
+                if (strpos($filename, '/') === 0 || preg_match('/^[a-zA-Z]:/', $filename)) {
+                    $errors[] = 'ZIP obsahuje absolutní cestu: ' . $filename;
+                    continue;
+                }
+
+                // ✅ BEZPEČNOST: Kontrola délky názvu souboru
+                if (strlen($filename) > 255) {
+                    $errors[] = 'Příliš dlouhý název souboru: ' . substr($filename, 0, 50) . '...';
+                    continue;
+                }
+
+                // ✅ BEZPEČNOST: Kontrola nebezpečných souborů
+                $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                $dangerousExtensions = ['exe', 'bat', 'cmd', 'scr', 'pif', 'com', 'vbs', 'jar'];
+
+                if (in_array(strtolower($extension), $dangerousExtensions)) {
+                    $errors[] = 'ZIP obsahuje nebezpečný soubor: ' . $filename;
+                    continue;
+                }
+
+                // ✅ NOVÉ: Speciální kontrola pro JS soubory
+                if (strtolower($extension) === 'js') {
+                    // JS soubory jsou v modulech OK, ale kontrolujeme obsah na nebezpečné vzory
+                    $jsContent = $zip->getFromIndex($i);
+                    if ($jsContent !== false) {
+                        $suspiciousPatterns = [
+                            'eval\s*\(',
+                            'new\s+Function\s*\(',
+                            'document\.write\s*\(',
+                            'window\.location\s*=',
+                            'innerHTML\s*=.*<script',
+                        ];
+
+                        foreach ($suspiciousPatterns as $pattern) {
+                            if (preg_match('/' . $pattern . '/i', $jsContent)) {
+                                $errors[] = 'JS soubor obsahuje podezřelý kód: ' . $filename;
+                                continue 2;
+                            }
+                        }
+                    }
+                }
+
+                // Kontrola na module.json
+                if (basename($filename) === 'module.json') {
+                    $hasModuleJson = true;
+                }
+
+                $totalSize += $size;
+            }
+
+            $zip->close();
+
+            // ✅ KONTROLA: Povinný module.json
+            if (!$hasModuleJson) {
+                $errors[] = 'ZIP neobsahuje povinný soubor module.json.';
+            }
+
+            // ✅ KONTROLA: Maximální celková velikost rozbalených souborů (zip bomb ochrana)
+            $maxUncompressedSize = 100 * 1024 * 1024; // 100MB
+            if ($totalSize > $maxUncompressedSize) {
+                $totalSizeMB = round($totalSize / 1048576, 2);
+                $maxSizeMB = round($maxUncompressedSize / 1048576, 2);
+                $errors[] = 'Rozbalený obsah ZIP je příliš velký (' . $totalSizeMB . ' MB). Maximum je ' . $maxSizeMB . ' MB.';
+            }
+        } catch (\Exception $e) {
+            $errors[] = 'Chyba při analýze ZIP souboru: ' . $e->getMessage();
+        }
+
+        return $errors;
+    }
+
+    /**
+     * ✅ NOVÉ: Generování bezpečného názvu pro ZIP soubor
+     */
+    public static function generateSafeZipFilename(string $originalName, string $prefix = 'module_'): string
+    {
+        // Odstranit příponu a nebezpečné znaky
+        $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+        $baseName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $baseName);
+        $baseName = trim($baseName, '_-');
+
+        // Pokud je název prázdný nebo moc krátký
+        if (strlen($baseName) < 3) {
+            $baseName = 'module';
+        }
+
+        // Omezit délku
+        $baseName = substr($baseName, 0, 50);
+
+        // Přidat timestamp a náhodný řetězec
+        $timestamp = date('Y-m-d_H-i-s');
+        $random = substr(uniqid(), -6);
+
+        return $prefix . $baseName . '_' . $timestamp . '_' . $random . '.zip';
+    }
 }

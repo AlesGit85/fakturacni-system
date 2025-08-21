@@ -45,7 +45,7 @@ return array (
     'App\\Model\\ModuleManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ModuleManager.php',
-      1 => 1754922344,
+      1 => 1755765533,
     ),
     'App\\Model\\QrPaymentService' => 
     array (
@@ -72,25 +72,45 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748950316,
     ),
-    'Modules\\Financial_reports\\FinancialReportsService' => 
+    'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
-      1 => 1748942352,
+      1 => 1755765624,
     ),
-    'Modules\\Financial_reports\\Module' => 
+    'Modules\\Tenant1\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
-      1 => 1748950824,
+      1 => 1755765624,
     ),
-    'Modules\\Notes\\Module' => 
+    'Modules\\Tenant1\\Notes\\Module' => 
     array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_2\\notes\\Module.php',
-      1 => 1752157143,
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\notes\\Module.php',
+      1 => 1755762376,
     ),
-    'Modules\\Notes\\NotesManager' => 
+    'Modules\\Tenant1\\Notes\\NotesManager' => 
     array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_2\\notes\\NotesManager.php',
-      1 => 1752157143,
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\notes\\NotesManager.php',
+      1 => 1755762376,
+    ),
+    'Modules\\Tenant12\\Financial_reports\\FinancialReportsService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\FinancialReportsService.php',
+      1 => 1755766075,
+    ),
+    'Modules\\Tenant12\\Financial_reports\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\Module.php',
+      1 => 1755766075,
+    ),
+    'Modules\\Tenant12\\Notes\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\notes\\Module.php',
+      1 => 1755762440,
+    ),
+    'Modules\\Tenant12\\Notes\\NotesManager' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\notes\\NotesManager.php',
+      1 => 1755762440,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -100,7 +120,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1755607440,
+      1 => 1755765835,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -135,7 +155,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1754981069,
+      1 => 1755765902,
     ),
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
@@ -145,7 +165,7 @@ return array (
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1755722355,
+      1 => 1755723897,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
@@ -190,7 +210,7 @@ return array (
     'App\\Security\\SecurityValidator' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityValidator.php',
-      1 => 1755672723,
+      1 => 1755760598,
     ),
     'App\\Security\\SQLSecurityAudit' => 
     array (
@@ -202,10 +222,11 @@ return array (
   array (
     'Nette\\Bridges\\Assets\\DIExtension' => 1,
     'null' => 1,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
-    'App\\Presentation\\Home\\HomeTemplate' => 1,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 1,
   ),
   2 => 
   array (
