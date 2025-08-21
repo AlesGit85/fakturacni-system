@@ -972,4 +972,28 @@ class ModuleManager
         
         return implode('', $pascalWords);
     }
+
+    /**
+     * ✅ NOVÁ METODA: Získá cestu k modulu pro aktuální tenant
+     */
+    public function getModulePath(string $moduleId): string
+    {
+        if ($this->currentTenantId === null) {
+            throw new \InvalidArgumentException('Tenant ID není nastaven. Zavolejte setUserContext() před použitím getModulePath().');
+        }
+        
+        return $this->getTenantModulesDir($this->currentTenantId) . '/' . $moduleId;
+    }
+
+    /**
+     * ✅ NOVÁ METODA: Získá cestu k WWW assets modulu pro aktuální tenant
+     */
+    public function getModuleWwwPath(string $moduleId): string
+    {
+        if ($this->currentTenantId === null) {
+            throw new \InvalidArgumentException('Tenant ID není nastaven. Zavolejte setUserContext() před použitím getModuleWwwPath().');
+        }
+        
+        return $this->getTenantWwwModulesDir($this->currentTenantId) . '/' . $moduleId;
+    }
 }

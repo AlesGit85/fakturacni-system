@@ -45,7 +45,7 @@ return array (
     'App\\Model\\ModuleManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ModuleManager.php',
-      1 => 1755765533,
+      1 => 1755772000,
     ),
     'App\\Model\\QrPaymentService' => 
     array (
@@ -72,161 +72,39 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748950316,
     ),
-    'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 
+    'Modules\\Financial_reports\\FinancialReportsService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
-      1 => 1755765624,
+      1 => 1755772514,
     ),
-    'Modules\\Tenant1\\Financial_reports\\Module' => 
+    'Modules\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
-      1 => 1755765624,
+      1 => 1755772514,
     ),
-    'Modules\\Tenant1\\Notes\\Module' => 
+    'Modules\\Notes\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\notes\\Module.php',
-      1 => 1755762376,
+      1 => 1755772536,
     ),
-    'Modules\\Tenant1\\Notes\\NotesManager' => 
+    'Modules\\Notes\\NotesManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\notes\\NotesManager.php',
-      1 => 1755762376,
-    ),
-    'Modules\\Tenant12\\Financial_reports\\FinancialReportsService' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\FinancialReportsService.php',
-      1 => 1755766075,
-    ),
-    'Modules\\Tenant12\\Financial_reports\\Module' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\Module.php',
-      1 => 1755766075,
-    ),
-    'Modules\\Tenant12\\Notes\\Module' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\notes\\Module.php',
-      1 => 1755762440,
-    ),
-    'Modules\\Tenant12\\Notes\\NotesManager' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\notes\\NotesManager.php',
-      1 => 1755762440,
-    ),
-    'App\\Presentation\\Accessory\\LatteExtension' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Accessory\\LatteExtension.php',
-      1 => 1753078292,
-    ),
-    'App\\Presentation\\BasePresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1755765835,
-    ),
-    'App\\Presentation\\Clients\\ClientsPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1755610732,
-    ),
-    'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Error\\Error4xx\\Error4xxPresenter.php',
-      1 => 1738539948,
-    ),
-    'App\\Presentation\\Error\\Error5xx\\Error5xxPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Error\\Error5xx\\Error5xxPresenter.php',
-      1 => 1738539948,
-    ),
-    'App\\Presentation\\Home\\HomePresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1755552711,
-    ),
-    'App\\Presentation\\Invoices\\InvoicesPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1755077382,
-    ),
-    'App\\Presentation\\Modules\\DetailPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\DetailPresenter.php',
-      1 => 1748251971,
-    ),
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1755765902,
-    ),
-    'App\\Presentation\\Security\\SecurityPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Security\\SecurityPresenter.php',
-      1 => 1755551153,
-    ),
-    'App\\Presentation\\Settings\\SettingsPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1755723897,
-    ),
-    'App\\Presentation\\Sign\\SignPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1755087255,
-    ),
-    'App\\Presentation\\Tenants\\TenantsPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Tenants\\TenantsPresenter.php',
-      1 => 1752667676,
-    ),
-    'App\\Presentation\\Users\\UsersPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Users\\UsersPresenter.php',
-      1 => 1755548450,
-    ),
-    'App\\Security\\AntiSpam' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\AntiSpam.php',
-      1 => 1754979837,
-    ),
-    'App\\Security\\RateLimiter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiter.php',
-      1 => 1755549906,
-    ),
-    'App\\Security\\RateLimiterCleaner' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiterCleaner.php',
-      1 => 1753218352,
-    ),
-    'App\\Security\\SecurityHeaders' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityHeaders.php',
-      1 => 1755608093,
-    ),
-    'App\\Security\\SecurityLogger' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityLogger.php',
-      1 => 1747984094,
-    ),
-    'App\\Security\\SecurityValidator' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityValidator.php',
-      1 => 1755760598,
-    ),
-    'App\\Security\\SQLSecurityAudit' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SQLSecurityAudit.php',
-      1 => 1753359076,
+      1 => 1755772536,
     ),
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 1,
-    'null' => 1,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
-    'App\\Presentation\\Home\\HomeTemplate' => 3,
+    'Nette\\Bridges\\Assets\\DIExtension' => 3,
+    'null' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 1,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeTemplate' => 3,
+    'Modules\\Tenant1\\Notes\\Module' => 2,
+    'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 2,
+    'Modules\\Tenant1\\Financial_reports\\Module' => 3,
+    'Modules\\Tenant12\\Notes\\Module' => 3,
   ),
   2 => 
   array (

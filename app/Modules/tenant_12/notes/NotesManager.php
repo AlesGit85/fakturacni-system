@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Tenant12\Notes;
+namespace Modules\Notes;
 
 use Nette;
 use DateTime;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Tenant12\Financial_reports;
+namespace Modules\Financial_reports;
 
 use Nette;
 use App\Model\InvoicesManager;

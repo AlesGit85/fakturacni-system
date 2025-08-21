@@ -6,6 +6,7 @@ namespace App\Presentation\ModuleAdmin;
 
 use Nette;
 use Nette\Application\UI\Form;
+use Nette\Http\FileUpload;
 use App\Model\ModuleManager;
 use App\Model\InvoicesManager;
 use App\Model\CompanyManager;
@@ -43,7 +44,7 @@ final class ModuleAdminPresenter extends BasePresenter
     ];
 
     public function __construct(
-        ModuleManager $moduleManager, 
+        ModuleManager $moduleManager,
         ILogger $logger,
         InvoicesManager $invoicesManager,
         CompanyManager $companyManager,
@@ -62,7 +63,7 @@ final class ModuleAdminPresenter extends BasePresenter
     public function startup(): void
     {
         parent::startup();
-        
+
         // OPRAVA: Nastavíme kontext ModuleManager pro tento presenter
         if ($this->getUser()->isLoggedIn()) {
             $identity = $this->getUser()->getIdentity();
@@ -103,11 +104,11 @@ final class ModuleAdminPresenter extends BasePresenter
     {
         try {
             $this->logger->log("=== ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===", ILogger::INFO);
-            
+
             // ✅ OPRAVENO: Sanitizace parametrů hned při čtení
             $moduleId = SecurityValidator::sanitizeString($this->getHttpRequest()->getQuery('moduleId') ?? '');
             $action = SecurityValidator::sanitizeString($this->getHttpRequest()->getQuery('action') ?? 'getAllData');
-            
+
             $this->logger->log("AJAX parametry - moduleId: '$moduleId', action: '$action'", ILogger::INFO);
 
             if (!$moduleId) {
@@ -182,10 +183,10 @@ final class ModuleAdminPresenter extends BasePresenter
 
             // Příprava závislostí pro modul
             $dependencies = $this->prepareDependencies();
-            
+
             // ✅ OPRAVENO: Bezpečná příprava parametrů
             $parameters = $this->prepareParameters();
-            
+
             // Přidání user_id pokud je uživatel přihlášen
             if ($this->getUser()->isLoggedIn()) {
                 $identity = $this->getUser()->getIdentity();
@@ -198,7 +199,7 @@ final class ModuleAdminPresenter extends BasePresenter
 
             // Volání metody modulu
             $result = $moduleInstance->handleAjaxRequest($action, $parameters, $dependencies);
-            
+
             $this->logger->log("AJAX akce '$action' úspěšně dokončena", ILogger::INFO);
             $this->logger->log("=== KONEC OBECNÉHO AJAX VOLÁNÍ ===", ILogger::INFO);
 
@@ -206,14 +207,13 @@ final class ModuleAdminPresenter extends BasePresenter
                 'success' => true,
                 'data' => $result
             ]);
-
         } catch (\Throwable $e) {
             $this->logger->log("=== CHYBA V OBECNÉM AJAX VOLÁNÍ ===", ILogger::ERROR);
             $this->logger->log("Exception type: " . get_class($e), ILogger::ERROR);
             $this->logger->log("Message: " . $e->getMessage(), ILogger::ERROR);
             $this->logger->log("File: " . $e->getFile() . " (line " . $e->getLine() . ")", ILogger::ERROR);
             $this->logger->log("Stack trace: " . $e->getTraceAsString(), ILogger::ERROR);
-            
+
             $this->sendJson([
                 'success' => false,
                 'error' => 'Chyba při načítání dat: ' . $e->getMessage()
@@ -228,60 +228,64 @@ final class ModuleAdminPresenter extends BasePresenter
     {
         try {
             $this->logger->log("Vytvářím instanci modulu '$moduleId'", ILogger::INFO);
-            
+
             // Získáme info o modulu z ModuleManager
             $activeModules = $this->moduleManager->getActiveModules();
             $moduleInfo = $activeModules[$moduleId] ?? null;
-            
+
             if (!$moduleInfo) {
                 $this->logger->log("CHYBA: Modul '$moduleId' nenalezen v aktivních modulech", ILogger::ERROR);
                 return null;
             }
-            
+
             // Používáme physical_path z moduleInfo
             $modulePath = $moduleInfo['physical_path'] ?? null;
             if (!$modulePath) {
                 $this->logger->log("CHYBA: Modul '$moduleId' nemá physical_path", ILogger::ERROR);
                 return null;
             }
-            
+
             $moduleFile = $modulePath . '/Module.php';
             $this->logger->log("Hledám soubor modulu: $moduleFile", ILogger::INFO);
-            
+
             if (!file_exists($moduleFile)) {
                 $this->logger->log("CHYBA: Soubor modulu neexistuje: $moduleFile", ILogger::ERROR);
                 return null;
             }
-            
+
             $this->logger->log("Soubor modulu nalezen, načítám...", ILogger::INFO);
 
             // Načtení souboru modulu
             require_once $moduleFile;
-            
+
             // Vytvoření názvu třídy (používáme skutečné ID modulu, ne klíč)
             $realModuleId = $moduleInfo['id'] ?? $moduleId;
-            $moduleClassName = 'Modules\\' . ucfirst($realModuleId) . '\\Module';
+            // ✅ OPRAVENO: Používáme tenant-specific namespace
+            $tenantId = $moduleInfo['tenant_id'] ?? 1;
+            $moduleNameForClass = ucfirst($realModuleId); // např. "Financial_reports"
+            $moduleClassName = "Modules\\Tenant{$tenantId}\\{$moduleNameForClass}\\Module";
             
+            $this->logger->log("Vytvářím instanci tenant-specific třídy: $moduleClassName pro modul: $realModuleId (tenant: $tenantId)", ILogger::INFO);
+
             $this->logger->log("Kontroluji existenci třídy: $moduleClassName", ILogger::INFO);
-            
+
             if (!class_exists($moduleClassName)) {
                 $this->logger->log("CHYBA: Třída modulu neexistuje: $moduleClassName", ILogger::ERROR);
                 return null;
             }
-            
+
             $this->logger->log("Třída nalezena, vytvářím instanci...", ILogger::INFO);
 
             // Vytvoření instance modulu
             $moduleInstance = new $moduleClassName();
-            
+
             if (!$moduleInstance instanceof \App\Modules\IModule) {
                 $this->logger->log("CHYBA: Třída modulu neimplementuje IModule: $moduleClassName", ILogger::ERROR);
                 return null;
             }
-            
+
             $this->logger->log("Instance modulu '$moduleId' úspěšně vytvořena", ILogger::INFO);
             return $moduleInstance;
-            
         } catch (\Throwable $e) {
             $this->logger->log("CHYBA při vytváření instance modulu '$moduleId': " . $e->getMessage(), ILogger::ERROR);
             return null;
@@ -294,7 +298,7 @@ final class ModuleAdminPresenter extends BasePresenter
     private function prepareDependencies(): array
     {
         $this->logger->log("Připravuji závislosti pro modul", ILogger::INFO);
-        
+
         return [
             $this->invoicesManager,
             $this->companyManager,
@@ -309,17 +313,17 @@ final class ModuleAdminPresenter extends BasePresenter
     private function prepareParameters(): array
     {
         $httpRequest = $this->getHttpRequest();
-        
+
         // ✅ OPRAVENO: Bezpečné získání parametrů s sanitizací
         $parameters = [];
-        
+
         // Query parametry
         foreach ($httpRequest->getQuery() as $key => $value) {
             if (!in_array($key, ['do', 'moduleId', 'action'])) {
                 // ✅ PŘIDÁNO: Sanitizace klíče i hodnoty
                 $sanitizedKey = SecurityValidator::sanitizeString($key);
                 $sanitizedValue = is_string($value) ? SecurityValidator::sanitizeString($value) : $value;
-                
+
                 // ✅ PŘIDÁNO: Základní validace klíče
                 if (preg_match('/^[a-zA-Z0-9_]+$/', $sanitizedKey)) {
                     $parameters[$sanitizedKey] = $sanitizedValue;
@@ -328,13 +332,13 @@ final class ModuleAdminPresenter extends BasePresenter
                 }
             }
         }
-        
+
         // POST parametry
         foreach ($httpRequest->getPost() as $key => $value) {
             // ✅ PŘIDÁNO: Sanitizace klíče i hodnoty
             $sanitizedKey = SecurityValidator::sanitizeString($key);
             $sanitizedValue = is_string($value) ? SecurityValidator::sanitizeString($value) : $value;
-            
+
             // ✅ PŘIDÁNO: Základní validace klíče
             if (preg_match('/^[a-zA-Z0-9_]+$/', $sanitizedKey)) {
                 $parameters[$sanitizedKey] = $sanitizedValue;
@@ -342,17 +346,17 @@ final class ModuleAdminPresenter extends BasePresenter
                 $this->logger->log("Přeskakuji POST parametr s neplatným klíčem: '$key'", ILogger::WARNING);
             }
         }
-        
+
         // ✅ PŘIDÁNO: Logování pouze bezpečných parametrů
         $safeParameters = [];
         foreach ($parameters as $key => $value) {
-            $safeParameters[$key] = is_string($value) ? 
-                SecurityValidator::safeLogString($value, 50) : 
+            $safeParameters[$key] = is_string($value) ?
+                SecurityValidator::safeLogString($value, 50) :
                 $value;
         }
-        
+
         $this->logger->log("Připravené parametry: " . json_encode($safeParameters), ILogger::INFO);
-        
+
         return $parameters;
     }
 
@@ -366,16 +370,16 @@ final class ModuleAdminPresenter extends BasePresenter
         // HLAVNÍ ZMĚNA: Používáme getAllInstalledModules() místo getActiveModules()
         $modules = $this->moduleManager->getAllInstalledModules();
         $this->logger->log("Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele", ILogger::INFO);
-        
+
         $this->template->modules = $modules;
         $this->logger->log("Načteno " . count($modules) . " modulů pro zobrazení (aktivních i neaktivních)", ILogger::INFO);
 
         // NOVÉ: Přidáme statistiky pro šablonu
-        $activeCount = count(array_filter($modules, function($module) {
+        $activeCount = count(array_filter($modules, function ($module) {
             return $module['is_active'] ?? false;
         }));
         $inactiveCount = count($modules) - $activeCount;
-        
+
         $this->template->activeModulesCount = $activeCount;
         $this->template->inactiveModulesCount = $inactiveCount;
         $this->template->totalModulesCount = count($modules);
@@ -387,7 +391,7 @@ final class ModuleAdminPresenter extends BasePresenter
 
         // DEBUG: Přidáme informace o PHP limitech pro debugging
         $this->template->debugInfo = $this->getPhpUploadDebugInfo();
-        
+
         $this->logger->log("Statistiky modulů: Aktivní: $activeCount, Neaktivní: $inactiveCount, Celkem: " . count($modules), ILogger::INFO);
     }
 
@@ -406,14 +410,14 @@ final class ModuleAdminPresenter extends BasePresenter
 
         // Načteme všechny uživatele s jejich moduly
         $usersWithModules = [];
-        
+
         try {
             // OPRAVA: Načteme pouze administrátory (admin role nebo super admin)
             $users = $this->database->table('users')
                 ->where('role = ? OR is_super_admin = ?', 'admin', 1)
                 ->order('username ASC')
                 ->fetchAll();
-            
+
             foreach ($users as $user) {
                 // Pro každého uživatele načteme jeho moduly
                 $userModules = $this->database->table('user_modules')
@@ -439,16 +443,17 @@ final class ModuleAdminPresenter extends BasePresenter
                     'user' => $user,
                     'modules' => $modules,
                     'modules_count' => count($modules),
-                    'active_modules_count' => count(array_filter($modules, function($m) { return $m['is_active']; }))
+                    'active_modules_count' => count(array_filter($modules, function ($m) {
+                        return $m['is_active'];
+                    }))
                 ];
             }
 
             $this->template->usersWithModules = $usersWithModules;
             $this->template->totalUsers = count($usersWithModules);
             $this->template->totalModules = array_sum(array_column($usersWithModules, 'modules_count'));
-            
+
             $this->logger->log("Super admin: Načten přehled modulů pro " . count($usersWithModules) . " administrátorů", ILogger::INFO);
-            
         } catch (\Exception $e) {
             $this->logger->log("Chyba při načítání přehledu uživatelských modulů: " . $e->getMessage(), ILogger::ERROR);
             $this->flashMessage('Chyba při načítání dat uživatelů.', 'danger');
@@ -465,7 +470,7 @@ final class ModuleAdminPresenter extends BasePresenter
     {
         // ✅ PŘIDÁNO: Sanitizace ID parametru
         $id = SecurityValidator::sanitizeString($id);
-        
+
         // ✅ PŘIDÁNO: Validace formátu ID
         if (!preg_match('/^[a-zA-Z0-9_-]+$/', $id)) {
             $this->flashMessage('Neplatný formát ID modulu.', 'danger');
@@ -480,7 +485,7 @@ final class ModuleAdminPresenter extends BasePresenter
         }
 
         $moduleInfo = $allModules[$id];
-        
+
         // NOVÁ KONTROLA: Ověříme, že je modul aktivní pro detail
         if (!$moduleInfo['is_active']) {
             $this->flashMessage('Modul není aktivní. Nejdříve jej aktivujte.', 'warning');
@@ -492,7 +497,7 @@ final class ModuleAdminPresenter extends BasePresenter
 
         // OPRAVA: Používáme physical_path z moduleInfo místo ručního sestavování
         $modulePath = $moduleInfo['physical_path'] ?? null;
-        
+
         if (!$modulePath || !is_dir($modulePath)) {
             $this->logger->log("Modul $id nemá platnou physical_path: " . ($modulePath ?? 'null'), ILogger::ERROR);
             $this->flashMessage('Cesta k modulu nebyla nalezena.', 'danger');
@@ -523,7 +528,7 @@ final class ModuleAdminPresenter extends BasePresenter
         // OPRAVA: Používáme physical_path pro šablonu
         $templatePath = $modulePath . '/templates/dashboard.latte';
         $this->logger->log("Hledám šablonu modulu $id na cestě: $templatePath", ILogger::DEBUG);
-        
+
         if (file_exists($templatePath)) {
             $this->template->moduleTemplatePath = $templatePath;
             $this->logger->log("Šablona modulu $id nalezena: $templatePath", ILogger::INFO);
@@ -533,7 +538,7 @@ final class ModuleAdminPresenter extends BasePresenter
 
         // OBECNÉ: AJAX URL pro všechny moduly
         $this->template->ajaxUrl = $this->link('moduleData!', [
-            'moduleId' => $id, 
+            'moduleId' => $id,
             'action' => 'getAllData'
         ]);
     }
@@ -544,12 +549,12 @@ final class ModuleAdminPresenter extends BasePresenter
     private function updateModuleAssets(string $moduleId, string $modulePath): void
     {
         $moduleAssetsDir = $modulePath . '/assets';
-        
+
         // Určíme tenant ID z module info
         $allModules = $this->moduleManager->getAllInstalledModules();
         $moduleInfo = $allModules[$moduleId] ?? null;
         $tenantId = $moduleInfo['tenant_id'] ?? null;
-        
+
         if (!$tenantId) {
             $this->logger->log("Modul '$moduleId' nemá tenant_id - přeskakuji aktualizaci assets", ILogger::WARNING);
             return;
@@ -580,7 +585,6 @@ final class ModuleAdminPresenter extends BasePresenter
             $this->copyDirectory($moduleAssetsDir, $wwwModuleDir . '/assets');
 
             $this->logger->log("Assets modulu '$moduleId' byly úspěšně aktualizovány", ILogger::INFO);
-            
         } catch (\Exception $e) {
             $this->logger->log("Chyba při aktualizaci assets modulu '$moduleId': " . $e->getMessage(), ILogger::ERROR);
         }
@@ -686,7 +690,7 @@ final class ModuleAdminPresenter extends BasePresenter
 
         $maxSize = min($limits);
         $this->logger->log("Výsledná maximální velikost souboru: " . $this->formatBytes($maxSize), ILogger::INFO);
-        
+
         return $maxSize;
     }
 
@@ -735,14 +739,14 @@ final class ModuleAdminPresenter extends BasePresenter
         $uploadMaxFilesize = $this->parseSize(ini_get('upload_max_filesize'));
         $postMaxSize = $this->parseSize(ini_get('post_max_size'));
         $memoryLimit = $this->parseSize(ini_get('memory_limit'));
-        
+
         // Vypočítáme finální limit (nejmenší hodnotu)
         $limits = [$uploadMaxFilesize, $postMaxSize];
         if ($memoryLimit > 0) { // memory_limit = -1 znamená nekonečno
             $limits[] = $memoryLimit;
         }
         $finalLimit = min($limits);
-        
+
         return [
             'upload_max_filesize' => ini_get('upload_max_filesize'),
             'upload_max_filesize_formatted' => $this->formatBytes($uploadMaxFilesize),
@@ -760,39 +764,446 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * OPRAVENÁ METODA: Zpracování nahraného modulu - oprava parametru installedBy
+     * ✅ FINÁLNÍ: Zpracování nahraného modulu s kompletní bezpečnostní validací
      */
     public function uploadFormSucceeded(Form $form): void
     {
         $values = $form->getValues();
         $file = $values->moduleZip;
 
-        if (!$file->isOk()) {
-            $this->flashMessage('Chyba při nahrávání souboru.', 'danger');
-            return;
-        }
+        try {
+            // ✅ ZÁKLADNÍ KONTROLA: Stav souboru
+            if (!$file->isOk()) {
+                throw new \Exception('Chyba při nahrávání souboru: ' . $this->getFileUploadErrorMessage($file->getError()));
+            }
 
-        $identity = $this->getUser()->getIdentity();
-        if (!$identity) {
-            $this->flashMessage('Nejste přihlášen.', 'danger');
-            return;
-        }
+            // ✅ POKROČILÁ VALIDACE ZIP SOUBORU
+            $maxFileSize = $this->getMaxUploadSize();
+            $validationErrors = SecurityValidator::validateZipFileUpload($file, $maxFileSize);
 
-        // OPRAVA: Čtvrtý parametr musí být user ID (int), protože databázový sloupec je INTEGER
-        $result = $this->moduleManager->installModuleForUser(
-            $file,
-            $identity->id,
-            null, // tenant ID se určí automaticky z kontextu
-            $identity->id  // OPRAVA: předáváme user ID (int) místo username (string)
-        );
+            if (!empty($validationErrors)) {
+                throw new \Exception('Validace ZIP souboru selhala: ' . implode(' ', $validationErrors));
+            }
 
-        if ($result['success']) {
-            $this->flashMessage($result['message'], 'success');
-        } else {
-            $this->flashMessage($result['message'], 'danger');
+            // ✅ KONTROLA PŘIHLÁŠENÍ
+            $identity = $this->getUser()->getIdentity();
+            if (!$identity) {
+                throw new \Exception('Nejste přihlášen.');
+            }
+
+            // ✅ LOGOVÁNÍ ZAČÁTKU PROCESU
+            $this->logger->log(sprintf(
+                'Začátek bezpečné instalace modulu: soubor=%s, velikost=%s, uživatel=%s, tenant=%s',
+                $file->getName(),
+                $this->formatBytes($file->getSize()),
+                $identity->id,
+                $this->getCurrentTenantId()
+            ), ILogger::INFO);
+
+            // ✅ VYTVOŘENÍ BEZPEČNÉHO DOČASNÉHO ADRESÁŘE
+            $tempDir = $this->createSecureTempDirectory();
+            
+            try {
+                // ✅ BEZPEČNÉ ULOŽENÍ ZIP DO DOČASNÉHO ADRESÁŘE
+                $tempZipPath = $this->saveZipToTempDirectory($file, $tempDir);
+                
+                // ✅ VALIDACE OBSAHU ZIP PŘED EXTRAKCÍ
+                $contentErrors = SecurityValidator::validateZipContents($tempZipPath);
+                if (!empty($contentErrors)) {
+                    throw new \Exception('Nebezpečný obsah ZIP: ' . implode(' ', $contentErrors));
+                }
+
+                // ✅ PŘEDEXTRAKČNÍ KONTROLA MODULE.JSON
+                $this->performPreExtractionValidation($tempZipPath);
+
+                // ✅ BEZPEČNÁ EXTRAKCE A VALIDACE
+                $extractedModuleInfo = $this->performSecureExtraction($tempZipPath, $tempDir);
+
+                // ✅ KONTROLA DUPLICITNÍ INSTALACE
+                $this->checkDuplicateInstallation($extractedModuleInfo['id'], $identity->id);
+
+                // ✅ PŮVODNÍ INSTALACE MODULU (nyní s předvalidovanými daty)
+                $result = $this->moduleManager->installModuleForUser(
+                    $file,
+                    $identity->id,
+                    $this->getCurrentTenantId(),
+                    $identity->id
+                );
+
+                if ($result['success']) {
+                    // ✅ LOGOVÁNÍ ÚSPĚŠNÉ INSTALACE
+                    $this->logger->log(sprintf(
+                        'Modul %s úspěšně nainstalován s bezpečnostními kontrolami - uživatel: %s, tenant: %s',
+                        $extractedModuleInfo['id'],
+                        $identity->id,
+                        $this->getCurrentTenantId()
+                    ), ILogger::INFO);
+                    
+                    $this->flashMessage($result['message'], 'success');
+                } else {
+                    throw new \Exception($result['message']);
+                }
+
+            } finally {
+                // ✅ VŽDY VYČISTIT DOČASNÝ ADRESÁŘ
+                $this->cleanupTempDirectory($tempDir);
+            }
+
+        } catch (\Exception $e) {
+            // ✅ DETAILNÍ LOGOVÁNÍ CHYB
+            $this->logger->log(sprintf(
+                'Chyba při bezpečné instalaci modulu: %s, soubor=%s, uživatel=%s',
+                $e->getMessage(),
+                $file->getName() ?? 'neznámý',
+                $this->getUser()->getId() ?? 'nepřihlášen'
+            ), ILogger::ERROR);
+            
+            $this->flashMessage('Chyba při instalaci modulu: ' . $e->getMessage(), 'danger');
         }
 
         $this->redirect('this');
+    }
+
+    /**
+     * ✅ NOVÉ: Bezpečná extrakce a validace obsahu
+     */
+    private function performSecureExtraction(string $zipPath, string $tempDir): array
+    {
+        $extractDir = $tempDir . '/extracted';
+        if (!mkdir($extractDir, 0755, true)) {
+            throw new \Exception('Nepodařilo se vytvořit adresář pro extrakci.');
+        }
+
+        // Extrakce ZIP
+        $zip = new \ZipArchive();
+        if ($zip->open($zipPath) !== TRUE) {
+            throw new \Exception('Nepodařilo se otevřít ZIP soubor pro extrakci.');
+        }
+
+        try {
+            // Kontrola každého souboru před extrakcí
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $filename = $zip->getNameIndex($i);
+                
+                // Kontrola path traversal
+                if (strpos($filename, '../') !== false || strpos($filename, '..\\') !== false) {
+                    throw new \Exception("Nebezpečná cesta v ZIP: $filename");
+                }
+                
+                // Kontrola absolutních cest
+                if (strpos($filename, '/') === 0 || preg_match('/^[a-zA-Z]:/', $filename)) {
+                    throw new \Exception("Absolutní cesta v ZIP: $filename");
+                }
+            }
+
+            // Extrakce do bezpečného adresáře
+            if (!$zip->extractTo($extractDir)) {
+                throw new \Exception('Nepodařilo se extrahovat ZIP soubor.');
+            }
+
+            // Najdeme a načteme module.json
+            $moduleJsonPath = $this->findModuleJsonRecursively($extractDir);
+            if (!$moduleJsonPath) {
+                throw new \Exception('V extrahovaném obsahu nebyl nalezen module.json.');
+            }
+
+            $moduleConfig = json_decode(file_get_contents($moduleJsonPath), true);
+            if (!$moduleConfig) {
+                throw new \Exception('Neplatný obsah module.json souboru.');
+            }
+
+            // Dodatečná validace modulu
+            $this->validateExtractedModule($moduleConfig, dirname($moduleJsonPath));
+
+            return $moduleConfig;
+
+        } finally {
+            $zip->close();
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Validace extrahovaného modulu
+     */
+    private function validateExtractedModule(array $moduleConfig, string $modulePath): void
+    {
+        // Kontrola povinných souborů
+        $requiredFiles = ['module.json'];
+        foreach ($requiredFiles as $file) {
+            if (!file_exists($modulePath . '/' . $file)) {
+                throw new \Exception("Chybí povinný soubor: $file");
+            }
+        }
+
+        // Kontrola bezpečnosti PHP souborů (pokud existují)
+        $phpFiles = glob($modulePath . '/*.php');
+        foreach ($phpFiles as $phpFile) {
+            $this->validatePhpFile($phpFile);
+        }
+
+        // Kontrola velikosti extrahovaných souborů
+        $totalSize = $this->calculateDirectorySize($modulePath);
+        $maxSize = 50 * 1024 * 1024; // 50MB limit pro extrahované soubory
+        
+        if ($totalSize > $maxSize) {
+            throw new \Exception('Extrahované soubory jsou příliš velké (' . $this->formatBytes($totalSize) . ').');
+        }
+
+        $this->logger->log("Extrahovaný modul validován: velikost " . $this->formatBytes($totalSize), ILogger::INFO);
+    }
+
+    /**
+     * ✅ NOVÉ: Validace PHP souboru na nebezpečný kód
+     */
+    private function validatePhpFile(string $filePath): void
+    {
+        $content = file_get_contents($filePath);
+        
+        // Kontrola na nebezpečné PHP funkce
+        $dangerousFunctions = [
+            'eval',
+            'exec',
+            'system',
+            'shell_exec',
+            'passthru',
+            'file_get_contents.*http',
+            'curl_exec',
+            'file_put_contents.*\.\.',
+            'unlink.*\.\.',
+            'rmdir.*\.\.',
+        ];
+
+        foreach ($dangerousFunctions as $function) {
+            if (preg_match('/' . $function . '/i', $content)) {
+                throw new \Exception("PHP soubor obsahuje nebezpečnou funkci: $function v souboru " . basename($filePath));
+            }
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Kontrola duplicitní instalace
+     */
+    private function checkDuplicateInstallation(string $moduleId, int $userId): void
+    {
+        $existingModule = $this->database->table('user_modules')
+            ->where('user_id', $userId)
+            ->where('module_id', $moduleId)
+            ->fetch();
+
+        if ($existingModule) {
+            throw new \Exception("Modul '$moduleId' je již nainstalován. Nejdříve jej odinstalujte, pokud chcete nahrát novou verzi.");
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Rekurzivní hledání module.json
+     */
+    private function findModuleJsonRecursively(string $directory): ?string
+    {
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS)
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->getFilename() === 'module.json') {
+                return $file->getPathname();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * ✅ NOVÉ: Výpočet velikosti adresáře
+     */
+    private function calculateDirectorySize(string $directory): int
+    {
+        $size = 0;
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS)
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                $size += $file->getSize();
+            }
+        }
+
+        return $size;
+    }
+
+    /**
+     * ✅ NOVÉ: Získání lidsky čitelné chybové zprávy pro upload error
+     */
+    private function getFileUploadErrorMessage(int $errorCode): string
+    {
+        switch ($errorCode) {
+            case UPLOAD_ERR_OK:
+                return 'Žádná chyba';
+            case UPLOAD_ERR_INI_SIZE:
+                return 'Soubor překračuje maximální povolenou velikost na serveru';
+            case UPLOAD_ERR_FORM_SIZE:
+                return 'Soubor překračuje maximální velikost specifikovanou ve formuláři';
+            case UPLOAD_ERR_PARTIAL:
+                return 'Soubor byl nahrán pouze částečně';
+            case UPLOAD_ERR_NO_FILE:
+                return 'Nebyl vybrán žádný soubor';
+            case UPLOAD_ERR_NO_TMP_DIR:
+                return 'Chybí dočasný adresář pro upload';
+            case UPLOAD_ERR_CANT_WRITE:
+                return 'Soubor se nepodařilo zapsat na disk';
+            case UPLOAD_ERR_EXTENSION:
+                return 'Upload souboru byl zastaven rozšířením PHP';
+            default:
+                return 'Neznámá chyba při nahrávání souboru (kód: ' . $errorCode . ')';
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Vytvoření bezpečného dočasného adresáře
+     */
+    private function createSecureTempDirectory(): string
+    {
+        $tempBase = sys_get_temp_dir() . '/module_uploads';
+
+        // Vytvoření základního adresáře pokud neexistuje
+        if (!is_dir($tempBase)) {
+            if (!mkdir($tempBase, 0755, true)) {
+                throw new \Exception('Nepodařilo se vytvořit dočasný adresář pro moduly.');
+            }
+        }
+
+        // Vytvoření unikátního podadresáře
+        $tempDir = $tempBase . '/' . uniqid('upload_', true);
+        if (!mkdir($tempDir, 0755, true)) {
+            throw new \Exception('Nepodařilo se vytvořit dočasný adresář pro upload.');
+        }
+
+        return $tempDir;
+    }
+
+    /**
+     * ✅ NOVÉ: Bezpečné uložení ZIP do dočasného adresáře
+     */
+    private function saveZipToTempDirectory(FileUpload $file, string $tempDir): string
+    {
+        // Generování bezpečného názvu souboru
+        $safeFilename = SecurityValidator::generateSafeZipFilename($file->getName());
+        $tempZipPath = $tempDir . '/' . $safeFilename;
+
+        // Přesunutí souboru
+        try {
+            $file->move($tempZipPath);
+        } catch (\Exception $e) {
+            throw new \Exception('Nepodařilo se uložit soubor do dočasného adresáře: ' . $e->getMessage());
+        }
+
+        // Kontrola, že soubor byl úspěšně uložen
+        if (!file_exists($tempZipPath) || filesize($tempZipPath) === 0) {
+            throw new \Exception('Soubor se nepodařilo úspěšně uložit.');
+        }
+
+        return $tempZipPath;
+    }
+
+    /**
+     * ✅ NOVÉ: Předextrakční validace ZIP souboru
+     */
+    private function performPreExtractionValidation(string $zipPath): void
+    {
+        // Otevření ZIP pro detailní kontrolu
+        $zip = new \ZipArchive();
+        $result = $zip->open($zipPath);
+
+        if ($result !== TRUE) {
+            throw new \Exception('Nepodařilo se otevřít ZIP soubor pro validaci.');
+        }
+
+        try {
+            // Kontrola module.json existence a validity
+            $moduleJsonIndex = $zip->locateName('module.json');
+            if ($moduleJsonIndex === false) {
+                // Hledání module.json v podadresářích
+                $moduleJsonFound = false;
+                for ($i = 0; $i < $zip->numFiles; $i++) {
+                    $filename = $zip->getNameIndex($i);
+                    if (basename($filename) === 'module.json') {
+                        $moduleJsonIndex = $i;
+                        $moduleJsonFound = true;
+                        break;
+                    }
+                }
+
+                if (!$moduleJsonFound) {
+                    throw new \Exception('ZIP neobsahuje povinný soubor module.json.');
+                }
+            }
+
+            // Načtení a validace module.json
+            $moduleJsonContent = $zip->getFromIndex($moduleJsonIndex);
+            if ($moduleJsonContent === false) {
+                throw new \Exception('Nepodařilo se načíst module.json ze ZIP souboru.');
+            }
+
+            $moduleConfig = json_decode($moduleJsonContent, true);
+            if (!$moduleConfig) {
+                throw new \Exception('Neplatný formát module.json souboru.');
+            }
+
+            // Kontrola povinných polí v module.json
+            $requiredFields = ['id', 'name', 'version'];
+            foreach ($requiredFields as $field) {
+                if (!isset($moduleConfig[$field]) || empty($moduleConfig[$field])) {
+                    throw new \Exception("Chybí povinné pole '$field' v module.json.");
+                }
+            }
+
+            // Validace ID modulu (bezpečnostní kontrola)
+            if (!preg_match('/^[a-zA-Z0-9_-]+$/', $moduleConfig['id'])) {
+                throw new \Exception('ID modulu obsahuje nepovolené znaky. Povoleny jsou pouze a-z, A-Z, 0-9, _, -.');
+            }
+
+            $this->logger->log(sprintf(
+                'Validace module.json úspěšná: ID=%s, název=%s, verze=%s',
+                $moduleConfig['id'],
+                $moduleConfig['name'],
+                $moduleConfig['version']
+            ), ILogger::INFO);
+        } finally {
+            $zip->close();
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Vyčištění dočasného adresáře
+     */
+    private function cleanupTempDirectory(string $tempDir): void
+    {
+        if (!is_dir($tempDir)) {
+            return;
+        }
+
+        try {
+            // Rekurzivní smazání obsahu
+            $files = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($tempDir, \RecursiveDirectoryIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($files as $fileinfo) {
+                if ($fileinfo->isDir()) {
+                    rmdir($fileinfo->getRealPath());
+                } else {
+                    unlink($fileinfo->getRealPath());
+                }
+            }
+
+            rmdir($tempDir);
+
+            $this->logger->log('Dočasný adresář úspěšně vyčištěn: ' . $tempDir, ILogger::INFO);
+        } catch (\Exception $e) {
+            $this->logger->log('Chyba při čištění dočasného adresáře: ' . $e->getMessage(), ILogger::WARNING);
+        }
     }
 
     /**
@@ -807,43 +1218,43 @@ final class ModuleAdminPresenter extends BasePresenter
 
         try {
             $syncCount = 0;
-            
+
             // Projdeme všechny tenant adresáře
             $baseModulesDir = dirname(__DIR__, 2) . '/Modules';
             if (is_dir($baseModulesDir)) {
                 $tenantDirectories = array_diff(scandir($baseModulesDir), ['.', '..']);
-                
+
                 foreach ($tenantDirectories as $tenantDir) {
                     if (!preg_match('/^tenant_(\d+)$/', $tenantDir, $matches)) {
                         continue;
                     }
-                    
+
                     $tenantId = (int)$matches[1];
                     $tenantModulesDir = $baseModulesDir . '/' . $tenantDir;
-                    
+
                     if (!is_dir($tenantModulesDir)) {
                         continue;
                     }
-                    
+
                     $moduleDirectories = array_diff(scandir($tenantModulesDir), ['.', '..']);
-                    
+
                     foreach ($moduleDirectories as $moduleDir) {
                         $moduleInfoFile = $tenantModulesDir . '/' . $moduleDir . '/module.json';
-                        
+
                         if (file_exists($moduleInfoFile)) {
                             $moduleInfo = json_decode(file_get_contents($moduleInfoFile), true);
-                            
+
                             if ($moduleInfo && isset($moduleInfo['id'])) {
                                 // Najdeme uživatele pro tento tenant
                                 $user = $this->database->table('users')->where('tenant_id', $tenantId)->fetch();
-                                
+
                                 if ($user) {
                                     // Zkontrolujeme, zda už záznam existuje
                                     $existingModule = $this->database->table('user_modules')
                                         ->where('user_id', $user->id)
                                         ->where('module_id', $moduleInfo['id'])
                                         ->fetch();
-                                    
+
                                     if (!$existingModule) {
                                         $this->database->table('user_modules')->insert([
                                             'user_id' => $user->id,
@@ -858,7 +1269,7 @@ final class ModuleAdminPresenter extends BasePresenter
                                             'config_data' => null,
                                             'last_used' => null
                                         ]);
-                                        
+
                                         $syncCount++;
                                         $this->logger->log("SYNC: Přidán záznam pro modul {$moduleInfo['id']} uživatele {$user->username} (tenant $tenantId)", ILogger::INFO);
                                     }
@@ -868,13 +1279,12 @@ final class ModuleAdminPresenter extends BasePresenter
                     }
                 }
             }
-            
+
             if ($syncCount > 0) {
                 $this->flashMessage("Úspěšně synchronizováno {$syncCount} modulů.", 'success');
             } else {
                 $this->flashMessage("Všechny moduly jsou již synchronizovány.", 'info');
             }
-            
         } catch (\Exception $e) {
             $this->logger->log("Chyba při synchronizaci modulů: " . $e->getMessage(), ILogger::ERROR);
             $this->flashMessage('Chyba při synchronizaci modulů.', 'danger');
@@ -890,7 +1300,7 @@ final class ModuleAdminPresenter extends BasePresenter
     {
         // ✅ PŘIDÁNO: Sanitizace parametru
         $id = SecurityValidator::sanitizeString($id);
-        
+
         if (!$this->isAdmin()) {
             $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
             $this->redirect('this');
@@ -904,7 +1314,7 @@ final class ModuleAdminPresenter extends BasePresenter
 
         try {
             $result = $this->moduleManager->toggleModuleForUser($id, $identity->id);
-            
+
             if ($result['success']) {
                 $this->flashMessage($result['message'], 'success');
             } else {
@@ -925,7 +1335,7 @@ final class ModuleAdminPresenter extends BasePresenter
     {
         // ✅ PŘIDÁNO: Sanitizace parametru
         $id = SecurityValidator::sanitizeString($id);
-        
+
         if (!$this->isAdmin()) {
             $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
             $this->redirect('this');
@@ -939,7 +1349,7 @@ final class ModuleAdminPresenter extends BasePresenter
 
         try {
             $result = $this->moduleManager->uninstallModuleForUser($id, $identity->id);
-            
+
             if ($result['success']) {
                 $this->flashMessage($result['message'], 'success');
             } else {
@@ -960,7 +1370,7 @@ final class ModuleAdminPresenter extends BasePresenter
     {
         // ✅ PŘIDÁNO: Sanitizace parametru
         $moduleId = SecurityValidator::sanitizeString($moduleId);
-        
+
         if (!$this->isSuperAdmin()) {
             $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
             $this->redirect('users');
@@ -968,7 +1378,7 @@ final class ModuleAdminPresenter extends BasePresenter
 
         try {
             $result = $this->moduleManager->toggleModuleForUser($moduleId, $userId);
-            
+
             if ($result['success']) {
                 $this->flashMessage($result['message'], 'success');
                 $this->logger->log("Super admin přepnul modul '$moduleId' pro uživatele $userId", ILogger::INFO);
@@ -990,7 +1400,7 @@ final class ModuleAdminPresenter extends BasePresenter
     {
         // ✅ PŘIDÁNO: Sanitizace parametru
         $moduleId = SecurityValidator::sanitizeString($moduleId);
-        
+
         if (!$this->isSuperAdmin()) {
             $this->flashMessage('Nemáte oprávnění pro tuto akci.', 'danger');
             $this->redirect('users');
@@ -998,7 +1408,7 @@ final class ModuleAdminPresenter extends BasePresenter
 
         try {
             $result = $this->moduleManager->uninstallModuleForUser($moduleId, $userId);
-            
+
             if ($result['success']) {
                 $this->flashMessage($result['message'], 'success');
                 $this->logger->log("Super admin smazal modul '$moduleId' uživateli $userId", ILogger::INFO);

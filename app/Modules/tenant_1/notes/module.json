@@ -1,9 +1,9 @@
 {
     "id": "notes",
-    "name": "Pozn\u00e1mky",
+    "name": "Poznámky",
     "version": "1.0.0",
-    "description": "Jednoduch\u00fd modul pro spr\u00e1vu pozn\u00e1mek a rychl\u00fdch z\u00e1pisk\u016f",
-    "author": "V\u00e1\u0161 n\u00e1zev",
+    "description": "Jednoduchý modul pro správu poznámek a rychlých zápisků",
+    "author": "Váš název",
     "active": true,
     "icon": "bi bi-sticky"
 }

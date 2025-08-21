@@ -491,6 +491,12 @@ class ModuleManager
             // Přesun modulu do finálního umístění
             $moduleRootDir = dirname($moduleJsonFile);
             $this->moveDirectory($moduleRootDir, $finalModuleDir);
+
+            // ✅ NOVÉ: Úprava namespace pro tenant-specific moduly
+            $this->updateModuleNamespace($finalModuleDir, $moduleConfig['id'], $tenantId);
+            
+            // ✅ NOVÉ: Logování úspěšné úpravy namespace
+            $this->logger->log("Namespace upraven pro modul {$moduleConfig['id']} v tenant $tenantId", ILogger::INFO);
             
             // Nastavení modulu jako aktivní
             $moduleConfig['active'] = true;
@@ -759,5 +765,211 @@ class ModuleManager
         }
         
         return true;
+    }
+
+    /**
+     * ✅ NOVÉ: Upraví namespace v PHP souborech modulu pro tenant-specific použití
+     */
+    private function updateModuleNamespace(string $moduleDir, string $moduleId, int $tenantId): void
+    {
+        try {
+            // Najdeme všechny PHP soubory v modulu
+            $phpFiles = $this->findPhpFilesRecursively($moduleDir);
+            
+            foreach ($phpFiles as $phpFile) {
+                $this->updatePhpFileNamespace($phpFile, $moduleId, $tenantId);
+            }
+            
+            $this->logger->log("Úspěšně aktualizován namespace pro modul $moduleId v " . count($phpFiles) . " souborech", ILogger::INFO);
+            
+        } catch (\Exception $e) {
+            $this->logger->log("Chyba při aktualizaci namespace pro modul $moduleId: " . $e->getMessage(), ILogger::ERROR);
+            throw $e;
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Najde všechny PHP soubory v adresáři rekurzivně
+     */
+    private function findPhpFilesRecursively(string $directory): array
+    {
+        $phpFiles = [];
+        
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS)
+        );
+        
+        foreach ($iterator as $file) {
+            if ($file->isFile() && $file->getExtension() === 'php') {
+                $phpFiles[] = $file->getPathname();
+            }
+        }
+        
+        return $phpFiles;
+    }
+
+    /**
+     * ✅ KOMPLETNÍ: Upraví namespace v konkrétním PHP souboru
+     */
+    private function updatePhpFileNamespace(string $filePath, string $moduleId, int $tenantId): void
+    {
+        try {
+            // Načtení obsahu souboru
+            $content = file_get_contents($filePath);
+            $originalContent = $content;
+            $fileName = basename($filePath);
+            
+            // ✅ DEBUG: Základní info
+            $this->logger->log("=== ZAČÁTEK updatePhpFileNamespace pro $fileName ===", ILogger::DEBUG);
+            $this->logger->log("DEBUG: Délka obsahu souboru: " . strlen($content) . " znaků", ILogger::DEBUG);
+            
+            // Náhled prvních 200 znaků
+            $preview = substr(str_replace(["\r", "\n"], [' ', ' '], $content), 0, 200);
+            $this->logger->log("DEBUG: Náhled obsahu: $preview", ILogger::DEBUG);
+            
+            // Převod module ID na různé formáty
+            $moduleName = $this->toPascalCase($moduleId); // např. "notes" → "Notes"
+            $moduleNameUnderscore = ucfirst($moduleId); // např. "financial_reports" → "Financial_reports"
+            
+            $this->logger->log("DEBUG: Module ID '$moduleId' → PascalCase: '$moduleName', Underscore: '$moduleNameUnderscore'", ILogger::DEBUG);
+            
+            $updated = false;
+            $namespaceFound = false;
+            
+            // ✅ KROK 1: Najdeme všechny namespace v souboru
+            if (preg_match_all('/^namespace\s+([^;]+);/m', $content, $allMatches)) {
+                $namespaceFound = true;
+                $this->logger->log("DEBUG: Nalezené namespace v $fileName: " . implode(', ', $allMatches[1]), ILogger::DEBUG);
+                
+                // Ukažeme přesný namespace řádek
+                if (preg_match('/^namespace\s+[^;]+;/m', $content, $exactMatch)) {
+                    $this->logger->log("DEBUG: Přesný namespace řádek: '" . trim($exactMatch[0]) . "'", ILogger::DEBUG);
+                }
+            } else {
+                $this->logger->log("DEBUG: Žádný namespace nalezen v $fileName", ILogger::DEBUG);
+            }
+            
+            // ✅ KROK 2: Aktualizace namespace (zjednodušený přístup)
+            if ($namespaceFound) {
+                $this->logger->log("DEBUG: Začínám aktualizaci namespace...", ILogger::DEBUG);
+                
+                // Obecný regex pro jakýkoliv Modules\ namespace
+                $generalPattern = '/^namespace\s+Modules\\\\([^;\\\\]+)(\\\\[^;]+)?\s*;/m';
+                $this->logger->log("DEBUG: Používám obecný vzor: $generalPattern", ILogger::DEBUG);
+                
+                if (preg_match($generalPattern, $content, $matches)) {
+                    $oldNamespace = $matches[0];
+                    $detectedModule = $matches[1]; // např. "Notes" nebo "Financial_reports"
+                    $remainder = isset($matches[2]) ? $matches[2] : ''; // např. "\Something"
+                    
+                    $this->logger->log("DEBUG: ✅ Obecný vzor zachytil - detectedModule: '$detectedModule', remainder: '$remainder'", ILogger::DEBUG);
+                    $this->logger->log("DEBUG: Celý zachycený namespace: '$oldNamespace'", ILogger::DEBUG);
+                    
+                    // Kontrola, zda se jedná o náš modul (různé formáty)
+                    $isOurModule = (
+                        $detectedModule === $moduleName || 
+                        $detectedModule === $moduleNameUnderscore ||
+                        $detectedModule === $moduleId ||
+                        strtolower($detectedModule) === strtolower($moduleName) ||
+                        strtolower($detectedModule) === strtolower($moduleNameUnderscore)
+                    );
+                    
+                    $this->logger->log("DEBUG: Je náš modul? " . ($isOurModule ? 'ANO' : 'NE'), ILogger::DEBUG);
+                    
+                    if ($isOurModule) {
+                        // Vytvoříme nový tenant-specific namespace
+                        $newNamespace = "namespace Modules\\Tenant{$tenantId}\\{$detectedModule}{$remainder};";
+                        
+                        // Nahradíme namespace
+                        $content = str_replace($oldNamespace, $newNamespace, $content);
+                        $updated = true;
+                        
+                        $this->logger->log("DEBUG: ✅ Namespace ÚSPĚŠNĚ aktualizován v $fileName:", ILogger::INFO);
+                        $this->logger->log("  STARÝ: $oldNamespace", ILogger::INFO);
+                        $this->logger->log("  NOVÝ:  $newNamespace", ILogger::INFO);
+                    } else {
+                        $this->logger->log("DEBUG: ⚠️ Detekovaný modul '$detectedModule' neodpovídá našemu modulu '$moduleId'", ILogger::WARNING);
+                    }
+                } else {
+                    $this->logger->log("DEBUG: ❌ Obecný vzor nezachytil žádný Modules\\ namespace", ILogger::DEBUG);
+                }
+            }
+            
+            // ✅ KROK 3: Aktualizace use statements
+            $this->logger->log("DEBUG: Kontroluji use statements...", ILogger::DEBUG);
+            
+            // Najdeme všechny use statements
+            if (preg_match_all('/^use\s+([^;]+);/m', $content, $useMatches)) {
+                $this->logger->log("DEBUG: Nalezené use statements: " . implode(', ', $useMatches[1]), ILogger::DEBUG);
+                
+                // Vzory pro use statements
+                $usePattern = '/^use\s+Modules\\\\([^\\\\;]+)\\\\([^;]+);/m';
+                
+                $newContent = preg_replace_callback($usePattern, function($matches) use ($moduleName, $moduleNameUnderscore, $moduleId, $tenantId, $fileName) {
+                    $oldUse = $matches[0];
+                    $detectedModule = $matches[1];
+                    $remainder = $matches[2];
+                    
+                    // Kontrola, zda se jedná o náš modul
+                    $isOurModule = (
+                        $detectedModule === $moduleName || 
+                        $detectedModule === $moduleNameUnderscore ||
+                        $detectedModule === $moduleId ||
+                        strtolower($detectedModule) === strtolower($moduleName) ||
+                        strtolower($detectedModule) === strtolower($moduleNameUnderscore)
+                    );
+                    
+                    if ($isOurModule) {
+                        $newUse = "use Modules\\Tenant{$tenantId}\\{$detectedModule}\\{$remainder};";
+                        $this->logger->log("DEBUG: ✅ Use statement aktualizován v $fileName: $oldUse → $newUse", ILogger::INFO);
+                        return $newUse;
+                    }
+                    
+                    return $oldUse; // Nezměníme
+                }, $content);
+                
+                if ($newContent !== $content) {
+                    $content = $newContent;
+                    $updated = true;
+                }
+            } else {
+                $this->logger->log("DEBUG: Žádné use statements nenalezeny", ILogger::DEBUG);
+            }
+            
+            // ✅ KROK 4: Uložení souboru
+            if ($updated) {
+                file_put_contents($filePath, $content);
+                $this->logger->log("DEBUG: ✅ Soubor uložen s aktualizacemi: $fileName", ILogger::INFO);
+            } else {
+                if ($namespaceFound) {
+                    $this->logger->log("DEBUG: ⚠️ Namespace nalezen ale NEAKTUALIZOVÁN v $fileName", ILogger::WARNING);
+                } else {
+                    $this->logger->log("DEBUG: ℹ️ Žádný namespace k aktualizaci v $fileName", ILogger::DEBUG);
+                }
+            }
+            
+            $this->logger->log("=== KONEC updatePhpFileNamespace pro $fileName ===", ILogger::DEBUG);
+            
+        } catch (\Exception $e) {
+            $this->logger->log("ERROR: Chyba v updatePhpFileNamespace pro $fileName: " . $e->getMessage(), ILogger::ERROR);
+            $this->logger->log("ERROR: Stack trace: " . $e->getTraceAsString(), ILogger::ERROR);
+            throw $e;
+        }
+    }
+
+    /**
+     * ✅ NOVÉ: Převede string na PascalCase (např. "notes" → "Notes", "my_module" → "MyModule")
+     */
+    private function toPascalCase(string $string): string
+    {
+        // Rozdělíme podle podtržítka, pomlčky nebo mezery
+        $words = preg_split('/[_\-\s]+/', $string);
+        
+        // Převedeme každé slovo na PascalCase
+        $pascalWords = array_map(function($word) {
+            return ucfirst(strtolower($word));
+        }, $words);
+        
+        return implode('', $pascalWords);
     }
 }

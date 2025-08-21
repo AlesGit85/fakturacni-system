@@ -45,7 +45,7 @@ return array (
     'App\\Model\\ModuleManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ModuleManager.php',
-      1 => 1755765533,
+      1 => 1755772000,
     ),
     'App\\Model\\QrPaymentService' => 
     array (
@@ -71,36 +71,6 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748950316,
-    ),
-    'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
-      1 => 1755765624,
-    ),
-    'Modules\\Tenant1\\Financial_reports\\Module' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
-      1 => 1755765624,
-    ),
-    'Modules\\Tenant1\\Notes\\Module' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\notes\\Module.php',
-      1 => 1755762376,
-    ),
-    'Modules\\Tenant1\\Notes\\NotesManager' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\notes\\NotesManager.php',
-      1 => 1755762376,
-    ),
-    'Modules\\Tenant12\\Notes\\Module' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\notes\\Module.php',
-      1 => 1755762440,
-    ),
-    'Modules\\Tenant12\\Notes\\NotesManager' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\notes\\NotesManager.php',
-      1 => 1755762440,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -145,7 +115,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1755765902,
+      1 => 1755772274,
     ),
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
@@ -200,7 +170,7 @@ return array (
     'App\\Security\\SecurityValidator' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SecurityValidator.php',
-      1 => 1755760598,
+      1 => 1755770014,
     ),
     'App\\Security\\SQLSecurityAudit' => 
     array (

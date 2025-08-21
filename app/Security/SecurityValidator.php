@@ -900,7 +900,7 @@ class SecurityValidator
     }
 
     /**
-     * ✅ OPRAVENÉ: Virus scan pomocí dostupných nástrojů
+     * ✅ Virus scan pomocí dostupných nástrojů
      */
     private static function performVirusScan(string $filepath): array
     {
@@ -1032,43 +1032,40 @@ class SecurityValidator
                 '/GIF8[79]a.{0,20}(<\?php|<script|javascript:)/i' => 'GIF obsahuje podezřelý script',
                 '/\x89PNG.{0,20}(<\?php|<script|javascript:)/i' => 'PNG obsahuje podezřelý script',
 
-                // HTML/JavaScript v binárních souborech
-                '/(<html|<script|<iframe|javascript:|vbscript:)/i' => 'Binární soubor obsahuje web kód',
+                // Document macro injections
+                '/PK\x03\x04.{0,50}(VBA|macro|Auto_Open)/i' => 'Archiv obsahuje podezřelá makra',
 
-                // Podezřelé PHP tagy
-                '/(<\?php|<\?=|\?>)/' => 'Soubor obsahuje PHP kód',
+                // Webshell patterns
+                '/(eval|exec|system|shell_exec|passthru)\s*\(/i' => 'Soubor obsahuje podezřelé PHP funkce',
+                '/base64_decode\s*\(/i' => 'Soubor obsahuje base64 dekódování (možný webshell)',
 
-                // Base64 encoded scripts (časté u malware)
-                '/eval\s*\(\s*base64_decode/i' => 'Podezřelý Base64 encoded kód',
-
-                // Common malware strings
-                '/(malware|trojan|backdoor|shell|payload)/i' => 'Podezřelé řetězce v souboru',
+                // Suspicious file headers in images
+                '/\xFF\xD8\xFF.{0,10}(\x00{10,}|deadbeef|malware)/i' => 'JPEG má podezřelé dodatky',
             ];
 
+            // Kontrola proti všem vzorům
             foreach ($suspiciousPatterns as $pattern => $message) {
                 if (preg_match($pattern, $header)) {
                     $errors[] = $message;
-                    break; // Stačí první nalezená hrozba
+                    break; // První shoda stačí
                 }
             }
 
-            // Dodatečná kontrola: podezřelě vysoký podíl neASCII znaků
-            $nonAsciiCount = 0;
-            $headerLength = strlen($header);
-
-            for ($i = 0; $i < $headerLength; $i++) {
-                $byte = ord($header[$i]);
-                if ($byte > 127 && $byte < 160) { // Podezřelý rozsah
-                    $nonAsciiCount++;
-                }
+            // Kontrola na velké množství null bytů (často v malware)
+            $nullBytes = substr_count($header, "\x00");
+            if ($nullBytes > 100) {
+                $errors[] = 'Soubor obsahuje podezřelé množství null bytů.';
             }
 
-            // Pokud je více než 30% podezřelých bytů, může jít o obfuskovaný kód
-            if ($headerLength > 100 && ($nonAsciiCount / $headerLength) > 0.3) {
-                $errors[] = 'Soubor obsahuje neobvykle vysoký podíl podezřelých bytů';
+            // Kontrola entropie (náhodnosti) - vysoká entropie může indikovat packed malware
+            if (strlen($header) > 100) {
+                $entropy = self::calculateEntropy($header);
+                if ($entropy > 7.5) { // Vysoká entropie
+                    $errors[] = 'Soubor má vysokou entropii (možný packed malware).';
+                }
             }
         } catch (\Exception $e) {
-            // Heuristická kontrola selhala, ale neblokujeme upload
+            // Chyba při heuristické kontrole, ale neblokujeme
             error_log('Heuristic scan failed: ' . $e->getMessage());
         }
 
@@ -1320,6 +1317,10 @@ class SecurityValidator
             $errors[] = 'Chyba při analýze ZIP souboru: ' . $e->getMessage();
         }
 
+        // Na konec metody validateZipContents přidejte před return $errors;
+        $securityErrors = self::validateZipSecurity($zipPath);
+        $errors = array_merge($errors, $securityErrors);
+
         return $errors;
     }
 
@@ -1346,5 +1347,75 @@ class SecurityValidator
         $random = substr(uniqid(), -6);
 
         return $prefix . $baseName . '_' . $timestamp . '_' . $random . '.zip';
+    }
+
+    /**
+     * ✅ NOVÁ: Výpočet entropie pro detekci packed souborů
+     */
+    private static function calculateEntropy(string $data): float
+    {
+        if (strlen($data) === 0) {
+            return 0.0;
+        }
+
+        $counts = array_count_values(str_split($data));
+        $length = strlen($data);
+        $entropy = 0.0;
+
+        foreach ($counts as $count) {
+            $probability = $count / $length;
+            $entropy -= $probability * log($probability, 2);
+        }
+
+        return $entropy;
+    }
+
+    /**
+     * ✅ NOVÁ: Rozšířená ZIP validace s compression ratio kontrolou
+     */
+    public static function validateZipSecurity(string $zipPath): array
+    {
+        $errors = [];
+
+        try {
+            $zip = new \ZipArchive();
+            $result = $zip->open($zipPath);
+
+            if ($result !== TRUE) {
+                return $errors; // Základní validace už proběhla
+            }
+
+            // Kontrola compression ratio (ochrana proti ZIP bomb)
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $stat = $zip->statIndex($i);
+                if ($stat === false) continue;
+
+                // Pokud má soubor kompresní poměr vyšší než 100:1, je podezřelý
+                if ($stat['comp_size'] > 0) {
+                    $ratio = $stat['size'] / $stat['comp_size'];
+                    if ($ratio > 100) {
+                        $errors[] = 'ZIP má podezřelý compression ratio (možná ZIP bomb): ' . $stat['name'];
+                        break;
+                    }
+                }
+
+                // Kontrola entropie pro detekci packed malware
+                if ($stat['size'] > 0 && $stat['size'] < 50000) { // Pouze menší soubory
+                    $content = $zip->getFromIndex($i);
+                    if ($content !== false && strlen($content) > 100) {
+                        $entropy = self::calculateEntropy(substr($content, 0, 1024));
+                        if ($entropy > 7.5) {
+                            $errors[] = 'Soubor má vysokou entropii (možný packed malware): ' . $stat['name'];
+                        }
+                    }
+                }
+            }
+
+            $zip->close();
+        } catch (\Exception $e) {
+            error_log('ZIP security validation failed: ' . $e->getMessage());
+        }
+
+        return $errors;
     }
 }
