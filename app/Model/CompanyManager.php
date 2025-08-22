@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Nette;
+use App\Security\EncryptionService;
 
 class CompanyManager
 {
@@ -11,19 +12,28 @@ class CompanyManager
     /** @var Nette\Database\Explorer */
     private $database;
 
+    /** @var EncryptionService */
+    private $encryptionService;
+
     /** @var int|null Current tenant ID pro filtrování */
     private $currentTenantId = null;
 
     /** @var bool Je uživatel super admin? */
     private $isSuperAdmin = false;
 
-    public function __construct(Nette\Database\Explorer $database)
+    /**
+     * Citlivá pole, která se budou automaticky šifrovat
+     */
+    private const ENCRYPTED_FIELDS = ['ic', 'dic', 'email', 'phone', 'bank_account'];
+
+    public function __construct(Nette\Database\Explorer $database, EncryptionService $encryptionService)
     {
         $this->database = $database;
+        $this->encryptionService = $encryptionService;
     }
 
     // =====================================================
-    // MULTI-TENANCY NASTAVENÍ (NOVÉ)
+    // MULTI-TENANCY NASTAVENÍ
     // =====================================================
 
     /**
@@ -56,21 +66,65 @@ class CompanyManager
     }
 
     // =====================================================
-    // PŮVODNÍ METODY S MULTI-TENANCY ROZŠÍŘENÍM
+    // ENCRYPTION/DECRYPTION HELPER METODY
     // =====================================================
 
     /**
-     * Získá firemní údaje (filtrované podle tenant_id)
+     * Zašifruje citlivá pole před uložením do databáze
+     */
+    private function encryptSensitiveData(array $data): array
+    {
+        return $this->encryptionService->encryptFields($data, self::ENCRYPTED_FIELDS);
+    }
+
+    /**
+     * Dešifruje citlivá pole po načtení z databáze
+     */
+    private function decryptSensitiveData(array $data): array
+    {
+        return $this->encryptionService->decryptFields($data, self::ENCRYPTED_FIELDS);
+    }
+
+    /**
+     * Dešifruje jeden záznam společnosti
+     */
+    private function decryptCompanyRecord($company)
+    {
+        if (!$company) {
+            return null;
+        }
+
+        // Převedeme na pole pro dešifrování
+        $companyArray = $company->toArray();
+        
+        // Dešifrujeme citlivá pole
+        $decryptedArray = $this->decryptSensitiveData($companyArray);
+        
+        // Vytvoříme nový objekt s dešifrovanými daty
+        $decryptedCompany = (object) $decryptedArray;
+        
+        return $decryptedCompany;
+    }
+
+    // =====================================================
+    // UPRAVENÉ PŮVODNÍ METODY S AUTOMATICKÝM ŠIFROVÁNÍM
+    // =====================================================
+
+    /**
+     * Získá firemní údaje (filtrované podle tenant_id) s automatickým dešifrováním
      */
     public function getCompanyInfo()
     {
         $selection = $this->database->table('company_info');
         $filteredSelection = $this->applyTenantFilter($selection);
-        return $filteredSelection->fetch();
+        $company = $filteredSelection->fetch();
+        
+        // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ při načítání
+        return $this->decryptCompanyRecord($company);
     }
 
     /**
-     * Aktualizuje firemní údaje (automaticky nastaví tenant_id)
+     * Aktualizuje firemní údaje (automaticky nastaví tenant_id) s automatickým šifrováním
      */
     public function save($data)
     {
@@ -84,29 +138,58 @@ class CompanyManager
             $data['dic'] = '';
         }
 
-        $company = $this->getCompanyInfo();
+        // 🔒 AUTOMATICKÉ ŠIFROVÁNÍ před uložením
+        $encryptedData = $this->encryptSensitiveData($data);
+
+        $company = $this->getCompanyInfoRaw(); // Použijeme raw verzi pro kontrolu existence
         if ($company) {
             // EDITACE - aktualizujeme existující záznam (bez změny tenant_id)
-            return $this->database->table('company_info')->where('id', $company->id)->update($data);
+            $result = $this->database->table('company_info')->where('id', $company->id)->update($encryptedData);
+            
+            // Pro debug - zobrazíme, co se uložilo
+            if ($this->encryptionService->isEncryptionEnabled()) {
+                \Tracy\Debugger::log("🔒 KROK 3: Firemní údaje aktualizovány se šifrováním", \Tracy\ILogger::INFO);
+                \Tracy\Debugger::log("Šifrovaná data: " . json_encode(array_intersect_key($encryptedData, array_flip(self::ENCRYPTED_FIELDS))), \Tracy\ILogger::INFO);
+            }
+            
+            return $result;
         } else {
             // NOVÁ SPOLEČNOST - automaticky nastavíme tenant_id
             if ($this->currentTenantId === null) {
                 // Fallback pro výchozí tenant
-                $data['tenant_id'] = 1;
+                $encryptedData['tenant_id'] = 1;
             } else {
-                $data['tenant_id'] = $this->currentTenantId;
+                $encryptedData['tenant_id'] = $this->currentTenantId;
             }
 
-            return $this->database->table('company_info')->insert($data);
+            $result = $this->database->table('company_info')->insert($encryptedData);
+            
+            // Pro debug - zobrazíme, co se uložilo
+            if ($this->encryptionService->isEncryptionEnabled()) {
+                \Tracy\Debugger::log("🔒 KROK 3: Nové firemní údaje vytvořeny se šifrováním", \Tracy\ILogger::INFO);
+                \Tracy\Debugger::log("Šifrovaná data: " . json_encode(array_intersect_key($encryptedData, array_flip(self::ENCRYPTED_FIELDS))), \Tracy\ILogger::INFO);
+            }
+            
+            return $result;
         }
     }
 
+    /**
+     * Získá RAW firemní údaje (bez dešifrování) - pro interní použití
+     */
+    private function getCompanyInfoRaw()
+    {
+        $selection = $this->database->table('company_info');
+        $filteredSelection = $this->applyTenantFilter($selection);
+        return $filteredSelection->fetch();
+    }
+
     // =====================================================
-    // NOVÉ MULTI-TENANCY METODY
+    // NOVÉ MULTI-TENANCY METODY S ŠIFROVÁNÍM
     // =====================================================
 
     /**
-     * Získá údaje společnosti pro konkrétní tenant (pouze pro super admina)
+     * Získá údaje společnosti pro konkrétní tenant (pouze pro super admina) s automatickým dešifrováním
      */
     public function getByTenant(int $tenantId)
     {
@@ -114,9 +197,12 @@ class CompanyManager
             throw new \Exception('Pouze super admin může získat údaje společnosti jiného tenanta.');
         }
 
-        return $this->database->table('company_info')
+        $company = $this->database->table('company_info')
             ->where('tenant_id', $tenantId)
             ->fetch();
+
+        // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ při načítání
+        return $this->decryptCompanyRecord($company);
     }
 
     /**
@@ -140,15 +226,15 @@ class CompanyManager
      */
     public function hasCompanyInfo(): bool
     {
-        return $this->getCompanyInfo() !== null;
+        return $this->getCompanyInfoRaw() !== null;
     }
 
     /**
-     * Získá základní údaje o společnosti pro aktuální tenant
+     * Získá základní údaje o společnosti pro aktuální tenant s automatickým dešifrováním
      */
     public function getBasicInfo(): array
     {
-        $company = $this->getCompanyInfo();
+        $company = $this->getCompanyInfo(); // Používáme dešifrovanou verzi
         
         if (!$company) {
             return [
@@ -178,6 +264,55 @@ class CompanyManager
      */
     public function exists(): bool
     {
-        return $this->getCompanyInfo() !== null;
+        return $this->getCompanyInfoRaw() !== null;
+    }
+
+    // =====================================================
+    // NOVÉ METODY PRO TESTOVÁNÍ ŠIFROVÁNÍ
+    // =====================================================
+
+    /**
+     * Testovací metoda pro ověření šifrování firemních údajů - POUZE PRO DEBUG!
+     */
+    public function testEncryption(): array
+    {
+        if (!$this->encryptionService->isEncryptionEnabled()) {
+            return ['error' => 'Šifrování není zapnuto'];
+        }
+
+        $currentCompany = $this->getCompanyInfoRaw();
+        
+        if ($currentCompany) {
+            // Test skutečných firemních dat
+            $decryptedCompany = $this->getCompanyInfo();
+            
+            return [
+                'company_exists' => true,
+                'raw_data' => $currentCompany->toArray(),
+                'decrypted_data' => (array) $decryptedCompany,
+                'encrypted_fields' => self::ENCRYPTED_FIELDS
+            ];
+        } else {
+            // Obecný test šifrování
+            $testData = [
+                'name' => 'Test Company s.r.o.',
+                'ic' => '87654321',
+                'dic' => 'CZ87654321',
+                'email' => 'info@testcompany.cz',
+                'phone' => '+420987654321',
+                'bank_account' => '987654321/0100'
+            ];
+            
+            $encrypted = $this->encryptSensitiveData($testData);
+            $decrypted = $this->decryptSensitiveData($encrypted);
+            
+            return [
+                'company_exists' => false,
+                'original' => $testData,
+                'encrypted' => $encrypted,
+                'decrypted' => $decrypted,
+                'test_ok' => ($testData === $decrypted)
+            ];
+        }
     }
 }

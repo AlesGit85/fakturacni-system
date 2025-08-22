@@ -1,8 +1,5 @@
 includes:
 	- mail.neon
-# Pro lokální vývoj se neinkluduje nic navíc
-	# local.neon se inkluduje jen na produkci
-	# dev.neon se inkluduje jen na DEV serveru
 
 parameters:
 	# Databáze podle prostředí (nastaveno v local.neon na produkci)

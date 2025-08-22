@@ -63,7 +63,9 @@ class ClientsPresenter extends BasePresenter
 
     public function renderDefault(): void
     {
-        $this->template->clients = $this->clientsManager->getAll();
+        $clients = $this->clientsManager->getAll();
+        $this->template->clients = $clients;
+        $this->template->clientsCount = count($clients);
     }
 
     public function renderShow(int $id): void

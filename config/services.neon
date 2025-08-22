@@ -32,6 +32,13 @@ services:
 	- App\Security\AntiSpam
 
 	# =====================================================
+	# ENCRYPTION SERVICE
+	# =====================================================
+	
+	# Encryption service pro citlivá data
+	- App\Security\EncryptionService
+
+	# =====================================================
 	# MANAGERY
 	# =====================================================
 	
@@ -45,12 +52,11 @@ services:
 	- App\Model\TenantManager
 
 	# =====================================================
-	# SQL SECURITY AUDIT - NOVÉ!
+	# SQL SECURITY AUDIT
 	# =====================================================
 
 	# SQL Security Audit Tool - webová verze (autowiring databáze)
 	- App\Security\SQLSecurityAudit
-
 
 	# =====================================================
 	# AUTO-DISCOVERY

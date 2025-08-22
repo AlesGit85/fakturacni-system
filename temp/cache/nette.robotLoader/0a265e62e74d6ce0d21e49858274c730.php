@@ -25,12 +25,12 @@ return array (
     'App\\Model\\ClientsManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ClientsManager.php',
-      1 => 1751960164,
+      1 => 1755870633,
     ),
     'App\\Model\\CompanyManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\CompanyManager.php',
-      1 => 1751976266,
+      1 => 1755872609,
     ),
     'App\\Model\\EmailService' => 
     array (
@@ -130,7 +130,7 @@ return array (
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Clients\\ClientsPresenter.php',
-      1 => 1755610732,
+      1 => 1755871360,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -145,7 +145,7 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1755552711,
+      1 => 1755870837,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
@@ -192,6 +192,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\AntiSpam.php',
       1 => 1754979837,
     ),
+    'App\\Security\\EncryptionService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\EncryptionService.php',
+      1 => 1755865277,
+    ),
     'App\\Security\\RateLimiter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\RateLimiter.php',
@@ -225,20 +230,10 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 3,
-    'null' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDiagnoseNamespacesTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
-    'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminFixNamespacesTemplate' => 3,
-    'Modules\\Financial_reports\\FinancialReportsService' => 2,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminFixDuplicateNamespacesTemplate' => 1,
-    'Modules\\Tenant1\\Tenant1\\Financial_reports\\FinancialReportsService' => 2,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 1,
+    'Nette\\Bridges\\Assets\\DIExtension' => 1,
+    'null' => 1,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 1,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 1,
   ),
   2 => 
   array (

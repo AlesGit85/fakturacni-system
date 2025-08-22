@@ -11,6 +11,7 @@ use App\Model\CompanyManager;
 use App\Model\UserManager;
 use App\Model\ModuleManager;
 use App\Presentation\BasePresenter;
+use App\Security\EncryptionService;
 
 final class HomePresenter extends BasePresenter
 {
@@ -28,6 +29,9 @@ final class HomePresenter extends BasePresenter
 
     /** @var ModuleManager */
     private $moduleManager;
+
+    /** @var EncryptionService */
+    private $encryptionService;
 
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
 
@@ -51,19 +55,19 @@ final class HomePresenter extends BasePresenter
     public function startup(): void
     {
         parent::startup();
-        
+
         // Nastavíme tenant kontext v manažerech
         $this->clientsManager->setTenantContext(
             $this->getCurrentTenantId(),
             $this->isSuperAdmin()
         );
-        
+
         // AKTUALIZOVÁNO: InvoicesManager má nyní multi-tenancy
         $this->invoicesManager->setTenantContext(
             $this->getCurrentTenantId(),
             $this->isSuperAdmin()
         );
-        
+
         // AKTUALIZOVÁNO: CompanyManager má nyní multi-tenancy
         $this->companyManager->setTenantContext(
             $this->getCurrentTenantId(),
@@ -78,7 +82,7 @@ final class HomePresenter extends BasePresenter
     }
 
     public function renderDefault(): void
-    {
+    {     
         try {
             // NOVÉ: Pokud je uživatel super admin, zobrazíme jiný dashboard
             if ($this->isSuperAdmin()) {
@@ -93,10 +97,10 @@ final class HomePresenter extends BasePresenter
 
             // Dashboard statistiky s bezpečnou kontrolou
             $invoiceStats = $this->invoicesManager->getStatistics();
-            
+
             // Statistiky klientů
-            $clientsCount = $this->clientsManager->getAll()->count();
-            
+            $clientsCount = $this->clientsManager->getCount();
+
             // Informace o společnosti
             $company = $this->companyManager->getCompanyInfo();
 
@@ -108,7 +112,7 @@ final class HomePresenter extends BasePresenter
             if ($currentUser) {
                 // OPRAVA: Použijeme přímý DB dotaz místo UserManager (který má problém s tenant filtrováním)
                 $userData = $this->database->query('SELECT * FROM users WHERE id = ?', $currentUser->getId())->fetch();
-                
+
                 if ($userData) {
                     // Pátý pád (vokativ) pro oslovení
                     $userDisplayName = $this->getVocativeName($userData->first_name);
@@ -156,11 +160,10 @@ final class HomePresenter extends BasePresenter
             $this->template->currentUserData = $currentUser;
             $this->template->userDisplayName = $userDisplayName;
             $this->template->userFullName = $userFullName;
-            
         } catch (\Exception $e) {
             // Logování chyby pro debug
             error_log('Chyba v HomePresenter::renderDefault(): ' . $e->getMessage());
-            
+
             // Fallback hodnoty
             $this->template->dashboardStats = [
                 'clients' => 0,
@@ -179,7 +182,7 @@ final class HomePresenter extends BasePresenter
             $this->template->currentUserData = null;
             $this->template->userDisplayName = '';
             $this->template->userFullName = '';
-            
+
             // Zobrazíme chybovou hlášku
             $this->flashMessage('Došlo k chybě při načítání dashboardu. Zkuste to prosím znovu.', 'danger');
         }
@@ -193,7 +196,7 @@ final class HomePresenter extends BasePresenter
         try {
             // Získání super admin statistik
             $superAdminStats = $this->getSuperAdminStatistics();
-            
+
             // Informace o aktuálním uživateli (i pro super admina)
             $currentUser = $this->getUser()->getIdentity();
             $userDisplayName = '';
@@ -201,20 +204,20 @@ final class HomePresenter extends BasePresenter
 
             if ($currentUser) {
                 $userData = $this->database->query('SELECT * FROM users WHERE id = ?', $currentUser->getId())->fetch();
-                
+
                 if ($userData) {
                     $userDisplayName = $this->getVocativeName($userData->first_name);
                     $userFullName = trim($userData->first_name . ' ' . $userData->last_name);
                 }
             }
-            
+
             // Předání dat do šablony
             $this->template->superAdminStats = $superAdminStats;
             $this->template->isSuperAdmin = true;
             $this->template->currentUserData = $currentUser;
             $this->template->userDisplayName = $userDisplayName;
             $this->template->userFullName = $userFullName;
-            
+
             // Super admin nepotřebuje tyto sekce, ale nastavíme je pro kompatibilitu šablony
             $this->template->dashboardStats = [
                 'clients' => 0,
@@ -230,10 +233,9 @@ final class HomePresenter extends BasePresenter
             $this->template->upcomingInvoices = [];
             $this->template->recentInvoices = [];
             $this->template->company = null;
-            
         } catch (\Exception $e) {
             error_log('Chyba v super admin dashboardu: ' . $e->getMessage());
-            
+
             // Fallback hodnoty pro super admin
             $this->template->superAdminStats = [
                 'total_tenants' => 0,
@@ -263,7 +265,7 @@ final class HomePresenter extends BasePresenter
             $this->template->upcomingInvoices = [];
             $this->template->recentInvoices = [];
             $this->template->company = null;
-            
+
             $this->flashMessage('Došlo k chybě při načítání super admin dashboardu.', 'danger');
         }
     }
@@ -276,36 +278,36 @@ final class HomePresenter extends BasePresenter
         try {
             // Počet tenantů
             $totalTenants = $this->database->table('tenants')->count();
-            
+
             // Počet všech uživatelů v systému
             $totalUsers = $this->database->table('users')
                 ->where('tenant_id IS NOT NULL')
                 ->count();
-            
+
             // Počet všech klientů v systému
             $totalClients = $this->database->table('clients')->count();
-            
+
             // Celkový počet aktivních modulů
             $totalActiveModules = $this->database->table('user_modules')
                 ->where('is_active', 1)
                 ->count();
-            
+
             // Celkový počet faktur v systému
             $totalInvoices = $this->database->table('invoices')->count();
-            
+
             // Datum registrace posledního tenanta
             $latestTenant = $this->database->table('tenants')
                 ->order('created_at DESC')
                 ->limit(1)
                 ->fetch();
             $latestTenantRegistration = $latestTenant ? $latestTenant->created_at : null;
-            
+
             // Počet aktuálně blokovaných IP adres
             $blockedIpsCount = $this->getSafeBlockedIpsCount();
-            
+
             // Počet neúspěšných pokusů za 24h
             $failedAttempts24h = $this->getSafeFailedAttempts24h();
-            
+
             return [
                 'total_tenants' => $totalTenants,
                 'total_users' => $totalUsers,
@@ -316,10 +318,9 @@ final class HomePresenter extends BasePresenter
                 'blocked_ips_count' => $blockedIpsCount,
                 'failed_attempts_24h' => $failedAttempts24h
             ];
-            
         } catch (\Exception $e) {
             error_log('Chyba při načítání super admin statistik: ' . $e->getMessage());
-            
+
             return [
                 'total_tenants' => 0,
                 'total_users' => 0,
@@ -407,7 +408,7 @@ final class HomePresenter extends BasePresenter
         }
 
         // Seřadíme podle priority
-        usort($steps, function($a, $b) {
+        usort($steps, function ($a, $b) {
             return $a['priority'] <=> $b['priority'];
         });
 
@@ -420,7 +421,7 @@ final class HomePresenter extends BasePresenter
     private function getUpcomingDueInvoices()
     {
         $sevenDaysFromNow = new \DateTime('+7 days');
-        
+
         return $this->invoicesManager->getAll()
             ->where('status', ['created', 'overdue'])
             ->where('due_date <= ?', $sevenDaysFromNow)

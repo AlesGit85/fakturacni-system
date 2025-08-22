@@ -3,7 +3,7 @@ parameters:
 	production: true
 	
 database:
-	dsn: 'mysql:host=localhost;dbname=c4qrdoklad'
+	dsn: 'mysql:host=localhost;dbname=c4devqrdoklad'
 	user: 'c4alpho'
 	password: '%env.DB_PASSWORD%'
 	options:

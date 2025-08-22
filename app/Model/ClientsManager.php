@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Nette;
+use App\Security\EncryptionService;
 
 class ClientsManager
 {
@@ -11,15 +12,24 @@ class ClientsManager
     /** @var Nette\Database\Explorer */
     private $database;
 
+    /** @var EncryptionService */
+    private $encryptionService;
+
     /** @var int|null Current tenant ID pro filtrování */
     private $currentTenantId = null;
 
     /** @var bool Je uživatel super admin? */
     private $isSuperAdmin = false;
 
-    public function __construct(Nette\Database\Explorer $database)
+    /**
+     * Citlivá pole, která se budou automaticky šifrovat
+     */
+    private const ENCRYPTED_FIELDS = ['ic', 'dic', 'email', 'phone'];
+
+    public function __construct(Nette\Database\Explorer $database, EncryptionService $encryptionService)
     {
         $this->database = $database;
+        $this->encryptionService = $encryptionService;
     }
 
     // =====================================================
@@ -56,30 +66,95 @@ class ClientsManager
     }
 
     // =====================================================
-    // PŮVODNÍ METODY S MULTI-TENANCY ROZŠÍŘENÍM
+    // ENCRYPTION/DECRYPTION HELPER METODY
     // =====================================================
 
     /**
-     * Získá všechny klienty (filtrované podle tenant_id)
+     * Zašifruje citlivá pole před uložením do databáze
+     */
+    private function encryptSensitiveData(array $data): array
+    {
+        return $this->encryptionService->encryptFields($data, self::ENCRYPTED_FIELDS);
+    }
+
+    /**
+     * Dešifruje citlivá pole po načtení z databáze
+     */
+    private function decryptSensitiveData(array $data): array
+    {
+        return $this->encryptionService->decryptFields($data, self::ENCRYPTED_FIELDS);
+    }
+
+    /**
+     * Dešifruje jeden záznam klienta
+     */
+    private function decryptClientRecord($client)
+    {
+        if (!$client) {
+            return null;
+        }
+
+        // Převedeme na pole pro dešifrování
+        $clientArray = $client->toArray();
+        
+        // Dešifrujeme citlivá pole
+        $decryptedArray = $this->decryptSensitiveData($clientArray);
+        
+        // Vytvoříme nový objekt s dešifrovanými daty
+        $decryptedClient = (object) $decryptedArray;
+        
+        return $decryptedClient;
+    }
+
+    /**
+     * Dešifruje kolekci záznamů klientů
+     */
+    private function decryptClientRecords($clients)
+    {
+        $decryptedClients = [];
+        
+        foreach ($clients as $client) {
+            $decryptedClient = $this->decryptClientRecord($client);
+            if ($decryptedClient) {
+                $decryptedClients[] = $decryptedClient;
+            }
+        }
+        
+        return $decryptedClients;
+    }
+
+    // =====================================================
+    // UPRAVENÉ PŮVODNÍ METODY S AUTOMATICKÝM ŠIFROVÁNÍM
+    // =====================================================
+
+    /**
+     * Získá všechny klienty (filtrované podle tenant_id) s automatickým dešifrováním
      */
     public function getAll()
     {
         $selection = $this->database->table('clients')->order('name ASC');
-        return $this->applyTenantFilter($selection);
+        $filteredSelection = $this->applyTenantFilter($selection);
+        
+        // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ při načítání
+        $clients = $filteredSelection->fetchAll();
+        return $this->decryptClientRecords($clients);
     }
 
     /**
-     * Získá klienta podle ID (s kontrolou tenant_id)
+     * Získá klienta podle ID (s kontrolou tenant_id) s automatickým dešifrováním
      */
     public function getById($id)
     {
         $selection = $this->database->table('clients')->where('id', $id);
         $filteredSelection = $this->applyTenantFilter($selection);
-        return $filteredSelection->fetch();
+        $client = $filteredSelection->fetch();
+        
+        // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ při načítání
+        return $this->decryptClientRecord($client);
     }
 
     /**
-     * Přidá nebo aktualizuje klienta (automaticky nastaví tenant_id)
+     * Přidá nebo aktualizuje klienta (automaticky nastaví tenant_id) s automatickým šifrováním
      */
     public function save($data, $id = null)
     {
@@ -88,6 +163,9 @@ class ClientsManager
             $data = (array) $data;
         }
 
+        // 🔒 AUTOMATICKÉ ŠIFROVÁNÍ před uložením
+        $encryptedData = $this->encryptSensitiveData($data);
+
         if ($id) {
             // EDITACE - ověříme, že klient patří do správného tenanta
             $existingClient = $this->getById($id);
@@ -95,18 +173,34 @@ class ClientsManager
                 throw new \Exception('Klient neexistuje nebo k němu nemáte přístup.');
             }
 
-            // Aktualizace (bez změny tenant_id)
-            return $this->database->table('clients')->where('id', $id)->update($data);
+            // Aktualizace (bez změny tenant_id) - používáme šifrovaná data
+            $result = $this->database->table('clients')->where('id', $id)->update($encryptedData);
+            
+            // Pro debug - zobrazíme, co se uložilo
+            if ($this->encryptionService->isEncryptionEnabled()) {
+                \Tracy\Debugger::log("🔒 KROK 2: Klient ID:$id aktualizován se šifrováním", \Tracy\ILogger::INFO);
+                \Tracy\Debugger::log("Šifrovaná data: " . json_encode(array_intersect_key($encryptedData, array_flip(self::ENCRYPTED_FIELDS))), \Tracy\ILogger::INFO);
+            }
+            
+            return $result;
         } else {
             // NOVÝ KLIENT - automaticky nastavíme tenant_id
             if ($this->currentTenantId === null) {
                 // OPRAVENO: Místo výjimky použijeme fallback na tenant 1
-                $data['tenant_id'] = 1; // Fallback pro výchozí tenant
+                $encryptedData['tenant_id'] = 1; // Fallback pro výchozí tenant
             } else {
-                $data['tenant_id'] = $this->currentTenantId;
+                $encryptedData['tenant_id'] = $this->currentTenantId;
             }
 
-            return $this->database->table('clients')->insert($data);
+            $result = $this->database->table('clients')->insert($encryptedData);
+            
+            // Pro debug - zobrazíme, co se uložilo
+            if ($this->encryptionService->isEncryptionEnabled()) {
+                \Tracy\Debugger::log("🔒 KROK 2: Nový klient vytvořen se šifrováním", \Tracy\ILogger::INFO);
+                \Tracy\Debugger::log("Šifrovaná data: " . json_encode(array_intersect_key($encryptedData, array_flip(self::ENCRYPTED_FIELDS))), \Tracy\ILogger::INFO);
+            }
+            
+            return $result;
         }
     }
 
@@ -125,11 +219,11 @@ class ClientsManager
     }
 
     // =====================================================
-    // NOVÉ MULTI-TENANCY METODY
+    // NOVÉ MULTI-TENANCY METODY S ŠIFROVÁNÍM
     // =====================================================
 
     /**
-     * Získá klienty pro konkrétní tenant (pouze pro super admina)
+     * Získá klienty pro konkrétní tenant (pouze pro super admina) s automatickým dešifrováním
      */
     public function getByTenant(int $tenantId)
     {
@@ -137,9 +231,13 @@ class ClientsManager
             throw new \Exception('Pouze super admin může získat klienty jiného tenanta.');
         }
 
-        return $this->database->table('clients')
+        $clients = $this->database->table('clients')
             ->where('tenant_id', $tenantId)
-            ->order('name ASC');
+            ->order('name ASC')
+            ->fetchAll();
+
+        // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ při načítání
+        return $this->decryptClientRecords($clients);
     }
 
     /**
@@ -159,7 +257,7 @@ class ClientsManager
     }
 
     /**
-     * Vrátí statistiky klientů pro aktuální tenant
+     * Vrátí statistiky klientů pro aktuální tenant s automatickým dešifrováním
      */
     public function getStatistics(): array
     {
@@ -168,12 +266,13 @@ class ClientsManager
 
         $totalClients = $filteredSelection->count();
 
-        // Klienti s emailem
+        // Klienti s emailem - pozor, email může být šifrovaný!
+        // Pro statistiky použijeme počet záznamů s neprázdným emailem (i šifrovaným)
         $withEmail = $this->applyTenantFilter($this->database->table('clients'))
             ->where('email IS NOT NULL AND email != ""')
             ->count();
 
-        // Klienti s telefonem
+        // Klienti s telefonem - podobně jako email
         $withPhone = $this->applyTenantFilter($this->database->table('clients'))
             ->where('phone IS NOT NULL AND phone != ""')
             ->count();
@@ -188,14 +287,21 @@ class ClientsManager
 
     /**
      * Vyhledávání klientů podle názvu nebo IČ (filtrované podle tenant_id)
+     * POZNÁMKA: Vyhledávání v šifrovaných polích je omezené!
      */
     public function search(string $query)
     {
+        // Pro vyhledávání v šifrovaných datech potřebujeme speciální přístup
+        // Zatím vyhledáváme pouze v nešifrovaných polích (name)
         $selection = $this->database->table('clients')
-            ->where('name LIKE ? OR ic LIKE ?', "%$query%", "%$query%")
+            ->where('name LIKE ?', "%$query%")
             ->order('name ASC');
 
-        return $this->applyTenantFilter($selection);
+        $filteredSelection = $this->applyTenantFilter($selection);
+        $clients = $filteredSelection->fetchAll();
+        
+        // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ při načítání
+        return $this->decryptClientRecords($clients);
     }
 
     // =====================================================
@@ -211,7 +317,7 @@ class ClientsManager
     }
 
     /**
-     * Získá názvy klientů pro dropdown (filtrované podle tenant_id)
+     * Získá názvy klientů pro dropdown (filtrované podle tenant_id) s automatickým dešifrováním
      */
     public function getPairs(): array
     {
@@ -223,5 +329,81 @@ class ClientsManager
         }
         
         return $pairs;
+    }
+
+    // =====================================================
+    // NOVÉ METODY PRO TESTOVÁNÍ ŠIFROVÁNÍ
+    // =====================================================
+
+    /**
+     * Testovací metoda pro ověření šifrování - POUZE PRO DEBUG!
+     */
+    public function testEncryption(int $clientId = null): array
+    {
+        if (!$this->encryptionService->isEncryptionEnabled()) {
+            return ['error' => 'Šifrování není zapnuto'];
+        }
+
+        $testResults = [];
+
+        if ($clientId) {
+            // Test konkrétního klienta
+            $rawClient = $this->database->table('clients')->where('id', $clientId)->fetch();
+            if ($rawClient) {
+                $decryptedClient = $this->getById($clientId);
+                
+                $testResults = [
+                    'client_id' => $clientId,
+                    'raw_data' => $rawClient->toArray(),
+                    'decrypted_data' => (array) $decryptedClient,
+                    'encrypted_fields' => self::ENCRYPTED_FIELDS
+                ];
+            }
+        } else {
+            // Obecný test šifrování
+            $testData = [
+                'name' => 'Test Company',
+                'ic' => '12345678',
+                'dic' => 'CZ12345678',
+                'email' => 'test@example.com',
+                'phone' => '+420123456789'
+            ];
+            
+            $encrypted = $this->encryptSensitiveData($testData);
+            $decrypted = $this->decryptSensitiveData($encrypted);
+            
+            $testResults = [
+                'original' => $testData,
+                'encrypted' => $encrypted,
+                'decrypted' => $decrypted,
+                'test_ok' => ($testData === $decrypted)
+            ];
+        }
+
+        return $testResults;
+    }
+
+    // =====================================================
+    // KOMPATIBILITA S PŮVODNÍM API
+    // =====================================================
+
+    /**
+     * Získá počet klientů (bez nutnosti načítat a dešifrovat všechna data)
+     */
+    public function getCount(): int
+    {
+        $selection = $this->database->table('clients');
+        $filteredSelection = $this->applyTenantFilter($selection);
+        return $filteredSelection->count();
+    }
+
+    /**
+     * Získá Selection objekt (pro případy, kdy potřebujeme původní DB operace)
+     * POZOR: Data NEBUDOU dešifrovaná!
+     */
+    public function getSelection()
+    {
+        $selection = $this->database->table('clients')->order('name ASC');
+        return $this->applyTenantFilter($selection);
     }
 }
