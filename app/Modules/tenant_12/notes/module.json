@@ -1,9 +1,0 @@
-{
-    "id": "notes",
-    "name": "Poznámky",
-    "version": "1.0.0",
-    "description": "Jednoduchý modul pro správu poznámek a rychlých zápisků",
-    "author": "Váš název",
-    "active": true,
-    "icon": "bi bi-sticky"
-}

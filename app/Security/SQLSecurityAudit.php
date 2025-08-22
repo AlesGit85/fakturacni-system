@@ -55,7 +55,7 @@ class SQLSecurityAudit
     private $searchPaths = [
         'app/Model',
         'app/Presentation',
-        'Modules'
+        'app/Modules'
     ];
 
     /** @var array Přípony souborů k prohledání */

@@ -10,7 +10,7 @@ return array (
     'App\\Core\\RouterFactory' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
-      1 => 1753883462,
+      1 => 1755852610,
     ),
     'App\\Mail\\TestMailer' => 
     array (
@@ -45,7 +45,7 @@ return array (
     'App\\Model\\ModuleManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ModuleManager.php',
-      1 => 1755772000,
+      1 => 1755852622,
     ),
     'App\\Model\\QrPaymentService' => 
     array (
@@ -71,6 +71,16 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748950316,
+    ),
+    'Modules\\Financial_reports\\FinancialReportsService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
+      1 => 1755851908,
+    ),
+    'Modules\\Financial_reports\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
+      1 => 1755851908,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -175,7 +185,7 @@ return array (
     'App\\Security\\SQLSecurityAudit' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SQLSecurityAudit.php',
-      1 => 1753359076,
+      1 => 1755850678,
     ),
   ),
   1 => 

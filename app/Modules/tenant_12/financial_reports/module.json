@@ -1,9 +1,0 @@
-{
-    "id": "financial_reports",
-    "name": "Finan\u010dn\u00ed p\u0159ehledy",
-    "version": "1.0.0",
-    "description": "Komplexn\u00ed p\u0159ehled financ\u00ed - vydan\u00e9, zaplacen\u00e9 a nezaplacen\u00e9 faktury s grafick\u00fdmi statistikami a sledov\u00e1n\u00edm DPH limit\u016f",
-    "author": "Allimedia.cz",
-    "active": true,
-    "icon": "bi bi-graph-up-arrow"
-}
