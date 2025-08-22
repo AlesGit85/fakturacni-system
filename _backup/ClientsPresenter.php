@@ -179,6 +179,9 @@ class ClientsPresenter extends BasePresenter
     /**
      * ✅ XSS OCHRANA: Zpracování formuláře s bezpečnostní kontrolou
      */
+    /**
+     * ✅ XSS OCHRANA: Zpracování formuláře s bezpečnostní kontrolou
+     */
     public function clientFormSucceeded(Form $form, \stdClass $data): void
     {
         // ✅ XSS OCHRANA: Základní kontrola XSS pokusů ve formulářových datech
@@ -219,7 +222,7 @@ class ClientsPresenter extends BasePresenter
             'country',
             'ic',
             'dic',
-            'contact_person',
+            'client_contact_person', // ✅ OPRAVA: Změněno z 'contact_person' na 'client_contact_person'
             'email',
             'phone'
         ];
@@ -239,6 +242,12 @@ class ClientsPresenter extends BasePresenter
             } else {
                 $sanitizedData[$key] = $value;
             }
+        }
+
+        // ✅ NOVÉ: Mapování formulářového pole zpět na databázové pole
+        if (isset($sanitizedData['client_contact_person'])) {
+            $sanitizedData['contact_person'] = $sanitizedData['client_contact_person'];
+            unset($sanitizedData['client_contact_person']);
         }
 
         // ✅ NOVÉ: Dodatečná validace sanitizovaných dat

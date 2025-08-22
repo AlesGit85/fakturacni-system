@@ -25,7 +25,7 @@ return array (
     'App\\Model\\ClientsManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ClientsManager.php',
-      1 => 1755870633,
+      1 => 1755873166,
     ),
     'App\\Model\\CompanyManager' => 
     array (
@@ -234,6 +234,11 @@ return array (
     'null' => 1,
     'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 1,
     'App\\Presentation\\Settings\\SettingsTemplate' => 1,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
+    'App\\Presentation\\Home\\HomeTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsEditTemplate' => 1,
   ),
   2 => 
   array (

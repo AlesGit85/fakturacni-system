@@ -321,10 +321,15 @@ class ClientsManager
      */
     public function getPairs(): array
     {
-        $clients = $this->getAll();
-        $pairs = [];
+        // Pro dropdown používáme přímo Selection - rychlejší, nepotřebujeme dešifrování
+        $selection = $this->database->table('clients')
+            ->select('id, name')
+            ->order('name ASC');
         
-        foreach ($clients as $client) {
+        $filteredSelection = $this->applyTenantFilter($selection);
+        
+        $pairs = [];
+        foreach ($filteredSelection as $client) {
             $pairs[$client->id] = $client->name;
         }
         
