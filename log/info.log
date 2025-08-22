@@ -1129,3 +1129,855 @@
 [2025-08-22 10-49-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-fix/ 
 [2025-08-22 10-50-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
 [2025-08-22 10-50-38] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-08-22 11-34-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-22 11-34-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=cn7nk&_fid=zg38 
+[2025-08-22 11-34-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-22 11-34-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=vbdn 
+[2025-08-22 11-34-18] Vytvořen tenant adresář: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12  @  http://localhost:8000/?_fid=vbdn 
+[2025-08-22 11-34-18] Vytvořen tenant WWW adresář: D:\_coding\nette\fakturacni-system/web/Modules/tenant_12  @  http://localhost:8000/?_fid=vbdn 
+[2025-08-22 11-34-18] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=vbdn 
+[2025-08-22 11-35-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-35-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=r8wam&_fid=npc5 
+[2025-08-22 11-35-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-22 11-35-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=5zqz 
+[2025-08-22 11-35-23] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=5zqz 
+[2025-08-22 11-35-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-35-27] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-35-27] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-39-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-39-03] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-39-03] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-39-03] === DIAGNOSTIKA NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-39-03] Kontroluji tenant: tenant_1 (ID: 1)  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-39-03] Kontroluji tenant: tenant_12 (ID: 12)  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-39-03] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-39-03] Celkem namespace: 1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-39-03] Konflikty: 1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] ✅ Základní adresář existuje  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] Zpracovávám tenant: tenant_1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] Zpracovávám tenant: tenant_12  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-01] Celkem namespace: 1, Konflikty: 0  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] ✅ Základní adresář existuje  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] Zpracovávám tenant: tenant_1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] Zpracovávám tenant: tenant_12  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-03] Celkem namespace: 1, Konflikty: 0  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/ 
+[2025-08-22 11-41-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/ 
+[2025-08-22 11-41-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/ 
+[2025-08-22 11-41-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 11-41-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 11-41-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 11-41-25] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 11-41-25] Načteno 1 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 11-41-25] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 11-41-25] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 11-41-25] Statistiky modulů: Aktivní: 1, Neaktivní: 0, Celkem: 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 11-41-25] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 11-41-25] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 11-41-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] ✅ Základní adresář existuje  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] Zpracovávám tenant: tenant_1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] Zpracovávám tenant: tenant_12  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-55] Celkem namespace: 1, Konflikty: 0  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] ✅ Základní adresář existuje  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] Zpracovávám tenant: tenant_1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] Zpracovávám tenant: tenant_12  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-56] Celkem namespace: 1, Konflikty: 0  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] ✅ Základní adresář existuje  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] Zpracovávám tenant: tenant_1  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] Zpracovávám tenant: tenant_12  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-41-57] Celkem namespace: 1, Konflikty: 0  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-42-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-42-50] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-42-50] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-42-50] Test diagnostiky spuštěn  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-48-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-48-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-48-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-48-59] Test diagnostiky spuštěn  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-51-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-51-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-51-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/diagnose-namespaces 
+[2025-08-22 11-51-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-51-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-51-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-51-48] Test diagnostiky spuštěn  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] Test diagnostiky s ModuleManager spuštěn  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] ModuleManager exists: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] Volám diagnoseNamespaceConflicts()  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] ✅ Základní adresář existuje  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] Zpracovávám tenant: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] Zpracovávám tenant: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] Celkem namespace: 1, Konflikty: 0  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 11-59-30] Diagnostika dokončena  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] Detailní diagnostika všech modulů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] ✅ Základní adresář existuje  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] Zpracovávám tenant: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] Zpracovávám tenant: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-00-38] Celkem namespace: 1, Konflikty: 0  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-04-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-22 12-04-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-08-22 12-04-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-04-13] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-04-13] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-04-13] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-04-13] Načteno 1 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-04-13] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-04-13] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-04-13] Statistiky modulů: Aktivní: 1, Neaktivní: 0, Celkem: 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-04-13] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-04-13] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-22 12-05-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=z3o9q&_fid=10bg 
+[2025-08-22 12-05-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-22 12-05-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=ceg2 
+[2025-08-22 12-05-38] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=ceg2 
+[2025-08-22 12-05-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-41] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-41] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-41] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-41] Načteno 0 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-41] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-41] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-41] Statistiky modulů: Aktivní: 0, Neaktivní: 0, Celkem: 0  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-41] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-41] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] Začátek bezpečné instalace modulu: soubor=Notes.zip, velikost=14.02 KB, uživatel=57, tenant=12  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] Validace module.json úspěšná: ID=notes, název=Poznámky, verze=1.0.0  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] Kopíruji nové assets modulu 'notes' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/notes/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_12/notes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] Assets modulu 'notes' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] Modul úspěšně nainstalován: Poznámky (verze 1.0.0) pro uživatele 57  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-05-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-05-54] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-05-54] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-05-54] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-05-54] Načteno 1 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-05-54] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-05-54] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-05-54] Statistiky modulů: Aktivní: 1, Neaktivní: 0, Celkem: 1  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-05-54] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-05-54] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-06-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] Detailní diagnostika všech modulů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] ✅ Základní adresář existuje  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] Zpracovávám tenant: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] Zpracovávám tenant: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-06-04] Celkem namespace: 2, Konflikty: 0  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-08-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-22 12-08-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-08-22 12-08-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/module-admin/fix-namespaces 
+[2025-08-22 12-08-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/fix-namespaces 
+[2025-08-22 12-08-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/module-admin/fix-namespaces 
+[2025-08-22 12-08-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Spouštím opravu namespace v existujících modulech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] === SPUŠTĚNÍ OPRAVY EXISTUJÍCÍCH NAMESPACE ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Opravuji namespace v tenant_1 (ID: 1)  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Opravuji modul: financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] === OPRAVA NAMESPACE v FinancialReportsService.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Aktuální namespace: Modules\Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Detekovaná část modulu z namespace: Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] ✅ ÚSPĚCH: Namespace aktualizován v FinancialReportsService.php  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] STARÝ: namespace Modules\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] NOVÝ:  namespace Modules\Tenant1\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Aktuální namespace: Modules\Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Detekovaná část modulu z namespace: Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] ✅ ÚSPĚCH: Namespace aktualizován v Module.php  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] STARÝ: namespace Modules\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] NOVÝ:  namespace Modules\Tenant1\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Úspěšně aktualizován namespace pro modul financial_reports v 2 souborech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] ✅ Úspěšně opraven: financial_reports v tenant 1  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Opravuji namespace v tenant_12 (ID: 12)  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Opravuji modul: notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Aktuální namespace: Modules\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Detekovaná část modulu z namespace: Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] ✅ ÚSPĚCH: Namespace aktualizován v Module.php  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] STARÝ: namespace Modules\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] NOVÝ:  namespace Modules\Tenant12\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] === OPRAVA NAMESPACE v NotesManager.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Aktuální namespace: Modules\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Detekovaná část modulu z namespace: Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] ✅ ÚSPĚCH: Namespace aktualizován v NotesManager.php  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] STARÝ: namespace Modules\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] NOVÝ:  namespace Modules\Tenant12\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Úspěšně aktualizován namespace pro modul notes v 2 souborech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] ✅ Úspěšně opraven: notes v tenant 12  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] === KONEC OPRAVY NAMESPACE ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-08-19] Opraveno modulů: 2, Chyby: 0  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-09-37] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] Detailní diagnostika všech modulů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] ✅ Základní adresář existuje  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] Zpracovávám tenant: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] Zpracovávám tenant: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-09-37] Celkem namespace: 2, Konflikty: 0  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-10-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-17] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-17] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-17] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-17] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-17] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-17] Načteno 1 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-17] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-17] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-17] Statistiky modulů: Aktivní: 1, Neaktivní: 0, Celkem: 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-22] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-22] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-22] Načteno 1 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-22] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-22] Statistiky modulů: Aktivní: 1, Neaktivní: 0, Celkem: 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-27] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-27] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-27] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-27] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-27] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-27] Načteno 1 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-27] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-27] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-27] Statistiky modulů: Aktivní: 1, Neaktivní: 0, Celkem: 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] Začátek bezpečné instalace modulu: soubor=Notes.zip, velikost=14.02 KB, uživatel=1, tenant=1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] Validace module.json úspěšná: ID=notes, název=Poznámky, verze=1.0.0  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] Kopíruji nové assets modulu 'notes' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/notes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] Assets modulu 'notes' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-38] Modul úspěšně nainstalován: Poznámky (verze 1.0.0) pro uživatele 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 12-10-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-39] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-39] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-39] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-39] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-39] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-10-45] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-10-45] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-10-45] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-10-45] Načteno 1 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-10-45] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-10-45] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-10-45] Statistiky modulů: Aktivní: 1, Neaktivní: 0, Celkem: 1  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-10-45] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-10-45] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=iss7 
+[2025-08-22 12-10-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-51] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-51] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-51] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-51] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-51] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-51] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-51] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-51] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-10-51] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-11-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] Detailní diagnostika všech modulů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] ✅ Základní adresář existuje  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] Zpracovávám tenant: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] Zpracovávám tenant: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-11-15] Celkem namespace: 3, Konflikty: 0  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-15-21] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-15-21] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-15-21] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-15-21] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-15-21] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-15-21] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-15-21] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-15-21] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-15-21] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=itxo 
+[2025-08-22 12-15-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] Detailní diagnostika všech modulů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] ✅ Základní adresář existuje  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] Zpracovávám tenant: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] Zpracovávám tenant: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] Celkem namespace: 3, Konflikty: 0  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 12-15-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-21] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-21] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-21] Spouštím opravu namespace v existujících modulech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-21] === SPUŠTĚNÍ OPRAVY EXISTUJÍCÍCH NAMESPACE ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-21] Opravuji namespace v tenant_1 (ID: 1)  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-21] Opravuji modul: financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] === OPRAVA NAMESPACE v FinancialReportsService.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Aktuální namespace: Modules\Tenant1\Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Detekovaná část modulu z namespace: Tenant1\Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] ✅ ÚSPĚCH: Namespace aktualizován v FinancialReportsService.php  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] STARÝ: namespace Modules\Tenant1\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] NOVÝ:  namespace Modules\Tenant1\Tenant1\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Aktuální namespace: Modules\Tenant1\Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Detekovaná část modulu z namespace: Tenant1\Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] ✅ ÚSPĚCH: Namespace aktualizován v Module.php  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] STARÝ: namespace Modules\Tenant1\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] NOVÝ:  namespace Modules\Tenant1\Tenant1\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Úspěšně aktualizován namespace pro modul financial_reports v 2 souborech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] ✅ Úspěšně opraven: financial_reports v tenant 1  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Opravuji modul: notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Aktuální namespace: Modules\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Detekovaná část modulu z namespace: Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] ✅ ÚSPĚCH: Namespace aktualizován v Module.php  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] STARÝ: namespace Modules\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] NOVÝ:  namespace Modules\Tenant1\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] === OPRAVA NAMESPACE v NotesManager.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Aktuální namespace: Modules\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Detekovaná část modulu z namespace: Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] ✅ ÚSPĚCH: Namespace aktualizován v NotesManager.php  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] STARÝ: namespace Modules\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] NOVÝ:  namespace Modules\Tenant1\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Úspěšně aktualizován namespace pro modul notes v 2 souborech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] ✅ Úspěšně opraven: notes v tenant 1  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Opravuji namespace v tenant_12 (ID: 12)  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Opravuji modul: notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Aktuální namespace: Modules\Tenant12\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Detekovaná část modulu z namespace: Tenant12\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] ✅ ÚSPĚCH: Namespace aktualizován v Module.php  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] STARÝ: namespace Modules\Tenant12\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] NOVÝ:  namespace Modules\Tenant12\Tenant12\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] === OPRAVA NAMESPACE v NotesManager.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Aktuální namespace: Modules\Tenant12\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Detekovaná část modulu z namespace: Tenant12\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] ✅ ÚSPĚCH: Namespace aktualizován v NotesManager.php  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] STARÝ: namespace Modules\Tenant12\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] NOVÝ:  namespace Modules\Tenant12\Tenant12\Notes;  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Úspěšně aktualizován namespace pro modul notes v 2 souborech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] ✅ Úspěšně opraven: notes v tenant 12  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] === KONEC OPRAVY NAMESPACE ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 12-15-22] Opraveno modulů: 3, Chyby: 0  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-13-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-22 13-13-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=0dc96&_fid=y1dt 
+[2025-08-22 13-13-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-22 13-13-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=q89pn&_fid=ak58 
+[2025-08-22 13-13-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-22 13-13-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=fkei 
+[2025-08-22 13-13-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=fkei 
+[2025-08-22 13-13-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-22 13-13-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=w5lq 
+[2025-08-22 13-13-26] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=w5lq 
+[2025-08-22 13-13-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-32] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-32] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-32] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-32] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-32] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-32] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-32] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-32] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-32] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-39] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-39] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-39] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-39] Načteno 1 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-39] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-39] Statistiky modulů: Aktivní: 1, Neaktivní: 0, Celkem: 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-39] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-13-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/default/notes?do=toggleModule 
+[2025-08-22 13-13-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/default/notes?do=toggleModule 
+[2025-08-22 13-13-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/default/notes?do=toggleModule 
+[2025-08-22 13-13-53] Modul 'notes' byl deaktivován pro uživatele 1  @  http://localhost:8000/moduleadmin/default/notes?do=toggleModule 
+[2025-08-22 13-13-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=gvp6 
+[2025-08-22 13-13-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=gvp6 
+[2025-08-22 13-13-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=gvp6 
+[2025-08-22 13-13-53] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=gvp6 
+[2025-08-22 13-13-53] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=gvp6 
+[2025-08-22 13-13-53] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=gvp6 
+[2025-08-22 13-13-53] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=gvp6 
+[2025-08-22 13-13-53] Statistiky modulů: Aktivní: 1, Neaktivní: 1, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=gvp6 
+[2025-08-22 13-13-53] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=gvp6 
+[2025-08-22 13-13-53] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=gvp6 
+[2025-08-22 13-13-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/default/notes?do=uninstallModule 
+[2025-08-22 13-13-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/default/notes?do=uninstallModule 
+[2025-08-22 13-13-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/default/notes?do=uninstallModule 
+[2025-08-22 13-13-56] Fyzické soubory modulu 'notes' byly smazány z tenant 1  @  http://localhost:8000/moduleadmin/default/notes?do=uninstallModule 
+[2025-08-22 13-13-56] Modul 'notes' byl odinstalován pro uživatele 1  @  http://localhost:8000/moduleadmin/default/notes?do=uninstallModule 
+[2025-08-22 13-13-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=ghga 
+[2025-08-22 13-13-57] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=ghga 
+[2025-08-22 13-13-57] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=ghga 
+[2025-08-22 13-13-57] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=ghga 
+[2025-08-22 13-13-57] Načteno 1 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=ghga 
+[2025-08-22 13-13-57] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=ghga 
+[2025-08-22 13-13-57] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=ghga 
+[2025-08-22 13-13-57] Statistiky modulů: Aktivní: 1, Neaktivní: 0, Celkem: 1  @  http://localhost:8000/moduleadmin/?_fid=ghga 
+[2025-08-22 13-13-57] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=ghga 
+[2025-08-22 13-13-57] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=ghga 
+[2025-08-22 13-14-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-14-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-14-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-14-04] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-14-04] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-14-04] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-14-04] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-14-04] Začátek bezpečné instalace modulu: soubor=Notes.zip, velikost=14.02 KB, uživatel=1, tenant=1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-14-04] Validace module.json úspěšná: ID=notes, název=Poznámky, verze=1.0.0  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-15-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-15-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-15-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-15-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-15-39] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-15-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-15-39] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-15-39] Začátek bezpečné instalace modulu: soubor=Notes.zip, velikost=14.02 KB, uživatel=1, tenant=1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-15-39] Validace module.json úspěšná: ID=notes, název=Poznámky, verze=1.0.0  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-15-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=i7um 
+[2025-08-22 13-15-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=i7um 
+[2025-08-22 13-15-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=i7um 
+[2025-08-22 13-15-39] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=i7um 
+[2025-08-22 13-15-39] Načteno 1 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=i7um 
+[2025-08-22 13-15-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=i7um 
+[2025-08-22 13-15-39] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=i7um 
+[2025-08-22 13-15-39] Statistiky modulů: Aktivní: 1, Neaktivní: 0, Celkem: 1  @  http://localhost:8000/moduleadmin/?_fid=i7um 
+[2025-08-22 13-15-39] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=i7um 
+[2025-08-22 13-15-39] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=i7um 
+[2025-08-22 13-16-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Začátek bezpečné instalace modulu: soubor=Notes.zip, velikost=14.02 KB, uživatel=1, tenant=1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Validace module.json úspěšná: ID=notes, název=Poznámky, verze=1.0.0  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Aktuální namespace: Modules\Notes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Detekovaná část modulu z namespace: Notes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] ✅ ÚSPĚCH: Namespace aktualizován v Module.php  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] STARÝ: namespace Modules\Notes;  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] NOVÝ:  namespace Modules\Tenant1\Notes;  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] === OPRAVA NAMESPACE v NotesManager.php ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Aktuální namespace: Modules\Notes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Detekovaná část modulu z namespace: Notes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] ✅ ÚSPĚCH: Namespace aktualizován v NotesManager.php  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] STARÝ: namespace Modules\Notes;  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] NOVÝ:  namespace Modules\Tenant1\Notes;  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Úspěšně aktualizován namespace pro modul notes v 2 souborech  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Namespace automaticky opraven pro modul notes v tenant 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Kopíruji nové assets modulu 'notes' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/notes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Assets modulu 'notes' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] Modul úspěšně nainstalován: Poznámky (verze 1.0.0) pro uživatele 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-05] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-05] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-05] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-05] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-05] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-05] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-05] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-10] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-10] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-10] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-10] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-10] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-10] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-10] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] Detailní diagnostika všech modulů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] ✅ Základní adresář existuje  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] Zpracovávám tenant: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] Zpracovávám tenant: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-19] Celkem namespace: 3, Konflikty: 0  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-16-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-22 13-16-31] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/ 
+[2025-08-22 13-16-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-35] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-35] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-35] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-35] Načteno 1 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-35] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-35] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-35] Statistiky modulů: Aktivní: 1, Neaktivní: 0, Celkem: 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-35] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-35] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Začátek bezpečné instalace modulu: soubor=financial_reports.zip, velikost=12.89 KB, uživatel=57, tenant=12  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Validace module.json úspěšná: ID=financial_reports, název=Finanční přehledy, verze=1.0.0  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] === OPRAVA NAMESPACE v FinancialReportsService.php ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Aktuální namespace: Modules\Financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Detekovaná část modulu z namespace: Financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] ✅ ÚSPĚCH: Namespace aktualizován v FinancialReportsService.php  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] STARÝ: namespace Modules\Financial_reports;  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] NOVÝ:  namespace Modules\Tenant12\Financial_reports;  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Aktuální namespace: Modules\Financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Detekovaná část modulu z namespace: Financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] ✅ ÚSPĚCH: Namespace aktualizován v Module.php  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] STARÝ: namespace Modules\Financial_reports;  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] NOVÝ:  namespace Modules\Tenant12\Financial_reports;  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Úspěšně aktualizován namespace pro modul financial_reports v 2 souborech  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Namespace automaticky opraven pro modul financial_reports v tenant 12  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_12/financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] Modul úspěšně nainstalován: Finanční přehledy (verze 1.0.0) pro uživatele 57  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-16-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-16-44] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-16-44] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-16-44] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-16-44] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-16-44] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-16-44] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-16-44] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-16-44] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-16-44] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-16-52] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-52] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-52] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-52] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-52] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-52] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-52] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-52] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-52] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-16-52] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-18-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Spouštím opravu namespace v existujících modulech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] === SPUŠTĚNÍ OPRAVY EXISTUJÍCÍCH NAMESPACE ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Opravuji namespace v tenant_1 (ID: 1)  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Opravuji modul: financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] === OPRAVA NAMESPACE v FinancialReportsService.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Aktuální namespace: Modules\Tenant1\Tenant1\Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Namespace už je správný pro tenant 1 - přeskakuji  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Aktuální namespace: Modules\Tenant1\Tenant1\Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Namespace už je správný pro tenant 1 - přeskakuji  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Úspěšně aktualizován namespace pro modul financial_reports v 2 souborech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Úspěšně opraven: financial_reports v tenant 1  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Opravuji modul: notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Aktuální namespace: Modules\Tenant1\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Namespace už je správný pro tenant 1 - přeskakuji  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] === OPRAVA NAMESPACE v NotesManager.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Aktuální namespace: Modules\Tenant1\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Namespace už je správný pro tenant 1 - přeskakuji  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Úspěšně aktualizován namespace pro modul notes v 2 souborech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Úspěšně opraven: notes v tenant 1  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Opravuji namespace v tenant_12 (ID: 12)  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Opravuji modul: financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] === OPRAVA NAMESPACE v FinancialReportsService.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Aktuální namespace: Modules\Tenant12\Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Namespace už je správný pro tenant 12 - přeskakuji  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Aktuální namespace: Modules\Tenant12\Financial_reports  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Namespace už je správný pro tenant 12 - přeskakuji  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Úspěšně aktualizován namespace pro modul financial_reports v 2 souborech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Úspěšně opraven: financial_reports v tenant 12  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Opravuji modul: notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Aktuální namespace: Modules\Tenant12\Tenant12\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Namespace už je správný pro tenant 12 - přeskakuji  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] === OPRAVA NAMESPACE v NotesManager.php ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Aktuální namespace: Modules\Tenant12\Tenant12\Notes  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Namespace už je správný pro tenant 12 - přeskakuji  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Úspěšně aktualizován namespace pro modul notes v 2 souborech  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] ✅ Úspěšně opraven: notes v tenant 12  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] === KONEC OPRAVY NAMESPACE ===  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-18-54] Opraveno modulů: 4, Chyby: 0  @  http://localhost:8000/moduleadmin/fix-namespaces 
+[2025-08-22 13-19-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-04] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-04] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-04] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-04] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-04] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-04] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-04] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-07] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-07] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-07] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-07] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-07] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-07] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-07] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-07] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-07] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-19-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-12] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-12] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-12] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-12] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-12] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-12] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-12] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-12] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-12] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-14] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-14] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-14] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-14] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-14] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-14] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-14] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-14] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-14] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-19-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] Detailní diagnostika všech modulů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] ✅ Základní adresář existuje  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] Zpracovávám tenant: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] Zpracovávám tenant: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-19-48] Celkem namespace: 4, Konflikty: 0  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] Opravuji duplikované Tenant ID v namespace  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] Zpracovávám tenant_1  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] ✅ Opraveno: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/FinancialReportsService.php  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] STARÝ: namespace Modules\Tenant1\Tenant1\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] NOVÝ: namespace Modules\Tenant1\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] ✅ Opraveno: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/Module.php  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] STARÝ: namespace Modules\Tenant1\Tenant1\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] NOVÝ: namespace Modules\Tenant1\Financial_reports;  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] Zpracovávám tenant_12  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] ✅ Opraveno: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/notes/Module.php  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] STARÝ: namespace Modules\Tenant12\Tenant12\Notes;  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] NOVÝ: namespace Modules\Tenant12\Notes;  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] ✅ Opraveno: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/notes/NotesManager.php  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] STARÝ: namespace Modules\Tenant12\Tenant12\Notes;  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-34] NOVÝ: namespace Modules\Tenant12\Notes;  @  http://localhost:8000/moduleadmin/fix-duplicate-namespaces 
+[2025-08-22 13-27-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] Detailní diagnostika všech modulů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] ✅ Základní adresář existuje  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] Zpracovávám tenant: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] Zpracovávám tenant: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-27-58] Celkem namespace: 4, Konflikty: 0  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-28-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-28-11] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-28-11] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-28-11] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-28-11] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-28-11] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-28-11] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-28-11] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-28-11] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-28-11] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=sfpr 
+[2025-08-22 13-28-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-28-16] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-28-16] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-28-16] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-28-16] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-28-16] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-28-16] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-28-16] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-28-16] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-28-16] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-39-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-39-38] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-39-38] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-39-38] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-39-38] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-39-38] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-39-38] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-39-38] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-39-38] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-39-38] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=952f 
+[2025-08-22 13-39-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] Začátek bezpečné instalace modulu: soubor=test_module1.4.2.zip, velikost=8.99 KB, uživatel=1, tenant=1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] Validace module.json úspěšná: ID=test_module, název=Testovací modul, verze=1.4.2  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] Aktuální namespace: Modules\Test_module  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] 🔧 Opravuji z starého formátu  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] ✅ ÚSPĚCH: Namespace opraven v Module.php  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] STARÝ: namespace Modules\Test_module;  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] NOVÝ:  namespace Modules\Tenant1\Test_module;  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] Úspěšně aktualizován namespace pro modul test_module v 1 souborech  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] Namespace automaticky opraven pro modul test_module v tenant 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] Kopíruji nové assets modulu 'test_module' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/test_module  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] Assets modulu 'test_module' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-45] Modul úspěšně nainstalován: Testovací modul (verze 1.4.2) pro uživatele 1  @  http://localhost:8000/moduleadmin/ 
+[2025-08-22 13-39-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=sd0u 
+[2025-08-22 13-39-46] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=sd0u 
+[2025-08-22 13-39-46] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=sd0u 
+[2025-08-22 13-39-46] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=sd0u 
+[2025-08-22 13-39-46] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=sd0u 
+[2025-08-22 13-39-46] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=sd0u 
+[2025-08-22 13-39-46] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=sd0u 
+[2025-08-22 13-39-46] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/?_fid=sd0u 
+[2025-08-22 13-39-46] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=sd0u 
+[2025-08-22 13-39-46] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=sd0u 
+[2025-08-22 13-39-52] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] Detailní diagnostika všech modulů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] === SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] Base modules dir: D:\_coding\nette\fakturacni-system\app/Modules  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] ✅ Základní adresář existuje  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] Nalezen tenant adresář: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] Nalezen tenant adresář: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] Celkem nalezeno 2 tenant adresářů  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] Zpracovávám tenant: tenant_1  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] Zpracovávám tenant: tenant_12  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] === KONEC DIAGNOSTIKY ===  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 13-39-52] Celkem namespace: 5, Konflikty: 0  @  http://localhost:8000/moduleadmin/diagnose-namespaces 
+[2025-08-22 14-06-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=sd0u 
+[2025-08-22 14-06-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=devup&_fid=sd0u 
+[2025-08-22 14-06-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-22 14-06-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=gr83 
+[2025-08-22 14-06-43] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=gr83 
+[2025-08-22 14-06-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-08-22 14-06-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-08-22 14-06-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-08-22 14-06-53] Super admin: Načten přehled modulů pro 5 administrátorů  @  http://localhost:8000/moduleadmin/users 

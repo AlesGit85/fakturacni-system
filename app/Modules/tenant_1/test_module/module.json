@@ -1,0 +1,33 @@
+{
+    "id": "test_module",
+    "name": "Testovací modul",
+    "version": "1.4.2",
+    "description": "Modul pro ukázku jednoduché instalace a správy modulů v systému",
+    "author": "QRdoklad System",
+    "icon": "bi bi-star-fill",
+    "active": true,
+    "demo_mode": true,
+    "requirements": {
+        "php": ">=8.0",
+        "qrdoklad": ">=1.0.0"
+    },
+    "features": [
+        "Vlastní dashboard template",
+        "CSS styly s animacemi", 
+        "JavaScript funkcionalita",
+        "Integrace do hlavního menu",
+        "Ukázka správy modulů",
+        "Demo testovací funkce"
+    ],
+    "menu_items": [
+        {
+            "presenter": "ModuleAdmin",
+            "action": "detail",
+            "params": {
+                "id": "test_module"
+            },
+            "label": "Test modul",
+            "icon": "bi bi-star-fill"
+        }
+    ]
+}

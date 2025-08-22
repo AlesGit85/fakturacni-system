@@ -264,7 +264,7 @@ final class ModuleAdminPresenter extends BasePresenter
             $tenantId = $moduleInfo['tenant_id'] ?? 1;
             $moduleNameForClass = ucfirst($realModuleId); // např. "Financial_reports"
             $moduleClassName = "Modules\\Tenant{$tenantId}\\{$moduleNameForClass}\\Module";
-            
+
             $this->logger->log("Vytvářím instanci tenant-specific třídy: $moduleClassName pro modul: $realModuleId (tenant: $tenantId)", ILogger::INFO);
 
             $this->logger->log("Kontroluji existenci třídy: $moduleClassName", ILogger::INFO);
@@ -660,13 +660,13 @@ final class ModuleAdminPresenter extends BasePresenter
         $form->addUpload('moduleZip', 'ZIP soubor s modulem:')
             ->setRequired('Vyberte ZIP soubor s modulem')
             ->addRule(Form::MAX_FILE_SIZE, 'Maximální velikost souboru je ' . $this->formatBytes($maxUploadSize), $maxUploadSize)
-            ->addRule(function(\Nette\Forms\Controls\UploadControl $control) {
+            ->addRule(function (\Nette\Forms\Controls\UploadControl $control) {
                 // ✅ OPRAVA: Získáme FileUpload z control
                 $file = $control->getValue();
                 if (!$file || !$file->isOk()) {
                     return false;
                 }
-                
+
                 // ✅ NOVÁ: Základní kontrola přípony na client side
                 $filename = $file->getName();
                 $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
@@ -818,11 +818,11 @@ final class ModuleAdminPresenter extends BasePresenter
 
             // ✅ VYTVOŘENÍ BEZPEČNÉHO DOČASNÉHO ADRESÁŘE
             $tempDir = $this->createSecureTempDirectory();
-            
+
             try {
                 // ✅ BEZPEČNÉ ULOŽENÍ ZIP DO DOČASNÉHO ADRESÁŘE
                 $tempZipPath = $this->saveZipToTempDirectory($file, $tempDir);
-                
+
                 // ✅ VALIDACE OBSAHU ZIP PŘED EXTRAKCÍ
                 $contentErrors = SecurityValidator::validateZipContents($tempZipPath);
                 if (!empty($contentErrors)) {
@@ -888,6 +888,15 @@ final class ModuleAdminPresenter extends BasePresenter
 
                 $this->copyDirectory($moduleBasePath, $finalModulePath);
 
+                // ✅ NOVĚ PŘIDANÉ: Oprava namespace pro tenant-specific moduly
+                try {
+                    $this->moduleManager->updateModuleNamespace($finalModulePath, $moduleId, $this->getCurrentTenantId());
+                    $this->logger->log("Namespace automaticky opraven pro modul $moduleId v tenant " . $this->getCurrentTenantId(), ILogger::INFO);
+                } catch (\Exception $e) {
+                    $this->logger->log("Chyba při automatické opravě namespace: " . $e->getMessage(), ILogger::ERROR);
+                    // Pokračujeme v instalaci i přes chybu namespace
+                }
+
                 // ✅ REGISTRACE MODULU V DATABÁZI
                 $this->database->table('user_modules')->insert([
                     'user_id' => $identity->id,
@@ -914,18 +923,16 @@ final class ModuleAdminPresenter extends BasePresenter
 
                 // ✅ OZNAČENÍ ÚSPĚŠNÉ INSTALACE
                 $installationSuccess = true;
-
             } finally {
                 // Vyčištění dočasného adresáře
                 if (is_dir($tempDir)) {
                     $this->removeDirectory($tempDir);
                 }
             }
-
         } catch (\Exception $e) {
             // ✅ LOGOVÁNÍ CHYBY
             $this->logger->log('Chyba při instalaci modulu: ' . $e->getMessage(), ILogger::ERROR);
-            
+
             // ✅ CHYBOVÁ HLÁŠKA
             $this->flashMessage('Chyba při nahrávání modulu: ' . $e->getMessage(), 'danger');
             $this->redirect('default');
@@ -964,12 +971,12 @@ final class ModuleAdminPresenter extends BasePresenter
             // Kontrola každého souboru před extrakcí
             for ($i = 0; $i < $zip->numFiles; $i++) {
                 $filename = $zip->getNameIndex($i);
-                
+
                 // Kontrola path traversal
                 if (strpos($filename, '../') !== false || strpos($filename, '..\\') !== false) {
                     throw new \Exception("Nebezpečná cesta v ZIP: $filename");
                 }
-                
+
                 // Kontrola absolutních cest
                 if (strpos($filename, '/') === 0 || preg_match('/^[a-zA-Z]:/', $filename)) {
                     throw new \Exception("Absolutní cesta v ZIP: $filename");
@@ -996,7 +1003,6 @@ final class ModuleAdminPresenter extends BasePresenter
             $this->validateExtractedModule($moduleConfig, dirname($moduleJsonPath));
 
             return $moduleConfig;
-
         } finally {
             $zip->close();
         }
@@ -1024,7 +1030,7 @@ final class ModuleAdminPresenter extends BasePresenter
         // Kontrola velikosti extrahovaných souborů
         $totalSize = $this->calculateDirectorySize($modulePath);
         $maxSize = 50 * 1024 * 1024; // 50MB limit pro extrahované soubory
-        
+
         if ($totalSize > $maxSize) {
             throw new \Exception('Extrahované soubory jsou příliš velké (' . $this->formatBytes($totalSize) . ').');
         }
@@ -1038,7 +1044,7 @@ final class ModuleAdminPresenter extends BasePresenter
     private function validatePhpFile(string $filePath): void
     {
         $content = file_get_contents($filePath);
-        
+
         // Kontrola na nebezpečné PHP funkce
         $dangerousFunctions = [
             'eval',
@@ -1501,5 +1507,128 @@ final class ModuleAdminPresenter extends BasePresenter
         }
 
         $this->redirect('users');
+    }
+
+    /**
+     * ✅ KROK 3: Detailní diagnostika všech modulů
+     */
+    public function renderDiagnoseNamespaces(): void
+    {
+        // Kontrola oprávnění - pouze admin
+        if (!$this->isAdmin()) {
+            echo json_encode(['success' => false, 'error' => 'Nemáte oprávnění']);
+            exit;
+        }
+
+        header('Content-Type: application/json');
+
+        try {
+            $this->logger->log("Detailní diagnostika všech modulů", ILogger::INFO);
+
+            $diagnosis = $this->moduleManager->diagnoseNamespaceConflicts();
+
+            // Přidáme detailní přehled všech souborů
+            $baseDir = dirname(__DIR__, 2) . '/Modules';
+            $detailedScan = [];
+
+            if (is_dir($baseDir)) {
+                $tenantDirs = array_diff(scandir($baseDir), ['.', '..']);
+
+                foreach ($tenantDirs as $tenantDir) {
+                    if (!preg_match('/^tenant_(\d+)$/', $tenantDir)) continue;
+
+                    $tenantPath = $baseDir . '/' . $tenantDir;
+                    if (!is_dir($tenantPath)) continue;
+
+                    $modules = array_diff(scandir($tenantPath), ['.', '..']);
+                    $detailedScan[$tenantDir] = [];
+
+                    foreach ($modules as $module) {
+                        $modulePath = $tenantPath . '/' . $module;
+                        if (!is_dir($modulePath)) continue;
+
+                        $moduleInfo = [
+                            'path' => $modulePath,
+                            'files' => [],
+                            'namespaces' => []
+                        ];
+
+                        // Najdeme všechny PHP soubory
+                        $phpFiles = glob($modulePath . '/*.php');
+                        foreach ($phpFiles as $phpFile) {
+                            $fileName = basename($phpFile);
+                            $content = file_get_contents($phpFile);
+
+                            $moduleInfo['files'][] = $fileName;
+
+                            // Najdeme namespace
+                            if (preg_match('/^namespace\s+([^;]+);/m', $content, $matches)) {
+                                $moduleInfo['namespaces'][$fileName] = trim($matches[1]);
+                            }
+                        }
+
+                        $detailedScan[$tenantDir][$module] = $moduleInfo;
+                    }
+                }
+            }
+
+            $response = [
+                'success' => true,
+                'diagnosis' => $diagnosis,
+                'detailed_scan' => $detailedScan,
+                'base_dir' => $baseDir
+            ];
+
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            exit;
+        } catch (\Throwable $e) {
+            $errorMsg = $e->getMessage() ?: 'Neznámá chyba';
+            $this->logger->log("Chyba v diagnostice: " . $errorMsg, ILogger::ERROR);
+
+            echo json_encode([
+                'success' => false,
+                'error' => $errorMsg,
+                'debug' => [
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]
+            ], JSON_PRETTY_PRINT);
+            exit;
+        }
+    }
+
+    /**
+     * ✅ NOVÁ AKCE: Oprava namespace v existujících modulech
+     */
+    public function renderFixNamespaces(): void
+    {
+        // Kontrola oprávnění - pouze admin
+        if (!$this->isAdmin()) {
+            echo json_encode(['success' => false, 'error' => 'Nemáte oprávnění']);
+            exit;
+        }
+
+        header('Content-Type: application/json');
+
+        try {
+            $this->logger->log("Spouštím opravu namespace v existujících modulech", ILogger::INFO);
+
+            $result = $this->moduleManager->fixExistingNamespaces();
+
+            echo json_encode($result, JSON_PRETTY_PRINT);
+            exit;
+        } catch (\Throwable $e) {
+            $this->logger->log("Chyba při opravě namespace: " . $e->getMessage(), ILogger::ERROR);
+
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage(),
+                'debug' => [
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]
+            ], JSON_PRETTY_PRINT);
+            exit;
+        }
     }
 }

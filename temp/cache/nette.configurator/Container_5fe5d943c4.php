@@ -292,7 +292,8 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 		'NetteModule\ErrorPresenter' => [2 => ['application.13']],
 		'NetteModule\MicroPresenter' => [2 => ['application.14']],
 		'App\Core\RouterFactory' => [['015']],
-		'Modules\Financial_reports\FinancialReportsService' => [['016']],
+		'Modules\Tenant1\Financial_reports\FinancialReportsService' => [['016']],
+		'Modules\Tenant12\Financial_reports\FinancialReportsService' => [['017']],
 	];
 
 
@@ -396,9 +397,19 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	}
 
 
-	public function createService016(): Modules\Financial_reports\FinancialReportsService
+	public function createService016(): Modules\Tenant1\Financial_reports\FinancialReportsService
 	{
-		return new Modules\Financial_reports\FinancialReportsService(
+		return new Modules\Tenant1\Financial_reports\FinancialReportsService(
+			$this->getService('07'),
+			$this->getService('09'),
+			$this->getService('database.default.explorer'),
+		);
+	}
+
+
+	public function createService017(): Modules\Tenant12\Financial_reports\FinancialReportsService
+	{
+		return new Modules\Tenant12\Financial_reports\FinancialReportsService(
 			$this->getService('07'),
 			$this->getService('09'),
 			$this->getService('database.default.explorer'),

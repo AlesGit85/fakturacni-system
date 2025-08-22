@@ -655,13 +655,27 @@ final class ModuleAdminPresenter extends BasePresenter
         // Získání maximální velikosti souboru pro nahrávání
         $maxUploadSize = $this->getMaxUploadSize();
 
+        // ✅ OPRAVA: Odebrali jsme client-side MIME validaci, která blokovala odeslání
+        // Server-side validace je důležitější a spolehlivější
         $form->addUpload('moduleZip', 'ZIP soubor s modulem:')
             ->setRequired('Vyberte ZIP soubor s modulem')
-            ->addRule(Form::MIME_TYPE, 'Soubor musí být ve formátu ZIP', 'application/zip')
-            ->addRule(Form::MAX_FILE_SIZE, 'Maximální velikost souboru je ' . $this->formatBytes($maxUploadSize), $maxUploadSize);
+            ->addRule(Form::MAX_FILE_SIZE, 'Maximální velikost souboru je ' . $this->formatBytes($maxUploadSize), $maxUploadSize)
+            ->addRule(function(\Nette\Forms\Controls\UploadControl $control) {
+                // ✅ OPRAVA: Získáme FileUpload z control
+                $file = $control->getValue();
+                if (!$file || !$file->isOk()) {
+                    return false;
+                }
+                
+                // ✅ NOVÁ: Základní kontrola přípony na client side
+                $filename = $file->getName();
+                $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                return $extension === 'zip';
+            }, 'Soubor musí mít příponu .zip');
 
         $form->addSubmit('upload', 'Nahrát modul');
 
+        // ✅ ZACHOVÁN: Stejný handler, ale teperve se bude volat
         $form->onSuccess[] = [$this, 'uploadFormSucceeded'];
 
         return $form;
@@ -764,12 +778,14 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * ✅ FINÁLNÍ: Zpracování nahraného modulu s kompletní bezpečnostní validací
+     * ✅ FINÁLNÍ: Zpracování nahraného modulu s opravným exception handling
      */
     public function uploadFormSucceeded(Form $form): void
     {
         $values = $form->getValues();
         $file = $values->moduleZip;
+        $installationSuccess = false;
+        $moduleInfo = null;
 
         try {
             // ✅ ZÁKLADNÍ KONTROLA: Stav souboru
@@ -813,55 +829,119 @@ final class ModuleAdminPresenter extends BasePresenter
                     throw new \Exception('Nebezpečný obsah ZIP: ' . implode(' ', $contentErrors));
                 }
 
-                // ✅ PŘEDEXTRAKČNÍ KONTROLA MODULE.JSON
+                // ✅ PŘEDEXTRAKČNÍ VALIDACE
                 $this->performPreExtractionValidation($tempZipPath);
 
-                // ✅ BEZPEČNÁ EXTRAKCE A VALIDACE
-                $extractedModuleInfo = $this->performSecureExtraction($tempZipPath, $tempDir);
-
-                // ✅ KONTROLA DUPLICITNÍ INSTALACE
-                $this->checkDuplicateInstallation($extractedModuleInfo['id'], $identity->id);
-
-                // ✅ PŮVODNÍ INSTALACE MODULU (nyní s předvalidovanými daty)
-                $result = $this->moduleManager->installModuleForUser(
-                    $file,
-                    $identity->id,
-                    $this->getCurrentTenantId(),
-                    $identity->id
-                );
-
-                if ($result['success']) {
-                    // ✅ LOGOVÁNÍ ÚSPĚŠNÉ INSTALACE
-                    $this->logger->log(sprintf(
-                        'Modul %s úspěšně nainstalován s bezpečnostními kontrolami - uživatel: %s, tenant: %s',
-                        $extractedModuleInfo['id'],
-                        $identity->id,
-                        $this->getCurrentTenantId()
-                    ), ILogger::INFO);
-                    
-                    $this->flashMessage($result['message'], 'success');
-                } else {
-                    throw new \Exception($result['message']);
+                // ✅ EXTRAKCE ZIP SOUBORU
+                $extractDir = $tempDir . '/extracted';
+                if (!mkdir($extractDir, 0755, true)) {
+                    throw new \Exception('Nepodařilo se vytvořit adresář pro extrakci.');
                 }
 
+                $zip = new \ZipArchive();
+                $result = $zip->open($tempZipPath);
+                if ($result !== TRUE) {
+                    throw new \Exception('Nepodařilo se otevřít ZIP soubor pro extrakci.');
+                }
+
+                if (!$zip->extractTo($extractDir)) {
+                    $zip->close();
+                    throw new \Exception('Nepodařilo se rozbalit ZIP soubor.');
+                }
+                $zip->close();
+
+                // ✅ HLEDÁNÍ A VALIDACE module.json
+                $moduleJsonPath = $this->findModuleJsonRecursively($extractDir);
+                if (!$moduleJsonPath) {
+                    throw new \Exception('V modulu nebyl nalezen soubor module.json.');
+                }
+
+                $moduleInfo = json_decode(file_get_contents($moduleJsonPath), true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    throw new \Exception('Soubor module.json obsahuje neplatný JSON.');
+                }
+
+                // ✅ VALIDACE OBSAHU module.json
+                $requiredFields = ['id', 'name', 'version', 'description'];
+                foreach ($requiredFields as $field) {
+                    if (!isset($moduleInfo[$field]) || empty($moduleInfo[$field])) {
+                        throw new \Exception("V module.json chybí povinné pole: $field");
+                    }
+                }
+
+                $moduleId = $moduleInfo['id'];
+
+                // ✅ KONTROLA DUPLICITNÍ INSTALACE
+                $this->checkDuplicateInstallation($moduleId, $identity->id);
+
+                // ✅ KOPÍROVÁNÍ MODULU DO FINÁLNÍHO UMÍSTĚNÍ
+                $moduleBasePath = dirname($moduleJsonPath);
+                $finalModulePath = $this->moduleManager->getModulePath($moduleId);
+
+                if (is_dir($finalModulePath)) {
+                    throw new \Exception("Adresář modulu '$moduleId' již existuje.");
+                }
+
+                if (!mkdir($finalModulePath, 0755, true)) {
+                    throw new \Exception("Nepodařilo se vytvořit adresář modulu: $finalModulePath");
+                }
+
+                $this->copyDirectory($moduleBasePath, $finalModulePath);
+
+                // ✅ REGISTRACE MODULU V DATABÁZI
+                $this->database->table('user_modules')->insert([
+                    'user_id' => $identity->id,
+                    'module_id' => $moduleId,
+                    'module_name' => $moduleInfo['name'],
+                    'module_version' => $moduleInfo['version'] ?? '1.0.0',
+                    'module_path' => 'tenant_' . $this->getCurrentTenantId() . '/' . $moduleId,
+                    'is_active' => true,
+                    'installed_at' => new \DateTime(),
+                    'installed_by' => $identity->id,
+                    'tenant_id' => $this->getCurrentTenantId()
+                ]);
+
+                // ✅ AKTUALIZACE ASSETS
+                $this->updateModuleAssets($moduleId, $finalModulePath);
+
+                // ✅ LOGOVÁNÍ ÚSPĚCHU
+                $this->logger->log(sprintf(
+                    'Modul úspěšně nainstalován: %s (verze %s) pro uživatele %s',
+                    $moduleInfo['name'],
+                    $moduleInfo['version'],
+                    $identity->id
+                ), ILogger::INFO);
+
+                // ✅ OZNAČENÍ ÚSPĚŠNÉ INSTALACE
+                $installationSuccess = true;
+
             } finally {
-                // ✅ VŽDY VYČISTIT DOČASNÝ ADRESÁŘ
-                $this->cleanupTempDirectory($tempDir);
+                // Vyčištění dočasného adresáře
+                if (is_dir($tempDir)) {
+                    $this->removeDirectory($tempDir);
+                }
             }
 
         } catch (\Exception $e) {
-            // ✅ DETAILNÍ LOGOVÁNÍ CHYB
-            $this->logger->log(sprintf(
-                'Chyba při bezpečné instalaci modulu: %s, soubor=%s, uživatel=%s',
-                $e->getMessage(),
-                $file->getName() ?? 'neznámý',
-                $this->getUser()->getId() ?? 'nepřihlášen'
-            ), ILogger::ERROR);
+            // ✅ LOGOVÁNÍ CHYBY
+            $this->logger->log('Chyba při instalaci modulu: ' . $e->getMessage(), ILogger::ERROR);
             
-            $this->flashMessage('Chyba při instalaci modulu: ' . $e->getMessage(), 'danger');
+            // ✅ CHYBOVÁ HLÁŠKA
+            $this->flashMessage('Chyba při nahrávání modulu: ' . $e->getMessage(), 'danger');
+            $this->redirect('default');
+            return; // Ukončíme metodu zde
         }
 
-        $this->redirect('this');
+        // ✅ ÚSPĚŠNÁ INSTALACE - mimo try-catch blok
+        if ($installationSuccess && $moduleInfo) {
+            $this->flashMessage(sprintf(
+                'Modul "%s" (verze %s) byl úspěšně nainstalován a aktivován.',
+                $moduleInfo['name'],
+                $moduleInfo['version']
+            ), 'success');
+        }
+
+        $this->redirect('default');
     }
 
     /**

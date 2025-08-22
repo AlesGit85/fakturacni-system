@@ -17,16 +17,16 @@ class ModuleManager
 
     /** @var ILogger */
     private $logger;
-    
+
     /** @var Nette\Database\Explorer */
     private $database;
-    
+
     /** @var string Základní cesta k adresáři s moduly */
     private $baseModulesDir;
-    
+
     /** @var string Cesta k adresáři pro dočasné nahrávání souborů */
     private $uploadsDir;
-    
+
     /** @var string Základní cesta k adresáři assets v WWW */
     private $baseWwwModulesDir;
 
@@ -53,20 +53,20 @@ class ModuleManager
         $this->baseModulesDir = dirname(__DIR__) . '/Modules';
         $this->uploadsDir = dirname(__DIR__, 2) . '/temp/module_uploads';
         $this->baseWwwModulesDir = dirname(__DIR__, 2) . '/web/Modules';
-        
+
         // Vytvoření základních adresářů
         if (!is_dir($this->baseModulesDir)) {
             mkdir($this->baseModulesDir, 0755, true);
         }
-        
+
         if (!is_dir($this->uploadsDir)) {
             mkdir($this->uploadsDir, 0755, true);
         }
-        
+
         if (!is_dir($this->baseWwwModulesDir)) {
             mkdir($this->baseWwwModulesDir, 0755, true);
         }
-        
+
         $this->logger->log("ModuleManager byl inicializován s tenant-specific adresáři", ILogger::INFO);
     }
 
@@ -97,12 +97,12 @@ class ModuleManager
     {
         $tenantModulesDir = $this->getTenantModulesDir($tenantId);
         $tenantWwwDir = $this->getTenantWwwModulesDir($tenantId);
-        
+
         if (!is_dir($tenantModulesDir)) {
             mkdir($tenantModulesDir, 0755, true);
             $this->logger->log("Vytvořen tenant adresář: $tenantModulesDir", ILogger::INFO);
         }
-        
+
         if (!is_dir($tenantWwwDir)) {
             mkdir($tenantWwwDir, 0755, true);
             $this->logger->log("Vytvořen tenant WWW adresář: $tenantWwwDir", ILogger::INFO);
@@ -121,12 +121,12 @@ class ModuleManager
         $this->currentUserId = $userId;
         $this->currentTenantId = $tenantId;
         $this->isSuperAdmin = $isSuperAdmin;
-        
+
         // Zajistíme existenci tenant adresářů
         if ($tenantId && !$isSuperAdmin) {
             $this->ensureTenantDirectories($tenantId);
         }
-        
+
         $this->logger->log("ModuleManager: Nastaven user context - User ID: $userId, Tenant ID: $tenantId, Super Admin: " . ($isSuperAdmin ? 'yes' : 'no'), ILogger::INFO);
     }
 
@@ -144,37 +144,37 @@ class ModuleManager
         }
 
         $allModules = [];
-        
+
         // Projdeme všechny tenant adresáře
         if (is_dir($this->baseModulesDir)) {
             $tenantDirectories = array_diff(scandir($this->baseModulesDir), ['.', '..']);
-            
+
             foreach ($tenantDirectories as $tenantDir) {
                 if (!preg_match('/^tenant_(\d+)$/', $tenantDir, $matches)) {
                     continue; // Přeskočíme adresáře, které nejsou tenant_X
                 }
-                
+
                 $tenantId = (int)$matches[1];
                 $tenantModulesDir = $this->baseModulesDir . '/' . $tenantDir;
-                
+
                 if (!is_dir($tenantModulesDir)) {
                     continue;
                 }
-                
+
                 $moduleDirectories = array_diff(scandir($tenantModulesDir), ['.', '..']);
-                
+
                 foreach ($moduleDirectories as $moduleDir) {
                     $moduleInfoFile = $tenantModulesDir . '/' . $moduleDir . '/module.json';
-                    
+
                     if (file_exists($moduleInfoFile)) {
                         $moduleInfo = json_decode(file_get_contents($moduleInfoFile), true);
-                        
+
                         if ($moduleInfo && isset($moduleInfo['id'])) {
                             // Přidáme informaci o tenant
                             $moduleInfo['tenant_id'] = $tenantId;
                             $moduleInfo['tenant_path'] = $tenantDir . '/' . $moduleDir;
                             $moduleInfo['physical_path'] = $tenantModulesDir . '/' . $moduleDir;
-                            
+
                             // Klíč bude jedinečný pro kombinaci tenant + modul
                             $key = "tenant_{$tenantId}_{$moduleInfo['id']}";
                             $allModules[$key] = $moduleInfo;
@@ -183,9 +183,9 @@ class ModuleManager
                 }
             }
         }
-        
+
         $this->logger->log("Super admin: Načteno " . count($allModules) . " modulů ze všech tenantů", ILogger::INFO);
-        
+
         return $allModules;
     }
 
@@ -212,14 +212,14 @@ class ModuleManager
     {
         // Získáme všechny nainstalované moduly
         $allModules = $this->getAllInstalledModules();
-        
+
         // Filtrujeme pouze aktivní
-        $activeModules = array_filter($allModules, function($module) {
+        $activeModules = array_filter($allModules, function ($module) {
             return $module['is_active'] ?? false;
         });
-        
+
         $this->logger->log("Filtrováno " . count($activeModules) . " aktivních modulů z " . count($allModules) . " celkem", ILogger::DEBUG);
-        
+
         return $activeModules;
     }
 
@@ -229,7 +229,7 @@ class ModuleManager
     public function getAllInstalledModulesForUser(int $userId): array
     {
         $this->logger->log("=== NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE $userId ===", ILogger::DEBUG);
-        
+
         // ZMĚNA: Odstraněno where('is_active', 1) - načteme všechny nainstalované moduly
         $userModules = $this->database->table('user_modules')
             ->where('user_id', $userId)
@@ -241,13 +241,13 @@ class ModuleManager
 
         foreach ($userModules as $userModule) {
             $this->logger->log("Zpracovávám modul: ID={$userModule->module_id}, tenant_id={$userModule->tenant_id}, name={$userModule->module_name}, aktivní={$userModule->is_active}", ILogger::DEBUG);
-            
+
             // Načteme informace o modulu ze souboru (z tenant-specific adresáře)
             $moduleInfo = $this->getModuleInfoFromFile($userModule->module_id, $userModule->tenant_id);
-            
+
             if ($moduleInfo) {
                 $this->logger->log("Module info úspěšně načteno pro {$userModule->module_id}", ILogger::DEBUG);
-                
+
                 // Kombinujeme data z databáze a ze souboru
                 $moduleInfo['user_module_id'] = $userModule->id;
                 $moduleInfo['installed_at'] = $userModule->installed_at;
@@ -255,16 +255,16 @@ class ModuleManager
                 $moduleInfo['config_data'] = $userModule->config_data ? json_decode($userModule->config_data, true) : null;
                 $moduleInfo['tenant_id'] = $userModule->tenant_id;
                 $moduleInfo['physical_path'] = $this->getTenantModulesDir($userModule->tenant_id) . '/' . $userModule->module_id;
-                
+
                 // KLÍČOVÁ ZMĚNA: Přidáme stav aktivní/neaktivní z databáze
                 $moduleInfo['is_active'] = (bool)$userModule->is_active;
                 $moduleInfo['module_status'] = $userModule->is_active ? 'active' : 'inactive';
-                
+
                 $installedModules[$userModule->module_id] = $moduleInfo;
                 $this->logger->log("Modul {$userModule->module_id} přidán do výsledků (stav: " . ($userModule->is_active ? 'aktivní' : 'neaktivní') . ")", ILogger::DEBUG);
             } else {
                 $this->logger->log("CHYBA: Module info se nepodařilo načíst pro {$userModule->module_id} z tenant {$userModule->tenant_id}", ILogger::WARNING);
-                
+
                 // NOVÉ: I když se nepodařilo načíst module.json, přidáme základní informace z databáze
                 $installedModules[$userModule->module_id] = [
                     'id' => $userModule->module_id,
@@ -279,7 +279,7 @@ class ModuleManager
                     'module_status' => $userModule->is_active ? 'active' : 'inactive',
                     'has_module_json' => false, // Indikátor problému
                 ];
-                
+
                 $this->logger->log("Modul {$userModule->module_id} přidán s minimálními informacemi", ILogger::DEBUG);
             }
         }
@@ -295,9 +295,9 @@ class ModuleManager
     public function getActiveModulesForUser(int $userId): array
     {
         $allModules = $this->getAllInstalledModulesForUser($userId);
-        
+
         // Filtrujeme pouze aktivní
-        return array_filter($allModules, function($module) {
+        return array_filter($allModules, function ($module) {
             return $module['is_active'] ?? false;
         });
     }
@@ -313,23 +313,23 @@ class ModuleManager
     {
         $tenantModulesDir = $this->getTenantModulesDir($tenantId);
         $moduleInfoFile = $tenantModulesDir . '/' . $moduleId . '/module.json';
-        
+
         $this->logger->log("Načítám modul info ze souboru: $moduleInfoFile", ILogger::DEBUG);
-        
+
         if (!file_exists($moduleInfoFile)) {
             $this->logger->log("Soubor module.json nenalezen: $moduleInfoFile", ILogger::WARNING);
             return null;
         }
-        
+
         $moduleInfo = json_decode(file_get_contents($moduleInfoFile), true);
-        
+
         if (!$moduleInfo || !isset($moduleInfo['id'])) {
             $this->logger->log("Neplatný module.json soubor: $moduleInfoFile", ILogger::WARNING);
             return null;
         }
-        
+
         $this->logger->log("Úspěšně načten modul {$moduleInfo['id']} z tenant $tenantId", ILogger::DEBUG);
-        
+
         return $moduleInfo;
     }
 
@@ -371,19 +371,19 @@ class ModuleManager
 
             // Rozbalení a instalace modulu (do tenant-specific adresáře)
             $installResult = $this->extractAndInstallModule($file, $tenantId);
-            
+
             if (!$installResult['success']) {
                 return $installResult;
             }
-            
+
             $moduleConfig = $installResult['module_info'];
-            
+
             // Kontrola, zda uživatel již nemá tento modul nainstalovaný
             $existingModule = $this->database->table('user_modules')
                 ->where('user_id', $userId)
                 ->where('module_id', $moduleConfig['id'])
                 ->fetch();
-            
+
             if ($existingModule) {
                 // Modul již existuje, aktualizujeme jej
                 $this->database->table('user_modules')
@@ -397,7 +397,7 @@ class ModuleManager
                         'installed_by' => $installedBy,
                         'tenant_id' => $tenantId
                     ]);
-                
+
                 $action = 'přeinstalován';
             } else {
                 // Nový modul, vložíme záznam do databáze
@@ -412,21 +412,20 @@ class ModuleManager
                     'installed_by' => $installedBy,
                     'tenant_id' => $tenantId
                 ]);
-                
+
                 $action = 'nainstalován';
             }
-            
+
             $this->logger->log("Modul '{$moduleConfig['name']}' byl $action pro uživatele $userId v tenant $tenantId", ILogger::INFO);
-            
+
             return [
                 'success' => true,
                 'message' => "Modul '{$moduleConfig['name']}' byl úspěšně $action",
                 'module_info' => $moduleConfig
             ];
-            
         } catch (\Exception $e) {
             $this->logger->log("Chyba při instalaci modulu pro uživatele: " . $e->getMessage(), ILogger::ERROR);
-            
+
             return [
                 'success' => false,
                 'message' => 'Chyba při instalaci modulu: ' . $e->getMessage()
@@ -444,84 +443,83 @@ class ModuleManager
             if (!$file->isOk()) {
                 throw new \Exception('Chyba při nahrávání souboru');
             }
-            
+
             if ($file->getContentType() !== 'application/zip') {
                 throw new \Exception('Neplatný typ souboru. Povoleny jsou pouze ZIP soubory.');
             }
-            
+
             // Vytvoření dočasného adresáře
             $tempDir = $this->uploadsDir . '/' . uniqid('module_', true);
             mkdir($tempDir, 0755, true);
-            
+
             // Uložení nahraného souboru
             $zipPath = $tempDir . '/module.zip';
             $file->move($zipPath);
-            
+
             // Rozbalení ZIP souboru
             $zip = new ZipArchive;
             if ($zip->open($zipPath) !== TRUE) {
                 throw new \Exception('Nepodařilo se otevřít ZIP soubor');
             }
-            
+
             $zip->extractTo($tempDir);
             $zip->close();
-            
+
             // Nalezení module.json souboru
             $moduleJsonFile = $this->findModuleJsonRecursively($tempDir);
             if (!$moduleJsonFile) {
                 throw new \Exception('V ZIP souboru nebyl nalezen soubor module.json');
             }
-            
+
             // Validace module.json
             $moduleConfig = json_decode(file_get_contents($moduleJsonFile), true);
             if (!$moduleConfig || !isset($moduleConfig['id'], $moduleConfig['name'], $moduleConfig['version'])) {
                 throw new \Exception('Neplatný soubor module.json');
             }
-            
+
             // Cílový adresář v tenant-specific umístění
             $tenantModulesDir = $this->getTenantModulesDir($tenantId);
             $finalModuleDir = $tenantModulesDir . '/' . $moduleConfig['id'];
-            
+
             // Kontrola, zda modul již neexistuje
             if (is_dir($finalModuleDir)) {
                 // Smazání starého modulu
                 $this->rrmdir($finalModuleDir);
             }
-            
+
             // Přesun modulu do finálního umístění
             $moduleRootDir = dirname($moduleJsonFile);
             $this->moveDirectory($moduleRootDir, $finalModuleDir);
 
             // ✅ NOVÉ: Úprava namespace pro tenant-specific moduly
             $this->updateModuleNamespace($finalModuleDir, $moduleConfig['id'], $tenantId);
-            
+
             // ✅ NOVÉ: Logování úspěšné úpravy namespace
             $this->logger->log("Namespace upraven pro modul {$moduleConfig['id']} v tenant $tenantId", ILogger::INFO);
-            
+
             // Nastavení modulu jako aktivní
             $moduleConfig['active'] = true;
             file_put_contents($finalModuleDir . '/module.json', json_encode($moduleConfig, JSON_PRETTY_PRINT));
-            
+
             // Vytvoření assets v www adresáři
             $this->setupModuleAssets($moduleConfig['id'], $tenantId);
-            
+
             // Úklid
             $this->cleanup($tempDir);
-            
+
             $this->logger->log("Modul '{$moduleConfig['name']}' byl úspěšně nainstalován do tenant $tenantId", ILogger::INFO);
-            
+
             return [
                 'success' => true,
                 'module_info' => $moduleConfig
             ];
-            
         } catch (\Exception $e) {
             $this->logger->log("Chyba při rozbalení modulu: " . $e->getMessage(), ILogger::ERROR);
-            
+
             if (isset($tempDir) && is_dir($tempDir)) {
                 $this->cleanup($tempDir);
             }
-            
+
             return [
                 'success' => false,
                 'message' => 'Chyba při instalaci modulu: ' . $e->getMessage()
@@ -536,15 +534,15 @@ class ModuleManager
     {
         $tenantModulesDir = $this->getTenantModulesDir($tenantId);
         $tenantWwwDir = $this->getTenantWwwModulesDir($tenantId);
-        
+
         $moduleAssetsDir = $tenantModulesDir . '/' . $moduleId . '/assets';
         $wwwModuleDir = $tenantWwwDir . '/' . $moduleId;
-        
+
         if (is_dir($moduleAssetsDir)) {
             if (is_dir($wwwModuleDir)) {
                 $this->rrmdir($wwwModuleDir);
             }
-            
+
             $this->copyDirectory($moduleAssetsDir, $wwwModuleDir);
             $this->logger->log("Assets zkopírovány pro modul $moduleId v tenant $tenantId", ILogger::INFO);
         }
@@ -575,18 +573,17 @@ class ModuleManager
                 ->update(['is_active' => $newStatus]);
 
             $status = $newStatus ? 'aktivován' : 'deaktivován';
-            
+
             $this->logger->log("Modul '$moduleId' byl $status pro uživatele $userId", ILogger::INFO);
-            
+
             return [
                 'success' => true,
                 'message' => "Modul '{$userModule->module_name}' byl $status",
                 'new_status' => $newStatus
             ];
-
         } catch (\Exception $e) {
             $this->logger->log("Chyba při přepínání modulu: " . $e->getMessage(), ILogger::ERROR);
-            
+
             return [
                 'success' => false,
                 'message' => 'Chyba při přepínání modulu: ' . $e->getMessage()
@@ -631,17 +628,16 @@ class ModuleManager
             } else {
                 $this->logger->log("Fyzické soubory modulu '$moduleId' ponechány - používá je $otherUsersWithModule dalších uživatelů", ILogger::INFO);
             }
-            
+
             $this->logger->log("Modul '$moduleId' byl odinstalován pro uživatele $userId", ILogger::INFO);
-            
+
             return [
                 'success' => true,
                 'message' => "Modul '{$userModule->module_name}' byl úspěšně odinstalován"
             ];
-
         } catch (\Exception $e) {
             $this->logger->log("Chyba při odinstalaci modulu: " . $e->getMessage(), ILogger::ERROR);
-            
+
             return [
                 'success' => false,
                 'message' => 'Chyba při odinstalaci modulu: ' . $e->getMessage()
@@ -656,14 +652,14 @@ class ModuleManager
     {
         $tenantModulesDir = $this->getTenantModulesDir($tenantId);
         $tenantWwwDir = $this->getTenantWwwModulesDir($tenantId);
-        
+
         $moduleDir = $tenantModulesDir . '/' . $moduleId;
         $wwwModuleDir = $tenantWwwDir . '/' . $moduleId;
-        
+
         if (is_dir($moduleDir)) {
             $this->rrmdir($moduleDir);
         }
-        
+
         if (is_dir($wwwModuleDir)) {
             $this->rrmdir($wwwModuleDir);
         }
@@ -681,13 +677,13 @@ class ModuleManager
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS)
         );
-        
+
         foreach ($iterator as $file) {
             if ($file->getFilename() === 'module.json') {
                 return $file->getPathname();
             }
         }
-        
+
         return null;
     }
 
@@ -699,11 +695,11 @@ class ModuleManager
         if (!is_dir($source)) {
             return false;
         }
-        
+
         if (!is_dir(dirname($destination))) {
             mkdir(dirname($destination), 0755, true);
         }
-        
+
         return rename($source, $destination);
     }
 
@@ -725,7 +721,7 @@ class ModuleManager
         if (!is_dir($dir)) {
             return false;
         }
-        
+
         $files = array_diff(scandir($dir), ['.', '..']);
         foreach ($files as $file) {
             $path = $dir . '/' . $file;
@@ -735,7 +731,7 @@ class ModuleManager
                 unlink($path);
             }
         }
-        
+
         return rmdir($dir);
     }
 
@@ -747,41 +743,40 @@ class ModuleManager
         if (!is_dir($source)) {
             return false;
         }
-        
+
         if (!is_dir($destination)) {
             mkdir($destination, 0755, true);
         }
-        
+
         $files = array_diff(scandir($source), ['.', '..']);
         foreach ($files as $file) {
             $sourcePath = $source . '/' . $file;
             $destPath = $destination . '/' . $file;
-            
+
             if (is_dir($sourcePath)) {
                 $this->copyDirectory($sourcePath, $destPath);
             } else {
                 copy($sourcePath, $destPath);
             }
         }
-        
+
         return true;
     }
 
     /**
      * ✅ NOVÉ: Upraví namespace v PHP souborech modulu pro tenant-specific použití
      */
-    private function updateModuleNamespace(string $moduleDir, string $moduleId, int $tenantId): void
+    public function updateModuleNamespace(string $moduleDir, string $moduleId, int $tenantId): void
     {
         try {
             // Najdeme všechny PHP soubory v modulu
             $phpFiles = $this->findPhpFilesRecursively($moduleDir);
-            
+
             foreach ($phpFiles as $phpFile) {
                 $this->updatePhpFileNamespace($phpFile, $moduleId, $tenantId);
             }
-            
+
             $this->logger->log("Úspěšně aktualizován namespace pro modul $moduleId v " . count($phpFiles) . " souborech", ILogger::INFO);
-            
         } catch (\Exception $e) {
             $this->logger->log("Chyba při aktualizaci namespace pro modul $moduleId: " . $e->getMessage(), ILogger::ERROR);
             throw $e;
@@ -794,168 +789,115 @@ class ModuleManager
     private function findPhpFilesRecursively(string $directory): array
     {
         $phpFiles = [];
-        
+
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS)
         );
-        
+
         foreach ($iterator as $file) {
             if ($file->isFile() && $file->getExtension() === 'php') {
                 $phpFiles[] = $file->getPathname();
             }
         }
-        
+
         return $phpFiles;
     }
 
-    /**
-     * ✅ KOMPLETNÍ: Upraví namespace v konkrétním PHP souboru
-     */
-    private function updatePhpFileNamespace(string $filePath, string $moduleId, int $tenantId): void
-    {
-        try {
-            // Načtení obsahu souboru
-            $content = file_get_contents($filePath);
-            $originalContent = $content;
-            $fileName = basename($filePath);
+/**
+ * ✅ OPRAVENÁ METODA: Upraví namespace v konkrétním PHP souboru - BEZ DUPLIKACE
+ */
+private function updatePhpFileNamespace(string $filePath, string $moduleId, int $tenantId): void
+{
+    try {
+        $content = file_get_contents($filePath);
+        $fileName = basename($filePath);
+        
+        $this->logger->log("=== OPRAVA NAMESPACE v $fileName ===", ILogger::INFO);
+        
+        // Najdeme aktuální namespace
+        if (preg_match('/^namespace\s+([^;]+);/m', $content, $matches)) {
+            $currentNamespace = trim($matches[1]);
+            $this->logger->log("Aktuální namespace: $currentNamespace", ILogger::INFO);
             
-            // ✅ DEBUG: Základní info
-            $this->logger->log("=== ZAČÁTEK updatePhpFileNamespace pro $fileName ===", ILogger::DEBUG);
-            $this->logger->log("DEBUG: Délka obsahu souboru: " . strlen($content) . " znaků", ILogger::DEBUG);
+            // NOVÁ LOGIKA: Kontrola různých formátů
+            $newNamespace = null;
             
-            // Náhled prvních 200 znaků
-            $preview = substr(str_replace(["\r", "\n"], [' ', ' '], $content), 0, 200);
-            $this->logger->log("DEBUG: Náhled obsahu: $preview", ILogger::DEBUG);
-            
-            // Převod module ID na různé formáty
-            $moduleName = $this->toPascalCase($moduleId); // např. "notes" → "Notes"
-            $moduleNameUnderscore = ucfirst($moduleId); // např. "financial_reports" → "Financial_reports"
-            
-            $this->logger->log("DEBUG: Module ID '$moduleId' → PascalCase: '$moduleName', Underscore: '$moduleNameUnderscore'", ILogger::DEBUG);
-            
-            $updated = false;
-            $namespaceFound = false;
-            
-            // ✅ KROK 1: Najdeme všechny namespace v souboru
-            if (preg_match_all('/^namespace\s+([^;]+);/m', $content, $allMatches)) {
-                $namespaceFound = true;
-                $this->logger->log("DEBUG: Nalezené namespace v $fileName: " . implode(', ', $allMatches[1]), ILogger::DEBUG);
-                
-                // Ukažeme přesný namespace řádek
-                if (preg_match('/^namespace\s+[^;]+;/m', $content, $exactMatch)) {
-                    $this->logger->log("DEBUG: Přesný namespace řádek: '" . trim($exactMatch[0]) . "'", ILogger::DEBUG);
-                }
-            } else {
-                $this->logger->log("DEBUG: Žádný namespace nalezen v $fileName", ILogger::DEBUG);
+            // 1. Pokud už má správný tenant namespace → nech tak
+            if (preg_match('/^Modules\\\\Tenant' . $tenantId . '\\\\(.+)$/', $currentNamespace)) {
+                $this->logger->log("✅ Namespace už je správný pro tenant $tenantId - přeskakuji", ILogger::INFO);
+                return; // Už je správně, nic neměníme
             }
             
-            // ✅ KROK 2: Aktualizace namespace (zjednodušený přístup)
-            if ($namespaceFound) {
-                $this->logger->log("DEBUG: Začínám aktualizaci namespace...", ILogger::DEBUG);
-                
-                // Obecný regex pro jakýkoliv Modules\ namespace
-                $generalPattern = '/^namespace\s+Modules\\\\([^;\\\\]+)(\\\\[^;]+)?\s*;/m';
-                $this->logger->log("DEBUG: Používám obecný vzor: $generalPattern", ILogger::DEBUG);
-                
-                if (preg_match($generalPattern, $content, $matches)) {
-                    $oldNamespace = $matches[0];
-                    $detectedModule = $matches[1]; // např. "Notes" nebo "Financial_reports"
-                    $remainder = isset($matches[2]) ? $matches[2] : ''; // např. "\Something"
-                    
-                    $this->logger->log("DEBUG: ✅ Obecný vzor zachytil - detectedModule: '$detectedModule', remainder: '$remainder'", ILogger::DEBUG);
-                    $this->logger->log("DEBUG: Celý zachycený namespace: '$oldNamespace'", ILogger::DEBUG);
-                    
-                    // Kontrola, zda se jedná o náš modul (různé formáty)
-                    $isOurModule = (
-                        $detectedModule === $moduleName || 
-                        $detectedModule === $moduleNameUnderscore ||
-                        $detectedModule === $moduleId ||
-                        strtolower($detectedModule) === strtolower($moduleName) ||
-                        strtolower($detectedModule) === strtolower($moduleNameUnderscore)
-                    );
-                    
-                    $this->logger->log("DEBUG: Je náš modul? " . ($isOurModule ? 'ANO' : 'NE'), ILogger::DEBUG);
-                    
-                    if ($isOurModule) {
-                        // Vytvoříme nový tenant-specific namespace
-                        $newNamespace = "namespace Modules\\Tenant{$tenantId}\\{$detectedModule}{$remainder};";
-                        
-                        // Nahradíme namespace
-                        $content = str_replace($oldNamespace, $newNamespace, $content);
-                        $updated = true;
-                        
-                        $this->logger->log("DEBUG: ✅ Namespace ÚSPĚŠNĚ aktualizován v $fileName:", ILogger::INFO);
-                        $this->logger->log("  STARÝ: $oldNamespace", ILogger::INFO);
-                        $this->logger->log("  NOVÝ:  $newNamespace", ILogger::INFO);
-                    } else {
-                        $this->logger->log("DEBUG: ⚠️ Detekovaný modul '$detectedModule' neodpovídá našemu modulu '$moduleId'", ILogger::WARNING);
-                    }
-                } else {
-                    $this->logger->log("DEBUG: ❌ Obecný vzor nezachytil žádný Modules\\ namespace", ILogger::DEBUG);
-                }
+            // 2. Pokud má jiný tenant namespace → nech tak (jiný tenant)
+            if (preg_match('/^Modules\\\\Tenant(\d+)\\\\(.+)$/', $currentNamespace, $tenantMatches)) {
+                $otherTenant = $tenantMatches[1];
+                $this->logger->log("ℹ️ Namespace patří jinému tenantu ($otherTenant) - přeskakuji", ILogger::INFO);
+                return; // Patří jinému tenantu
             }
             
-            // ✅ KROK 3: Aktualizace use statements
-            $this->logger->log("DEBUG: Kontroluji use statements...", ILogger::DEBUG);
+            // 3. Pokud má starý Modules\ formát → oprav na tenant formát
+            if (preg_match('/^Modules\\\\(.+)$/', $currentNamespace, $moduleMatches)) {
+                $modulePartFromNamespace = $moduleMatches[1];
+                $newNamespace = "Modules\\Tenant{$tenantId}\\{$modulePartFromNamespace}";
+                $this->logger->log("🔧 Opravuji z starého formátu", ILogger::INFO);
+            }
             
-            // Najdeme všechny use statements
-            if (preg_match_all('/^use\s+([^;]+);/m', $content, $useMatches)) {
-                $this->logger->log("DEBUG: Nalezené use statements: " . implode(', ', $useMatches[1]), ILogger::DEBUG);
-                
-                // Vzory pro use statements
-                $usePattern = '/^use\s+Modules\\\\([^\\\\;]+)\\\\([^;]+);/m';
-                
-                $newContent = preg_replace_callback($usePattern, function($matches) use ($moduleName, $moduleNameUnderscore, $moduleId, $tenantId, $fileName) {
-                    $oldUse = $matches[0];
-                    $detectedModule = $matches[1];
-                    $remainder = $matches[2];
-                    
-                    // Kontrola, zda se jedná o náš modul
-                    $isOurModule = (
-                        $detectedModule === $moduleName || 
-                        $detectedModule === $moduleNameUnderscore ||
-                        $detectedModule === $moduleId ||
-                        strtolower($detectedModule) === strtolower($moduleName) ||
-                        strtolower($detectedModule) === strtolower($moduleNameUnderscore)
-                    );
-                    
-                    if ($isOurModule) {
-                        $newUse = "use Modules\\Tenant{$tenantId}\\{$detectedModule}\\{$remainder};";
-                        $this->logger->log("DEBUG: ✅ Use statement aktualizován v $fileName: $oldUse → $newUse", ILogger::INFO);
-                        return $newUse;
-                    }
-                    
-                    return $oldUse; // Nezměníme
-                }, $content);
+            // 4. Jiný formát namespace → nech tak
+            else {
+                $this->logger->log("ℹ️ Namespace není Modules\\ formát - přeskakuji", ILogger::INFO);
+                return;
+            }
+            
+            // Provedeme opravu
+            if ($newNamespace) {
+                $newContent = str_replace(
+                    "namespace {$currentNamespace};",
+                    "namespace {$newNamespace};", 
+                    $content
+                );
                 
                 if ($newContent !== $content) {
-                    $content = $newContent;
-                    $updated = true;
-                }
-            } else {
-                $this->logger->log("DEBUG: Žádné use statements nenalezeny", ILogger::DEBUG);
-            }
-            
-            // ✅ KROK 4: Uložení souboru
-            if ($updated) {
-                file_put_contents($filePath, $content);
-                $this->logger->log("DEBUG: ✅ Soubor uložen s aktualizacemi: $fileName", ILogger::INFO);
-            } else {
-                if ($namespaceFound) {
-                    $this->logger->log("DEBUG: ⚠️ Namespace nalezen ale NEAKTUALIZOVÁN v $fileName", ILogger::WARNING);
-                } else {
-                    $this->logger->log("DEBUG: ℹ️ Žádný namespace k aktualizaci v $fileName", ILogger::DEBUG);
+                    file_put_contents($filePath, $newContent);
+                    $this->logger->log("✅ ÚSPĚCH: Namespace opraven v $fileName", ILogger::INFO);
+                    $this->logger->log("  STARÝ: namespace {$currentNamespace};", ILogger::INFO);
+                    $this->logger->log("  NOVÝ:  namespace {$newNamespace};", ILogger::INFO);
+                    
+                    // Opravíme také use statements
+                    $this->fixUseStatements($newContent, $currentNamespace, $newNamespace, $fileName);
+                    file_put_contents($filePath, $newContent);
                 }
             }
             
-            $this->logger->log("=== KONEC updatePhpFileNamespace pro $fileName ===", ILogger::DEBUG);
-            
-        } catch (\Exception $e) {
-            $this->logger->log("ERROR: Chyba v updatePhpFileNamespace pro $fileName: " . $e->getMessage(), ILogger::ERROR);
-            $this->logger->log("ERROR: Stack trace: " . $e->getTraceAsString(), ILogger::ERROR);
-            throw $e;
+        } else {
+            $this->logger->log("ℹ️ Žádný namespace nenalezen v $fileName", ILogger::INFO);
         }
+        
+    } catch (\Exception $e) {
+        $this->logger->log("❌ CHYBA při úpravě namespace v $fileName: " . $e->getMessage(), ILogger::ERROR);
+        throw $e;
     }
+}
+
+/**
+ * ✅ OPRAVENÁ POMOCNÁ METODA: Opraví use statements
+ */
+private function fixUseStatements(string &$content, string $oldNamespaceRoot, string $newNamespaceRoot, string $fileName): void
+{
+    // Extrahuj část modulu ze starého namespace (např. "Financial_reports" z "Modules\Financial_reports")
+    if (preg_match('/^Modules\\\\(.+)$/', $oldNamespaceRoot, $matches)) {
+        $modulePartFromNamespace = $matches[1];
+        
+        // Oprav use statements které začínají tímto modulem
+        $usePattern = '/^use\s+Modules\\\\' . preg_quote($modulePartFromNamespace, '/') . '(\\\\[^;]+)?;/m';
+        
+        $content = preg_replace_callback($usePattern, function($matches) use ($newNamespaceRoot, $fileName) {
+            $remainder = $matches[1] ?? '';
+            $newUse = "use {$newNamespaceRoot}{$remainder};";
+            $this->logger->log("✅ Use statement opraven v $fileName: {$matches[0]} → {$newUse}", ILogger::INFO);
+            return $newUse;
+        }, $content);
+    }
+}
 
     /**
      * ✅ NOVÉ: Převede string na PascalCase (např. "notes" → "Notes", "my_module" → "MyModule")
@@ -964,12 +906,12 @@ class ModuleManager
     {
         // Rozdělíme podle podtržítka, pomlčky nebo mezery
         $words = preg_split('/[_\-\s]+/', $string);
-        
+
         // Převedeme každé slovo na PascalCase
-        $pascalWords = array_map(function($word) {
+        $pascalWords = array_map(function ($word) {
             return ucfirst(strtolower($word));
         }, $words);
-        
+
         return implode('', $pascalWords);
     }
 
@@ -981,7 +923,7 @@ class ModuleManager
         if ($this->currentTenantId === null) {
             throw new \InvalidArgumentException('Tenant ID není nastaven. Zavolejte setUserContext() před použitím getModulePath().');
         }
-        
+
         return $this->getTenantModulesDir($this->currentTenantId) . '/' . $moduleId;
     }
 
@@ -993,7 +935,248 @@ class ModuleManager
         if ($this->currentTenantId === null) {
             throw new \InvalidArgumentException('Tenant ID není nastaven. Zavolejte setUserContext() před použitím getModuleWwwPath().');
         }
-        
+
         return $this->getTenantWwwModulesDir($this->currentTenantId) . '/' . $moduleId;
     }
+
+    /**
+ * ✅ ZJEDNODUŠENÁ DIAGNOSTICKÁ METODA: Zkontroluje namespace ve všech modulech
+ */
+public function diagnoseNamespaceConflicts(): array
+{
+    try {
+        $this->logger->log("=== SPUŠTĚNÍ DIAGNOSTIKY NAMESPACE KONFLIKTŮ ===", ILogger::INFO);
+        $this->logger->log("Base modules dir: " . $this->baseModulesDir, ILogger::INFO);
+        
+        $result = [
+            'success' => true,
+            'base_dir' => $this->baseModulesDir,
+            'tenant_dirs' => [],
+            'conflicts' => [],
+            'all_namespaces' => [],
+            'debug' => []
+        ];
+        
+        // Krok 1: Kontrola, zda existuje základní adresář
+        if (!is_dir($this->baseModulesDir)) {
+            $this->logger->log("CHYBA: Základní adresář modulů neexistuje: " . $this->baseModulesDir, ILogger::ERROR);
+            return [
+                'success' => false,
+                'error' => 'Základní adresář modulů neexistuje: ' . $this->baseModulesDir
+            ];
+        }
+        
+        $this->logger->log("✅ Základní adresář existuje", ILogger::INFO);
+        
+        // Krok 2: Najdeme tenant adresáře
+        $allDirs = scandir($this->baseModulesDir);
+        $tenantDirs = [];
+        
+        foreach ($allDirs as $dir) {
+            if ($dir === '.' || $dir === '..') continue;
+            
+            $fullPath = $this->baseModulesDir . '/' . $dir;
+            if (!is_dir($fullPath)) continue;
+            
+            if (preg_match('/^tenant_(\d+)$/', $dir)) {
+                $tenantDirs[] = $dir;
+                $this->logger->log("Nalezen tenant adresář: $dir", ILogger::INFO);
+            }
+        }
+        
+        $result['tenant_dirs'] = $tenantDirs;
+        $this->logger->log("Celkem nalezeno " . count($tenantDirs) . " tenant adresářů", ILogger::INFO);
+        
+        if (empty($tenantDirs)) {
+            $this->logger->log("⚠️ Žádné tenant adresáře nenalezeny", ILogger::WARNING);
+            return $result;
+        }
+        
+        // Krok 3: Projdeme každý tenant adresář
+        $allNamespaces = [];
+        
+        foreach ($tenantDirs as $tenantDir) {
+            $this->logger->log("Zpracovávám tenant: $tenantDir", ILogger::INFO);
+            
+            $tenantPath = $this->baseModulesDir . '/' . $tenantDir;
+            $moduleDirs = array_diff(scandir($tenantPath), ['.', '..']);
+            
+            foreach ($moduleDirs as $moduleDir) {
+                $modulePath = $tenantPath . '/' . $moduleDir;
+                if (!is_dir($modulePath)) continue;
+                
+                $this->logger->log("  Zpracovávám modul: $moduleDir", ILogger::DEBUG);
+                
+                // Jednoduchý způsob - najdeme pouze Module.php
+                $modulePhp = $modulePath . '/Module.php';
+                if (file_exists($modulePhp)) {
+                    try {
+                        $content = file_get_contents($modulePhp);
+                        if ($content === false) {
+                            $this->logger->log("    Nelze načíst soubor: $modulePhp", ILogger::WARNING);
+                            continue;
+                        }
+                        
+                        // Najdeme namespace
+                        if (preg_match('/^namespace\s+([^;]+);/m', $content, $matches)) {
+                            $namespace = trim($matches[1]);
+                            $this->logger->log("    Nalezen namespace: $namespace", ILogger::DEBUG);
+                            
+                            if (!isset($allNamespaces[$namespace])) {
+                                $allNamespaces[$namespace] = [];
+                            }
+                            
+                            $allNamespaces[$namespace][] = [
+                                'file' => "$tenantDir/$moduleDir/Module.php",
+                                'tenant' => $tenantDir,
+                                'module' => $moduleDir
+                            ];
+                        } else {
+                            $this->logger->log("    Žádný namespace nenalezen v $modulePhp", ILogger::DEBUG);
+                        }
+                        
+                    } catch (\Exception $e) {
+                        $this->logger->log("    Chyba při zpracování $modulePhp: " . $e->getMessage(), ILogger::ERROR);
+                        continue;
+                    }
+                }
+            }
+        }
+        
+        // Krok 4: Najdeme konflikty
+        $conflicts = [];
+        foreach ($allNamespaces as $namespace => $locations) {
+            if (count($locations) > 1) {
+                $conflicts[$namespace] = $locations;
+                $this->logger->log("🔴 KONFLIKT: Namespace '$namespace' v " . count($locations) . " souborech", ILogger::WARNING);
+            }
+        }
+        
+        $result['all_namespaces'] = $allNamespaces;
+        $result['conflicts'] = $conflicts;
+        $result['summary'] = [
+            'total_namespaces' => count($allNamespaces),
+            'conflicts_count' => count($conflicts),
+            'tenant_count' => count($tenantDirs)
+        ];
+        
+        $this->logger->log("=== KONEC DIAGNOSTIKY ===", ILogger::INFO);
+        $this->logger->log("Celkem namespace: " . count($allNamespaces) . ", Konflikty: " . count($conflicts), ILogger::INFO);
+        
+        return $result;
+        
+    } catch (\Throwable $e) {
+        $this->logger->log("KRITICKÁ CHYBA v diagnostice: " . $e->getMessage(), ILogger::CRITICAL);
+        $this->logger->log("File: " . $e->getFile() . " Line: " . $e->getLine(), ILogger::CRITICAL);
+        $this->logger->log("Stack trace: " . $e->getTraceAsString(), ILogger::CRITICAL);
+        
+        return [
+            'success' => false,
+            'error' => 'Kritická chyba: ' . $e->getMessage(),
+            'debug' => [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'message' => $e->getMessage()
+            ]
+        ];
+    }
+}
+
+    /**
+     * ✅ POMOCNÁ METODA: Extrahuje všechny namespace z PHP souboru
+     */
+    private function extractNamespacesFromFile(string $filePath): array
+    {
+        $content = file_get_contents($filePath);
+        $namespaces = [];
+
+        // Najdeme všechny namespace deklarace
+        if (preg_match_all('/^namespace\s+([^;]+);/m', $content, $matches)) {
+            foreach ($matches[1] as $namespace) {
+                $namespaces[] = trim($namespace);
+            }
+        }
+
+        return $namespaces;
+    }
+
+    /**
+ * ✅ NOVÁ METODA: Opraví namespace ve všech existujících modulech
+ */
+public function fixExistingNamespaces(): array
+{
+    try {
+        $this->logger->log("=== SPUŠTĚNÍ OPRAVY EXISTUJÍCÍCH NAMESPACE ===", ILogger::INFO);
+        
+        $results = [
+            'success' => true,
+            'fixed_modules' => [],
+            'errors' => []
+        ];
+        
+        // Projdeme všechny tenant adresáře
+        if (!is_dir($this->baseModulesDir)) {
+            return ['success' => false, 'error' => 'Base modules dir neexistuje'];
+        }
+        
+        $tenantDirs = glob($this->baseModulesDir . '/tenant_*', GLOB_ONLYDIR);
+        
+        foreach ($tenantDirs as $tenantDir) {
+            $tenantName = basename($tenantDir);
+            if (!preg_match('/^tenant_(\d+)$/', $tenantName, $matches)) continue;
+            
+            $tenantId = (int)$matches[1];
+            $this->logger->log("Opravuji namespace v $tenantName (ID: $tenantId)", ILogger::INFO);
+            
+            // Najdeme všechny moduly v tomto tenantovi
+            $moduleDirs = glob($tenantDir . '/*', GLOB_ONLYDIR);
+            
+            foreach ($moduleDirs as $moduleDir) {
+                $moduleId = basename($moduleDir);
+                $this->logger->log("  Opravuji modul: $moduleId", ILogger::INFO);
+                
+                try {
+                    // Použijeme existující metodu pro aktualizaci namespace
+                    $this->updateModuleNamespace($moduleDir, $moduleId, $tenantId);
+                    
+                    $results['fixed_modules'][] = [
+                        'tenant_id' => $tenantId,
+                        'module_id' => $moduleId,
+                        'path' => $moduleDir,
+                        'status' => 'success'
+                    ];
+                    
+                    $this->logger->log("  ✅ Úspěšně opraven: $moduleId v tenant $tenantId", ILogger::INFO);
+                    
+                } catch (\Exception $e) {
+                    $error = "Chyba při opravě $moduleId v tenant $tenantId: " . $e->getMessage();
+                    $this->logger->log("  ❌ $error", ILogger::ERROR);
+                    
+                    $results['errors'][] = [
+                        'tenant_id' => $tenantId,
+                        'module_id' => $moduleId,
+                        'error' => $error
+                    ];
+                }
+            }
+        }
+        
+        $this->logger->log("=== KONEC OPRAVY NAMESPACE ===", ILogger::INFO);
+        $this->logger->log("Opraveno modulů: " . count($results['fixed_modules']) . ", Chyby: " . count($results['errors']), ILogger::INFO);
+        
+        return $results;
+        
+    } catch (\Throwable $e) {
+        $this->logger->log("KRITICKÁ CHYBA při opravě namespace: " . $e->getMessage(), ILogger::CRITICAL);
+        
+        return [
+            'success' => false,
+            'error' => 'Kritická chyba: ' . $e->getMessage(),
+            'debug' => [
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]
+        ];
+    }
+}
 }

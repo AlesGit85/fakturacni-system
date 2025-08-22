@@ -45,7 +45,7 @@ return array (
     'App\\Model\\ModuleManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ModuleManager.php',
-      1 => 1755852622,
+      1 => 1755861528,
     ),
     'App\\Model\\QrPaymentService' => 
     array (
@@ -72,15 +72,50 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1748950316,
     ),
-    'Modules\\Financial_reports\\FinancialReportsService' => 
+    'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
-      1 => 1755851908,
+      1 => 1755862054,
     ),
-    'Modules\\Financial_reports\\Module' => 
+    'Modules\\Tenant1\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
-      1 => 1755851908,
+      1 => 1755862054,
+    ),
+    'Modules\\Tenant1\\Notes\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\notes\\Module.php',
+      1 => 1755861365,
+    ),
+    'Modules\\Tenant1\\Notes\\NotesManager' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\notes\\NotesManager.php',
+      1 => 1755861365,
+    ),
+    'Modules\\Tenant1\\Test_module\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\test_module\\Module.php',
+      1 => 1755862785,
+    ),
+    'Modules\\Tenant12\\Financial_reports\\FinancialReportsService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\FinancialReportsService.php',
+      1 => 1755861404,
+    ),
+    'Modules\\Tenant12\\Financial_reports\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\Module.php',
+      1 => 1755861404,
+    ),
+    'Modules\\Tenant12\\Notes\\Module' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\notes\\Module.php',
+      1 => 1755862054,
+    ),
+    'Modules\\Tenant12\\Notes\\NotesManager' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\notes\\NotesManager.php',
+      1 => 1755862054,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -125,7 +160,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1755772274,
+      1 => 1755864122,
     ),
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
@@ -192,22 +227,18 @@ return array (
   array (
     'Nette\\Bridges\\Assets\\DIExtension' => 3,
     'null' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDiagnoseNamespacesTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'Modules\\Tenant1\\Notes\\Module' => 3,
-    'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 2,
-    'Modules\\Tenant1\\Financial_reports\\Module' => 3,
-    'Modules\\Tenant12\\Notes\\Module' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
     'App\\Presentation\\Sign\\SignInTemplate' => 3,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Security\\SecuritySqlAuditTemplate' => 1,
-    'App\\Presentation\\Security\\SecurityTemplate' => 1,
-    'App\\Presentation\\ModuleFix\\ModuleFixDefaultTemplate' => 3,
-    'App\\Presentation\\ModuleFix\\ModuleFixTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 1,
-    'App\\Presentation\\ModuleFix\\ModuleFixPresenter' => 2,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminFixNamespacesTemplate' => 3,
+    'Modules\\Financial_reports\\FinancialReportsService' => 2,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminFixDuplicateNamespacesTemplate' => 1,
+    'Modules\\Tenant1\\Tenant1\\Financial_reports\\FinancialReportsService' => 2,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 1,
   ),
   2 => 
   array (
