@@ -45,7 +45,7 @@ return array (
     'App\\Model\\MigrationService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\MigrationService.php',
-      1 => 1756130018,
+      1 => 1756155154,
     ),
     'App\\Model\\ModuleManager' => 
     array (
@@ -240,15 +240,23 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 2,
-    'null' => 2,
+    'Nette\\Bridges\\Assets\\DIExtension' => 3,
+    'null' => 3,
     'App\\Presentation\\Migration\\MigrationEncryptOldDataTemplate' => 3,
     'App\\Presentation\\Migration\\MigrationTemplate' => 3,
+    'App\\Presentation\\Migration\\MigrationDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeTemplate' => 3,
+    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
+    'App\\Presentation\\Users\\UsersTemplate' => 3,
+    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
+    'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityTemplate' => 3,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
     'App\\Presentation\\Sign\\SignInTemplate' => 2,
     'App\\Presentation\\Sign\\SignTemplate' => 2,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
-    'App\\Presentation\\Home\\HomeTemplate' => 1,
-    'App\\Presentation\\Migration\\MigrationDefaultTemplate' => 2,
   ),
   2 => 
   array (
