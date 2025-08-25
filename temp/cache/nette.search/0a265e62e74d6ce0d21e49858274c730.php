@@ -45,7 +45,7 @@ return array (
     'App\\Model\\MigrationService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\MigrationService.php',
-      1 => 1755896567,
+      1 => 1756130018,
     ),
     'App\\Model\\ModuleManager' => 
     array (
@@ -160,7 +160,7 @@ return array (
     'App\\Presentation\\Migration\\MigrationPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Migration\\MigrationPresenter.php',
-      1 => 1756124762,
+      1 => 1756131848,
     ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (

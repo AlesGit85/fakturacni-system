@@ -1,287 +1,162 @@
-[2025-08-25 10-49-41] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?backlink=i59vv&_fid=jbzs 
-[2025-08-25 10-49-43] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Module info úspěšně načteno pro notes  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Module info úspěšně načteno pro test_module  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-48] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-28] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Module info úspěšně načteno pro notes  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Module info úspěšně načteno pro test_module  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/ 
-[2025-08-25 11-31-23] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-18-59] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?backlink=chybv&_fid=9z18 
-[2025-08-25 14-19-01] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Module info úspěšně načteno pro notes  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Module info úspěšně načteno pro test_module  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-10] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-25-27] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Module info úspěšně načteno pro notes  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Module info úspěšně načteno pro test_module  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/clients/ 
-[2025-08-25 14-26-10] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-16-08] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-17-18] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-45] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?backlink=06pjy&_fid=d10a 
+[2025-08-25 16-24-47] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Zpracovávám modul: ID=financial_reports, tenant_id=12, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/financial_reports/module.json  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Úspěšně načten modul financial_reports z tenant 12  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Zpracovávám modul: ID=notes, tenant_id=12, name=Poznámky, aktivní=1  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/notes/module.json  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Úspěšně načten modul notes z tenant 12  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Module info úspěšně načteno pro notes  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] === KONEC: Uživatel 57 má 2 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-50] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 57 ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Nalezeno 2 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 57  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Zpracovávám modul: ID=financial_reports, tenant_id=12, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Úspěšně načten modul financial_reports z tenant 12  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Zpracovávám modul: ID=notes, tenant_id=12, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Úspěšně načten modul notes z tenant 12  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] === KONEC: Uživatel 57 má 2 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] Filtrováno 2 aktivních modulů z 2 celkem  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-35] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-50] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-03] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-06] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Module info úspěšně načteno pro notes  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Module info úspěšně načteno pro test_module  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/migration/encrypt-old-data 

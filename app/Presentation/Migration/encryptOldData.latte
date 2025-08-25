@@ -242,7 +242,7 @@
 </div>
 
 {* JavaScript pro řízení procesu *}
-<script>
+<script n:syntax=off>
 document.addEventListener('DOMContentLoaded', function() {
     let encryptionInProgress = false;
     let encryptionStartTime = null;
@@ -305,18 +305,45 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Aktualizace výsledků analýzy
     function updateAnalysisResults(data) {
-        document.getElementById('clientsToEncrypt').textContent = data['clients_to_encrypt'];
-        document.getElementById('companiesToEncrypt').textContent = data['companies_to_encrypt'];
+    document.getElementById('clientsToEncrypt').textContent = data['clients_to_encrypt'];
+    document.getElementById('companiesToEncrypt').textContent = data['companies_to_encrypt'];
+    
+    const status = document.getElementById('encryptionStatus');
+    const statusCard = status.closest('.security-stat-card');
+    const statusIcon = status.parentElement.querySelector('.security-stat-icon i');
+    
+    if (data['clients_to_encrypt'] === 0 && data['companies_to_encrypt'] === 0) {
+        // ✅ Vše zašifrováno - pěkný zelený design
+        status.textContent = 'Vše zašifrováno';
+        status.style.color = '#B1D235';
+        status.style.fontWeight = 'bold';
         
-        const status = document.getElementById('encryptionStatus');
-        if (data['clients_to_encrypt'] === 0 && data['companies_to_encrypt'] === 0) {
-            status.textContent = 'Vše zašifrováno';
-            status.parentElement.querySelector('.security-stat-icon i').className = 'bi bi-shield-check';
-        } else {
-            status.textContent = 'Vyžaduje šifrování';
-            status.parentElement.querySelector('.security-stat-icon i').className = 'bi bi-shield-exclamation';
-        }
+        // Změna ikony na úspěšnou
+        statusIcon.className = 'bi bi-shield-check';
+        statusIcon.style.color = '#B1D235';
+        
+        // Přidání jemného zeleného efektu na celou kartu
+        statusCard.style.borderLeft = '4px solid #B1D235';
+        statusCard.style.backgroundColor = 'rgba(177, 210, 53, 0.05)';
+        
+        console.log('✅ Status nastaven na: Vše zašifrováno (zelený)');
+    } else {
+        // ⚠️ Vyžaduje šifrování - normální design
+        status.textContent = 'Vyžaduje šifrování';
+        status.style.color = '#6c757d';
+        status.style.fontWeight = 'normal';
+        
+        // Změna ikony na varování
+        statusIcon.className = 'bi bi-shield-exclamation';
+        statusIcon.style.color = '#ffc107';
+        
+        // Odstranění zeleného efektu
+        statusCard.style.borderLeft = '';
+        statusCard.style.backgroundColor = '';
+        
+        console.log('⚠️ Status nastaven na: Vyžaduje šifrování');
     }
+}
     
     // Spuštění šifrování
     function startEncryption() {
@@ -370,17 +397,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Aktualizace progress baru
+    // Aktualizace progress baru - s kontrolou existence elementů
     function updateProgress(data) {
-        const percentage = Math.round((data['processed'] / data['total']) * 100);
+        console.log('📊 Aktualizuji progress:', data);
         
-        document.getElementById('progressPercentage').textContent = percentage + '%';
-        document.getElementById('progressBar').style.width = percentage + '%';
-        document.getElementById('processedCount').textContent = data['processed'];
-        document.getElementById('totalCount').textContent = data['total'];
-        document.getElementById('currentBatch').textContent = data['current_batch'] || 0;
-        document.getElementById('errorsCount').textContent = data['errors'] || 0;
-        document.getElementById('operationText').textContent = data['current_operation'] || 'Zpracovávám data...';
+        // Kontrola dat
+        if (!data || typeof data !== 'object') {
+            console.error('❌ Neplatná data pro progress:', data);
+            return;
+        }
+        
+        const processed = data['processed'] || 0;
+        const total = data['total'] || 0;
+        const percentage = total > 0 ? Math.round((processed / total) * 100) : 0;
+        
+        console.log(`📈 Progress kalkulace: ${processed}/${total} = ${percentage}%`);
+        
+        // Bezpečná aktualizace elementů s kontrolou existence
+        const updateElement = (id, value) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value;
+                console.log(`✅ Element ${id} aktualizován na: ${value}`);
+            } else {
+                console.error(`❌ Element ${id} nenalezen!`);
+            }
+        };
+        
+        const updateElementStyle = (id, property, value) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.style[property] = value;
+                console.log(`✅ Element ${id} style ${property} nastaven na: ${value}`);
+            } else {
+                console.error(`❌ Element ${id} nenalezen pro style update!`);
+            }
+        };
+        
+        // Aktualizace progress baru
+        updateElement('progressPercentage', percentage + '%');
+        updateElementStyle('progressBar', 'width', percentage + '%');
+        
+        // Aktualizace statistik
+        updateElement('processedCount', processed);
+        updateElement('totalCount', total);
+        updateElement('currentBatch', data['current_batch'] || 0);
+        updateElement('errorsCount', data['errors'] || 0);
+        updateElement('operationText', data['current_operation'] || 'Zpracovávám data...');
+        
+        console.log('✅ Progress aktualizace dokončena');
     }
     
     // Zobrazení výsledků

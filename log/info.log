@@ -1,64 +1,86 @@
-[2025-08-25 10-49-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=i59vv&_fid=jbzs 
-[2025-08-25 10-49-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
-[2025-08-25 10-49-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-43] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=c05l 
-[2025-08-25 10-49-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-49-49] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 10-49-49] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 10-51-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-45] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-51-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 10-51-46] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 10-52-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-27] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 10-52-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 10-52-28] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 11-09-57] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-57] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-09-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 11-09-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 11-15-30] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 11-15-30] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 11-16-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-16-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 11-16-13] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 11-16-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 11-16-16] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 11-16-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
-[2025-08-25 11-16-28] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
-[2025-08-25 11-31-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 11-31-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 11-31-24] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 14-18-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-18-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=chybv&_fid=9z18 
-[2025-08-25 14-19-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
-[2025-08-25 14-19-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-01] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=nn7k 
-[2025-08-25 14-19-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 14-19-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 14-19-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-19-20] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 14-19-20] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 14-23-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-23-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 14-23-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 14-24-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-12] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-24-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 14-24-13] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 14-25-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
-[2025-08-25 14-25-27] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
-[2025-08-25 14-26-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
-[2025-08-25 14-26-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 14-26-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
-[2025-08-25 14-26-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
-[2025-08-25 14-26-15] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-20-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] === MIGRATION PRESENTER STARTUP START ===  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] Calling parent::startup()  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] Parent startup completed  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] Setting tenant context for ClientsManager  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] Setting tenant context for CompanyManager  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] Migration presenter startup - Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] === MIGRATION PRESENTER STARTUP END SUCCESS ===  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] === ACTION ENCRYPT OLD DATA START ===  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] Checking permissions...  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] Permissions OK, logging security event  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] === ACTION ENCRYPT OLD DATA END SUCCESS ===  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] === ANALYZE DATA START ===  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] isAjax: true  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] isAdmin: true  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] isSuperAdmin: true  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] Starting analysis logic...  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] getCurrentTenantId() returned: 1  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] User ID: 1  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] User tenant_id: 1  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] User username: Aleš  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] About to call analyzeDataForEncryption...  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] Analysis result: {"clients_to_encrypt":1,"companies_to_encrypt":0,"total_records":1,"encryption_enabled":true,"analysis_timestamp":1756131617}  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] About to send JSON response...  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-20-17] AbortException caught:  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-24-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-24-23] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-24-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=06pjy&_fid=d10a 
+[2025-08-25 16-24-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-25 16-24-47] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-47] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=rh8j 
+[2025-08-25 16-24-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-24-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-24-50] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-24-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-24-55] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-25-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-03] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-03] 🔒 KROK 2: Klient ID:29 aktualizován se šifrováním  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-03] Šifrovaná data: {"ic":"pFh\/2HjBVG5dDtCOqVHII9\/M4d230iUBuLKdhfquZ5FsDGJV","dic":"qC37mLbd+QiNDj\/aqU+XxepAhtiqK3Pv6phCSksDj5wQlrv2l\/8=","email":"AGRc+3\/+snzfwSYEkD3eyldMVXZdWzN8NIdGngrlU26gDUmIVB69Y43JoFR1br3B","phone":""}  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-03] 🔒 KROK 2: Klient ID:44 aktualizován se šifrováním  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-03] Šifrovaná data: {"ic":"DiikBjpIDfhNWOF1Ys\/HvXHCd7UcP\/pR0pgFv\/Q7\/jfmPVDY","dic":"9b8QX6YjgpAXCYckAoxUhWLhercmeXKtqzQGfqeW83ESMWK3cJc=","email":"HCucY\/CnPARd4rIT7cQH877XTjFLGiuMeY9xQODWIWJptU9XWElh12rUrqgr","phone":""}  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-03] 🔒 KROK 2: Klient ID:45 aktualizován se šifrováním  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-03] Šifrovaná data: {"ic":"S7P8sYfEpVOhuoiP5zyoO\/mgOpsC+R3c\/pPjuzVJyvQG+z25","dic":"","email":"","phone":""}  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-04] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-04] 🔒 KROK 3: Firemní údaje aktualizovány se šifrováním  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-04] Šifrovaná data: {"ic":"XKs90629ABnlERUkiShzR6xdvZ+IVY17cHP4mfytIA8HCys+","dic":"","email":"rY8LE4nbG9H083yiL4lB6WjcmZM4r2+cP7evSNqMPf74kIaLWJ60f\/B8LWMa","phone":"kiPLU1Q6ycwD5fKtfDbb2sR\/lEd+DZ9X37wx+SvXVW\/+ruXO1BZ\/6q4=","bank_account":"TJq4JDqpEEW8WVPGaEUw0CemX2qekrexHrEAwhxfRX9wBeQiTDhPdGb21Q=="}  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-25-07] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-25-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-25] 🔒 KROK 2: Klient ID:26 aktualizován se šifrováním  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-25] Šifrovaná data: {"ic":"2bfdvFWHhPe3qbW0HycB2R7oa1fh2B\/jHN5a73oz9fQoco4Q","dic":"","email":"UyAD2HzT9wv6H7+r0LWIEVPgzOc+BhD51HmMmRfZ9IDLTal2bkjANPt1MYFlXw==","phone":"o9STQa4mzGEsnN3VscCp3z7LwRcL6gwhQrHpGRgCOjaLnzGh6cteU3N5rFw="}  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-25] 🔒 KROK 2: Klient ID:46 aktualizován se šifrováním  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-25] Šifrovaná data: {"ic":"GCa5s\/isViy6LSLl7dG3E\/5vBPapPNkxuTZw1QCYNQaNAsW+DfOJrLtdoPVHcNtJbQERZXQXutn96D02oo3A3JvGkznXqL2vp8KAMQ==","dic":"","email":"dIY9AQxL7dbpCexFzpnmw0NedTKzb\/qnFf0CFGnT6kvt0qJZwcQriXs4pNp19yc=","phone":""}  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-26] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-26] 🔒 KROK 3: Firemní údaje aktualizovány se šifrováním  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-26] Šifrovaná data: {"ic":"XEyeVoZtieKcLXHL+XOhYE2sp4UE5wKKz24wjFPN+Njoh3lt","dic":"","email":"aVDLvugS85NxiBoW9Lnw7EMB2STG3FA4p8hvF5ovis4XI03jug7WPgGooeh4","phone":"yQY6gq6RiHdxaJ2tZ6fDEcGnP\/6JSVT7BjqpW+vy+fpNu++7vW2Xbks=","bank_account":"eWKLOJSIzVGYxYIBsai3Jw9VJsXeOu2JS5PqiKj4Vw6Ab7AfGYryzIfhBg=="}  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-26] 🔒 KROK 3: Firemní údaje aktualizovány se šifrováním  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-26] Šifrovaná data: {"ic":"kzssV9gOAcMzss2KT163jSzgosA76oL63XO1BknbilyTlNOj","dic":"","email":"dMDNVuA4gqHx+25rhK2l\/W5aJSvJLaqlPSMmzaP66rYz7G2Nu1ArxEsJtsP7","phone":"a86U8tCAJqAzAIZ9WCG+uIJJJ6RNxYCA2HQdMUqVEmR8aVdr4E1\/oLw=","bank_account":"dJWcJqbvu9KUTTnLHdlJem64hJyixjTy33QtBRWjgWgy85WsqTEddiLXbg=="}  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-25-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-35] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/ 
+[2025-08-25 16-25-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-25-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-25-50] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-26-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-26-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-26-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-26-01] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-26-01] 🔒 KROK 3: Firemní údaje aktualizovány se šifrováním  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-26-01] Šifrovaná data: {"ic":"PyLTfUqmuRvHFK6mS+JRulkSfhE8ESZEMsAONKCsn7l9Mlx4","dic":"","email":"iIK0xI\/OfB6EvDa\/w9N\/kcsIWVvpgo\/8N7WWo+JJNgirmtAsKr86NwXRJ7y+","phone":"2yD9d9XmjnWTSu83IXjzLghJzf3EwqUzobfhzFqMCwPABHh5t78x6cU=","bank_account":"DDMP7hLV6aHjGrjb\/rhRUM2TDQeruM+uNrdUKQ6VetXsJD\/7vChZVcFOGA=="}  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-26-01] 🔒 KROK 3: Firemní údaje aktualizovány se šifrováním  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-26-01] Šifrovaná data: {"ic":"vaexIqOOv5jwPgEQTgiUHjAPtC5Agqxj1RG9frbkBhncrdrq","dic":"","email":"yFFPYbZUC3ZUUCWQYwmJhB1ZBhAOidwwLboCyMcURCS1baWZffkL78nwj7Nw","phone":"T+5lxIbyDwGtFmv64NyVjuwE4gpwkfQoxEqhhsOk744dLWjnCn1zhRM=","bank_account":"be5iOxyn7Ba6CO8IR1aWMx4OSoUsCQmOzxtK7OzWvJJnCPSOA1iVQ9U8CA=="}  @  http://localhost:8000/migration/encrypt-old-data?do=startEncryption 
+[2025-08-25 16-26-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-03] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/ 
+[2025-08-25 16-26-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-06] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data 
+[2025-08-25 16-26-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 
+[2025-08-25 16-26-07] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/encrypt-old-data?do=analyzeData 

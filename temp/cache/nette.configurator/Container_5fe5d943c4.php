@@ -687,6 +687,8 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->injectAntiSpam($this->getService('06'));
 		$service->injectMigrationService($this->getService('08'));
+		$service->injectClientsManager($this->getService('010'));
+		$service->injectCompanyManager($this->getService('011'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}

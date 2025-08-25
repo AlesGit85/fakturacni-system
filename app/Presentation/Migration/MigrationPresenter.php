@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Presentation\Migration;
 
-use App\Presentation\BasePresenter;
+use Tracy\ILogger;
+use Tracy\Debugger;
+use App\Model\ClientsManager;
+use App\Model\CompanyManager;
 use App\Model\MigrationService;
+use App\Presentation\BasePresenter;
 
 /**
  * Migration Presenter pro nástroje migrace dat
@@ -17,12 +21,51 @@ class MigrationPresenter extends BasePresenter
     protected array $requiredRoles = ['admin'];
 
     /** @var MigrationService */
-    private $migrationService;
+private $migrationService;
 
-    public function injectMigrationService(MigrationService $migrationService): void
-    {
-        $this->migrationService = $migrationService;
+/** @var ClientsManager */
+private $clientsManager;
+
+/** @var CompanyManager */
+private $companyManager;
+
+public function injectMigrationService(MigrationService $migrationService): void
+{
+    $this->migrationService = $migrationService;
+}
+
+public function injectClientsManager(ClientsManager $clientsManager): void
+{
+    $this->clientsManager = $clientsManager;
+}
+
+public function injectCompanyManager(CompanyManager $companyManager): void
+{
+    $this->companyManager = $companyManager;
+}
+
+/**
+ * MULTI-TENANCY: Nastavení tenant kontextu po spuštění presenteru
+ */
+public function startup(): void
+{
+    parent::startup();
+
+    // Nastavíme tenant kontext v manažerech
+    if ($this->clientsManager) {
+        $this->clientsManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
     }
+
+    if ($this->companyManager) {
+        $this->companyManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
+    }
+}
 
     /**
      * Hlavní stránka migračních nástrojů
@@ -48,166 +91,159 @@ class MigrationPresenter extends BasePresenter
     }
 
     /**
-     * Stránka pro šifrování starých dat
-     */
-    public function actionEncryptOldData(): void
-    {
-        if (!$this->isAdmin() && !$this->isSuperAdmin()) {
-            $this->error('Nemáte oprávnění pro spuštění šifrování dat', 403);
-        }
-
-        $this->securityLogger->logSecurityEvent(
-            'encryption_migration_access',
-            "Uživatel {$this->getUser()->getIdentity()->username} přistoupil k nástroji šifrování starých dat",
-            ['user_id' => $this->getUser()->getId()]
-        );
+ * Stránka pro šifrování starých dat
+ */
+public function actionEncryptOldData(): void
+{
+    if (!$this->isAdmin() && !$this->isSuperAdmin()) {
+        $this->error('Nemáte oprávnění pro spuštění šifrování dat', 403);
     }
 
-    public function renderEncryptOldData(): void
-    {
-        $this->template->pageTitle = 'Šifrování starých dat';
-        $this->template->isAdmin = $this->isAdmin();
-        $this->template->isSuperAdmin = $this->isSuperAdmin();
+    $this->securityLogger->logSecurityEvent(
+        'encryption_migration_access',
+        "Uživatel {$this->getUser()->getIdentity()->username} přistoupil k nástroji šifrování starých dat",
+        ['user_id' => $this->getUser()->getId()]
+    );
+}
+
+/**
+ * AJAX akce pro analýzu dat k šifrování - FINÁLNÍ OPRAVENÁ VERZE
+ */
+public function handleAnalyzeData(): void
+{
+    if (!$this->isAjax()) {
+        $this->error('Tato akce je dostupná pouze přes AJAX');
     }
 
-    /**
-     * AJAX akce pro analýzu dat k šifrování
-     */
-    public function handleAnalyzeData(): void
-    {
-        if (!$this->isAjax()) {
-            $this->error('Tato akce je dostupná pouze přes AJAX');
-        }
-
-        if (!$this->isAdmin() && !$this->isSuperAdmin()) {
-            $this->sendJson([
-                'success' => false,
-                'message' => 'Nemáte oprávnění pro analýzu dat'
-            ]);
-            return;
-        }
-
-        if (!$this->migrationService) {
-            $this->sendJson([
-                'success' => false,
-                'message' => 'MigrationService není dostupný'
-            ]);
-            return;
-        }
-
-        // Použijeme tenant ID 1 (můžeme později změnit na dynamické)
-        $tenantId = 1;
-
-        // Skutečná analýza
-        $analysisResult = $this->migrationService->analyzeDataForEncryption($tenantId);
-
+    if (!$this->isAdmin() && !$this->isSuperAdmin()) {
         $this->sendJson([
-            'success' => true,
-            'message' => 'Analýza dokončena',
-            'data' => $analysisResult
+            'success' => false,
+            'message' => 'Nemáte oprávnění pro analýzu dat'
         ]);
+        return;
     }
 
-    /**
-     * AJAX akce pro spuštění šifrování (batch processing)
-     */
-    public function handleStartEncryption(): void
-    {
-        if (!$this->isAjax()) {
-            $this->error('Tato akce je dostupná pouze přes AJAX');
+    if (!$this->migrationService) {
+        $this->sendJson([
+            'success' => false,
+            'message' => 'MigrationService není dostupný'
+        ]);
+        return;
+    }
+
+    // ✅ OPRAVA: Pro super admina použij null (všichni tenanti), jinak aktuální tenant
+    $tenantId = $this->isSuperAdmin() ? null : $this->getCurrentTenantId();
+    
+    // Logování spuštění
+    $this->securityLogger->logSecurityEvent(
+        'migration_analysis_started',
+        "Spuštěna analýza dat pro tenant ID: " . ($tenantId ?? 'ALL (super admin)'),
+        [
+            'user_id' => $this->getUser()->getId(),
+            'tenant_id' => $tenantId,
+            'is_super_admin' => $this->isSuperAdmin()
+        ]
+    );
+
+    // ✅ BEZ try-catch - necháme AbortException projít!
+    $analysisResult = $this->migrationService->analyzeDataForEncryption($tenantId);
+
+    $this->sendJson([
+        'success' => true,
+        'message' => 'Analýza dokončena',
+        'data' => $analysisResult
+    ]);
+}
+
+/**
+ * AJAX akce pro spuštění šifrování (batch processing) - FINÁLNÍ OPRAVENÁ VERZE
+ */
+public function handleStartEncryption(): void
+{
+    if (!$this->isAjax()) {
+        $this->error('Tato akce je dostupná pouze přes AJAX');
+    }
+    
+    if (!$this->isAdmin() && !$this->isSuperAdmin()) {
+        $this->sendJson([
+            'success' => false,
+            'message' => 'Nemáte oprávnění pro spuštění šifrování'
+        ]);
+        return;
+    }
+
+    // ✅ OPRAVA: Pro super admina použij null (všichni tenanti), jinak aktuální tenant
+    $tenantId = $this->isSuperAdmin() ? null : $this->getCurrentTenantId();
+    $session = $this->getSession('migration');
+    
+    if (!isset($session->encryption_progress)) {
+        $analysisResult = $this->migrationService->analyzeDataForEncryption($tenantId);
+        
+        $session->encryption_progress = [
+            'total' => $analysisResult['total_records'],
+            'processed' => 0,
+            'current_batch' => 0,
+            'errors' => 0,
+            'completed' => false,
+            'current_operation' => 'Inicializace...',
+            'clients_completed' => false,
+            'companies_completed' => false
+        ];
+    }
+    
+    $progress = $session->encryption_progress;
+    $batchSize = 10;
+    
+    if (!$progress['clients_completed']) {
+        $result = $this->migrationService->encryptClientsBatch($tenantId, $batchSize);
+        $progress['processed'] += $result['processed'];
+        $progress['errors'] += $result['errors'];
+        
+        if ($result['completed']) {
+            $progress['clients_completed'] = true;
+            $progress['current_operation'] = 'Klienti dokončeni, zpracovávám firemní údaje...';
+        } else {
+            $progress['current_operation'] = "Šifruji klienty: batch {$progress['current_batch']}";
         }
-
-        if (!$this->isAdmin() && !$this->isSuperAdmin()) {
-            $this->sendJson([
-                'success' => false,
-                'message' => 'Nemáte oprávnění pro spuštění šifrování'
-            ]);
-            return;
-        }
-
-        try {
-            $tenantId = $this->getCurrentTenantId();
-            $session = $this->getSession('migration');
-
-            if (!isset($session->encryption_progress)) {
-                $analysisResult = $this->migrationService->analyzeDataForEncryption($tenantId);
-
-                $session->encryption_progress = [
-                    'total' => $analysisResult['total_records'],
-                    'processed' => 0,
-                    'current_batch' => 0,
-                    'errors' => 0,
-                    'completed' => false,
-                    'current_operation' => 'Inicializace...',
-                    'clients_completed' => false,
-                    'companies_completed' => false
-                ];
-            }
-
-            $progress = $session->encryption_progress;
-            $batchSize = 10;
-
-            if (!$progress['clients_completed']) {
-                $result = $this->migrationService->encryptClientsBatch($tenantId, $batchSize);
-                $progress['processed'] += $result['processed'];
-                $progress['errors'] += $result['errors'];
-
-                if ($result['completed']) {
-                    $progress['clients_completed'] = true;
-                    $progress['current_operation'] = 'Klienti dokončeni, zpracovávám firemní údaje...';
-                } else {
-                    $progress['current_operation'] = "Šifruji klienty: batch {$progress['current_batch']}";
-                }
-            } elseif (!$progress['companies_completed']) {
-                $result = $this->migrationService->encryptCompaniesBatch($tenantId, $batchSize);
-                $progress['processed'] += $result['processed'];
-                $progress['errors'] += $result['errors'];
-
-                if ($result['completed']) {
-                    $progress['companies_completed'] = true;
-                    $progress['current_operation'] = 'Šifrování dokončeno';
-                    $progress['completed'] = true;
-                } else {
-                    $progress['current_operation'] = "Šifruji firemní údaje: batch {$progress['current_batch']}";
-                }
-            }
-
-            $progress['current_batch']++;
-            $session->encryption_progress = $progress;
-
-            if ($progress['completed']) {
-                $this->securityLogger->logSecurityEvent(
-                    'encryption_migration_completed',
-                    "Šifrování starých dat dokončeno: {$progress['processed']} záznamů, {$progress['errors']} chyb",
-                    [
-                        'user_id' => $this->getUser()->getId(),
-                        'tenant_id' => $tenantId,
-                        'total_processed' => $progress['processed'],
-                        'total_errors' => $progress['errors']
-                    ]
-                );
-
-                unset($session->encryption_progress);
-            }
-
-            $this->sendJson([
-                'success' => true,
-                'message' => $progress['completed'] ? 'Šifrování dokončeno' : 'Batch zpracován',
-                'data' => $progress
-            ]);
-        } catch (\Exception $e) {
-            $this->securityLogger->logSecurityEvent(
-                'encryption_migration_error',
-                "Chyba při šifrování starých dat: " . $e->getMessage(),
-                ['user_id' => $this->getUser()->getId()]
-            );
-
-            $this->sendJson([
-                'success' => false,
-                'message' => 'Chyba při šifrování: ' . $e->getMessage()
-            ]);
+    } elseif (!$progress['companies_completed']) {
+        $result = $this->migrationService->encryptCompaniesBatch($tenantId, $batchSize);
+        $progress['processed'] += $result['processed'];
+        $progress['errors'] += $result['errors'];
+        
+        if ($result['completed']) {
+            $progress['companies_completed'] = true;
+            $progress['current_operation'] = 'Šifrování dokončeno';
+            $progress['completed'] = true;
+        } else {
+            $progress['current_operation'] = "Šifruji firemní údaje: batch {$progress['current_batch']}";
         }
     }
+    
+    $progress['current_batch']++;
+    $session->encryption_progress = $progress;
+    
+    if ($progress['completed']) {
+        $this->securityLogger->logSecurityEvent(
+            'encryption_migration_completed',
+            "Šifrování starých dat dokončeno: {$progress['processed']} záznamů, {$progress['errors']} chyb",
+            [
+                'user_id' => $this->getUser()->getId(),
+                'tenant_id' => $tenantId,
+                'total_processed' => $progress['processed'],
+                'total_errors' => $progress['errors']
+            ]
+        );
+        
+        unset($session->encryption_progress);
+    }
+    
+    // ✅ BEZ try-catch - necháme AbortException projít!
+    $this->sendJson([
+        'success' => true,
+        'message' => $progress['completed'] ? 'Šifrování dokončeno' : 'Batch zpracován',
+        'data' => $progress
+    ]);
+}
 
     /**
      * AJAX akce pro testovací kontrolu připojení
