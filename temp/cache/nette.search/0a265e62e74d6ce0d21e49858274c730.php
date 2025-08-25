@@ -25,7 +25,7 @@ return array (
     'App\\Model\\ClientsManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ClientsManager.php',
-      1 => 1755870633,
+      1 => 1755873166,
     ),
     'App\\Model\\CompanyManager' => 
     array (
@@ -41,6 +41,11 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\InvoicesManager.php',
       1 => 1755075250,
+    ),
+    'App\\Model\\MigrationService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\MigrationService.php',
+      1 => 1755896567,
     ),
     'App\\Model\\ModuleManager' => 
     array (
@@ -151,6 +156,11 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
       1 => 1755077382,
+    ),
+    'App\\Presentation\\Migration\\MigrationPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Migration\\MigrationPresenter.php',
+      1 => 1756124762,
     ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (

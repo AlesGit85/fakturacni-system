@@ -1,0 +1,306 @@
+{* Migration Utility - Hlavní stránka nástrojů - Konzistentní design *}
+{block title}Migration Utility{/block}
+
+{block content}
+
+{* Hlavička stránky - stejný styl jako Security stránky *}
+<div class="security-page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1>🔄 Migration Utility</h1>
+            <p>Nástroje pro migraci a aktualizaci dat v systému</p>
+        </div>
+        <div class="security-header-actions">
+            <button id="testConnectionBtn" class="btn btn-outline-secondary" data-url="{link testConnection!}">
+                <i class="bi bi-wifi me-2"></i>Test připojení
+            </button>
+        </div>
+    </div>
+</div>
+
+{* Úvodní informace - stejný styl jako Security *}
+<div class="security-audit-intro">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card security-intro-card">
+                <div class="card-body">
+                    <div class="security-intro-icon">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </div>
+                    <h3 class="security-intro-title">Migration Tools</h3>
+                    <p class="security-intro-description">
+                        Nástroje pro bezpečnou migraci a aktualizaci dat v databázi.
+                        Všechny operace jsou logovány a lze je sledovat v reálném čase.
+                    </p>
+                    
+                    <div class="row security-intro-features">
+                        <div class="col-md-6">
+                            <div class="security-feature-section">
+                                <h6 class="security-feature-title">
+                                    <i class="bi bi-check-circle me-2"></i>Dostupné nástroje:
+                                </h6>
+                                <ul class="security-feature-list">
+                                    <li>Šifrování starých nezašifrovaných dat</li>
+                                    <li>Migrace klientů a firemních údajů</li>
+                                    <li>Analýza dat před migrací</li>
+                                    <li>Batch processing s progress tracking</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="security-feature-section">
+                                <h6 class="security-feature-title">
+                                    <i class="bi bi-shield-check me-2"></i>Bezpečnostní vlastnosti:
+                                </h6>
+                                <ul class="security-feature-list">
+                                    <li>AES-256-GCM šifrování</li>
+                                    <li>Atomické databázové transakce</li>
+                                    <li>Kompletní auditování změn</li>
+                                    <li>Rollback možnosti</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="security-intro-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Upozornění:</strong> Před spuštěním jakékoliv migrace doporučujeme vytvořit zálohu databáze.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* Systémové statistiky - podobné jako Security Dashboard *}
+<div class="row mb-4">
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card security-stat-card">
+            <div class="card-body">
+                <div class="security-stat-icon">
+                    <i class="bi bi-database-check"></i>
+                </div>
+                <div class="security-stat-label" id="dbStatus" style="color: #B1D235;">OK</div>
+                <div class="security-stat-label">Databázové připojení</div>
+                <div class="security-stat-subtitle">Stav systému</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card security-stat-card">
+            <div class="card-body">
+                <div class="security-stat-icon">
+                    <i class="bi bi-lock-fill"></i>
+                </div>
+                <div class="security-stat-label" style="color: #B1D235;">Aktivní</div>
+                <div class="security-stat-label">Šifrovací služba</div>
+                <div class="security-stat-subtitle">EncryptionService</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card security-stat-card">
+            <div class="card-body">
+                <div class="security-stat-icon">
+                    <i class="bi bi-person-check"></i>
+                </div>
+                <div class="security-stat-label" style="color: #B1D235;">
+                    {if $isSuperAdmin}Super Admin{else}Admin{/if}
+                </div>
+                <div class="security-stat-label">Oprávnění</div>
+                <div class="security-stat-subtitle">Aktuální role</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card security-stat-card">
+            <div class="card-body">
+                <div class="security-stat-icon">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="security-stat-label" style="color: #B1D235;">Připraveno</div>
+                <div class="security-stat-label">Migration Status</div>
+                <div class="security-stat-subtitle">Nástroje k dispozici</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* Dostupné nástroje - stejný styl jako Security Tools *}
+<div class="security-tools-section">
+    <h2 class="security-tools-title">Dostupné migrační nástroje</h2>
+    
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card security-tool-card">
+                <div class="card-header security-tool-header text-center">
+                    <div>
+                        <i class="bi bi-lock-fill security-tool-icon mb-2 d-block" style="font-size: 2.5rem;"></i>
+                        <h5 class="security-tool-title mb-1">Šifrování starých dat</h5>
+                        <small class="security-tool-subtitle">Data Encryption Migration</small>
+                    </div>
+                </div>
+                <div class="card-body security-tool-body">
+                    <p class="security-tool-description">
+                        Zašifruje všechna stará nezašifrovaná data v databázi pomocí AES-256-GCM šifrování.
+                        Podporuje klienty, firemní údaje a další citlivá data.
+                    </p>
+                    
+                    <div class="security-tool-features">
+                        <div class="security-feature-item">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            <span>Batch processing s progress barem</span>
+                        </div>
+                        <div class="security-feature-item">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            <span>Atomické databázové transakce</span>
+                        </div>
+                        <div class="security-feature-item">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            <span>Kompletní auditování změn</span>
+                        </div>
+                    </div>
+                    
+                    <div class="security-tool-actions text-center mt-4">
+                        <a href="{link encryptOldData}" class="btn security-tool-btn btn-primary">
+                            <i class="bi bi-play-circle me-2"></i>Spustit šifrování
+                        </a>
+                        <small class="security-tool-note d-block mt-2" style="color: #9fa5aa;">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Doporučujeme spustit v době mimo provoz
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card security-tool-card security-tool-card-placeholder">
+                <div class="card-header security-tool-header text-center">
+                    <div>
+                        <i class="bi bi-plus-circle security-tool-icon mb-2 d-block text-muted" style="font-size: 2.5rem;"></i>
+                        <h5 class="security-tool-title mb-1 text-muted">Další nástroje</h5>
+                        <small class="security-tool-subtitle text-muted">Připravuje se</small>
+                    </div>
+                </div>
+                <div class="card-body security-tool-body">
+                    <p class="security-tool-description text-muted">
+                        Zde budou postupně přibývat další migrační nástroje pro údržbu a aktualizaci systému.
+                        Naplánované: migrace uživatelských dat, optimalizace databáze, konverze formátů.
+                    </p>
+                    
+                    <div class="security-tool-features">
+                        <div class="security-feature-item text-muted">
+                            <i class="bi bi-clock me-2"></i>
+                            <span>Migrace uživatelských rolí</span>
+                        </div>
+                        <div class="security-feature-item text-muted">
+                            <i class="bi bi-clock me-2"></i>
+                            <span>Optimalizace databázových indexů</span>
+                        </div>
+                        <div class="security-feature-item text-muted">
+                            <i class="bi bi-clock me-2"></i>
+                            <span>Konverze starých formátů</span>
+                        </div>
+                    </div>
+                    
+                    <div class="security-tool-actions text-center">
+                        <button class="btn btn-outline-secondary" disabled>
+                            <i class="bi bi-clock me-2"></i>V přípravě
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* Toast kontejner pro notifikace *}
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="migrationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <i class="bi bi-info-circle-fill text-primary me-2"></i>
+            <strong class="me-auto">Migration Utility</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <!-- Obsah bude vložen JavaScriptem -->
+        </div>
+    </div>
+</div>
+
+{* JavaScript pro základní funkčnost *}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Test připojení k databázi
+    const testConnectionBtn = document.getElementById('testConnectionBtn');
+    if (testConnectionBtn) {
+        testConnectionBtn.addEventListener('click', function() {
+            const url = this.dataset.url;
+            
+            // Změna stavu tlačítka
+            this.disabled = true;
+            this.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Testuje se...';
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Zobrazení výsledku
+                showToast(data.success ? 'success' : 'error', data.message);
+                
+                // Aktualizace status indikátoru
+                const dbStatus = document.getElementById('dbStatus');
+                if (data.success) {
+                    dbStatus.textContent = 'OK';
+                    dbStatus.parentElement.querySelector('.security-stat-icon i').className = 'bi bi-database-check';
+                } else {
+                    dbStatus.textContent = 'Chyba';
+                    dbStatus.parentElement.querySelector('.security-stat-icon i').className = 'bi bi-database-x';
+                }
+            })
+            .catch(error => {
+                showToast('error', 'Chyba při testování připojení');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                // Obnovení tlačítka
+                this.disabled = false;
+                this.innerHTML = '<i class="bi bi-wifi me-2"></i>Test připojení';
+            });
+        });
+    }
+    
+    // Funkce pro zobrazení toast notifikace
+    function showToast(type, message) {
+        const toast = document.getElementById('migrationToast');
+        const toastBody = toast.querySelector('.toast-body');
+        const toastHeader = toast.querySelector('.toast-header i');
+        
+        // Nastavení typu a zprávy
+        toastBody.textContent = message;
+        
+        // Změna ikony podle typu
+        if (type === 'success') {
+            toastHeader.className = 'bi bi-check-circle-fill text-success me-2';
+        } else if (type === 'error') {
+            toastHeader.className = 'bi bi-exclamation-circle-fill text-danger me-2';
+        } else {
+            toastHeader.className = 'bi bi-info-circle-fill text-primary me-2';
+        }
+        
+        // Zobrazení toast
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+    }
+});
+</script>
+
+{/block}

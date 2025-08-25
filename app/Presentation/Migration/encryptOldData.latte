@@ -1,0 +1,419 @@
+{* Šifrování starých dat - konzistentní design *}
+{block title}Šifrování starých dat{/block}
+
+{block content}
+
+{* Hlavička stránky *}
+<div class="security-page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1>🔒 Šifrování starých dat</h1>
+            <p>Migrace nezašifrovaných dat na AES-256-GCM šifrování</p>
+        </div>
+        <div class="security-header-actions">
+            <a href="{link default}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Zpět na přehled
+            </a>
+        </div>
+    </div>
+</div>
+
+{* Stav migrace *}
+<div id="migrationStatus" class="mb-4">
+    <div class="row">
+        <div class="col-md-4 col-sm-6 mb-3">
+            <div class="card security-stat-card">
+                <div class="card-body">
+                    <div class="security-stat-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <div class="security-stat-number" id="clientsToEncrypt">-</div>
+                    <div class="security-stat-label">Klienti k šifrování</div>
+                    <div class="security-stat-subtitle">Nezašifrovaná data</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 col-sm-6 mb-3">
+            <div class="card security-stat-card">
+                <div class="card-body">
+                    <div class="security-stat-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <div class="security-stat-number" id="companiesToEncrypt">-</div>
+                    <div class="security-stat-label">Firemní údaje</div>
+                    <div class="security-stat-subtitle">K šifrování</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 col-sm-6 mb-3">
+            <div class="card security-stat-card">
+                <div class="card-body">
+                    <div class="security-stat-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <div class="security-stat-number" id="encryptionStatus">Analyzuje se...</div>
+                    <div class="security-stat-label">Stav šifrování</div>
+                    <div class="security-stat-subtitle">Aktuální status</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* Analýza dat - úvodní stav *}
+<div id="dataAnalysis" class="security-audit-intro">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <div class="card security-intro-card">
+                <div class="card-body">
+                    <div class="security-intro-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <h3 class="security-intro-title">Analýza dat pro šifrování</h3>
+                    <p class="security-intro-description">
+                        Systém analyzuje databázi a identifikuje nezašifrovaná citlivá data, 
+                        která je třeba migrovat na bezpečné AES-256-GCM šifrování.
+                    </p>
+                    
+                    <div class="row security-intro-features">
+                        <div class="col-md-6">
+                            <div class="security-feature-section">
+                                <h6 class="security-feature-title">
+                                    <i class="bi bi-check-circle me-2"></i>Co bude šifrováno:
+                                </h6>
+                                <ul class="security-feature-list">
+                                    <li>E-mailové adresy klientů</li>
+                                    <li>Telefonní čísla</li>
+                                    <li>Adresy a IČ klientů</li>
+                                    <li>Firemní kontaktní údaje</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="security-feature-section">
+                                <h6 class="security-feature-title">
+                                    <i class="bi bi-shield-check me-2"></i>Bezpečnostní funkce:
+                                </h6>
+                                <ul class="security-feature-list">
+                                    <li>AES-256-GCM šifrování</li>
+                                    <li>Batch processing po 10 záznamech</li>
+                                    <li>Atomické databázové transakce</li>
+                                    <li>Kompletní auditní záznam</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button id="analyzeDataBtn" class="btn security-tool-btn btn-primary me-3" data-url="{link analyzeData!}">
+                            <i class="bi bi-search me-2"></i>Spustit analýzu
+                        </button>
+                        <button id="startEncryptionBtn" class="btn btn-success" style="display: none;" data-url="{link startEncryption!}">
+                            <i class="bi bi-lock-fill me-2"></i>Zahájit šifrování
+                        </button>
+                    </div>
+                    
+                    <div class="security-intro-warning mt-4">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Upozornění:</strong> Proces šifrování nelze vrátit zpět. Ujistěte se, že máte zálohu databáze.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* Progress sekce - skrytá na začátku *}
+<div id="encryptionProgress" class="security-tools-section" style="display: none;">
+    <h2 class="security-tools-title">Průběh šifrování</h2>
+    
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <h5 id="progressTitle">Šifrování dat...</h5>
+                        <p id="progressDescription" class="text-muted">Zpracovávám záznamy v bezpečných batch operacích</p>
+                    </div>
+                    
+                    {* Progress bar *}
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted">Celkový průběh:</span>
+                            <span id="progressPercentage" class="fw-bold">0%</span>
+                        </div>
+                        <div class="progress" style="height: 12px;">
+                            <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%; background: linear-gradient(90deg, #B1D235 0%, #95B11F 100%);"></div>
+                        </div>
+                    </div>
+                    
+                    {* Detailní statistiky *}
+                    <div class="row text-center">
+                        <div class="col-3">
+                            <div class="border rounded p-3">
+                                <div class="h5 mb-1" id="processedCount">0</div>
+                                <small class="text-muted">Zpracováno</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="border rounded p-3">
+                                <div class="h5 mb-1" id="totalCount">0</div>
+                                <small class="text-muted">Celkem</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="border rounded p-3">
+                                <div class="h5 mb-1" id="currentBatch">0</div>
+                                <small class="text-muted">Aktuální batch</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="border rounded p-3">
+                                <div class="h5 mb-1" id="errorsCount">0</div>
+                                <small class="text-muted">Chyby</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {* Aktuální operace *}
+                    <div class="mt-4">
+                        <h6>Aktuální operace:</h6>
+                        <div id="currentOperation" class="alert alert-info">
+                            <i class="bi bi-hourglass-split me-2"></i>
+                            <span id="operationText">Čekám na spuštění...</span>
+                        </div>
+                    </div>
+                    
+                    {* Kontrolní tlačítka *}
+                    <div class="text-center mt-4">
+                        <button id="pauseEncryptionBtn" class="btn btn-warning me-2" style="display: none;">
+                            <i class="bi bi-pause-fill me-2"></i>Pozastavit
+                        </button>
+                        <button id="stopEncryptionBtn" class="btn btn-danger" style="display: none;">
+                            <i class="bi bi-stop-fill me-2"></i>Zastavit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* Výsledky - zobrazí se po dokončení *}
+<div id="encryptionResults" class="security-tools-section" style="display: none;">
+    <h2 class="security-tools-title">Výsledky šifrování</h2>
+    
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i id="resultIcon" class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 id="resultTitle">Šifrování dokončeno úspěšně!</h4>
+                    <p id="resultDescription" class="text-muted">Všechna citlivá data byla bezpečně zašifrována.</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="border rounded p-3">
+                                <div class="h4 mb-1" id="resultProcessed">0</div>
+                                <small class="text-muted">Zašifrováno záznamů</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="border rounded p-3">
+                                <div class="h4 mb-1" id="resultDuration">0s</div>
+                                <small class="text-muted">Doba trvání</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="{link default}" class="btn btn-primary">
+                            <i class="bi bi-arrow-left me-2"></i>Zpět na přehled
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{* JavaScript pro řízení procesu *}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let encryptionInProgress = false;
+    let encryptionStartTime = null;
+    
+    // Spuštění analýzy dat
+    const analyzeBtn = document.getElementById('analyzeDataBtn');
+    if (analyzeBtn) {
+        analyzeBtn.addEventListener('click', function() {
+            analyzeData();
+        });
+    }
+    
+    // Spuštění šifrování
+    const startBtn = document.getElementById('startEncryptionBtn');
+    if (startBtn) {
+        startBtn.addEventListener('click', function() {
+            startEncryption();
+        });
+    }
+    
+    // Automatická analýza při načtení stránky
+    setTimeout(() => {
+        analyzeData();
+    }, 500);
+    
+    // Analýza dat
+    function analyzeData() {
+        const btn = document.getElementById('analyzeDataBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Analyzuje se...';
+        
+        fetch(btn.dataset.url, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data['success']) {
+                updateAnalysisResults(data['data']);
+                
+                // Zobraz tlačítko pro start pokud jsou data k šifrování
+                if (data['data']['clients_to_encrypt'] > 0 || data['data']['companies_to_encrypt'] > 0) {
+                    document.getElementById('startEncryptionBtn').style.display = 'inline-block';
+                }
+            } else {
+                showError('Chyba při analýze: ' + data['message']);
+            }
+        })
+        .catch(error => {
+            showError('Chyba při analýze dat');
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-search me-2"></i>Spustit analýzu';
+        });
+    }
+    
+    // Aktualizace výsledků analýzy
+    function updateAnalysisResults(data) {
+        document.getElementById('clientsToEncrypt').textContent = data['clients_to_encrypt'];
+        document.getElementById('companiesToEncrypt').textContent = data['companies_to_encrypt'];
+        
+        const status = document.getElementById('encryptionStatus');
+        if (data['clients_to_encrypt'] === 0 && data['companies_to_encrypt'] === 0) {
+            status.textContent = 'Vše zašifrováno';
+            status.parentElement.querySelector('.security-stat-icon i').className = 'bi bi-shield-check';
+        } else {
+            status.textContent = 'Vyžaduje šifrování';
+            status.parentElement.querySelector('.security-stat-icon i').className = 'bi bi-shield-exclamation';
+        }
+    }
+    
+    // Spuštění šifrování
+    function startEncryption() {
+        if (encryptionInProgress) return;
+        
+        encryptionInProgress = true;
+        encryptionStartTime = Date.now();
+        
+        // Skrytí analýzy a zobrazení progress
+        document.getElementById('dataAnalysis').style.display = 'none';
+        document.getElementById('encryptionProgress').style.display = 'block';
+        
+        // Start šifrování
+        runEncryptionBatch();
+    }
+    
+    // Spuštění batch operace
+    function runEncryptionBatch() {
+        const startBtn = document.getElementById('startEncryptionBtn');
+        
+        fetch(startBtn.dataset.url, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data['success']) {
+                updateProgress(data['data']);
+                
+                if (data['data']['completed']) {
+                    showResults(data['data']);
+                } else {
+                    // Pokračování v dalším batch
+                    setTimeout(() => {
+                        if (encryptionInProgress) {
+                            runEncryptionBatch();
+                        }
+                    }, 500);
+                }
+            } else {
+                showError('Chyba při šifrování: ' + data['message']);
+                encryptionInProgress = false;
+            }
+        })
+        .catch(error => {
+            showError('Chyba při šifrování dat');
+            console.error('Error:', error);
+            encryptionInProgress = false;
+        });
+    }
+    
+    // Aktualizace progress baru
+    function updateProgress(data) {
+        const percentage = Math.round((data['processed'] / data['total']) * 100);
+        
+        document.getElementById('progressPercentage').textContent = percentage + '%';
+        document.getElementById('progressBar').style.width = percentage + '%';
+        document.getElementById('processedCount').textContent = data['processed'];
+        document.getElementById('totalCount').textContent = data['total'];
+        document.getElementById('currentBatch').textContent = data['current_batch'] || 0;
+        document.getElementById('errorsCount').textContent = data['errors'] || 0;
+        document.getElementById('operationText').textContent = data['current_operation'] || 'Zpracovávám data...';
+    }
+    
+    // Zobrazení výsledků
+    function showResults(data) {
+        encryptionInProgress = false;
+        
+        document.getElementById('encryptionProgress').style.display = 'none';
+        document.getElementById('encryptionResults').style.display = 'block';
+        
+        document.getElementById('resultProcessed').textContent = data['processed'];
+        
+        const duration = Math.round((Date.now() - encryptionStartTime) / 1000);
+        document.getElementById('resultDuration').textContent = duration + 's';
+        
+        if (data['errors'] > 0) {
+            document.getElementById('resultIcon').className = 'bi bi-exclamation-triangle-fill text-warning';
+            document.getElementById('resultTitle').textContent = 'Šifrování dokončeno s upozorněními';
+            document.getElementById('resultDescription').textContent = 'Zpracováno ' + data['processed'] + ' záznamů, ' + data['errors'] + ' chyb.';
+        }
+    }
+    
+    // Zobrazení chyby
+    function showError(message) {
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-danger alert-dismissible';
+        alert.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2"></i>' + 
+            message + 
+            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
+        
+        const container = document.querySelector('.container');
+        container.insertBefore(alert, container.firstChild);
+    }
+});
+</script>
+
+{/block}

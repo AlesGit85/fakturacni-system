@@ -75,6 +75,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\Application\Routers\RouteList' => [['router']],
@@ -88,14 +89,15 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 		'App\Security\SecurityValidator' => [['05']],
 		'App\Security\AntiSpam' => [['06']],
 		'App\Security\EncryptionService' => [['07']],
-		'App\Model\InvoicesManager' => [['08']],
-		'App\Model\ClientsManager' => [['09']],
-		'App\Model\CompanyManager' => [['010']],
-		'App\Model\QrPaymentService' => [['011']],
-		'App\Model\AresService' => [['012']],
-		'App\Model\EmailService' => [['013']],
-		'App\Model\TenantManager' => [['014']],
-		'App\Security\SQLSecurityAudit' => [['015']],
+		'App\Model\MigrationService' => [['08']],
+		'App\Model\InvoicesManager' => [['09']],
+		'App\Model\ClientsManager' => [['010']],
+		'App\Model\CompanyManager' => [['011']],
+		'App\Model\QrPaymentService' => [['012']],
+		'App\Model\AresService' => [['013']],
+		'App\Model\EmailService' => [['014']],
+		'App\Model\TenantManager' => [['015']],
+		'App\Security\SQLSecurityAudit' => [['016']],
 		'App\Presentation\BasePresenter' => [
 			2 => [
 				'application.1',
@@ -108,6 +110,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\Application\UI\Presenter' => [
@@ -123,6 +126,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\Application\UI\Control' => [
@@ -138,6 +142,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\Application\UI\Component' => [
@@ -153,6 +158,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\ComponentModel\Container' => [
@@ -168,6 +174,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\ComponentModel\Component' => [
@@ -183,6 +190,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\ComponentModel\IComponent' => [
@@ -198,6 +206,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\ComponentModel\IContainer' => [
@@ -213,6 +222,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\Application\UI\SignalReceiver' => [
@@ -228,6 +238,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\Application\UI\StatePersistent' => [
@@ -243,6 +254,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\Application\UI\Renderable' => [
@@ -258,6 +270,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.10',
 				'application.11',
 				'application.12',
+				'application.13',
 			],
 		],
 		'Nette\Application\IPresenter' => [
@@ -276,6 +289,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 				'application.12',
 				'application.13',
 				'application.14',
+				'application.15',
 			],
 		],
 		'App\Presentation\Clients\ClientsPresenter' => [2 => ['application.1']],
@@ -283,18 +297,19 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 		'App\Presentation\Error\Error5xx\Error5xxPresenter' => [2 => ['application.3']],
 		'App\Presentation\Home\HomePresenter' => [2 => ['application.4']],
 		'App\Presentation\Invoices\InvoicesPresenter' => [2 => ['application.5']],
-		'App\Presentation\Modules\DetailPresenter' => [2 => ['application.6']],
-		'App\Presentation\ModuleAdmin\ModuleAdminPresenter' => [2 => ['application.7']],
-		'App\Presentation\Security\SecurityPresenter' => [2 => ['application.8']],
-		'App\Presentation\Settings\SettingsPresenter' => [2 => ['application.9']],
-		'App\Presentation\Sign\SignPresenter' => [2 => ['application.10']],
-		'App\Presentation\Tenants\TenantsPresenter' => [2 => ['application.11']],
-		'App\Presentation\Users\UsersPresenter' => [2 => ['application.12']],
-		'NetteModule\ErrorPresenter' => [2 => ['application.13']],
-		'NetteModule\MicroPresenter' => [2 => ['application.14']],
-		'App\Core\RouterFactory' => [['016']],
-		'Modules\Tenant1\Financial_reports\FinancialReportsService' => [['017']],
-		'Modules\Tenant12\Financial_reports\FinancialReportsService' => [['018']],
+		'App\Presentation\Migration\MigrationPresenter' => [2 => ['application.6']],
+		'App\Presentation\Modules\DetailPresenter' => [2 => ['application.7']],
+		'App\Presentation\ModuleAdmin\ModuleAdminPresenter' => [2 => ['application.8']],
+		'App\Presentation\Security\SecurityPresenter' => [2 => ['application.9']],
+		'App\Presentation\Settings\SettingsPresenter' => [2 => ['application.10']],
+		'App\Presentation\Sign\SignPresenter' => [2 => ['application.11']],
+		'App\Presentation\Tenants\TenantsPresenter' => [2 => ['application.12']],
+		'App\Presentation\Users\UsersPresenter' => [2 => ['application.13']],
+		'NetteModule\ErrorPresenter' => [2 => ['application.14']],
+		'NetteModule\MicroPresenter' => [2 => ['application.15']],
+		'App\Core\RouterFactory' => [['017']],
+		'Modules\Tenant1\Financial_reports\FinancialReportsService' => [['018']],
+		'Modules\Tenant12\Financial_reports\FinancialReportsService' => [['019']],
 	];
 
 
@@ -346,43 +361,55 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	}
 
 
-	public function createService08(): App\Model\InvoicesManager
+	public function createService08(): App\Model\MigrationService
+	{
+		return new App\Model\MigrationService(
+			$this->getService('database.default.explorer'),
+			$this->getService('07'),
+			$this->getService('01'),
+			$this->getService('010'),
+			$this->getService('011'),
+		);
+	}
+
+
+	public function createService09(): App\Model\InvoicesManager
 	{
 		return new App\Model\InvoicesManager($this->getService('database.default.explorer'));
 	}
 
 
-	public function createService09(): App\Model\ClientsManager
+	public function createService010(): App\Model\ClientsManager
 	{
 		return new App\Model\ClientsManager($this->getService('database.default.explorer'), $this->getService('07'));
 	}
 
 
-	public function createService010(): App\Model\CompanyManager
+	public function createService011(): App\Model\CompanyManager
 	{
 		return new App\Model\CompanyManager($this->getService('database.default.explorer'), $this->getService('07'));
 	}
 
 
-	public function createService011(): App\Model\QrPaymentService
+	public function createService012(): App\Model\QrPaymentService
 	{
 		return new App\Model\QrPaymentService;
 	}
 
 
-	public function createService012(): App\Model\AresService
+	public function createService013(): App\Model\AresService
 	{
 		return new App\Model\AresService($this->getService('tracy.logger'));
 	}
 
 
-	public function createService013(): App\Model\EmailService
+	public function createService014(): App\Model\EmailService
 	{
 		return new App\Model\EmailService($this->getService('mail.mailer'), $this->getService('application.linkGenerator'));
 	}
 
 
-	public function createService014(): App\Model\TenantManager
+	public function createService015(): App\Model\TenantManager
 	{
 		return new App\Model\TenantManager(
 			$this->getService('database.default.explorer'),
@@ -392,33 +419,33 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	}
 
 
-	public function createService015(): App\Security\SQLSecurityAudit
+	public function createService016(): App\Security\SQLSecurityAudit
 	{
 		return new App\Security\SQLSecurityAudit($this->getService('database.default.explorer'));
 	}
 
 
-	public function createService016(): App\Core\RouterFactory
+	public function createService017(): App\Core\RouterFactory
 	{
 		return new App\Core\RouterFactory;
 	}
 
 
-	public function createService017(): Modules\Tenant1\Financial_reports\FinancialReportsService
+	public function createService018(): Modules\Tenant1\Financial_reports\FinancialReportsService
 	{
 		return new Modules\Tenant1\Financial_reports\FinancialReportsService(
-			$this->getService('08'),
-			$this->getService('010'),
+			$this->getService('09'),
+			$this->getService('011'),
 			$this->getService('database.default.explorer'),
 		);
 	}
 
 
-	public function createService018(): Modules\Tenant12\Financial_reports\FinancialReportsService
+	public function createService019(): Modules\Tenant12\Financial_reports\FinancialReportsService
 	{
 		return new Modules\Tenant12\Financial_reports\FinancialReportsService(
-			$this->getService('08'),
-			$this->getService('010'),
+			$this->getService('09'),
+			$this->getService('011'),
 			$this->getService('database.default.explorer'),
 		);
 	}
@@ -427,9 +454,9 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	public function createServiceApplication__1(): App\Presentation\Clients\ClientsPresenter
 	{
 		$service = new App\Presentation\Clients\ClientsPresenter(
-			$this->getService('09'),
+			$this->getService('010'),
 			$this->getService('database.default.explorer'),
-			$this->getService('012'),
+			$this->getService('013'),
 			$this->getService('tracy.logger'),
 		);
 		$service->injectPrimary(
@@ -451,13 +478,35 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	}
 
 
-	public function createServiceApplication__10(): App\Presentation\Sign\SignPresenter
+	public function createServiceApplication__10(): App\Presentation\Settings\SettingsPresenter
+	{
+		$service = new App\Presentation\Settings\SettingsPresenter($this->getService('011'), $this->getService('tracy.logger'));
+		$service->injectPrimary(
+			$this->getService('http.request'),
+			$this->getService('http.response'),
+			$this->getService('application.presenterFactory'),
+			$this->getService('router'),
+			$this->getService('session.session'),
+			$this->getService('security.user'),
+			$this->getService('latte.templateFactory'),
+		);
+		$service->injectSecurityLogger($this->getService('01'));
+		$service->injectRateLimiter($this->getService('02'));
+		$service->injectModuleManager($this->getService('04'));
+		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->injectAntiSpam($this->getService('06'));
+		$service->invalidLinkMode = 5;
+		return $service;
+	}
+
+
+	public function createServiceApplication__11(): App\Presentation\Sign\SignPresenter
 	{
 		$service = new App\Presentation\Sign\SignPresenter(
 			$this->getService('authenticator'),
 			$this->getService('01'),
-			$this->getService('013'),
 			$this->getService('014'),
+			$this->getService('015'),
 			$this->getService('02'),
 			$this->getService('database.default.explorer'),
 			$this->getService('04'),
@@ -482,11 +531,11 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	}
 
 
-	public function createServiceApplication__11(): App\Presentation\Tenants\TenantsPresenter
+	public function createServiceApplication__12(): App\Presentation\Tenants\TenantsPresenter
 	{
 		$service = new App\Presentation\Tenants\TenantsPresenter(
-			$this->getService('014'),
-			$this->getService('012'),
+			$this->getService('015'),
+			$this->getService('013'),
 			$this->getService('tracy.logger'),
 		);
 		$service->injectPrimary(
@@ -508,7 +557,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	}
 
 
-	public function createServiceApplication__12(): App\Presentation\Users\UsersPresenter
+	public function createServiceApplication__13(): App\Presentation\Users\UsersPresenter
 	{
 		$service = new App\Presentation\Users\UsersPresenter($this->getService('authenticator'));
 		$service->injectPrimary(
@@ -530,13 +579,13 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	}
 
 
-	public function createServiceApplication__13(): NetteModule\ErrorPresenter
+	public function createServiceApplication__14(): NetteModule\ErrorPresenter
 	{
 		return new NetteModule\ErrorPresenter($this->getService('tracy.logger'));
 	}
 
 
-	public function createServiceApplication__14(): NetteModule\MicroPresenter
+	public function createServiceApplication__15(): NetteModule\MicroPresenter
 	{
 		return new NetteModule\MicroPresenter($this, $this->getService('http.request'), $this->getService('router'));
 	}
@@ -568,9 +617,9 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	public function createServiceApplication__4(): App\Presentation\Home\HomePresenter
 	{
 		$service = new App\Presentation\Home\HomePresenter(
-			$this->getService('08'),
 			$this->getService('09'),
 			$this->getService('010'),
+			$this->getService('011'),
 			$this->getService('authenticator'),
 			$this->getService('04'),
 		);
@@ -596,10 +645,10 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	public function createServiceApplication__5(): App\Presentation\Invoices\InvoicesPresenter
 	{
 		$service = new App\Presentation\Invoices\InvoicesPresenter(
-			$this->getService('08'),
 			$this->getService('09'),
 			$this->getService('010'),
 			$this->getService('011'),
+			$this->getService('012'),
 		);
 		$service->injectPrimary(
 			$this->getService('http.request'),
@@ -620,7 +669,30 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	}
 
 
-	public function createServiceApplication__6(): App\Presentation\Modules\DetailPresenter
+	public function createServiceApplication__6(): App\Presentation\Migration\MigrationPresenter
+	{
+		$service = new App\Presentation\Migration\MigrationPresenter;
+		$service->injectPrimary(
+			$this->getService('http.request'),
+			$this->getService('http.response'),
+			$this->getService('application.presenterFactory'),
+			$this->getService('router'),
+			$this->getService('session.session'),
+			$this->getService('security.user'),
+			$this->getService('latte.templateFactory'),
+		);
+		$service->injectSecurityLogger($this->getService('01'));
+		$service->injectRateLimiter($this->getService('02'));
+		$service->injectModuleManager($this->getService('04'));
+		$service->injectDatabase($this->getService('database.default.explorer'));
+		$service->injectAntiSpam($this->getService('06'));
+		$service->injectMigrationService($this->getService('08'));
+		$service->invalidLinkMode = 5;
+		return $service;
+	}
+
+
+	public function createServiceApplication__7(): App\Presentation\Modules\DetailPresenter
 	{
 		$service = new App\Presentation\Modules\DetailPresenter($this->getService('04'));
 		$service->injectPrimary(
@@ -642,13 +714,13 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	}
 
 
-	public function createServiceApplication__7(): App\Presentation\ModuleAdmin\ModuleAdminPresenter
+	public function createServiceApplication__8(): App\Presentation\ModuleAdmin\ModuleAdminPresenter
 	{
 		$service = new App\Presentation\ModuleAdmin\ModuleAdminPresenter(
 			$this->getService('04'),
 			$this->getService('tracy.logger'),
-			$this->getService('08'),
-			$this->getService('010'),
+			$this->getService('09'),
+			$this->getService('011'),
 			$this->getService('database.default.explorer'),
 		);
 		$service->injectPrimary(
@@ -670,7 +742,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 	}
 
 
-	public function createServiceApplication__8(): App\Presentation\Security\SecurityPresenter
+	public function createServiceApplication__9(): App\Presentation\Security\SecurityPresenter
 	{
 		$service = new App\Presentation\Security\SecurityPresenter;
 		$service->injectPrimary(
@@ -687,29 +759,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->injectAntiSpam($this->getService('06'));
-		$service->injectSqlAudit($this->getService('015'));
-		$service->invalidLinkMode = 5;
-		return $service;
-	}
-
-
-	public function createServiceApplication__9(): App\Presentation\Settings\SettingsPresenter
-	{
-		$service = new App\Presentation\Settings\SettingsPresenter($this->getService('010'), $this->getService('tracy.logger'));
-		$service->injectPrimary(
-			$this->getService('http.request'),
-			$this->getService('http.response'),
-			$this->getService('application.presenterFactory'),
-			$this->getService('router'),
-			$this->getService('session.session'),
-			$this->getService('security.user'),
-			$this->getService('latte.templateFactory'),
-		);
-		$service->injectSecurityLogger($this->getService('01'));
-		$service->injectRateLimiter($this->getService('02'));
-		$service->injectModuleManager($this->getService('04'));
-		$service->injectDatabase($this->getService('database.default.explorer'));
-		$service->injectAntiSpam($this->getService('06'));
+		$service->injectSqlAudit($this->getService('016'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}

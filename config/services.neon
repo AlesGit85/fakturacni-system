@@ -39,6 +39,13 @@ services:
 	- App\Security\EncryptionService
 
 	# =====================================================
+	# MIGRATION SERVICE
+	# =====================================================
+	
+	# Migration service pro šifrování starých dat
+	- App\Model\MigrationService
+
+	# =====================================================
 	# MANAGERY
 	# =====================================================
 	

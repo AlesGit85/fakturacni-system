@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 	<link rel="stylesheet" href="{$basePath}/css/style.css">
 	<link rel="stylesheet" href="{$basePath}/css/anti-spam.css">
+
 	
 	{* OPRAVA: Zahrnutí head bloku z podšablon *}
 	{ifset head}{include head}{/ifset}
@@ -98,7 +99,7 @@
 					</li>
 					{/if}
 					
-					{* Administrátorské sekce - pouze pro běžné adminy (ale ne super admin) *}
+					{* Administratorské sekce - pouze pro běžné adminy (ale ne super admin) *}
 					{if isset($isUserAdmin) && $isUserAdmin && !$isSuperAdmin}
 					<li class="nav-item">
 						<a class="nav-link" n:href=":Settings:default">
@@ -136,6 +137,24 @@
 									<li>
 										<a class="dropdown-item" n:href="Security:sqlAudit">
 											<i class="bi bi-search me-2"></i>SQL Security Audit
+										</a>
+									</li>
+								</ul>
+							</li>
+							<li class="dropdown-submenu">
+								<a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">
+									<i class="bi bi-arrow-repeat me-2"></i>Migrace
+									<i class="bi bi-chevron-right ms-auto"></i>
+								</a>
+								<ul class="dropdown-menu dropdown-submenu-menu">
+									<li>
+										<a class="dropdown-item" n:href="Migration:default">
+											<i class="bi bi-house-door me-2"></i>Přehled nástrojů
+										</a>
+									</li>
+									<li>
+										<a class="dropdown-item" n:href="Migration:encryptOldData">
+											<i class="bi bi-lock-fill me-2"></i>Šifrování starých dat
 										</a>
 									</li>
 								</ul>
@@ -208,6 +227,26 @@
 									<li>
 										<a class="dropdown-item" n:href="Security:default">
 											<i class="bi bi-house-door me-2"></i>Přehled nástrojů
+										</a>
+									</li>
+								</ul>
+							</li>
+							<li><hr class="dropdown-divider"></li>
+							{* Migrace submenu pro super admina *}
+							<li class="dropdown-submenu">
+								<a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">
+									<i class="bi bi-arrow-repeat me-2" style="color: #B1D235;"></i>Migrace
+									<i class="bi bi-chevron-right ms-auto"></i>
+								</a>
+								<ul class="dropdown-menu dropdown-submenu-menu">
+									<li>
+										<a class="dropdown-item" n:href="Migration:default">
+											<i class="bi bi-house-door me-2"></i>Přehled nástrojů
+										</a>
+									</li>
+									<li>
+										<a class="dropdown-item" n:href="Migration:encryptOldData">
+											<i class="bi bi-lock-fill me-2"></i>Šifrování starých dat
 										</a>
 									</li>
 								</ul>

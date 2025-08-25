@@ -1,436 +1,197 @@
+{* Security Tools Default Page *}
+{block title}Bezpečnostní nástroje{/block}
+
 {block content}
 
-<div class="home-container">
-    <!-- Uvítací sekce -->
-    <div class="welcome-section mb-4">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="welcome-title mb-2">
-                    {if $userDisplayName}
-                        {* ✅ XSS OCHRANA: Escapování jména uživatele *}
-                        Vítejte zpět, {$userDisplayName|escape}!
-                    {else}
-                        {* ✅ BEZPEČNÉ: Statický text *}
-                        Vítejte v QRdokladu!
-                    {/if}
-                </h1>
-                <p class="welcome-subtitle text-muted">
-                    {if $isSetupComplete}
-                        {* ✅ BEZPEČNÉ: Statický text *}
-                        Váš fakturační systém je připraven k použití
-                    {else}
-                        {* ✅ BEZPEČNÉ: Statický text *}
-                        Dokončete nastavení pro plné využití systému
-                    {/if}
-                </p>
-            </div>
-            <div class="col-md-4 text-end">
-                <div class="quick-actions">
-                    {* Tlačítko Nová faktura - pouze pro účetní a adminy *}
-                    {if $isUserAccountant}
-                        {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                        <a n:href="Invoices:add" class="btn btn-primary btn-lg">
-                            <i class="bi bi-plus-circle me-2"></i>
-                            Nová faktura
-                        </a>
-                    {else}
-                        {* Pro readonly uživatele - tlačítko na profil *}
-                        {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                        <a n:href="Users:profile" class="btn btn-primary btn-lg">
-                            <i class="bi bi-person me-2"></i>
-                            Můj profil
-                        </a>
-                    {/if}
-                </div>
-            </div>
+{* Hlavička stránky - stejný styl jako dashboard *}
+<div class="security-page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1>🔒 Bezpečnostní nástroje</h1>
+            <p>Nástroje pro monitoring a audit bezpečnosti systému</p>
         </div>
     </div>
+</div>
 
-    <!-- Začínáme sekce (zobrazí se jen pokud není setup kompletní) -->
-    {if !$isSetupComplete}
-    <div class="setup-section mb-4">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-light">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-list-check text-primary me-2"></i>
-                    {* ✅ BEZPEČNÉ: Statický text *}
-                    <h3 class="mb-0">Začínáme</h3>
-                    {* ✅ XSS OCHRANA: Escapování počtu kroků *}
-                    <span class="badge bg-primary ms-2">{count($setupSteps)|escape} kroků zbývá</span>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    {foreach $setupSteps as $step}
-                    <div class="col-md-4">
-                        <div class="setup-step">
-                            <div class="step-icon">
-                                {* ✅ XSS OCHRANA: Escapování CSS třídy ikony *}
-                                <i class="{$step['icon']|escape} text-primary"></i>
-                            </div>
-                            <div class="step-content">
-                                {* ✅ XSS OCHRANA: Escapování názvu kroku *}
-                                <h5 class="step-title">{$step['title']|escape}</h5>
-                                {* ✅ XSS OCHRANA: Escapování popisu kroku *}
-                                <p class="step-description text-muted">{$step['description']|escape}</p>
-                                {* ✅ XSS OCHRANA: Escapování odkazu *}
-                                <a href="{$step['link']|escape}" class="btn btn-outline-primary btn-sm">
-                                    {* ✅ XSS OCHRANA: Escapování textu odkazu *}
-                                    {$step['linkText']|escape}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    {/foreach}
-                </div>
-            </div>
-        </div>
-    </div>
-    {/if}
-
-<!-- Dashboard statistiky -->
-    <div class="dashboard-stats mb-4">
-        <div class="row g-4">
-            <!-- Celkové statistiky -->
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card stat-card-primary">
-                    <div class="stat-icon">
-                        <i class="bi bi-people"></i>
-                    </div>
-                    <div class="stat-content">
-                        {* ✅ XSS OCHRANA: Escapování statistiky klientů *}
-                        <div class="stat-number">{$dashboardStats['clients']|escape}</div>
-                        {* ✅ BEZPEČNÉ: Statický text *}
-                        <div class="stat-label">Klientů</div>
-                    </div>
-                    <div class="stat-action">
-                        {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                        <a n:href="Clients:default" class="btn btn-icon-dashboard" title="Zobrazit klienty">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card stat-card-info">
-                    <div class="stat-icon">
-                        <i class="bi bi-file-earmark-text"></i>
-                    </div>
-                    <div class="stat-content">
-                        {* ✅ XSS OCHRANA: Escapování celkového počtu faktur *}
-                        <div class="stat-number">{$dashboardStats['invoices']['total']|escape}</div>
-                        {* ✅ BEZPEČNÉ: Statický text *}
-                        <div class="stat-label">Celkem faktur</div>
-                    </div>
-                    <div class="stat-action">
-                        {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                        <a n:href="Invoices:default" class="btn btn-icon-dashboard" title="Zobrazit faktury">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card stat-card-success">
-                    <div class="stat-icon">
-                        <i class="bi bi-check-circle"></i>
-                    </div>
-                    <div class="stat-content">
-                        {* ✅ XSS OCHRANA: Escapování počtu zaplacených faktur *}
-                        <div class="stat-number">{$dashboardStats['invoices']['paid']|escape}</div>
-                        {* ✅ BEZPEČNÉ: Statický text *}
-                        <div class="stat-label">Zaplacených</div>
-                    </div>
-                    <div class="stat-action">
-                        {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                        <a n:href="Invoices:default, filter => 'paid'" class="btn btn-icon-dashboard" title="Zobrazit zaplacené faktury">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card stat-card-warning">
-                    <div class="stat-icon">
-                        <i class="bi bi-exclamation-circle"></i>
-                    </div>
-                    <div class="stat-content">
-                        {* ✅ XSS OCHRANA: Escapování počtu faktur po splatnosti *}
-                        <div class="stat-number">{$dashboardStats['invoices']['overdue']|escape}</div>
-                        {* ✅ BEZPEČNÉ: Statický text *}
-                        <div class="stat-label">Po splatnosti</div>
-                    </div>
-                    <div class="stat-action">
-                        {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                        <a n:href="Invoices:default, filter => 'overdue'" class="btn btn-icon-dashboard" title="Zobrazit faktury po splatnosti">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Obsah dashboardu -->
-    <div class="row g-4">
-        <!-- Blížící se splatnosti -->
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            {* ✅ BEZPEČNÉ: Statický text *}
-                            <h4 class="mb-0">
-                                <i class="bi bi-calendar-event text-warning me-2"></i>
-                                Blížící se splatnosti
-                            </h4>
-                            <small class="text-muted">Faktury splatné do 7 dnů</small>
-                        </div>
-                        {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                        <a n:href="Invoices:default, filter => 'created'" class="btn btn-sm btn-outline-primary">
-                            Zobrazit všechny
-                        </a>
-                    </div>
-                </div>
+{* Hlavní nástroje - konzistentní se stylem dashboard *}
+<div class="security-tools-section">
+    <h2 class="security-tools-title">Hlavní nástroje</h2>
+    
+    <div class="row">
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card security-tool-card security-main-tool">
                 <div class="card-body">
-                    {* Bezpečná kontrola pro count() - funguje pro pole i pro Selection objekty *}
-                    {var $upcomingCount = is_array($upcomingInvoices) ? count($upcomingInvoices) : ($upcomingInvoices ? $upcomingInvoices->count() : 0)}
-                    {if $upcomingCount > 0}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        {* ✅ BEZPEČNÉ: Statické texty *}
-                                        <th>Faktura</th>
-                                        <th>Klient</th>
-                                        <th>Splatnost</th>
-                                        <th class="text-end">Částka</th>
-                                        <th class="text-center">Akce</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {foreach $upcomingInvoices as $invoice}
-                                    <tr>
-                                        <td>
-                                            {* ✅ XSS OCHRANA: Escapování čísla faktury *}
-                                            <strong>{$invoice->number|escape}</strong>
-                                        </td>
-                                        <td>
-                                            {if $invoice->manual_client}
-                                                {* ✅ XSS OCHRANA: Escapování jména manuálního klienta *}
-                                                {$invoice->client_name|escape}
-                                            {else}
-                                                {* ✅ XSS OCHRANA: Escapování jména klienta z databáze *}
-                                                {$invoice->ref('client_id')->name|escape}
-                                            {/if}
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-warning text-dark">
-                                                {* ✅ XSS OCHRANA: Escapování data splatnosti *}
-                                                {$invoice->due_date|date:'d.m.Y'|escape}
-                                            </span>
-                                        </td>
-                                        <td class="text-end">
-                                            {* ✅ XSS OCHRANA: Escapování celkové částky *}
-                                            {$invoice->total|number(0, ',', ' ')|escape} Kč
-                                        </td>
-                                        <td class="text-center">
-                                            {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                                            <a n:href="Invoices:show $invoice->id" class="btn btn-sm btn-outline-primary">
-                                                Detail
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    {/foreach}
-                                </tbody>
-                            </table>
-                        </div>
-                    {else}
-                        <div class="empty-state-small">
-                            <i class="bi bi-check-circle text-success"></i>
-                            {* ✅ BEZPEČNÉ: Statický text *}
-                            <p class="mb-0">Žádné faktury se neblíží splatnosti</p>
-                        </div>
-                    {/if}
-                </div>
-            </div>
-        </div>
-
-        <!-- Rychlé akce a přehled -->
-        <div class="col-lg-4">
-            <!-- Finanční přehled -->
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-white">
-                    {* ✅ BEZPEČNÉ: Statický text *}
-                    <h4 class="mb-0">
-                        <i class="bi bi-currency-exchange text-success me-2"></i>
-                        Finanční přehled
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <div class="financial-overview">
-                        <div class="financial-item">
-                            {* ✅ BEZPEČNÉ: Statický text *}
-                            <div class="financial-label">Nezaplaceno celkem</div>
-                            <div class="financial-amount text-danger">
-                                {* ✅ XSS OCHRANA: Escapování nezaplacené částky *}
-                                {$dashboardStats['invoices']['unpaidAmount']|number(0, ',', ' ')|escape} Kč
-                            </div>
-                        </div>
-                        <hr class="my-3">
-                        <div class="row text-center">
-                            <div class="col-6">
-                                <div class="mini-stat">
-                                    {* ✅ XSS OCHRANA: Escapování počtu zaplacených faktur *}
-                                    <div class="mini-stat-number text-success">{$dashboardStats['invoices']['paid']|escape}</div>
-                                    {* ✅ BEZPEČNÉ: Statický text *}
-                                    <div class="mini-stat-label">Zaplaceno</div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="mini-stat">
-                                    {* ✅ XSS OCHRANA: Escapování počtu faktur po splatnosti *}
-                                    <div class="mini-stat-number text-warning">{$dashboardStats['invoices']['overdue']|escape}</div>
-                                    {* ✅ BEZPEČNÉ: Statický text *}
-                                    <div class="mini-stat-label">Po splatnosti</div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="security-tool-icon security-main-icon">
+                        <i class="bi bi-search"></i>
                     </div>
-                </div>
-            </div>
-
-            <!-- Rychlé akce -->
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white">
-                    {* ✅ BEZPEČNÉ: Statický text *}
-                    <h4 class="mb-0">
-                        <i class="bi bi-lightning text-primary me-2"></i>
-                        Rychlé akce
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        {if $isUserAccountant}
-                            {* Účetní a Admin vidí akce pro vytváření *}
-                            {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                            <a n:href="Invoices:add" class="btn btn-primary">
-                                <i class="bi bi-plus-circle me-2"></i>
-                                Nová faktura
-                            </a>
-                            {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                            <a n:href="Clients:add" class="btn btn-outline-primary">
-                                <i class="bi bi-person-plus me-2"></i>
-                                Nový klient
-                            </a>
-                            {if $isUserAdmin}
-                                {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                                <a n:href="Settings:default" class="btn btn-outline-secondary">
-                                    <i class="bi bi-gear me-2"></i>
-                                    Nastavení
-                                </a>
-                            {/if}
-                        {else}
-                            {* Readonly uživatel vidí pouze tlačítko na profil *}
-                            {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                            <a n:href="Users:profile" class="btn btn-primary">
-                                <i class="bi bi-person me-2"></i>
-                                Upravit můj profil
-                            </a>
-                            <div class="alert alert-info">
-                                <i class="bi bi-info-circle me-2"></i>
-                                {* ✅ BEZPEČNÉ: Statický text *}
-                                <small>Máte oprávnění pouze pro čtení. Pro vytváření faktur a klientů kontaktujte administrátora.</small>
-                            </div>
-                        {/if}
+                    <h4 class="security-tool-title">SQL Security Audit</h4>
+                    <p class="security-tool-description">
+                        Kompletní analýza všech SQL dotazů v projektu z hlediska bezpečnosti. 
+                        Detekuje potenciální SQL injection vulnerabilities a poskytuje doporučení.
+                    </p>
+                    
+                    <div class="security-features-list">
+                        <h6 class="security-features-title">
+                            <i class="bi bi-check-circle me-2"></i>Funkce:
+                        </h6>
+                        <ul class="security-features">
+                            <li>• Skenování raw SQL dotazů</li>
+                            <li>• Detekce nebezpečných vzorů</li>
+                            <li>• Bezpečnostní skóre</li>
+                            <li>• Podrobná doporučení</li>
+                        </ul>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Nedávné faktury -->
-    {var $recentCount = is_array($recentInvoices) ? count($recentInvoices) : ($recentInvoices ? $recentInvoices->count() : 0)}
-    {if $recentCount > 0}
-    <div class="recent-invoices mt-4">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-white">
-                <div class="d-flex justify-content-between align-items-center">
-                    {* ✅ BEZPEČNÉ: Statický text *}
-                    <h4 class="mb-0">
-                        <i class="bi bi-clock-history text-info me-2"></i>
-                        Nedávné faktury
-                    </h4>
-                    {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                    <a n:href="Invoices:default" class="btn btn-sm btn-outline-primary">
-                        Zobrazit všechny
+                    
+                    <a n:href="Security:sqlAudit" class="btn security-tool-btn btn-primary">
+                        <i class="bi bi-search me-2"></i>Spustit SQL Audit
                     </a>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                {* ✅ BEZPEČNÉ: Statické texty *}
-                                <th>Číslo</th>
-                                <th>Klient</th>
-                                <th>Vystaveno</th>
-                                <th>Stav</th>
-                                <th class="text-end">Částka</th>
-                                <th class="text-center">Akce</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {foreach $recentInvoices as $invoice}
-                            <tr>
-                                <td>
-                                    {* ✅ XSS OCHRANA: Escapování čísla faktury *}
-                                    <strong>{$invoice->number|escape}</strong>
-                                </td>
-                                <td>
-                                    {if $invoice->manual_client}
-                                        {* ✅ XSS OCHRANA: Escapování jména manuálního klienta *}
-                                        {$invoice->client_name|escape}
-                                    {else}
-                                        {* ✅ XSS OCHRANA: Escapování jména klienta z databáze *}
-                                        {$invoice->ref('client_id')->name|escape}
-                                    {/if}
-                                </td>
-                                <td>
-                                    {* ✅ XSS OCHRANA: Escapování data vystavení *}
-                                    {$invoice->issue_date|date:'d.m.Y'|escape}
-                                </td>
-                                <td>
-                                    {if $invoice->status == 'created'}
-                                        <span class="badge bg-secondary">Vystavena</span>
-                                    {elseif $invoice->status == 'paid'}
-                                        <span class="badge bg-success">Zaplacena</span>
-                                    {elseif $invoice->status == 'overdue'}
-                                        <span class="badge bg-danger">Po splatnosti</span>
-                                    {/if}
-                                </td>
-                                <td class="text-end">
-                                    {* ✅ XSS OCHRANA: Escapování celkové částky *}
-                                    {$invoice->total|number(0, ',', ' ')|escape} Kč
-                                </td>
-                                <td class="text-center">
-                                    {* ✅ BEZPEČNÉ: Nette link je automaticky escapovaný *}
-                                    <a n:href="Invoices:show $invoice->id" class="btn btn-sm btn-outline-primary">
-                                        Detail
-                                    </a>
-                                </td>
-                            </tr>
-                            {/foreach}
-                        </tbody>
-                    </table>
+        </div>
+        
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card security-tool-card security-main-tool">
+                <div class="card-body">
+                    <div class="security-tool-icon security-main-icon">
+                        <i class="bi bi-speedometer2"></i>
+                    </div>
+                    <h4 class="security-tool-title">Security Dashboard</h4>
+                    <p class="security-tool-description">
+                        Přehled bezpečnostních statistik, monitoring událostí a rychlý přístup 
+                        ke všem bezpečnostním nástrojům systému.
+                    </p>
+                    
+                    <div class="security-features-list">
+                        <h6 class="security-features-title">
+                            <i class="bi bi-graph-up me-2"></i>Monitoring:
+                        </h6>
+                        <ul class="security-features">
+                            <li>• Přihlašovací statistiky</li>
+                            <li>• XSS pokusy</li>
+                            <li>• Rate limiting</li>
+                            <li>• Security logy</li>
+                        </ul>
+                    </div>
+                    
+                    <a n:href="Security:dashboard" class="btn security-tool-btn btn-info">
+                        <i class="bi bi-speedometer2 me-2"></i>Otevřít Dashboard
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    {/if}
 </div>
+
+{* Super Admin nástroje - pouze pro Super Admin *}
+{if $isSuperAdmin}
+<div class="security-tools-section">
+    <h2 class="security-tools-title">Super Admin nástroje</h2>
+    
+    <div class="card security-admin-tools-card">
+        <div class="security-admin-tools-header">
+            <h5>
+                <i class="bi bi-shield-exclamation me-2"></i>Super Admin nástroje
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card security-tool-card security-admin-tool">
+                        <div class="card-body">
+                            <div class="security-tool-icon">
+                                <i class="bi bi-stopwatch"></i>
+                            </div>
+                            <h6 class="security-tool-title">Rate Limit Monitor</h6>
+                            <p class="security-tool-description">
+                                Správa a monitoring rate limitingu napříč systémem
+                            </p>
+                            <a n:href="Security:rateLimitStats" class="btn security-tool-btn btn-warning">
+                                <i class="bi bi-bar-chart me-2"></i>Statistiky
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card security-tool-card security-admin-tool">
+                        <div class="card-body">
+                            <div class="security-tool-icon">
+                                <i class="bi bi-gear"></i>
+                            </div>
+                            <h6 class="security-tool-title">Pokročilé nastavení</h6>
+                            <p class="security-tool-description">
+                                Konfigurace bezpečnostních parametrů systému
+                            </p>
+                            <button class="btn security-tool-btn disabled" disabled>
+                                <i class="bi bi-wrench me-2"></i>Připravuje se
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card security-tool-card security-admin-tool">
+                        <div class="card-body">
+                            <div class="security-tool-icon">
+                                <i class="bi bi-bug"></i>
+                            </div>
+                            <h6 class="security-tool-title">Penetration Test</h6>
+                            <p class="security-tool-description">
+                                Automatické testování bezpečnostních slabin
+                            </p>
+                            <button class="btn security-tool-btn btn-outline-danger disabled" disabled>
+                                <i class="bi bi-shield-check me-2"></i>V přípravě
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
+
+{* Bezpečnostní doporučení *}
+<div class="security-tools-section">
+    <h2 class="security-tools-title">Bezpečnostní doporučení</h2>
+    
+    <div class="card security-recommendations-card">
+        <div class="security-recommendations-header">
+            <h5>
+                <i class="bi bi-lightbulb-fill me-2"></i>Bezpečnostní doporučení
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="security-recommendation-section">
+                        <h6 class="security-recommendation-title">
+                            <i class="bi bi-check-circle me-2"></i>Dobré praktiky:
+                        </h6>
+                        <ul class="security-recommendation-list">
+                            <li>Pravidelně spouštějte SQL security audit</li>
+                            <li>Monitorujte bezpečnostní logy</li>
+                            <li>Kontrolujte rate limiting statistiky</li>
+                            <li>Udržujte silná hesla pro všechny účty</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="security-recommendation-section">
+                        <h6 class="security-recommendation-title">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Pozor na:
+                        </h6>
+                        <ul class="security-recommendation-list">
+                            <li>Neobvyklé množství neúspěšných přihlášení</li>
+                            <li>XSS pokusy z nových IP adres</li>
+                            <li>Abnormální databázovou aktivitu</li>
+                            <li>Neočekávané změny v oprávněních</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {/block}

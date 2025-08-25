@@ -42,6 +42,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\InvoicesManager.php',
       1 => 1755075250,
     ),
+    'App\\Model\\MigrationService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\MigrationService.php',
+      1 => 1755896567,
+    ),
     'App\\Model\\ModuleManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\ModuleManager.php',
@@ -152,6 +157,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
       1 => 1755077382,
     ),
+    'App\\Presentation\\Migration\\MigrationPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Migration\\MigrationPresenter.php',
+      1 => 1756124762,
+    ),
     'App\\Presentation\\Modules\\DetailPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\DetailPresenter.php',
@@ -230,15 +240,12 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 1,
-    'null' => 1,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 1,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 1,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
-    'App\\Presentation\\Home\\HomeTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsEditTemplate' => 1,
+    'Nette\\Bridges\\Assets\\DIExtension' => 2,
+    'null' => 2,
+    'App\\Presentation\\Migration\\MigrationEncryptOldDataTemplate' => 2,
+    'App\\Presentation\\Migration\\MigrationTemplate' => 2,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
   ),
   2 => 
   array (
