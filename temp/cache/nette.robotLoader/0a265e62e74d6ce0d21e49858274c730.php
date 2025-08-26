@@ -65,7 +65,7 @@ return array (
     'App\\Model\\UserManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\UserManager.php',
-      1 => 1756215019,
+      1 => 1756215536,
     ),
     'App\\Modules\\BaseModule' => 
     array (
@@ -240,10 +240,28 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 2,
-    'null' => 2,
+    'Nette\\Bridges\\Assets\\DIExtension' => 3,
+    'null' => 3,
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
     'App\\Presentation\\Users\\UsersTemplate' => 3,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
+    'App\\Presentation\\Migration\\MigrationEncryptOldDataTemplate' => 2,
+    'App\\Presentation\\Migration\\MigrationTemplate' => 3,
+    'App\\Presentation\\Migration\\MigrationDefaultTemplate' => 2,
+    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
+    'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeTemplate' => 3,
+    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'App\\Presentation\\Sign\\SignTemplate' => 3,
+    'App\\Presentation\\Users\\UsersEditTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityTemplate' => 3,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
+    'App\\Presentation\\Sign\\SignUpTemplate' => 2,
   ),
   2 => 
   array (

@@ -751,8 +751,21 @@ class UserManager implements Nette\Security\Authenticator
     // =====================================================
 
     /**
+     * Citlivá pole pro firemní údaje, která se šifrují v tabulce company_info
+     */
+    private const COMPANY_ENCRYPTED_FIELDS = ['ic', 'dic', 'email', 'phone', 'bank_account'];
+
+    /**
+     * Dešifruje firemní údaje
+     */
+    private function decryptCompanyData(array $data): array
+    {
+        return $this->encryptionService->decryptFields($data, self::COMPANY_ENCRYPTED_FIELDS);
+    }
+
+    /**
      * Získá všechny uživatele seskupené podle tenantů (pouze pro super admina)
-     * ✅ PŮVODNÍ KÓD - parametrizované dotazy jsou bezpečné
+     * ✅ OPRAVENO: Nyní dešifruje i firemní údaje
      */
     public function getAllUsersGroupedByTenants(): array
     {
@@ -776,11 +789,29 @@ class UserManager implements Nette\Security\Authenticator
         $result = [];
 
         foreach ($tenants as $tenant) {
-            // Získáme uživatele pro tento tenant
-            $users = $this->database->table('users')
+            // Získáme uživatele pro tento tenant s automatickým dešifrováním
+            $userSelection = $this->database->table('users')
                 ->where('tenant_id', $tenant->tenant_id)
                 ->order('role DESC, username ASC') // Admini první, pak alfabeticky
                 ->fetchAll();
+
+            // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ uživatelských dat
+            $users = $this->decryptUserRecords($userSelection);
+
+            // 🔓 NOVÉ: AUTOMATICKÉ DEŠIFROVÁNÍ firemních údajů
+            $companyEmail = null;
+            $companyPhone = null;
+            
+            if ($tenant->company_email || $tenant->company_phone) {
+                $companyData = [
+                    'email' => $tenant->company_email,
+                    'phone' => $tenant->company_phone
+                ];
+                
+                $decryptedCompanyData = $this->decryptCompanyData($companyData);
+                $companyEmail = $decryptedCompanyData['email'];
+                $companyPhone = $decryptedCompanyData['phone'];
+            }
 
             // Najdeme majitele (prvního admina v tenantu)
             $owner = null;
@@ -795,8 +826,8 @@ class UserManager implements Nette\Security\Authenticator
                 'tenant_id' => $tenant->tenant_id,
                 'tenant_name' => $tenant->tenant_name,
                 'company_name' => $tenant->company_name ?? $tenant->tenant_name,
-                'company_email' => $tenant->company_email,
-                'company_phone' => $tenant->company_phone,
+                'company_email' => $companyEmail, // ✅ OPRAVENO: Nyní dešifrované
+                'company_phone' => $companyPhone, // ✅ OPRAVENO: Nyní dešifrované
                 'owner' => $owner,
                 'users' => $users,
                 'user_count' => count($users),
