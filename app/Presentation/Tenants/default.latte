@@ -65,52 +65,47 @@
             </thead>
             <tbody>
                 {foreach $tenants as $tenantData}
-                <tr class="data-row tenant-row{if $tenantData['tenant']['status'] === 'inactive'} tenant-inactive{/if}" 
-                    data-tenant-id="{$tenantData['tenant']['id']}" 
+                <tr class="data-row tenant-row{if $tenantData['tenant']->status === 'inactive'} tenant-inactive{/if}" 
+                    data-tenant-id="{$tenantData['tenant']->id}" 
                     style="cursor: pointer;"
                     title="Klikněte pro zobrazení detailů">
                     <td class="company-column">
                         <div class="company-name">
-                            <strong>{$tenantData['tenant']['name']}</strong>
+                            <strong>{$tenantData['tenant']->name}</strong>
                             <i class="bi bi-chevron-right tenant-expand-icon ms-2" style="color: #B1D235; font-size: 0.8rem; transition: transform 0.3s ease;"></i>
                         </div>
-                        {if $tenantData['tenant']['domain']}
+                        {if $tenantData['tenant']->domain}
                             <div class="company-location text-muted">
-                                <small><i class="bi bi-globe me-1"></i>{$tenantData['tenant']['domain']}</small>
+                                <small><i class="bi bi-globe me-1"></i>{$tenantData['tenant']->domain}</small>
                             </div>
                         {/if}
-                        {if $tenantData['company'] && $tenantData['company']['name']}
+                        {if $tenantData['company'] && $tenantData['company']->name}
                             <div class="company-location text-muted">
-                                <small><i class="bi bi-building me-1"></i>{$tenantData['company']['name']}</small>
+                                <small><i class="bi bi-building me-1"></i>{$tenantData['company']->name}</small>
                             </div>
                         {/if}
                     </td>
                     <td>
-                        <span class="badge badge-primary-custom">{$tenantData['stats']['users_count']}</span>
+                        <span class="badge badge-primary-custom">{$tenantData['user_count']}</span>
                         {if $tenantData['admin_user']}
                             <div class="text-muted mt-1">
-                                <small><i class="bi bi-person-gear me-1"></i>{$tenantData['admin_user']['username']}</small>
+                                <small><i class="bi bi-person-gear me-1"></i>{$tenantData['admin_user']->username}</small>
                             </div>
                         {/if}
                     </td>
                     <td>
-                        <span class="badge badge-neutral">{$tenantData['stats']['invoices_count']}</span>
-                        {if $tenantData['stats']['total_revenue'] > 0}
-                            <div class="text-muted mt-1">
-                                <small><i class="bi bi-currency-exchange me-1"></i>{$tenantData['stats']['total_revenue']|number:0} Kč</small>
-                            </div>
-                        {/if}
+                        <span class="badge badge-neutral">{$tenantData['invoice_count']}</span>
                     </td>
                     <td>
                         <div class="text-muted">
-                            <small>{$tenantData['tenant']['created_at']|date:'d.m.Y'}</small>
+                            <small>{$tenantData['tenant']->created_at|date:'d.m.Y'}</small>
                         </div>
                         <div class="text-muted">
-                            <small>{$tenantData['tenant']['created_at']|date:'H:i'}</small>
+                            <small>{$tenantData['tenant']->created_at|date:'H:i'}</small>
                         </div>
                     </td>
                     <td>
-                        {if $tenantData['tenant']['status'] === 'active'}
+                        {if $tenantData['tenant']->status === 'active'}
                             <span class="badge" style="background-color: var(--secondary-color); color: white;">
                                 <i class="bi bi-check-circle me-1"></i>
                                 Aktivní
@@ -124,30 +119,30 @@
                     </td>
                     <td class="text-end">
                         <div class="action-buttons">
-                            {if $tenantData['tenant']['status'] === 'active'}
-                                <a n:href="deactivate!, id => $tenantData['tenant']['id']" 
+                            {if $tenantData['tenant']->status === 'active'}
+                                <a n:href="deactivate!, id => $tenantData['tenant']->id" 
                                    class="btn btn-sm" style="color: var(--grey-color); border-color: var(--grey-color);" 
                                    onmouseover="this.style.backgroundColor='var(--grey-color)'; this.style.color='white';"
                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--grey-color)';"
-                                   onclick="event.stopPropagation(); return confirm('Opravdu chcete deaktivovat tenant {$tenantData['tenant']['name']}?')"
+                                   onclick="event.stopPropagation(); return confirm('Opravdu chcete deaktivovat tenant {$tenantData['tenant']->name}?')"
                                    title="Deaktivovat tenant">
                                     <i class="bi bi-pause"></i>
                                 </a>
                             {else}
-                                <a n:href="activate!, id => $tenantData['tenant']['id']" 
+                                <a n:href="activate!, id => $tenantData['tenant']->id" 
                                    class="btn btn-sm" 
                                    style="color: var(--primary-color); border-color: var(--primary-color);"
                                    onmouseover="this.style.backgroundColor='var(--primary-color)'; this.style.color='white';"
                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--primary-color)';"
-                                   onclick="event.stopPropagation(); return confirm('Opravdu chcete aktivovat tenant {$tenantData['tenant']['name']}?')"
+                                   onclick="event.stopPropagation(); return confirm('Opravdu chcete aktivovat tenant {$tenantData['tenant']->name}?')"
                                    title="Aktivovat tenant">
                                     <i class="bi bi-play"></i>
                                 </a>
                             {/if}
                             
-                            <a n:href="delete!, id => $tenantData['tenant']['id']" 
+                            <a n:href="delete!, id => $tenantData['tenant']->id" 
                                class="btn btn-sm btn-outline-danger"
-                               onclick="event.stopPropagation(); return confirm('POZOR! Opravdu chcete smazat tenant {$tenantData['tenant']['name']}? Tata akce je nevratná!')"
+                               onclick="event.stopPropagation(); return confirm('POZOR! Opravdu chcete smazat tenant {$tenantData['tenant']->name}? Tato akce je nevratná!')"
                                title="Smazat tenant">
                                 <i class="bi bi-trash"></i>
                             </a>
@@ -156,7 +151,7 @@
                 </tr>
                 
                 {* Rozbalitelný řádek s detaily *}
-                <tr class="tenant-details-row" id="details-{$tenantData['tenant']['id']}" style="display: none;">
+                <tr class="tenant-details-row" id="details-{$tenantData['tenant']->id}" style="display: none;">
                     <td colspan="6" class="tenant-details-cell">
                         <div class="tenant-details-content">
                             <div class="row">
@@ -169,17 +164,17 @@
                                         </h6>
                                         <div class="detail-item">
                                             <strong>Název tenanta:</strong><br>
-                                            <span>{$tenantData['tenant']['name']}</span>
+                                            <span>{$tenantData['tenant']->name}</span>
                                         </div>
-                                        {if $tenantData['tenant']['domain']}
+                                        {if $tenantData['tenant']->domain}
                                             <div class="detail-item">
                                                 <strong>Doména:</strong><br>
-                                                <span>{$tenantData['tenant']['domain']}</span>
+                                                <span>{$tenantData['tenant']->domain}</span>
                                             </div>
                                         {/if}
                                         <div class="detail-item">
                                             <strong>Vytvořen:</strong><br>
-                                            <span>{$tenantData['tenant']['created_at']|date:'d.m.Y H:i'}</span>
+                                            <span>{$tenantData['tenant']->created_at|date:'d.m.Y H:i'}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -194,27 +189,27 @@
                                         {if $tenantData['company']}
                                             <div class="detail-item">
                                                 <strong>Název společnosti:</strong><br>
-                                                <span>{$tenantData['company']['name']}</span>
+                                                <span>{$tenantData['company']->name}</span>
                                             </div>
-                                            {if $tenantData['company']['ic']}
+                                            {if $tenantData['company']->ic}
                                                 <div class="detail-item">
                                                     <strong>IČ:</strong><br>
-                                                    <span>{$tenantData['company']['ic']}</span>
+                                                    <span>{$tenantData['company']->ic}</span>
                                                 </div>
                                             {/if}
-                                            {if $tenantData['company']['dic']}
+                                            {if $tenantData['company']->dic}
                                                 <div class="detail-item">
                                                     <strong>DIČ:</strong><br>
-                                                    <span>{$tenantData['company']['dic']}</span>
+                                                    <span>{$tenantData['company']->dic}</span>
                                                 </div>
                                             {/if}
-                                            {if $tenantData['company']['address']}
+                                            {if $tenantData['company']->address}
                                                 <div class="detail-item">
                                                     <strong>Adresa:</strong><br>
                                                     <span>
-                                                        {$tenantData['company']['address']}<br>
-                                                        {if $tenantData['company']['city']}{$tenantData['company']['city']}{/if}
-                                                        {if $tenantData['company']['zip']} {$tenantData['company']['zip']}{/if}
+                                                        {$tenantData['company']->address}<br>
+                                                        {if $tenantData['company']->city}{$tenantData['company']->city}{/if}
+                                                        {if $tenantData['company']->zip} {$tenantData['company']->zip}{/if}
                                                     </span>
                                                 </div>
                                             {/if}
@@ -237,19 +232,19 @@
                                         {if $tenantData['admin_user']}
                                             <div class="detail-item">
                                                 <strong>Jméno:</strong><br>
-                                                <span>{$tenantData['admin_user']['first_name']} {$tenantData['admin_user']['last_name']}</span>
+                                                <span>{$tenantData['admin_user']->first_name} {$tenantData['admin_user']->last_name}</span>
                                             </div>
                                             <div class="detail-item">
                                                 <strong>Uživatelské jméno:</strong><br>
-                                                <span>@{$tenantData['admin_user']['username']}</span>
+                                                <span>@{$tenantData['admin_user']->username}</span>
                                             </div>
                                             <div class="detail-item">
                                                 <strong>E-mail:</strong><br>
-                                                <span>{$tenantData['admin_user']['email']}</span>
+                                                <span>{$tenantData['admin_user']->email}</span>
                                             </div>
                                             <div class="detail-item">
                                                 <strong>Registrován:</strong><br>
-                                                <span>{$tenantData['admin_user']['created_at']|date:'d.m.Y H:i'}</span>
+                                                <span>{$tenantData['admin_user']->created_at|date:'d.m.Y H:i'}</span>
                                             </div>
                                         {else}
                                             <div class="text-muted">
@@ -269,20 +264,12 @@
                                         </h6>
                                         <div class="detail-stats">
                                             <div class="stat-item">
-                                                <span class="stat-number" style="color: #B1D235;">{$tenantData['stats']['users_count']}</span>
+                                                <span class="stat-number" style="color: #B1D235;">{$tenantData['user_count']}</span>
                                                 <span class="stat-label">uživatelů</span>
                                             </div>
                                             <div class="stat-item">
-                                                <span class="stat-number" style="color: #95B11F;">{$tenantData['stats']['invoices_count']}</span>
+                                                <span class="stat-number" style="color: #95B11F;">{$tenantData['invoice_count']}</span>
                                                 <span class="stat-label">faktur</span>
-                                            </div>
-                                            <div class="stat-item">
-                                                <span class="stat-number" style="color: #6c757d;">{$tenantData['stats']['clients_count']}</span>
-                                                <span class="stat-label">klientů</span>
-                                            </div>
-                                            <div class="stat-item">
-                                                <span class="stat-number" style="color: #212529;">{$tenantData['stats']['modules_count']}</span>
-                                                <span class="stat-label">modulů</span>
                                             </div>
                                         </div>
                                     </div>

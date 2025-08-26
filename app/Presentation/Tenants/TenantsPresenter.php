@@ -8,6 +8,7 @@ use Nette;
 use Nette\Application\UI\Form;
 use App\Model\TenantManager;
 use App\Model\AresService;
+use App\Model\CompanyManager;
 use App\Presentation\BasePresenter;
 use Tracy\ILogger;
 use Tracy\Debugger;
@@ -16,6 +17,9 @@ final class TenantsPresenter extends BasePresenter
 {
     /** @var TenantManager */
     private $tenantManager;
+
+    /** @var CompanyManager */
+    private $companyManager;
 
     /** @var AresService */
     private $aresService;
@@ -36,31 +40,92 @@ final class TenantsPresenter extends BasePresenter
         $this->logger = $logger;
     }
 
-    public function startup(): void
-    {
-        parent::startup();
+public function injectCompanyManager(CompanyManager $companyManager): void
+{
+    $this->companyManager = $companyManager;
+}
 
-        // Kontrola super admin oprávnění pro všechny akce
-        if (!$this->isSuperAdmin()) {
-            $this->flashMessage('Pouze super admin může spravovat tenanty.', 'danger');
-            $this->redirect('Home:default');
-        }
+/**
+ * MULTI-TENANCY: Nastavení tenant kontextu po spuštění presenteru
+ */
+public function startup(): void
+{
+    parent::startup();
+
+    // Nastavíme tenant kontext v CompanyManager pro super admin přístup
+    if ($this->companyManager) {
+        $this->companyManager->setTenantContext(
+            null, // null pro přístup ke všem tenantům
+            true  // super admin mode
+        );
+    }
+}
+
+/**
+ * OPRAVENÉ načítání tenantů s automatickým dešifrováním firemních údajů
+ */
+public function renderDefault(): void
+{
+    if (!$this->isSuperAdmin()) {
+        $this->error('Nemáte oprávnění pro správu tenantů', 403);
     }
 
-    public function renderDefault(): void
-    {
-        $this->template->tenants = $this->tenantManager->getAllTenantsWithStats();
-        $this->template->dashboardStats = $this->tenantManager->getDashboardStats();
+    $tenantsList = [];
+
+    // Získáme všechny tenanty
+    $tenants = $this->database->table('tenants')->order('name ASC');
+
+    foreach ($tenants as $tenant) {
+        // Používáme CompanyManager s automatickým dešifrováním
+        $company = $this->companyManager->getByTenant($tenant->id);
+        
+        // Získáme admin uživatele pro tento tenant
+        $adminUser = $this->database->table('users')
+            ->where('tenant_id', $tenant->id)
+            ->where('role', 'admin')
+            ->fetch();
+
+        // Počet uživatelů
+        $userCount = $this->database->table('users')
+            ->where('tenant_id', $tenant->id)
+            ->count();
+
+        // Počet faktur
+        $invoiceCount = $this->database->table('invoices')
+            ->where('tenant_id', $tenant->id)
+            ->count();
+
+        $tenantsList[] = [
+            'tenant' => $tenant,
+            'company' => $company, // Nyní obsahuje dešifrovaná data
+            'admin_user' => $adminUser,
+            'user_count' => $userCount,
+            'invoice_count' => $invoiceCount
+        ];
     }
 
-    public function renderAdd(): void
-    {
-        // Příprava pro šablonu
-        $this->template->pageTitle = 'Vytvořit nový tenant';
-
-        // Přidáme URL pro ARES lookup do šablony
-        $this->template->aresLookupUrl = $this->link('aresLookup!');
-    }
+    // Příprava proměnných pro šablonu
+    $this->template->tenants = $tenantsList;
+    $this->template->totalTenants = count($tenantsList);
+    
+    // Dashboard statistiky - OPRAVA: používáme objektovou syntaxi
+    $activeTenants = array_filter($tenantsList, function($t) {
+        return $t['tenant']->status === 'active';
+    });
+    
+    $totalUsers = array_sum(array_column($tenantsList, 'user_count'));
+    $totalInvoices = array_sum(array_column($tenantsList, 'invoice_count'));
+    
+    $this->template->dashboardStats = [
+        'total_tenants' => count($tenantsList),
+        'active_tenants' => count($activeTenants),
+        'inactive_tenants' => count($tenantsList) - count($activeTenants),
+        'total_users' => $totalUsers,
+        'total_invoices' => $totalInvoices,
+        'avg_users_per_tenant' => count($tenantsList) > 0 ? round($totalUsers / count($tenantsList), 1) : 0,
+        'avg_invoices_per_tenant' => count($tenantsList) > 0 ? round($totalInvoices / count($tenantsList), 1) : 0
+    ];
+}
 
     /**
      * Signál pro deaktivaci tenanta

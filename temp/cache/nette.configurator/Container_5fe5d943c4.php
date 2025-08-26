@@ -552,6 +552,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 		$service->injectModuleManager($this->getService('04'));
 		$service->injectDatabase($this->getService('database.default.explorer'));
 		$service->injectAntiSpam($this->getService('06'));
+		$service->injectCompanyManager($this->getService('011'));
 		$service->invalidLinkMode = 5;
 		return $service;
 	}
@@ -816,6 +817,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 			$this->getService('database.default.explorer'),
 			$this->getService('security.passwords'),
 			$this->getService('01'),
+			$this->getService('07'),
 		);
 	}
 

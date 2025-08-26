@@ -50,6 +50,7 @@ services:
 	# =====================================================
 	
 	# UserManager už je registrovaný jako authenticator výše
+	- App\Model\UserManager
 	- App\Model\InvoicesManager  
 	- App\Model\ClientsManager
 	- App\Model\CompanyManager

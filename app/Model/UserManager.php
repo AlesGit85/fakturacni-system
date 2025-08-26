@@ -4,11 +4,18 @@ namespace App\Model;
 
 use Nette;
 use Nette\Security\Passwords;
+use Nette\Database\Explorer;
 use App\Security\SecurityLogger;
+use App\Security\EncryptionService;
 
 class UserManager implements Nette\Security\Authenticator
 {
     use Nette\SmartObject;
+
+    /**
+     * Citlivá pole, která se budou automaticky šifrovat
+     */
+    private const ENCRYPTED_FIELDS = ['email', 'first_name', 'last_name'];
 
     /** @var Nette\Database\Explorer */
     private $database;
@@ -18,6 +25,9 @@ class UserManager implements Nette\Security\Authenticator
 
     /** @var SecurityLogger */
     private $securityLogger;
+
+    /** @var EncryptionService */
+    private $encryptionService;
 
     /** @var int Maximální počet neúspěšných přihlášení */
     private $maxLoginAttempts = 5;
@@ -34,12 +44,73 @@ class UserManager implements Nette\Security\Authenticator
     public function __construct(
         Nette\Database\Explorer $database,
         Passwords $passwords,
-        SecurityLogger $securityLogger
+        SecurityLogger $securityLogger,
+        EncryptionService $encryptionService
     ) {
         $this->database = $database;
         $this->passwords = $passwords;
         $this->securityLogger = $securityLogger;
+        $this->encryptionService = $encryptionService;
     }
+
+    // =====================================================
+    // NOVÉ ŠIFROVACÍ HELPER METODY
+    // =====================================================
+
+    /**
+     * Zašifruje citlivá pole před uložením do databáze
+     */
+    private function encryptSensitiveData(array $data): array
+    {
+        return $this->encryptionService->encryptFields($data, self::ENCRYPTED_FIELDS);
+    }
+
+    /**
+     * Dešifruje citlivá pole po načtení z databáze
+     */
+    private function decryptSensitiveData(array $data): array
+    {
+        return $this->encryptionService->decryptFields($data, self::ENCRYPTED_FIELDS);
+    }
+
+    /**
+     * Dešifruje jeden záznam uživatele
+     */
+    private function decryptUserRecord($user)
+    {
+        if (!$user) {
+            return null;
+        }
+
+        // Převedeme na pole pro dešifrování
+        $userArray = $user->toArray();
+
+        // Dešifrujeme citlivá pole
+        $decryptedArray = $this->decryptSensitiveData($userArray);
+
+        // Vytvoříme nový objekt s dešifrovanými daty
+        $decryptedUser = (object) $decryptedArray;
+
+        return $decryptedUser;
+    }
+
+    /**
+     * Dešifruje kolekci záznamů uživatelů
+     */
+    private function decryptUserRecords($users): array
+    {
+        $decryptedUsers = [];
+
+        foreach ($users as $user) {
+            $decryptedUser = $this->decryptUserRecord($user);
+            if ($decryptedUser) {
+                $decryptedUsers[] = $decryptedUser;
+            }
+        }
+
+        return $decryptedUsers;
+    }
+
 
     // =====================================================
     // MULTI-TENANCY NASTAVENÍ (NOVÉ)
