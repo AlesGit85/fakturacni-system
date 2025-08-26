@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Presentation\Tenants;
 
 use Nette;
-use Nette\Application\UI\Form;
-use App\Model\TenantManager;
-use App\Model\AresService;
-use App\Model\CompanyManager;
-use App\Presentation\BasePresenter;
 use Tracy\ILogger;
 use Tracy\Debugger;
+use App\Model\AresService;
+use App\Model\UserManager;
+use App\Model\TenantManager;
+use App\Model\CompanyManager;
+use Nette\Application\UI\Form;
+use App\Presentation\BasePresenter;
 
 final class TenantsPresenter extends BasePresenter
 {
@@ -20,6 +21,9 @@ final class TenantsPresenter extends BasePresenter
 
     /** @var CompanyManager */
     private $companyManager;
+
+    /** @var UserManager */
+    private $userManager;
 
     /** @var AresService */
     private $aresService;
@@ -33,99 +37,119 @@ final class TenantsPresenter extends BasePresenter
     public function __construct(
         TenantManager $tenantManager,
         AresService $aresService,
-        ILogger $logger
+        ILogger $logger,
+        UserManager $userManager
     ) {
         $this->tenantManager = $tenantManager;
         $this->aresService = $aresService;
         $this->logger = $logger;
+        $this->userManager = $userManager;
     }
 
-public function injectCompanyManager(CompanyManager $companyManager): void
-{
-    $this->companyManager = $companyManager;
-}
+    public function injectCompanyManager(CompanyManager $companyManager): void
+    {
+        $this->companyManager = $companyManager;
+    }
 
-/**
- * MULTI-TENANCY: Nastavení tenant kontextu po spuštění presenteru
- */
-public function startup(): void
-{
-    parent::startup();
+    /**
+     * MULTI-TENANCY: Nastavení tenant kontextu po spuštění presenteru
+     */
+    public function startup(): void
+    {
+        parent::startup();
 
-    // Nastavíme tenant kontext v CompanyManager pro super admin přístup
-    if ($this->companyManager) {
-        $this->companyManager->setTenantContext(
+        // Nastavíme tenant kontext v CompanyManager pro super admin přístup
+        if ($this->companyManager) {
+            $this->companyManager->setTenantContext(
+                null, // null pro přístup ke všem tenantům
+                true  // super admin mode
+            );
+        }
+
+        // NOVÉ: Nastavíme tenant kontext i v UserManageru pro super admin přístup
+        $this->userManager->setTenantContext(
             null, // null pro přístup ke všem tenantům
             true  // super admin mode
         );
     }
-}
 
-/**
- * OPRAVENÉ načítání tenantů s automatickým dešifrováním firemních údajů
- */
-public function renderDefault(): void
-{
-    if (!$this->isSuperAdmin()) {
-        $this->error('Nemáte oprávnění pro správu tenantů', 403);
-    }
+    /**
+     * OPRAVENÉ načítání tenantů s automatickým dešifrováním firemních údajů
+     */
+    public function renderDefault(): void
+    {
+        if (!$this->isSuperAdmin()) {
+            $this->error('Nemáte oprávnění pro správu tenantů', 403);
+        }
 
-    $tenantsList = [];
+        $tenantsList = [];
 
-    // Získáme všechny tenanty
-    $tenants = $this->database->table('tenants')->order('name ASC');
+        // Získáme všechny tenanty
+        $tenants = $this->database->table('tenants')->order('name ASC');
 
-    foreach ($tenants as $tenant) {
-        // Používáme CompanyManager s automatickým dešifrováním
-        $company = $this->companyManager->getByTenant($tenant->id);
-        
-        // Získáme admin uživatele pro tento tenant
-        $adminUser = $this->database->table('users')
-            ->where('tenant_id', $tenant->id)
-            ->where('role', 'admin')
-            ->fetch();
+        foreach ($tenants as $tenant) {
+            // Používáme CompanyManager s automatickým dešifrováním
+            $company = $this->companyManager->getByTenant($tenant->id);
 
-        // Počet uživatelů
-        $userCount = $this->database->table('users')
-            ->where('tenant_id', $tenant->id)
-            ->count();
+            // OPRAVENO: Používáme UserManager pro získání admin uživatele s automatickým dešifrováním
+            $adminUser = null;
 
-        // Počet faktur
-        $invoiceCount = $this->database->table('invoices')
-            ->where('tenant_id', $tenant->id)
-            ->count();
+            // Dočasně nastavíme kontext na konkrétní tenant
+            $this->userManager->setTenantContext($tenant->id, true);
 
-        $tenantsList[] = [
-            'tenant' => $tenant,
-            'company' => $company, // Nyní obsahuje dešifrovaná data
-            'admin_user' => $adminUser,
-            'user_count' => $userCount,
-            'invoice_count' => $invoiceCount
+            // Získáme všechny uživatele v tenantu a najdeme prvního admina
+            $tenantUsers = $this->userManager->getAll();
+            foreach ($tenantUsers as $user) {
+                if ($user->role === 'admin') {
+                    $adminUser = $user;
+                    break;
+                }
+            }
+
+            // Vrátíme kontext na super admin mode
+            $this->userManager->setTenantContext(null, true);
+
+            // Počet uživatelů
+            $userCount = $this->database->table('users')
+                ->where('tenant_id', $tenant->id)
+                ->count();
+
+            // Počet faktur
+            $invoiceCount = $this->database->table('invoices')
+                ->where('tenant_id', $tenant->id)
+                ->count();
+
+            $tenantsList[] = [
+                'tenant' => $tenant,
+                'company' => $company, // Nyní obsahuje dešifrovaná data
+                'admin_user' => $adminUser, // Nyní obsahuje dešifrovaná data
+                'user_count' => $userCount,
+                'invoice_count' => $invoiceCount
+            ];
+        }
+
+        // ZACHOVANÁ PŮVODNÍ LOGIKA: Příprava proměnných pro šablonu
+        $this->template->tenants = $tenantsList;
+        $this->template->totalTenants = count($tenantsList);
+
+        // ZACHOVANÁ PŮVODNÍ LOGIKA: Dashboard statistiky
+        $activeTenants = array_filter($tenantsList, function ($t) {
+            return $t['tenant']->status === 'active';
+        });
+
+        $totalUsers = array_sum(array_column($tenantsList, 'user_count'));
+        $totalInvoices = array_sum(array_column($tenantsList, 'invoice_count'));
+
+        $this->template->dashboardStats = [
+            'total_tenants' => count($tenantsList),
+            'active_tenants' => count($activeTenants),
+            'inactive_tenants' => count($tenantsList) - count($activeTenants),
+            'total_users' => $totalUsers,
+            'total_invoices' => $totalInvoices,
+            'avg_users_per_tenant' => count($tenantsList) > 0 ? round($totalUsers / count($tenantsList), 1) : 0,
+            'avg_invoices_per_tenant' => count($tenantsList) > 0 ? round($totalInvoices / count($tenantsList), 1) : 0
         ];
     }
-
-    // Příprava proměnných pro šablonu
-    $this->template->tenants = $tenantsList;
-    $this->template->totalTenants = count($tenantsList);
-    
-    // Dashboard statistiky - OPRAVA: používáme objektovou syntaxi
-    $activeTenants = array_filter($tenantsList, function($t) {
-        return $t['tenant']->status === 'active';
-    });
-    
-    $totalUsers = array_sum(array_column($tenantsList, 'user_count'));
-    $totalInvoices = array_sum(array_column($tenantsList, 'invoice_count'));
-    
-    $this->template->dashboardStats = [
-        'total_tenants' => count($tenantsList),
-        'active_tenants' => count($activeTenants),
-        'inactive_tenants' => count($tenantsList) - count($activeTenants),
-        'total_users' => $totalUsers,
-        'total_invoices' => $totalInvoices,
-        'avg_users_per_tenant' => count($tenantsList) > 0 ? round($totalUsers / count($tenantsList), 1) : 0,
-        'avg_invoices_per_tenant' => count($tenantsList) > 0 ? round($totalInvoices / count($tenantsList), 1) : 0
-    ];
-}
 
     /**
      * Signál pro deaktivaci tenanta

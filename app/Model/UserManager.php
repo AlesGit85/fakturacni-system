@@ -365,24 +365,39 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     /**
-     * Získá všechny uživatele (filtrované podle tenant_id)
-     * AKTUALIZOVÁNO: Nyní používá tenant kontext místo parametrů
+     * Získá všechny uživatele (filtrované podle tenant_id) s automatickým dešifrováním
      */
     public function getAll()
+    {
+        $selection = $this->database->table('users')->order('username ASC');
+        $filteredSelection = $this->applyTenantFilter($selection);
+
+        // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ při načítání
+        $users = $filteredSelection->fetchAll();
+        return $this->decryptUserRecords($users);
+    }
+
+    /**
+     * Získá databázový selection pro uživatele (bez automatického dešifrování)
+     * Pro případy, kdy potřebujeme databázové operace jako where(), count() apod.
+     */
+    public function getAllSelection(): Nette\Database\Table\Selection
     {
         $selection = $this->database->table('users')->order('username ASC');
         return $this->applyTenantFilter($selection);
     }
 
     /**
-     * Získá uživatele podle ID (s kontrolou tenant_id)
-     * AKTUALIZOVÁNO: Nyní používá tenant kontext
+     * Získá uživatele podle ID (s kontrolou tenant_id) s automatickým dešifrováním
      */
     public function getById($id)
     {
         $selection = $this->database->table('users')->where('id', $id);
         $filteredSelection = $this->applyTenantFilter($selection);
-        return $filteredSelection->fetch();
+        $user = $filteredSelection->fetch();
+
+        // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ při načítání
+        return $this->decryptUserRecord($user);
     }
 
     /**
@@ -398,8 +413,7 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     /**
-     * Aktualizuje uživatele
-     * ROZŠÍŘENO: Kontroluje tenant přístup při editaci
+     * Aktualizuje uživatele s automatickým šifrováním
      */
     public function update($id, $data, ?int $adminId = null, ?string $adminName = null)
     {
@@ -410,55 +424,98 @@ class UserManager implements Nette\Security\Authenticator
                 throw new \Exception('Uživatel neexistuje nebo k němu nemáte přístup.');
             }
 
+            // Konverze stdClass na pole
+            if ($data instanceof \stdClass) {
+                $data = (array) $data;
+            }
+
+            // 🔒 AUTOMATICKÉ ŠIFROVÁNÍ před uložením
+            $encryptedData = $this->encryptSensitiveData($data);
+
             // Logování změny role
-            if (isset($data['role'])) {
-                if ($existingUser->role !== $data['role']) {
+            if (isset($encryptedData['role'])) {
+                if ($existingUser->role !== $encryptedData['role']) {
                     $this->securityLogger->logRoleChange(
                         $id,
                         $existingUser->username,
                         $existingUser->role,
-                        $data['role'],
+                        $encryptedData['role'],
                         $adminId ?: -1,
                         $adminName ?: 'Systém'
                     );
                 }
-            }
-
-            // Logování změny tenant_id (pouze pro super admina)
-            if (isset($data['tenant_id']) && $this->isSuperAdmin) {
-                if ($existingUser->tenant_id != $data['tenant_id']) {
-                    $this->securityLogger->logSecurityEvent(
-                        'tenant_change',
-                        "Uživatel {$existingUser->username} (ID: $id) byl přesunut z tenanta {$existingUser->tenant_id} do tenanta {$data['tenant_id']} administrátorem " . ($adminName ?: 'Systém') . " (ID: " . ($adminId ?: -1) . ")"
-                    );
-                }
-            } elseif (isset($data['tenant_id']) && !$this->isSuperAdmin) {
-                // Nestandardní případ - tenant_id se nemá měnit bez super admin práv
-                unset($data['tenant_id']);
-            }
-
-            // Logování změny super admin statusu (pouze pro super admina)
-            if (isset($data['is_super_admin']) && $this->isSuperAdmin) {
-                if ($existingUser->is_super_admin != $data['is_super_admin']) {
-                    $action = $data['is_super_admin'] ? 'přidělena' : 'odebrána';
-                    $this->securityLogger->logSecurityEvent(
-                        'super_admin_change',
-                        "Super admin role byla $action uživateli {$existingUser->username} (ID: $id) administrátorem " . ($adminName ?: 'Systém') . " (ID: " . ($adminId ?: -1) . ")"
-                    );
-                }
-            } elseif (isset($data['is_super_admin']) && !$this->isSuperAdmin) {
+            } elseif (isset($encryptedData['is_super_admin']) && !$this->isSuperAdmin) {
                 // Super admin status může měnit pouze super admin
-                unset($data['is_super_admin']);
+                unset($encryptedData['is_super_admin']);
             }
 
             $result = $this->database->table('users')
                 ->where('id', $id)
-                ->update($data);
+                ->update($encryptedData);
+
+            // Pro debug - zobrazíme, co se uložilo
+            if ($this->encryptionService->isEncryptionEnabled()) {
+                \Tracy\Debugger::log("🔒 KROK 2: Uživatel ID:$id aktualizován se šifrováním", \Tracy\ILogger::INFO);
+                \Tracy\Debugger::log("Šifrovaná data: " . json_encode(array_intersect_key($encryptedData, array_flip(self::ENCRYPTED_FIELDS))), \Tracy\ILogger::INFO);
+            }
 
             return $result > 0;
         } catch (\Exception $e) {
             error_log('Chyba při aktualizaci uživatele: ' . $e->getMessage());
             return false;
+        }
+    }
+
+
+    /**
+     * Přidá nebo aktualizuje uživatele s automatickým šifrováním
+     * NOVÁ METODA: Pro konzistentní API se ostatními managery
+     */
+    public function save($data, $id = null)
+    {
+        // Konverze stdClass na pole
+        if ($data instanceof \stdClass) {
+            $data = (array) $data;
+        }
+
+        // 🔒 AUTOMATICKÉ ŠIFROVÁNÍ před uložením
+        $encryptedData = $this->encryptSensitiveData($data);
+
+        if ($id) {
+            // EDITACE - ověříme, že uživatel existuje a máme k němu přístup
+            $existingUser = $this->getById($id);
+            if (!$existingUser) {
+                throw new \Exception('Uživatel neexistuje nebo k němu nemáte přístup.');
+            }
+
+            // Aktualizace (bez změny tenant_id) - používáme šifrovaná data
+            $result = $this->database->table('users')->where('id', $id)->update($encryptedData);
+
+            // Pro debug - zobrazíme, co se uložilo
+            if ($this->encryptionService->isEncryptionEnabled()) {
+                \Tracy\Debugger::log("🔒 KROK 2: Uživatel ID:$id aktualizován se šifrováním", \Tracy\ILogger::INFO);
+                \Tracy\Debugger::log("Šifrovaná data: " . json_encode(array_intersect_key($encryptedData, array_flip(self::ENCRYPTED_FIELDS))), \Tracy\ILogger::INFO);
+            }
+
+            return $result;
+        } else {
+            // NOVÝ UŽIVATEL - automaticky nastavíme tenant_id
+            if ($this->currentTenantId === null) {
+                // Fallback pro výchozí tenant
+                $encryptedData['tenant_id'] = 1;
+            } else {
+                $encryptedData['tenant_id'] = $this->currentTenantId;
+            }
+
+            $result = $this->database->table('users')->insert($encryptedData);
+
+            // Pro debug - zobrazíme, co se uložilo
+            if ($this->encryptionService->isEncryptionEnabled()) {
+                \Tracy\Debugger::log("🔒 KROK 2: Nový uživatel vytvořen se šifrováním", \Tracy\ILogger::INFO);
+                \Tracy\Debugger::log("Šifrovaná data: " . json_encode(array_intersect_key($encryptedData, array_flip(self::ENCRYPTED_FIELDS))), \Tracy\ILogger::INFO);
+            }
+
+            return $result;
         }
     }
 
@@ -513,29 +570,29 @@ class UserManager implements Nette\Security\Authenticator
     /**
      * Kontrola, zda je uživatelské jméno dostupné
      */
-    public function isUsernameAvailable(string $username, ?int $excludeUserId = null): bool
+        public function isUsernameAvailable(string $username, ?int $excludeUserId = null): bool
     {
-        $query = $this->database->table('users')->where('username', $username);
+        $selection = $this->getAllSelection()->where('username', $username);
 
         if ($excludeUserId) {
-            $query->where('id != ?', $excludeUserId);
+            $selection->where('id != ?', $excludeUserId);
         }
 
-        return $query->count() === 0;
+        return $selection->count() === 0;
     }
 
     /**
      * Kontrola, zda je e-mail dostupný
      */
-    public function isEmailAvailable(string $email, ?int $excludeUserId = null): bool
+        public function isEmailAvailable(string $email, ?int $excludeUserId = null): bool
     {
-        $query = $this->database->table('users')->where('email', $email);
+        $selection = $this->getAllSelection()->where('email', $email);
 
         if ($excludeUserId) {
-            $query->where('id != ?', $excludeUserId);
+            $selection->where('id != ?', $excludeUserId);
         }
 
-        return $query->count() === 0;
+        return $selection->count() === 0;
     }
 
     /**
@@ -751,37 +808,42 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     /**
-     * Vyhledá uživatele podle různých kritérií (pouze pro super admina)
-     * ✅ PŮVODNÍ KÓD - parametrizované dotazy jsou bezpečné
+     * Vyhledá uživatele podle různých kritérií (pouze pro super admina) s automatickým dešifrováním
      */
     public function searchUsersForSuperAdmin(string $query): array
     {
         if (!$this->isSuperAdmin) {
-            return [];
+            throw new \Exception('Pouze super admin může vyhledávat napříč tenanty.');
         }
 
-        $searchQuery = "%$query%";
+        $searchQuery = mb_strtolower(trim($query), 'UTF-8');
+        $results = [];
 
-        // Vyhledáme ve všech relevantních polích - parametrizované dotazy jsou bezpečné
-        $users = $this->database->query('
-            SELECT 
-                u.*,
-                t.name as tenant_name,
-                c.name as company_name
-            FROM users u
-            LEFT JOIN tenants t ON t.id = u.tenant_id
-            LEFT JOIN company_info c ON c.tenant_id = u.tenant_id
-            WHERE 
-                u.username LIKE ? OR
-                u.email LIKE ? OR
-                u.first_name LIKE ? OR
-                u.last_name LIKE ? OR
-                t.name LIKE ? OR
-                c.name LIKE ?
-            ORDER BY t.name ASC, u.role DESC, u.username ASC
-        ', $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery)->fetchAll();
+        // Získáme všechny tenanty pro přiřazení názvu
+        $tenants = $this->database->table('tenants')->fetchPairs('id', 'name');
 
-        return $users;
+        // Vyhledáváme ve všech uživatelích napříč tenanty
+        $users = $this->database->table('users')
+            ->where(
+                'username LIKE ? OR email LIKE ? OR first_name LIKE ? OR last_name LIKE ?',
+                "%$query%",
+                "%$query%",
+                "%$query%",
+                "%$query%"
+            )
+            ->order('tenant_id, username ASC')
+            ->fetchAll();
+
+        // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ při načítání
+        $decryptedUsers = $this->decryptUserRecords($users);
+
+        foreach ($decryptedUsers as $user) {
+            $userArray = (array) $user;
+            $userArray['tenant_name'] = $tenants[$user->tenant_id] ?? 'Neznámý tenant';
+            $results[] = $userArray;
+        }
+
+        return $results;
     }
 
     /**

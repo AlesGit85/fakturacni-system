@@ -537,6 +537,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 			$this->getService('015'),
 			$this->getService('013'),
 			$this->getService('tracy.logger'),
+			$this->getService('authenticator'),
 		);
 		$service->injectPrimary(
 			$this->getService('http.request'),
@@ -560,7 +561,7 @@ class Container_5fe5d943c4 extends Nette\DI\Container
 
 	public function createServiceApplication__13(): App\Presentation\Users\UsersPresenter
 	{
-		$service = new App\Presentation\Users\UsersPresenter($this->getService('authenticator'));
+		$service = new App\Presentation\Users\UsersPresenter($this->getService('authenticator'), $this->getService('011'));
 		$service->injectPrimary(
 			$this->getService('http.request'),
 			$this->getService('http.response'),

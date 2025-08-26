@@ -7,6 +7,7 @@ namespace App\Presentation\Users;
 use Nette;
 use Nette\Application\UI\Form;
 use App\Model\UserManager;
+use App\Model\CompanyManager;
 use App\Presentation\BasePresenter;
 use App\Security\SecurityValidator; // ✅ NOVÉ: Import našeho validátoru
 
@@ -14,6 +15,9 @@ final class UsersPresenter extends BasePresenter
 {
     /** @var UserManager */
     private $userManager;
+
+    /** @var CompanyManager */
+    private $companyManager;
 
     // Celý presenter je primárně pro adminy, kromě profilu
     protected array $requiredRoles = [];
@@ -28,9 +32,10 @@ final class UsersPresenter extends BasePresenter
         'moveUser' => ['admin'], // Přesunout uživatele může jen admin (ale reálně jen super admin)
     ];
 
-    public function __construct(UserManager $userManager)
+    public function __construct(UserManager $userManager, CompanyManager $companyManager)
     {
         $this->userManager = $userManager;
+        $this->companyManager = $companyManager;
     }
 
     /**
@@ -42,6 +47,12 @@ final class UsersPresenter extends BasePresenter
 
         // Nastavíme tenant kontext v UserManager
         $this->userManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
+
+        // NOVÉ: Nastavíme tenant kontext i v CompanyManager
+        $this->companyManager->setTenantContext(
             $this->getCurrentTenantId(),
             $this->isSuperAdmin()
         );
@@ -81,7 +92,7 @@ final class UsersPresenter extends BasePresenter
             $this->template->totalUsers = count($searchResults);
         } else {
             // NORMÁLNÍ ZOBRAZENÍ - seskupení podle tenantů
-            $groupedUsers = $this->getUsersGroupedByTenants();
+            $groupedUsers = $this->userManager->getAllUsersGroupedByTenants();
             $this->template->groupedUsers = $groupedUsers;
             $this->template->searchResults = [];
 
@@ -100,63 +111,114 @@ final class UsersPresenter extends BasePresenter
     /**
      * Příprava zobrazení pro normálního admina
      */
-private function prepareNormalAdminView(): void
-{
-    // ✅ POUŽÍVÁME UserManager s automatickým dešifrováním
-    $users = $this->userManager->getAll();
-    $this->template->users = $users;
-    $this->template->totalUsers = count($users);
-    $this->template->groupedUsers = [];
-    $this->template->searchResults = [];
-}
+    private function prepareNormalAdminView(): void
+    {
+        // ✅ POUŽÍVÁME UserManager s automatickým dešifrováním
+        $users = $this->userManager->getAll();
+        $this->template->users = $users;
+        $this->template->totalUsers = count($users);
+        $this->template->groupedUsers = [];
+        $this->template->searchResults = [];
+
+        // NOVÉ: Načtení firemních údajů aktuálního tenanta s automatickým dešifrováním
+        $this->template->currentTenantCompany = $this->companyManager->getCompanyInfo();
+        $this->template->currentTenant = $this->getCurrentTenant();
+    }
 
     /**
      * Vyhledá uživatele podle různých kritérií
      * ✅ PŮVODNÍ KÓD - již byl bezpečný s parametrizovanými dotazy
      */
     private function performUserSearch(string $query): array
-{
-    // ✅ POUŽÍVÁME UserManager místo přímých SQL dotazů
-    if ($this->isSuperAdmin()) {
-        return $this->userManager->searchUsersForSuperAdmin($query);
-    } else {
-        // Pro normální admina vyhledáváme jen v jeho tenantu
-        $allUsers = $this->userManager->getAll();
-        $searchQuery = mb_strtolower(trim($query), 'UTF-8');
-        
-        $results = [];
-        foreach ($allUsers as $user) {
-            $userArray = (array) $user;
-            
-            // Vyhledáváme v relevantních polích
-            if (
-                stripos($user->username, $searchQuery) !== false ||
-                stripos($user->email, $searchQuery) !== false ||
-                stripos($user->first_name, $searchQuery) !== false ||
-                stripos($user->last_name, $searchQuery) !== false
-            ) {
-                $userArray['tenant_name'] = null; // Normální admin nevidí tenant name
-                $userArray['company_name'] = null;
-                $results[] = (object) $userArray;
+    {
+        // ✅ POUŽÍVÁME UserManager místo přímých SQL dotazů
+        if ($this->isSuperAdmin()) {
+            return $this->userManager->searchUsersForSuperAdmin($query);
+        } else {
+            // Pro normální admina vyhledáváme jen v jeho tenantu
+            $allUsers = $this->userManager->getAll();
+            $searchQuery = mb_strtolower(trim($query), 'UTF-8');
+
+            $results = [];
+            foreach ($allUsers as $user) {
+                $userArray = (array) $user;
+
+                // Vyhledáváme v relevantních polích
+                if (
+                    stripos($user->username, $searchQuery) !== false ||
+                    stripos($user->email, $searchQuery) !== false ||
+                    stripos($user->first_name, $searchQuery) !== false ||
+                    stripos($user->last_name, $searchQuery) !== false
+                ) {
+                    $userArray['tenant_name'] = null; // Normální admin nevidí tenant name
+                    $userArray['company_name'] = null;
+                    $results[] = (object) $userArray;
+                }
             }
+
+            return $results;
         }
-        
-        return $results;
     }
-}
 
-    /**
-     * Získá uživatele seskupené podle tenantů (pouze pro super admina)
+/**
+     * Získá všechny uživatele seskupené podle tenantů (pouze pro super admina)
+     * NOVÁ METODA: Základní implementace bez automatického dešifrování firemních údajů
      */
-    private function getUsersGroupedByTenants(): array
-{
-    if (!$this->isSuperAdmin()) {
-        return [];
-    }
+    public function getAllUsersGroupedByTenants(): array
+    {
+        if (!$this->isSuperAdmin) {
+            return [];
+        }
 
-    // ✅ POUŽÍVÁME UserManager místo přímých dotazů
-    return $this->userManager->getAllUsersGroupedByTenants();
-}
+        // Získáme všechny tenanty s informacemi o společnosti (POZOR: firemní údaje budou šifrované)
+        $tenants = $this->database->query('
+            SELECT 
+                t.id as tenant_id,
+                t.name as tenant_name,
+                c.name as company_name,
+                c.email as company_email,
+                c.phone as company_phone
+            FROM tenants t
+            LEFT JOIN company_info c ON c.tenant_id = t.id
+            ORDER BY t.name ASC
+        ')->fetchAll();
+
+        $result = [];
+
+        foreach ($tenants as $tenant) {
+            // Získáme uživatele pro tento tenant s automatickým dešifrováním
+            $userSelection = $this->database->table('users')
+                ->where('tenant_id', $tenant->tenant_id)
+                ->order('role DESC, username ASC') // Admini první, pak alfabeticky
+                ->fetchAll();
+
+            // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ uživatelských dat
+            $users = $this->decryptUserRecords($userSelection);
+
+            // Najdeme majitele (prvního admina v tenantu)
+            $owner = null;
+            foreach ($users as $user) {
+                if ($user->role === 'admin') {
+                    $owner = $user;
+                    break;
+                }
+            }
+
+            $result[] = [
+                'tenant_id' => $tenant->tenant_id,
+                'tenant_name' => $tenant->tenant_name,
+                'company_name' => $tenant->company_name ?? $tenant->tenant_name,
+                'company_email' => $tenant->company_email, // POZOR: Bude šifrované - opraví se v UsersPresenter
+                'company_phone' => $tenant->company_phone, // POZOR: Bude šifrované - opraví se v UsersPresenter
+                'owner' => $owner,
+                'users' => $users,
+                'user_count' => count($users),
+                'admin_count' => count(array_filter($users, fn($u) => $u->role === 'admin'))
+            ];
+        }
+
+        return $result;
+    }
 
     /**
      * Super admin statistiky
@@ -238,7 +300,8 @@ private function prepareNormalAdminView(): void
         $this['userForm']->setDefaults($user);
     }
 
-    public function actionDelete(int $id): void
+    
+public function actionDelete(int $id): void
     {
         $user = $this->userManager->getById($id);
 
@@ -252,9 +315,9 @@ private function prepareNormalAdminView(): void
             $this->redirect('default');
         }
 
-        // Kontrola, zda se nejedná o posledního admina
+        // OPRAVENO: Kontrola, zda se nejedná o posledního admina - používáme getAllSelection()
         if ($user->role === 'admin') {
-            $adminCount = $this->userManager->getAll()->where('role', 'admin')->count();
+            $adminCount = $this->userManager->getAllSelection()->where('role', 'admin')->count();
             if ($adminCount <= 1) {
                 $this->flashMessage('Nemůžete smazat posledního administrátora.', 'danger');
                 $this->redirect('default');
@@ -687,7 +750,7 @@ private function prepareNormalAdminView(): void
             }
 
             // Kontrola jedinečnosti dat
-            $existingUsername = $this->userManager->getAll()
+            $existingUsername = $this->userManager->getAllSelection()
                 ->where('username', $data->username)
                 ->where('id != ?', $userId)
                 ->fetch();
@@ -698,7 +761,7 @@ private function prepareNormalAdminView(): void
                 return;
             }
 
-            $existingEmail = $this->userManager->getAll()
+            $existingEmail = $this->userManager->getAllSelection()
                 ->where('email', $data->email)
                 ->where('id != ?', $userId)
                 ->fetch();
