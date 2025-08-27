@@ -375,3 +375,8 @@
 [2025-08-26 15-56-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/migration/ 
 [2025-08-26 15-56-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
 [2025-08-26 15-56-13] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-08-27 10-22-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=ojbj 
+[2025-08-27 10-22-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=t4466&_fid=ojbj 
+[2025-08-27 10-22-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-27 10-22-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=0j81 
+[2025-08-27 10-22-09] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=0j81 
