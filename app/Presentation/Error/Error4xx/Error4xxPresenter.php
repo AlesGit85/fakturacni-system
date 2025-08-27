@@ -14,10 +14,17 @@ use Nette\Application\Attributes\Requires;
 #[Requires(methods: '*', forward: true)]
 final class Error4xxPresenter extends Nette\Application\UI\Presenter
 {
-	public function renderDefault(Nette\Application\BadRequestException $exception): void
+	public function renderDefault(\Throwable $exception): void
 	{
+		// OPRAVENO: Zpracování různých typů výjimek
+		if ($exception instanceof Nette\Application\BadRequestException) {
+			$code = $exception->getCode();
+		} else {
+			// Pro ostatní výjimky (jako ConnectionException) použijeme 500
+			$code = 500;
+		}
+		
 		// renders the appropriate error template based on the HTTP status code
-		$code = $exception->getCode();
 		$file = is_file($file = __DIR__ . "/$code.latte")
 			? $file
 			: __DIR__ . '/4xx.latte';

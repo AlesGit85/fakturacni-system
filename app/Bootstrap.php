@@ -24,20 +24,20 @@ class Bootstrap
 
 
     public function bootWebApplication(): Nette\DI\Container
-    {
-        $this->initializeEnvironment();
-        $this->setupContainer();
-        $container = $this->configurator->createContainer();
+{
+    $this->initializeEnvironment();
+    $this->setupContainer();
+    $container = $this->configurator->createContainer();
 
-        // Aplikace bezpečnostních hlaviček
-        $httpResponse = $container->getByType(Nette\Http\Response::class);
-        SecurityHeaders::apply($httpResponse);
+    // Aplikace bezpečnostních hlaviček
+    $httpResponse = $container->getByType(Nette\Http\Response::class);
+    SecurityHeaders::apply($httpResponse);
 
-        // OPRAVENO: Bezpečnější vytvoření složky pro moduly bez symlinků
-        $this->createModulesDirectorySafely();
+    // OPRAVENO: Bezpečnější vytvoření složky pro moduly bez symlinků
+    $this->createModulesDirectorySafely();
 
-        return $container;
-    }
+    return $container;
+}
 
     /**
      * Bezpečné vytvoření adresáře pro moduly bez symlinků
@@ -67,34 +67,60 @@ class Bootstrap
     }
 
 
-    public function initializeEnvironment(): void
-    {
-        // NOVÉ: Načtení .env souboru
-        $envPath = $this->rootDir . '/.env';
-        if (file_exists($envPath)) {
-            $dotenv = Dotenv::createImmutable($this->rootDir);
-            $dotenv->load();
+public function initializeEnvironment(): void
+{
+    // NEJDŘÍVE načtení .env souboru - MUSÍ být před vším ostatním
+    $envPath = $this->rootDir . '/.env';
+    if (file_exists($envPath)) {
+        $dotenv = Dotenv::createImmutable($this->rootDir);
+        $dotenv->load();
+        
+        // KLÍČOVÉ: Předání environment variables do Nette konfiguratoru
+        $this->configurator->addStaticParameters([
+            'env' => $_ENV
+        ]);
+        
+        if (!isset($_ENV['DB_PASSWORD'])) {
+            throw new \Exception('.env soubor se načetl, ale DB_PASSWORD není nastaveno');
         }
-
-        // Nastavení časového pásma pro celou aplikaci
-        date_default_timezone_set('Europe/Prague');
-
-        // Správná definice WWW_DIR pro produkční server
-        define('WWW_DIR', dirname(__DIR__));
-
-        // Tracy jen pro development
-        $this->configurator->enableTracy($this->rootDir . '/log');
-
-        $this->configurator->createRobotLoader()
-            ->addDirectory(__DIR__)
-            ->register();
+    } else {
+        throw new \Exception('.env soubor nenalezen na cestě: ' . $envPath);
     }
 
+    // Nastavení časového pásma pro celou aplikaci
+    date_default_timezone_set('Europe/Prague');
 
-    private function setupContainer(): void
-    {
-        $configDir = $this->rootDir . '/config';
-        $this->configurator->addConfig($configDir . '/common.neon');
-        $this->configurator->addConfig($configDir . '/services.neon');
+    // Správná definice WWW_DIR pro produkční server
+    define('WWW_DIR', dirname(__DIR__));
+
+    // Tracy jen pro development
+    $this->configurator->enableTracy($this->rootDir . '/log');
+
+    $this->configurator->createRobotLoader()
+        ->addDirectory(__DIR__)
+        ->register();
+}
+
+
+private function setupContainer(): void
+{
+    $configDir = $this->rootDir . '/config';
+    $this->configurator->addConfig($configDir . '/common.neon');
+    $this->configurator->addConfig($configDir . '/services.neon');
+
+    // Chytrý výběr konfigurace podle prostředí
+    if ($_SERVER['SERVER_NAME'] === 'localhost' || $_SERVER['HTTP_HOST'] === 'localhost:8080' || isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] === '127.0.0.1') {
+        // Localhost - development
+        $envConfig = $configDir . '/localhost.neon';
+        if (file_exists($envConfig)) {
+            $this->configurator->addConfig($envConfig);
+        }
+    } else {
+        // Produkce
+        $localConfig = $configDir . '/local.neon';
+        if (file_exists($localConfig)) {
+            $this->configurator->addConfig($localConfig);
+        }
     }
+}
 }

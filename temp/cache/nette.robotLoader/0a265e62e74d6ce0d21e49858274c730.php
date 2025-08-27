@@ -5,7 +5,7 @@ return array (
     'App\\Bootstrap' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Bootstrap.php',
-      1 => 1756282682,
+      1 => 1756284904,
     ),
     'App\\Core\\RouterFactory' => 
     array (
@@ -140,7 +140,7 @@ return array (
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Error\\Error4xx\\Error4xxPresenter.php',
-      1 => 1738539948,
+      1 => 1756284651,
     ),
     'App\\Presentation\\Error\\Error5xx\\Error5xxPresenter' => 
     array (
@@ -150,7 +150,7 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1756282894,
+      1 => 1756283565,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
@@ -242,26 +242,10 @@ return array (
   array (
     'Nette\\Bridges\\Assets\\DIExtension' => 3,
     'null' => 3,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\Migration\\MigrationEncryptOldDataTemplate' => 2,
-    'App\\Presentation\\Migration\\MigrationTemplate' => 3,
-    'App\\Presentation\\Migration\\MigrationDefaultTemplate' => 2,
-    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
-    'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
     'App\\Presentation\\Sign\\SignInTemplate' => 3,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Users\\UsersEditTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityTemplate' => 3,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
-    'App\\Presentation\\Sign\\SignUpTemplate' => 2,
   ),
   2 => 
   array (

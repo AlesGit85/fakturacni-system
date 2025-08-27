@@ -1,33 +1,32 @@
-# config/local.neon - Produkční konfigurace pro qrdoklad.cz
+# config/localhost.neon - Lokální vývojové prostředí
 parameters:
-	production: true
+	production: false
 	
 database:
-	dsn: 'mysql:host=localhost;dbname=c4devqrdoklad'
-	user: 'c4alpho'
-	password: '%env.DB_PASSWORD%'
+	dsn: 'mysql:host=127.0.0.1;dbname=fakturacni_system'
+	user: 'root'
+	password: '%env.DB_PASSWORD_LOCAL%'
 	options:
 		lazy: true
 		charset: utf8mb4
 
 session:
-	expiration: 14 days
+	expiration: 20 minutes
 	autoStart: true
-	name: qrdoklad_session
+	name: fakturacni_system_session
 	cookieHttponly: true
-	cookieSecure: true # HTTPS je povinné v produkci
 	cookieSamesite: Strict
 
 tracy:
 	email: info@allimedia.cz
-	strictMode: true
-	showBar: false # Skryje Tracy bar v produkci
+	strictMode: false
+	showBar: true # Zobrazí Tracy bar pro development
 
 application:
 	errorPresenter:
 		4xx: Error:Error4xx
 		5xx: Error:Error5xx
-	catchExceptions: true
+	catchExceptions: false # Zobrazí detailní chyby pro development
 	
 latte:
 	strictTypes: yes
