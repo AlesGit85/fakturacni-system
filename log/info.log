@@ -90,3 +90,8 @@
 [2025-08-27 12-49-17] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
 [2025-08-27 13-56-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
 [2025-08-27 13-56-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=mgym5&_fid=j4t0 
+[2025-08-27 13-59-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-27 13-59-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=og0t 
+[2025-08-27 13-59-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=og0t 
+[2025-08-27 14-04-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=og0t 
+[2025-08-27 14-04-24] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=og0t 
