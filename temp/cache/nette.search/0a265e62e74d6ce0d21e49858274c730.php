@@ -5,7 +5,7 @@ return array (
     'App\\Bootstrap' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Bootstrap.php',
-      1 => 1756284904,
+      1 => 1756285192,
     ),
     'App\\Core\\RouterFactory' => 
     array (
@@ -65,7 +65,7 @@ return array (
     'App\\Model\\UserManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\UserManager.php',
-      1 => 1756282894,
+      1 => 1756285789,
     ),
     'App\\Modules\\BaseModule' => 
     array (
@@ -150,7 +150,7 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1756283565,
+      1 => 1756285590,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
