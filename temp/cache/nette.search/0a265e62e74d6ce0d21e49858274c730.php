@@ -57,6 +57,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\QrPaymentService.php',
       1 => 1747658804,
     ),
+    'App\\Model\\SessionSettingsManager' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\SessionSettingsManager.php',
+      1 => 1756297054,
+    ),
     'App\\Model\\TenantManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\TenantManager.php',
@@ -130,7 +135,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1755765835,
+      1 => 1756299169,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -150,12 +155,12 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1756285590,
+      1 => 1756286420,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1755077382,
+      1 => 1756286594,
     ),
     'App\\Presentation\\Migration\\MigrationPresenter' => 
     array (
@@ -180,7 +185,7 @@ return array (
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1755723897,
+      1 => 1756297689,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (

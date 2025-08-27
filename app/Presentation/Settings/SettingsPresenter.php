@@ -5,6 +5,7 @@ namespace App\Presentation\Settings;
 use Nette;
 use Nette\Application\UI\Form;
 use App\Model\CompanyManager;
+use App\Model\SessionSettingsManager;
 use App\Presentation\BasePresenter;
 use App\Security\SecurityValidator;
 use Tracy\ILogger;
@@ -13,6 +14,9 @@ class SettingsPresenter extends BasePresenter
 {
     /** @var CompanyManager */
     private $companyManager;
+
+    /** @var SessionSettingsManager */
+    private $sessionSettingsManager;
 
     /** @var ILogger */
     private $logger;
@@ -23,6 +27,7 @@ class SettingsPresenter extends BasePresenter
     // Všechny akce v nastavení jsou pouze pro admina
     protected array $actionRoles = [
         'default' => ['admin'],
+        'sessionTimeouts' => ['admin'],
         'deleteLogo' => ['admin'],
         'deleteSignature' => ['admin'],
     ];
@@ -31,9 +36,10 @@ class SettingsPresenter extends BasePresenter
     protected bool $enableHoneypotProtection = false;
     protected bool $enableTimingProtection = false;
 
-    public function __construct(CompanyManager $companyManager, ILogger $logger)
+    public function __construct(CompanyManager $companyManager, SessionSettingsManager $sessionSettingsManager, ILogger $logger)
     {
         $this->companyManager = $companyManager;
+        $this->sessionSettingsManager = $sessionSettingsManager;
         $this->logger = $logger;
     }
 
@@ -46,6 +52,11 @@ class SettingsPresenter extends BasePresenter
 
         // Nastavíme tenant kontext v CompanyManager
         $this->companyManager->setTenantContext(
+            $this->getCurrentTenantId(),
+            $this->isSuperAdmin()
+        );
+
+        $this->sessionSettingsManager->setTenantContext(
             $this->getCurrentTenantId(),
             $this->isSuperAdmin()
         );
@@ -715,5 +726,148 @@ class SettingsPresenter extends BasePresenter
             $this->flashMessage('Chyba při mazání podpisu: ' . $e->getMessage(), 'error');
             $this->redirect('default');
         }
+    }
+
+    /**
+     * NOVÁ AKCE: Správa session timeoutů
+     */
+    public function renderSessionTimeouts(): void
+    {
+        $settings = $this->sessionSettingsManager->getSessionSettings();
+        $this->template->currentSettings = $settings;
+
+        // Připravíme lidsky čitelné hodnoty pro zobrazení
+        $this->template->readableSettings = [
+            'grace_period' => $this->sessionSettingsManager->formatDuration($settings['grace_period']),
+            'inactivity_timeout' => $this->sessionSettingsManager->formatDuration($settings['inactivity_timeout']),
+            'max_lifetime' => $this->sessionSettingsManager->formatDuration($settings['max_lifetime']),
+            'regeneration_interval' => $this->sessionSettingsManager->formatDuration($settings['regeneration_interval'])
+        ];
+    }
+
+    /**
+     * Vytvoření formuláře pro session timeouty
+     */
+    public function createComponentSessionTimeoutsForm(): Form
+    {
+        $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+
+        // Anti-spam ochrana
+        $this->addAntiSpamProtectionToForm($form);
+
+        // Grace period (v minutách pro uživatele)
+        $form->addInteger('grace_period', 'Grace period po přihlášení:')
+            ->setRequired('Zadejte grace period')
+            ->setDefaultValue(2)
+            ->setHtmlAttribute('min', 1)
+            ->setHtmlAttribute('max', 10)
+            ->setHtmlAttribute('class', 'form-control')
+            ->setHtmlAttribute('title', 'Doba v minutách, během které se nekontroluje timeout po přihlášení');
+
+        // Timeout neaktivity (v hodinách)
+        $form->addInteger('inactivity_timeout', 'Timeout neaktivity:')
+            ->setRequired('Zadejte timeout neaktivity')
+            ->setDefaultValue(4)
+            ->setHtmlAttribute('min', 1)
+            ->setHtmlAttribute('max', 24)
+            ->setHtmlAttribute('class', 'form-control')
+            ->setHtmlAttribute('title', 'Doba v hodinách, po které se uživatel odhlásí při neaktivitě');
+
+        // Maximální doba života session (v hodinách)
+        $form->addInteger('max_lifetime', 'Maximální doba přihlášení:')
+            ->setRequired('Zadejte maximální dobu přihlášení')
+            ->setDefaultValue(12)
+            ->setHtmlAttribute('min', 2)
+            ->setHtmlAttribute('max', 168)
+            ->setHtmlAttribute('class', 'form-control')
+            ->setHtmlAttribute('title', 'Maximální doba v hodinách, po které se uživatel musí odhlásit');
+
+        // Interval regenerace session ID (v minutách)
+        $form->addInteger('regeneration_interval', 'Interval regenerace session:')
+            ->setRequired('Zadejte interval regenerace')
+            ->setDefaultValue(30)
+            ->setHtmlAttribute('min', 5)
+            ->setHtmlAttribute('max', 120)
+            ->setHtmlAttribute('class', 'form-control')
+            ->setHtmlAttribute('title', 'Doba v minutách mezi regeneracemi session ID');
+
+        $form->addSubmit('send', 'Uložit nastavení')
+            ->setHtmlAttribute('class', 'btn btn-primary');
+
+        $form->addSubmit('reset', 'Obnovit výchozí')
+            ->setHtmlAttribute('class', 'btn btn-outline-secondary ms-2')
+            ->setValidationScope([]);
+
+        $form->onSuccess[] = [$this, 'sessionTimeoutsFormSucceeded'];
+
+        // Nastavení výchozích hodnot z databáze
+        $settings = $this->sessionSettingsManager->getSessionSettings();
+        $form->setDefaults([
+            'grace_period' => round($settings['grace_period'] / 60), // převést z sekund na minuty
+            'inactivity_timeout' => round($settings['inactivity_timeout'] / 3600), // převést z sekund na hodiny
+            'max_lifetime' => round($settings['max_lifetime'] / 3600), // převést z sekund na hodiny
+            'regeneration_interval' => round($settings['regeneration_interval'] / 60) // převést z sekund na minuty
+        ]);
+
+        return $form;
+    }
+
+    /**
+     * Zpracování formuláře session timeoutů
+     */
+    public function sessionTimeoutsFormSucceeded(Form $form, \stdClass $data): void
+    {
+        // OPRAVA: Správná detekce, které tlačítko bylo stisknuto
+        $isResetClicked = $form->isSubmitted() === $form['reset'];
+
+        if ($isResetClicked) {
+            // Obnovení výchozích hodnot
+            $settings = [
+                'grace_period' => 120,      // 2 minuty
+                'inactivity_timeout' => 14400, // 4 hodiny
+                'max_lifetime' => 43200,    // 12 hodin
+                'regeneration_interval' => 1800  // 30 minut
+            ];
+            $message = 'Výchozí nastavení bylo obnoveno';
+        } else {
+            // Převedení z uživatelských jednotek na sekundy
+            $settings = [
+                'grace_period' => $data->grace_period * 60,          // minuty -> sekundy
+                'inactivity_timeout' => $data->inactivity_timeout * 3600, // hodiny -> sekundy
+                'max_lifetime' => $data->max_lifetime * 3600,        // hodiny -> sekundy
+                'regeneration_interval' => $data->regeneration_interval * 60  // minuty -> sekundy
+            ];
+            $message = 'Session nastavení bylo úspěšně uloženo';
+        }
+
+        try {
+            $success = $this->sessionSettingsManager->saveSessionSettings(
+                $settings,
+                $this->getUser()->getId()
+            );
+
+            if ($success) {
+                $this->flashMessage($message, 'success');
+
+                // Logování změny
+                $this->securityLogger->logSecurityEvent(
+                    'session_settings_changed',
+                    $message . " uživatelem {$this->getUser()->getIdentity()->username}",
+                    [
+                        'user_id' => $this->getUser()->getId(),
+                        'tenant_id' => $this->getCurrentTenantId(),
+                        'new_settings' => $settings
+                    ]
+                );
+            } else {
+                $this->flashMessage('Chyba při ukládání nastavení. Zkontrolujte, zda jsou hodnoty v platném rozsahu.', 'error');
+            }
+        } catch (\Exception $e) {
+            $this->flashMessage('Chyba při ukládání nastavení: ' . $e->getMessage(), 'error');
+            $this->logger->log($e->getMessage(), ILogger::ERROR);
+        }
+
+        $this->redirect('sessionTimeouts');
     }
 }

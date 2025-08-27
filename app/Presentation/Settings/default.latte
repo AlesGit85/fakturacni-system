@@ -1,9 +1,67 @@
 {block content}
+
+{block head}
+    <link rel="stylesheet" href="{$basePath}/css/settings.css">
+{/block}
+
 <div class="settings-container">
     <div class="page-header">
         <h1 class="main-title">Nastavení</h1>
         <p class="text-muted">Správa firemních údajů a nastavení systému</p>
     </div>
+
+{* Moderní navigační dlaždice pro nastavení *}
+<div class="settings-navigation">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card settings-nav-card">
+                <div class="card-body">
+                    <div class="settings-nav-icon">
+                        <i class="bi bi-building icon-primary"></i>
+                    </div>
+                    <h5 class="card-title">Firemní údaje</h5>
+                    <p class="card-text">Správa základních informací o společnosti</p>
+                    <a href="#company-settings" class="btn btn-outline-primary">
+                        <i class="bi bi-gear"></i>
+                        Upravit
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card settings-nav-card">
+                <div class="card-body">
+                    <div class="settings-nav-icon">
+                        <i class="bi bi-clock-history icon-secondary"></i>
+                    </div>
+                    <h5 class="card-title">Session Timeouty</h5>
+                    <p class="card-text">Konfigurace časových limitů pro přihlašování</p>
+                    <a href="{link Settings:sessionTimeouts}" class="btn btn-outline-primary">
+                        <i class="bi bi-sliders"></i>
+                        Nastavit
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card settings-nav-card">
+                <div class="card-body">
+                    <div class="settings-nav-icon">
+                        <i class="bi bi-shield-lock icon-muted"></i>
+                    </div>
+                    <h5 class="card-title">Zabezpečení</h5>
+                    <p class="card-text">Nastavení bezpečnostních pravidel</p>
+                    <span class="btn btn-outline-secondary disabled">
+                        <i class="bi bi-lock"></i>
+                        Připravujeme
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     {if $company}
     <div class="info-card mb-4">
@@ -111,7 +169,7 @@
     </div>
     {/if}
 
-    <div class="card shadow-sm rounded-lg border-0 mb-4">
+    <div class="card shadow-sm rounded-lg border-0 mb-4" id="company-settings">
         <div class="card-header">
             <i class="bi bi-pencil-square me-2"></i>
             <h3>Upravit firemní údaje</h3>

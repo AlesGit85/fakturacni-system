@@ -95,3 +95,99 @@
 [2025-08-27 13-59-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=og0t 
 [2025-08-27 14-04-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=og0t 
 [2025-08-27 14-04-24] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=og0t 
+[2025-08-27 14-18-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=og0t 
+[2025-08-27 14-18-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=og0t 
+[2025-08-27 14-18-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=og0t 
+[2025-08-27 14-18-29] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=og0t 
+[2025-08-27 14-30-02] Session settings tabulka byla automaticky vytvořena  @  http://localhost:8000/settings/ 
+[2025-08-27 14-30-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-30-02] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-32-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-32-21] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-32-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-32-55] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-33-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-33-07] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-33-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-33-29] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-35-49] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-35-49] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-35-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-35-55] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-38-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-38-41] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-39-52] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-39-52] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-39-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-39-54] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-40-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-40-01] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-44-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-44-28] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-44-40] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-44-40] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-44-42] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-44-42] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-48-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-48-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-48-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-48-36] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-49-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-49-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-50-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 14-50-50] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 14-50-52] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-50-52] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-53-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 14-53-02] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-20-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-20-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=kxuvl&_fid=ckfd 
+[2025-08-27 15-20-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-27 15-20-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=ex1n 
+[2025-08-27 15-20-28] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=ex1n 
+[2025-08-27 15-20-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 15-20-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 15-23-40] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-23-40] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-23-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-23-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-23-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts?_fid=22ff 
+[2025-08-27 15-23-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts?_fid=22ff 
+[2025-08-27 15-25-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-27 15-25-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=mp3r8&_fid=aykj 
+[2025-08-27 15-25-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-08-27 15-25-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=uyna 
+[2025-08-27 15-25-44] Vytvořen tenant WWW adresář: D:\_coding\nette\fakturacni-system/web/Modules/tenant_12  @  http://localhost:8000/?_fid=uyna 
+[2025-08-27 15-25-44] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=uyna 
+[2025-08-27 15-25-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 15-25-45] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/ 
+[2025-08-27 15-25-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-25-48] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-26-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-26-05] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-26-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts?_fid=586q 
+[2025-08-27 15-26-05] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/session-timeouts?_fid=586q 
+[2025-08-27 15-29-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 15-29-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 15-34-37] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-27 15-34-37] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-08-27 15-34-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 15-34-38] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 15-34-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-34-45] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-36-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 15-36-23] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 15-39-57] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-27 15-39-57] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-08-27 15-39-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 15-39-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 15-40-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-40-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-40-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-40-03] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-40-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-40-14] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/session-timeouts 
+[2025-08-27 15-40-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-08-27 15-40-16] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-08-27 15-40-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-08-27 15-40-18] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 

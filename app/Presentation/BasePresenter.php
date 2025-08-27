@@ -9,6 +9,7 @@ use Nette\Application\UI\Presenter;
 use App\Security\SecurityLogger;
 use App\Security\RateLimiter;
 use App\Model\ModuleManager;
+use App\Model\SessionSettingsManager;
 use App\Security\SecurityValidator;
 use App\Security\AntiSpam;
 
@@ -34,6 +35,9 @@ abstract class BasePresenter extends Presenter
 
     /** @var ModuleManager */
     private $moduleManager;
+
+    /** @var SessionSettingsManager */
+    private $sessionSettingsManager;
 
     /** @var Nette\Database\Explorer Databáze pro multi-tenancy dotazy */
     protected $database;
@@ -122,6 +126,11 @@ abstract class BasePresenter extends Presenter
     public function injectAntiSpam(AntiSpam $antiSpam): void
     {
         $this->antiSpam = $antiSpam;
+    }
+
+    public function injectSessionSettingsManager(SessionSettingsManager $sessionSettingsManager): void
+    {
+        $this->sessionSettingsManager = $sessionSettingsManager;
     }
 
     public function startup(): void
@@ -1600,7 +1609,7 @@ abstract class BasePresenter extends Presenter
     }
 
     /**
-     * 🔒 VYVÁŽENÁ: Kontrola session security s rozumnými hodnotami
+     * 🔒 DYNAMICKÁ: Kontrola session security s konfigurovatelné timeouty
      */
     private function checkSessionSecurity(): void
     {
@@ -1614,6 +1623,9 @@ abstract class BasePresenter extends Presenter
             return;
         }
         $alreadyChecked = true;
+
+        // Načtení dynamických nastavení
+        $sessionSettings = $this->getSessionSettings();
 
         // 1. Nastavení session security údajů při prvním přístupu
         if (!isset($securitySection->initialized)) {
@@ -1629,36 +1641,73 @@ abstract class BasePresenter extends Presenter
             return; // Ukončit, nekontroluji timeout při inicializaci
         }
 
-        // 🔒 Grace period - prvních 2 minut po přihlášení nekontroluji timeout
-        if (($now - $securitySection->loginTime) < 120) { // 2 minuty
+        // 🔒 Grace period - konfigurovatelná doba po přihlášení
+        if (($now - $securitySection->loginTime) < $sessionSettings['grace_period']) {
             $securitySection->lastActivity = $now;
             return;
         }
 
-        // 2. Kontrola timeoutu neaktivity (4 hodiny - rozumné pro práci)
-        $inactivityTimeout = 14400; // 4 hodiny
-        if (($now - $securitySection->lastActivity) > $inactivityTimeout) {
+        // 2. Kontrola timeoutu neaktivity - konfigurovatelná
+        if (($now - $securitySection->lastActivity) > $sessionSettings['inactivity_timeout']) {
             $this->getUser()->logout(true);
-            $this->flashMessage('Byli jste odhlášeni z důvodu neaktivity (4 hodiny).', 'warning');
+            $timeoutMinutes = round($sessionSettings['inactivity_timeout'] / 60);
+            $this->flashMessage("Byli jste odhlášeni z důvodu neaktivity ({$timeoutMinutes} minut).", 'warning');
             $this->redirect('Sign:in');
         }
 
-        // 3. Kontrola maximální doby života session (12 hodin - celý pracovní den)
-        $maxLifetime = 43200; // 12 hodin
-        if (($now - $securitySection->loginTime) > $maxLifetime) {
+        // 3. Kontrola maximální doby života session - konfigurovatelná
+        if (($now - $securitySection->loginTime) > $sessionSettings['max_lifetime']) {
             $this->getUser()->logout(true);
-            $this->flashMessage('Byli jste odhlášeni z důvodu překročení maximální doby přihlášení (12 hodin).', 'warning');
+            $maxHours = round($sessionSettings['max_lifetime'] / 3600);
+            $this->flashMessage("Byli jste odhlášeni z důvodu překročení maximální doby přihlášení ({$maxHours} hodin).", 'warning');
             $this->redirect('Sign:in');
         }
 
-        // 4. Periodická regenerace session ID (každých 30 minut)
-        $regenerationInterval = 1800; // 30 minut
-        if (($now - $securitySection->lastRegeneration) > $regenerationInterval) {
+        // 4. Periodická regenerace session ID - konfigurovatelná
+        if (($now - $securitySection->lastRegeneration) > $sessionSettings['regeneration_interval']) {
             $session->regenerateId();
             $securitySection->lastRegeneration = $now;
         }
 
         // 5. Aktualizace poslední aktivity
         $securitySection->lastActivity = $now;
+    }
+
+    /**
+     * 🔒 NOVÉ: Získání session nastavení s fallback hodnotami
+     */
+    private function getSessionSettings(): array
+    {
+        static $cachedSettings = null;
+
+        // Cache nastavení během jednoho requestu
+        if ($cachedSettings !== null) {
+            return $cachedSettings;
+        }
+
+        try {
+            // Pokusíme se získat nastavení přes SessionSettingsManager
+            if (isset($this->sessionSettingsManager)) {
+                $this->sessionSettingsManager->setTenantContext(
+                    $this->getCurrentTenantId(),
+                    $this->isSuperAdmin()
+                );
+                $cachedSettings = $this->sessionSettingsManager->getSessionSettings();
+                return $cachedSettings;
+            }
+        } catch (\Exception $e) {
+            // Logování chyby, ale pokračujeme s výchozími hodnotami
+            \Tracy\Debugger::log("Chyba při načítání session nastavení: " . $e->getMessage(), \Tracy\ILogger::WARNING);
+        }
+
+        // Fallback - výchozí hodnoty pokud se nepodaří načíst z databáze
+        $cachedSettings = [
+            'grace_period' => 120,          // 2 minuty
+            'inactivity_timeout' => 14400,  // 4 hodiny  
+            'max_lifetime' => 43200,        // 12 hodin
+            'regeneration_interval' => 1800  // 30 minut
+        ];
+
+        return $cachedSettings;
     }
 }

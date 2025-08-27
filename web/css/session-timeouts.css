@@ -1,0 +1,322 @@
+/**
+ * Session Timeouty - CSS styly
+ * Používá projektové barvy: primární #B1D235, sekundární #95B11F, šedá #6c757d, černá #212529
+ */
+
+.timeout-stat {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    border-left: 4px solid #B1D235;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.timeout-stat:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 0.25rem 0.5rem rgba(177, 210, 53, 0.15);
+}
+
+.timeout-stat-icon {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(177, 210, 53, 0.1);
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+
+.timeout-stat-icon i {
+    font-size: 1.5rem;
+    color: #B1D235;
+}
+
+.timeout-stat-content {
+    flex: 1;
+}
+
+.timeout-stat-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.timeout-stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.25rem;
+}
+
+.timeout-stat-desc {
+    font-size: 0.75rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Formulář styly */
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    font-size: 0.9rem;
+}
+
+.form-group input[type="number"]:focus {
+    border-color: #B1D235;
+    box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.25);
+    outline: none;
+}
+
+.form-group .form-label {
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.form-group .form-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: flex-start;
+    line-height: 1.4;
+}
+
+/* Tlačítka */
+.form-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.form-actions .btn-primary {
+    background-color: #B1D235;
+    border-color: #B1D235;
+    color: #212529;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+}
+
+.form-actions .btn-primary:hover {
+    background-color: #95B11F;
+    border-color: #95B11F;
+    color: #212529;
+}
+
+.form-actions .btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+    padding: 0.5rem 1.5rem;
+}
+
+.form-actions .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+}
+
+/* Warning upozornění */
+.timeout-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-left: 4px solid #ffc107;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    margin-top: 1rem;
+}
+
+.timeout-warning .bi-exclamation-triangle {
+    color: #ffc107;
+    flex-shrink: 0;
+}
+
+/* Nápověda sekce */
+.help-section h5 {
+    color: #212529;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.help-section h5 i {
+    color: #B1D235;
+}
+
+.help-section ul {
+    margin-bottom: 0;
+}
+
+.help-section li {
+    margin-bottom: 0.5rem;
+    color: #6c757d;
+    line-height: 1.5;
+}
+
+.help-section li strong {
+    color: #212529;
+}
+
+/* Card vylepšení */
+.session-settings-card .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.session-settings-card .card-title {
+    color: #212529;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.session-settings-card .card-title i {
+    color: #B1D235;
+}
+
+/* Responzivní úpravy */
+@media (max-width: 768px) {
+    .timeout-stat {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem 0.75rem;
+    }
+    
+    .timeout-stat-icon {
+        margin-right: 0;
+        margin-bottom: 0.75rem;
+    }
+    
+    .form-actions {
+        justify-content: center;
+    }
+    
+    .form-actions .btn {
+        min-width: 120px;
+    }
+}
+
+/* Animace pro načítání */
+.session-timeouts-container {
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =================================
+   SETTINGS NAVIGATION CARDS
+   ================================= */
+
+.settings-navigation {
+    margin-bottom: 1.5rem;
+}
+
+.settings-nav-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.settings-nav-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.settings-nav-icon {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.settings-nav-icon i {
+    font-size: 3rem;
+}
+
+/* Projektové barvy pro ikony */
+.settings-nav-icon .icon-primary {
+    color: #B1D235;
+}
+
+.settings-nav-icon .icon-secondary {
+    color: #95B11F;
+}
+
+.settings-nav-icon .icon-muted {
+    color: #6c757d;
+}
+
+/* Tlačítka v navigation cards */
+.settings-nav-card .btn-outline-primary {
+    border-color: #B1D235;
+    color: #B1D235;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.settings-nav-card .btn-outline-primary:hover {
+    background-color: #B1D235;
+    border-color: #B1D235;
+    color: #212529;
+    font-weight: 600;
+}
+
+.settings-nav-card .btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.settings-nav-card .btn-outline-secondary.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.settings-nav-card .card-title {
+    color: #212529;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.settings-nav-card .card-text {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Responzivní úpravy pro navigation */
+@media (max-width: 768px) {
+    .settings-nav-card {
+        margin-bottom: 1rem;
+    }
+    
+    .settings-nav-icon i {
+        font-size: 2.5rem;
+    }
+    
+    .settings-nav-card .card-title {
+        font-size: 1.1rem;
+    }
+}

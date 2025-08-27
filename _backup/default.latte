@@ -1,159 +1,334 @@
 {block content}
-<div class="clients-container">
-    <!-- Záhlaví s názvem sekce a počtem klientů -->
-    <div class="section-header-row mb-4">
-        <div>
-            {* ✅ BEZPEČNÉ: count() je číselná hodnota *}
-            <h1 class="section-title mb-0">Klienti <span class="total-count">Počet klientů v systému: {$clients->count()}</span></h1>
-            <p class="text-muted">Seznam všech klientů v systému</p>
-        </div>
-        <div class="header-actions">
-            {* Tlačítko pro přidání klienta - pouze pro účetní a admin *}
-            {if $isUserAccountant}
-                <a n:href="add" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Přidat klienta
-                </a>
-            {/if}
-        </div>
+<div class="settings-container">
+    <div class="page-header">
+        <h1 class="main-title">Nastavení</h1>
+        <p class="text-muted">Správa firemních údajů a nastavení systému</p>
     </div>
 
-    <!-- Panel s vyhledáváním -->
-    <div class="search-panel">
-        <div class="search-container">
-            <div class="search-input-wrapper">
-                <i class="bi bi-search search-icon"></i>
-                <input type="text" id="clientSearch" class="search-input" placeholder="Vyhledat klienta...">
-            </div>
+    {if $company}
+    <div class="info-card mb-4">
+        <div class="info-card-header">
+            <i class="bi bi-info-circle me-2"></i>
+            <h3>Aktuální firemní údaje</h3>
         </div>
-    </div>
-
-    <!-- Tabulka klientů -->
-    {if $clients->count() > 0}
-    <div class="table-container">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th class="sortable-column">Společnost</th>
-                    <th>IČ</th>
-                    <th>Kontaktní osoba</th>
-                    <th>Email</th>
-                    <th>Telefon</th>
-                    <th class="text-end">Akce</th>
-                </tr>
-            </thead>
-            <tbody>
-                {foreach $clients as $client}
-                <tr class="data-row">
-                    <td>
-                        {* ✅ XSS OCHRANA: Escapování názvu společnosti *}
-                        <strong>{$client->name|escape}</strong>
-                        {if $client->address}
-                            {* ✅ XSS OCHRANA: Escapování adresy *}
-                            <br><small class="text-muted">{$client->address|escape}</small>
-                        {/if}
-                    </td>
-                    <td>
-                        {if $client->ic}
-                            {* ✅ XSS OCHRANA: Escapování IČO *}
-                            {$client->ic|escape}
-                        {else}
-                            <span class="text-muted">—</span>
-                        {/if}
-                    </td>
-                    <td>
-                        {if $client->contact_person}
-                            {* ✅ XSS OCHRANA: Escapování kontaktní osoby *}
-                            {$client->contact_person|escape}
-                        {else}
-                            <span class="text-muted">—</span>
-                        {/if}
-                    </td>
-                    <td>
-                        {if $client->email}
-                            {* ✅ XSS OCHRANA: Escapování emailu *}
-                            <a href="mailto:{$client->email|escape}">{$client->email|escape}</a>
-                        {else}
-                            <span class="text-muted">—</span>
-                        {/if}
-                    </td>
-                    <td>
-                        {if $client->phone}
-                            {* ✅ XSS OCHRANA: Escapování telefonu *}
-                            {$client->phone|escape}
-                        {else}
-                            <span class="text-muted">—</span>
-                        {/if}
-                    </td>
-                    <td class="actions-column">
-                        <div class="action-buttons">
-                            {* Tlačítko Detail - všichni uživatelé *}
-                            {* ✅ BEZPEČNÉ: Nette link s ID parametrem *}
-                            <a n:href="show $client->id" class="btn btn-icon" title="Detail klienta">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            {* Tlačítko Upravit - pouze účetní a admin *}
-                            {if $isUserAccountant}
-                                <a n:href="edit $client->id" class="btn btn-icon" title="Upravit klienta">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                            {/if}
-
-                            {* ✅ CSRF OCHRANA: Tlačítko Smazat - pouze admin a jen pokud nemá faktury *}
-                            {if $isUserAdmin}
-                                {var $invoiceCount = $presenter->getClientInvoiceCount($client->id)}
-                                {if $invoiceCount == 0}
-                                    {* ✅ NOVÉ: CSRF token přidán do odkazu *}
-                                    <a href="{link delete $client->id, '_csrf_token' => $csrfToken}" class="btn btn-icon text-danger" onclick="return confirm('Opravdu chcete smazat tohoto klienta?')" title="Smazat klienta" style="color: #dc3545;">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-                                {else}
-                                    {* ✅ XSS OCHRANA: Bezpečný title - používá metodu z presenteru *}
-                                    <a class="btn btn-icon text-muted" title="Klient má {$presenter->getInvoiceCountText($invoiceCount)} a nelze ho smazat" disabled>
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-                                {/if}
-                            {/if}
+        <div class="info-card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-building"></i>
+                            Název společnosti
                         </div>
-                    </td>
-                </tr>
-                {/foreach}
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Stránkování -->
-    <div class="pagination-container mt-3">
-        <div class="pagination-info">
-            Strana 1 z 1
-        </div>
-        <div class="pagination-controls">
-            <button class="btn btn-icon pagination-button" disabled>
-                <i class="bi bi-chevron-left"></i>
-            </button>
-            <button class="btn btn-icon pagination-button" disabled>
-                <i class="bi bi-chevron-right"></i>
-            </button>
-        </div>
-    </div>
-    {else}
-    <div class="empty-state">
-        <div class="empty-state-icon">
-            <i class="bi bi-people"></i>
-        </div>
-        <h3>Zatím zde nejsou žádní klienti</h3>
-        <p>Začněte přidáním nového klienta do systému</p>
-        {* Tlačítko pro přidání prvního klienta - pouze pro účetní a admin *}
-        {if $isUserAccountant}
-            <a n:href="add" class="btn btn-primary mt-3">
-                <i class="bi bi-person-plus"></i> Přidat prvního klienta
-            </a>
-        {else}
-            <div class="alert alert-info mt-3">
-                <i class="bi bi-info-circle me-2"></i>
-                Pro přidávání klientů potřebujete oprávnění účetní nebo administrátor.
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->name|escape}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-geo-alt"></i>
+                            Adresa
+                        </div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->address|escape}, {$company->zip|escape} {$company->city|escape}, {$company->country|escape}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-upc"></i>
+                            IČ
+                        </div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->ic|escape}</div>
+                    </div>
+                    
+                    {if $company->dic}
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-upc-scan"></i>
+                            DIČ
+                        </div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->dic|escape}</div>
+                    </div>
+                    {/if}
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-envelope"></i>
+                            E-mail
+                        </div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->email|escape}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-telephone"></i>
+                            Telefon
+                        </div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->phone|escape}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-bank"></i>
+                            Bankovní účet
+                        </div>
+                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                        <div class="info-value">{$company->bank_account|escape} ({$company->bank_name|escape})</div>
+                    </div>
+                    
+                    {if $company->logo}
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-image"></i>
+                            Logo
+                        </div>
+                        <div class="info-value">
+                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                            <img src="{$basePath}/uploads/logo/{$company->logo|escape}" alt="Logo" style="max-height: 60px;" class="rounded">
+                        </div>
+                    </div>
+                    {/if}
+                    
+                    {if $company->signature}
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="bi bi-pen"></i>
+                            Podpis
+                        </div>
+                        <div class="info-value">
+                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                            <img src="{$basePath}/uploads/signature/{$company->signature|escape}" alt="Podpis" style="max-height: 60px;" class="rounded">
+                        </div>
+                    </div>
+                    {/if}
+                </div>
             </div>
-        {/if}
+        </div>
     </div>
     {/if}
+
+    <div class="card shadow-sm rounded-lg border-0 mb-4">
+        <div class="card-header">
+            <i class="bi bi-pencil-square me-2"></i>
+            <h3>Upravit firemní údaje</h3>
+        </div>
+        <div class="card-body">
+            {form companyForm class => 'row g-4'}
+                <!-- Základní údaje -->
+                <div class="col-12">
+                    <div class="section-header">
+                        <i class="bi bi-building"></i>
+                        <h2 class="section-title">Základní údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
+                        {input name class => 'form-control'}
+                        {label name class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input email class => 'form-control'}
+                        {label email class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input phone class => 'form-control'}
+                        {label phone class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input country class => 'form-control'}
+                        {label country class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <div class="form-floating">
+                        {input address class => 'form-control'}
+                        {label address class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input city class => 'form-control'}
+                        {label city class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input zip class => 'form-control'}
+                        {label zip class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <!-- Identifikační údaje -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-upc"></i>
+                        <h2 class="section-title">Identifikační údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input ic class => 'form-control'}
+                        {label ic class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-check-container">
+                        <div class="form-check">
+                            {input vat_payer class => 'form-check-input', id => 'vat-payer-checkbox'}
+                            {label vat_payer class => 'form-check-label' /}
+                        </div>
+                        <small class="form-text text-muted">Zaškrtněte, pokud jste plátce DPH</small>
+                    </div>
+                </div>
+                
+                <div class="col-md-6" id="dic-container" style="display: {if $company && $company->vat_payer}block{else}none{/if};">
+                    <div class="form-floating">
+                        {input dic class => 'form-control', id => 'dic-field'}
+                        {label dic class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <!-- Bankovní údaje -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-bank"></i>
+                        <h2 class="section-title">Bankovní údaje</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input bank_account class => 'form-control'}
+                        {label bank_account class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        {input bank_name class => 'form-control'}
+                        {label bank_name class => 'form-label' /}
+                    </div>
+                </div>
+                
+                <!-- Soubory -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-file-earmark-image"></i>
+                        <h2 class="section-title">Logo a podpis</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label">Logo společnosti</label>
+                    {input logo class => 'form-control'}
+                    
+                    {if $company && $company->logo}
+                        <div class="mt-2 d-flex align-items-center gap-3">
+                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                            <img src="{$basePath}/uploads/logo/{$company->logo|escape}" alt="Logo" style="max-height: 60px;" class="rounded">
+                            {* ✅ XSS OCHRANA: Bezpečný JavaScript bez uživatelských dat *}
+                            <a href="{link deleteLogo!, '_csrf_token' => $csrfToken}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat logo?')">
+                                <i class="bi bi-trash"></i> Smazat logo
+                            </a>
+                        </div>
+                    {/if}
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label">Podpis</label>
+                    {input signature class => 'form-control'}
+                    {if $company && $company->signature}
+                        <div class="mt-2 d-flex align-items-center gap-3">
+                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
+                            <img src="{$basePath}/uploads/signature/{$company->signature|escape}" alt="Podpis" style="max-height: 60px;" class="rounded">
+                            {* ✅ XSS OCHRANA: Bezpečný JavaScript bez uživatelských dat *}
+                            <a href="{link deleteSignature!, '_csrf_token' => $csrfToken}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat podpis?')">
+                                <i class="bi bi-trash"></i> Smazat podpis
+                            </a>
+                        </div>
+                    {/if}
+                </div>
+                
+                <!-- Barvy pro faktury -->
+                <div class="col-12 mt-4">
+                    <div class="section-header">
+                        <i class="bi bi-palette"></i>
+                        <h2 class="section-title">Barvy pro faktury</h2>
+                    </div>
+                </div>
+                
+                <div class="color-settings-grid">
+                    <div class="color-setting-item">
+                        <label class="form-label">Barva nadpisu faktury</label>
+                        <div class="color-input-group">
+                            {* ✅ BEZPEČNÉ: Formulářové prvky jsou automaticky escapované *}
+                            {input invoice_heading_color class => 'form-control form-control-color'}
+                            <div class="color-preview" style="background-color: #B1D235; color: #212529;">Ukázka barvy</div>
+                        </div>
+                    </div>
+                    
+                    <div class="color-setting-item">
+                        <label class="form-label">Barva pozadí lichoběžníku</label>
+                        <div class="color-input-group">
+                            {input invoice_trapezoid_bg_color class => 'form-control form-control-color'}
+                            <div class="color-preview" style="background-color: #B1D235; color: #212529;">Ukázka barvy</div>
+                        </div>
+                    </div>
+                    
+                    <div class="color-setting-item">
+                        <label class="form-label">Barva textu v lichoběžníku</label>
+                        <div class="color-input-group">
+                            {input invoice_trapezoid_text_color class => 'form-control form-control-color'}
+                            <div class="color-preview" style="background-color: #212529; color: #B1D235;">Ukázka barvy</div>
+                        </div>
+                    </div>
+                    
+                    <div class="color-setting-item">
+                        <label class="form-label">Barva štítků (Dodavatel, Odběratel)</label>
+                        <div class="color-input-group">
+                            {input invoice_labels_color class => 'form-control form-control-color'}
+                            <div class="color-preview" style="background-color: #95B11F; color: #212529;">Ukázka barvy</div>
+                        </div>
+                    </div>
+                    
+                    <div class="color-setting-item">
+                        <label class="form-label">Barva patičky</label>
+                        <div class="color-input-group">
+                            {input invoice_footer_color class => 'form-control form-control-color'}
+                            <div class="color-preview" style="background-color: #6c757d; color: #ffffff;">Ukázka barvy</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-12 mt-5">
+                    <div class="d-flex gap-3">
+                        {input send class => 'btn btn-primary px-4'}
+                        <a n:href="default" class="btn btn-outline-secondary">Zrušit</a>
+                    </div>
+                </div>
+            {/form}
+        </div>
+    </div>
 </div>
+
 {/block}

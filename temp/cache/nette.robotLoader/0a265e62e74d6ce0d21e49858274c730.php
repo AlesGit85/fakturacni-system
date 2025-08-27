@@ -57,6 +57,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\QrPaymentService.php',
       1 => 1747658804,
     ),
+    'App\\Model\\SessionSettingsManager' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\SessionSettingsManager.php',
+      1 => 1756297054,
+    ),
     'App\\Model\\TenantManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\TenantManager.php',
@@ -130,7 +135,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1755765835,
+      1 => 1756299169,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -180,7 +185,7 @@ return array (
     'App\\Presentation\\Settings\\SettingsPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Settings\\SettingsPresenter.php',
-      1 => 1755723897,
+      1 => 1756297689,
     ),
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
@@ -240,25 +245,13 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 3,
-    'null' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
-    'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Users\\UsersEditTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
-    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 1,
-    'App\\Presentation\\Security\\SecurityTemplate' => 2,
-    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 1,
+    'Nette\\Bridges\\Assets\\DIExtension' => 1,
+    'null' => 1,
+    'App\\Presentation\\Settings\\SettingsSessionTimeoutsTemplate' => 1,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 2,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 1,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
+    'App\\Presentation\\Home\\HomeTemplate' => 1,
   ),
   2 => 
   array (

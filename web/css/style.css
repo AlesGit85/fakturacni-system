@@ -17,6 +17,7 @@
 @import url('tenants.css');
 @import url('security.css');
 @import url('anti-spam.css');
+@import url('session-timeouts.css');
 
 
 /* Případné další specifické styly, které nepatří do žádné kategorie */
