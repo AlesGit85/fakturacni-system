@@ -111,7 +111,7 @@ final class HomePresenter extends BasePresenter
 
             if ($currentUser) {
                 // OPRAVA: Použijeme přímý DB dotaz místo UserManager (který má problém s tenant filtrováním)
-                $userData = $this->database->query('SELECT * FROM users WHERE id = ?', $currentUser->getId())->fetch();
+                $userData = $this->userManager->getById($currentUser->getId());
 
                 if ($userData) {
                     // Pátý pád (vokativ) pro oslovení
@@ -203,7 +203,7 @@ final class HomePresenter extends BasePresenter
             $userFullName = '';
 
             if ($currentUser) {
-                $userData = $this->database->query('SELECT * FROM users WHERE id = ?', $currentUser->getId())->fetch();
+                $userData = $this->userManager->getById($currentUser->getId());
 
                 if ($userData) {
                     $userDisplayName = $this->getVocativeName($userData->first_name);

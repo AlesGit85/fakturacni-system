@@ -150,12 +150,12 @@ return array (
     'App\\Presentation\\Home\\HomePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Home\\HomePresenter.php',
-      1 => 1756285590,
+      1 => 1756286420,
     ),
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1755077382,
+      1 => 1756286594,
     ),
     'App\\Presentation\\Migration\\MigrationPresenter' => 
     array (
@@ -249,6 +249,16 @@ return array (
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
     'App\\Presentation\\Users\\UsersTemplate' => 3,
     'App\\Presentation\\Users\\UsersEditTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
+    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 1,
+    'App\\Presentation\\Security\\SecurityTemplate' => 2,
+    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 1,
   ),
   2 => 
   array (
