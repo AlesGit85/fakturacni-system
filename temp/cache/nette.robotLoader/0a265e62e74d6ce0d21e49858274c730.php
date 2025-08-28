@@ -135,7 +135,7 @@ return array (
     'App\\Presentation\\BasePresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\BasePresenter.php',
-      1 => 1756299169,
+      1 => 1756364307,
     ),
     'App\\Presentation\\Clients\\ClientsPresenter' => 
     array (
@@ -247,11 +247,15 @@ return array (
   array (
     'Nette\\Bridges\\Assets\\DIExtension' => 1,
     'null' => 1,
-    'App\\Presentation\\Settings\\SettingsSessionTimeoutsTemplate' => 1,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 2,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
     'App\\Presentation\\Home\\HomeTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 2,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
+    'App\\Presentation\\Settings\\SettingsSessionTimeoutsTemplate' => 1,
   ),
   2 => 
   array (

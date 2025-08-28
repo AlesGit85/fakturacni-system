@@ -1,0 +1,21 @@
+/**
+ * Fakturační systém - Hlavní CSS soubor
+ * Importuje všechny ostatní CSS soubory
+ */
+
+@import url('base.css');
+@import url('components.css');
+@import url('layout.css');
+@import url('tables.css');
+@import url('pages.css');
+@import url('modules.css');
+@import url('responsive.css');
+@import url('print.css');
+@import url('auth.css');
+@import url('settings.css');
+@import url('hierarchical-menu.css');
+@import url('tenants.css');
+@import url('security.css');
+@import url('anti-spam.css');
+
+/* Případné další specifické styly, které nepatří do žádné kategorie */

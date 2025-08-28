@@ -1649,6 +1649,9 @@ abstract class BasePresenter extends Presenter
 
         // 2. Kontrola timeoutu neaktivity - konfigurovatelná
         if (($now - $securitySection->lastActivity) > $sessionSettings['inactivity_timeout']) {
+            // ✅ OPRAVA: Před odhlášením vymazat všechny session security údaje
+            $this->clearSessionSecurityData();
+            
             $this->getUser()->logout(true);
             $timeoutMinutes = round($sessionSettings['inactivity_timeout'] / 60);
             $this->flashMessage("Byli jste odhlášeni z důvodu neaktivity ({$timeoutMinutes} minut).", 'warning');
@@ -1657,6 +1660,9 @@ abstract class BasePresenter extends Presenter
 
         // 3. Kontrola maximální doby života session - konfigurovatelná
         if (($now - $securitySection->loginTime) > $sessionSettings['max_lifetime']) {
+            // ✅ OPRAVA: Před odhlášením vymazat všechny session security údaje
+            $this->clearSessionSecurityData();
+            
             $this->getUser()->logout(true);
             $maxHours = round($sessionSettings['max_lifetime'] / 3600);
             $this->flashMessage("Byli jste odhlášeni z důvodu překročení maximální doby přihlášení ({$maxHours} hodin).", 'warning');
@@ -1709,5 +1715,24 @@ abstract class BasePresenter extends Presenter
         ];
 
         return $cachedSettings;
+    }
+
+    /**
+     * Vymazání všech session security údajů
+     */
+    private function clearSessionSecurityData(): void
+    {
+        $session = $this->getSession();
+        
+        // Vymazat security section
+        $securitySection = $session->getSection('security');
+        $securitySection->remove();
+        
+        // Pro jistotu vymazat i další možné security sections
+        $deactivationSection = $session->getSection('deactivation');
+        $deactivationSection->remove();
+        
+        // Regenerovat session ID pro úplnou jistotu
+        $session->regenerateId();
     }
 }
