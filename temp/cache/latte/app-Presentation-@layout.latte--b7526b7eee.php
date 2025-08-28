@@ -35,79 +35,79 @@ final class Template_b7526b7eee extends Latte\Runtime\Template
 		echo 'QRdoklad</title>
 	<link rel="icon" type="image/x-icon" href="/favicon.ico">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 11 */;
 		echo '/css/base.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 11 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 12 */;
 		echo '/css/components.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 12 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 13 */;
 		echo '/css/layout.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 13 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 14 */;
 		echo '/css/tables.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 14 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 15 */;
 		echo '/css/pages.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 15 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 16 */;
 		echo '/css/modules.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 16 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 17 */;
 		echo '/css/responsive.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 17 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 18 */;
 		echo '/css/print.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 18 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 19 */;
 		echo '/css/auth.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 19 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 20 */;
 		echo '/css/settings.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 20 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 21 */;
 		echo '/css/hierarchical-menu.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 21 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 22 */;
 		echo '/css/tenants.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 22 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 23 */;
 		echo '/css/security.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 23 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 24 */;
 		echo '/css/session-timeouts.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 24 */;
 		echo '">
-<link rel="stylesheet" href="';
+	<link rel="stylesheet" href="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 25 */;
 		echo '/css/anti-spam.css?v=';
 		echo LR\Filters::escapeHtmlAttr(time()) /* line 25 */;

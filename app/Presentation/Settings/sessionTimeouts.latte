@@ -1,85 +1,80 @@
 {block title}Nastavení Session Timeoutů{/block}
 
 {block content}
-<div class="settings-container session-timeouts-container">
+<div class="settings-container">
     <div class="page-header">
-        <h1 class="main-title">
-            <i class="bi bi-clock-history me-2" style="color: #B1D235;"></i>
-            Session Timeouty
-        </h1>
-        <p class="text-muted">Konfigurace časových limitů pro přihlašování uživatelů</p>
-        
-        <div class="page-header-actions">
+        <div class="header-content">
+            <h1 class="main-title">
+                <i class="bi bi-clock-history me-2" style="color: #B1D235;"></i>
+                Session Timeouty
+            </h1>
+            <p class="text-muted">Konfigurace časových limitů pro přihlašování uživatelů</p>
+        </div>
+        <div class="header-actions">
             <a href="{link Settings:default}" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-2"></i>Zpět na nastavení
             </a>
         </div>
     </div>
 
-    {* Současné nastavení - krásné statistiky *}
-    <div class="info-card mb-4">
-        <div class="info-card-header">
-            <i class="bi bi-info-circle me-2"></i>
-            <h3>Aktuální nastavení</h3>
-        </div>
-        <div class="info-card-body">
-            <div class="row">
-                <div class="col-md-6 col-lg-3">
-                    <div class="timeout-stat">
-                        <div class="timeout-stat-icon">
-                            <i class="bi bi-hourglass-top"></i>
-                        </div>
-                        <div class="timeout-stat-content">
-                            <div class="timeout-stat-label">Grace Period</div>
-                            <div class="timeout-stat-value">{$readableSettings['grace_period']}</div>
-                            <div class="timeout-stat-desc">Po přihlášení</div>
-                        </div>
+    {* Současné nastavení - použití dashboard-stats z pages.css *}
+    <div class="dashboard-stats mb-4">
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <div class="stat-card stat-card-primary">
+                    <div class="stat-icon">
+                        <i class="bi bi-hourglass-top"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Grace Period</div>
+                        <div class="stat-number">{$readableSettings['grace_period']}</div>
+                        <p class="text-muted small mb-0">Po přihlášení</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="timeout-stat">
-                        <div class="timeout-stat-icon">
-                            <i class="bi bi-person-x"></i>
-                        </div>
-                        <div class="timeout-stat-content">
-                            <div class="timeout-stat-label">Timeout neaktivity</div>
-                            <div class="timeout-stat-value">{$readableSettings['inactivity_timeout']}</div>
-                            <div class="timeout-stat-desc">Automatické odhlášení</div>
-                        </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="stat-card stat-card-success">
+                    <div class="stat-icon">
+                        <i class="bi bi-person-x"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Timeout neaktivity</div>
+                        <div class="stat-number">{$readableSettings['inactivity_timeout']}</div>
+                        <p class="text-muted small mb-0">Automatické odhlášení</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="timeout-stat">
-                        <div class="timeout-stat-icon">
-                            <i class="bi bi-stopwatch"></i>
-                        </div>
-                        <div class="timeout-stat-content">
-                            <div class="timeout-stat-label">Max. doba přihlášení</div>
-                            <div class="timeout-stat-value">{$readableSettings['max_lifetime']}</div>
-                            <div class="timeout-stat-desc">Celková doba session</div>
-                        </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="stat-card stat-card-info">
+                    <div class="stat-icon">
+                        <i class="bi bi-stopwatch"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Max. doba přihlášení</div>
+                        <div class="stat-number">{$readableSettings['max_lifetime']}</div>
+                        <p class="text-muted small mb-0">Celková doba session</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="timeout-stat">
-                        <div class="timeout-stat-icon">
-                            <i class="bi bi-arrow-clockwise"></i>
-                        </div>
-                        <div class="timeout-stat-content">
-                            <div class="timeout-stat-label">Regenerace</div>
-                            <div class="timeout-stat-value">{$readableSettings['regeneration_interval']}</div>
-                            <div class="timeout-stat-desc">Session ID refresh</div>
-                        </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="stat-card stat-card-warning">
+                    <div class="stat-icon">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Regenerace</div>
+                        <div class="stat-number">{$readableSettings['regeneration_interval']}</div>
+                        <p class="text-muted small mb-0">Session ID refresh</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    {* Formulář pro změnu nastavení *}
-    <div class="card session-settings-card">
+    {* Formulář pro změnu nastavení - použití standardní card z components.css *}
+    <div class="card mb-4">
         <div class="card-header">
-            <h4 class="card-title mb-0">
+            <h4 class="mb-0">
                 <i class="bi bi-gear me-2"></i>
                 Změna nastavení
             </h4>
@@ -88,12 +83,12 @@
             {form sessionTimeoutsForm}
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="{$form['grace_period']->htmlId}" class="form-label">
+                        <div class="mb-4">
+                            <label for="{$form['grace_period']->htmlId}" class="form-label fw-bold">
                                 <i class="bi bi-hourglass-top me-1" style="color: #B1D235;"></i>
                                 {$form['grace_period']->caption}
                             </label>
-                            {input grace_period}
+                            {input grace_period class => 'form-control'}
                             <div class="form-text">
                                 <i class="bi bi-info-circle me-1"></i>
                                 Doba po přihlášení, během které se nekontroluje neaktivita (1-10 minut)
@@ -107,12 +102,12 @@
                             {/if}
                         </div>
 
-                        <div class="form-group mb-4">
-                            <label for="{$form['inactivity_timeout']->htmlId}" class="form-label">
+                        <div class="mb-4">
+                            <label for="{$form['inactivity_timeout']->htmlId}" class="form-label fw-bold">
                                 <i class="bi bi-person-x me-1" style="color: #95B11F;"></i>
                                 {$form['inactivity_timeout']->caption}
                             </label>
-                            {input inactivity_timeout}
+                            {input inactivity_timeout class => 'form-control'}
                             <div class="form-text">
                                 <i class="bi bi-info-circle me-1"></i>
                                 Doba neaktivity, po které se uživatel automaticky odhlásí (1-24 hodin)
@@ -128,15 +123,15 @@
                     </div>
 
                     <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="{$form['max_lifetime']->htmlId}" class="form-label">
+                        <div class="mb-4">
+                            <label for="{$form['max_lifetime']->htmlId}" class="form-label fw-bold">
                                 <i class="bi bi-stopwatch me-1" style="color: #6c757d;"></i>
                                 {$form['max_lifetime']->caption}
                             </label>
-                            {input max_lifetime}
+                            {input max_lifetime class => 'form-control'}
                             <div class="form-text">
                                 <i class="bi bi-info-circle me-1"></i>
-                                Maximální doba, po které se uživatel musí znovu přihlásit (2-168 hodin)
+                                Maximální doba, po které se session ukončí bez ohledu na aktivitu (1-24 hodin)
                             </div>
                             {if $form['max_lifetime']->hasErrors()}
                                 <div class="text-danger mt-1">
@@ -147,12 +142,12 @@
                             {/if}
                         </div>
 
-                        <div class="form-group mb-4">
-                            <label for="{$form['regeneration_interval']->htmlId}" class="form-label">
+                        <div class="mb-4">
+                            <label for="{$form['regeneration_interval']->htmlId}" class="form-label fw-bold">
                                 <i class="bi bi-arrow-clockwise me-1" style="color: #212529;"></i>
                                 {$form['regeneration_interval']->caption}
                             </label>
-                            {input regeneration_interval}
+                            {input regeneration_interval class => 'form-control'}
                             <div class="form-text">
                                 <i class="bi bi-info-circle me-1"></i>
                                 Interval regenerace session ID z bezpečnostních důvodů (5-120 minut)
@@ -170,11 +165,11 @@
 
                 <hr class="my-4">
 
-                <div class="form-actions">
-                    {input send}
-                    {input reset}
+                <div class="d-flex gap-3 flex-wrap align-items-center">
+                    {input send class => 'btn btn-primary'}
+                    {input reset class => 'btn btn-outline-secondary'}
                     
-                    <div class="timeout-warning">
+                    <div class="alert alert-warning flex-grow-1 mb-0 ms-3">
                         <i class="bi bi-exclamation-triangle me-1"></i>
                         <strong>Upozornění:</strong> Změna těchto nastavení ovlivní všechny nově přihlášené uživatele. 
                         Současně přihlášení uživatelé budou používat staré nastavení až do dalšího přihlášení.
@@ -184,10 +179,10 @@
         </div>
     </div>
 
-    {* Nápověda *}
-    <div class="card mt-4">
+    {* Nápověda - použití standardní card *}
+    <div class="card">
         <div class="card-header">
-            <h4 class="card-title mb-0">
+            <h4 class="mb-0">
                 <i class="bi bi-question-circle me-2"></i>
                 Nápověda
             </h4>
@@ -195,26 +190,28 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="help-section">
-                        <h5><i class="bi bi-shield-check me-1"></i> Bezpečnostní doporučení</h5>
-                        <ul>
-                            <li><strong>Grace period:</strong> Minimálně 1 minuta pro načtení stránky</li>
-                            <li><strong>Neaktivita:</strong> 2-8 hodin pro kancelářskou práci</li>
-                            <li><strong>Max. doba:</strong> Max 24 hodin pro nejvyšší bezpečnost</li>
-                            <li><strong>Regenerace:</strong> 15-60 minut pro vyvážení bezpečnosti a výkonu</li>
-                        </ul>
-                    </div>
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-shield-check me-2" style="color: #B1D235;"></i>
+                        Bezpečnostní doporučení
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><strong>Grace period:</strong> Minimálně 1 minuta pro načtení stránky</li>
+                        <li class="mb-2"><strong>Neaktivita:</strong> 2-8 hodin pro kancelářskou práci</li>
+                        <li class="mb-2"><strong>Max. doba:</strong> Max 24 hodin pro nejvyšší bezpečnost</li>
+                        <li class="mb-2"><strong>Regenerace:</strong> 15-60 minut pro vyvážení bezpečnosti a výkonu</li>
+                    </ul>
                 </div>
                 <div class="col-md-6">
-                    <div class="help-section">
-                        <h5><i class="bi bi-people me-1"></i> Uživatelské pohodlí</h5>
-                        <ul>
-                            <li>Kratší timeouty = vyšší bezpečnost, ale více přihlašování</li>
-                            <li>Delší timeouty = pohodlí, ale nižší bezpečnost</li>
-                            <li>Regenerace má minimální vliv na uživatele</li>
-                            <li>Grace period zabraňuje okamžitému odhlášení</li>
-                        </ul>
-                    </div>
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-people me-2" style="color: #95B11F;"></i>
+                        Uživatelské pohodlí
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">Kratší timeouty = vyšší bezpečnost, ale více přihlašování</li>
+                        <li class="mb-2">Delší timeouty = pohodlí, ale nižší bezpečnost</li>
+                        <li class="mb-2">Regenerace má minimální vliv na uživatele</li>
+                        <li class="mb-2">Grace period zabraňuje okamžitému odhlášení</li>
+                    </ul>
                 </div>
             </div>
         </div>

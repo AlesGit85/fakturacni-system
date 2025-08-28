@@ -1,65 +1,70 @@
 {block content}
 
 <div class="settings-container">
-    <div class="page-header">
-        <h1 class="main-title">Nastavení</h1>
-        <p class="text-muted">Správa firemních údajů a nastavení systému</p>
+    <div class="welcome-section text-center mb-4">
+        <h1 class="welcome-title">Nastavení</h1>
+        <p class="welcome-subtitle text-muted">Správa firemních údajů a nastavení systému</p>
     </div>
 
-{* Moderní navigační dlaždice pro nastavení *}
-<div class="settings-navigation">
-    <div class="row">
+    {* Moderní navigační karty s lepším layoutem *}
+    <div class="row mb-4">
         <div class="col-md-4 mb-4">
-            <div class="card settings-nav-card">
-                <div class="card-body">
-                    <div class="settings-nav-icon">
-                        <i class="bi bi-building icon-primary"></i>
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex flex-column text-center">
+                    <div class="mb-3">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                             style="width: 60px; height: 60px; background: linear-gradient(135deg, #B1D235, #95B11F);">
+                            <i class="bi bi-building fs-2 text-dark"></i>
+                        </div>
                     </div>
                     <h5 class="card-title">Firemní údaje</h5>
-                    <p class="card-text">Správa základních informací o společnosti</p>
-                    <a href="#company-settings" class="btn btn-outline-primary">
-                        <i class="bi bi-gear"></i>
-                        Upravit
+                    <p class="card-text text-muted flex-grow-1">Správa základních informací o společnosti</p>
+                    <a href="#company-settings" class="btn btn-primary">
+                        <i class="bi bi-gear"></i> Upravit
                     </a>
                 </div>
             </div>
         </div>
         
         <div class="col-md-4 mb-4">
-            <div class="card settings-nav-card">
-                <div class="card-body">
-                    <div class="settings-nav-icon">
-                        <i class="bi bi-clock-history icon-secondary"></i>
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex flex-column text-center">
+                    <div class="mb-3">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                             style="width: 60px; height: 60px; background: linear-gradient(135deg, #6c757d, #495057);">
+                            <i class="bi bi-clock-history fs-2 text-light"></i>
+                        </div>
                     </div>
                     <h5 class="card-title">Session Timeouty</h5>
-                    <p class="card-text">Konfigurace časových limitů pro přihlašování</p>
-                    <a href="{link Settings:sessionTimeouts}" class="btn btn-outline-primary">
-                        <i class="bi bi-sliders"></i>
-                        Nastavit
+                    <p class="card-text text-muted flex-grow-1">Konfigurace časových limitů pro přihlašování</p>
+                    <a href="{link Settings:sessionTimeouts}" class="btn btn-primary">
+                        <i class="bi bi-sliders"></i> Nastavit
                     </a>
                 </div>
             </div>
         </div>
         
         <div class="col-md-4 mb-4">
-            <div class="card settings-nav-card">
-                <div class="card-body">
-                    <div class="settings-nav-icon">
-                        <i class="bi bi-shield-lock icon-muted"></i>
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex flex-column text-center">
+                    <div class="mb-3">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                             style="width: 60px; height: 60px; background: linear-gradient(135deg, #ffc107, #e0a800);">
+                            <i class="bi bi-shield-lock fs-2 text-dark"></i>
+                        </div>
                     </div>
                     <h5 class="card-title">Zabezpečení</h5>
-                    <p class="card-text">Nastavení bezpečnostních pravidel</p>
+                    <p class="card-text text-muted flex-grow-1">Nastavení bezpečnostních pravidel</p>
                     <span class="btn btn-outline-secondary disabled">
-                        <i class="bi bi-lock"></i>
-                        Připravujeme
+                        <i class="bi bi-hourglass"></i> Brzy dostupné
                     </span>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
     {if $company}
+    {* Použití stávající info-card třídy z layout.css *}
     <div class="info-card mb-4">
         <div class="info-card-header">
             <i class="bi bi-info-circle me-2"></i>
@@ -73,7 +78,6 @@
                             <i class="bi bi-building"></i>
                             Název společnosti
                         </div>
-                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
                         <div class="info-value">{$company->name|escape}</div>
                     </div>
                     
@@ -82,7 +86,6 @@
                             <i class="bi bi-geo-alt"></i>
                             Adresa
                         </div>
-                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
                         <div class="info-value">{$company->address|escape}, {$company->zip|escape} {$company->city|escape}, {$company->country|escape}</div>
                     </div>
                     
@@ -91,7 +94,6 @@
                             <i class="bi bi-upc"></i>
                             IČ
                         </div>
-                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
                         <div class="info-value">{$company->ic|escape}</div>
                     </div>
                     
@@ -101,7 +103,6 @@
                             <i class="bi bi-upc-scan"></i>
                             DIČ
                         </div>
-                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
                         <div class="info-value">{$company->dic|escape}</div>
                     </div>
                     {/if}
@@ -112,7 +113,6 @@
                             <i class="bi bi-envelope"></i>
                             E-mail
                         </div>
-                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
                         <div class="info-value">{$company->email|escape}</div>
                     </div>
                     
@@ -121,7 +121,6 @@
                             <i class="bi bi-telephone"></i>
                             Telefon
                         </div>
-                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
                         <div class="info-value">{$company->phone|escape}</div>
                     </div>
                     
@@ -130,7 +129,6 @@
                             <i class="bi bi-bank"></i>
                             Bankovní účet
                         </div>
-                        {* ✅ XSS OCHRANA: Přidán escape filtr *}
                         <div class="info-value">{$company->bank_account|escape} ({$company->bank_name|escape})</div>
                     </div>
                     
@@ -141,7 +139,6 @@
                             Logo
                         </div>
                         <div class="info-value">
-                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
                             <img src="{$basePath}/uploads/logo/{$company->logo|escape}" alt="Logo" style="max-height: 60px;" class="rounded">
                         </div>
                     </div>
@@ -154,7 +151,6 @@
                             Podpis
                         </div>
                         <div class="info-value">
-                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
                             <img src="{$basePath}/uploads/signature/{$company->signature|escape}" alt="Podpis" style="max-height: 60px;" class="rounded">
                         </div>
                     </div>
@@ -165,7 +161,7 @@
     </div>
     {/if}
 
-    <div class="card shadow-sm rounded-lg border-0 mb-4" id="company-settings">
+    <div class="card" id="company-settings">
         <div class="card-header">
             <i class="bi bi-pencil-square me-2"></i>
             <h3>Upravit firemní údaje</h3>
@@ -182,7 +178,6 @@
                 
                 <div class="col-md-6">
                     <div class="form-floating">
-                        {* ✅ BEZPEČNÉ: Nette formulářové prvky jsou automaticky escapované *}
                         {input name class => 'form-control'}
                         {label name class => 'form-label' /}
                     </div>
@@ -298,9 +293,7 @@
                     
                     {if $company && $company->logo}
                         <div class="mt-2 d-flex align-items-center gap-3">
-                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
                             <img src="{$basePath}/uploads/logo/{$company->logo|escape}" alt="Logo" style="max-height: 60px;" class="rounded">
-                            {* ✅ XSS OCHRANA: Bezpečný JavaScript bez uživatelských dat *}
                             <a href="{link deleteLogo!, '_csrf_token' => $csrfToken}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat logo?')">
                                 <i class="bi bi-trash"></i> Smazat logo
                             </a>
@@ -313,9 +306,7 @@
                     {input signature class => 'form-control'}
                     {if $company && $company->signature}
                         <div class="mt-2 d-flex align-items-center gap-3">
-                            {* ✅ XSS OCHRANA: Přidán escape filtr *}
                             <img src="{$basePath}/uploads/signature/{$company->signature|escape}" alt="Podpis" style="max-height: 60px;" class="rounded">
-                            {* ✅ XSS OCHRANA: Bezpečný JavaScript bez uživatelských dat *}
                             <a href="{link deleteSignature!, '_csrf_token' => $csrfToken}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Opravdu chcete smazat podpis?')">
                                 <i class="bi bi-trash"></i> Smazat podpis
                             </a>
@@ -335,7 +326,6 @@
                     <div class="color-setting-item">
                         <label class="form-label">Barva nadpisu faktury</label>
                         <div class="color-input-group">
-                            {* ✅ BEZPEČNÉ: Formulářové prvky jsou automaticky escapované *}
                             {input invoice_heading_color class => 'form-control form-control-color'}
                             <div class="color-preview" style="background-color: #B1D235; color: #212529;">Ukázka barvy</div>
                         </div>
@@ -384,5 +374,27 @@
         </div>
     </div>
 </div>
+
+<script>
+// Show/hide DIC input based on checkbox
+document.addEventListener('DOMContentLoaded', function() {
+    const hasDicCheckbox = document.getElementById('vat-payer-checkbox');
+    const dicContainer = document.getElementById('dic-container');
+    
+    function toggleDicContainer() {
+        if (hasDicCheckbox.checked) {
+            dicContainer.style.display = 'block';
+        } else {
+            dicContainer.style.display = 'none';
+        }
+    }
+    
+    // Initial state
+    toggleDicContainer();
+    
+    // Listen for changes
+    hasDicCheckbox.addEventListener('change', toggleDicContainer);
+});
+</script>
 
 {/block}
