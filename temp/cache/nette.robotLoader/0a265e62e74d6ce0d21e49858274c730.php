@@ -35,7 +35,7 @@ return array (
     'App\\Model\\EmailService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\EmailService.php',
-      1 => 1756726732,
+      1 => 1756729294,
     ),
     'App\\Model\\InvoicesManager' => 
     array (
@@ -190,7 +190,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1756724881,
+      1 => 1756732002,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
@@ -256,12 +256,19 @@ return array (
     'App\\Presentation\\Sign\\SignTemplate' => 3,
     'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
     'App\\Presentation\\Clients\\ClientsTemplate' => 1,
-    'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 2,
+    'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 3,
     'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 1,
     'App\\Presentation\\Security\\SecurityTemplate' => 1,
     'App\\Presentation\\TestEmails\\TestEmailsPresenter' => 2,
     'App\\Presentation\\Sgn\\SgnPresenter' => 2,
     'App\\Presentation\\Sign\\SignTestEmailsTemplate' => 3,
+    'App\\Presentation\\Sign\\SignUpTemplate' => 3,
+    'App\\Presentation\\Users\\UsersProfileTemplate' => 1,
+    'App\\Presentation\\Users\\UsersTemplate' => 3,
+    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
+    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
+    'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
+    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
   ),
   2 => 
   array (

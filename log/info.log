@@ -404,3 +404,80 @@
 [2025-09-01 14-23-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/test-emails?confirm=1 
 [2025-09-01 14-23-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/test-emails 
 [2025-09-01 14-23-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/test-emails?_fid=g5o9 
+[2025-09-01 14-38-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-09-01 14-38-52] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-09-01 14-39-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-18] 🔍 TENANT DEBUG: Krok 1 - kontroly unikátnosti prošly  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-18] 🔍 TENANT DEBUG: Krok 2 - vkládám do tabulky 'tenants'  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-18] 🔍 TENANT DEBUG: Krok 2 - vytvořen unikátní slug: 'alpho-test-mail'  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-18] 🔍 TENANT DEBUG: Krok 2 - tenant vytvořen s ID: 19  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] 🔍 TENANT DEBUG: Krok 3 - vkládám do tabulky 'users'  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] 🔍 TENANT DEBUG: Krok 3 - admin user vytvořen s ID: 78  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] 🔍 TENANT DEBUG: Krok 4 - vkládám do tabulky 'company_info'  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] 🔍 TENANT DEBUG: Krok 4 - company_info vytvořeno  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] 🔍 TENANT DEBUG: Krok 5 - vytvářím adresáře  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] 🔍 TENANT DEBUG: Krok 5 - adresáře vytvořeny  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] 🔍 TENANT DEBUG: Krok 6 - nastavuji moduly  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] 🔍 TENANT DEBUG: Tenant 19 začíná bez modulů (čistý start)  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] 🔍 TENANT DEBUG: Tenant 19 má prázdné adresáře, žádné moduly  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] 🔍 TENANT DEBUG: Krok 6 - moduly nastaveny  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] 🔍 TENANT DEBUG: Krok 7 - transakce potvrzena  @  http://localhost:8000/sign/up 
+[2025-09-01 14-40-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=sjri 
+[2025-09-01 14-41-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-09-01 14-41-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-09-01 14-41-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=7827 
+[2025-09-01 14-41-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-09-01 14-41-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=2lze 
+[2025-09-01 14-41-33] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=2lze 
+[2025-09-01 14-41-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/profile 
+[2025-09-01 14-41-35] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/users/profile 
+[2025-09-01 14-41-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/out 
+[2025-09-01 14-41-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=8fuw 
+[2025-09-01 14-41-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-09-01 14-41-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-09-01 14-41-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=5swl 
+[2025-09-01 14-42-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-09-01 14-42-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=mluo2&_fid=9t75 
+[2025-09-01 14-46-47] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-09-01 14-46-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-09-01 14-46-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=b37z 
+[2025-09-01 14-46-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=b37z 
+[2025-09-01 14-46-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-09-01 14-46-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-09-01 14-47-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/default/19?do=delete 
+[2025-09-01 14-47-01] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/default/19?do=delete 
+[2025-09-01 14-47-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/?_fid=p9v9 
+[2025-09-01 14-47-01] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/?_fid=p9v9 
+[2025-09-01 14-47-42] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-42] 🔍 TENANT DEBUG: Krok 1 - kontroly unikátnosti prošly  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-42] 🔍 TENANT DEBUG: Krok 2 - vkládám do tabulky 'tenants'  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-42] 🔍 TENANT DEBUG: Krok 2 - vytvořen unikátní slug: 'alpho-test-mail'  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-42] 🔍 TENANT DEBUG: Krok 2 - tenant vytvořen s ID: 20  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] 🔍 TENANT DEBUG: Krok 3 - vkládám do tabulky 'users'  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] 🔍 TENANT DEBUG: Krok 3 - admin user vytvořen s ID: 79  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] 🔍 TENANT DEBUG: Krok 4 - vkládám do tabulky 'company_info'  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] 🔍 TENANT DEBUG: Krok 4 - company_info vytvořeno  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] 🔍 TENANT DEBUG: Krok 5 - vytvářím adresáře  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] 🔍 TENANT DEBUG: Krok 5 - adresáře vytvořeny  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] 🔍 TENANT DEBUG: Krok 6 - nastavuji moduly  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] 🔍 TENANT DEBUG: Tenant 20 začíná bez modulů (čistý start)  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] 🔍 TENANT DEBUG: Tenant 20 má prázdné adresáře, žádné moduly  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] 🔍 TENANT DEBUG: Krok 6 - moduly nastaveny  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] 🔍 TENANT DEBUG: Krok 7 - transakce potvrzena  @  http://localhost:8000/sign/up 
+[2025-09-01 14-47-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=hknq 
+[2025-09-01 14-48-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-09-01 14-48-40] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-09-01 14-48-40] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=w3tj 
+[2025-09-01 14-49-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-09-01 14-49-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-09-01 14-49-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-09-01 14-49-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/forgot-password 
+[2025-09-01 14-49-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=nm4g 
+[2025-09-01 14-50-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?_fid=nm4g 
+[2025-09-01 15-00-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-09-01 15-00-09] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-09-01 15-06-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-09-01 15-06-50] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-09-01 15-14-20] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-09-01 15-14-20] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 

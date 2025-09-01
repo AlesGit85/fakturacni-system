@@ -12,8 +12,8 @@ services:
 # 		arguments:
 # 			host: smtp.seznam.cz
 # 			port: 465
-# 			username: %env.SMTP_USERNAME%
-# 			password: %env.SMTP_PASSWORD%
+# 			username: noreply@qrdoklad.cz
+# 			password: your_smtp_password
 # 			secure: tls
 
 # Pro produkci - jednoduchý SendmailMailer:
