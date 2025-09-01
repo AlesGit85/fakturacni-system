@@ -2001,3 +2001,185 @@
 [2025-08-28 14-10-33] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/settings/ 
 [2025-08-28 14-10-33] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/settings/ 
 [2025-08-28 14-10-33] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/settings/ 
+[2025-09-01 12-42-36] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?backlink=kgiag&_fid=0ynl 
+[2025-09-01 12-42-39] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?backlink=7vye8&_fid=gjkf 
+[2025-09-01 12-42-44] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Module info úspěšně načteno pro notes  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Module info úspěšně načteno pro test_module  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-42-44] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/?_fid=r60b 
+[2025-09-01 12-47-27] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Module info úspěšně načteno pro notes  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Module info úspěšně načteno pro test_module  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-27] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/clients/ 
+[2025-09-01 12-47-35] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?backlink=06pjy&_fid=d10a 
+[2025-09-01 12-47-36] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/forgot-password 
+[2025-09-01 12-47-40] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?_fid=ilsj 
+[2025-09-01 12-48-24] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Module info úspěšně načteno pro notes  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Module info úspěšně načteno pro test_module  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-24] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/security/rate-limit-stats 
+[2025-09-01 12-48-27] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Module info úspěšně načteno pro notes  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Module info úspěšně načteno pro test_module  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-09-01 12-48-27] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Nalezeno 3 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Zpracovávám modul: ID=financial_reports, tenant_id=1, name=Finanční přehledy, aktivní=1  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/module.json  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Úspěšně načten modul financial_reports z tenant 1  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Module info úspěšně načteno pro financial_reports  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Modul financial_reports přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Zpracovávám modul: ID=notes, tenant_id=1, name=Poznámky, aktivní=1  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/notes/module.json  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Úspěšně načten modul notes z tenant 1  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Module info úspěšně načteno pro notes  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Modul notes přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Zpracovávám modul: ID=test_module, tenant_id=1, name=Testovací modul, aktivní=1  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Načítám modul info ze souboru: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/test_module/module.json  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Úspěšně načten modul test_module z tenant 1  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Module info úspěšně načteno pro test_module  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Modul test_module přidán do výsledků (stav: aktivní)  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] === KONEC: Uživatel 1 má 3 nainstalovaných modulů ===  @  http://localhost:8000/ 
+[2025-09-01 12-52-26] Filtrováno 3 aktivních modulů z 3 celkem  @  http://localhost:8000/ 
+[2025-09-01 12-53-56] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails 
+[2025-09-01 12-56-39] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in?backlink=06pjy&_fid=d10a 
+[2025-09-01 12-56-41] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails 
+[2025-09-01 12-58-20] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails 
+[2025-09-01 12-58-25] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 12-58-39] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=xsxd 
+[2025-09-01 12-58-58] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 12-59-08] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=x2gr 
+[2025-09-01 13-05-07] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=x2gr 
+[2025-09-01 13-05-09] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-05-12] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=x116 
+[2025-09-01 13-05-13] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-05-15] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=5zkh 
+[2025-09-01 13-05-16] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-05-18] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=kopy 
+[2025-09-01 13-05-19] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-05-22] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=dnlp 
+[2025-09-01 13-08-17] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=dnlp 
+[2025-09-01 13-08-19] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-08-34] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=i3uf 
+[2025-09-01 13-08-36] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-09-47] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=m8hs 
+[2025-09-01 13-09-48] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-09-50] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=bzjp 
+[2025-09-01 13-09-51] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-09-54] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=6v5b 
+[2025-09-01 13-09-55] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-09-57] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=dgf1 
+[2025-09-01 13-09-59] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-10-02] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=swlr 
+[2025-09-01 13-10-03] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-10-06] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=9own 
+[2025-09-01 13-10-07] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-10-09] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=tbct 
+[2025-09-01 13-41-08] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=tbct 
+[2025-09-01 13-53-07] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=tbct 
+[2025-09-01 13-53-08] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=tbct 
+[2025-09-01 13-53-09] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=tbct 
+[2025-09-01 13-55-57] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=tbct 
+[2025-09-01 13-55-58] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 13-56-02] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=jq9o 
+[2025-09-01 14-13-36] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=jq9o 
+[2025-09-01 14-13-39] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-13-45] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=cttz 
+[2025-09-01 14-13-46] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-13-50] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=q1v2 
+[2025-09-01 14-13-52] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/in 
+[2025-09-01 14-13-55] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails 
+[2025-09-01 14-14-01] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails 
+[2025-09-01 14-21-52] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails 
+[2025-09-01 14-21-53] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-21-56] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=foxl 
+[2025-09-01 14-21-57] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-22-00] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=xvkd 
+[2025-09-01 14-22-01] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-22-07] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=ofuu 
+[2025-09-01 14-22-08] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-22-12] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=123a 
+[2025-09-01 14-22-13] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-22-16] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=80wg 
+[2025-09-01 14-22-49] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-22-51] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=xak3 
+[2025-09-01 14-22-51] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-22-53] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=lg9g 
+[2025-09-01 14-22-54] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-22-56] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=oty6 
+[2025-09-01 14-22-56] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-22-58] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=y0fd 
+[2025-09-01 14-22-59] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-23-01] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=z1hy 
+[2025-09-01 14-23-02] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-23-04] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=qnno 
+[2025-09-01 14-23-05] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-23-08] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=1hxq 
+[2025-09-01 14-23-08] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-23-12] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=q5fo 
+[2025-09-01 14-23-12] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-23-16] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=wia5 
+[2025-09-01 14-23-16] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-23-19] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=qm2k 
+[2025-09-01 14-23-19] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?confirm=1 
+[2025-09-01 14-23-22] Filtrováno 0 aktivních modulů z 0 celkem  @  http://localhost:8000/sign/test-emails?_fid=g5o9 

@@ -546,6 +546,131 @@ final class SignPresenter extends BasePresenter
     }
 
     /**
+     * Testovací akce pro emaily - přidejte na konec SignPresenter třídy před uzavírací }
+     */
+    public function actionTestEmails(): void
+    {
+        // Pouze pro vývoj - můžete smazat po dokončení
+        if (!$this->getParameter('confirm')) {
+            $this->template->showConfirm = true;
+            return;
+        }
+    }
+
+    /**
+     * Formulář pro testování všech typů emailů včetně budoucích modulů
+     */
+    protected function createComponentEmailTestForm(): Form
+    {
+        $form = new Form;
+        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
+
+        $form->addEmail('email', 'Testovací e-mail:')
+            ->setRequired('Zadejte e-mail pro test')
+            ->setDefaultValue('test@example.com');
+
+        $form->addSelect('type', 'Typ emailu:', [
+            // Stávající funkcionality
+            'test' => '📧 Testovací email',
+            'registration' => '👋 Potvrzení registrace', 
+            'password_reset' => '🔑 Reset hesla',
+            'admin_notification' => '👨‍💼 Admin notifikace',
+            
+            // Budoucí moduly - faktury
+            'invoice_created' => '📄 Faktura vytvořena (budoucí)',
+            'invoice_sent' => '📤 Faktura odeslána (budoucí)',
+            'invoice_paid' => '✅ Faktura zaplacena (budoucí)', 
+            'invoice_overdue' => '⚠️ Faktura po splatnosti (budoucí)',
+            
+            // Budoucí moduly - upomínky
+            'reminder_first' => '🔔 První upomínka (budoucí)',
+            'reminder_second' => '📢 Druhá upomínka (budoucí)',
+            'reminder_final' => '🚨 Konečná upomínka (budoucí)',
+        ])->setRequired();
+
+        $form->addSubmit('send', 'Odeslat testovací e-mail');
+
+        $form->onSuccess[] = [$this, 'emailTestFormSucceeded'];
+
+        return $form;
+    }
+
+    public function emailTestFormSucceeded(Form $form, \stdClass $data): void
+    {
+        try {
+            switch ($data->type) {
+                // Stávající funkcionality
+                case 'test':
+                    $this->emailService->sendTestEmail($data->email);
+                    break;
+                    
+                case 'registration':
+                    $this->emailService->sendRegistrationConfirmation($data->email, 'TestUser', 'admin');
+                    break;
+                    
+                case 'password_reset':
+                    $dummyToken = bin2hex(random_bytes(32));
+                    $this->emailService->sendPasswordReset($data->email, 'TestUser', $dummyToken);
+                    break;
+                    
+                case 'admin_notification':
+                    $this->emailService->sendAdminNotification('TestUser', $data->email, 'accountant');
+                    break;
+
+                // Budoucí moduly - testování nové sendModuleEmail metody
+                case 'invoice_created':
+                case 'invoice_sent':
+                case 'invoice_paid':
+                case 'invoice_overdue':
+                    $this->emailService->sendModuleEmail($data->type, $data->email, [
+                        'invoice_number' => '2025001',
+                        'client_name' => 'Test Klient s.r.o.',
+                        'amount' => '15 250 Kč',
+                        'due_date' => '15.09.2025'
+                    ]);
+                    break;
+                    
+                case 'reminder_first':
+                case 'reminder_second': 
+                case 'reminder_final':
+                    $this->emailService->sendModuleEmail($data->type, $data->email, [
+                        'invoice_number' => '2025001',
+                        'client_name' => 'Test Klient s.r.o.',
+                        'amount' => '15 250 Kč',
+                        'due_date' => '01.08.2025',
+                        'days_overdue' => 15
+                    ], [
+                        'priority' => 1, // Vysoká priorita pro upomínky
+                        'admin_copy' => true // Kopie pro admin
+                    ]);
+                    break;
+            }
+            
+            $emailTypeNames = [
+                'test' => 'testovací email',
+                'registration' => 'potvrzení registrace',
+                'password_reset' => 'reset hesla',
+                'admin_notification' => 'admin notifikace',
+                'invoice_created' => 'faktura vytvořena',
+                'invoice_sent' => 'faktura odeslána', 
+                'invoice_paid' => 'faktura zaplacena',
+                'invoice_overdue' => 'faktura po splatnosti',
+                'reminder_first' => 'první upomínka',
+                'reminder_second' => 'druhá upomínka',
+                'reminder_final' => 'konečná upomínka'
+            ];
+            
+            $typeName = $emailTypeNames[$data->type] ?? $data->type;
+            $this->flashMessage("Email '{$typeName}' byl úspěšně odeslán na {$data->email}.", 'success');
+            
+        } catch (\Exception $e) {
+            $form->addError('Chyba při odesílání e-mailu: ' . $e->getMessage());
+        }
+        
+        $this->redirect('this');
+    }
+
+    /**
      * ✅ AKTUALIZACE: processCompanyAccountCreation() - s návratovými hodnotami
      */
     private function processCompanyAccountCreation(Form $form, \stdClass $data): array

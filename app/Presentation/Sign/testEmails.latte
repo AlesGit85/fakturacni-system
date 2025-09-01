@@ -1,0 +1,116 @@
+{layout none}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test emailů - QRdoklad</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #B1D235;
+            --secondary-color: #95B11F; 
+            --gray-color: #6c757d;
+            --dark-color: #212529;
+        }
+        body {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+        }
+        .test-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        .btn-primary {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container d-flex align-items-center min-vh-100">
+        <div class="test-container mx-auto p-5">
+            <div class="text-center mb-4">
+                <i class="bi bi-envelope-check display-4" style="color: var(--primary-color);"></i>
+                <h1 class="h3 mt-3">Test emailového systému</h1>
+                <p class="text-muted">Ověření funkčnosti odesílání emailů</p>
+            </div>
+
+            {if isset($showConfirm) && $showConfirm}
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <strong>Pozor:</strong> Tato akce je určena pouze pro testování během vývoje.
+                </div>
+                
+                <div class="text-center">
+                    <p>Chcete pokračovat v testování emailů?</p>
+                    <a href="{link this confirm => true}" class="btn btn-primary me-2">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Ano, testovat emaily
+                    </a>
+                    <a href="{link Sign:in}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Zpět na přihlášení
+                    </a>
+                </div>
+            {else}
+                {form emailTestForm}
+                    {if $form->hasErrors()}
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-circle me-2"></i>
+                            {foreach $form->errors as $error}
+                                {$error}<br>
+                            {/foreach}
+                        </div>
+                    {/if}
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-floating">
+                                {input email class => 'form-control'}
+                                {label email class => 'form-label' /}
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-floating">
+                                {input type class => 'form-select'}
+                                {label type class => 'form-label' /}
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 text-center pt-3">
+                            {input send class => 'btn btn-primary btn-lg px-4'}
+                        </div>
+                    </div>
+                {/form}
+
+                <div class="text-center mt-4">
+                    <a href="{link Sign:in}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Zpět na přihlášení
+                    </a>
+                </div>
+
+                <div class="mt-4 p-3 bg-light rounded">
+                    <h5>Informace o testování:</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li><i class="bi bi-info-circle text-primary me-2"></i>Emaily se ukládají do <code>temp/mails/</code> složky</li>
+                        <li><i class="bi bi-info-circle text-primary me-2"></i>Pro produkci změňte konfiguraci v <code>config/mail.neon</code></li>
+                        <li><i class="bi bi-info-circle text-primary me-2"></i>TestMailer nezapotřebuje SMTP nastavení</li>
+                    </ul>
+                </div>
+            {/if}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
