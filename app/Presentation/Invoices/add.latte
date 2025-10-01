@@ -272,7 +272,13 @@
                                             {* ✅ BEZPEČNÉ: Statický text *}
                                             <label class="form-label">Název položky</label>
                                             {* ⚠️ BEZPEČNOST: Ruční HTML input - hodnoty budou validovány na serveru *}
-                                            <input type="text" name="items[0][name]" class="form-control" required>
+                                            <input type="text" name="items[0][name]" class="form-control item-name-input" required maxlength="500">
+                                            <div class="form-text">
+                                                <span class="char-count text-muted">0</span> / 500 znaků
+                                                <span class="char-warning text-warning ms-2" style="display: none;">
+                                                    <i class="bi bi-exclamation-triangle"></i> Blížíte se k limitu
+                                                </span>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             {* ✅ BEZPEČNÉ: Statický text *}
@@ -331,7 +337,13 @@
                             {* ✅ BEZPEČNÉ: Statický text *}
                             <label class="form-label">Předmět fakturace</label>
                             {* ⚠️ BEZPEČNOST: Ruční HTML textarea - hodnoty budou validovány na serveru *}
-                            <textarea name="items[0][name]" class="form-control" rows="3" required></textarea>
+                            <textarea name="items[0][name]" id="simple-item-name" class="form-control" rows="3" required maxlength="500"></textarea>
+                            <div class="form-text">
+                                <span id="simple-char-count" class="text-muted">0</span> / 500 znaků
+                                <span id="simple-char-warning" class="text-warning ms-2" style="display: none;">
+                                    <i class="bi bi-exclamation-triangle"></i> Blížíte se k limitu
+                                </span>
+                            </div>
                             <input type="hidden" name="items[0][description]" value="">
                             <input type="hidden" name="items[0][quantity]" value="1">
                             <input type="hidden" name="items[0][unit]" value="ks">
@@ -384,4 +396,103 @@
         </div>
     </div>
 </div>
+
+{* JavaScript pro počítadlo znaků *}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Počítadlo pro neplátce DPH (textarea)
+    const simpleTextarea = document.getElementById('simple-item-name');
+    const simpleCharCount = document.getElementById('simple-char-count');
+    const simpleCharWarning = document.getElementById('simple-char-warning');
+    
+    if (simpleTextarea && simpleCharCount) {
+        simpleTextarea.addEventListener('input', function() {
+            const length = this.value.length;
+            simpleCharCount.textContent = length;
+            
+            // Zobrazíme varování při 450+ znacích
+            if (length >= 450) {
+                simpleCharWarning.style.display = 'inline';
+                simpleCharCount.className = 'text-warning';
+            } else {
+                simpleCharWarning.style.display = 'none';
+                simpleCharCount.className = 'text-muted';
+            }
+            
+            // Červeně při 500 znacích
+            if (length >= 500) {
+                simpleCharCount.className = 'text-danger';
+            }
+        });
+    }
+    
+    // Počítadlo pro plátce DPH (input fields) - včetně dynamicky přidaných
+    function setupCharCounter(input) {
+        if (!input) return;
+        
+        const container = input.closest('.col-md-6') || input.parentElement;
+        const charCount = container.querySelector('.char-count');
+        const charWarning = container.querySelector('.char-warning');
+        
+        if (!charCount) return;
+        
+        input.addEventListener('input', function() {
+            const length = this.value.length;
+            charCount.textContent = length;
+            
+            // Zobrazíme varování při 450+ znacích
+            if (length >= 450) {
+                if (charWarning) charWarning.style.display = 'inline';
+                charCount.className = 'char-count text-warning';
+            } else {
+                if (charWarning) charWarning.style.display = 'none';
+                charCount.className = 'char-count text-muted';
+            }
+            
+            // Červeně při 500 znacích
+            if (length >= 500) {
+                charCount.className = 'char-count text-danger';
+            }
+        });
+    }
+    
+    // Nastavíme počítadla pro existující input fieldy
+    document.querySelectorAll('.item-name-input').forEach(setupCharCounter);
+    
+    // Pokud existuje funkce pro přidávání položek, přidáme počítadlo i k novým
+    const addItemBtn = document.getElementById('add-item');
+    if (addItemBtn) {
+        // Pozorujeme změny v kontejneru s položkami
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === 1) { // Element node
+                        const nameInput = node.querySelector('input[name*="[name]"]');
+                        if (nameInput) {
+                            nameInput.classList.add('item-name-input');
+                            nameInput.setAttribute('maxlength', '500');
+                            
+                            // Přidáme počítadlo znaků k novému inputu
+                            const container = nameInput.closest('.col-md-6');
+                            if (container && !container.querySelector('.char-count')) {
+                                const formText = document.createElement('div');
+                                formText.className = 'form-text';
+                                formText.innerHTML = '<span class="char-count text-muted">0</span> / 500 znaků <span class="char-warning text-warning ms-2" style="display: none;"><i class="bi bi-exclamation-triangle"></i> Blížíte se k limitu</span>';
+                                nameInput.parentNode.appendChild(formText);
+                            }
+                            
+                            setupCharCounter(nameInput);
+                        }
+                    }
+                });
+            });
+        });
+        
+        const itemsContainer = document.getElementById('invoice-items');
+        if (itemsContainer) {
+            observer.observe(itemsContainer, { childList: true, subtree: true });
+        }
+    }
+});
+</script>
 {/block}

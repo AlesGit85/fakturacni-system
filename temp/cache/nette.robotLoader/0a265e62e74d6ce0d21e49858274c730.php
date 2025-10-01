@@ -45,7 +45,7 @@ return array (
     'App\\Model\\InvoicesManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\InvoicesManager.php',
-      1 => 1755075250,
+      1 => 1759304250,
     ),
     'App\\Model\\MigrationService' => 
     array (
@@ -274,6 +274,10 @@ return array (
     'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
     'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 2,
   ),
   2 => 
   array (

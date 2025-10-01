@@ -65,24 +65,28 @@ class InvoicesManager
     public function getAll($limit = null, $offset = null, $search = null)
     {
         $query = $this->database->table('invoices');
-        
+
         // Aplikace tenant filtru
         $query = $this->applyTenantFilter($query);
-        
+
         // Vyhledávání
         if (!empty($search)) {
-            $query = $query->where('number LIKE ? OR client_name LIKE ? OR total LIKE ?', 
-                "%$search%", "%$search%", "%$search%");
+            $query = $query->where(
+                'number LIKE ? OR client_name LIKE ? OR total LIKE ?',
+                "%$search%",
+                "%$search%",
+                "%$search%"
+            );
         }
-        
+
         // Řazení podle čísla faktury sestupně (nejnovější první)
         $query = $query->order('number DESC');
-        
+
         // Limit a offset
         if ($limit !== null) {
             $query = $query->limit($limit, $offset);
         }
-        
+
         return $query;
     }
 
@@ -152,6 +156,11 @@ class InvoicesManager
         // Konverze stdClass na pole
         if ($data instanceof \stdClass) {
             $data = (array) $data;
+        }
+
+        // ✅ OPRAVA: Ošetření délky názvu položky na 500 znaků
+        if (isset($data['name']) && strlen($data['name']) > 500) {
+            $data['name'] = mb_substr($data['name'], 0, 497) . '...';
         }
 
         // Ošetření prázdných číselných hodnot
@@ -253,16 +262,16 @@ class InvoicesManager
         $filteredSelection = $this->applyTenantFilter($selection);
 
         $totalInvoices = $filteredSelection->count();
-        
+
         // Faktury podle statusu
         $unpaid = $this->applyTenantFilter($this->database->table('invoices'))
             ->where('status', 'created')
             ->count();
-            
+
         $paid = $this->applyTenantFilter($this->database->table('invoices'))
             ->where('status', 'paid')
             ->count();
-            
+
         $overdue = $this->applyTenantFilter($this->database->table('invoices'))
             ->where('status', 'overdue')
             ->count();
@@ -330,7 +339,7 @@ class InvoicesManager
     public function checkOverdueDates()
     {
         $today = new \DateTime();
-        
+
         $overdueInvoices = $this->applyTenantFilter($this->database->table('invoices'))
             ->where('status', 'created')
             ->where('due_date < ?', $today->format('Y-m-d'));
@@ -443,7 +452,7 @@ class InvoicesManager
             ->where('user_id', $userId)
             ->order('id DESC')
             ->limit(1);
-            
+
         $filteredSelection = $this->applyTenantFilter($selection);
         return $filteredSelection->fetch();
     }
