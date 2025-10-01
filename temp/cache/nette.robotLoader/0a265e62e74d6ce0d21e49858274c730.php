@@ -12,6 +12,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
       1 => 1755852610,
     ),
+    'App\\Mail\\SmtpFactory' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Mail\\SmtpFactory.php',
+      1 => 1756737321,
+    ),
     'App\\Mail\\TestMailer' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Mail\\TestMailer.php',

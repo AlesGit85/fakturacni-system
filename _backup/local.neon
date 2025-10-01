@@ -3,9 +3,9 @@ parameters:
 	production: true
 	
 database:
-	dsn: 'mysql:host=localhost;dbname=c4qrdoklad'
+	dsn: 'mysql:host=localhost;dbname=c4devqrdoklad'
 	user: 'c4alpho'
-	password: 'nzsm_YJH6'
+	password: '%env.DB_PASSWORD%'
 	options:
 		lazy: true
 		charset: utf8mb4
@@ -20,14 +20,13 @@ session:
 
 tracy:
 	email: info@allimedia.cz
-	logSeverity: [E_ERROR, E_WARNING, E_PARSE, E_COMPILE_ERROR]
 	strictMode: true
 	showBar: false # Skryje Tracy bar v produkci
-	logDir: %appDir%/../log
-	maxLogFiles: 50
 
 application:
-	errorPresenter: Error:Error4xx
+	errorPresenter:
+		4xx: Error:Error4xx
+		5xx: Error:Error5xx
 	catchExceptions: true
 	
 latte:

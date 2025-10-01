@@ -33,8 +33,13 @@ latte:
 	strictTypes: yes
 	strictParsing: yes
 
+# PŘIDÁNO: Mail konfigurace pro produkci
 services:
 	security.headers:
 		factory: App\Security\SecurityHeaders
 		setup:
 			- apply(@Nette\Http\Response)
+	
+	# SMTP Mailer pro produkci
+	nette.mailer:
+		factory: App\Mail\SmtpFactory::create
