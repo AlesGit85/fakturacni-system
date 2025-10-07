@@ -413,7 +413,7 @@ class UserManager implements Nette\Security\Authenticator
     }
 
     /**
-     * Aktualizuje uživatele s automatickým šifrováním
+     * Aktualizuje uživatele s automatickým šifrováním a hashováním hesla
      */
     public function update($id, $data, ?int $adminId = null, ?string $adminName = null)
     {
@@ -427,6 +427,12 @@ class UserManager implements Nette\Security\Authenticator
             // Konverze stdClass na pole
             if ($data instanceof \stdClass) {
                 $data = (array) $data;
+            }
+
+            // 🔒 NOVÉ: AUTOMATICKÉ HASHOVÁNÍ HESLA pokud je v datech
+            if (isset($data['password']) && !empty($data['password'])) {
+                $data['password'] = $this->passwords->hash($data['password']);
+                \Tracy\Debugger::log("🔒 HESLO: Heslo bylo zahashováno při update() uživatele ID:$id", \Tracy\ILogger::INFO);
             }
 
             // 🔒 AUTOMATICKÉ ŠIFROVÁNÍ před uložením
@@ -468,7 +474,7 @@ class UserManager implements Nette\Security\Authenticator
 
 
     /**
-     * Přidá nebo aktualizuje uživatele s automatickým šifrováním
+     * Přidá nebo aktualizuje uživatele s automatickým šifrováním a hashováním hesla
      * NOVÁ METODA: Pro konzistentní API se ostatními managery
      */
     public function save($data, $id = null)
@@ -476,6 +482,12 @@ class UserManager implements Nette\Security\Authenticator
         // Konverze stdClass na pole
         if ($data instanceof \stdClass) {
             $data = (array) $data;
+        }
+
+        // 🔒 NOVÉ: AUTOMATICKÉ HASHOVÁNÍ HESLA pokud je v datech
+        if (isset($data['password']) && !empty($data['password'])) {
+            $data['password'] = $this->passwords->hash($data['password']);
+            \Tracy\Debugger::log("🔒 HESLO: Heslo bylo zahashováno při save() uživatele" . ($id ? " ID:$id" : " (nový)"), \Tracy\ILogger::INFO);
         }
 
         // 🔒 AUTOMATICKÉ ŠIFROVÁNÍ před uložením
@@ -570,7 +582,7 @@ class UserManager implements Nette\Security\Authenticator
     /**
      * Kontrola, zda je uživatelské jméno dostupné
      */
-        public function isUsernameAvailable(string $username, ?int $excludeUserId = null): bool
+    public function isUsernameAvailable(string $username, ?int $excludeUserId = null): bool
     {
         $selection = $this->getAllSelection()->where('username', $username);
 
@@ -584,7 +596,7 @@ class UserManager implements Nette\Security\Authenticator
     /**
      * Kontrola, zda je e-mail dostupný
      */
-        public function isEmailAvailable(string $email, ?int $excludeUserId = null): bool
+    public function isEmailAvailable(string $email, ?int $excludeUserId = null): bool
     {
         $selection = $this->getAllSelection()->where('email', $email);
 
@@ -801,13 +813,13 @@ class UserManager implements Nette\Security\Authenticator
             // 🔓 NOVÉ: AUTOMATICKÉ DEŠIFROVÁNÍ firemních údajů
             $companyEmail = null;
             $companyPhone = null;
-            
+
             if ($tenant->company_email || $tenant->company_phone) {
                 $companyData = [
                     'email' => $tenant->company_email,
                     'phone' => $tenant->company_phone
                 ];
-                
+
                 $decryptedCompanyData = $this->decryptCompanyData($companyData);
                 $companyEmail = $decryptedCompanyData['email'];
                 $companyPhone = $decryptedCompanyData['phone'];

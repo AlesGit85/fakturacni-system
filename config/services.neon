@@ -55,7 +55,6 @@ services:
 	- App\Model\CompanyManager
 	- App\Model\QrPaymentService
 	- App\Model\AresService
-	- App\Model\EmailService
 	- App\Model\TenantManager
 	- App\Model\SessionSettingsManager
 

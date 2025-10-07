@@ -195,7 +195,7 @@ return array (
     'App\\Presentation\\Sign\\SignPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Sign\\SignPresenter.php',
-      1 => 1756732002,
+      1 => 1759332202,
     ),
     'App\\Presentation\\Tenants\\TenantsPresenter' => 
     array (
@@ -250,34 +250,11 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 3,
-    'null' => 3,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsSessionTimeoutsTemplate' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
-    'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'Nette\\Bridges\\Assets\\DIExtension' => 1,
+    'null' => 2,
+    'App\\Presentation\\Sign\\SignSendTestEmailTemplate' => 2,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 1,
-    'App\\Presentation\\Sign\\SignForgotPasswordTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityRateLimitStatsTemplate' => 1,
-    'App\\Presentation\\Security\\SecurityTemplate' => 1,
-    'App\\Presentation\\TestEmails\\TestEmailsPresenter' => 2,
-    'App\\Presentation\\Sgn\\SgnPresenter' => 2,
-    'App\\Presentation\\Sign\\SignTestEmailsTemplate' => 3,
-    'App\\Presentation\\Sign\\SignUpTemplate' => 3,
-    'App\\Presentation\\Users\\UsersProfileTemplate' => 1,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Sign\\SignOutTemplate' => 1,
-    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 3,
-    'App\\Presentation\\Tenants\\TenantsTemplate' => 3,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 2,
+    'App\\Presentation\\Sign\\SignEmailDiagnosticTemplate' => 1,
   ),
   2 => 
   array (

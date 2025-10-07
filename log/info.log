@@ -529,3 +529,37 @@
 [2025-10-01 10-07-44] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
 [2025-10-01 10-07-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/add 
 [2025-10-01 10-07-45] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/add 
+[2025-10-01 16-44-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-10-01 16-44-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=9lg33&_fid=8jzr 
+[2025-10-01 16-44-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-10-01 16-44-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=wpl9 
+[2025-10-01 16-44-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=wpl9 
+[2025-10-01 16-44-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-01 16-44-41] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-10-01 16-44-42] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/add 
+[2025-10-01 16-44-42] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/add 
+[2025-10-01 16-44-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-10-01 16-44-48] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-10-01 16-44-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-10-01 16-44-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-10-01 16-44-57] 🔒 KROK 3: Firemní údaje aktualizovány se šifrováním  @  http://localhost:8000/settings/ 
+[2025-10-01 16-44-57] Šifrovaná data: {"ic":"GXo3SMQdx+BNL3oVWd\/An51KgK816mrV9FqXcg+bfG8WWMDh","dic":"SnFYxh+Gua0hlKN4LmmNtf+C3oRsY\/QcHbG44I3XfXLQXEKtDIATig==","bank_account":"0yEJz5gphStt2y0qozHRnBWHSLhPjT9I3rwJFuQBQ8VBKht3mh6nv7ephA==","email":"wabDH7jtxpawDwL\/El6w29VBWiwxA+voZsUqburd5VwQo0JbAEQ+gKW7Frlt","phone":"RTfwfK0\/4ZrU89uRKpFXv2cmkPX90ire\/YGJhhg4G2V3TM4HFBih0qA="}  @  http://localhost:8000/settings/ 
+[2025-10-01 16-44-57] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/?_fid=0s5i 
+[2025-10-01 16-44-57] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/?_fid=0s5i 
+[2025-10-01 16-44-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-01 16-44-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-10-01 16-45-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/add 
+[2025-10-01 16-45-00] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/add 
+[2025-10-01 16-45-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-10-01 16-45-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-10-01 16-52-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/email-diagnostic 
+[2025-10-01 16-56-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/email-diagnostic 
+[2025-10-01 17-00-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/email-diagnostic 
+[2025-10-01 17-05-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/email-diagnostic 
+[2025-10-01 17-10-47] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/email-diagnostic 
+[2025-10-01 17-10-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/email-diagnostic 
+[2025-10-01 17-15-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/email-diagnostic 
+[2025-10-01 17-15-57] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/email-diagnostic 
+[2025-10-01 17-24-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/send-test-email 
+[2025-10-01 17-24-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/send-test-email?email=info%40alimedia.cz 
+[2025-10-01 17-30-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/email-diagnostic 

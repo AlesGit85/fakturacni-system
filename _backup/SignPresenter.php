@@ -47,7 +47,7 @@ final class SignPresenter extends BasePresenter
         ModuleManager $moduleManager,
         AntiSpam $antiSpam
     ) {
-        // ✅ KRITICKÉ: Volání parent konstruktoru s BasePresenter parametry
+        // KRITICKÉ: Volání parent konstruktoru s BasePresenter parametry
         parent::__construct($securityLogger, $rateLimiter, $moduleManager, $database, $antiSpam);
 
         // SignPresenter specifické vlastnosti
@@ -140,22 +140,6 @@ final class SignPresenter extends BasePresenter
         // Registrace = vždy vytvoření nového firemního účtu
         // Neřešíme, jestli už existují jiní uživatelé
         $this->template->isNewCompanyRegistration = true;
-    }
-
-    /**
-     * Testovací akce pro ověření funkčnosti emailů
-     * URL: /sign/test-email
-     */
-    public function actionTestEmail(): void
-    {
-        // Pouze pro vývojové a testovací účely
-        // V produkci můžete tuto akci odstranit nebo omezit přístup
-    }
-
-    public function renderTestEmail(): void
-    {
-        // Explicitně nastavíme šablonu (pokud chceš zachovat název s pomlčkou)
-        $this->template->setFile(__DIR__ . '/templates/test-email.latte');
     }
 
     public function actionOut(): void
@@ -435,6 +419,10 @@ final class SignPresenter extends BasePresenter
                 'expires_at' => new \DateTime('+1 hour'),
             ]);
 
+            // Nastavení tenant kontextu pro EmailService
+            $userTenantId = $user->tenant_id ?? null;
+            $this->emailService->setTenantContext($userTenantId);
+
             // Odešli email s odkazem pro reset
             $this->emailService->sendPasswordReset($data->email, $user->username, $token);
 
@@ -517,35 +505,6 @@ final class SignPresenter extends BasePresenter
     }
 
     /**
-     * Formulář pro test emailů
-     */
-    protected function createComponentTestEmailForm(): Form
-    {
-        $form = new Form;
-        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
-
-        $form->addEmail('email', 'E-mail:')
-            ->setRequired('Zadejte e-mail')
-            ->setDefaultValue('test@example.com');
-
-        $form->addSubmit('send', 'Odeslat testovací e-mail');
-
-        $form->onSuccess[] = [$this, 'testEmailFormSucceeded'];
-
-        return $form;
-    }
-
-    public function testEmailFormSucceeded(Form $form, \stdClass $data): void
-    {
-        try {
-            $this->emailService->sendTestEmail($data->email);
-            $this->flashMessage('Testovací e-mail byl úspěšně odeslán.', 'success');
-        } catch (\Exception $e) {
-            $form->addError('Chyba při odesílání e-mailu: ' . $e->getMessage());
-        }
-    }
-
-    /**
      * ✅ AKTUALIZACE: processCompanyAccountCreation() - s návratovými hodnotami
      */
     private function processCompanyAccountCreation(Form $form, \stdClass $data): array
@@ -595,7 +554,35 @@ final class SignPresenter extends BasePresenter
         $result = $this->tenantManager->createTenant($tenantData, $adminData, $companyData);
 
         if ($result['success']) {
-            $this->flashMessage('Firemní účet byl úspěšně vytvořen. Nyní se můžete přihlásit.', 'success');
+            // Odeslání emailů po úspěšné registraci
+            try {
+                // Nastavení tenant kontextu pro EmailService
+                $this->emailService->setTenantContext($result['tenant_id']);
+
+                // 1. Email potvrzení registrace pro nového uživatele
+                $this->emailService->sendRegistrationConfirmation(
+                    $data->email,
+                    $data->username,
+                    'admin'
+                );
+
+                // 2. Admin notifikace o nové registraci
+                $this->emailService->sendAdminNotification(
+                    $data->username,
+                    $data->email,
+                    'admin'
+                );
+
+                error_log("Registrační email odeslán pro: {$data->email}");
+            } catch (Nette\Application\AbortException $e) {
+                // KLÍČOVÉ: AbortException (redirect/forward) necháme projít
+                throw $e;
+            } catch (\Exception $emailError) {
+                // Pouze skutečné email chyby (ne redirect)
+                error_log("Chyba při odesílání registračního emailu: " . $emailError->getMessage());
+            }
+
+            $this->flashMessage('Firemní účet byl úspěšně vytvořen! Nyní se můžete přihlásit.', 'success');
             $this->redirect('Sign:in');
 
             return [

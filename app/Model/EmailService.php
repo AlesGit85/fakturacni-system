@@ -116,15 +116,16 @@ class EmailService
 
     /**
      * Odešle email s potvrzením registrace uživateli
+     * PRO REGISTRACI: vždy používáme defaultFromEmail, ne tenant-specific
      */
     public function sendRegistrationConfirmation(string $userEmail, string $username, string $role): void
     {
         $mail = new Message;
 
-        // OPRAVENO: Použití helper metod místo přímých property
-        $mail->setFrom($this->getFromEmail(), $this->getFromName())
+        // PRO REGISTRACI: Vždy použijeme default hodnoty místo tenant-specific
+        $mail->setFrom($this->defaultFromEmail, $this->appName)
             ->addTo($userEmail)
-            ->setSubject('Vítejte v ' . $this->getFromName() . ' - registrace byla úspěšná');
+            ->setSubject('Vítejte v ' . $this->appName . ' - registrace byla úspěšná');
 
         // Získání role v češtině
         $roleNames = [
@@ -136,16 +137,16 @@ class EmailService
 
         $loginUrl = $this->linkGenerator->link('Sign:in');
 
-        // HTML verze - OPRAVENO: přidán admin email parametr
-        $htmlBody = $this->createRegistrationConfirmationHtml($username, $roleName, $loginUrl, $this->getAdminEmail());
+        // HTML verze - používáme default admin email
+        $htmlBody = $this->createRegistrationConfirmationHtml($username, $roleName, $loginUrl, $this->defaultAdminEmail);
         $mail->setHtmlBody($htmlBody);
 
-        // OPRAVENÁ textová verze s helper metodami
-        $textBody = "Vítejte v " . $this->getFromName() . "!\n\n";
+        // Textová verze
+        $textBody = "Vítejte v " . $this->appName . "!\n\n";
         $textBody .= "Váš účet s uživatelským jménem '{$username}' byl úspěšně vytvořen.\n";
         $textBody .= "Role: {$roleName}\n\n";
         $textBody .= "Nyní se můžete přihlásit: {$loginUrl}\n\n";
-        $textBody .= "V případě problémů nás kontaktujte na: " . $this->getAdminEmail();
+        $textBody .= "V případě problémů nás kontaktujte na: " . $this->defaultAdminEmail;
 
         $mail->setBody($textBody, 'text/plain; charset=utf-8');
 
@@ -154,15 +155,16 @@ class EmailService
 
     /**
      * Odešle upozornění adminovi o nové registraci
+     * PRO REGISTRACI: vždy používáme defaultAdminEmail, ne tenant-specific
      */
     public function sendAdminNotification(string $username, string $email, string $role): void
     {
         $mail = new Message;
 
-        // OPRAVENO: Použití helper metod + pouze tenant admin (GDPR)
-        $mail->setFrom($this->getFromEmail(), $this->getFromName())
-            ->addTo($this->getAdminEmail())  // Pouze tenant admin
-            ->setSubject('Nová registrace v ' . $this->getFromName());
+        // PRO REGISTRACI: Vždy použijeme default hodnoty
+        $mail->setFrom($this->defaultFromEmail, $this->appName)
+            ->addTo($this->defaultAdminEmail)
+            ->setSubject('Nová registrace v ' . $this->appName);
 
         // Získání role v češtině
         $roleNames = [
@@ -174,12 +176,12 @@ class EmailService
 
         $usersUrl = $this->linkGenerator->link('Users:default');
 
-        // HTML verze - OPRAVENO: přidán admin email parametr
-        $htmlBody = $this->createAdminNotificationHtml($username, $email, $roleName, $usersUrl, $this->getAdminEmail());
+        // HTML verze
+        $htmlBody = $this->createAdminNotificationHtml($username, $email, $roleName, $usersUrl, $this->defaultAdminEmail);
         $mail->setHtmlBody($htmlBody);
 
-        // OPRAVENÁ textová verze s helper metodami
-        $textBody = "Nová registrace v " . $this->getFromName() . "\n\n";
+        // Textová verze
+        $textBody = "Nová registrace v " . $this->appName . "\n\n";
         $textBody .= "Uživatelské jméno: {$username}\n";
         $textBody .= "E-mail: {$email}\n";
         $textBody .= "Role: {$roleName}\n";
@@ -193,35 +195,56 @@ class EmailService
 
     /**
      * Odešle email pro resetování hesla
+     * PRO RESET HESLA: vždy používáme defaultFromEmail, ne tenant-specific
      */
     public function sendPasswordReset(string $userEmail, string $username, string $resetToken): void
     {
-        $mail = new Message;
+        error_log("EmailService::sendPasswordReset START");
+        error_log("  - userEmail: " . $userEmail);
+        error_log("  - username: " . $username);
+        error_log("  - token: " . substr($resetToken, 0, 10) . "...");
+        error_log("  - defaultFromEmail: " . $this->defaultFromEmail);
+        error_log("  - appName: " . $this->appName);
 
-        // OPRAVENO: Použití helper metod místo přímých property
-        $mail->setFrom($this->getFromEmail(), $this->getFromName())
-            ->addTo($userEmail)
-            ->setSubject('Obnovení hesla - ' . $this->getFromName());
+        try {
+            $mail = new Message;
 
-        $resetUrl = $this->linkGenerator->link('Sign:resetPassword', ['token' => $resetToken]);
+            // PRO RESET: Vždy použijeme default hodnoty
+            error_log("  - Vytvářím Message objekt...");
+            $mail->setFrom($this->defaultFromEmail, $this->appName)
+                ->addTo($userEmail)
+                ->setSubject('Obnovení hesla - ' . $this->appName);
+            error_log("  - Message hlavičky nastaveny");
 
-        // HTML verze - OPRAVENO: přidán admin email parametr
-        $htmlBody = $this->createPasswordResetHtml($username, $resetUrl, $this->getAdminEmail());
-        $mail->setHtmlBody($htmlBody);
+            $resetUrl = $this->linkGenerator->link('Sign:resetPassword', ['token' => $resetToken]);
+            error_log("  - Reset URL: " . $resetUrl);
 
-        // OPRAVENÁ textová verze s helper metodami
-        $textBody = "Obnovení hesla pro " . $this->getFromName() . "\n\n";
-        $textBody .= "Ahoj {$username},\n\n";
-        $textBody .= "Někdo požádal o obnovení hesla pro váš účet.\n";
-        $textBody .= "Pokud to nebyli vy, tento email ignorujte.\n\n";
-        $textBody .= "Pro obnovení hesla klikněte na následující odkaz:\n";
-        $textBody .= "{$resetUrl}\n\n";
-        $textBody .= "Odkaz je platný po dobu 24 hodin.\n\n";
-        $textBody .= "V případě problémů nás kontaktujte na: " . $this->getAdminEmail();
+            // HTML verze
+            $htmlBody = $this->createPasswordResetHtml($username, $resetUrl, $this->defaultAdminEmail);
+            $mail->setHtmlBody($htmlBody);
+            error_log("  - HTML body nastaven");
 
-        $mail->setBody($textBody, 'text/plain; charset=utf-8');
+            // Textová verze
+            $textBody = "Obnovení hesla pro " . $this->appName . "\n\n";
+            $textBody .= "Ahoj {$username},\n\n";
+            $textBody .= "Někdo požádal o obnovení hesla pro váš účet.\n";
+            $textBody .= "Pokud to nebyli vy, tento email ignorujte.\n\n";
+            $textBody .= "Pro obnovení hesla klikněte na následující odkaz:\n";
+            $textBody .= "{$resetUrl}\n\n";
+            $textBody .= "Odkaz je platný po dobu 24 hodin.\n\n";
+            $textBody .= "V případě problémů nás kontaktujte na: " . $this->defaultAdminEmail;
 
-        $this->mailer->send($mail);
+            $mail->setBody($textBody, 'text/plain; charset=utf-8');
+            error_log("  - Text body nastaven");
+
+            error_log("  - Volám mailer->send()...");
+            $this->mailer->send($mail);
+            error_log("EmailService::sendPasswordReset ÚSPĚCH");
+        } catch (\Exception $e) {
+            error_log("EmailService::sendPasswordReset CHYBA: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            throw $e;
+        }
     }
 
     /**

@@ -1,20 +1,21 @@
 # Konfigurace e-mailů
 
 # Pro testování - vlastní TestMailer (ukládá emaily do temp/mails)
-services:
-	nette.mailer:
-		factory: App\Mail\TestMailer(%tempDir%)
-
-# Pro produkci - SMTP konfigurace:
 # services:
 # 	nette.mailer:
-# 		factory: Nette\Mail\SmtpMailer
-# 		arguments:
-# 			host: smtp.seznam.cz
-# 			port: 465
-# 			username: %env.SMTP_USERNAME%
-# 			password: %env.SMTP_PASSWORD%
-# 			secure: tls
+# 		factory: App\Mail\TestMailer(%tempDir%)
+
+# Pro produkci - SMTP konfigurace:
+services:
+	nette.mailer:
+		factory: App\Mail\SmtpFactory::create
+	
+	# EmailService s konfigurací FROM adresy
+	- App\Model\EmailService(
+		appName: 'QRdoklad'
+		defaultFromEmail: %env.SMTP_USERNAME%
+		defaultAdminEmail: %env.SMTP_USERNAME%
+	  )
 
 # Pro produkci - jednoduchý SendmailMailer:
 # services:

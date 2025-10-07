@@ -142,7 +142,7 @@ final class SignPresenter extends BasePresenter
         $this->template->isNewCompanyRegistration = true;
     }
 
-        public function actionOut(): void
+    public function actionOut(): void
     {
         // Logování odhlášení před samotným odhlášením
         if ($this->getUser()->isLoggedIn()) {
@@ -379,17 +379,23 @@ final class SignPresenter extends BasePresenter
     }
 
     /**
-     * ✅ AKTUALIZACE: forgotPasswordFormSucceeded() - s tenant podporou
+     * ✅ OPRAVA: forgotPasswordFormSucceeded() - s dešifrováním emailu
      */
     public function forgotPasswordFormSucceeded(Form $form, \stdClass $data): void
     {
+        error_log("=== RESET HESLA START ===");
+        error_log("Email pro reset: " . $data->email);
+
         $clientIP = $this->rateLimiter->getClientIP();
+        error_log("Client IP: " . $clientIP);
 
         // ✅ NOVÉ: Pokus o získání tenant_id z emailu
         $tenantId = $this->getTenantIdFromEmail($data->email);
+        error_log("Tenant ID: " . ($tenantId ?? 'NULL'));
 
         // ✅ ZMĚNA: Rate limiting s tenant podporou
         if (!$this->rateLimiter->isAllowed('password_reset', $clientIP, $tenantId)) {
+            error_log("Rate limit překročen");
             $passwordResetStatus = $this->rateLimiter->getLimitStatus('password_reset', $clientIP, $tenantId);
             $blockedUntil = $passwordResetStatus['blocked_until'];
             $timeRemaining = $blockedUntil ? $blockedUntil->diff(new \DateTime())->format('%i minut %s sekund') : 'neznámý čas';
@@ -399,46 +405,66 @@ final class SignPresenter extends BasePresenter
         }
 
         try {
-            // Najdi uživatele podle e-mailu
-            $user = $this->database->table('users')
-                ->where('email', $data->email)
-                ->fetch();
+            error_log("Hledám uživatele pomocí UserManager...");
+
+            // ✅ OPRAVA: Použití UserManager pro vyhledání uživatele (automaticky dešifruje)
+            $user = $this->userManager->findByEmail($data->email);
 
             if (!$user) {
+                error_log("Uživatel nenalezen pro email: " . $data->email);
                 // Z bezpečnostních důvodů neříkáme, že email neexistuje
                 $this->flashMessage('Pokud je váš e-mail registrovaný, obdržíte odkaz pro obnovení hesla.', 'info');
                 $this->redirect('Sign:in');
             }
 
+            error_log("Uživatel nalezen: ID=" . $user->id . ", username=" . $user->username);
+
             // Vytvoř nový reset token
             $token = bin2hex(random_bytes(32));
+            error_log("Vytvořen token: " . substr($token, 0, 10) . "...");
+
             $this->database->table('password_reset_tokens')->insert([
                 'user_id' => $user->id,
                 'token' => $token,
                 'created_at' => new \DateTime(),
                 'expires_at' => new \DateTime('+1 hour'),
             ]);
+            error_log("Token uložen do databáze");
 
             // Nastavení tenant kontextu pro EmailService
             $userTenantId = $user->tenant_id ?? null;
+            error_log("Nastavuji tenant context: " . ($userTenantId ?? 'NULL'));
             $this->emailService->setTenantContext($userTenantId);
 
             // Odešli email s odkazem pro reset
-            $this->emailService->sendPasswordReset($data->email, $user->username, $token);
+            error_log("Volám sendPasswordReset...");
+            try {
+                $this->emailService->sendPasswordReset($data->email, $user->username, $token);
+                error_log("sendPasswordReset dokončeno BEZ chyby");
+            } catch (\Exception $emailException) {
+                error_log("CHYBA v sendPasswordReset: " . $emailException->getMessage());
+                error_log("Stack trace: " . $emailException->getTraceAsString());
+                throw $emailException;
+            }
 
             // ✅ ZMĚNA: Úspěšné odeslání s tenant a user parametry
             $this->rateLimiter->recordAttempt('password_reset', $clientIP, true, $tenantId, $user->id);
+            error_log("Rate limiter zaznamenal úspěch");
 
             $this->flashMessage('Odkaz pro obnovení hesla byl odeslán na váš e-mail.', 'success');
+            error_log("=== RESET HESLA ÚSPĚCH ===");
             $this->redirect('Sign:in');
         } catch (Nette\Application\AbortException $e) {
-            // ✅ KLÍČOVÁ OPRAVA: AbortException (redirect/forward) necháme projít - to je normální
+            error_log("AbortException (redirect) - to je OK");
             throw $e;
         } catch (\Exception $e) {
-            // ✅ OPRAVENO: Pouze skutečné chyby (ne redirect)
             $this->rateLimiter->recordAttempt('password_reset', $clientIP, false, $tenantId, null);
 
+            error_log('=== RESET HESLA CHYBA ===');
             error_log('Chyba při odesílání emailu pro reset hesla: ' . $e->getMessage());
+            error_log('Stack trace: ' . $e->getTraceAsString());
+            error_log('=========================');
+
             $form->addError('Při odesílání emailu došlo k chybě. Zkuste to prosím znovu.');
         }
     }
@@ -612,15 +638,13 @@ final class SignPresenter extends BasePresenter
     }
 
     /**
-     * ✅ NOVÉ: Získání tenant_id z emailu (pro password reset)
+     * ✅ OPRAVENO: Získání tenant_id z emailu - s dešifrováním
      */
     private function getTenantIdFromEmail(string $email): ?int
     {
         try {
-            $user = $this->database->table('users')
-                ->where('email', $email)
-                ->fetch();
-
+            // Použití UserManager pro vyhledání (automaticky dešifruje)
+            $user = $this->userManager->findByEmail($email);
             return $user ? $user->tenant_id : null;
         } catch (\Exception $e) {
             error_log('Chyba při získávání tenant_id z emailu: ' . $e->getMessage());

@@ -939,4 +939,31 @@ class UserManager implements Nette\Security\Authenticator
 
         return $tenants;
     }
+
+    /**
+     * Najde uživatele podle emailu (s automatickým dešifrováním)
+     * @return \stdClass|null
+     */
+    public function findByEmail(string $email): ?\stdClass
+    {
+        // Pokud je nastaven tenant context, hledáme pouze v rámci tenantu
+        $selection = $this->database->table('users');
+
+        if ($this->currentTenantId !== null) {
+            $selection->where('tenant_id', $this->currentTenantId);
+        }
+
+        $users = $selection->fetchAll();
+
+        // Dešifrujeme uživatele a hledáme podle emailu
+        $decryptedUsers = $this->decryptUserRecords($users);
+
+        foreach ($decryptedUsers as $user) {
+            if (strcasecmp($user->email, $email) === 0) {
+                return $user;
+            }
+        }
+
+        return null;
+    }
 }
