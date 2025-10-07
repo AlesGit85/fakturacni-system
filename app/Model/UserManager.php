@@ -97,7 +97,7 @@ class UserManager implements Nette\Security\Authenticator
     /**
      * Dešifruje kolekci záznamů uživatelů
      */
-    private function decryptUserRecords($users): array
+    public function decryptUserRecords($users): array
     {
         $decryptedUsers = [];
 
@@ -399,6 +399,28 @@ class UserManager implements Nette\Security\Authenticator
         // 🔓 AUTOMATICKÉ DEŠIFROVÁNÍ při načítání
         return $this->decryptUserRecord($user);
     }
+
+/**
+ * Získá admin uživatele pro konkrétní tenant s dešifrováním
+ * @param int $tenantId ID tenanta
+ * @return \stdClass|null Dešifrovaný admin uživatel
+ */
+public function getFirstAdminByTenant(int $tenantId): ?\stdClass
+{
+    $adminUserRow = $this->database->table('users')
+        ->where('tenant_id', $tenantId)
+        ->where('role', 'admin')
+        ->order('created_at ASC') // První vytvořený admin
+        ->fetch();
+    
+    if (!$adminUserRow) {
+        return null;
+    }
+    
+    // Dešifrování
+    $decryptedUsers = $this->decryptUserRecords([$adminUserRow]);
+    return $decryptedUsers[0] ?? null;
+}
 
     /**
      * Získá uživatele podle ID BEZ tenant filtru (pouze pro super admina)

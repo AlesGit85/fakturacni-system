@@ -91,21 +91,23 @@ final class TenantsPresenter extends BasePresenter
             // Používáme CompanyManager s automatickým dešifrováním
             $company = $this->companyManager->getByTenant($tenant->id);
 
-            // OPRAVENO: Získáme admin uživatele přímo z databáze pro konkrétní tenant
-            $adminUserRow = $this->database->table('users')
-                ->where('tenant_id', $tenant->id)
-                ->where('role', 'admin')
-                ->order('created_at ASC') // První vytvořený admin
-                ->fetch();
-
+            // OPRAVENO: Používáme UserManager pro získání admin uživatele s automatickým dešifrováním
             $adminUser = null;
-            if ($adminUserRow) {
-                // Dešifrujeme údaje admin uživatele
-                $this->userManager->setTenantContext($tenant->id, true);
-                $decryptedUsers = $this->userManager->decryptUserRecords([$adminUserRow]);
-                $adminUser = $decryptedUsers[0] ?? null;
-                $this->userManager->setTenantContext(null, true); // Vrátíme na super admin
+
+            // Dočasně nastavíme kontext na konkrétní tenant
+            $this->userManager->setTenantContext($tenant->id, true);
+
+            // Získáme všechny uživatele v tenantu a najdeme prvního admina
+            $tenantUsers = $this->userManager->getAll();
+            foreach ($tenantUsers as $user) {
+                if ($user->role === 'admin') {
+                    $adminUser = $user;
+                    break;
+                }
             }
+
+            // Vrátíme kontext na super admin mode
+            $this->userManager->setTenantContext(null, true);
 
             // Počet uživatelů
             $userCount = $this->database->table('users')
@@ -120,7 +122,7 @@ final class TenantsPresenter extends BasePresenter
             $tenantsList[] = [
                 'tenant' => $tenant,
                 'company' => $company, // Nyní obsahuje dešifrovaná data
-                'admin_user' => $adminUser, // OPRAVENO: Správný admin pro tento tenant
+                'admin_user' => $adminUser, // Nyní obsahuje dešifrovaná data
                 'user_count' => $userCount,
                 'invoice_count' => $invoiceCount
             ];
