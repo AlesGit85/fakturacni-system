@@ -853,4 +853,155 @@ class EmailService
 
         return "Systémová zpráva z {$appName}\n\nTyp: {$type}\n\nKontakt: {$adminEmail}";
     }
+
+    /**
+     * Odešle fakturu emailem klientovi
+     * @param object $invoice Faktura
+     * @param object $client Klient (s dešifrovanými daty)
+     * @param object $company Firma (s dešifrovanými daty)
+     * @param string $pdfPath Cesta k PDF souboru faktury
+     */
+    public function sendInvoiceEmail($invoice, $client, $company, string $pdfPath): void
+    {
+        // Kontrola, zda klient má email
+        if (empty($client->email)) {
+            throw new \Exception('Klient nemá zadaný email.');
+        }
+
+        // Kontrola, zda firma má email
+        if (empty($company->email)) {
+            throw new \Exception('Firma nemá zadaný email pro odesílání faktur.');
+        }
+
+        $mail = new Message;
+
+        // Email odesílatele = email firmy (již dešifrovaný)
+        // Email příjemce = email klienta (již dešifrovaný)
+        $mail->setFrom($company->email, $company->name)
+            ->addTo($client->email, $client->name);
+
+        // Předmět emailu
+        $subject = 'Faktura ' . $invoice->number . ' - ' . $company->name;
+        $mail->setSubject($subject);
+
+        // HTML tělo emailu
+        $htmlBody = $this->createSentInvoiceHtmlBody($invoice, $client, $company);
+        $mail->setHtmlBody($htmlBody);
+
+        // Textová verze emailu
+        $textBody = $this->createSentInvoiceTextBody($invoice, $client, $company);
+        $mail->setBody($textBody, 'text/plain; charset=utf-8');
+
+        // Příloha - PDF faktura
+        if (file_exists($pdfPath)) {
+            $mail->addAttachment($pdfPath, 'faktura-' . $invoice->number . '.pdf');
+        }
+
+        // Odeslání emailu
+        $this->mailer->send($mail);
+    }
+
+    /**
+     * Vytvoří HTML tělo emailu pro odeslanou fakturu
+     */
+    private function createSentInvoiceHtmlBody($invoice, $client, $company): string
+    {
+        $invoiceNumber = $invoice->number;
+        $clientName = $client->name;
+        $amount = number_format($invoice->total, 0, ',', ' ') . ' Kč';
+        $dueDate = $invoice->due_date->format('d.m.Y');
+        $issueDate = $invoice->issue_date->format('d.m.Y');
+
+        return "
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset='utf-8'>
+        <style>
+            body { font-family: Arial, sans-serif; color: #212529; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #B1D235; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; }
+            .invoice-info { background: white; padding: 20px; border-left: 4px solid #B1D235; margin: 20px 0; }
+            .info-row { margin: 10px 0; }
+            .label { font-weight: bold; color: #6c757d; }
+            .footer { text-align: center; color: #6c757d; font-size: 12px; margin-top: 30px; }
+            a { color: #B1D235; text-decoration: none; }
+            a:hover { color: #95B11F; }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <div class='header'>
+                <h1>Faktura {$invoiceNumber}</h1>
+            </div>
+            <div class='content'>
+                <p>Vážený/á {$clientName},</p>
+                
+                <p>zasíláme Vám fakturu za poskytnuté služby.</p>
+                
+                <div class='invoice-info'>
+                    <div class='info-row'>
+                        <span class='label'>Číslo faktury:</span> {$invoiceNumber}
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Datum vystavení:</span> {$issueDate}
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Datum splatnosti:</span> {$dueDate}
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Částka k úhradě:</span> <strong>{$amount}</strong>
+                    </div>
+                </div>
+                
+                <p>Faktura je přiložena jako PDF příloha v tomto emailu.</p>
+                
+                <p>V případě jakýchkoliv dotazů nás neváhejte kontaktovat.</p>
+                
+                <p>S pozdravem,<br>
+                {$company->name}</p>
+                
+                <div class='footer'>
+                    <p>{$company->name}<br>
+                    {$company->address}, {$company->zip} {$company->city}<br>
+                    Email: <a href='mailto:{$company->email}'>{$company->email}</a> | 
+                    Tel: {$company->phone}</p>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>";
+    }
+
+    /**
+     * Vytvoří textové tělo emailu pro odeslanou fakturu
+     */
+    private function createSentInvoiceTextBody($invoice, $client, $company): string
+    {
+        $invoiceNumber = $invoice->number;
+        $clientName = $client->name;
+        $amount = number_format($invoice->total, 0, ',', ' ') . ' Kč';
+        $dueDate = $invoice->due_date->format('d.m.Y');
+        $issueDate = $invoice->issue_date->format('d.m.Y');
+
+        $textBody = "FAKTURA {$invoiceNumber}\n\n";
+        $textBody .= "Vážený/á {$clientName},\n\n";
+        $textBody .= "zasíláme Vám fakturu za poskytnuté služby.\n\n";
+        $textBody .= "ÚDAJE O FAKTUŘE:\n";
+        $textBody .= "Číslo faktury: {$invoiceNumber}\n";
+        $textBody .= "Datum vystavení: {$issueDate}\n";
+        $textBody .= "Datum splatnosti: {$dueDate}\n";
+        $textBody .= "Částka k úhradě: {$amount}\n\n";
+        $textBody .= "Faktura je přiložena jako PDF příloha v tomto emailu.\n\n";
+        $textBody .= "V případě jakýchkoliv dotazů nás neváhejte kontaktovat.\n\n";
+        $textBody .= "S pozdravem,\n";
+        $textBody .= "{$company->name}\n\n";
+        $textBody .= "---\n";
+        $textBody .= "{$company->name}\n";
+        $textBody .= "{$company->address}, {$company->zip} {$company->city}\n";
+        $textBody .= "Email: {$company->email} | Tel: {$company->phone}";
+
+        return $textBody;
+    }
 }

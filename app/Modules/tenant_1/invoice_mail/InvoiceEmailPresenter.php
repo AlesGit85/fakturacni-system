@@ -1,17 +1,22 @@
 <?php
 
-namespace App\Presentation\Invoices;
+declare(strict_types=1);
+
+namespace App\Modules\InvoiceEmail;
 
 use Nette;
-use Nette\Application\UI\Form;
+use App\Presentation\BasePresenter;
 use App\Model\InvoicesManager;
 use App\Model\ClientsManager;
 use App\Model\CompanyManager;
+use App\Model\EmailService;
 use App\Model\QrPaymentService;
-use App\Presentation\BasePresenter;
 use TCPDF;
 
-class InvoicesPresenter extends BasePresenter
+/**
+ * Modul pro odesílání faktur emailem
+ */
+final class InvoiceEmailPresenter extends BasePresenter
 {
     /** @var InvoicesManager */
     private $invoicesManager;
@@ -22,43 +27,31 @@ class InvoicesPresenter extends BasePresenter
     /** @var CompanyManager */
     private $companyManager;
 
+    /** @var EmailService */
+    private $emailService;
+
     /** @var QrPaymentService */
     private $qrPaymentService;
 
-    /** @var \App\Model\ModuleManager */
-    private $moduleManager;
-
-    // Všichni přihlášení uživatelé mají základní přístup k fakturám
-    protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
-
-    // Konkrétní role pro jednotlivé akce
-    protected array $actionRoles = [
-        'default' => ['readonly', 'accountant', 'admin'], // Seznam faktur mohou vidět všichni
-        'show' => ['readonly', 'accountant', 'admin'], // Detail faktury mohou vidět všichni
-        'pdf' => ['readonly', 'accountant', 'admin'], // PDF může stáhnout každý
-        'add' => ['accountant', 'admin'], // Přidat fakturu může účetní a admin
-        'edit' => ['accountant', 'admin'], // Upravit fakturu může účetní a admin
-        'delete' => ['admin'], // Smazat fakturu může jen admin
-        'markAsPaid' => ['accountant', 'admin'], // Označit jako zaplacenou může účetní a admin
-        'markAsCreated' => ['accountant', 'admin'], // Zrušit zaplacení může účetní a admin
-    ];
+    // Pouze účetní a admin mohou odesílat faktury
+    protected array $requiredRoles = ['accountant', 'admin'];
 
     public function __construct(
         InvoicesManager $invoicesManager,
         ClientsManager $clientsManager,
         CompanyManager $companyManager,
-        QrPaymentService $qrPaymentService,
-        \App\Model\ModuleManager $moduleManager
+        EmailService $emailService,
+        QrPaymentService $qrPaymentService
     ) {
         $this->invoicesManager = $invoicesManager;
         $this->clientsManager = $clientsManager;
         $this->companyManager = $companyManager;
+        $this->emailService = $emailService;
         $this->qrPaymentService = $qrPaymentService;
-        $this->moduleManager = $moduleManager;
     }
 
     /**
-     * MULTI-TENANCY: Nastavení tenant kontextu po spuštění presenteru
+     * Nastavení tenant kontextu
      */
     public function startup(): void
     {
@@ -75,99 +68,98 @@ class InvoicesPresenter extends BasePresenter
             $this->isSuperAdmin()
         );
 
-        // PŘIDÁNO: CompanyManager také potřebuje tenant kontext pro zobrazení faktur
         $this->companyManager->setTenantContext(
             $this->getCurrentTenantId(),
             $this->isSuperAdmin()
         );
     }
 
-    public function renderAdd(): void
+    /**
+     * Handler pro odesílání faktury emailem
+     */
+    public function handleSend(int $invoiceId): void
     {
-        $company = $this->companyManager->getCompanyInfo();
-        $this->template->isVatPayer = $company ? $company->vat_payer : false;
+        try {
+            // Načtení faktury
+            $invoice = $this->invoicesManager->getById($invoiceId);
+            if (!$invoice) {
+                throw new \Exception('Faktura nebyla nalezena.');
+            }
+
+            // Načtení údajů o klientovi (automaticky dešifrované)
+            if (!$invoice->manual_client) {
+                $client = $this->clientsManager->getById($invoice->client_id);
+            } else {
+                // Pro ručně zadaného klienta vytvoříme objekt
+                $client = new \stdClass();
+                $client->name = $invoice->client_name;
+                $client->address = $invoice->client_address;
+                $client->city = $invoice->client_city;
+                $client->zip = $invoice->client_zip;
+                $client->country = $invoice->client_country;
+                $client->ic = $invoice->client_ic;
+                $client->dic = $invoice->client_dic;
+                $client->email = '';
+                $client->phone = '';
+                $client->bank_account = '';
+            }
+
+            // Kontrola, zda klient má email
+            if (empty($client->email)) {
+                throw new \Exception('Klient nemá zadaný email. Nelze odeslat fakturu.');
+            }
+
+            // Načtení firemních údajů (automaticky dešifrované)
+            $company = $this->companyManager->getCompanyInfo();
+            if (!$company) {
+                throw new \Exception('Firemní údaje nejsou vyplněny.');
+            }
+
+            // Kontrola, zda firma má email
+            if (empty($company->email)) {
+                throw new \Exception('Ve firemních údajích není zadán email pro odesílání faktur.');
+            }
+
+            // Vygenerování PDF do dočasného souboru
+            $tempDir = dirname(__DIR__, 3) . '/temp';
+            if (!is_dir($tempDir)) {
+                mkdir($tempDir, 0755, true);
+            }
+
+            $pdfPath = $tempDir . '/invoice-' . $invoice->id . '-' . time() . '.pdf';
+
+            // Generování PDF
+            $this->generateInvoicePdf($invoice, $client, $company, $pdfPath);
+
+            // Kontrola, zda PDF bylo vytvořeno
+            if (!file_exists($pdfPath)) {
+                throw new \Exception('Nepodařilo se vygenerovat PDF faktury.');
+            }
+
+            // Odeslání emailu s fakturou
+            $this->emailService->sendInvoiceEmail($invoice, $client, $company, $pdfPath);
+
+            // Smazání dočasného PDF souboru
+            if (file_exists($pdfPath)) {
+                unlink($pdfPath);
+            }
+
+            $this->flashMessage('Faktura byla úspěšně odeslána emailem na adresu: ' . $client->email, 'success');
+        } catch (\Exception $e) {
+            $this->flashMessage('Chyba při odesílání faktury: ' . $e->getMessage(), 'danger');
+        }
+
+        // Přesměrování zpět na detail faktury
+        $this->redirect(':Invoices:show', $invoiceId);
     }
 
-    public function renderShow(int $id): void
+    /**
+     * Vygeneruje PDF faktury a uloží ho do souboru
+     */
+    private function generateInvoicePdf($invoice, $client, $company, string $outputPath): void
     {
-        $invoice = $this->invoicesManager->getById($id);
-
-        if (!$invoice) {
-            $this->error('Faktura nebyla nalezena');
-        }
-
-        $this->template->invoice = $invoice;
-
-        if (!$invoice->manual_client) {
-            // Pro existujícího klienta použijeme data z tabulky klientů
-            $this->template->client = $this->clientsManager->getById($invoice->client_id);
-        } else {
-            // Pro ručně zadaného klienta vytvoříme objekt s údaji z faktury
-            $manualClient = new \stdClass();
-            $manualClient->name = $invoice->client_name;
-            $manualClient->address = $invoice->client_address;
-            $manualClient->city = $invoice->client_city;
-            $manualClient->zip = $invoice->client_zip;
-            $manualClient->country = $invoice->client_country;
-            $manualClient->ic = $invoice->client_ic;
-            $manualClient->dic = $invoice->client_dic;
-            // Přidáme chybějící vlastnosti s prázdnými hodnotami
-            $manualClient->email = '';
-            $manualClient->phone = '';
-            $manualClient->bank_account = '';
-
-            $this->template->client = $manualClient;
-        }
-
-        $this->template->invoiceItems = $this->invoicesManager->getInvoiceItems($id);
-        $this->template->company = $this->companyManager->getCompanyInfo();
-
-        // NOVÉ: Načtení akcí z aktivních modulů
-        $this->template->moduleInvoiceActions = $this->getModuleInvoiceActions($invoice);
-    }
-
-    public function actionDelete(int $id): void
-    {
-        // Kontrola oprávnění je už v actionRoles - pouze admin
-        $this->invoicesManager->delete($id);
-        $this->flashMessage('Faktura byla úspěšně smazána', 'success');
-        $this->redirect('default');
-    }
-
-    public function actionPdf(int $id): void
-    {
-        // Čištění output bufferů
-        while (ob_get_level()) {
-            ob_end_clean();
-        }
-
-        $invoice = $this->invoicesManager->getById($id);
-
-        if (!$invoice) {
-            $this->error('Faktura nebyla nalezena');
-        }
-
-        // Získání údajů o klientovi - buď z databáze, nebo z faktury pro ručně zadané
-        if (!$invoice->manual_client) {
-            $client = $this->clientsManager->getById($invoice->client_id);
-        } else {
-            // Pro ručně zadaného klienta vytvoříme objekt s údaji z faktury
-            $client = new \stdClass();
-            $client->name = $invoice->client_name;
-            $client->address = $invoice->client_address;
-            $client->city = $invoice->client_city;
-            $client->zip = $invoice->client_zip;
-            $client->country = $invoice->client_country;
-            $client->ic = $invoice->client_ic;
-            $client->dic = $invoice->client_dic;
-            // Přidáme chybějící vlastnosti i zde pro PDF
-            $client->email = '';
-            $client->phone = '';
-            $client->bank_account = '';
-        }
-
-        $invoiceItems = $this->invoicesManager->getInvoiceItems($id);
-        $company = $this->companyManager->getCompanyInfo();
+        // Načtení položek faktury
+        $invoiceItems = $this->invoicesManager->getInvoiceItems($invoice->id);
         $isVatPayer = $company ? $company->vat_payer : false;
 
         // Vytvoření PDF
@@ -205,7 +197,7 @@ class InvoicesPresenter extends BasePresenter
             return array($r, $g, $b);
         }
 
-        // ✅ NOVÁ POMOCNÁ FUNKCE: Inteligentní zalamování textu na max. počet znaků
+        // Pomocná funkce: Inteligentní zalamování textu na max. počet znaků
         function wrapText($text, $maxLength = 100)
         {
             // Pokud je text prázdný, vrátíme prázdné pole
@@ -395,7 +387,7 @@ class InvoicesPresenter extends BasePresenter
         // Mezera před platebními údaji
         $pdf->Ln(5);
 
-        // ✅ OPRAVENO: Převod způsobu platby na správný tvar pro PDF
+        // Převod způsobu platby na správný tvar pro PDF
         $paymentMethodText = '';
         switch ($invoice->payment_method) {
             case 'Bankovní převod':
@@ -421,7 +413,7 @@ class InvoicesPresenter extends BasePresenter
         $pdf->SetFont('dejavusans', '', 10);
         $pdf->Cell($valueWidth, $rowHeight, $paymentMethodText, 0, 1, 'L');
 
-        // ✅ VYLEPŠENO: Bankovní údaje zobrazujeme pouze pro bankovní převod
+        // Bankovní údaje zobrazujeme pouze pro bankovní převod
         if ($invoice->payment_method === 'Bankovní převod') {
             // Číslo účtu
             $pdf->SetXY($leftMargin, $pdf->GetY());
@@ -547,7 +539,7 @@ class InvoicesPresenter extends BasePresenter
         $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
         $pdf->SetFont('dejavusans', '', 10);
 
-        // ✅ UPRAVENO: Použití funkce wrapText pro inteligentní zalamování na max 100 znaků
+        // Použití funkce wrapText pro inteligentní zalamování na max 100 znaků
         foreach ($invoiceItems as $key => $item) {
             // Zalomení názvu položky na max 100 znaků
             $nameLines = wrapText($item->name, 100);
@@ -714,392 +706,38 @@ class InvoicesPresenter extends BasePresenter
         $pdf->SetXY($col2X, $verticalMiddle + 6);
         $pdf->Cell($colWidth, 6, $company->email, 0, 1, 'L');
 
-        // Výstup PDF
-        $pdf->Output('faktura-' . $invoice->number . '.pdf', 'D');
-        $this->terminate();
+        // Výstup PDF do souboru
+        $pdf->Output($outputPath, 'F');
     }
 
-    public function createComponentInvoiceForm(): Form
+    public function renderDefault(): void
     {
-        $form = new Form;
-        $form->addProtection('Bezpečnostní token vypršel. Odešlete formulář znovu.');
-
-        // ✅ Anti-spam ochrana
-        $this->addAntiSpamProtectionToForm($form);
-
-        // ✅ OPRAVENO: Načtení preferencí na začátku metody
-        $lastInvoice = $this->invoicesManager->getLastUserInvoice($this->getUser()->getId());
-
-        // Výchozí hodnoty - pokud uživatel ještě nemá žádnou fakturu, použije se výchozí nastavení
-        $defaultQrPayment = $lastInvoice ? (bool)$lastInvoice->qr_payment : true;
-        $defaultShowLogo = $lastInvoice ? (bool)$lastInvoice->show_logo : true;
-        $defaultShowSignature = $lastInvoice ? (bool)$lastInvoice->show_signature : false;
-        $defaultPaymentMethod = $lastInvoice ? $lastInvoice->payment_method : 'Bankovní převod';
-
-        // Přepínač mezi existujícím a ručně zadaným klientem
-        $clientTypeRadio = $form->addRadioList('client_type', 'Klient:', [
-            'existing' => 'Vybrat existujícího klienta',
-            'manual' => 'Zadat ručně'
-        ])->setDefaultValue('existing');
-
-        // Existující klient - výběr
-        $clients = $this->clientsManager->getPairs();
-        $form->addSelect('client_id', 'Vyberte klienta:', $clients)
-            ->setPrompt('Vyberte klienta')
-            ->setRequired(false)
-            ->setOption('id', 'existing-client-select')
-            ->addConditionOn($clientTypeRadio, Form::EQUAL, 'existing')
-            ->setRequired('Vyberte klienta');
-
-        // Ruční zadání klienta - formulář
-        $form->addText('client_name', 'Název klienta:')
-            ->setOption('id', 'manual-client-name')
-            ->addConditionOn($clientTypeRadio, Form::EQUAL, 'manual')
-            ->setRequired('Zadejte název klienta');
-
-        $form->addTextArea('client_address', 'Adresa:')
-            ->setOption('id', 'manual-client-address')
-            ->addConditionOn($clientTypeRadio, Form::EQUAL, 'manual')
-            ->setRequired('Zadejte adresu');
-
-        $form->addText('client_city', 'Město:')
-            ->setOption('id', 'manual-client-city')
-            ->addConditionOn($clientTypeRadio, Form::EQUAL, 'manual')
-            ->setRequired('Zadejte město');
-
-        $form->addText('client_zip', 'PSČ:')
-            ->setOption('id', 'manual-client-zip')
-            ->addConditionOn($clientTypeRadio, Form::EQUAL, 'manual')
-            ->setRequired('Zadejte PSČ');
-
-        $form->addText('client_country', 'Země:')
-            ->setOption('id', 'manual-client-country')
-            ->setDefaultValue('Česká republika')
-            ->addConditionOn($clientTypeRadio, Form::EQUAL, 'manual')
-            ->setRequired('Zadejte zemi');
-
-        $form->addText('client_ic', 'IČ:')
-            ->setOption('id', 'manual-client-ic');
-
-        $form->addText('client_dic', 'DIČ:')
-            ->setOption('id', 'manual-client-dic');
-
-        // Fakturační údaje
-        $form->addText('number', 'Číslo faktury:')
-            ->setRequired('Zadejte číslo faktury')
-            ->setDefaultValue($this->invoicesManager->generateInvoiceNumber());
-
-        $form->addText('issue_date', 'Datum vystavení:')
-            ->setRequired('Zadejte datum vystavení')
-            ->setDefaultValue(date('Y-m-d'))
-            ->setHtmlType('date');
-
-        $form->addText('due_date', 'Datum splatnosti:')
-            ->setRequired('Zadejte datum splatnosti')
-            ->setDefaultValue(date('Y-m-d', strtotime('+14 days')))
-            ->setHtmlType('date');
-
-        // ✅ OPRAVENO: Způsob platby s výchozí hodnotou přímo při vytváření
-        $form->addSelect('payment_method', 'Způsob platby:', [
-            'Bankovní převod' => 'Bankovní převod',
-            'Hotovost' => 'Hotovost',
-            'Karta' => 'Platební karta',
-        ])
-            ->setRequired('Vyberte způsob platby')
-            ->setDefaultValue($defaultPaymentMethod);
-
-        // ✅ OPRAVENO: Možnosti zobrazení s prázdnými labely pro moderní design
-        $form->addCheckbox('qr_payment', '')
-            ->setDefaultValue($defaultQrPayment);
-
-        $form->addCheckbox('show_logo', '')
-            ->setDefaultValue($defaultShowLogo);
-
-        $form->addCheckbox('show_signature', '')
-            ->setDefaultValue($defaultShowSignature);
-
-        $form->addTextArea('note', 'Poznámka:')
-            ->setHtmlAttribute('rows', 3);
-
-        // Skrytá položka pro uživatele
-        $form->addHidden('user_id', $this->getUser()->getId());
-
-        // Odeslání formuláře
-        $form->addSubmit('send', 'Uložit fakturu');
-
-        $form->onSuccess[] = [$this, 'invoiceFormSucceeded'];
-
-        return $form;
-    }
-
-    public function invoiceFormSucceeded(Form $form, \stdClass $data): void
-    {
-        $id = $this->getParameter('id');
-
-        // Kontrola, zda jsou zadány položky faktury
-        $items = $this->getHttpRequest()->getPost('items');
-
-        if (!$items) {
-            $form->addError('Faktura musí obsahovat alespoň jednu položku.');
-            return;
-        }
-
-        // Příprava dat pro uložení faktury
-        $invoiceData = [
-            'number' => $data->number,
-            'issue_date' => $data->issue_date,
-            'due_date' => $data->due_date,
-            'payment_method' => $data->payment_method,
-            'qr_payment' => $data->qr_payment,
-            'show_logo' => $data->show_logo, // Nová položka
-            'show_signature' => $data->show_signature, // Nová položka
-            'note' => $data->note,
-            'user_id' => $data->user_id,
-            'manual_client' => ($data->client_type === 'manual'),
-        ];
-
-        // Nastavení klienta podle zvoleného typu
-        if ($data->client_type === 'existing') {
-            $invoiceData['client_id'] = $data->client_id;
-        } else {
-            // Vytvoříme nový záznam v tabulce klientů pro ručně zadaného klienta
-            $clientData = [
-                'name' => $data->client_name,
-                'address' => $data->client_address,
-                'city' => $data->client_city,
-                'zip' => $data->client_zip,
-                'country' => $data->client_country,
-                'ic' => $data->client_ic,
-                'dic' => $data->client_dic,
-                'email' => '', // Prázdná výchozí hodnota pro povinné pole
-                'phone' => '', // Prázdná výchozí hodnota pro povinné pole
-            ];
-
-            $newClient = $this->clientsManager->save($clientData);
-
-            // Použijeme ID nově vytvořeného klienta
-            $invoiceData['client_id'] = $newClient->id;
-
-            // Zachováme informaci o ručně zadaném klientovi a jeho údajích
-            $invoiceData['manual_client'] = true;
-            $invoiceData['client_name'] = $data->client_name;
-            $invoiceData['client_address'] = $data->client_address;
-            $invoiceData['client_city'] = $data->client_city;
-            $invoiceData['client_zip'] = $data->client_zip;
-            $invoiceData['client_country'] = $data->client_country;
-            $invoiceData['client_ic'] = $data->client_ic;
-            $invoiceData['client_dic'] = $data->client_dic;
-        }
-
-        // Vytvoření nebo aktualizace faktury
-        if ($id) {
-            $invoice = $this->invoicesManager->save($invoiceData, $id);
-            $invoiceId = $id;
-            $this->flashMessage('Faktura byla úspěšně aktualizována', 'success');
-        } else {
-            $invoice = $this->invoicesManager->save($invoiceData);
-            $invoiceId = $invoice->id;
-            $this->flashMessage('Faktura byla úspěšně vytvořena', 'success');
-        }
-
-        // Vymazání starých položek při editaci
-        if ($id) {
-            $this->invoicesManager->deleteInvoiceItems($id);
-        }
-
-        // Uložení položek faktury
-        foreach ($items as $item) {
-            $item['invoice_id'] = $invoiceId;
-            $this->invoicesManager->saveItem($item);
-        }
-
-        // Aktualizace celkové částky faktury
-        $this->invoicesManager->updateInvoiceTotal($invoiceId);
-
-        $this->redirect('show', $invoiceId);
-    }
-
-    public function actionEdit(int $id): void
-    {
-        $invoice = $this->invoicesManager->getById($id);
-
-        if (!$invoice) {
-            $this->error('Faktura nebyla nalezena');
-        }
-
-        // Připravíme data formuláře
-        $defaults = (array) $invoice;
-
-        // Nastavíme typ klienta a jeho údaje
-        if ($invoice->manual_client) {
-            $defaults['client_type'] = 'manual';
-
-            // Pro ručně zadaného klienta načteme aktuální údaje z tabulky clients
-            if ($invoice->client_id) {
-                $client = $this->clientsManager->getById($invoice->client_id);
-                if ($client) {
-                    $defaults['client_name'] = $client->name;
-                    $defaults['client_address'] = $client->address;
-                    $defaults['client_city'] = $client->city;
-                    $defaults['client_zip'] = $client->zip;
-                    $defaults['client_country'] = $client->country;
-                    $defaults['client_ic'] = $client->ic;
-                    $defaults['client_dic'] = $client->dic;
-                }
-            }
-        } else {
-            $defaults['client_type'] = 'existing';
-            // Pro existujícího klienta nastavíme client_id
-            $defaults['client_id'] = $invoice->client_id;
-        }
-
-        $this['invoiceForm']->setDefaults($defaults);
-        $this->template->invoice = $invoice;
-        $this->template->invoiceItems = $this->invoicesManager->getInvoiceItems($id);
-
-        $company = $this->companyManager->getCompanyInfo();
-        $this->template->isVatPayer = $company ? $company->vat_payer : false;
-    }
-
-    // Je potřeba implementovat metodu pro mazání položek faktury
-    public function actionDeleteItem(int $invoiceId, int $itemId): void
-    {
-        $this->invoicesManager->deleteItem($itemId);
-        $this->invoicesManager->updateInvoiceTotal($invoiceId);
-        $this->flashMessage('Položka byla úspěšně smazána', 'success');
-        $this->redirect('edit', $invoiceId);
-    }
-
-    public function renderDefault(?string $filter = null, ?string $search = null, ?int $client = null): void
-    {
-        // Kontrola faktur po splatnosti - pouze pro účetní a admin
-        if ($this->isAccountant()) {
-            $this->invoicesManager->checkOverdueDates();
-        }
-
-        // Příprava dotazu
-        $query = $this->invoicesManager->getAll(null, null, $search);
-
-        // Aplikace filtru podle stavu
-        if ($filter) {
-            $query->where('status', $filter);
-        }
-
-        // Aplikace filtru podle klienta
-        if ($client) {
-            $query->where('client_id', $client);
-
-            // Získáme název klienta pro zobrazení v šabloně
-            $clientName = $this->clientsManager->getById($client)->name ?? null;
-            $this->template->clientFilter = $clientName;
-        }
-
-        // Nastavení proměnných pro šablonu
-        $this->template->invoices = $query;
-        $this->template->filter = $filter;
-        $this->template->search = $search;
-        $this->template->client = $client;
+        // Prázdná metoda - modul funguje přes handlery
     }
 
     /**
-     * Akce pro označení faktury jako zaplacené
-     * @param int $id ID faktury
+     * Statická metoda pro hook - vrací HTML tlačítka pro detail faktury
+     * Volá se z InvoicesPresenter::getModuleInvoiceActions()
      */
-    public function handleMarkAsPaid(int $id): void
+    public static function getInvoiceDetailAction($invoice, $presenter): ?string
     {
-        // Explicitní kontrola oprávnění - pouze účetní a admin
-        if (!$this->isAccountant()) {
-            $this->flashMessage('Nemáte oprávnění označovat faktury jako zaplacené.', 'danger');
-            $this->redirect('this');
+        // Kontrola oprávnění - pouze účetní a admin
+        $user = $presenter->getUser();
+        if (!$user->isInRole('accountant') && !$user->isInRole('admin')) {
+            return null; // Uživatel nemá oprávnění
         }
 
-        $this->invoicesManager->markAsPaid($id);
-        $this->flashMessage('Faktura byla označena jako zaplacená', 'success');
-        $this->redirect('this');
-    }
+        // Vygenerování odkazu na handler
+        $link = $presenter->link(':InvoiceEmail:InvoiceEmail:send!', ['invoiceId' => $invoice->id]);
 
-    /**
-     * Akce pro označení faktury jako vystavené (reset stavu)
-     * @param int $id ID faktury
-     */
-    public function handleMarkAsCreated(int $id): void
-    {
-        // Explicitní kontrola oprávnění - pouze účetní a admin
-        if (!$this->isAccountant()) {
-            $this->flashMessage('Nemáte oprávnění měnit stav faktur.', 'danger');
-            $this->redirect('this');
-        }
-
-        $this->invoicesManager->markAsCreated($id);
-        $this->flashMessage('Faktura byla označena jako vystavená', 'success');
-        $this->redirect('this');
-    }
-
-    /**
-     * Formulář pro vyhledávání
-     */
-    protected function createComponentSearchForm(): Nette\Application\UI\Form
-    {
-        $form = new Nette\Application\UI\Form;
-
-        $form->addText('search', 'Hledat:')
-            ->setHtmlAttribute('placeholder', 'Číslo faktury, klient, částka...');
-
-        $form->addSubmit('send', 'Vyhledat');
-
-        $form->onSuccess[] = function (Nette\Application\UI\Form $form, \stdClass $values) {
-            $this->redirect('default', $values->search);
-        };
-
-        return $form;
-    }
-
-    /**
-     * Získá akce (tlačítka) z aktivních modulů pro detail faktury
-     */
-    private function getModuleInvoiceActions($invoice): array
-    {
-        $actions = [];
-
-        // Načteme aktivní moduly pro aktuálního uživatele
-        $activeModules = $this->moduleManager->getActiveModulesForUser(
-            $this->getUser()->getId()
+        // HTML kód tlačítka
+        $html = sprintf(
+            '<a href="%s" class="btn btn-success" onclick="return confirm(\'Opravdu chcete odeslat fakturu emailem?\')">
+            <i class="bi bi-envelope-fill"></i> Odeslat emailem
+        </a>',
+            htmlspecialchars($link)
         );
 
-        foreach ($activeModules as $moduleId => $moduleInfo) {
-            // Pokusíme se načíst presenter modulu
-            $presenterClass = $this->getModulePresenterClass($moduleId);
-
-            if ($presenterClass && method_exists($presenterClass, 'getInvoiceDetailAction')) {
-                // Modul má metodu pro invoice detail akce
-                try {
-                    $action = $presenterClass::getInvoiceDetailAction($invoice, $this);
-                    if ($action) {
-                        $actions[] = $action;
-                    }
-                } catch (\Exception $e) {
-                    // Pokud modul selže, prostě ho přeskočíme
-                    continue;
-                }
-            }
-        }
-
-        return $actions;
-    }
-
-    /**
-     * Získá třídu presenteru modulu
-     */
-    private function getModulePresenterClass(string $moduleId): ?string
-    {
-        // Převod module_id na CamelCase namespace
-        $parts = explode('_', $moduleId);
-        $namespace = 'App\\Modules\\' . implode('', array_map('ucfirst', $parts));
-
-        // Název presenteru je stejný jako název modulu
-        $presenterName = implode('', array_map('ucfirst', $parts));
-        $presenterClass = $namespace . '\\' . $presenterName . 'Presenter';
-
-        return class_exists($presenterClass) ? $presenterClass : null;
+        return $html;
     }
 }

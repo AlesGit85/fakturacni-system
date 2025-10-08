@@ -40,7 +40,7 @@ return array (
     'App\\Model\\EmailService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\EmailService.php',
-      1 => 1759843838,
+      1 => 1759922544,
     ),
     'App\\Model\\InvoicesManager' => 
     array (
@@ -96,6 +96,11 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
       1 => 1755862054,
+    ),
+    'App\\Modules\\InvoiceEmail\\InvoiceEmailPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\invoice_email\\InvoiceEmailPresenter.php',
+      1 => 1759927744,
     ),
     'Modules\\Tenant1\\Notes\\Module' => 
     array (
@@ -165,7 +170,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1759912594,
+      1 => 1759927464,
     ),
     'App\\Presentation\\Migration\\MigrationPresenter' => 
     array (
@@ -250,7 +255,7 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 2,
+    'Nette\\Bridges\\Assets\\DIExtension' => 3,
     'null' => 3,
     'App\\Presentation\\Sign\\SignSendTestEmailTemplate' => 2,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
@@ -276,6 +281,12 @@ return array (
     'App\\Presentation\\Clients\\ClientsAddTemplate' => 2,
     'App\\Presentation\\Invoices\\InvoicesDeleteTemplate' => 1,
     'App\\Presentation\\Clients\\ClientsShowTemplate' => 2,
+    'App\\Modules\\FinancialReports\\FinancialReportsPresenter' => 1,
+    'App\\Modules\\Notes\\NotesPresenter' => 1,
+    'App\\Modules\\TestModule\\TestModulePresenter' => 1,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 1,
   ),
   2 => 
   array (

@@ -1,0 +1,29 @@
+{
+    "id": "invoice_email",
+    "name": "Odeslání faktur emailem",
+    "version": "1.0.0",
+    "description": "Umožňuje odeslat vygenerovanou fakturu klientovi emailem. Email odesílatele je z firemních údajů, email příjemce z údajů klienta.",
+    "author": "QRdoklad System",
+    "icon": "bi bi-envelope-fill",
+    "active": true,
+    "demo_mode": false,
+    "requirements": {
+        "php": ">=8.0",
+        "qrdoklad": ">=1.0.0"
+    },
+    "features": [
+        "Přehled faktur s možností odeslání emailem",
+        "Automatické načtení emailů z databáze (šifrovaných)",
+        "HTML a textová verze emailu",
+        "PDF faktura jako příloha",
+        "Kontrola oprávnění (pouze účetní a admin)"
+    ],
+    "menu_items": [
+        {
+            "presenter": "InvoiceEmail",
+            "action": "default",
+            "label": "Faktury - Email",
+            "icon": "bi bi-envelope-fill"
+        }
+    ]
+}
