@@ -680,7 +680,7 @@ class InvoicesPresenter extends BasePresenter
         ])->setDefaultValue('existing');
 
         // Existující klient - výběr
-        $clients = $this->clientsManager->getAll()->fetchPairs('id', 'name');
+        $clients = $this->clientsManager->getPairs();
         $form->addSelect('client_id', 'Vyberte klienta:', $clients)
             ->setPrompt('Vyberte klienta')
             ->setRequired(false)
