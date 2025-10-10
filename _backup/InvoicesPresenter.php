@@ -25,6 +25,9 @@ class InvoicesPresenter extends BasePresenter
     /** @var QrPaymentService */
     private $qrPaymentService;
 
+    /** @var \App\Model\ModuleManager */
+    private $moduleManager;
+
     // Všichni přihlášení uživatelé mají základní přístup k fakturám
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
 
@@ -44,12 +47,14 @@ class InvoicesPresenter extends BasePresenter
         InvoicesManager $invoicesManager,
         ClientsManager $clientsManager,
         CompanyManager $companyManager,
-        QrPaymentService $qrPaymentService
+        QrPaymentService $qrPaymentService,
+        \App\Model\ModuleManager $moduleManager
     ) {
         $this->invoicesManager = $invoicesManager;
         $this->clientsManager = $clientsManager;
         $this->companyManager = $companyManager;
         $this->qrPaymentService = $qrPaymentService;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -116,6 +121,15 @@ class InvoicesPresenter extends BasePresenter
 
         $this->template->invoiceItems = $this->invoicesManager->getInvoiceItems($id);
         $this->template->company = $this->companyManager->getCompanyInfo();
+
+        // NOVÉ: Načtení akcí z aktivních modulů
+$moduleActions = $this->getModuleInvoiceActions($invoice);
+
+// DEBUG: Vypíšeme do Tracy baru
+\Tracy\Debugger::barDump($moduleActions, 'Module Actions');
+\Tracy\Debugger::barDump($this->moduleManager->getActiveModulesForUser($this->getUser()->getId()), 'Active Modules');
+
+$this->template->moduleInvoiceActions = $moduleActions;
     }
 
     public function actionDelete(int $id): void
@@ -195,6 +209,64 @@ class InvoicesPresenter extends BasePresenter
                 $b = hexdec(substr($hex, 4, 2));
             }
             return array($r, $g, $b);
+        }
+
+        // ✅ NOVÁ POMOCNÁ FUNKCE: Inteligentní zalamování textu na max. počet znaků
+        function wrapText($text, $maxLength = 100)
+        {
+            // Pokud je text prázdný, vrátíme prázdné pole
+            if (empty($text)) {
+                return [];
+            }
+
+            // Nahradíme všechny možné varianty znaků nového řádku za standardní PHP \n
+            $text = str_replace(["\r\n", "\r"], "\n", $text);
+
+            // Rozdělíme text podle ručně zadaných nových řádků
+            $manualLines = explode("\n", $text);
+            $wrappedLines = [];
+
+            foreach ($manualLines as $line) {
+                // Pokud je řádek kratší než max délka, přidáme ho celý
+                if (mb_strlen($line) <= $maxLength) {
+                    $wrappedLines[] = $line;
+                    continue;
+                }
+
+                // Pokud je delší, musíme ho zalomit
+                $words = explode(' ', $line);
+                $currentLine = '';
+
+                foreach ($words as $word) {
+                    // Zkusíme přidat slovo k aktuálnímu řádku
+                    $testLine = $currentLine === '' ? $word : $currentLine . ' ' . $word;
+
+                    // Pokud by přesáhl max délku
+                    if (mb_strlen($testLine) > $maxLength) {
+                        // Uložíme současný řádek (pokud není prázdný)
+                        if ($currentLine !== '') {
+                            $wrappedLines[] = $currentLine;
+                        }
+                        // Začneme nový řádek
+                        $currentLine = $word;
+
+                        // Pokud i samotné slovo je delší než max délka, rozdělíme ho
+                        if (mb_strlen($word) > $maxLength) {
+                            $wrappedLines[] = mb_substr($word, 0, $maxLength);
+                            $currentLine = '';
+                        }
+                    } else {
+                        $currentLine = $testLine;
+                    }
+                }
+
+                // Přidáme poslední řádek, pokud není prázdný
+                if ($currentLine !== '') {
+                    $wrappedLines[] = $currentLine;
+                }
+            }
+
+            return $wrappedLines;
         }
 
         // Získání barev z nastavení firmy nebo použití výchozích
@@ -481,15 +553,13 @@ class InvoicesPresenter extends BasePresenter
         $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
         $pdf->SetFont('dejavusans', '', 10);
 
+        // ✅ UPRAVENO: Použití funkce wrapText pro inteligentní zalamování na max 100 znaků
         foreach ($invoiceItems as $key => $item) {
-            // Nahradíme všechny možné varianty znaků nového řádku za standardní PHP \n
-            $cleanText = str_replace(["\r\n", "\r"], "\n", $item->name);
+            // Zalomení názvu položky na max 100 znaků
+            $nameLines = wrapText($item->name, 100);
 
-            // Rozdělíme text na jednotlivé řádky
-            $lines = explode("\n", $cleanText);
-
-            // Vykreslíme každý řádek s vlastní spodní linkou
-            foreach ($lines as $index => $line) {
+            // Vykreslíme každý řádek názvu s vlastní spodní linkou
+            foreach ($nameLines as $index => $line) {
                 $pdf->Cell(180, 8, $line, 'B', 1, 'L');
             }
 
@@ -497,9 +567,8 @@ class InvoicesPresenter extends BasePresenter
             if (!empty($item->description)) {
                 $pdf->SetFont('dejavusans', 'I', 9);
 
-                // Vyčistíme i popis stejným způsobem
-                $cleanDesc = str_replace(["\r\n", "\r"], "\n", $item->description);
-                $descLines = explode("\n", $cleanDesc);
+                // Zalomení popisu na max 100 znaků
+                $descLines = wrapText($item->description, 100);
 
                 foreach ($descLines as $descLine) {
                     $pdf->Cell(180, 6, $descLine, 0, 1, 'L');
@@ -989,5 +1058,74 @@ class InvoicesPresenter extends BasePresenter
         };
 
         return $form;
+    }
+
+    /**
+ * Získá akce (tlačítka) z aktivních modulů pro detail faktury
+ */
+private function getModuleInvoiceActions($invoice): array
+{
+    $actions = [];
+    
+    // Načteme aktivní moduly pro aktuálního uživatele
+    $activeModules = $this->moduleManager->getActiveModulesForUser(
+        $this->getUser()->getId()
+    );
+    
+    // DEBUG
+    \Tracy\Debugger::barDump(count($activeModules), 'Počet aktivních modulů');
+    
+    foreach ($activeModules as $moduleId => $moduleInfo) {
+        // DEBUG
+        \Tracy\Debugger::barDump($moduleId, 'Zpracovávám modul');
+        
+        // Pokusíme se načíst presenter modulu
+        $presenterClass = $this->getModulePresenterClass($moduleId);
+        
+        // DEBUG
+        \Tracy\Debugger::barDump($presenterClass, "Presenter class pro $moduleId");
+        
+        if ($presenterClass && method_exists($presenterClass, 'getInvoiceDetailAction')) {
+            // DEBUG
+            \Tracy\Debugger::barDump("Metoda existuje", "getInvoiceDetailAction pro $moduleId");
+            
+            // Modul má metodu pro invoice detail akce
+            try {
+                $action = $presenterClass::getInvoiceDetailAction($invoice, $this);
+                
+                // DEBUG
+                \Tracy\Debugger::barDump($action, "Action HTML pro $moduleId");
+                
+                if ($action) {
+                    $actions[] = $action;
+                }
+            } catch (\Exception $e) {
+                // DEBUG
+                \Tracy\Debugger::barDump($e->getMessage(), "CHYBA pro $moduleId");
+                continue;
+            }
+        } else {
+            // DEBUG
+            \Tracy\Debugger::barDump("Metoda NEEXISTUJE nebo presenter nenalezen", "Problem s $moduleId");
+        }
+    }
+    
+    return $actions;
+}
+
+    /**
+     * Získá třídu presenteru modulu
+     */
+    private function getModulePresenterClass(string $moduleId): ?string
+    {
+        // Převod module_id na CamelCase namespace
+        $parts = explode('_', $moduleId);
+        $namespace = 'App\\Modules\\' . implode('', array_map('ucfirst', $parts));
+
+        // Název presenteru je stejný jako název modulu
+        $presenterName = implode('', array_map('ucfirst', $parts));
+        $presenterClass = $namespace . '\\' . $presenterName . 'Presenter';
+
+        return class_exists($presenterClass) ? $presenterClass : null;
     }
 }

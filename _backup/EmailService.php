@@ -116,15 +116,16 @@ class EmailService
 
     /**
      * Odešle email s potvrzením registrace uživateli
+     * PRO REGISTRACI: vždy používáme defaultFromEmail, ne tenant-specific
      */
     public function sendRegistrationConfirmation(string $userEmail, string $username, string $role): void
     {
         $mail = new Message;
 
-        // OPRAVENO: Použití helper metod místo přímých property
-        $mail->setFrom($this->getFromEmail(), $this->getFromName())
+        // PRO REGISTRACI: Vždy použijeme default hodnoty místo tenant-specific
+        $mail->setFrom($this->defaultFromEmail, $this->appName)
             ->addTo($userEmail)
-            ->setSubject('Vítejte v ' . $this->getFromName() . ' - registrace byla úspěšná');
+            ->setSubject('Vítejte v ' . $this->appName . ' - registrace byla úspěšná');
 
         // Získání role v češtině
         $roleNames = [
@@ -136,16 +137,16 @@ class EmailService
 
         $loginUrl = $this->linkGenerator->link('Sign:in');
 
-        // HTML verze - OPRAVENO: přidán admin email parametr
-        $htmlBody = $this->createRegistrationConfirmationHtml($username, $roleName, $loginUrl, $this->getAdminEmail());
+        // HTML verze - používáme default admin email
+        $htmlBody = $this->createRegistrationConfirmationHtml($username, $roleName, $loginUrl, $this->defaultAdminEmail);
         $mail->setHtmlBody($htmlBody);
 
-        // OPRAVENÁ textová verze s helper metodami
-        $textBody = "Vítejte v " . $this->getFromName() . "!\n\n";
+        // Textová verze
+        $textBody = "Vítejte v " . $this->appName . "!\n\n";
         $textBody .= "Váš účet s uživatelským jménem '{$username}' byl úspěšně vytvořen.\n";
         $textBody .= "Role: {$roleName}\n\n";
         $textBody .= "Nyní se můžete přihlásit: {$loginUrl}\n\n";
-        $textBody .= "V případě problémů nás kontaktujte na: " . $this->getAdminEmail();
+        $textBody .= "V případě problémů nás kontaktujte na: " . $this->defaultAdminEmail;
 
         $mail->setBody($textBody, 'text/plain; charset=utf-8');
 
@@ -154,15 +155,16 @@ class EmailService
 
     /**
      * Odešle upozornění adminovi o nové registraci
+     * PRO REGISTRACI: vždy používáme defaultAdminEmail, ne tenant-specific
      */
     public function sendAdminNotification(string $username, string $email, string $role): void
     {
         $mail = new Message;
 
-        // OPRAVENO: Použití helper metod + pouze tenant admin (GDPR)
-        $mail->setFrom($this->getFromEmail(), $this->getFromName())
-            ->addTo($this->getAdminEmail())  // Pouze tenant admin
-            ->setSubject('Nová registrace v ' . $this->getFromName());
+        // PRO REGISTRACI: Vždy použijeme default hodnoty
+        $mail->setFrom($this->defaultFromEmail, $this->appName)
+            ->addTo($this->defaultAdminEmail)
+            ->setSubject('Nová registrace v ' . $this->appName);
 
         // Získání role v češtině
         $roleNames = [
@@ -174,12 +176,12 @@ class EmailService
 
         $usersUrl = $this->linkGenerator->link('Users:default');
 
-        // HTML verze - OPRAVENO: přidán admin email parametr
-        $htmlBody = $this->createAdminNotificationHtml($username, $email, $roleName, $usersUrl, $this->getAdminEmail());
+        // HTML verze
+        $htmlBody = $this->createAdminNotificationHtml($username, $email, $roleName, $usersUrl, $this->defaultAdminEmail);
         $mail->setHtmlBody($htmlBody);
 
-        // OPRAVENÁ textová verze s helper metodami
-        $textBody = "Nová registrace v " . $this->getFromName() . "\n\n";
+        // Textová verze
+        $textBody = "Nová registrace v " . $this->appName . "\n\n";
         $textBody .= "Uživatelské jméno: {$username}\n";
         $textBody .= "E-mail: {$email}\n";
         $textBody .= "Role: {$roleName}\n";
@@ -193,35 +195,56 @@ class EmailService
 
     /**
      * Odešle email pro resetování hesla
+     * PRO RESET HESLA: vždy používáme defaultFromEmail, ne tenant-specific
      */
     public function sendPasswordReset(string $userEmail, string $username, string $resetToken): void
     {
-        $mail = new Message;
+        error_log("EmailService::sendPasswordReset START");
+        error_log("  - userEmail: " . $userEmail);
+        error_log("  - username: " . $username);
+        error_log("  - token: " . substr($resetToken, 0, 10) . "...");
+        error_log("  - defaultFromEmail: " . $this->defaultFromEmail);
+        error_log("  - appName: " . $this->appName);
 
-        // OPRAVENO: Použití helper metod místo přímých property
-        $mail->setFrom($this->getFromEmail(), $this->getFromName())
-            ->addTo($userEmail)
-            ->setSubject('Obnovení hesla - ' . $this->getFromName());
+        try {
+            $mail = new Message;
 
-        $resetUrl = $this->linkGenerator->link('Sign:resetPassword', ['token' => $resetToken]);
+            // PRO RESET: Vždy použijeme default hodnoty
+            error_log("  - Vytvářím Message objekt...");
+            $mail->setFrom($this->defaultFromEmail, $this->appName)
+                ->addTo($userEmail)
+                ->setSubject('Obnovení hesla - ' . $this->appName);
+            error_log("  - Message hlavičky nastaveny");
 
-        // HTML verze - OPRAVENO: přidán admin email parametr
-        $htmlBody = $this->createPasswordResetHtml($username, $resetUrl, $this->getAdminEmail());
-        $mail->setHtmlBody($htmlBody);
+            $resetUrl = $this->linkGenerator->link('Sign:resetPassword', ['token' => $resetToken]);
+            error_log("  - Reset URL: " . $resetUrl);
 
-        // OPRAVENÁ textová verze s helper metodami
-        $textBody = "Obnovení hesla pro " . $this->getFromName() . "\n\n";
-        $textBody .= "Ahoj {$username},\n\n";
-        $textBody .= "Někdo požádal o obnovení hesla pro váš účet.\n";
-        $textBody .= "Pokud to nebyli vy, tento email ignorujte.\n\n";
-        $textBody .= "Pro obnovení hesla klikněte na následující odkaz:\n";
-        $textBody .= "{$resetUrl}\n\n";
-        $textBody .= "Odkaz je platný po dobu 24 hodin.\n\n";
-        $textBody .= "V případě problémů nás kontaktujte na: " . $this->getAdminEmail();
+            // HTML verze
+            $htmlBody = $this->createPasswordResetHtml($username, $resetUrl, $this->defaultAdminEmail);
+            $mail->setHtmlBody($htmlBody);
+            error_log("  - HTML body nastaven");
 
-        $mail->setBody($textBody, 'text/plain; charset=utf-8');
+            // Textová verze
+            $textBody = "Obnovení hesla pro " . $this->appName . "\n\n";
+            $textBody .= "Ahoj {$username},\n\n";
+            $textBody .= "Někdo požádal o obnovení hesla pro váš účet.\n";
+            $textBody .= "Pokud to nebyli vy, tento email ignorujte.\n\n";
+            $textBody .= "Pro obnovení hesla klikněte na následující odkaz:\n";
+            $textBody .= "{$resetUrl}\n\n";
+            $textBody .= "Odkaz je platný po dobu 24 hodin.\n\n";
+            $textBody .= "V případě problémů nás kontaktujte na: " . $this->defaultAdminEmail;
 
-        $this->mailer->send($mail);
+            $mail->setBody($textBody, 'text/plain; charset=utf-8');
+            error_log("  - Text body nastaven");
+
+            error_log("  - Volám mailer->send()...");
+            $this->mailer->send($mail);
+            error_log("EmailService::sendPasswordReset ÚSPĚCH");
+        } catch (\Exception $e) {
+            error_log("EmailService::sendPasswordReset CHYBA: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            throw $e;
+        }
     }
 
     /**
@@ -829,5 +852,156 @@ class EmailService
         $adminEmail = $this->getAdminEmail(); // OPRAVENO: Helper metoda
 
         return "Systémová zpráva z {$appName}\n\nTyp: {$type}\n\nKontakt: {$adminEmail}";
+    }
+
+    /**
+     * Odešle fakturu emailem klientovi
+     * @param object $invoice Faktura
+     * @param object $client Klient (s dešifrovanými daty)
+     * @param object $company Firma (s dešifrovanými daty)
+     * @param string $pdfPath Cesta k PDF souboru faktury
+     */
+    public function sendInvoiceEmail($invoice, $client, $company, string $pdfPath): void
+    {
+        // Kontrola, zda klient má email
+        if (empty($client->email)) {
+            throw new \Exception('Klient nemá zadaný email.');
+        }
+
+        // Kontrola, zda firma má email
+        if (empty($company->email)) {
+            throw new \Exception('Firma nemá zadaný email pro odesílání faktur.');
+        }
+
+        $mail = new Message;
+
+        // Email odesílatele = email firmy (již dešifrovaný)
+        // Email příjemce = email klienta (již dešifrovaný)
+        $mail->setFrom($company->email, $company->name)
+            ->addTo($client->email, $client->name);
+
+        // Předmět emailu
+        $subject = 'Faktura ' . $invoice->number . ' - ' . $company->name;
+        $mail->setSubject($subject);
+
+        // HTML tělo emailu
+        $htmlBody = $this->createSentInvoiceHtmlBody($invoice, $client, $company);
+        $mail->setHtmlBody($htmlBody);
+
+        // Textová verze emailu
+        $textBody = $this->createSentInvoiceTextBody($invoice, $client, $company);
+        $mail->setBody($textBody, 'text/plain; charset=utf-8');
+
+        // Příloha - PDF faktura
+        if (file_exists($pdfPath)) {
+            $mail->addAttachment($pdfPath, 'faktura-' . $invoice->number . '.pdf');
+        }
+
+        // Odeslání emailu
+        $this->mailer->send($mail);
+    }
+
+    /**
+     * Vytvoří HTML tělo emailu pro odeslanou fakturu
+     */
+    private function createSentInvoiceHtmlBody($invoice, $client, $company): string
+    {
+        $invoiceNumber = $invoice->number;
+        $clientName = $client->name;
+        $amount = number_format($invoice->total, 0, ',', ' ') . ' Kč';
+        $dueDate = $invoice->due_date->format('d.m.Y');
+        $issueDate = $invoice->issue_date->format('d.m.Y');
+
+        return "
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset='utf-8'>
+        <style>
+            body { font-family: Arial, sans-serif; color: #212529; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #B1D235; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; }
+            .invoice-info { background: white; padding: 20px; border-left: 4px solid #B1D235; margin: 20px 0; }
+            .info-row { margin: 10px 0; }
+            .label { font-weight: bold; color: #6c757d; }
+            .footer { text-align: center; color: #6c757d; font-size: 12px; margin-top: 30px; }
+            a { color: #B1D235; text-decoration: none; }
+            a:hover { color: #95B11F; }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <div class='header'>
+                <h1>Faktura {$invoiceNumber}</h1>
+            </div>
+            <div class='content'>
+                <p>Vážený/á {$clientName},</p>
+                
+                <p>zasíláme Vám fakturu za poskytnuté služby.</p>
+                
+                <div class='invoice-info'>
+                    <div class='info-row'>
+                        <span class='label'>Číslo faktury:</span> {$invoiceNumber}
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Datum vystavení:</span> {$issueDate}
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Datum splatnosti:</span> {$dueDate}
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Částka k úhradě:</span> <strong>{$amount}</strong>
+                    </div>
+                </div>
+                
+                <p>Faktura je přiložena jako PDF příloha v tomto emailu.</p>
+                
+                <p>V případě jakýchkoliv dotazů nás neváhejte kontaktovat.</p>
+                
+                <p>S pozdravem,<br>
+                {$company->name}</p>
+                
+                <div class='footer'>
+                    <p>{$company->name}<br>
+                    {$company->address}, {$company->zip} {$company->city}<br>
+                    Email: <a href='mailto:{$company->email}'>{$company->email}</a> | 
+                    Tel: {$company->phone}</p>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>";
+    }
+
+    /**
+     * Vytvoří textové tělo emailu pro odeslanou fakturu
+     */
+    private function createSentInvoiceTextBody($invoice, $client, $company): string
+    {
+        $invoiceNumber = $invoice->number;
+        $clientName = $client->name;
+        $amount = number_format($invoice->total, 0, ',', ' ') . ' Kč';
+        $dueDate = $invoice->due_date->format('d.m.Y');
+        $issueDate = $invoice->issue_date->format('d.m.Y');
+
+        $textBody = "FAKTURA {$invoiceNumber}\n\n";
+        $textBody .= "Vážený/á {$clientName},\n\n";
+        $textBody .= "zasíláme Vám fakturu za poskytnuté služby.\n\n";
+        $textBody .= "ÚDAJE O FAKTUŘE:\n";
+        $textBody .= "Číslo faktury: {$invoiceNumber}\n";
+        $textBody .= "Datum vystavení: {$issueDate}\n";
+        $textBody .= "Datum splatnosti: {$dueDate}\n";
+        $textBody .= "Částka k úhradě: {$amount}\n\n";
+        $textBody .= "Faktura je přiložena jako PDF příloha v tomto emailu.\n\n";
+        $textBody .= "V případě jakýchkoliv dotazů nás neváhejte kontaktovat.\n\n";
+        $textBody .= "S pozdravem,\n";
+        $textBody .= "{$company->name}\n\n";
+        $textBody .= "---\n";
+        $textBody .= "{$company->name}\n";
+        $textBody .= "{$company->address}, {$company->zip} {$company->city}\n";
+        $textBody .= "Email: {$company->email} | Tel: {$company->phone}";
+
+        return $textBody;
     }
 }

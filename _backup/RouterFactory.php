@@ -14,31 +14,25 @@ class RouterFactory
     public static function createRouter(): Nette\Application\Routers\RouteList
     {
         $router = new RouteList;
-
-        // SPECIÁLNÍ ROUTE PRO MODUL invoice-email
-        // Musíme vytvořit vlastní RouteList s jiným mappingem
-        $moduleRouter = new RouteList('InvoiceEmail');
-        $moduleRouter->addRoute('invoice-email/<action>', 'InvoiceEmail:');
-        $router[] = $moduleRouter;
-
+        
         // ✅ OPRAVENO: Specifická routa pro Security presenter s podporou signálů
         $router->addRoute('security/<action>[/<id>]', [
             'presenter' => 'Security',
             'action' => 'default'
         ]);
-
+        
         // Přidáme specifickou routu pro ModuleAdmin
         $router->addRoute('moduleadmin/<action>[/<id>]', [
             'presenter' => 'ModuleAdmin',
             'action' => 'default'
         ]);
-
+        
         // Obecná routa pro ostatní presentery
         $router->addRoute('<presenter>/<action>[/<id>]', [
             'presenter' => 'Home',
             'action' => 'default'
         ]);
-
+        
         return $router;
     }
 }

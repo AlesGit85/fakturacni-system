@@ -10,7 +10,7 @@ return array (
     'App\\Core\\RouterFactory' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Core\\RouterFactory.php',
-      1 => 1755852610,
+      1 => 1760085981,
     ),
     'App\\Mail\\SmtpFactory' => 
     array (
@@ -40,7 +40,7 @@ return array (
     'App\\Model\\EmailService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\EmailService.php',
-      1 => 1759922544,
+      1 => 1760019414,
     ),
     'App\\Model\\InvoicesManager' => 
     array (
@@ -96,11 +96,6 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
       1 => 1755862054,
-    ),
-    'App\\Modules\\InvoiceEmail\\InvoiceEmailPresenter' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\invoice_email\\InvoiceEmailPresenter.php',
-      1 => 1759927744,
     ),
     'Modules\\Tenant1\\Notes\\Module' => 
     array (
@@ -170,7 +165,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1759927464,
+      1 => 1760080779,
     ),
     'App\\Presentation\\Migration\\MigrationPresenter' => 
     array (
@@ -257,36 +252,10 @@ return array (
   array (
     'Nette\\Bridges\\Assets\\DIExtension' => 3,
     'null' => 3,
-    'App\\Presentation\\Sign\\SignSendTestEmailTemplate' => 2,
-    'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Sign\\SignEmailDiagnosticTemplate' => 1,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
-    'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 3,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 2,
-    'App\\Presentation\\Users\\UsersDefaultTemplate' => 2,
-    'App\\Presentation\\Users\\UsersTemplate' => 3,
-    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 1,
-    'App\\Presentation\\Tenants\\TenantsTemplate' => 1,
-    'App\\Presentation\\Users\\UsersProfileTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDeleteTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsAddTemplate' => 2,
-    'App\\Presentation\\Invoices\\InvoicesDeleteTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsShowTemplate' => 2,
-    'App\\Modules\\FinancialReports\\FinancialReportsPresenter' => 1,
-    'App\\Modules\\Notes\\NotesPresenter' => 1,
-    'App\\Modules\\TestModule\\TestModulePresenter' => 1,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 1,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 2,
+    'App\\Presentation\\Home\\HomeTemplate' => 2,
+    'App\\Presentation\\Sign\\SignInTemplate' => 2,
+    'App\\Presentation\\Sign\\SignTemplate' => 2,
   ),
   2 => 
   array (

@@ -14,7 +14,7 @@ application:
 		5xx: Error:Error5xx
 	mapping:
 		*: App\Presentation\*\**Presenter
-		InvoiceEmail: Modules\Tenant*\InvoiceEmail\*Presenter
+		InvoiceEmail: App\Modules\InvoiceEmail\*Presenter
 
 database:
 	dsn: %database.dsn%

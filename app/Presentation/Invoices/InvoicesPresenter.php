@@ -123,7 +123,13 @@ class InvoicesPresenter extends BasePresenter
         $this->template->company = $this->companyManager->getCompanyInfo();
 
         // NOVÉ: Načtení akcí z aktivních modulů
-        $this->template->moduleInvoiceActions = $this->getModuleInvoiceActions($invoice);
+        $moduleActions = $this->getModuleInvoiceActions($invoice);
+
+        // DEBUG: Vypíšeme do Tracy baru
+        \Tracy\Debugger::barDump($moduleActions, 'Module Actions');
+        \Tracy\Debugger::barDump($this->moduleManager->getActiveModulesForUser($this->getUser()->getId()), 'Active Modules');
+
+        $this->template->moduleInvoiceActions = $moduleActions;
     }
 
     public function actionDelete(int $id): void
@@ -1066,21 +1072,41 @@ class InvoicesPresenter extends BasePresenter
             $this->getUser()->getId()
         );
 
+        // DEBUG
+        \Tracy\Debugger::barDump(count($activeModules), 'Počet aktivních modulů');
+
         foreach ($activeModules as $moduleId => $moduleInfo) {
+            // DEBUG
+            \Tracy\Debugger::barDump($moduleId, 'Zpracovávám modul');
+
             // Pokusíme se načíst presenter modulu
             $presenterClass = $this->getModulePresenterClass($moduleId);
 
+            // DEBUG
+            \Tracy\Debugger::barDump($presenterClass, "Presenter class pro $moduleId");
+
             if ($presenterClass && method_exists($presenterClass, 'getInvoiceDetailAction')) {
+                // DEBUG
+                \Tracy\Debugger::barDump("Metoda existuje", "getInvoiceDetailAction pro $moduleId");
+
                 // Modul má metodu pro invoice detail akce
                 try {
                     $action = $presenterClass::getInvoiceDetailAction($invoice, $this);
+
+                    // DEBUG
+                    \Tracy\Debugger::barDump($action, "Action HTML pro $moduleId");
+
                     if ($action) {
                         $actions[] = $action;
                     }
                 } catch (\Exception $e) {
-                    // Pokud modul selže, prostě ho přeskočíme
+                    // DEBUG
+                    \Tracy\Debugger::barDump($e->getMessage(), "CHYBA pro $moduleId");
                     continue;
                 }
+            } else {
+                // DEBUG
+                \Tracy\Debugger::barDump("Metoda NEEXISTUJE nebo presenter nenalezen", "Problem s $moduleId");
             }
         }
 
@@ -1092,13 +1118,24 @@ class InvoicesPresenter extends BasePresenter
      */
     private function getModulePresenterClass(string $moduleId): ?string
     {
-        // Převod module_id na CamelCase namespace
-        $parts = explode('_', $moduleId);
-        $namespace = 'App\\Modules\\' . implode('', array_map('ucfirst', $parts));
+        // Získáme tenant ID aktuálního uživatele
+        $tenantId = $this->getCurrentTenantId();
 
-        // Název presenteru je stejný jako název modulu
-        $presenterName = implode('', array_map('ucfirst', $parts));
-        $presenterClass = $namespace . '\\' . $presenterName . 'Presenter';
+        if ($tenantId === null) {
+            return null;
+        }
+
+        // Převod module_id na PascalCase (invoice_email -> InvoiceEmail)
+        $parts = explode('_', $moduleId);
+        $moduleName = implode('', array_map('ucfirst', $parts));
+
+        // Tenant-specific namespace
+        // Formát: Modules\Tenant1\InvoiceEmail\InvoiceEmailPresenter
+        $presenterClass = 'Modules\\Tenant' . $tenantId . '\\' . $moduleName . '\\' . $moduleName . 'Presenter';
+
+        // Debug
+        \Tracy\Debugger::barDump($presenterClass, "Hledám třídu presenteru pro $moduleId");
+        \Tracy\Debugger::barDump(class_exists($presenterClass), "Třída existuje?");
 
         return class_exists($presenterClass) ? $presenterClass : null;
     }

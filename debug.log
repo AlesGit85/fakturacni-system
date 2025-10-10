@@ -1,0 +1,78 @@
+[2025-10-10 10-43-22] Filtrováno 0 aktivních modulů z 0 celkem  @  https://dev.qrdoklad.cz/sign/in?backlink=sxa86&_fid=le92 
+[2025-10-10 10-43-24] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  https://dev.qrdoklad.cz/?_fid=cfoy 
+[2025-10-10 10-43-24] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  https://dev.qrdoklad.cz/?_fid=cfoy 
+[2025-10-10 10-43-24] Zpracovávám modul: ID=invoice_email, tenant_id=1, name=Odeslání faktur emailem, aktivní=1  @  https://dev.qrdoklad.cz/?_fid=cfoy 
+[2025-10-10 10-43-24] Načítám modul info ze souboru: /var/www/clients/client4/web95/web/app/Modules/tenant_1/invoice_email/module.json  @  https://dev.qrdoklad.cz/?_fid=cfoy 
+[2025-10-10 10-43-24] Úspěšně načten modul invoice_email z tenant 1  @  https://dev.qrdoklad.cz/?_fid=cfoy 
+[2025-10-10 10-43-24] Module info úspěšně načteno pro invoice_email  @  https://dev.qrdoklad.cz/?_fid=cfoy 
+[2025-10-10 10-43-24] Modul invoice_email přidán do výsledků (stav: aktivní)  @  https://dev.qrdoklad.cz/?_fid=cfoy 
+[2025-10-10 10-43-24] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  https://dev.qrdoklad.cz/?_fid=cfoy 
+[2025-10-10 10-43-24] Filtrováno 1 aktivních modulů z 1 celkem  @  https://dev.qrdoklad.cz/?_fid=cfoy 
+[2025-10-10 10-43-26] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-26] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-26] Zpracovávám modul: ID=invoice_email, tenant_id=1, name=Odeslání faktur emailem, aktivní=1  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-26] Načítám modul info ze souboru: /var/www/clients/client4/web95/web/app/Modules/tenant_1/invoice_email/module.json  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-26] Úspěšně načten modul invoice_email z tenant 1  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-26] Module info úspěšně načteno pro invoice_email  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-26] Modul invoice_email přidán do výsledků (stav: aktivní)  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-26] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-26] Filtrováno 1 aktivních modulů z 1 celkem  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-27] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Zpracovávám modul: ID=invoice_email, tenant_id=1, name=Odeslání faktur emailem, aktivní=1  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Načítám modul info ze souboru: /var/www/clients/client4/web95/web/app/Modules/tenant_1/invoice_email/module.json  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Úspěšně načten modul invoice_email z tenant 1  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Module info úspěšně načteno pro invoice_email  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Modul invoice_email přidán do výsledků (stav: aktivní)  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Filtrováno 1 aktivních modulů z 1 celkem  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Zpracovávám modul: ID=invoice_email, tenant_id=1, name=Odeslání faktur emailem, aktivní=1  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Načítám modul info ze souboru: /var/www/clients/client4/web95/web/app/Modules/tenant_1/invoice_email/module.json  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Úspěšně načten modul invoice_email z tenant 1  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Module info úspěšně načteno pro invoice_email  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Modul invoice_email přidán do výsledků (stav: aktivní)  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Zpracovávám modul: ID=invoice_email, tenant_id=1, name=Odeslání faktur emailem, aktivní=1  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Načítám modul info ze souboru: /var/www/clients/client4/web95/web/app/Modules/tenant_1/invoice_email/module.json  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Úspěšně načten modul invoice_email z tenant 1  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Module info úspěšně načteno pro invoice_email  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] Modul invoice_email přidán do výsledků (stav: aktivní)  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-27] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  https://dev.qrdoklad.cz/invoices/show/75 
+[2025-10-10 10-43-30] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-30] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-30] Zpracovávám modul: ID=invoice_email, tenant_id=1, name=Odeslání faktur emailem, aktivní=1  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-30] Načítám modul info ze souboru: /var/www/clients/client4/web95/web/app/Modules/tenant_1/invoice_email/module.json  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-30] Úspěšně načten modul invoice_email z tenant 1  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-30] Module info úspěšně načteno pro invoice_email  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-30] Modul invoice_email přidán do výsledků (stav: aktivní)  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-30] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-30] Filtrováno 1 aktivních modulů z 1 celkem  @  https://dev.qrdoklad.cz/invoices/ 
+[2025-10-10 10-43-35] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Zpracovávám modul: ID=invoice_email, tenant_id=1, name=Odeslání faktur emailem, aktivní=1  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Načítám modul info ze souboru: /var/www/clients/client4/web95/web/app/Modules/tenant_1/invoice_email/module.json  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Úspěšně načten modul invoice_email z tenant 1  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Module info úspěšně načteno pro invoice_email  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Modul invoice_email přidán do výsledků (stav: aktivní)  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Filtrováno 1 aktivních modulů z 1 celkem  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Zpracovávám modul: ID=invoice_email, tenant_id=1, name=Odeslání faktur emailem, aktivní=1  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Načítám modul info ze souboru: /var/www/clients/client4/web95/web/app/Modules/tenant_1/invoice_email/module.json  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Úspěšně načten modul invoice_email z tenant 1  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Module info úspěšně načteno pro invoice_email  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Modul invoice_email přidán do výsledků (stav: aktivní)  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] === NAČÍTÁNÍ VŠECH NAINSTALOVANÝCH MODULŮ PRO UŽIVATELE 1 ===  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Nalezeno 1 nainstalovaných modulů (aktivních i neaktivních) pro uživatele 1  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Zpracovávám modul: ID=invoice_email, tenant_id=1, name=Odeslání faktur emailem, aktivní=1  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Načítám modul info ze souboru: /var/www/clients/client4/web95/web/app/Modules/tenant_1/invoice_email/module.json  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Úspěšně načten modul invoice_email z tenant 1  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Module info úspěšně načteno pro invoice_email  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] Modul invoice_email přidán do výsledků (stav: aktivní)  @  https://dev.qrdoklad.cz/invoices/show/71 
+[2025-10-10 10-43-35] === KONEC: Uživatel 1 má 1 nainstalovaných modulů ===  @  https://dev.qrdoklad.cz/invoices/show/71 

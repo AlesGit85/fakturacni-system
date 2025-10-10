@@ -875,9 +875,10 @@ class EmailService
 
         $mail = new Message;
 
-        // Email odesílatele = email firmy (již dešifrovaný)
-        // Email příjemce = email klienta (již dešifrovaný)
-        $mail->setFrom($company->email, $company->name)
+        // OPRAVENO: FROM = technický email, Reply-To = firemní email
+        // Používáme helper metody pro získání FROM emailu (tenant-aware)
+        $mail->setFrom($this->getFromEmail(), $company->name)  // Jméno firmy, ale technický email
+            ->addReplyTo($company->email, $company->name)      // Odpověď půjde na firemní email
             ->addTo($client->email, $client->name);
 
         // Předmět emailu
