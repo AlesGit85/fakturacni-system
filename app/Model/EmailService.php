@@ -876,9 +876,8 @@ class EmailService
         $mail = new Message;
 
         // OPRAVENO: FROM = technický email, Reply-To = firemní email
-        // Používáme helper metody pro získání FROM emailu (tenant-aware)
-        $mail->setFrom($this->getFromEmail(), $company->name)  // Jméno firmy, ale technický email
-            ->addReplyTo($company->email, $company->name)      // Odpověď půjde na firemní email
+        $mail->setFrom($this->getFromEmail(), $company->name)
+            ->addReplyTo($company->email, $company->name)
             ->addTo($client->email, $client->name);
 
         // Předmět emailu
@@ -893,9 +892,9 @@ class EmailService
         $textBody = $this->createSentInvoiceTextBody($invoice, $client, $company);
         $mail->setBody($textBody, 'text/plain; charset=utf-8');
 
-        // Příloha - PDF faktura
+        // ✅ OPRAVENO: Příloha - PDF faktura
         if (file_exists($pdfPath)) {
-            $mail->addAttachment($pdfPath, 'faktura-' . $invoice->number . '.pdf');
+            $mail->addAttachment('faktura-' . $invoice->number . '.pdf', file_get_contents($pdfPath));
         }
 
         // Odeslání emailu
