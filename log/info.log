@@ -1287,3 +1287,436 @@
 [2025-10-10 14-04-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
 [2025-10-10 14-04-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=f9ej 
 [2025-10-10 14-04-46] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=f9ej 
+[2025-10-10 14-12-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=f9ej 
+[2025-10-10 14-12-55] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=f9ej 
+[2025-10-10 14-12-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-12-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-12-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-12-59] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-12-59] Načteno 4 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-12-59] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-12-59] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-12-59] Statistiky modulů: Aktivní: 4, Neaktivní: 0, Celkem: 4  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-12-59] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-12-59] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-13-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-10 14-13-02] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-10-10 14-13-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-10 14-13-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-10 14-13-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-10 14-13-36] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-10 14-14-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=tesa 
+[2025-10-10 14-14-50] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=nua0g&_fid=tesa 
+[2025-10-10 14-14-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-10-10 14-14-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=f17c 
+[2025-10-10 14-14-51] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=f17c 
+[2025-10-10 14-14-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-14-54] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-14-54] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-14-54] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-14-54] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-14-54] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-14-54] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-14-54] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-14-54] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-14-54] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-28-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-28-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-28-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-28-56] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-28-56] Načteno 4 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-28-56] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-28-56] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-28-56] Statistiky modulů: Aktivní: 4, Neaktivní: 0, Celkem: 4  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-28-56] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-28-56] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-02] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-02] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-02] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-02] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-02] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-02] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-02] Začátek bezpečné instalace modulu: soubor=invoice_email.zip, velikost=7.98 KB, uživatel=57, tenant=12  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-02] Validace module.json úspěšná: ID=invoice_email, název=Odeslání faktur emailem, verze=1.0.0  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-03] === OPRAVA NAMESPACE v InvoiceEmailPresenter.php ===  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-03] Aktuální namespace: Modules\InvoiceEmail  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-03] 🔧 Opravuji z starého formátu  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-03] ✅ ÚSPĚCH: Namespace opraven v InvoiceEmailPresenter.php  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-03] STARÝ: namespace Modules\InvoiceEmail;  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-03] NOVÝ:  namespace Modules\Tenant12\InvoiceEmail;  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-03] Úspěšně aktualizován namespace pro modul invoice_email v 1 souborech  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-03] Namespace automaticky opraven pro modul invoice_email v tenant 12  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-03] Assets modulu 'invoice_email' neexistují v: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/invoice_email/assets  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-03] Modul úspěšně nainstalován: Odeslání faktur emailem (verze 1.0.0) pro uživatele 57  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-29-03] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-29-03] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-29-03] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-29-03] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-29-03] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-29-03] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-29-03] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-29-03] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-29-03] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-29-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/default/invoice_email?do=uninstallModule 
+[2025-10-10 14-29-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/default/invoice_email?do=uninstallModule 
+[2025-10-10 14-29-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/default/invoice_email?do=uninstallModule 
+[2025-10-10 14-29-22] Fyzické soubory modulu 'invoice_email' byly smazány z tenant 1  @  http://localhost:8000/moduleadmin/default/invoice_email?do=uninstallModule 
+[2025-10-10 14-29-22] Modul 'invoice_email' byl odinstalován pro uživatele 1  @  http://localhost:8000/moduleadmin/default/invoice_email?do=uninstallModule 
+[2025-10-10 14-29-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=d4a2 
+[2025-10-10 14-29-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=d4a2 
+[2025-10-10 14-29-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=d4a2 
+[2025-10-10 14-29-22] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=d4a2 
+[2025-10-10 14-29-22] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=d4a2 
+[2025-10-10 14-29-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=d4a2 
+[2025-10-10 14-29-22] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=d4a2 
+[2025-10-10 14-29-22] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/?_fid=d4a2 
+[2025-10-10 14-29-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=d4a2 
+[2025-10-10 14-29-22] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=d4a2 
+[2025-10-10 14-29-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] Začátek bezpečné instalace modulu: soubor=invoice_email.zip, velikost=7.98 KB, uživatel=1, tenant=1  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] Validace module.json úspěšná: ID=invoice_email, název=Odeslání faktur emailem, verze=1.0.0  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] === OPRAVA NAMESPACE v InvoiceEmailPresenter.php ===  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] Aktuální namespace: Modules\InvoiceEmail  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] 🔧 Opravuji z starého formátu  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] ✅ ÚSPĚCH: Namespace opraven v InvoiceEmailPresenter.php  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] STARÝ: namespace Modules\InvoiceEmail;  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] NOVÝ:  namespace Modules\Tenant1\InvoiceEmail;  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] Úspěšně aktualizován namespace pro modul invoice_email v 1 souborech  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] Namespace automaticky opraven pro modul invoice_email v tenant 1  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] Assets modulu 'invoice_email' neexistují v: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/invoice_email/assets  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] Modul úspěšně nainstalován: Odeslání faktur emailem (verze 1.0.0) pro uživatele 1  @  http://localhost:8000/moduleadmin/ 
+[2025-10-10 14-29-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=rt7q 
+[2025-10-10 14-29-34] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=rt7q 
+[2025-10-10 14-29-34] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/?_fid=rt7q 
+[2025-10-10 14-29-34] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=rt7q 
+[2025-10-10 14-29-34] Načteno 4 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=rt7q 
+[2025-10-10 14-29-34] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=rt7q 
+[2025-10-10 14-29-34] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=rt7q 
+[2025-10-10 14-29-34] Statistiky modulů: Aktivní: 4, Neaktivní: 0, Celkem: 4  @  http://localhost:8000/moduleadmin/?_fid=rt7q 
+[2025-10-10 14-29-34] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=rt7q 
+[2025-10-10 14-29-34] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=rt7q 
+[2025-10-10 14-45-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-45-02] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-45-02] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-45-02] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-45-02] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-45-02] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-45-02] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-45-02] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-45-02] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-45-02] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=vuuu 
+[2025-10-10 14-45-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-10 14-45-04] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/ 
+[2025-10-10 14-45-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/61 
+[2025-10-10 14-45-06] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/61 
+[2025-10-10 14-45-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-10 14-45-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-10-10 14-45-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-10 14-45-35] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-10 14-46-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-10 14-46-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-10 14-46-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/61 
+[2025-10-10 14-46-15] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/61 
+[2025-10-10 14-47-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-10 14-47-51] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-10 14-49-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-10 14-49-36] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-39-42] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-10-11 09-39-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=sg4i6&_fid=vwcf 
+[2025-10-11 09-39-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-10-11 09-39-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=eqvsp&_fid=1luf 
+[2025-10-11 09-39-57] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-10-11 09-39-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=y2p7 
+[2025-10-11 09-39-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=y2p7 
+[2025-10-11 09-40-01] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-11 09-40-01] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-10-11 09-40-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=06pjy&_fid=d10a 
+[2025-10-11 09-40-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-10-11 09-40-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=fnk1 
+[2025-10-11 09-40-13] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=fnk1 
+[2025-10-11 09-40-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-10-11 09-40-15] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/settings/ 
+[2025-10-11 09-40-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-18] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-18] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-18] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-18] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-18] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-18] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-18] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-18] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-18] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-22] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-22] Načteno 4 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-22] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-22] Statistiky modulů: Aktivní: 4, Neaktivní: 0, Celkem: 4  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-22] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-22] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-40-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-11 09-40-24] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-10-11 09-40-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-40-26] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-41-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-41-51] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-42-49] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-42-49] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-42-49] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-42-49] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-42-49] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-42-49] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-42-49] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-42-49] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-42-49] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-42-49] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-10] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-10] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-10] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-10] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-10] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-10] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-10] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-10] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-10] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-12] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-12] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-12] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-12] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-12] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-12] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-12] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-12] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-43-12] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-44-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-44-15] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-46-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-46-27] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-46-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-11 09-46-34] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/ 
+[2025-10-11 09-46-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 09-46-41] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 09-46-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 09-46-44] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 09-47-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-47-02] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-47-42] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-47-42] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-47-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-47-54] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-48-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 09-48-27] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 09-56-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-56-09] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 09-56-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 09-56-14] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 09-56-21] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-56-21] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-56-21] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-56-21] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-56-21] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-56-21] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-56-21] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-56-21] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-56-21] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-56-21] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-56-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/default/invoice_email?do=uninstallModule 
+[2025-10-11 09-56-26] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/default/invoice_email?do=uninstallModule 
+[2025-10-11 09-56-26] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/default/invoice_email?do=uninstallModule 
+[2025-10-11 09-56-26] Fyzické soubory modulu 'invoice_email' byly smazány z tenant 12  @  http://localhost:8000/moduleadmin/default/invoice_email?do=uninstallModule 
+[2025-10-11 09-56-26] Modul 'invoice_email' byl odinstalován pro uživatele 57  @  http://localhost:8000/moduleadmin/default/invoice_email?do=uninstallModule 
+[2025-10-11 09-56-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=ft3h 
+[2025-10-11 09-56-27] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=ft3h 
+[2025-10-11 09-56-27] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=ft3h 
+[2025-10-11 09-56-27] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=ft3h 
+[2025-10-11 09-56-27] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=ft3h 
+[2025-10-11 09-56-27] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=ft3h 
+[2025-10-11 09-56-27] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=ft3h 
+[2025-10-11 09-56-27] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=ft3h 
+[2025-10-11 09-56-27] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=ft3h 
+[2025-10-11 09-56-27] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=ft3h 
+[2025-10-11 09-57-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] Začátek bezpečné instalace modulu: soubor=invoice_email.zip, velikost=7.98 KB, uživatel=57, tenant=12  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] Validace module.json úspěšná: ID=invoice_email, název=Odeslání faktur emailem, verze=1.0.0  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] === OPRAVA NAMESPACE v InvoiceEmailPresenter.php ===  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] Aktuální namespace: Modules\InvoiceEmail  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] 🔧 Opravuji z starého formátu  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] ✅ ÚSPĚCH: Namespace opraven v InvoiceEmailPresenter.php  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] STARÝ: namespace Modules\InvoiceEmail;  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] NOVÝ:  namespace Modules\Tenant12\InvoiceEmail;  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] Úspěšně aktualizován namespace pro modul invoice_email v 1 souborech  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] Namespace automaticky opraven pro modul invoice_email v tenant 12  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] Assets modulu 'invoice_email' neexistují v: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/invoice_email/assets  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] Modul úspěšně nainstalován: Odeslání faktur emailem (verze 1.0.0) pro uživatele 57  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 09-57-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=9luj 
+[2025-10-11 09-57-38] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=9luj 
+[2025-10-11 09-57-38] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=9luj 
+[2025-10-11 09-57-38] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=9luj 
+[2025-10-11 09-57-38] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=9luj 
+[2025-10-11 09-57-38] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=9luj 
+[2025-10-11 09-57-38] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=9luj 
+[2025-10-11 09-57-38] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/?_fid=9luj 
+[2025-10-11 09-57-38] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=9luj 
+[2025-10-11 09-57-38] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=9luj 
+[2025-10-11 09-57-40] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-11 09-57-40] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/ 
+[2025-10-11 09-57-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 09-57-43] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 10-00-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-00-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-00-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-00-24] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-00-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 10-00-29] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 10-00-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 10-00-34] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/61 
+[2025-10-11 10-00-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-10-11 10-00-48] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/clients/ 
+[2025-10-11 10-00-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/add 
+[2025-10-11 10-00-51] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/clients/add 
+[2025-10-11 10-00-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-10-11 10-00-54] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-10-11 10-00-54] === ARES LOOKUP START pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-10-11 10-00-54] Zkouším nové REST API (4s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-10-11 10-00-55] Zkouším HTTP XML API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-10-11 10-00-55] Zkouším starší REST API (3s timeout)...  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-10-11 10-00-55] Staré REST API - finální výsledek: {"name":"Ale\u0161 Zita","ic":"87894912","dic":"","address":"167","city":"Librantice","zip":50346,"country":"\u010cesk\u00e1 republika"}  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-10-11 10-00-55] === ARES ÚSPĚCH pro IČO: 87894912 ===  @  http://localhost:8000/clients/add?do=aresLookup&ico=87894912 
+[2025-10-11 10-01-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-10-11 10-01-07] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-10-11 10-01-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/add 
+[2025-10-11 10-01-44] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/clients/add 
+[2025-10-11 10-01-44] 🔒 KROK 2: Nový klient vytvořen se šifrováním  @  http://localhost:8000/clients/add 
+[2025-10-11 10-01-44] Šifrovaná data: {"ic":"mSL36KceOLpmtitwH24mSe6rpfXfsqfDjzr4QyfhR2OU6XI7","dic":"","email":"0U0dVtJswr94WnPHgCzShbiHI3zJITB8c3apiVD4PwfEr1gMBmMKEgm++FNZ","phone":"H6lgbUwZ4u8Cmkse5tVi6hYK9v4UjQuuIgp3xtftC0YHhwBV51RChpU="}  @  http://localhost:8000/clients/add 
+[2025-10-11 10-01-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/?_fid=bpp9 
+[2025-10-11 10-01-45] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/clients/?_fid=bpp9 
+[2025-10-11 10-01-48] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-11 10-01-48] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/ 
+[2025-10-11 10-01-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/add 
+[2025-10-11 10-01-51] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/add 
+[2025-10-11 10-02-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/add 
+[2025-10-11 10-02-04] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/add 
+[2025-10-11 10-02-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-02-04] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-02-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-10-11 10-02-18] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-10-11 10-02-20] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-11 10-02-20] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-10-11 10-02-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-02-23] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-02-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-02-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-02-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-02-33] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-02-33] Načteno 4 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-02-33] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-02-33] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-02-33] Statistiky modulů: Aktivní: 4, Neaktivní: 0, Celkem: 4  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-02-33] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-02-33] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-04-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-04-34] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-04-34] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-04-34] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-04-34] Načteno 4 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-04-34] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-04-34] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-04-34] Statistiky modulů: Aktivní: 4, Neaktivní: 0, Celkem: 4  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-04-34] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-04-34] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-11 10-04-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-10-11 10-04-36] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-10-11 10-04-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-04-38] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-06-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-06-33] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-06-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-06-35] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-06-37] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-06-37] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-06-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-06-51] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-07-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-07-04] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-09-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-09-12] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-11-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-11-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-11-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-11-24] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-11-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-11-26] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-11-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-11-28] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-11-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-11-32] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-12-57] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-12-57] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-12-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-12-59] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-13-00] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-13-00] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-14-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-14-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-14-44] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-14-44] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-14-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-14-51] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-14-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-14-53] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-14-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-14-55] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-16-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-16-31] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-19-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-19-15] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-19-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-19-16] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-19-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-19-16] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-22-23] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-22-23] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-22-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-22-33] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ev2g 
+[2025-10-11 10-22-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-22-35] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?invoiceId=76&do=sendInvoiceEmail 
+[2025-10-11 10-22-37] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/76?_fid=ulc9 
+[2025-10-11 10-22-37] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/invoices/show/76?_fid=ulc9 
+[2025-10-11 10-24-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-24-16] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-25-47] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-25-47] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-25-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75?invoiceId=75&do=sendInvoiceEmail 
+[2025-10-11 10-25-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75?invoiceId=75&do=sendInvoiceEmail 
+[2025-10-11 10-26-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-26-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-26-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/pdf/75 
+[2025-10-11 10-26-09] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/pdf/75 
+[2025-10-11 10-26-30] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75?invoiceId=75&do=sendInvoiceEmail 
+[2025-10-11 10-26-30] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75?invoiceId=75&do=sendInvoiceEmail 
+[2025-10-11 10-27-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-27-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-27-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-27-24] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-10-11 10-27-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75?invoiceId=75&do=sendInvoiceEmail 
+[2025-10-11 10-27-27] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75?invoiceId=75&do=sendInvoiceEmail 
+[2025-10-11 10-27-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75?_fid=8mg9 
+[2025-10-11 10-27-28] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75?_fid=8mg9 

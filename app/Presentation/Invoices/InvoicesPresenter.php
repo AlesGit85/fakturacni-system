@@ -28,6 +28,9 @@ class InvoicesPresenter extends BasePresenter
     /** @var \App\Model\ModuleManager */
     private $moduleManager;
 
+    /** @var \App\Model\EmailService */
+    private $emailService;
+
     // Všichni přihlášení uživatelé mají základní přístup k fakturám
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
 
@@ -48,13 +51,15 @@ class InvoicesPresenter extends BasePresenter
         ClientsManager $clientsManager,
         CompanyManager $companyManager,
         QrPaymentService $qrPaymentService,
-        \App\Model\ModuleManager $moduleManager
+        \App\Model\ModuleManager $moduleManager,
+        \App\Model\EmailService $emailService
     ) {
         $this->invoicesManager = $invoicesManager;
         $this->clientsManager = $clientsManager;
         $this->companyManager = $companyManager;
         $this->qrPaymentService = $qrPaymentService;
         $this->moduleManager = $moduleManager;
+        $this->emailService = $emailService;
     }
 
     /**
@@ -99,10 +104,8 @@ class InvoicesPresenter extends BasePresenter
         $this->template->invoice = $invoice;
 
         if (!$invoice->manual_client) {
-            // Pro existujícího klienta použijeme data z tabulky klientů
             $this->template->client = $this->clientsManager->getById($invoice->client_id);
         } else {
-            // Pro ručně zadaného klienta vytvoříme objekt s údaji z faktury
             $manualClient = new \stdClass();
             $manualClient->name = $invoice->client_name;
             $manualClient->address = $invoice->client_address;
@@ -111,23 +114,17 @@ class InvoicesPresenter extends BasePresenter
             $manualClient->country = $invoice->client_country;
             $manualClient->ic = $invoice->client_ic;
             $manualClient->dic = $invoice->client_dic;
-            // Přidáme chybějící vlastnosti s prázdnými hodnotami
             $manualClient->email = '';
             $manualClient->phone = '';
             $manualClient->bank_account = '';
-
             $this->template->client = $manualClient;
         }
 
         $this->template->invoiceItems = $this->invoicesManager->getInvoiceItems($id);
         $this->template->company = $this->companyManager->getCompanyInfo();
 
-        // NOVÉ: Načtení akcí z aktivních modulů
+        // Načtení akcí z aktivních modulů
         $moduleActions = $this->getModuleInvoiceActions($invoice);
-
-        // DEBUG: Vypíšeme do Tracy baru
-        \Tracy\Debugger::barDump($moduleActions, 'Module Actions');
-        \Tracy\Debugger::barDump($this->moduleManager->getActiveModulesForUser($this->getUser()->getId()), 'Active Modules');
 
         $this->template->moduleInvoiceActions = $moduleActions;
     }
@@ -1072,41 +1069,23 @@ class InvoicesPresenter extends BasePresenter
             $this->getUser()->getId()
         );
 
-        // DEBUG
-        \Tracy\Debugger::barDump(count($activeModules), 'Počet aktivních modulů');
-
         foreach ($activeModules as $moduleId => $moduleInfo) {
-            // DEBUG
-            \Tracy\Debugger::barDump($moduleId, 'Zpracovávám modul');
-
-            // Pokusíme se načíst presenter modulu
-            $presenterClass = $this->getModulePresenterClass($moduleId);
-
-            // DEBUG
-            \Tracy\Debugger::barDump($presenterClass, "Presenter class pro $moduleId");
+            // Pokusíme se načíst presenter modulu s tenant-specific namespace
+            $presenterClass = $this->getModulePresenterClass($moduleId, $moduleInfo);
 
             if ($presenterClass && method_exists($presenterClass, 'getInvoiceDetailAction')) {
-                // DEBUG
-                \Tracy\Debugger::barDump("Metoda existuje", "getInvoiceDetailAction pro $moduleId");
-
                 // Modul má metodu pro invoice detail akce
                 try {
                     $action = $presenterClass::getInvoiceDetailAction($invoice, $this);
-
-                    // DEBUG
-                    \Tracy\Debugger::barDump($action, "Action HTML pro $moduleId");
-
                     if ($action) {
                         $actions[] = $action;
+                        \Tracy\Debugger::barDump($action, "Action from: $moduleId");
                     }
                 } catch (\Exception $e) {
-                    // DEBUG
-                    \Tracy\Debugger::barDump($e->getMessage(), "CHYBA pro $moduleId");
+                    // DEBUG: Vypíšeme chybu
+                    \Tracy\Debugger::barDump($e->getMessage(), "Error in: $moduleId");
                     continue;
                 }
-            } else {
-                // DEBUG
-                \Tracy\Debugger::barDump("Metoda NEEXISTUJE nebo presenter nenalezen", "Problem s $moduleId");
             }
         }
 
@@ -1114,29 +1093,417 @@ class InvoicesPresenter extends BasePresenter
     }
 
     /**
-     * Získá třídu presenteru modulu
+     * Získá třídu presenteru modulu s podporou tenant-specific namespace
      */
-    private function getModulePresenterClass(string $moduleId): ?string
+    private function getModulePresenterClass(string $moduleId, array $moduleInfo): ?string
     {
-        // Získáme tenant ID aktuálního uživatele
-        $tenantId = $this->getCurrentTenantId();
+        // Získání tenant_id z moduleInfo
+        $tenantId = $moduleInfo['tenant_id'] ?? 1;
 
-        if ($tenantId === null) {
+        // Získáme název složky z physical_path místo použití moduleId
+        $physicalPath = $moduleInfo['physical_path'] ?? null;
+        if (!$physicalPath || !is_dir($physicalPath)) {
             return null;
         }
 
-        // Převod module_id na PascalCase (invoice_email -> InvoiceEmail)
-        $parts = explode('_', $moduleId);
-        $moduleName = implode('', array_map('ucfirst', $parts));
+        // Získáme název složky (poslední část cesty)
+        $folderName = basename($physicalPath);
 
-        // Tenant-specific namespace
-        // Formát: Modules\Tenant1\InvoiceEmail\InvoiceEmailPresenter
-        $presenterClass = 'Modules\\Tenant' . $tenantId . '\\' . $moduleName . '\\' . $moduleName . 'Presenter';
+        // Převod názvu složky (např. invoice_email) na CamelCase pro presenter
+        $parts = explode('_', $folderName);
+        $presenterName = implode('', array_map('ucfirst', $parts));
 
-        // Debug
-        \Tracy\Debugger::barDump($presenterClass, "Hledám třídu presenteru pro $moduleId");
-        \Tracy\Debugger::barDump(class_exists($presenterClass), "Třída existuje?");
+        // Vytvoření tenant-specific namespace BEZ App\ na začátku!
+        $namespace = 'Modules\\Tenant' . $tenantId . '\\' . $presenterName;
+        $presenterClass = $namespace . '\\' . $presenterName . 'Presenter';
 
         return class_exists($presenterClass) ? $presenterClass : null;
+    }
+
+    /**
+     * Handler pro odesílání faktury emailem
+     */
+    public function handleSendInvoiceEmail(int $invoiceId): void
+    {
+        try {
+            // Kontrola oprávnění - pouze účetní a admin
+            if (!$this->isAccountant()) {
+                $this->flashMessage('Nemáte oprávnění odesílat faktury emailem.', 'danger');
+                $this->redirect('show', $invoiceId);
+            }
+
+            // Načtení faktury
+            $invoice = $this->invoicesManager->getById($invoiceId);
+            if (!$invoice) {
+                throw new \Exception('Faktura nebyla nalezena.');
+            }
+
+            // Načtení údajů o klientovi (automaticky dešifrované)
+            if (!$invoice->manual_client) {
+                $client = $this->clientsManager->getById($invoice->client_id);
+            } else {
+                // Pro ručně zadaného klienta vytvoříme objekt
+                $client = new \stdClass();
+                $client->name = $invoice->client_name;
+                $client->address = $invoice->client_address;
+                $client->city = $invoice->client_city;
+                $client->zip = $invoice->client_zip;
+                $client->country = $invoice->client_country;
+                $client->ic = $invoice->client_ic;
+                $client->dic = $invoice->client_dic;
+                $client->email = '';
+                $client->phone = '';
+                $client->bank_account = '';
+            }
+
+            // Kontrola, zda klient má email
+            if (empty($client->email)) {
+                throw new \Exception('Klient nemá zadaný email. Nelze odeslat fakturu.');
+            }
+
+            // Načtení firemních údajů
+            $company = $this->companyManager->getCompanyInfo();
+            if (!$company) {
+                throw new \Exception('Firemní údaje nejsou vyplněny.');
+            }
+
+            // Kontrola, zda firma má email
+            if (empty($company->email)) {
+                throw new \Exception('Ve firemních údajích není zadán email pro odesílání faktur.');
+            }
+
+            // Vygenerování PDF do dočasného souboru
+            $tempDir = dirname(__DIR__, 2) . '/temp';
+            if (!is_dir($tempDir)) {
+                mkdir($tempDir, 0755, true);
+            }
+
+            $pdfPath = $tempDir . '/invoice-' . $invoice->id . '-' . time() . '.pdf';
+
+            // Generování PDF (použijeme existující actionPdf logiku)
+            $this->generateInvoicePdfForEmail($invoice, $client, $company, $pdfPath);
+
+            // Kontrola, zda PDF bylo vytvořeno
+            if (!file_exists($pdfPath)) {
+                throw new \Exception('Nepodařilo se vygenerovat PDF faktury.');
+            }
+
+            // Odeslání emailu s fakturou
+            // Odeslání emailu pomocí EmailService
+            $this->emailService->sendInvoiceEmail($invoice, $client, $company, $pdfPath);
+
+            // Smazání dočasného PDF souboru
+            if (file_exists($pdfPath)) {
+                unlink($pdfPath);
+            }
+
+            $this->flashMessage('Faktura byla úspěšně odeslána emailem na adresu: ' . $client->email, 'success');
+        } catch (\Exception $e) {
+            $this->flashMessage('Chyba při odesílání faktury: ' . $e->getMessage(), 'danger');
+        }
+
+        $this->redirect('show', $invoiceId);
+    }
+
+    /**
+     * Pomocná metoda pro generování PDF faktury pro email
+     * (zjednodušená verze actionPdf)
+     */
+    private function generateInvoicePdfForEmail($invoice, $client, $company, string $outputPath): void
+    {
+        // Načtení položek faktury
+        $invoiceItems = $this->invoicesManager->getInvoiceItems($invoice->id);
+        $isVatPayer = $company ? $company->vat_payer : false;
+
+        // Vytvoření PDF
+        $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+
+        // Nastavení PDF dokumentu
+        $pdf->SetCreator($company->name);
+        $pdf->SetAuthor($company->name);
+        $pdf->SetTitle('Faktura ' . $invoice->number);
+        $pdf->SetSubject('Faktura ' . $invoice->number);
+
+        // Odstranění hlavičky a patičky
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+
+        // Přidání stránky
+        $pdf->AddPage();
+
+        // Nastavení okrajů
+        $pdf->SetMargins(15, 15, 15);
+
+        // Převod HEX barev na RGB hodnoty
+        $hex2rgb = function ($hex) {
+            $hex = str_replace('#', '', $hex);
+            if (strlen($hex) == 3) {
+                $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
+                $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
+                $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
+            } else {
+                $r = hexdec(substr($hex, 0, 2));
+                $g = hexdec(substr($hex, 2, 2));
+                $b = hexdec(substr($hex, 4, 2));
+            }
+            return array($r, $g, $b);
+        };
+
+        // Barevné schéma
+        $primaryColor = $hex2rgb('#B1D235');
+        $secondaryColor = $hex2rgb('#95B11F');
+        $grayColor = $hex2rgb('#6c757d');
+        $blackColor = $hex2rgb('#212529');
+        $footerColor = $blackColor;
+
+        // Pomocná funkce pro zalamování textu
+        $smartWrap = function ($text, $maxLength = 60) {
+            if (mb_strlen($text) <= $maxLength) {
+                return $text;
+            }
+            $words = explode(' ', $text);
+            $lines = [];
+            $currentLine = '';
+            foreach ($words as $word) {
+                if (mb_strlen($currentLine . ' ' . $word) <= $maxLength) {
+                    $currentLine .= ($currentLine ? ' ' : '') . $word;
+                } else {
+                    if ($currentLine) {
+                        $lines[] = $currentLine;
+                    }
+                    $currentLine = $word;
+                }
+            }
+            if ($currentLine) {
+                $lines[] = $currentLine;
+            }
+            return implode("\n", $lines);
+        };
+
+        // ZÁHLAVÍ
+        $logoPath = dirname(__DIR__, 2) . '/www/static/images/logo.png';
+        $headerHeight = 35;
+
+        $pdf->SetFillColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
+        $pdf->Rect(0, 0, 210, $headerHeight, 'F');
+
+        if (file_exists($logoPath)) {
+            $pdf->Image($logoPath, 15, 8, 40, 0, 'PNG');
+        }
+
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetFont('dejavusans', 'B', 24);
+        $pdf->SetXY(120, 12);
+        $pdf->Cell(70, 10, 'FAKTURA', 0, 0, 'R');
+
+        $pdf->SetFont('dejavusans', '', 12);
+        $pdf->SetXY(120, 24);
+        $pdf->Cell(70, 6, $invoice->number, 0, 0, 'R');
+
+        // DODAVATEL A ODBĚRATEL
+        $startY = $headerHeight + 15;
+        $pdf->SetTextColor($blackColor[0], $blackColor[1], $blackColor[2]);
+
+        $pdf->SetFont('dejavusans', 'B', 11);
+        $pdf->SetXY(15, $startY);
+        $pdf->Cell(85, 6, 'Dodavatel', 0, 1, 'L');
+
+        $pdf->SetFont('dejavusans', '', 10);
+        $pdf->SetXY(15, $startY + 8);
+        $pdf->MultiCell(85, 5, $smartWrap($company->name, 40), 0, 'L');
+
+        $currentY = $pdf->GetY();
+        $pdf->SetXY(15, $currentY);
+        $pdf->Cell(85, 5, $company->address, 0, 1, 'L');
+        $pdf->SetX(15);
+        $pdf->Cell(85, 5, $company->zip . ' ' . $company->city, 0, 1, 'L');
+        $pdf->SetX(15);
+        $pdf->Cell(85, 5, 'IČO: ' . $company->ic, 0, 1, 'L');
+        if ($isVatPayer) {
+            $pdf->SetX(15);
+            $pdf->Cell(85, 5, 'DIČ: ' . $company->dic, 0, 1, 'L');
+        }
+
+        $pdf->SetFont('dejavusans', 'B', 11);
+        $pdf->SetXY(110, $startY);
+        $pdf->Cell(85, 6, 'Odběratel', 0, 1, 'L');
+
+        $pdf->SetFont('dejavusans', '', 10);
+        $pdf->SetXY(110, $startY + 8);
+        $pdf->MultiCell(85, 5, $smartWrap($client->name, 40), 0, 'L');
+
+        $currentY = $pdf->GetY();
+        $pdf->SetXY(110, $currentY);
+        $pdf->Cell(85, 5, $client->address, 0, 1, 'L');
+        $pdf->SetX(110);
+        $pdf->Cell(85, 5, $client->zip . ' ' . $client->city, 0, 1, 'L');
+        if (!empty($client->ic)) {
+            $pdf->SetX(110);
+            $pdf->Cell(85, 5, 'IČO: ' . $client->ic, 0, 1, 'L');
+        }
+        if (!empty($client->dic)) {
+            $pdf->SetX(110);
+            $pdf->Cell(85, 5, 'DIČ: ' . $client->dic, 0, 1, 'L');
+        }
+
+        // ÚDAJE O FAKTUŘE
+        $infoY = $startY + 55;
+        $pdf->SetFont('dejavusans', 'B', 10);
+        $pdf->SetXY(15, $infoY);
+        $pdf->Cell(85, 6, 'Číslo faktury: ', 0, 0, 'L');
+        $pdf->SetFont('dejavusans', '', 10);
+        $pdf->Cell(85, 6, $invoice->number, 0, 1, 'L');
+
+        $pdf->SetFont('dejavusans', 'B', 10);
+        $pdf->SetX(15);
+        $pdf->Cell(85, 6, 'Datum vystavení: ', 0, 0, 'L');
+        $pdf->SetFont('dejavusans', '', 10);
+        $pdf->Cell(85, 6, $invoice->issue_date->format('d.m.Y'), 0, 1, 'L');
+
+        $pdf->SetFont('dejavusans', 'B', 10);
+        $pdf->SetX(15);
+        $pdf->Cell(85, 6, 'Datum splatnosti: ', 0, 0, 'L');
+        $pdf->SetFont('dejavusans', '', 10);
+        $pdf->Cell(85, 6, $invoice->due_date->format('d.m.Y'), 0, 1, 'L');
+
+        if (!empty($invoice->variable_symbol)) {
+            $pdf->SetFont('dejavusans', 'B', 10);
+            $pdf->SetX(15);
+            $pdf->Cell(85, 6, 'Variabilní symbol: ', 0, 0, 'L');
+            $pdf->SetFont('dejavusans', '', 10);
+            $pdf->Cell(85, 6, $invoice->variable_symbol, 0, 1, 'L');
+        }
+
+        // TABULKA POLOŽEK
+        $tableY = $infoY + 35;
+        $pdf->SetY($tableY);
+
+        $pdf->SetFillColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetFont('dejavusans', 'B', 10);
+
+        if ($isVatPayer) {
+            $pdf->Cell(70, 8, 'Položka', 1, 0, 'L', true);
+            $pdf->Cell(20, 8, 'Množství', 1, 0, 'C', true);
+            $pdf->Cell(35, 8, 'Cena/jedn.', 1, 0, 'R', true);
+            $pdf->Cell(20, 8, 'DPH %', 1, 0, 'C', true);
+            $pdf->Cell(35, 8, 'Celkem', 1, 1, 'R', true);
+        } else {
+            $pdf->Cell(90, 8, 'Položka', 1, 0, 'L', true);
+            $pdf->Cell(30, 8, 'Množství', 1, 0, 'C', true);
+            $pdf->Cell(40, 8, 'Cena/jedn.', 1, 0, 'R', true);
+            $pdf->Cell(40, 8, 'Celkem', 1, 1, 'R', true);
+        }
+
+        $pdf->SetTextColor($blackColor[0], $blackColor[1], $blackColor[2]);
+        $pdf->SetFont('dejavusans', '', 9);
+
+        foreach ($invoiceItems as $item) {
+            $itemTotal = $item->quantity * $item->price;
+
+            if ($isVatPayer) {
+                $pdf->Cell(70, 7, $smartWrap($item->description, 35), 1, 0, 'L');
+                $pdf->Cell(20, 7, number_format($item->quantity, 2, ',', ' '), 1, 0, 'C');
+                $pdf->Cell(35, 7, number_format($item->price, 2, ',', ' ') . ' Kč', 1, 0, 'R');
+                $pdf->Cell(20, 7, $item->vat . '%', 1, 0, 'C');
+                $pdf->Cell(35, 7, number_format($itemTotal, 2, ',', ' ') . ' Kč', 1, 1, 'R');
+            } else {
+                $pdf->Cell(90, 7, $smartWrap($item->description, 45), 1, 0, 'L');
+                $pdf->Cell(30, 7, number_format($item->quantity, 2, ',', ' '), 1, 0, 'C');
+                $pdf->Cell(40, 7, number_format($item->price, 2, ',', ' ') . ' Kč', 1, 0, 'R');
+                $pdf->Cell(40, 7, number_format($itemTotal, 2, ',', ' ') . ' Kč', 1, 1, 'R');
+            }
+        }
+
+        // CELKOVÁ ČÁSTKA
+        $pdf->Ln(5);
+        $pdf->SetFont('dejavusans', 'B', 12);
+        $pdf->Cell(145, 10, 'Celková částka k úhradě:', 0, 0, 'R');
+        $pdf->SetFont('dejavusans', 'B', 14);
+        $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
+        $pdf->Cell(35, 10, number_format($invoice->total, 2, ',', ' ') . ' Kč', 0, 1, 'R');
+
+        // QR KÓD
+        $pdf->SetTextColor($blackColor[0], $blackColor[1], $blackColor[2]);
+        $pdf->Ln(10);
+        $qrSize = 50;
+
+        // QR kód přidáme přímo do PDF pomocí addQrPaymentToPdf
+        $cleanVs = preg_replace('/\D/', '', $invoice->number);
+        $this->qrPaymentService->addQrPaymentToPdf(
+            $pdf,
+            15,                     // x pozice
+            $pdf->GetY(),           // y pozice  
+            $qrSize,                // šířka
+            $qrSize,                // výška
+            $company->bank_account,
+            $invoice->total,
+            $cleanVs,
+            'Faktura ' . $invoice->number
+        );
+
+        // Posuneme kurzor pod QR kód
+        $pdf->SetY($pdf->GetY() + $qrSize + 5);
+
+        $pdf->SetFont('dejavusans', '', 9);
+        $pdf->SetXY(70, $pdf->GetY());
+        $pdf->MultiCell(120, 5, "Číslo účtu: " . $company->bank_account . "\nVariabilní symbol: " . ($invoice->variable_symbol ?? 'N/A') . "\nČástka: " . number_format($invoice->total, 2, ',', ' ') . " Kč", 0, 'L');
+
+        // POZNÁMKA
+        if (!empty($invoice->note)) {
+            $pdf->Ln(10);
+            $pdf->SetFont('dejavusans', 'B', 10);
+            $pdf->Cell(0, 6, 'Poznámka:', 0, 1, 'L');
+            $pdf->SetFont('dejavusans', '', 9);
+            $pdf->MultiCell(0, 5, $invoice->note, 0, 'L');
+        }
+
+        // PATIČKA
+        $pdf->SetAutoPageBreak(false);
+
+        $pageWidth = 210;
+        $pageHeight = 297;
+        $footerHeight = 20;
+
+        $footerStartY = $pageHeight - $footerHeight;
+        $footerEndY = $pageHeight;
+
+        $rightEdge = $pageWidth;
+        $leftEdgeTop = 70;
+        $leftEdgeBottom = 50;
+
+        $p0x = $rightEdge;
+        $p0y = $footerStartY;
+        $p1x = $leftEdgeTop;
+        $p1y = $footerStartY;
+        $p2x = $leftEdgeBottom;
+        $p2y = $footerEndY;
+        $p3x = $rightEdge;
+        $p3y = $footerEndY;
+
+        $pdf->SetFillColor($footerColor[0], $footerColor[1], $footerColor[2]);
+        $points = array($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y);
+        $pdf->Polygon($points, 'F');
+
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetFont('dejavusans', '', 9);
+
+        $colWidth = 60;
+        $col1X = $leftEdgeTop + 15;
+        $col2X = $col1X + $colWidth + 10;
+        $verticalMiddle = $footerStartY + ($footerHeight / 2) - 5;
+
+        $pdf->SetXY($col1X, $verticalMiddle);
+        $pdf->Cell($colWidth, 6, $company->name, 0, 1, 'L');
+        $pdf->SetXY($col1X, $verticalMiddle + 6);
+        $pdf->Cell($colWidth, 6, $company->phone, 0, 1, 'L');
+
+        $pdf->SetXY($col2X, $verticalMiddle);
+        $pdf->Cell($colWidth, 6, 'Email:', 0, 1, 'L');
+        $pdf->SetXY($col2X, $verticalMiddle + 6);
+        $pdf->Cell($colWidth, 6, $company->email, 0, 1, 'L');
+
+        // Výstup PDF do souboru
+        $pdf->Output($outputPath, 'F');
     }
 }

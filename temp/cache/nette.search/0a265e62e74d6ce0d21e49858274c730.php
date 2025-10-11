@@ -97,6 +97,11 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
       1 => 1755862054,
     ),
+    'Modules\\Tenant1\\InvoiceEmail\\InvoiceEmailPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\invoice_email\\InvoiceEmailPresenter.php',
+      1 => 1760171145,
+    ),
     'Modules\\Tenant1\\Notes\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\notes\\Module.php',
@@ -121,6 +126,11 @@ return array (
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\Module.php',
       1 => 1755861404,
+    ),
+    'Modules\\Tenant12\\InvoiceEmail\\InvoiceEmailPresenter' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\invoice_email\\InvoiceEmailPresenter.php',
+      1 => 1760169991,
     ),
     'Modules\\Tenant12\\Notes\\Module' => 
     array (
@@ -165,7 +175,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1760080779,
+      1 => 1760170937,
     ),
     'App\\Presentation\\Migration\\MigrationPresenter' => 
     array (
