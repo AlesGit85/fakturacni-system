@@ -10,6 +10,7 @@ use Nette\Http\FileUpload;
 use App\Model\ModuleManager;
 use App\Model\InvoicesManager;
 use App\Model\CompanyManager;
+use App\Model\UserManager;
 use App\Presentation\BasePresenter;
 use App\Security\SecurityValidator; // ✅ PŘIDÁNO: Import SecurityValidator
 use Tracy\ILogger;
@@ -27,6 +28,9 @@ final class ModuleAdminPresenter extends BasePresenter
 
     /** @var CompanyManager */
     private $companyManager;
+
+    /** @var UserManager */
+    private $userManager;
 
     // Základní přístup k modulům mají všichni přihlášení uživatelé
     protected array $requiredRoles = ['readonly', 'accountant', 'admin'];
@@ -48,12 +52,14 @@ final class ModuleAdminPresenter extends BasePresenter
         ILogger $logger,
         InvoicesManager $invoicesManager,
         CompanyManager $companyManager,
+        UserManager $userManager,
         Nette\Database\Explorer $database
     ) {
         $this->moduleManager = $moduleManager;
         $this->logger = $logger;
         $this->invoicesManager = $invoicesManager;
         $this->companyManager = $companyManager;
+        $this->userManager = $userManager;
         $this->database = $database;
     }
 
@@ -70,6 +76,12 @@ final class ModuleAdminPresenter extends BasePresenter
             if ($identity) {
                 $this->moduleManager->setUserContext(
                     $identity->id,
+                    $this->getCurrentTenantId(),
+                    $this->isSuperAdmin()
+                );
+
+                // ✅ OPRAVENO: Nastavíme kontext i pro UserManager
+                $this->userManager->setTenantContext(
                     $this->getCurrentTenantId(),
                     $this->isSuperAdmin()
                 );
@@ -412,14 +424,28 @@ final class ModuleAdminPresenter extends BasePresenter
         $usersWithModules = [];
 
         try {
-            // OPRAVA: Načteme pouze administrátory (admin role nebo super admin)
-            $users = $this->database->table('users')
+            // ✅ OPRAVA: Nejdřív načteme ID všech adminů
+            $adminIds = $this->database->table('users')
                 ->where('role = ? OR is_super_admin = ?', 'admin', 1)
-                ->order('username ASC')
-                ->fetchAll();
+                ->select('id')
+                ->fetchPairs('id', 'id');
 
+            // ✅ OPRAVA: Pro každého admina načteme dešifrovaná data přes UserManager
+            $users = [];
+            foreach ($adminIds as $userId) {
+                $user = $this->userManager->getByIdForSuperAdmin($userId);
+                if ($user) {
+                    $users[] = $user;
+                }
+            }
+
+            // ✅ OPRAVA: Seřadíme podle username
+            usort($users, function ($a, $b) {
+                return strcmp($a->username ?? '', $b->username ?? '');
+            });
+
+            // Pro každého uživatele načteme jeho moduly
             foreach ($users as $user) {
-                // Pro každého uživatele načteme jeho moduly
                 $userModules = $this->database->table('user_modules')
                     ->where('user_id', $user->id)
                     ->order('module_name ASC')
@@ -440,7 +466,7 @@ final class ModuleAdminPresenter extends BasePresenter
                 }
 
                 $usersWithModules[] = [
-                    'user' => $user,
+                    'user' => $user, // ✅ OPRAVENO: Nyní obsahuje dešifrovaná data
                     'modules' => $modules,
                     'modules_count' => count($modules),
                     'active_modules_count' => count(array_filter($modules, function ($m) {
@@ -453,7 +479,7 @@ final class ModuleAdminPresenter extends BasePresenter
             $this->template->totalUsers = count($usersWithModules);
             $this->template->totalModules = array_sum(array_column($usersWithModules, 'modules_count'));
 
-            $this->logger->log("Super admin: Načten přehled modulů pro " . count($usersWithModules) . " administrátorů", ILogger::INFO);
+            $this->logger->log("Super admin: Načten přehled modulů pro " . count($usersWithModules) . " administrátorů (s dešifrováním)", ILogger::INFO);
         } catch (\Exception $e) {
             $this->logger->log("Chyba při načítání přehledu uživatelských modulů: " . $e->getMessage(), ILogger::ERROR);
             $this->flashMessage('Chyba při načítání dat uživatelů.', 'danger');

@@ -1999,3 +1999,124 @@
 [2025-10-11 16-54-56] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
 [2025-10-11 16-54-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
 [2025-10-11 16-54-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-10-14 13-34-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-10-14 13-34-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=kq1ax&_fid=6nmc 
+[2025-10-14 13-34-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-10-14 13-34-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=unk1 
+[2025-10-14 13-34-09] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=unk1 
+[2025-10-14 13-34-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-10-14 13-34-15] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-10-14 13-34-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-10-14 13-34-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-10-14 13-34-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/users/ 
+[2025-10-14 13-34-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/users/ 
+[2025-10-14 13-34-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 13-34-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 13-34-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 13-34-33] Super admin: Načten přehled modulů pro 5 administrátorů  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-09-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-09-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=b853x&_fid=2w05 
+[2025-10-14 14-09-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-10-14 14-09-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=0ed8 
+[2025-10-14 14-09-16] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=0ed8 
+[2025-10-14 14-09-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-09-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-09-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-10-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=0ed8 
+[2025-10-14 14-10-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=0ed8 
+[2025-10-14 14-10-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=0ed8 
+[2025-10-14 14-10-06] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=0ed8 
+[2025-10-14 14-10-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-10-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-10-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-10-08] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-10-08] Načteno 4 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-10-08] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-10-08] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-10-08] Statistiky modulů: Aktivní: 4, Neaktivní: 0, Celkem: 4  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-10-08] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-10-08] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-10-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-10-14 14-10-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-10-14 14-11-15] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-11-15] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-11-15] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-12-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-10-14 14-12-51] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-10-14 14-12-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/tenants/ 
+[2025-10-14 14-12-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/tenants/ 
+[2025-10-14 14-19-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-19-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-19-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-19-43] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-19-43] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-19-43] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-25-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-25-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-25-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-25-39] DEBUG: isSuperAdmin v presenteru: true  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-25-39] DEBUG: Nalezeno 5 adminů  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-25-39] DEBUG: Načítám uživatele ID: 1  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=yr2hl&_fid=qkww 
+[2025-10-14 14-54-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-10-14 14-54-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=64in 
+[2025-10-14 14-54-55] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=64in 
+[2025-10-14 14-54-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG STARTUP: TenantID=1, isSuperAdmin=true  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: UserManager->setTenantContext zavoláno s TenantID=1, isSuperAdmin=true  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: isSuperAdmin v presenteru: true  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Nalezeno 5 adminů  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Načítám uživatele ID: 1  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Uživatel ID: 1 úspěšně načten  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Načítám uživatele ID: 57  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Uživatel ID: 57 úspěšně načten  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Načítám uživatele ID: 67  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Uživatel ID: 67 úspěšně načten  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Načítám uživatele ID: 76  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Uživatel ID: 76 úspěšně načten  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Načítám uživatele ID: 79  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Uživatel ID: 79 úspěšně načten  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] DEBUG: Celkem načteno 5 uživatelů  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-54-58] Super admin: Načten přehled modulů pro 5 administrátorů (s dešifrováním)  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-16] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-16] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-16] DEBUG STARTUP: TenantID=1, isSuperAdmin=true  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-16] DEBUG: UserManager->setTenantContext zavoláno s TenantID=1, isSuperAdmin=true  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-16] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-16] Načteno 4 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-16] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-16] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-16] Statistiky modulů: Aktivní: 4, Neaktivní: 0, Celkem: 4  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-16] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-16] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-10-14 14-55-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG STARTUP: TenantID=1, isSuperAdmin=true  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: UserManager->setTenantContext zavoláno s TenantID=1, isSuperAdmin=true  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: isSuperAdmin v presenteru: true  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Nalezeno 5 adminů  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Načítám uživatele ID: 1  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Uživatel ID: 1 úspěšně načten  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Načítám uživatele ID: 57  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Uživatel ID: 57 úspěšně načten  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Načítám uživatele ID: 67  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Uživatel ID: 67 úspěšně načten  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Načítám uživatele ID: 76  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Uživatel ID: 76 úspěšně načten  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Načítám uživatele ID: 79  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Uživatel ID: 79 úspěšně načten  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] DEBUG: Celkem načteno 5 uživatelů  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-55-18] Super admin: Načten přehled modulů pro 5 administrátorů (s dešifrováním)  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-59-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-59-18] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-59-18] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-59-18] Super admin: Načten přehled modulů pro 5 administrátorů (s dešifrováním)  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-59-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-59-35] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-59-35] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
+[2025-10-14 14-59-35] Super admin: Načten přehled modulů pro 5 administrátorů (s dešifrováním)  @  http://localhost:8000/moduleadmin/users 

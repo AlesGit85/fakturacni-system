@@ -19,7 +19,7 @@ session:
 	cookieSamesite: Strict
 
 tracy:
-	email: info@allimedia.cz
+	email: info@qrdoklad.cz
 	strictMode: true
 	showBar: false # Skryje Tracy bar v produkci
 
