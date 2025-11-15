@@ -190,7 +190,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1760446488,
+      1 => 1760446738,
     ),
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
@@ -260,15 +260,16 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 1,
-    'null' => 1,
+    'Nette\\Bridges\\Assets\\DIExtension' => 2,
+    'null' => 2,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 2,
-    'App\\Presentation\\Sign\\SignTemplate' => 2,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 1,
-    'App\\Presentation\\Home\\HomeTemplate' => 1,
+    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'App\\Presentation\\Sign\\SignTemplate' => 3,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 1,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 1,
   ),
   2 => 
   array (

@@ -2120,3 +2120,38 @@
 [2025-10-14 14-59-35] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
 [2025-10-14 14-59-35] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/users 
 [2025-10-14 14-59-35] Super admin: Načten přehled modulů pro 5 administrátorů (s dešifrováním)  @  http://localhost:8000/moduleadmin/users 
+[2025-11-15 09-31-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-11-15 09-31-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=467mk&_fid=7blp 
+[2025-11-15 09-31-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-11-15 09-31-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=mtb7 
+[2025-11-15 09-31-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=mtb7 
+[2025-11-15 09-32-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-15 09-32-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-15 09-32-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-15 09-32-39] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-15 09-32-39] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-15 09-32-39] Šablona modulu financial_reports nalezena: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/templates/dashboard.latte  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-15 09-32-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] === ZAČÁTEK OBECNÉHO AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] AJAX parametry - moduleId: 'financial_reports', action: 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Kontroluji aktivní moduly...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Aktivní moduly: ["financial_reports","invoice_email","notes","test_module"]  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Modul 'financial_reports' je aktivní, pokračuji...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Vytvářím instanci modulu 'financial_reports'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Hledám soubor modulu: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/Module.php  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Soubor modulu nalezen, načítám...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Vytvářím instanci tenant-specific třídy: Modules\Tenant1\Financial_reports\Module pro modul: financial_reports (tenant: 1)  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Kontroluji existenci třídy: Modules\Tenant1\Financial_reports\Module  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Třída nalezena, vytvářím instanci...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Instance modulu 'financial_reports' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Instance modulu 'financial_reports' úspěšně vytvořena  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Modul 'financial_reports' podporuje AJAX, volám handleAjaxRequest...  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Připravené parametry: []  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] Volám handleAjaxRequest s akcí 'getAllData'  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] AJAX akce 'getAllData' úspěšně dokončena  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-32-58] === KONEC OBECNÉHO AJAX VOLÁNÍ ===  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-15 09-33-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=mtb7 
+[2025-11-15 09-33-18] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=mtb7 
