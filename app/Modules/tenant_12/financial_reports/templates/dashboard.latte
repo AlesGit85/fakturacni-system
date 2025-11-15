@@ -1,20 +1,45 @@
-{* Získání dat pomocí továrny - zatím jednoduchý způsob *}
+{* 
+ * Finanční přehledy - Dashboard template (aktualizovaná verze pro multitenancy systém)
+ * Bez inline CSS/JS stylů - vše je v externích souborech
+ *}
+
+{* Získání dat pomocí továrny - nyní s multitenancy podporou *}
 {varType array $basicStats}
 {varType array $vatLimits}
+{varType int|null $currentTenantId}
+{varType bool $isSuperAdmin}
 
 {var $currentYear = date('Y')}
 
-<div class="financial-reports-dashboard">
+{* Meta tagy pro JavaScript - tenant kontext *}
+<meta name="tenant-id" content="{$currentTenantId|noescape}">
+<meta name="is-super-admin" content="{$isSuperAdmin ? 'true' : 'false'}">
+
+<div class="financial-reports-dashboard" data-tenant-id="{$currentTenantId}" data-super-admin="{$isSuperAdmin ? 'true' : 'false'}">
+    
+    {* Tenant kontext indikátor *}
     <div class="row">
         <div class="col-12">
-            <div class="alert alert-success">
-                <i class="bi bi-check-circle-fill me-2"></i>
-                <strong>Finanční přehledy pro rok {$currentYear}</strong> - Data budou načítána ze skutečných faktur v systému.
+            <div id="tenantIndicator" class="tenant-context" style="display: none;">
+                {* Bude naplněno JavaScriptem *}
             </div>
         </div>
     </div>
 
-    <!-- Prozatím použijeme testovací data, dokud nezajistíme správné načítání -->
+    {* Hlavní nadpis s informacemi o roku *}
+    <div class="row">
+        <div class="col-12">
+            <div class="alert-financial alert-success d-flex align-items-center">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <div>
+                    <strong>Finanční přehledy pro rok <span id="currentYear">{$currentYear}</span></strong><br>
+                    <small>Data budou načítána ze skutečných faktur v systému pro váš tenant</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {* Inicializační testovací data - budou nahrazena skutečnými daty přes AJAX *}
     {var $testStats = [
         'totalCount' => 0,
         'paidCount' => 0, 
@@ -33,34 +58,21 @@
         'progressToNextLimit' => 0
     ]}
 
-    <!-- DPH upozornění -->
-    {if !empty($testVatLimits['alerts'])}
+    {* DPH upozornění kontejner *}
     <div class="row mb-4">
         <div class="col-12">
-            {foreach $testVatLimits['alerts'] as $alert}
-                <div class="alert alert-{$alert['type']} {if $alert['type'] === 'warning'}vat-warning{else}vat-danger{/if}">
-                    <div class="d-flex align-items-center">
-                        <div class="me-3">
-                            <i class="bi bi-{if $alert['type'] === 'warning'}exclamation-triangle{else}exclamation-octagon{/if}-fill" style="font-size: 2rem;"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <h5 class="alert-heading mb-1">{$alert['title']}</h5>
-                            <p class="mb-1">{$alert['message']}</p>
-                            <small>Aktuální obrat: <strong>{number_format($alert['amount'], 0, ',', ' ')} Kč</strong> (limit: {number_format($alert['limit'], 0, ',', ' ')} Kč)</small>
-                        </div>
-                    </div>
-                </div>
-            {/foreach}
+            <div id="vatAlerts">
+                {* DPH upozornění budou načtena dynamicky *}
+            </div>
         </div>
     </div>
-    {/if}
 
-    <!-- Hlavní statistiky -->
+    {* Hlavní statistiky *}
     <div class="row g-4 mb-4">
         <div class="col-lg-3 col-md-6">
-            <div class="financial-stat-card text-center">
+            <div class="financial-stat-card stat-total text-center">
                 <div class="stat-icon">
-                    <i class="bi bi-file-earmark-text" style="color: #B1D235;"></i>
+                    <i class="bi bi-file-earmark-text"></i>
                 </div>
                 <div class="stat-number" id="totalCount">{$testStats['totalCount']}</div>
                 <div class="stat-label">Celkem faktur</div>
@@ -68,9 +80,9 @@
         </div>
         
         <div class="col-lg-3 col-md-6">
-            <div class="financial-stat-card text-center">
+            <div class="financial-stat-card stat-paid text-center">
                 <div class="stat-icon">
-                    <i class="bi bi-check-circle" style="color: #28a745;"></i>
+                    <i class="bi bi-check-circle"></i>
                 </div>
                 <div class="stat-number" id="paidCount">{$testStats['paidCount']}</div>
                 <div class="stat-label">Zaplacených</div>
@@ -78,9 +90,9 @@
         </div>
         
         <div class="col-lg-3 col-md-6">
-            <div class="financial-stat-card text-center">
+            <div class="financial-stat-card stat-unpaid text-center">
                 <div class="stat-icon">
-                    <i class="bi bi-clock" style="color: #ffc107;"></i>
+                    <i class="bi bi-clock"></i>
                 </div>
                 <div class="stat-number" id="unpaidCount">{$testStats['unpaidCount']}</div>
                 <div class="stat-label">Nezaplacených</div>
@@ -88,9 +100,9 @@
         </div>
         
         <div class="col-lg-3 col-md-6">
-            <div class="financial-stat-card text-center">
+            <div class="financial-stat-card stat-overdue text-center">
                 <div class="stat-icon">
-                    <i class="bi bi-exclamation-circle" style="color: #dc3545;"></i>
+                    <i class="bi bi-exclamation-circle"></i>
                 </div>
                 <div class="stat-number" id="overdueCount">{$testStats['overdueCount']}</div>
                 <div class="stat-label">Po splatnosti</div>
@@ -98,11 +110,11 @@
         </div>
     </div>
 
-    <!-- Finanční přehled -->
+    {* Finanční přehled a DPH status *}
     <div class="row g-4">
         <div class="col-md-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header" style="background-color: #B1D235; color: #212529;">
+            <div class="card">
+                <div class="card-header">
                     <i class="bi bi-currency-exchange me-2"></i>
                     <h5 class="mb-0">Finanční přehled za rok {$testStats['year']}</h5>
                 </div>
@@ -110,21 +122,21 @@
                     <div class="row">
                         <div class="col-md-4 text-center mb-3">
                             <h6 class="text-muted">Celkový obrat</h6>
-                            <h4 style="color: #B1D235; font-weight: 700;" id="totalTurnover">
+                            <h4 class="stat-number" id="totalTurnover">
                                 {number_format($testStats['totalTurnover'], 0, ',', ' ')} Kč
                             </h4>
                             <small class="text-muted">Všechny vystavené faktury</small>
                         </div>
                         <div class="col-md-4 text-center mb-3">
                             <h6 class="text-muted">Zaplaceno</h6>
-                            <h4 style="color: #28a745; font-weight: 700;" id="paidAmount">
+                            <h4 class="stat-number text-success" id="paidAmount">
                                 {number_format($testStats['paidAmount'], 0, ',', ' ')} Kč
                             </h4>
                             <small class="text-muted">Skutečné příjmy</small>
                         </div>
                         <div class="col-md-4 text-center mb-3">
                             <h6 class="text-muted">Nezaplaceno</h6>
-                            <h4 style="color: #dc3545; font-weight: 700;" id="unpaidAmount">
+                            <h4 class="stat-number text-danger" id="unpaidAmount">
                                 {number_format($testStats['unpaidAmount'], 0, ',', ' ')} Kč
                             </h4>
                             <small class="text-muted">Čeká na úhradu</small>
@@ -135,75 +147,252 @@
         </div>
         
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header" style="background-color: #95B11F; color: white;">
+            <div class="card">
+                <div class="card-header">
                     <i class="bi bi-percent me-2"></i>
                     <h5 class="mb-0">DPH Status</h5>
                 </div>
                 <div class="card-body">
                     <div class="text-center">
                         <h6>Obrat k DPH limitu</h6>
-                        <div class="progress mb-3" style="height: 20px;">
+                        <div class="vat-progress mb-3">
                             <div class="progress-bar" 
-                                 style="background-color: #B1D235; width: {min($testVatLimits['progressToNextLimit'], 100)}%;"
                                  role="progressbar"
-                                 id="vatProgress">
+                                 id="vatProgress"
+                                 data-bs-toggle="tooltip" 
+                                 data-bs-placement="top" 
+                                 title="Pokrok k DPH limitu">
                                 <span id="vatProgressText">{number_format($testVatLimits['progressToNextLimit'], 1, ',', ' ')}%</span>
                             </div>
                         </div>
                         <p class="mb-1">
                             <strong id="currentTurnover">{number_format($testVatLimits['currentTurnover'], 0, ',', ' ')} Kč</strong>
                         </p>
-                            <small class="text-muted">
-                               Do limitu <span id="nextLimit">{number_format($testVatLimits['nextLimit'], 0, ',', ' ')} Kč</span><br>
-                              zbývá: <span id="remainingToLimit">{number_format($testVatLimits['nextLimit'] - $testVatLimits['currentTurnover'], 0, ',', ' ')} Kč</span>
-                            </small>
+                        <small class="text-muted">
+                           Do limitu <span id="nextLimit">{number_format($testVatLimits['nextLimit'], 0, ',', ' ')} Kč</span><br>
+                          zbývá: <span id="remainingToLimit">{number_format($testVatLimits['nextLimit'] - $testVatLimits['currentTurnover'], 0, ',', ' ')} Kč</span>
+                        </small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Načítání skutečných dat -->
+    {* Filtr panel *}
     <div class="row mt-4">
         <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header" style="background-color: #6c757d; color: white;">
+            <div class="filter-panel">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <label for="yearFilter" class="form-label fw-bold">Rok:</label>
+                        <select class="form-select" id="yearFilter">
+                            <option value="{$currentYear}" selected>{$currentYear}</option>
+                            <option value="{$currentYear - 1}">{$currentYear - 1}</option>
+                            <option value="{$currentYear - 2}">{$currentYear - 2}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="monthFilter" class="form-label fw-bold">Měsíc:</label>
+                        <select class="form-select" id="monthFilter">
+                            <option value="">Celý rok</option>
+                            <option value="1">Leden</option>
+                            <option value="2">Únor</option>
+                            <option value="3">Březen</option>
+                            <option value="4">Duben</option>
+                            <option value="5">Květen</option>
+                            <option value="6">Červen</option>
+                            <option value="7">Červenec</option>
+                            <option value="8">Srpen</option>
+                            <option value="9">Září</option>
+                            <option value="10">Říjen</option>
+                            <option value="11">Listopad</option>
+                            <option value="12">Prosinec</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="button" class="btn btn-primary me-2" id="refreshData">
+                            <i class="bi bi-arrow-clockwise"></i> Aktualizovat
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" id="exportData">
+                            <i class="bi bi-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {* Načítání skutečných dat *}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
                     <i class="bi bi-database me-2"></i>
                     <h5 class="mb-0">Načítání dat</h5>
                 </div>
                 <div class="card-body">
-                    <button type="button" class="btn btn-primary" id="loadRealData">
-                        <i class="bi bi-arrow-repeat"></i> Načíst skutečná data z databáze
-                    </button>
-                    <div id="loadingIndicator" class="mt-3" style="display: none;">
-                        <div class="d-flex align-items-center">
-                            <div class="spinner-border spinner-border-sm me-2" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
+                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <div>
+                            <button type="button" class="btn btn-primary me-2" id="loadRealData" data-auto-load="true">
+                                <i class="bi bi-arrow-repeat"></i> Načíst skutečná data z databáze
+                            </button>
+                            <small class="text-muted">
+                                <kbd>Ctrl+R</kbd> pro rychlé obnovení
+                            </small>
+                        </div>
+                        
+                        <div id="loadingIndicator" class="d-flex align-items-center" style="display: none !important;">
+                            <div class="loading-spinner me-2"></div>
                             <span>Načítám data...</span>
                         </div>
                     </div>
-                    <div id="dataStatus" class="alert mt-3" style="display: none;"></div>
+                    
+                    <div id="dataStatus" class="mt-3" style="display: none;">
+                        {* Status bude nastaven JavaScriptem *}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Návod pro další kroky -->
+    {* Graf kontejner - připraveno pro budoucí implementaci *}
     <div class="row mt-4">
         <div class="col-12">
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle me-2"></i>
-                <strong>V dalších krocích přidáme:</strong>
-                <ul class="mb-0 mt-2">
-                    <li>Načítání skutečných dat pomocí AJAX</li>
-                    <li>Graf příjmů po měsících</li>
-                    <li>Detailní tabulku faktur s filtrováním</li>
-                    <li>Měsíční přehledy</li>
-                    <li>Export dat do CSV/PDF</li>
-                </ul>
+            <div class="chart-wrapper">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-bar-chart me-2"></i>
+                        Graf příjmů po měsících
+                    </h5>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-outline-secondary active" data-chart-type="column">
+                            <i class="bi bi-bar-chart"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" data-chart-type="line">
+                            <i class="bi bi-graph-up"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" data-chart-type="area">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="chart-container" id="monthlyIncomeChart">
+                    <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+                        <div class="text-center">
+                            <i class="bi bi-graph-up display-4 mb-3"></i>
+                            <p>Graf bude zobrazen po načtení dat</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    {* Rychlý přehled faktur - připraveno pro budoucí implementaci *}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-table me-2"></i>
+                    <h5 class="mb-0">Nejnovější faktury</h5>
+                </div>
+                <div class="card-body">
+                    <div class="invoices-table">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Číslo faktury</th>
+                                        <th>Datum vystavení</th>
+                                        <th>Částka</th>
+                                        <th>Status</th>
+                                        <th>Splatnost</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="invoicesTableBody">
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            <i class="bi bi-inbox display-6 d-block mb-2"></i>
+                                            Načítají se faktury...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <small class="text-muted">Zobrazeno posledních 10 faktur</small>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="showAllInvoices">
+                            <i class="bi bi-eye"></i> Zobrazit všechny
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {* Informační panel s pokyny *}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert-financial alert-success">
+                <div class="d-flex align-items-start">
+                    <i class="bi bi-lightbulb-fill me-3 mt-1"></i>
+                    <div>
+                        <strong>Funkce modulu:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li><strong>Automatické načítání dat</strong> - Zobrazení skutečných statistik z vaší databáze</li>
+                            <li><strong>Multitenancy podpora</strong> - Data jsou filtrována podle vašeho tenanta</li>
+                            <li><strong>DPH monitoring</strong> - Sledování limitů pro registraci k DPH</li>
+                            <li><strong>Responzivní design</strong> - Optimalizováno pro všechny zařízení</li>
+                            <li><strong>Real-time aktualizace</strong> - Použijte <kbd>Ctrl+R</kbd> pro rychlé obnovení</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {* Debug informace - pouze pro development *}
+    {if $isSuperAdmin}
+    <div class="row mt-4">
+        <div class="col-12">
+            <details class="alert-financial alert-warning">
+                <summary><strong>Debug informace (pouze pro Super Admin)</strong></summary>
+                <div class="mt-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Tenant kontext:</strong><br>
+                            <code>
+                                Tenant ID: {$currentTenantId|noescape}<br>
+                                Super Admin: {$isSuperAdmin ? 'true' : 'false'}<br>
+                                Aktuální rok: {$currentYear}
+                            </code>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Testovací data:</strong><br>
+                            <code>
+                                Stats: {json_encode($testStats)}<br>
+                                VAT Limits: {json_encode($testVatLimits)}
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </details>
+        </div>
+    </div>
+    {/if}
 </div>
+
+{* CSS animace pro highlight efekt *}
+<style>
+.highlight {
+    animation: highlight 1s ease-in-out;
+}
+
+@keyframes highlight {
+    0% { background-color: rgba(177, 210, 53, 0.3); }
+    100% { background-color: transparent; }
+}
+</style>

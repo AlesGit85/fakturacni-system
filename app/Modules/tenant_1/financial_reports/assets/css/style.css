@@ -1,155 +1,442 @@
 /**
- * Finanční přehledy - CSS styly
+ * Finanční přehledy - CSS styly (aktualizovaná verze pro multitenancy systém)
+ * Barevné schéma: #B1D235, #95B11F, #6c757d, #212529
  */
 
 .financial-reports-dashboard {
     padding: 1rem 0;
 }
 
+/* === ZÁKLADNÍ KARTY === */
 .financial-reports-dashboard .card {
     border: none;
+    border-radius: 0.75rem;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
 }
 
 .financial-reports-dashboard .card:hover {
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
 }
 
 .financial-reports-dashboard .card-header {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 2px solid rgba(177, 210, 53, 0.1);
     font-weight: 600;
+    background: linear-gradient(135deg, rgba(177, 210, 53, 0.05), rgba(149, 177, 31, 0.05));
+    color: #212529;
 }
 
-/* Statistické karty */
+/* === STATISTICKÉ KARTY === */
 .financial-stat-card {
-    padding: 1.5rem 1rem;
-    border-radius: 0.5rem;
-    background-color: #f8f9fa;
-    margin-bottom: 1rem;
-    transition: all 0.3s ease;
+    padding: 2rem 1.5rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    border: 1px solid rgba(177, 210, 53, 0.1);
+    margin-bottom: 1.5rem;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .financial-stat-card:hover {
-    background-color: #e9ecef;
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #ffffff, #f0f8ff);
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1.5rem rgba(177, 210, 53, 0.2);
+}
+
+.financial-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #B1D235, #95B11F);
+    border-radius: 0.75rem 0.75rem 0 0;
 }
 
 .financial-stat-card .stat-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    color: #B1D235;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    background: rgba(177, 210, 53, 0.1);
+    border-radius: 50%;
 }
 
 .financial-stat-card .stat-number {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
     color: #212529;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
 }
 
 .financial-stat-card .stat-label {
     font-size: 0.875rem;
     color: #6c757d;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-/* DPH upozornění */
+/* === SPECIFICKÉ STATISTIKY === */
+.stat-total .stat-icon { color: #B1D235; background: rgba(177, 210, 53, 0.1); }
+.stat-paid .stat-icon { color: #28a745; background: rgba(40, 167, 69, 0.1); }
+.stat-unpaid .stat-icon { color: #dc3545; background: rgba(220, 53, 69, 0.1); }
+.stat-overdue .stat-icon { color: #e74c3c; background: rgba(231, 76, 60, 0.1); }
+
+/* === DPH UPOZORNĚNÍ === */
 .vat-warning {
     border-left: 4px solid #ffc107;
-    background-color: rgba(255, 193, 7, 0.1);
+    background: linear-gradient(90deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+    border-radius: 0.5rem;
+    padding: 1rem;
 }
 
 .vat-danger {
     border-left: 4px solid #dc3545;
-    background-color: rgba(220, 53, 69, 0.1);
-}
-
-/* Graf kontejner */
-.chart-container {
-    position: relative;
-    height: 300px;
-    width: 100%;
-}
-
-/* Filtr panel */
-.filter-panel {
-    background-color: #f8f9fa;
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.1), rgba(220, 53, 69, 0.05));
     border-radius: 0.5rem;
     padding: 1rem;
+}
+
+.vat-success {
+    border-left: 4px solid #28a745;
+    background: linear-gradient(90deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.05));
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+/* === PROGRESS BARY === */
+.vat-progress {
+    background-color: rgba(177, 210, 53, 0.1);
+    border-radius: 1rem;
+    overflow: hidden;
+    height: 1rem;
+}
+
+.vat-progress .progress-bar {
+    background: linear-gradient(90deg, #B1D235, #95B11F);
+    transition: width 0.6s ease;
+    border-radius: 1rem;
+}
+
+/* === GRAF KONTEJNERY === */
+.chart-container {
+    position: relative;
+    height: 350px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.chart-wrapper {
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
     margin-bottom: 1.5rem;
 }
 
-.filter-panel .form-select {
-    border: 1px solid #B1D235;
-    border-radius: 0.5rem;
+/* === FILTR PANEL === */
+.filter-panel {
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    border: 1px solid rgba(177, 210, 53, 0.2);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
 }
 
-.filter-panel .form-select:focus {
+.filter-panel .form-select,
+.filter-panel .form-control {
+    border: 2px solid rgba(177, 210, 53, 0.3);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.filter-panel .form-select:focus,
+.filter-panel .form-control:focus {
     border-color: #95B11F;
     box-shadow: 0 0 0 0.2rem rgba(177, 210, 53, 0.25);
+    background-color: #ffffff;
 }
 
-/* Tabulka faktur */
+.filter-panel .btn-primary {
+    background: linear-gradient(135deg, #B1D235, #95B11F);
+    border: none;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.filter-panel .btn-primary:hover {
+    background: linear-gradient(135deg, #95B11F, #7a951a);
+    transform: translateY(-2px);
+}
+
+/* === TABULKA FAKTUR === */
+.invoices-table {
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.invoices-table .table {
+    margin-bottom: 0;
+}
+
 .invoices-table .table th {
-    background-color: #B1D235;
+    background: linear-gradient(135deg, #B1D235, #95B11F);
     color: #212529;
     border: none;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.875rem;
+    padding: 1rem 0.75rem;
 }
 
 .invoices-table .table td {
-    border-color: rgba(177, 210, 53, 0.2);
+    border-color: rgba(177, 210, 53, 0.15);
     vertical-align: middle;
+    padding: 0.875rem 0.75rem;
+    background-color: #ffffff;
 }
 
-.invoices-table .status-paid {
-    color: #28a745;
+.invoices-table .table tbody tr:hover {
+    background-color: rgba(177, 210, 53, 0.05);
+    transition: background-color 0.2s ease;
+}
+
+/* === STATUS INDIKÁTORY === */
+.status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 2rem;
     font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.invoices-table .status-unpaid {
-    color: #dc3545;
-    font-weight: 600;
+.status-paid {
+    color: #ffffff;
+    background: linear-gradient(135deg, #28a745, #20c997);
 }
 
-.invoices-table .status-overdue {
-    color: #e74c3c;
-    font-weight: 700;
+.status-unpaid {
+    color: #ffffff;  
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
 }
 
-/* Animace pro načítání dat */
+.status-overdue {
+    color: #ffffff;
+    background: linear-gradient(135deg, #e74c3c, #c82333);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* === LOADING ANIMACE === */
 .loading-placeholder {
     background: linear-gradient(
         90deg,
         rgba(177, 210, 53, 0.1) 25%,
-        rgba(177, 210, 53, 0.2) 50%,
+        rgba(177, 210, 53, 0.3) 50%,
         rgba(177, 210, 53, 0.1) 75%
     );
     background-size: 200% 100%;
-    animation: loading 2s infinite;
+    animation: loading 1.5s infinite;
+    border-radius: 0.5rem;
+    height: 3rem;
 }
 
 @keyframes loading {
-    0% {
-        background-position: 200% 0;
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid rgba(177, 210, 53, 0.3);
+    border-radius: 50%;
+    border-top-color: #B1D235;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* === NOTIFIKACE === */
+.alert-financial {
+    border: none;
+    border-radius: 0.75rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.alert-financial.alert-success {
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.05));
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.alert-financial.alert-warning {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+    color: #856404;
+    border-left: 4px solid #ffc107;
+}
+
+.alert-financial.alert-danger {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(220, 53, 69, 0.05));
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+/* === RESPONZIVNÍ DESIGN === */
+@media (max-width: 1200px) {
+    .financial-stat-card {
+        padding: 1.5rem 1rem;
     }
-    100% {
-        background-position: -200% 0;
+    
+    .chart-container {
+        height: 300px;
     }
 }
 
-/* Responzivní úpravy */
 @media (max-width: 768px) {
+    .financial-reports-dashboard {
+        padding: 0.5rem 0;
+    }
+    
     .financial-stat-card {
         margin-bottom: 1rem;
+        padding: 1rem 0.75rem;
+    }
+    
+    .financial-stat-card .stat-icon {
+        font-size: 2rem;
+        width: 3rem;
+        height: 3rem;
+    }
+    
+    .financial-stat-card .stat-number {
+        font-size: 1.5rem;
     }
     
     .chart-container {
         height: 250px;
+        padding: 0.5rem;
     }
     
     .filter-panel {
         text-align: center;
+        padding: 1rem;
+    }
+    
+    .filter-panel .btn-primary {
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .invoices-table .table th,
+    .invoices-table .table td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .filter-panel {
+        padding: 0.75rem;
+    }
+    
+    .financial-stat-card .stat-number {
+        font-size: 1.25rem;
+    }
+    
+    .financial-stat-card .stat-label {
+        font-size: 0.75rem;
+    }
+}
+
+/* === TENANT KONTEXT INDIKÁTOR === */
+.tenant-context {
+    background: linear-gradient(135deg, rgba(177, 210, 53, 0.1), rgba(149, 177, 31, 0.05));
+    border: 1px solid rgba(177, 210, 53, 0.2);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.tenant-context .tenant-id {
+    font-weight: 600;
+    color: #95B11F;
+}
+
+/* === DARK MODE PODPORA === */
+@media (prefers-color-scheme: dark) {
+    .financial-stat-card {
+        background: linear-gradient(135deg, #2d3748, #1a202c);
+        color: #ffffff;
+    }
+    
+    .chart-container {
+        background: #2d3748;
+    }
+    
+    .filter-panel {
+        background: linear-gradient(135deg, #2d3748, #1a202c);
+        color: #ffffff;
+    }
+}
+
+/* === ACCESSIBILITY === */
+@media (prefers-reduced-motion: reduce) {
+    .financial-stat-card,
+    .card,
+    .loading-placeholder,
+    .loading-spinner {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* === PRINT STYLY === */
+@media print {
+    .financial-reports-dashboard {
+        background: white;
+    }
+    
+    .card,
+    .financial-stat-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .filter-panel {
+        display: none;
+    }
+    
+    .chart-container {
+        height: 400px;
     }
 }

@@ -90,12 +90,12 @@ return array (
     'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
-      1 => 1755862054,
+      1 => 1763200408,
     ),
     'Modules\\Tenant1\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
-      1 => 1755862054,
+      1 => 1763200408,
     ),
     'Modules\\Tenant1\\InvoiceEmail\\InvoiceEmailPresenter' => 
     array (
@@ -120,12 +120,12 @@ return array (
     'Modules\\Tenant12\\Financial_reports\\FinancialReportsService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\FinancialReportsService.php',
-      1 => 1755861404,
+      1 => 1763200156,
     ),
     'Modules\\Tenant12\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\Module.php',
-      1 => 1755861404,
+      1 => 1763200156,
     ),
     'Modules\\Tenant12\\InvoiceEmail\\InvoiceEmailPresenter' => 
     array (
@@ -190,7 +190,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1760446738,
+      1 => 1763200647,
     ),
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
@@ -260,16 +260,10 @@ return array (
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 2,
-    'null' => 2,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminUsersTemplate' => 3,
+    'Nette\\Bridges\\Assets\\DIExtension' => 1,
+    'null' => 1,
+    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
-    'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 1,
-    'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 1,
   ),
   2 => 
   array (

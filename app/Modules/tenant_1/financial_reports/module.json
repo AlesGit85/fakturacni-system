@@ -1,9 +1,46 @@
 {
     "id": "financial_reports",
-    "name": "Finan\u010dn\u00ed p\u0159ehledy",
-    "version": "1.0.0",
-    "description": "Komplexn\u00ed p\u0159ehled financ\u00ed - vydan\u00e9, zaplacen\u00e9 a nezaplacen\u00e9 faktury s grafick\u00fdmi statistikami a sledov\u00e1n\u00edm DPH limit\u016f",
+    "name": "Finanční přehledy",
+    "version": "2.0.0",
+    "description": "Komplexní přehled financí s podporou multitenancy - vydané, zaplacené a nezaplacené faktury s grafickými statistikami a sledováním DPH limitů. Aktualizovaná verze pro současný systém.",
     "author": "Allimedia.cz",
     "active": true,
-    "icon": "bi bi-graph-up-arrow"
+    "icon": "bi bi-graph-up-arrow",
+    "requirements": {
+        "php": ">=8.0",
+        "nette": ">=3.1",
+        "multitenancy": true,
+        "database_tables": ["invoices"]
+    },
+    "features": [
+        "Multitenancy podpora",
+        "Tenant filtrování dat",
+        "DPH limity monitoring", 
+        "Responzivní design",
+        "AJAX načítání dat",
+        "Moderní UI komponenty"
+    ],
+    "changelog": {
+        "2.0.0": {
+            "date": "2025-11-15",
+            "changes": [
+                "Přidána kompletní podpora multitenancy",
+                "Implementováno tenant filtrování všech dat",
+                "Modernizace UI a CSS komponent",
+                "Aktualizace JavaScript pro současnou architekturu",
+                "Vylepšené error handling a logování",
+                "Přidány meta tagy pro tenant kontext",
+                "Bezpečnostní vylepšení a type hints"
+            ]
+        },
+        "1.0.0": {
+            "date": "2025-08-19", 
+            "changes": [
+                "Základní verze modulu",
+                "Finanční statistiky",
+                "DPH monitoring",
+                "Základní UI"
+            ]
+        }
+    }
 }

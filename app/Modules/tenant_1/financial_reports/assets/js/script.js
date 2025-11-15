@@ -1,334 +1,698 @@
 /**
- * Finanční přehledy - JavaScript funkcionalita
+ * Finanční přehledy - JavaScript funkcionalita (aktualizovaná verze pro multitenancy systém)
+ * Kompatibilní s Nette Framework a současnou architekturou
  */
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🟢 Finanční přehledy - JavaScript načten a spuštěn');
-    
-    // Inicializace modulu
-    initFinancialReports();
-});
 
-/**
- * Inicializace finančních přehledů
- */
-function initFinancialReports() {
-    console.log('🟡 Inicializace finančních přehledů...');
-    
-    // Nastavení event listeneru pro načítání dat
-    const loadButton = document.getElementById('loadRealData');
-    console.log('🔍 Hledám tlačítko loadRealData:', loadButton);
-    
-    if (loadButton) {
-        console.log('✅ Tlačítko nalezeno, přidávám event listener');
-        loadButton.addEventListener('click', function() {
-            console.log('🖱️ Tlačítko bylo kliknuto!');
-            loadRealFinancialData();
-        });
-    } else {
-        console.error('❌ Tlačítko loadRealData nebylo nalezeno!');
-    }
-    
-    console.log('✅ Finanční přehledy jsou připraveny k použití');
-}
-
-/**
- * Načte skutečná finanční data pomocí AJAX
- */
-function loadRealFinancialData() {
-    console.log('🚀 Spouštím načítání finančních dat...');
-    
-    const loadButton = document.getElementById('loadRealData');
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    const dataStatus = document.getElementById('dataStatus');
-    
-    console.log('🔍 Kontrola elementů:', {
-        loadButton: !!loadButton,
-        loadingIndicator: !!loadingIndicator,
-        dataStatus: !!dataStatus
-    });
-    
-    // Zobrazení loading stavu
-    if (loadButton) {
-        loadButton.disabled = true;
-        loadButton.innerHTML = '<i class="bi bi-hourglass-split"></i> Načítám...';
-    }
-    
-    if (loadingIndicator) {
-        loadingIndicator.style.display = 'block';
-    }
-    
-    if (dataStatus) {
-        dataStatus.style.display = 'none';
-    }
-    
-    console.log('⏳ Loading stav nastaven, spouštím AJAX volání...');
-    
-    // Vytvoříme správnou URL pro Nette signál
-    // Zjistíme base URL bez query parametrů
-    const currentLocation = window.location;
-    const baseUrl = currentLocation.protocol + '//' + currentLocation.host + currentLocation.pathname;
-    
-    // Pro ModuleAdmin presenter vytvoříme URL se signálem
-    const ajaxUrl = baseUrl + '?do=moduleData&moduleId=financial_reports&action=getAllData';
-    
-    console.log('🔗 Current location:', currentLocation.href);
-    console.log('🔧 Base URL:', baseUrl);
-    console.log('🔧 Vytvořená AJAX URL:', ajaxUrl);
-    
-    // Skutečné AJAX volání
-    fetch(ajaxUrl, {
-        method: 'GET',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json',
-            'Cache-Control': 'no-cache'
-        }
-    })
-    .then(response => {
-        console.log('📥 AJAX odpověď received:', {
-            status: response.status,
-            statusText: response.statusText,
-            ok: response.ok,
-            url: response.url
-        });
+class FinancialReportsModule {
+    constructor() {
+        this.version = '2.0.0';
+        this.moduleName = 'Finanční přehledy';
+        this.isLoading = false;
+        this.tenantId = null;
+        this.isSuperAdmin = false;
+        this.charts = {};
         
-        if (!response.ok) {
-            return response.text().then(text => {
-                console.error('❌ Server error response (first 1000 chars):', text.substring(0, 1000));
-                throw new Error(`HTTP ${response.status}: ${response.statusText}\n\nServer response: ${text.substring(0, 200)}`);
-            });
+        // Bind methods to preserve context
+        this.loadRealData = this.loadRealData.bind(this);
+        this.refreshData = this.refreshData.bind(this);
+        this.handleError = this.handleError.bind(this);
+        
+        this.log('🟢 FinancialReportsModule inicializován', 'info');
+    }
+
+    /**
+     * Inicializace modulu
+     */
+    init() {
+        this.log('🟡 Spouštím inicializaci modulu...', 'info');
+        
+        // Detekce tenant kontextu z DOM
+        this.detectTenantContext();
+        
+        // Nastavení event listenerů
+        this.setupEventListeners();
+        
+        // Inicializace UI komponent
+        this.initializeComponents();
+        
+        // Auto-loading pokud je tlačítko označené
+        this.checkAutoLoad();
+        
+        this.log('✅ Modul je připraven k použití', 'success');
+        
+        return this;
+    }
+
+    /**
+     * Detekce tenant kontextu z DOM
+     */
+    detectTenantContext() {
+        // Hledáme tenant informace v meta tagu nebo data attributech
+        const tenantMeta = document.querySelector('meta[name="tenant-id"]');
+        const adminMeta = document.querySelector('meta[name="is-super-admin"]');
+        
+        if (tenantMeta) {
+            this.tenantId = parseInt(tenantMeta.content);
         }
         
-        return response.text().then(text => {
-            console.log('📄 Raw response text (first 500 chars):', text.substring(0, 500) + (text.length > 500 ? '...' : ''));
-            
-            // Zkusíme najít JSON v odpovědi (může být obalený v HTML)
-            let jsonText = text.trim();
-            
-            // Pokud odpověď začína HTML, zkusíme najít JSON
-            if (jsonText.startsWith('<!DOCTYPE') || jsonText.startsWith('<html')) {
-                console.log('📄 Detekována HTML odpověď, hledám JSON...');
-                
-                // Zkusíme najít JSON někde v HTML (možná je v script tagu nebo podobně)
-                const jsonMatch = jsonText.match(/\{.*\}/s);
-                if (jsonMatch) {
-                    jsonText = jsonMatch[0];
-                    console.log('📄 Nalezen JSON v HTML:', jsonText.substring(0, 200));
-                } else {
-                    throw new Error('Server vrátil HTML místo JSON. Možná chyba v routingu nebo v presenteru.');
-                }
+        if (adminMeta) {
+            this.isSuperAdmin = adminMeta.content === 'true' || adminMeta.content === '1';
+        }
+        
+        // Backup: hledáme v container elementech
+        const container = document.querySelector('[data-tenant-id]');
+        if (container && !this.tenantId) {
+            this.tenantId = parseInt(container.dataset.tenantId);
+        }
+        
+        const adminContainer = document.querySelector('[data-super-admin]');
+        if (adminContainer && this.isSuperAdmin === false) {
+            this.isSuperAdmin = adminContainer.dataset.superAdmin === 'true';
+        }
+        
+        this.log(`🔍 Tenant kontext: ID=${this.tenantId}, SuperAdmin=${this.isSuperAdmin}`, 'info');
+        
+        // Zobrazíme tenant indikátor pokud existuje
+        this.updateTenantIndicator();
+    }
+
+    /**
+     * Aktualizuje tenant indikátor v UI
+     */
+    updateTenantIndicator() {
+        const indicator = document.getElementById('tenantIndicator');
+        if (indicator && this.tenantId) {
+            const statusText = this.isSuperAdmin ? 'Super Admin (všichni tenanti)' : `Tenant ${this.tenantId}`;
+            indicator.innerHTML = `<i class="bi bi-building"></i> <span class="tenant-id">${statusText}</span>`;
+            indicator.style.display = 'block';
+        }
+    }
+
+    /**
+     * Nastavení event listenerů
+     */
+    setupEventListeners() {
+        // Hlavní tlačítko pro načítání dat
+        const loadButton = document.getElementById('loadRealData');
+        if (loadButton) {
+            loadButton.addEventListener('click', this.loadRealData);
+            this.log('✅ Event listener pro loadRealData nastaven', 'debug');
+        }
+
+        // Refresh tlačítko
+        const refreshButton = document.getElementById('refreshData');
+        if (refreshButton) {
+            refreshButton.addEventListener('click', this.refreshData);
+            this.log('✅ Event listener pro refreshData nastaven', 'debug');
+        }
+
+        // Filter změny
+        const yearFilter = document.getElementById('yearFilter');
+        const monthFilter = document.getElementById('monthFilter');
+        
+        if (yearFilter) {
+            yearFilter.addEventListener('change', () => this.handleFilterChange());
+        }
+        
+        if (monthFilter) {
+            monthFilter.addEventListener('change', () => this.handleFilterChange());
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                this.refreshData();
             }
+        });
+    }
+
+    /**
+     * Inicializace UI komponent
+     */
+    initializeComponents() {
+        // Nastavení tooltipů pro Bootstrap
+        const tooltipElements = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipElements.forEach(element => {
+            new bootstrap.Tooltip(element);
+        });
+
+        // Nastavení progress barů
+        this.initializeProgressBars();
+        
+        // Příprava kontejnerů pro grafy
+        this.prepareChartContainers();
+    }
+
+    /**
+     * Inicializace progress barů
+     */
+    initializeProgressBars() {
+        const progressBars = document.querySelectorAll('.vat-progress .progress-bar');
+        progressBars.forEach(bar => {
+            bar.style.width = '0%';
+            bar.style.transition = 'width 0.6s ease';
+        });
+    }
+
+    /**
+     * Příprava kontejnerů pro grafy
+     */
+    prepareChartContainers() {
+        const chartContainers = document.querySelectorAll('.chart-container');
+        chartContainers.forEach(container => {
+            if (!container.querySelector('canvas')) {
+                const canvas = document.createElement('canvas');
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+                container.appendChild(canvas);
+            }
+        });
+    }
+
+    /**
+     * Kontrola automatického načítání
+     */
+    checkAutoLoad() {
+        const autoLoad = document.querySelector('[data-auto-load="true"]');
+        if (autoLoad) {
+            setTimeout(() => this.loadRealData(), 1000);
+        }
+    }
+
+    /**
+     * Načtení skutečných dat přes AJAX
+     */
+    async loadRealData() {
+        if (this.isLoading) {
+            this.log('⏳ Načítání již probíhá, ignoruji požadavek', 'warn');
+            return;
+        }
+
+        this.isLoading = true;
+        this.log('🚀 Spouštím načítání finančních dat...', 'info');
+
+        try {
+            // UI stav - loading
+            this.setLoadingState(true);
             
+            // Vytvoření AJAX URL pro multitenancy systém
+            const ajaxUrl = this.buildAjaxUrl('getAllData');
+            this.log(`🔗 AJAX URL: ${ajaxUrl}`, 'debug');
+
+            // AJAX request s error handling
+            const response = await this.makeAjaxRequest(ajaxUrl);
+            
+            // Zpracování odpovědi
+            await this.processResponse(response);
+            
+            // Úspěšné dokončení
+            this.setSuccessState();
+            this.log('✅ Data úspěšně načtena a zobrazena', 'success');
+
+        } catch (error) {
+            this.handleError(error);
+        } finally {
+            this.setLoadingState(false);
+            this.isLoading = false;
+        }
+    }
+
+    /**
+     * Sestavení AJAX URL pro aktuální systém
+     */
+    buildAjaxUrl(action, params = {}) {
+        const currentUrl = new URL(window.location);
+        const baseUrl = `${currentUrl.origin}${currentUrl.pathname}`;
+        
+        // Parametry pro ModuleAdmin presenter
+        const ajaxParams = new URLSearchParams({
+            do: 'moduleData',
+            moduleId: 'financial_reports',
+            action: action,
+            ...params
+        });
+
+        // Přidáme tenant kontext pokud není super admin
+        if (this.tenantId && !this.isSuperAdmin) {
+            ajaxParams.set('tenantId', this.tenantId);
+        }
+
+        return `${baseUrl}?${ajaxParams.toString()}`;
+    }
+
+    /**
+     * AJAX request s retry logikou
+     */
+    async makeAjaxRequest(url, retries = 2) {
+        for (let attempt = 0; attempt <= retries; attempt++) {
             try {
-                return JSON.parse(jsonText);
-            } catch (e) {
-                console.error('❌ JSON parse error:', e);
-                console.error('❌ Pokusil jsem se parsovat:', jsonText.substring(0, 200));
-                throw new Error('Server nevrátil validní JSON. Možná chyba na serveru nebo v routingu.');
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'Cache-Control': 'no-cache',
+                        'X-Tenant-Id': this.tenantId || '',
+                        'X-Super-Admin': this.isSuperAdmin ? '1' : '0'
+                    },
+                    credentials: 'same-origin'
+                });
+
+                this.log(`📥 Response status: ${response.status} ${response.statusText}`, 'debug');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const text = await response.text();
+                this.log(`📄 Response preview: ${text.substring(0, 200)}...`, 'debug');
+
+                return this.parseJsonResponse(text);
+
+            } catch (error) {
+                this.log(`❌ Attempt ${attempt + 1} failed: ${error.message}`, 'warn');
+                
+                if (attempt === retries) {
+                    throw error;
+                }
+                
+                // Exponential backoff
+                await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
             }
-        });
-    })
-    .then(data => {
-        console.log('📊 AJAX data parsed:', data);
+        }
+    }
+
+    /**
+     * Parsování JSON odpovědi
+     */
+    parseJsonResponse(text) {
+        let jsonText = text.trim();
         
-        if (data.success) {
-            console.log('✅ Data úspěšně načtena z databáze');
-            
-            // Aktualizace UI s reálnými daty
-            if (data.data && data.data.stats && data.data.vatLimits) {
-                updateFinancialStats(data.data.stats);
-                updateVatStatus(data.data.vatLimits);
+        // Handling HTML wrapped responses
+        if (jsonText.startsWith('<!DOCTYPE') || jsonText.startsWith('<html')) {
+            const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                jsonText = jsonMatch[0];
             } else {
-                console.error('❌ Neočekávaná struktura dat:', data);
-                throw new Error('Server vrátil data v neočekávané struktuře');
+                throw new Error('Server vrátil HTML místo JSON');
             }
+        }
+
+        try {
+            return JSON.parse(jsonText);
+        } catch (e) {
+            this.log(`❌ JSON parse error: ${e.message}`, 'error');
+            this.log(`📄 Attempted to parse: ${jsonText.substring(0, 500)}`, 'error');
+            throw new Error('Nevalidní JSON odpověď od serveru');
+        }
+    }
+
+    /**
+     * Zpracování odpovědi serveru
+     */
+    async processResponse(data) {
+        this.log('📊 Zpracovávám data:', 'debug', data);
+
+        if (!data.success) {
+            throw new Error(data.error || data.message || 'Neznámá chyba serveru');
+        }
+
+        if (data.data && data.data.stats && data.data.vatLimits) {
+            // Aktualizace statistik
+            this.updateFinancialStats(data.data.stats);
             
-            // Zobrazení úspěchu
-            if (dataStatus) {
-                dataStatus.className = 'alert alert-success mt-3';
-                dataStatus.style.display = 'block';
-                dataStatus.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Skutečná data byla úspěšně načtena z databáze!';
-            }
+            // Aktualizace DPH statusu
+            this.updateVatStatus(data.data.vatLimits);
             
-            if (loadButton) {
-                loadButton.innerHTML = '<i class="bi bi-check"></i> Data načtena z databáze';
-                loadButton.className = 'btn btn-success';
-            }
+            // Aktualizace grafů (pokud existují)
+            await this.updateCharts(data.data);
             
         } else {
-            throw new Error(data.error || 'Neznámá chyba serveru');
+            throw new Error('Neočekávaná struktura dat od serveru');
         }
-    })
-    .catch(error => {
-        console.error('❌ AJAX chyba:', error);
+    }
+
+    /**
+     * Aktualizace finančních statistik v UI
+     */
+    updateFinancialStats(stats) {
+        this.log('📊 Aktualizuji statistiky:', 'debug', stats);
+
+        const updates = [
+            { id: 'totalCount', value: stats.totalCount },
+            { id: 'paidCount', value: stats.paidCount },
+            { id: 'unpaidCount', value: stats.unpaidCount },
+            { id: 'overdueCount', value: stats.overdueCount },
+            { id: 'totalTurnover', value: this.formatAmount(stats.totalTurnover) },
+            { id: 'paidAmount', value: this.formatAmount(stats.paidAmount) },
+            { id: 'unpaidAmount', value: this.formatAmount(stats.unpaidAmount) },
+            { id: 'currentYear', value: stats.year }
+        ];
+
+        updates.forEach(update => {
+            this.updateElement(update.id, update.value);
+        });
+
+        // Animované čítače pro čísla
+        this.animateCounters(['totalCount', 'paidCount', 'unpaidCount', 'overdueCount']);
+    }
+
+    /**
+     * Aktualizace DPH statusu
+     */
+    updateVatStatus(vatLimits) {
+        this.log('💰 Aktualizuji DPH status:', 'debug', vatLimits);
+
+        // Základní informace
+        this.updateElement('currentTurnover', this.formatAmount(vatLimits.currentTurnover));
+        this.updateElement('nextLimit', this.formatAmount(vatLimits.nextLimit));
+        this.updateElement('remainingToLimit', 
+            this.formatAmount(vatLimits.nextLimit - vatLimits.currentTurnover));
+
+        // Progress bar
+        this.updateProgressBar('vatProgress', 'vatProgressText', vatLimits.progressToNextLimit);
+
+        // Upozornění
+        this.updateVatAlerts(vatLimits.alerts);
+    }
+
+    /**
+     * Aktualizace progress baru s animací
+     */
+    updateProgressBar(progressId, textId, percentage) {
+        const progressBar = document.getElementById(progressId);
+        const progressText = document.getElementById(textId);
+
+        if (progressBar && progressText) {
+            const finalPercentage = Math.min(Math.max(percentage, 0), 100);
+            
+            // Animovaná aktualizace
+            let currentPercentage = 0;
+            const increment = finalPercentage / 30; // 30 kroků animace
+            
+            const animation = setInterval(() => {
+                currentPercentage += increment;
+                if (currentPercentage >= finalPercentage) {
+                    currentPercentage = finalPercentage;
+                    clearInterval(animation);
+                }
+                
+                progressBar.style.width = `${currentPercentage}%`;
+                progressText.textContent = `${currentPercentage.toFixed(1)}%`;
+                
+                // Změna barvy podle hodnoty
+                if (currentPercentage >= 95) {
+                    progressBar.className = 'progress-bar bg-danger';
+                } else if (currentPercentage >= 80) {
+                    progressBar.className = 'progress-bar bg-warning';
+                } else {
+                    progressBar.className = 'progress-bar bg-success';
+                }
+            }, 30);
+        }
+    }
+
+    /**
+     * Aktualizace DPH upozornění
+     */
+    updateVatAlerts(alerts) {
+        const alertContainer = document.getElementById('vatAlerts');
+        if (!alertContainer) return;
+
+        alertContainer.innerHTML = '';
+
+        alerts.forEach(alert => {
+            const alertElement = document.createElement('div');
+            alertElement.className = `alert-financial alert-${alert.type} d-flex align-items-center`;
+            alertElement.innerHTML = `
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <div>
+                    <strong>${alert.title}</strong><br>
+                    <small>${alert.message}</small>
+                </div>
+            `;
+            
+            alertContainer.appendChild(alertElement);
+        });
+    }
+
+    /**
+     * Animované čítače pro čísla
+     */
+    animateCounters(elementIds) {
+        elementIds.forEach(id => {
+            const element = document.getElementById(id);
+            if (!element) return;
+
+            const targetValue = parseInt(element.textContent) || 0;
+            let currentValue = 0;
+            const increment = Math.ceil(targetValue / 20);
+
+            const animation = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    currentValue = targetValue;
+                    clearInterval(animation);
+                }
+                element.textContent = currentValue;
+            }, 50);
+        });
+    }
+
+    /**
+     * Aktualizace grafů (připraveno pro Chart.js)
+     */
+    async updateCharts(data) {
+        // Placeholder pro budoucí implementaci grafů
+        this.log('📈 Charts update - připraveno pro implementaci', 'debug');
+    }
+
+    /**
+     * Refresh dat
+     */
+    async refreshData() {
+        this.log('🔄 Refresh voláno', 'info');
+        await this.loadRealData();
+    }
+
+    /**
+     * Handling změny filtrů
+     */
+    handleFilterChange() {
+        const year = document.getElementById('yearFilter')?.value;
+        const month = document.getElementById('monthFilter')?.value;
         
-        // Zobrazení chyby s více detaily
+        this.log(`🔍 Filter změna: rok=${year}, měsíc=${month}`, 'debug');
+        
+        // Zde můžeme implementovat filtrované načítání dat
+        // this.loadFilteredData(year, month);
+    }
+
+    /**
+     * Nastavení loading stavu
+     */
+    setLoadingState(loading) {
+        const loadButton = document.getElementById('loadRealData');
+        const refreshButton = document.getElementById('refreshData');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        if (loading) {
+            if (loadButton) {
+                loadButton.disabled = true;
+                loadButton.innerHTML = '<span class="loading-spinner me-2"></span>Načítám...';
+            }
+            if (refreshButton) {
+                refreshButton.disabled = true;
+            }
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'block';
+            }
+        } else {
+            if (loadButton) {
+                loadButton.disabled = false;
+            }
+            if (refreshButton) {
+                refreshButton.disabled = false;
+            }
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+    }
+
+    /**
+     * Nastavení success stavu
+     */
+    setSuccessState() {
+        const loadButton = document.getElementById('loadRealData');
+        const dataStatus = document.getElementById('dataStatus');
+
+        if (loadButton) {
+            loadButton.innerHTML = '<i class="bi bi-check"></i> Data načtena z databáze';
+            loadButton.className = 'btn btn-success';
+        }
+
         if (dataStatus) {
-            dataStatus.className = 'alert alert-danger mt-3';
+            dataStatus.className = 'alert-financial alert-success d-flex align-items-center';
             dataStatus.style.display = 'block';
-            dataStatus.innerHTML = `<i class="bi bi-x-circle-fill me-2"></i>
-                <strong>Chyba při načítání dat:</strong><br>
-                ${error.message}<br><br>
-                <small>Pro více informací otevřete Developer Tools (F12) a podívejte se do Console záložky.</small>`;
+            dataStatus.innerHTML = `
+                <i class="bi bi-check-circle-fill me-2"></i>
+                Skutečná data byla úspěšně načtena z databáze!
+                <small class="d-block mt-1">Tenant: ${this.tenantId || 'všichni'}</small>
+            `;
         }
-        
+    }
+
+    /**
+     * Error handling
+     */
+    handleError(error) {
+        this.log(`❌ Chyba: ${error.message}`, 'error', error);
+
+        const loadButton = document.getElementById('loadRealData');
+        const dataStatus = document.getElementById('dataStatus');
+
         if (loadButton) {
             loadButton.innerHTML = '<i class="bi bi-arrow-repeat"></i> Zkusit znovu';
             loadButton.className = 'btn btn-danger';
         }
-        
-        // Fallback na mock data
-        console.log('🔄 Fallback na mock data...');
-        const mockData = generateMockFinancialData();
-        updateFinancialStats(mockData.stats);
-        updateVatStatus(mockData.vatLimits);
-    })
-    .finally(() => {
-        // Skrytí loading stavu
-        if (loadingIndicator) {
-            loadingIndicator.style.display = 'none';
-        }
-        
-        if (loadButton) {
-            loadButton.disabled = false;
-        }
-        
-        console.log('✅ AJAX operace dokončena');
-    });
-}
 
-/**
- * Generuje mock data pro testování (fallback)
- */
-function generateMockFinancialData() {
-    console.log('🎲 Generuji mock data jako fallback...');
-    
-    // Simulovaná data pro případ, že AJAX selže
-    const data = {
-        stats: {
-            totalCount: 25,
-            paidCount: 18,
-            unpaidCount: 7,
-            overdueCount: 2,
-            totalTurnover: 1850000,
-            paidAmount: 1420000,
-            unpaidAmount: 430000,
-            year: new Date().getFullYear()
-        },
-        vatLimits: {
-            currentTurnover: 1850000,
-            alerts: [
-                {
-                    type: 'warning',
-                    title: 'Blížíte se k DPH limitu',
-                    message: 'Při překročení 2 mil. Kč se stanete plátcem DPH',
-                    amount: 1850000,
-                    limit: 2000000
-                }
-            ],
-            nextLimit: 2000000,
-            progressToNextLimit: 92.5
+        if (dataStatus) {
+            dataStatus.className = 'alert-financial alert-danger d-flex align-items-start';
+            dataStatus.style.display = 'block';
+            dataStatus.innerHTML = `
+                <i class="bi bi-x-circle-fill me-2 mt-1"></i>
+                <div>
+                    <strong>Chyba při načítání dat:</strong><br>
+                    <span class="small">${error.message}</span><br>
+                    <small class="text-muted mt-2 d-block">
+                        Pro více informací otevřete Developer Tools (F12)
+                    </small>
+                </div>
+            `;
         }
-    };
-    
-    console.log('📋 Mock data připravena:', data);
-    return data;
-}
 
-/**
- * Aktualizuje statistiky v UI
- */
-function updateFinancialStats(stats) {
-    console.log('📊 Aktualizuji statistiky:', stats);
-    
-    // Aktualizace základních statistik
-    updateElementText('totalCount', stats.totalCount);
-    updateElementText('paidCount', stats.paidCount);
-    updateElementText('unpaidCount', stats.unpaidCount);
-    updateElementText('overdueCount', stats.overdueCount);
-    
-    // Aktualizace finančních částek
-    updateElementText('totalTurnover', formatAmount(stats.totalTurnover));
-    updateElementText('paidAmount', formatAmount(stats.paidAmount));
-    updateElementText('unpaidAmount', formatAmount(stats.unpaidAmount));
-    
-    console.log('✅ Statistiky aktualizovány');
-}
-
-/**
- * Aktualizuje DPH status
- */
-function updateVatStatus(vatLimits) {
-    console.log('💰 Aktualizuji DPH status:', vatLimits);
-    
-    updateElementText('currentTurnover', formatAmount(vatLimits.currentTurnover));
-    updateElementText('nextLimit', formatAmount(vatLimits.nextLimit));
-    updateElementText('remainingToLimit', formatAmount(vatLimits.nextLimit - vatLimits.currentTurnover));
-    
-    // Aktualizace progress baru
-    const progressBar = document.getElementById('vatProgress');
-    const progressText = document.getElementById('vatProgressText');
-    
-    console.log('📊 Progress bar elementy:', { progressBar: !!progressBar, progressText: !!progressText });
-    
-    if (progressBar && progressText) {
-        const percentage = Math.min(vatLimits.progressToNextLimit, 100);
-        progressBar.style.width = percentage + '%';
-        progressText.textContent = percentage.toFixed(1) + '%';
-        console.log('📈 Progress bar nastaven na:', percentage + '%');
+        // Fallback na mock data pokud je k dispozici
+        this.loadMockDataFallback();
     }
-    
-    console.log('✅ DPH status aktualizován');
-}
 
-/**
- * Pomocná funkce pro aktualizaci textu elementu
- */
-function updateElementText(id, value) {
-    const element = document.getElementById(id);
-    console.log(`🔄 Aktualizuji element ${id}:`, { element: !!element, value: value });
-    
-    if (element) {
-        element.textContent = value;
-        console.log(`✅ Element ${id} aktualizován na: ${value}`);
-    } else {
-        console.error(`❌ Element s ID '${id}' nenalezen!`);
+    /**
+     * Fallback mock data
+     */
+    loadMockDataFallback() {
+        this.log('🎲 Načítám fallback mock data...', 'warn');
+
+        const mockData = {
+            stats: {
+                totalCount: 15,
+                paidCount: 10,
+                unpaidCount: 5,
+                overdueCount: 1,
+                totalTurnover: 950000,
+                paidAmount: 720000,
+                unpaidAmount: 230000,
+                year: new Date().getFullYear()
+            },
+            vatLimits: {
+                currentTurnover: 950000,
+                alerts: [],
+                nextLimit: 2000000,
+                progressToNextLimit: 47.5
+            }
+        };
+
+        this.updateFinancialStats(mockData.stats);
+        this.updateVatStatus(mockData.vatLimits);
     }
-}
 
-/**
- * Formátování částky do českého formátu
- */
-function formatAmount(amount) {
-    const formatted = new Intl.NumberFormat('cs-CZ').format(amount) + ' Kč';
-    console.log(`💰 Formátuji částku ${amount} na: ${formatted}`);
-    return formatted;
-}
+    /**
+     * Utility metody
+     */
+    updateElement(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value;
+            // Přidej animaci pro zvýraznění změny
+            element.classList.add('highlight');
+            setTimeout(() => element.classList.remove('highlight'), 1000);
+        } else {
+            this.log(`⚠️ Element '${id}' nenalezen`, 'warn');
+        }
+    }
 
-/**
- * Veřejné API modulu
- */
-window.FinancialReports = {
-    version: '1.0.0',
-    
-    getInfo: function() {
+    formatAmount(amount) {
+        return new Intl.NumberFormat('cs-CZ', {
+            style: 'currency',
+            currency: 'CZK',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(amount);
+    }
+
+    log(message, level = 'info', data = null) {
+        const timestamp = new Date().toLocaleTimeString();
+        const prefix = `[${timestamp}] FinancialReports`;
+        
+        switch (level) {
+            case 'error':
+                console.error(`${prefix} ❌`, message, data || '');
+                break;
+            case 'warn':
+                console.warn(`${prefix} ⚠️`, message, data || '');
+                break;
+            case 'success':
+                console.log(`${prefix} ✅`, message, data || '');
+                break;
+            case 'debug':
+                console.debug(`${prefix} 🔍`, message, data || '');
+                break;
+            default:
+                console.log(`${prefix} ℹ️`, message, data || '');
+        }
+    }
+
+    /**
+     * Veřejné API
+     */
+    getInfo() {
         return {
-            name: 'Finanční přehledy',
+            name: this.moduleName,
             version: this.version,
             status: 'active',
-            author: 'Allimedia.cz'
+            author: 'Allimedia.cz',
+            tenantId: this.tenantId,
+            isSuperAdmin: this.isSuperAdmin
         };
-    },
-    
-    refresh: function() {
-        console.log('🔄 Refresh voláno z API');
-        loadRealFinancialData();
-    },
-    
-    loadData: function() {
-        console.log('📥 LoadData voláno z API');
-        loadRealFinancialData();
     }
-};
 
-console.log('🌟 FinancialReports API je dostupné:', window.FinancialReports);
+    destroy() {
+        // Cleanup při odstranění modulu
+        Object.values(this.charts).forEach(chart => {
+            if (chart && typeof chart.destroy === 'function') {
+                chart.destroy();
+            }
+        });
+        this.charts = {};
+        this.log('🗑️ Modul byl odstraněn', 'info');
+    }
+}
+
+// Automatická inicializace při načtení DOM
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🟢 DOM načten, inicializuji FinancialReports modul...');
+    
+    // Vytvoření a inicializace instance modulu
+    const financialReports = new FinancialReportsModule();
+    financialReports.init();
+    
+    // Globální přístup pro backwards compatibility a debugging
+    window.FinancialReports = financialReports;
+    
+    console.log('🌟 FinancialReports modul je připraven:', window.FinancialReports.getInfo());
+});
+
+// Export pro ES6 modules (pokud je potřeba)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = FinancialReportsModule;
+}

@@ -10,10 +10,16 @@ use App\Model\CompanyManager;
 use Nette\Database\Explorer;
 
 /**
- * Modul Finanční přehledy
+ * Modul Finanční přehledy - aktualizovaná verze pro multitenancy
  */
 class Module extends BaseModule
 {
+    /** @var int|null ID aktuálního tenanta */
+    private $currentTenantId;
+
+    /** @var bool Zda je uživatel super admin */
+    private $isSuperAdmin = false;
+
     /**
      * {@inheritdoc}
      */
@@ -47,13 +53,22 @@ class Module extends BaseModule
     /**
      * {@inheritdoc}
      * 
-     * NOVÁ IMPLEMENTACE: Zpracování AJAX požadavků přímo v modulu
+     * Zpracování AJAX požadavků s tenant kontextem
      */
     public function handleAjaxRequest(string $action, array $parameters = [], array $dependencies = [])
     {
-        $this->log("Zpracovávám AJAX akci: $action");
+        $this->log("Zpracovávám AJAX akci: $action pro tenant: " . ($this->currentTenantId ?? 'neznámý'));
         
         try {
+            // Nastavíme tenant kontext z dependencies pokud není nastaven
+            if (isset($dependencies['tenantId'])) {
+                $this->currentTenantId = (int)$dependencies['tenantId'];
+            }
+            
+            if (isset($dependencies['isSuperAdmin'])) {
+                $this->isSuperAdmin = (bool)$dependencies['isSuperAdmin'];
+            }
+
             // Získáme potřebné závislosti
             $invoicesManager = $this->getDependency($dependencies, InvoicesManager::class);
             $companyManager = $this->getDependency($dependencies, CompanyManager::class);
@@ -63,27 +78,27 @@ class Module extends BaseModule
                 throw new \Exception('Chybí potřebné závislosti pro modul Financial Reports');
             }
             
-            $this->log("Závislosti úspěšně získány");
+            $this->log("Závislosti úspěšně získány, tenant_id: " . ($this->currentTenantId ?? 'null'));
             
-            // Vytvoříme instanci služby
+            // Vytvoříme instanci služby s tenant kontextem
             $service = $this->getFinancialReportsService($invoicesManager, $companyManager, $database);
             
             // Zpracujeme akci
             switch ($action) {
                 case 'getBasicStats':
-                    $this->log("Volám getBasicStats");
+                    $this->log("Volám getBasicStats pro tenant: " . ($this->currentTenantId ?? 'all'));
                     $result = $service->getBasicStats();
                     $this->log("getBasicStats výsledek: " . json_encode($result));
                     return $result;
 
                 case 'getVatLimits':
-                    $this->log("Volám getVatLimits");
+                    $this->log("Volám getVatLimits pro tenant: " . ($this->currentTenantId ?? 'all'));
                     $result = $service->checkVatLimits();
                     $this->log("getVatLimits výsledek: " . json_encode($result));
                     return $result;
 
                 case 'getAllData':
-                    $this->log("Volám getAllData (getBasicStats + getVatLimits)");
+                    $this->log("Volám getAllData (getBasicStats + getVatLimits) pro tenant: " . ($this->currentTenantId ?? 'all'));
                     
                     $this->log("Načítám základní statistiky...");
                     $stats = $service->getBasicStats();
@@ -105,7 +120,7 @@ class Module extends BaseModule
                     $year = (int)($parameters['year'] ?? date('Y'));
                     $month = (int)($parameters['month'] ?? date('n'));
                     
-                    $this->log("Volám getMonthlyStats pro rok $year, měsíc $month");
+                    $this->log("Volám getMonthlyStats pro rok $year, měsíc $month, tenant: " . ($this->currentTenantId ?? 'all'));
                     $result = $service->getMonthlyStats($year, $month);
                     $this->log("getMonthlyStats výsledek: " . json_encode($result));
                     return $result;
@@ -113,7 +128,7 @@ class Module extends BaseModule
                 case 'getMonthlyIncomeData':
                     $year = (int)($parameters['year'] ?? date('Y'));
                     
-                    $this->log("Volám getMonthlyIncomeData pro rok $year");
+                    $this->log("Volám getMonthlyIncomeData pro rok $year, tenant: " . ($this->currentTenantId ?? 'all'));
                     $result = $service->getMonthlyIncomeData($year);
                     $this->log("getMonthlyIncomeData výsledek: " . json_encode($result));
                     return $result;
@@ -123,7 +138,7 @@ class Module extends BaseModule
                     $month = isset($parameters['month']) ? (int)$parameters['month'] : null;
                     $limit = (int)($parameters['limit'] ?? 50);
                     
-                    $this->log("Volám getInvoicesOverview - rok: $year, měsíc: $month, limit: $limit");
+                    $this->log("Volám getInvoicesOverview - rok: $year, měsíc: $month, limit: $limit, tenant: " . ($this->currentTenantId ?? 'all'));
                     $result = $service->getInvoicesOverview($year, $month, $limit);
                     
                     // Převedeme na pole pro JSON
@@ -146,13 +161,23 @@ class Module extends BaseModule
     }
     
     /**
+     * Nastaví tenant kontext pro modul
+     */
+    public function setTenantContext(int $tenantId, bool $isSuperAdmin = false): void
+    {
+        $this->currentTenantId = $tenantId;
+        $this->isSuperAdmin = $isSuperAdmin;
+        $this->log("Nastaven tenant kontext: tenant_id=$tenantId, is_super_admin=" . ($isSuperAdmin ? 'true' : 'false'));
+    }
+    
+    /**
      * Získá instanci služby pro finanční přehledy
      */
     private function getFinancialReportsService(
         InvoicesManager $invoicesManager,
         CompanyManager $companyManager,
         Explorer $database
-    ): FinancialReportsService {
+    ) {
         
         $this->log("Vytvářím instanci FinancialReportsService");
         
@@ -163,17 +188,29 @@ class Module extends BaseModule
             throw new \Exception("Soubor služby FinancialReportsService nebyl nalezen: $serviceFile");
         }
         
-        if (!class_exists(FinancialReportsService::class)) {
+        // Dynamicky určíme název třídy podle aktuálního namespace
+        $currentNamespace = __NAMESPACE__;
+        $serviceClassName = $currentNamespace . '\\FinancialReportsService';
+        
+        if (!class_exists($serviceClassName)) {
             require_once $serviceFile;
         }
         
-        if (!class_exists(FinancialReportsService::class)) {
-            throw new \Exception("Třída FinancialReportsService nebyla nalezena");
+        if (!class_exists($serviceClassName)) {
+            throw new \Exception("Třída $serviceClassName nebyla nalezena");
         }
         
-        $this->log("FinancialReportsService úspěšně vytvořena");
+        $this->log("FinancialReportsService úspěšně vytvořena jako: $serviceClassName");
         
-        return new FinancialReportsService($invoicesManager, $companyManager, $database);
+        // Vytvoříme službu s tenant kontextem
+        $service = new $serviceClassName($invoicesManager, $companyManager, $database);
+        
+        // Nastavíme tenant kontext do služby pokud metoda existuje
+        if (method_exists($service, 'setTenantContext') && $this->currentTenantId !== null) {
+            $service->setTenantContext($this->currentTenantId, $this->isSuperAdmin);
+        }
+        
+        return $service;
     }
     
     /**
