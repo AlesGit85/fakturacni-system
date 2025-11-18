@@ -11,16 +11,16 @@ abstract class BaseModule implements IModule
 {
     /** @var array */
     protected $moduleInfo;
-    
+
     /** @var string */
     protected $modulePath;
-    
+
     public function __construct()
     {
         // Zjistíme cestu k adresáři modulu
         $reflector = new \ReflectionClass($this);
         $this->modulePath = dirname($reflector->getFileName());
-        
+
         // Načteme module.json, pokud existuje
         $moduleJsonPath = $this->modulePath . '/module.json';
         if (file_exists($moduleJsonPath)) {
@@ -30,7 +30,7 @@ abstract class BaseModule implements IModule
             $this->moduleInfo = [];
         }
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -38,7 +38,7 @@ abstract class BaseModule implements IModule
     {
         return $this->moduleInfo['id'] ?? basename($this->modulePath);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -46,7 +46,7 @@ abstract class BaseModule implements IModule
     {
         return $this->moduleInfo['name'] ?? 'Unnamed Module';
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -54,7 +54,7 @@ abstract class BaseModule implements IModule
     {
         return $this->moduleInfo['version'] ?? '1.0.0';
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -62,7 +62,7 @@ abstract class BaseModule implements IModule
     {
         return $this->moduleInfo['author'] ?? 'Unknown';
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -70,7 +70,7 @@ abstract class BaseModule implements IModule
     {
         return $this->moduleInfo['description'] ?? '';
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -78,7 +78,7 @@ abstract class BaseModule implements IModule
     {
         return $this->moduleInfo['icon'] ?? 'bi bi-puzzle-fill';
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -87,7 +87,7 @@ abstract class BaseModule implements IModule
         $templatePath = $this->modulePath . '/templates/dashboard.latte';
         return file_exists($templatePath) ? $templatePath : null;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -95,7 +95,7 @@ abstract class BaseModule implements IModule
     {
         // Prázdná implementace
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -103,7 +103,7 @@ abstract class BaseModule implements IModule
     {
         // Prázdná implementace
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -111,7 +111,7 @@ abstract class BaseModule implements IModule
     {
         // Prázdná implementace
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -119,7 +119,7 @@ abstract class BaseModule implements IModule
     {
         // Prázdná implementace
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -127,7 +127,7 @@ abstract class BaseModule implements IModule
     {
         return [];
     }
-    
+
     /**
      * {@inheritdoc}
      * 
@@ -139,7 +139,7 @@ abstract class BaseModule implements IModule
         // Základní implementace - žádné AJAX akce nejsou podporovány
         throw new \Exception("Modul '{$this->getName()}' nepodporuje AJAX akci: $action");
     }
-    
+
     /**
      * Pomocná metoda pro získání závislosti z pole dependencies
      * 
@@ -156,7 +156,7 @@ abstract class BaseModule implements IModule
         }
         return null;
     }
-    
+
     /**
      * Pomocná metoda pro logování z modulu
      * 
@@ -167,8 +167,17 @@ abstract class BaseModule implements IModule
     {
         $moduleId = $this->getId();
         $logMessage = "[MODULE: $moduleId] $message";
-        
+
         // V produkční verzi by zde mohlo být lepší řešení logování
         error_log("[$level] $logMessage");
+    }
+
+    /**
+     * Nastaví tenant kontext pro modul (volitelné pro moduly)
+     */
+    public function setTenantContext(int $tenantId, bool $isSuperAdmin = false): void
+    {
+        // Default implementace - moduly můžou override
+        // Některé moduly nemusí tenant kontext potřebovat
     }
 }
