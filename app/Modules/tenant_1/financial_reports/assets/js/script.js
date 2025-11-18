@@ -11,12 +11,12 @@ class FinancialReportsModule {
         this.tenantId = null;
         this.isSuperAdmin = false;
         this.charts = {};
-        
+
         // Bind methods to preserve context
         this.loadRealData = this.loadRealData.bind(this);
         this.refreshData = this.refreshData.bind(this);
         this.handleError = this.handleError.bind(this);
-        
+
         this.log('🟢 FinancialReportsModule inicializován', 'info');
     }
 
@@ -25,21 +25,21 @@ class FinancialReportsModule {
      */
     init() {
         this.log('🟡 Spouštím inicializaci modulu...', 'info');
-        
+
         // Detekce tenant kontextu z DOM
         this.detectTenantContext();
-        
+
         // Nastavení event listenerů
         this.setupEventListeners();
-        
+
         // Inicializace UI komponent
         this.initializeComponents();
-        
+
         // Auto-loading pokud je tlačítko označené
         this.checkAutoLoad();
-        
+
         this.log('✅ Modul je připraven k použití', 'success');
-        
+
         return this;
     }
 
@@ -50,28 +50,28 @@ class FinancialReportsModule {
         // Hledáme tenant informace v meta tagu nebo data attributech
         const tenantMeta = document.querySelector('meta[name="tenant-id"]');
         const adminMeta = document.querySelector('meta[name="is-super-admin"]');
-        
+
         if (tenantMeta) {
             this.tenantId = parseInt(tenantMeta.content);
         }
-        
+
         if (adminMeta) {
             this.isSuperAdmin = adminMeta.content === 'true' || adminMeta.content === '1';
         }
-        
+
         // Backup: hledáme v container elementech
         const container = document.querySelector('[data-tenant-id]');
         if (container && !this.tenantId) {
             this.tenantId = parseInt(container.dataset.tenantId);
         }
-        
+
         const adminContainer = document.querySelector('[data-super-admin]');
         if (adminContainer && this.isSuperAdmin === false) {
             this.isSuperAdmin = adminContainer.dataset.superAdmin === 'true';
         }
-        
+
         this.log(`🔍 Tenant kontext: ID=${this.tenantId}, SuperAdmin=${this.isSuperAdmin}`, 'info');
-        
+
         // Zobrazíme tenant indikátor pokud existuje
         this.updateTenantIndicator();
     }
@@ -109,11 +109,11 @@ class FinancialReportsModule {
         // Filter změny
         const yearFilter = document.getElementById('yearFilter');
         const monthFilter = document.getElementById('monthFilter');
-        
+
         if (yearFilter) {
             yearFilter.addEventListener('change', () => this.handleFilterChange());
         }
-        
+
         if (monthFilter) {
             monthFilter.addEventListener('change', () => this.handleFilterChange());
         }
@@ -139,7 +139,7 @@ class FinancialReportsModule {
 
         // Nastavení progress barů
         this.initializeProgressBars();
-        
+
         // Příprava kontejnerů pro grafy
         this.prepareChartContainers();
     }
@@ -195,17 +195,17 @@ class FinancialReportsModule {
         try {
             // UI stav - loading
             this.setLoadingState(true);
-            
+
             // Vytvoření AJAX URL pro multitenancy systém
             const ajaxUrl = this.buildAjaxUrl('getAllData');
             this.log(`🔗 AJAX URL: ${ajaxUrl}`, 'debug');
 
             // AJAX request s error handling
             const response = await this.makeAjaxRequest(ajaxUrl);
-            
+
             // Zpracování odpovědi
             await this.processResponse(response);
-            
+
             // Úspěšné dokončení
             this.setSuccessState();
             this.log('✅ Data úspěšně načtena a zobrazena', 'success');
@@ -224,7 +224,7 @@ class FinancialReportsModule {
     buildAjaxUrl(action, params = {}) {
         const currentUrl = new URL(window.location);
         const baseUrl = `${currentUrl.origin}${currentUrl.pathname}`;
-        
+
         // Parametry pro ModuleAdmin presenter
         const ajaxParams = new URLSearchParams({
             do: 'moduleData',
@@ -272,11 +272,11 @@ class FinancialReportsModule {
 
             } catch (error) {
                 this.log(`❌ Attempt ${attempt + 1} failed: ${error.message}`, 'warn');
-                
+
                 if (attempt === retries) {
                     throw error;
                 }
-                
+
                 // Exponential backoff
                 await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
             }
@@ -288,7 +288,7 @@ class FinancialReportsModule {
      */
     parseJsonResponse(text) {
         let jsonText = text.trim();
-        
+
         // Handling HTML wrapped responses
         if (jsonText.startsWith('<!DOCTYPE') || jsonText.startsWith('<html')) {
             const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
@@ -321,13 +321,13 @@ class FinancialReportsModule {
         if (data.data && data.data.stats && data.data.vatLimits) {
             // Aktualizace statistik
             this.updateFinancialStats(data.data.stats);
-            
+
             // Aktualizace DPH statusu
             this.updateVatStatus(data.data.vatLimits);
-            
+
             // Aktualizace grafů (pokud existují)
             await this.updateCharts(data.data);
-            
+
         } else {
             throw new Error('Neočekávaná struktura dat od serveru');
         }
@@ -367,7 +367,7 @@ class FinancialReportsModule {
         // Základní informace
         this.updateElement('currentTurnover', this.formatAmount(vatLimits.currentTurnover));
         this.updateElement('nextLimit', this.formatAmount(vatLimits.nextLimit));
-        this.updateElement('remainingToLimit', 
+        this.updateElement('remainingToLimit',
             this.formatAmount(vatLimits.nextLimit - vatLimits.currentTurnover));
 
         // Progress bar
@@ -386,21 +386,21 @@ class FinancialReportsModule {
 
         if (progressBar && progressText) {
             const finalPercentage = Math.min(Math.max(percentage, 0), 100);
-            
+
             // Animovaná aktualizace
             let currentPercentage = 0;
             const increment = finalPercentage / 30; // 30 kroků animace
-            
+
             const animation = setInterval(() => {
                 currentPercentage += increment;
                 if (currentPercentage >= finalPercentage) {
                     currentPercentage = finalPercentage;
                     clearInterval(animation);
                 }
-                
+
                 progressBar.style.width = `${currentPercentage}%`;
                 progressText.textContent = `${currentPercentage.toFixed(1)}%`;
-                
+
                 // Změna barvy podle hodnoty
                 if (currentPercentage >= 95) {
                     progressBar.className = 'progress-bar bg-danger';
@@ -432,7 +432,7 @@ class FinancialReportsModule {
                     <small>${alert.message}</small>
                 </div>
             `;
-            
+
             alertContainer.appendChild(alertElement);
         });
     }
@@ -482,9 +482,9 @@ class FinancialReportsModule {
     handleFilterChange() {
         const year = document.getElementById('yearFilter')?.value;
         const month = document.getElementById('monthFilter')?.value;
-        
+
         this.log(`🔍 Filter změna: rok=${year}, měsíc=${month}`, 'debug');
-        
+
         // Zde můžeme implementovat filtrované načítání dat
         // this.loadFilteredData(year, month);
     }
@@ -524,13 +524,26 @@ class FinancialReportsModule {
     /**
      * Nastavení success stavu
      */
+    /**
+     * Nastavení success stavu
+     */
     setSuccessState() {
         const loadButton = document.getElementById('loadRealData');
         const dataStatus = document.getElementById('dataStatus');
+        const loadingIndicator = document.getElementById('loadingIndicator');
 
         if (loadButton) {
             loadButton.innerHTML = '<i class="bi bi-check"></i> Data načtena z databáze';
             loadButton.className = 'btn btn-success';
+        }
+
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'block';
+            loadingIndicator.className = 'd-flex align-items-center text-success';
+            loadingIndicator.innerHTML = `
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span>Načteno</span>
+            `;
         }
 
         if (dataStatus) {
@@ -538,8 +551,7 @@ class FinancialReportsModule {
             dataStatus.style.display = 'block';
             dataStatus.innerHTML = `
                 <i class="bi bi-check-circle-fill me-2"></i>
-                Skutečná data byla úspěšně načtena z databáze!
-                <small class="d-block mt-1">Tenant: ${this.tenantId || 'všichni'}</small>
+                Data byla úspěšně načtena z databáze!
             `;
         }
     }
@@ -633,7 +645,7 @@ class FinancialReportsModule {
     log(message, level = 'info', data = null) {
         const timestamp = new Date().toLocaleTimeString();
         const prefix = `[${timestamp}] FinancialReports`;
-        
+
         switch (level) {
             case 'error':
                 console.error(`${prefix} ❌`, message, data || '');
@@ -679,16 +691,16 @@ class FinancialReportsModule {
 }
 
 // Automatická inicializace při načtení DOM
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('🟢 DOM načten, inicializuji FinancialReports modul...');
-    
+
     // Vytvoření a inicializace instance modulu
     const financialReports = new FinancialReportsModule();
     financialReports.init();
-    
+
     // Globální přístup pro backwards compatibility a debugging
     window.FinancialReports = financialReports;
-    
+
     console.log('🌟 FinancialReports modul je připraven:', window.FinancialReports.getInfo());
 });
 
