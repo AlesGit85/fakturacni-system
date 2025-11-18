@@ -87,16 +87,6 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1763201631,
     ),
-    'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
-      1 => 1763200408,
-    ),
-    'Modules\\Tenant1\\Financial_reports\\Module' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
-      1 => 1763200408,
-    ),
     'Modules\\Tenant1\\InvoiceEmail\\InvoiceEmailPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\invoice_email\\InvoiceEmailPresenter.php',
@@ -120,12 +110,12 @@ return array (
     'Modules\\Tenant12\\Financial_reports\\FinancialReportsService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\FinancialReportsService.php',
-      1 => 1763200156,
+      1 => 1763484062,
     ),
     'Modules\\Tenant12\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\Module.php',
-      1 => 1763200156,
+      1 => 1763484062,
     ),
     'Modules\\Tenant12\\InvoiceEmail\\InvoiceEmailPresenter' => 
     array (
@@ -190,7 +180,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1763203242,
+      1 => 1763483908,
     ),
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (

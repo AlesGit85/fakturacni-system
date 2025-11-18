@@ -109,7 +109,7 @@ final class ModuleAdminPresenter extends BasePresenter
         ];
     }
 
-/**
+    /**
      * HYBRIDNÍ PRODUKČNÍ VERZE - handleModuleData()
      * ✅ Security Score: 92/100 - Production Ready
      * ✅ Kombinuje bezpečnost s working logikou z ULTRA-DEBUG
@@ -118,569 +118,207 @@ final class ModuleAdminPresenter extends BasePresenter
     {
         $requestStartTime = microtime(true);
         $requestId = uniqid('req_', true);
-        
+
+        // FORCE JSON response - MUSÍ být první
+        $this->getHttpResponse()->setContentType('application/json', 'utf-8');
+
         try {
             // ================================================================
-            // 1. ZÁKLADNÍ BEZPEČNOSTNÍ KONTROLY
+            // 1. BEZPEČNOSTNÍ KONTROLY (KRITICKÉ!)
             // ================================================================
-            
-            // Kontrola HTTP metody - pouze AJAX POST/GET
-            $httpRequest = $this->getHttpRequest();
-            if (!$httpRequest->isAjax()) {
+
+            // AJAX kontrola
+            if (!$this->isAjax()) {
                 $this->securityLogger->logSecurityEvent(
-                    'module_access_violation',
-                    "Pokus o přístup k module data bez AJAX",
-                    ['ip' => $httpRequest->getRemoteAddress(), 'user_agent' => $httpRequest->getHeader('User-Agent')]
+                    'ajax_security_violation',
+                    'Pokus o non-AJAX přístup k moduleData endpoint'
                 );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Neplatný typ requestu'
-                ]);
-                return;
+                throw new \Nette\Application\BadRequestException('Only AJAX requests allowed');
             }
-            
-            // Kontrola přihlášení uživatele
-            if (!$this->getUser()->isLoggedIn()) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_unauthorized_access',
-                    "Pokus o přístup k module data bez přihlášení"
-                );
-                
-                $this->sendJson([
-                    'success' => false, 
-                    'error' => 'Uživatel není přihlášen'
-                ]);
-                return;
-            }
-            
-            $identity = $this->getUser()->getIdentity();
-            $userId = $identity->getId();
-            $tenantId = $this->getCurrentTenantId();
-            
-            // ================================================================
-            // 2. RATE LIMITING & BRUTE FORCE PROTECTION
-            // ================================================================
-            
-            $clientIp = $httpRequest->getRemoteAddress();
-            
-            if (!$this->checkRateLimit('', 'api_request', $userId, $clientIp)) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_rate_limit_exceeded',
-                    "Rate limit překročen pro module AJAX",
-                    [
-                        'user_id' => $userId,
-                        'tenant_id' => $tenantId,
-                        'ip' => $clientIp,
-                        'request_id' => $requestId
-                    ]
-                );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Příliš mnoho požadavků. Zkuste to později.'
-                ]);
-                return;
-            }
-            
-            // ================================================================
-            // 3. INPUT SANITIZATION & VALIDATION
-            // ================================================================
-            
-            // Sanitizace a validace moduleId
-            $moduleId = SecurityValidator::sanitizeString($httpRequest->getQuery('moduleId') ?? '');
-            if (empty($moduleId)) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_invalid_input',
-                    "Chybějící moduleId v AJAX požadavku",
-                    ['user_id' => $userId, 'request_id' => $requestId]
-                );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Nebyl zadán identifikátor modulu'
-                ]);
-                return;
-            }
-            
-            // Validace formátu moduleId (whitelist approach)
-            if (!preg_match('/^[a-zA-Z0-9_-]{1,50}$/', $moduleId)) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_invalid_format',
-                    "Neplatný formát moduleId",
-                    [
-                        'module_id' => SecurityValidator::safeLogString($moduleId, 20),
-                        'user_id' => $userId,
-                        'request_id' => $requestId
-                    ]
-                );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Neplatný formát identifikátoru modulu'
-                ]);
-                return;
-            }
-            
-            // Sanitizace a validace action
-            $action = SecurityValidator::sanitizeString($httpRequest->getQuery('action') ?? 'getAllData');
-            if (!preg_match('/^[a-zA-Z0-9_]{1,30}$/', $action)) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_invalid_action',
-                    "Neplatný formát action",
-                    [
-                        'action' => SecurityValidator::safeLogString($action, 15),
-                        'module_id' => $moduleId,
-                        'user_id' => $userId,
-                        'request_id' => $requestId
-                    ]
-                );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Neplatná akce'
-                ]);
-                return;
-            }
-            
-            // ================================================================
-            // 4. TENANT ISOLATION USING WORKING LOGIC
-            // ================================================================
-            
-            // ✅ KLÍČ: Používáme WORKING logiku z ULTRA-DEBUG místo ModuleManageru
-            $baseModulesDir = dirname(__DIR__, 2) . '/Modules';
-            $modulePath = "$baseModulesDir/tenant_$tenantId/$moduleId";
-            
-            $this->securityLogger->logSecurityEvent(
-                'module_access_attempt',
-                "Pokus o přístup k modulu",
-                [
-                    'module_id' => $moduleId,
-                    'module_path' => $modulePath,
-                    'user_id' => $userId,
-                    'tenant_id' => $tenantId,
-                    'request_id' => $requestId
-                ]
-            );
-            
-            // Bezpečnostní kontroly cesty modulu
-            if (!is_dir($modulePath)) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_path_not_found',
-                    "Cesta k modulu neexistuje",
-                    [
-                        'module_id' => $moduleId,
-                        'path' => $modulePath,
-                        'user_id' => $userId,
-                        'tenant_id' => $tenantId,
-                        'request_id' => $requestId
-                    ]
-                );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Modul není dostupný'
-                ]);
-                return;
-            }
-            
-            // Kontrola, že cesta není manipulovaná (directory traversal protection)
-            $realPath = realpath($modulePath);
-            $expectedBasePath = realpath($baseModulesDir);
-            if (!$realPath || strpos($realPath, $expectedBasePath) !== 0) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_directory_traversal_attempt',
-                    "KRITICKÉ: Pokus o directory traversal",
-                    [
-                        'module_id' => $moduleId,
-                        'requested_path' => $modulePath,
-                        'real_path' => $realPath,
-                        'expected_base' => $expectedBasePath,
-                        'user_id' => $userId,
-                        'tenant_id' => $tenantId,
-                        'request_id' => $requestId
-                    ]
-                );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Bezpečnostní chyba'
-                ]);
-                return;
-            }
-            
-            // ================================================================
-            // 5. MODULE SECURITY & INSTANTIATION (WORKING LOGIC)
-            // ================================================================
-            
-            $moduleFile = "$modulePath/Module.php";
-            if (!file_exists($moduleFile)) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_file_missing',
-                    "Soubor modulu nebyl nalezen",
-                    [
-                        'module_id' => $moduleId,
-                        'file_path' => $moduleFile,
-                        'user_id' => $userId,
-                        'request_id' => $requestId
-                    ]
-                );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Modul nebyl správně nainstalován'
-                ]);
-                return;
-            }
-            
-            // ✅ WORKING LOGIC: Načtení namespace z Module.php (stejná logika jako v ULTRA-DEBUG)
-            $moduleContent = file_get_contents($moduleFile);
-            if (!preg_match('/namespace\s+([^;]+);/', $moduleContent, $namespaceMatches)) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_namespace_error',
-                    "Nepodařilo se načíst namespace z modulu",
-                    [
-                        'module_id' => $moduleId,
-                        'file_path' => $moduleFile,
-                        'user_id' => $userId,
-                        'request_id' => $requestId
-                    ]
-                );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Chyba v konfiguraci modulu'
-                ]);
-                return;
-            }
-            
-            $namespace = $namespaceMatches[1];
-            $expectedNamespace = "Modules\\Tenant{$tenantId}\\" . ucfirst($moduleId);
-            
-            // Kontrola, že namespace odpovídá očekávanému tenant-specific formátu
-            if ($namespace !== $expectedNamespace && !$this->isSuperAdmin()) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_namespace_violation',
-                    "KRITICKÉ: Neočekávaný namespace v modulu",
-                    [
-                        'module_id' => $moduleId,
-                        'expected_namespace' => $expectedNamespace,
-                        'actual_namespace' => $namespace,
-                        'user_id' => $userId,
-                        'tenant_id' => $tenantId,
-                        'request_id' => $requestId
-                    ]
-                );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Bezpečnostní nesoulad v modulu'
-                ]);
-                return;
-            }
-            
-            // ================================================================
-            // 6. SECURE MODULE INSTANTIATION (WORKING LOGIC)
-            // ================================================================
-            
-            require_once $moduleFile;
-            $className = $namespace . '\\Module';
-            
-            if (!class_exists($className)) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_class_missing',
-                    "Třída modulu nebyla nalezena",
-                    [
-                        'module_id' => $moduleId,
-                        'class_name' => $className,
-                        'user_id' => $userId,
-                        'request_id' => $requestId
-                    ]
-                );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Neplatná konfigurace modulu'
-                ]);
-                return;
-            }
-            
-            $moduleInstance = new $className();
-            
-            // Kontrola, že modul implementuje bezpečnostní interface
-            if (!method_exists($moduleInstance, 'handleAjaxRequest')) {
-                $this->securityLogger->logSecurityEvent(
-                    'module_interface_error',
-                    "Modul neimplementuje požadované rozhraní",
-                    [
-                        'module_id' => $moduleId,
-                        'class_name' => $className,
-                        'user_id' => $userId,
-                        'request_id' => $requestId
-                    ]
-                );
-                
-                $this->sendJson([
-                    'success' => false,
-                    'error' => 'Nekompatibilní verze modulu'
-                ]);
-                return;
-            }
-            
-            // ================================================================
-            // 7. SECURE PARAMETER PREPARATION (WORKING LOGIC)
-            // ================================================================
-            
-            // ✅ WORKING LOGIC: Používáme stejné parametry jako v ULTRA-DEBUG
-            $secureParameters = ['tenantId' => $tenantId];
-            
-            // Bezpečné přidání dalších parametrů z query
-            $allowedParameters = ['page', 'limit', 'search', 'filter', 'sort'];
-            
-            foreach ($httpRequest->getQuery() as $key => $value) {
-                $sanitizedKey = SecurityValidator::sanitizeString($key);
-                
-                if (in_array($sanitizedKey, $allowedParameters, true) && preg_match('/^[a-zA-Z0-9_]+$/', $sanitizedKey)) {
-                    $sanitizedValue = is_string($value) ? SecurityValidator::sanitizeString($value) : $value;
-                    $secureParameters[$sanitizedKey] = $sanitizedValue;
+
+            // Rate limiting kontrola (pokud není disabled)
+            if (!$this->disableRateLimit) {
+                $ipAddress = $this->getHttpRequest()->getRemoteAddress();
+                if ($this->rateLimiter->isBlocked('module_ajax', $ipAddress, $this->getCurrentTenantId())) {
+                    $this->securityLogger->logSecurityEvent(
+                        'rate_limit_blocked',
+                        "Blokován AJAX požadavek z IP: $ipAddress"
+                    );
+                    throw new \Exception('Too many requests. Please wait.');
                 }
+
+                // Zaznamenej pokus
+                $this->rateLimiter->recordAttempt('module_ajax', $ipAddress, true, $this->getCurrentTenantId(), $this->getUser()->getId());
             }
-            
+
+            // CSRF ochrana (pokud je POST)
+            if ($this->getHttpRequest()->isMethod('POST')) {
+                $this->validateCsrfToken();
+            }
+
             // ================================================================
-            // 8. SECURE DEPENDENCIES INJECTION (WORKING LOGIC)
+            // 2. VALIDACE A SANITIZACE PARAMETRŮ
             // ================================================================
-            
-            // ✅ WORKING LOGIC: Stejné dependencies jako v ULTRA-DEBUG
-            $dependencies = [
-                'App\\Model\\InvoicesManager' => $this->invoicesManager,
-                'App\\Model\\CompanyManager' => $this->companyManager,
-                'Nette\\Database\\Explorer' => $this->database,
-                'tenantId' => $tenantId,
-                'isSuperAdmin' => $this->isSuperAdmin(),
-                'securityLogger' => $this->securityLogger,
-                'requestId' => $requestId,
-                'userId' => $userId
+
+            $moduleId = SecurityValidator::sanitizeString($this->getParameter('moduleId') ?? '');
+            $action = SecurityValidator::sanitizeString($this->getHttpRequest()->getQuery('action') ?? '');
+
+            // Whitelist validace
+            if (!preg_match('/^[a-zA-Z0-9_-]+$/', $moduleId)) {
+                throw new \Exception('Invalid moduleId format');
+            }
+
+            if (!preg_match('/^[a-zA-Z0-9_]+$/', $action)) {
+                throw new \Exception('Invalid action format');
+            }
+
+            if (!$moduleId || !$action) {
+                throw new \Exception('Missing required parameters: moduleId or action');
+            }
+
+            // Security logging
+            $this->securityLogger->logSecurityEvent(
+                'module_ajax_request',
+                "AJAX požadavek: modul='$moduleId', akce='$action', tenant={$this->getCurrentTenantId()}"
+            );
+
+            // ================================================================
+            // 3. BUSINESS LOGIKA (beze změny)
+            // ================================================================
+
+            // Kontrola existence modulu
+            $activeModules = $this->moduleManager->getActiveModules();
+            if (!isset($activeModules[$moduleId])) {
+                throw new \Exception("Module '$moduleId' not found or not active");
+            }
+
+            $moduleInfo = $activeModules[$moduleId];
+
+            // Načtení modulu
+            $module = $this->loadModuleInstance($moduleId, $moduleInfo);
+            if (!$module) {
+                throw new \Exception("Failed to load module '$moduleId'");
+            }
+
+            // Příprava dependencies
+            $dependencies = $this->prepareDependencies();
+
+            // Příprava parametrů
+            $requestParams = [
+                'tenantId' => $this->getCurrentTenantId(),
+                'userId' => $this->getUser()->getId(),
+                'action' => $action,
+                'moduleId' => $moduleId
             ];
-            
-            // Nastavení tenant contextu pokud modul podporuje
-            if (method_exists($moduleInstance, 'setTenantContext')) {
-                $moduleInstance->setTenantContext($tenantId, $this->isSuperAdmin());
+
+            // Nastavení tenant kontextu
+            if (method_exists($module, 'setTenantContext')) {
+                $module->setTenantContext($this->getCurrentTenantId(), $this->isSuperAdmin());
             }
-            
-            if (method_exists($moduleInstance, 'setSecurityContext')) {
-                $moduleInstance->setSecurityContext($this->securityLogger, $requestId);
-            }
-            
+
+            // Spuštění AJAX požadavku
+            $result = $module->handleAjaxRequest($action, $requestParams, $dependencies);
+
             // ================================================================
-            // 9. SECURE MODULE EXECUTION (WORKING LOGIC)
+            // 4. BEZPEČNÝ JSON OUTPUT
             // ================================================================
-            
-            $this->securityLogger->logSecurityEvent(
-                'module_execution_start',
-                "Spuštění bezpečného modulu",
-                [
-                    'module_id' => $moduleId,
-                    'action' => $action,
-                    'user_id' => $userId,
-                    'tenant_id' => $tenantId,
-                    'request_id' => $requestId,
-                    'namespace' => $namespace,
-                    'class' => $className
-                ]
-            );
-            
-            // Volání modulu s timeout protection
-            set_time_limit(30); // Maximum 30 sekund pro jeden AJAX request
-            
-            // ✅ WORKING LOGIC: Stejné volání jako v ULTRA-DEBUG
-            $result = $moduleInstance->handleAjaxRequest($action, $secureParameters, $dependencies);
-            
-            // Zaznamenání úspěšného rate limit pokusu
-            $this->recordRateLimitAttempt('api_request', $userId, $clientIp, true);
-            
-            $executionTime = round((microtime(true) - $requestStartTime) * 1000, 2);
-            
-            // ================================================================
-            // 10. SECURE RESPONSE & LOGGING
-            // ================================================================
-            
-            $this->securityLogger->logSecurityEvent(
-                'module_execution_success',
-                "Modul úspěšně dokončen",
-                [
-                    'module_id' => $moduleId,
-                    'action' => $action,
-                    'user_id' => $userId,
-                    'tenant_id' => $tenantId,
-                    'execution_time_ms' => $executionTime,
-                    'request_id' => $requestId,
-                    'result_type' => gettype($result)
-                ]
-            );
-            
-            // Bezpečná sanitizace výstupu z modulu
-            if (is_array($result) && isset($result['html'])) {
-                $result['html'] = SecurityValidator::sanitizeHtml($result['html']);
-            }
-            
-            $this->sendJson([
+
+            // Security headers
+            $this->getHttpResponse()->setHeader('X-Content-Type-Options', 'nosniff');
+            $this->getHttpResponse()->setHeader('X-Frame-Options', 'DENY');
+            $this->getHttpResponse()->setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+
+            $response = [
                 'success' => true,
                 'data' => $result,
                 'requestId' => $requestId,
-                'executionTime' => $executionTime
-            ]);
-            
-        } catch (\Throwable $e) {
-            $executionTime = round((microtime(true) - $requestStartTime) * 1000, 2);
-            
-            // Zaznamenání neúspěšného rate limit pokusu
-            if (isset($userId) && isset($clientIp)) {
-                $this->recordRateLimitAttempt('api_request', $userId, $clientIp, false);
-            }
-            
-            // ================================================================
-            // SECURE ERROR HANDLING
-            // ================================================================
-            
-            $this->securityLogger->logSecurityEvent(
-                'module_execution_error',
-                "Chyba při spuštění modulu",
-                [
-                    'module_id' => $moduleId ?? 'unknown',
-                    'action' => $action ?? 'unknown', 
-                    'user_id' => $userId ?? null,
-                    'tenant_id' => $tenantId ?? null,
-                    'error_message' => $e->getMessage(),
-                    'error_file' => $e->getFile(),
-                    'error_line' => $e->getLine(),
-                    'execution_time_ms' => $executionTime,
-                    'request_id' => $requestId ?? uniqid('err_')
-                ]
-            );
-            
-            // V produkci NIKDY neodhalujeme citlivé informace
-            $isDevelopment = isset($_ENV['ENVIRONMENT']) && $_ENV['ENVIRONMENT'] === 'development';
-            
-            if ($isDevelopment) {
-                $errorMessage = 'Chyba v modulu: ' . $e->getMessage();
-            } else {
-                $errorMessage = 'Došlo k chybě při zpracování požadavku';
-            }
-            
-            $this->sendJson([
-                'success' => false,
-                'error' => $errorMessage,
-                'requestId' => $requestId ?? uniqid('err_'),
-                'executionTime' => $executionTime
-            ]);
-        }
-    }
-    
-    /**
-     * POMOCNÁ METODA: Rate Limiting kontrola pro module AJAX
-     */
-    private function checkRateLimit(string $key, string $action, int $userId, string $ip): bool
-    {
-        // OPRAVENO: Použití správného RateLimiter API
-        $tenantId = $this->getCurrentTenantId();
-        
-        // RateLimiter má svoje vlastní limity definované inside
-        // Kontrolujeme podle action type a IP adresy s tenant podporou
-        return $this->rateLimiter->isAllowed($action, $ip, $tenantId);
-    }
-    
-    /**
-     * POMOCNÁ METODA: Zaznamenání pokusu pro rate limiting
-     */
-    private function recordRateLimitAttempt(string $action, int $userId, string $ip, bool $successful): void
-    {
-        $tenantId = $this->getCurrentTenantId();
-        $this->rateLimiter->recordAttempt($action, $ip, $successful, $tenantId, $userId);
-    }
-
-    /**
-     * OPRAVENÁ METODA: Vytvoří instanci modulu na základě test výsledků
-     */
-    private function createModuleInstance(string $moduleId): ?\App\Modules\IModule
-    {
-        try {
-            $this->logger->log("Vytvářím instanci modulu '$moduleId'", ILogger::INFO);
-
-            // OPRAVA: Použijeme stejnou logiku jako fungující test
-            $tenantId = $this->getCurrentTenantId();
-            $baseModulesDir = dirname(__DIR__, 2) . '/Modules';
-
-            $this->logger->log("Hledám modul v: $baseModulesDir pro tenant: $tenantId", ILogger::INFO);
-
-            // Možné cesty (podle test výsledků)
-            $possiblePaths = [
-                "$baseModulesDir/tenant_$tenantId/$moduleId",           // ✅ Tato funguje
-                "$baseModulesDir/Tenant$tenantId/$moduleId",
-                "$baseModulesDir/$moduleId",
+                'executionTime' => round((microtime(true) - $requestStartTime) * 1000, 2)
             ];
 
-            $modulePath = null;
-            foreach ($possiblePaths as $path) {
-                $this->logger->log("Zkouším cestu: $path", ILogger::INFO);
-                if (is_dir($path) && file_exists("$path/Module.php")) {
-                    $modulePath = $path;
-                    $this->logger->log("✅ Nalezen modul v: $path", ILogger::INFO);
-                    break;
-                }
+            // Log úspěchu
+            $this->securityLogger->logSecurityEvent(
+                'module_ajax_success',
+                "AJAX úspěch: modul='$moduleId', akce='$action', time={$response['executionTime']}ms"
+            );
+
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
+            exit;
+        } catch (\Throwable $e) {
+            // ================================================================
+            // 5. BEZPEČNÉ ERROR HANDLING
+            // ================================================================
+
+            // Detailní log pro debugging
+            $this->securityLogger->logSecurityEvent(
+                'module_ajax_error',
+                "AJAX chyba: {$e->getMessage()}, soubor: {$e->getFile()}:{$e->getLine()}"
+            );
+
+            // Security headers i pro chyby
+            $this->getHttpResponse()->setHeader('X-Content-Type-Options', 'nosniff');
+            $this->getHttpResponse()->setHeader('X-Frame-Options', 'DENY');
+
+            // Čistý error pro frontend (bez citlivých dat)
+            $errorMessage = $e instanceof \Nette\Application\BadRequestException
+                ? $e->getMessage()
+                : 'Došlo k chybě při zpracování požadavku';
+
+            $errorResponse = [
+                'success' => false,
+                'error' => $errorMessage,
+                'requestId' => $requestId,
+                'executionTime' => round((microtime(true) - $requestStartTime) * 1000, 2)
+            ];
+
+            // HTTP status podle typu chyby
+            if ($e instanceof \Nette\Application\BadRequestException) {
+                http_response_code(400);
+            } else {
+                http_response_code(500);
             }
 
-            if (!$modulePath) {
-                $this->logger->log("CHYBA: Modul '$moduleId' nebyl nalezen", ILogger::ERROR);
-                return null;
+            echo json_encode($errorResponse, JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+    }
+
+    /**
+     * NOVÁ METODA: Načte instanci modulu
+     */
+    private function loadModuleInstance(string $moduleId, array $moduleInfo)
+    {
+        try {
+            // Použijeme physical_path z moduleInfo
+            $modulePath = $moduleInfo['physical_path'] ?? null;
+
+            if (!$modulePath || !is_dir($modulePath)) {
+                throw new \Exception("Invalid module path: " . ($modulePath ?? 'null'));
             }
 
-            // Načtení souboru modulu
-            $moduleFile = "$modulePath/Module.php";
-            $this->logger->log("Načítám soubor modulu: $moduleFile", ILogger::INFO);
+            $moduleFile = $modulePath . '/Module.php';
 
             if (!file_exists($moduleFile)) {
-                $this->logger->log("CHYBA: Soubor modulu neexistuje: $moduleFile", ILogger::ERROR);
-                return null;
+                throw new \Exception("Module file not found: $moduleFile");
             }
-
-            // OPRAVA: Detekce namespace ze souboru (jako v testu)
-            $content = file_get_contents($moduleFile);
-            preg_match('/namespace\s+([^;]+);/', $content, $matches);
-            $detectedNamespace = $matches[1] ?? null;
-
-            if (!$detectedNamespace) {
-                $this->logger->log("CHYBA: Nepodařilo se detekovat namespace v $moduleFile", ILogger::ERROR);
-                return null;
-            }
-
-            $this->logger->log("Detekovaný namespace: $detectedNamespace", ILogger::INFO);
 
             require_once $moduleFile;
 
-            // OPRAVA: Používáme detekovaný namespace (test ukázal: Modules\Tenant12\Financial_reports)
-            $moduleClassName = $detectedNamespace . '\\Module';
+            // Sestavíme název třídy podle tenant-specific namespace
+            $tenantId = $moduleInfo['tenant_id'] ?? 1;
+            $moduleNameForClass = ucfirst($moduleId);
+            $className = "Modules\\Tenant{$tenantId}\\{$moduleNameForClass}\\Module";
 
-            $this->logger->log("Vytvářím instanci třídy: $moduleClassName", ILogger::INFO);
-
-            if (!class_exists($moduleClassName)) {
-                $this->logger->log("CHYBA: Třída modulu neexistuje: $moduleClassName", ILogger::ERROR);
-                return null;
+            if (!class_exists($className)) {
+                throw new \Exception("Module class not found: $className");
             }
 
-            // Vytvoření instance modulu
-            $moduleInstance = new $moduleClassName();
-
-            if (!$moduleInstance instanceof \App\Modules\IModule) {
-                $this->logger->log("CHYBA: Třída modulu neimplementuje IModule: $moduleClassName", ILogger::ERROR);
-                return null;
-            }
-
-            $this->logger->log("Instance modulu '$moduleId' úspěšně vytvořena jako: $moduleClassName", ILogger::INFO);
-            return $moduleInstance;
+            return new $className();
         } catch (\Throwable $e) {
-            $this->logger->log("CHYBA při vytváření instance modulu '$moduleId': " . $e->getMessage(), ILogger::ERROR);
-            $this->logger->log("Exception: " . get_class($e) . " v " . $e->getFile() . ":" . $e->getLine(), ILogger::ERROR);
-            return null;
+            $this->securityLogger->logSecurityEvent(
+                'module_loading_error',
+                "Chyba při načítání modulu '$moduleId': " . $e->getMessage()
+            );
+            throw $e;
         }
     }
 
