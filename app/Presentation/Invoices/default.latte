@@ -57,6 +57,9 @@
             <a n:href="default, filter => 'paid'" class="filter-tab {if isset($filter) && $filter == 'paid'}filter-tab-active{/if}">
                 <i class="bi bi-check-circle me-1"></i> Zaplacené
             </a>
+            <a n:href="default, filter => 'unpaid'" class="filter-tab {if isset($filter) && $filter == 'unpaid'}filter-tab-active{/if}">
+                <i class="bi bi-clock me-1"></i> Nezaplacené
+            </a>
             <a n:href="default, filter => 'overdue'" class="filter-tab {if isset($filter) && $filter == 'overdue'}filter-tab-active{/if}">
                 <i class="bi bi-exclamation-circle me-1"></i> Po splatnosti
             </a>
@@ -92,7 +95,7 @@
             </thead>
             <tbody>
                 {foreach $invoices as $invoice}
-                <tr class="data-row {if $invoice->status == 'overdue'}row-danger{elseif $invoice->status == 'paid'}row-success{/if}">
+                <tr class="data-row {if $invoice->status == 'overdue'}row-danger{elseif $invoice->status == 'paid'}row-success{elseif $invoice->status == 'unpaid'}row-warning{/if}">
                     <td>
                         {* ✅ XSS OCHRANA: Escapování čísla faktury - OPRAVENO: používám 'number' místo 'invoice_number' *}
                         <strong>{$invoice->number|escape}</strong>
@@ -137,6 +140,12 @@
                                 <i class="bi bi-exclamation-circle-fill me-1 text-danger"></i>
                                 {* ✅ BEZPEČNÉ: Statický text *}
                                 <span class="text-danger">Po splatnosti</span>
+                            </span>
+                        {elseif $invoice->status == 'unpaid'}
+                            <span class="status-badge status-badge-warning">
+                                <i class="bi bi-exclamation-triangle-fill me-1 text-warning"></i>
+                                {* ✅ BEZPEČNÉ: Statický text *}
+                                <span class="text-warning">Nezaplacené</span>
                             </span>
                         {/if}
                     </td>
@@ -184,6 +193,21 @@
                                                 </a>
                                             </li>
                                         {/if}
+                                        
+                                        {* NOVÁ AKCE: Označit jako nezaplacené - pouze pro overdue faktury *}
+                                        {if $invoice->status == 'overdue'}
+                                            <li>
+                                                <a href="{link markAsUnpaid! $invoice->id, '_csrf_token' => $csrfToken}" class="dropdown-item text-warning" onclick="return confirm('Označit fakturu jako nezaplacenou? Tato akce označí fakturu jako nezaplacenou a připraví ji pro předání k vymáhání.')">
+                                                    <i class="bi bi-exclamation-triangle text-warning me-2"></i> Označit jako nezaplacenou
+                                                </a>
+                                            </li>
+                                        {/if}
+                                        
+                                        {* Divider před nebezpečné akce *}
+                                        {if $isUserAdmin}
+                                            <li><hr class="dropdown-divider"></li>
+                                        {/if}
+                                        
                                         {* ✅ CSRF OCHRANA: Mazání - pouze admin *}
                                         {if $isUserAdmin}
                                             <li>

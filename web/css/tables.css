@@ -373,6 +373,11 @@
     color: #dc3545;
 }
 
+.status-badge-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #e0a800;
+}
+
 .payment-date {
     font-size: 0.7rem;
     opacity: 0.8;
@@ -385,6 +390,10 @@
 
 .row-success {
     background-color: rgba(40, 167, 69, 0.02);
+}
+
+.row-warning {
+    background-color: rgba(255, 193, 7, 0.02);
 }
 
 .client-email,

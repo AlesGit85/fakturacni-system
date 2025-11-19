@@ -456,4 +456,69 @@ class InvoicesManager
         $filteredSelection = $this->applyTenantFilter($selection);
         return $filteredSelection->fetch();
     }
+
+/**
+     * Aktualizuje stav faktury (s kontrolou tenant_id)
+     */
+    public function updateStatus($id, $status)
+    {
+        // Ověříme, že faktura patří do správného tenanta
+        $invoice = $this->getById($id);
+        if (!$invoice) {
+            throw new \Exception('Faktura neexistuje nebo k ní nemáte přístup.');
+        }
+
+        return $this->database->table('invoices')
+            ->where('id', $id)
+            ->update(['status' => $status]);
+    }
+
+    /**
+     * Označí fakturu jako nezaplacenou (pro vymáhání)
+     */
+    public function markAsUnpaid($id)
+    {
+        return $this->updateStatus($id, 'unpaid');
+    }
+
+    /**
+     * Pokročilá kontrola stavů faktur s 60denní logikou
+     * Nahrazuje původní checkOverdueDates() rozšířenou funkčností
+     */
+    public function checkInvoiceStatuses()
+    {
+        $now = new \DateTime();
+        
+        // 1. Najdi faktury po splatnosti (status = 'created' a po splatnosti)
+        $overdueInvoices = $this->applyTenantFilter($this->database->table('invoices'))
+            ->where('status', 'created')
+            ->where('due_date < ?', $now->format('Y-m-d'));
+        
+        foreach ($overdueInvoices as $invoice) {
+            $dueDate = new \DateTime($invoice->due_date);
+            $daysPastDue = $now->diff($dueDate)->days;
+            
+            if ($daysPastDue <= 60) {
+                // 1-60 dní po splatnosti = overdue
+                $this->updateStatus($invoice->id, 'overdue');
+            } else {
+                // 60+ dní po splatnosti = automaticky nezaplacené
+                $this->updateStatus($invoice->id, 'unpaid');
+            }
+        }
+        
+        // 2. Zkontroluj faktury už označené jako 'overdue' - možná už jsou 60+ dní po splatnosti
+        $longOverdueInvoices = $this->applyTenantFilter($this->database->table('invoices'))
+            ->where('status', 'overdue');
+            
+        foreach ($longOverdueInvoices as $invoice) {
+            $dueDate = new \DateTime($invoice->due_date);
+            $daysPastDue = $now->diff($dueDate)->days;
+            
+            if ($daysPastDue > 60) {
+                $this->updateStatus($invoice->id, 'unpaid');
+            }
+        }
+    }
+
 }

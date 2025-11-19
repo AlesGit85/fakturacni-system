@@ -33,7 +33,7 @@
                 <i class="bi bi-check-circle-fill me-2"></i>
                 <div>
                     <strong>Finanční přehledy pro rok <span id="currentYear">{$currentYear}</span></strong><br>
-                    <small>Data budou načítána ze skutečných faktur v systému pro váš tenant</small>
+                    <small>Data jsou načítána z Vašich faktur v systému</small>
                 </div>
             </div>
         </div>
@@ -70,42 +70,70 @@
     {* Hlavní statistiky *}
     <div class="row g-4 mb-4">
         <div class="col-lg-3 col-md-6">
-            <div class="financial-stat-card stat-total text-center">
+            <div class="stat-card stat-card-primary">
                 <div class="stat-icon">
                     <i class="bi bi-file-earmark-text"></i>
                 </div>
-                <div class="stat-number" id="totalCount">{$testStats['totalCount']}</div>
-                <div class="stat-label">Celkem faktur</div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalCount">{$testStats['totalCount']}</div>
+                    <div class="stat-label">Celkem faktur</div>
+                </div>
+                <div class="stat-action">
+                    <a n:href="Invoices:default" class="btn btn-icon-dashboard" title="Zobrazit všechny faktury">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                </div>
             </div>
         </div>
         
         <div class="col-lg-3 col-md-6">
-            <div class="financial-stat-card stat-paid text-center">
+            <div class="stat-card stat-card-success">
                 <div class="stat-icon">
                     <i class="bi bi-check-circle"></i>
                 </div>
-                <div class="stat-number" id="paidCount">{$testStats['paidCount']}</div>
-                <div class="stat-label">Zaplacených</div>
+                <div class="stat-content">
+                    <div class="stat-number" id="paidCount">{$testStats['paidCount']}</div>
+                    <div class="stat-label">Zaplacených</div>
+                </div>
+                <div class="stat-action">
+                    <a n:href="Invoices:default, filter => 'paid'" class="btn btn-icon-dashboard" title="Zobrazit zaplacené faktury">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                </div>
             </div>
         </div>
         
         <div class="col-lg-3 col-md-6">
-            <div class="financial-stat-card stat-unpaid text-center">
+            <div class="stat-card stat-card-warning">
                 <div class="stat-icon">
                     <i class="bi bi-clock"></i>
                 </div>
-                <div class="stat-number" id="unpaidCount">{$testStats['unpaidCount']}</div>
-                <div class="stat-label">Nezaplacených</div>
+                <div class="stat-content">
+                    <div class="stat-number" id="unpaidCount">{$testStats['unpaidCount']}</div>
+                    <div class="stat-label">Nezaplacených</div>
+                </div>
+                <div class="stat-action">
+                    <a n:href="Invoices:default, filter => 'unpaid'" class="btn btn-icon-dashboard" title="Zobrazit nezaplacené faktury">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                </div>
             </div>
         </div>
         
         <div class="col-lg-3 col-md-6">
-            <div class="financial-stat-card stat-overdue text-center">
-                <div class="stat-icon">
+            <div class="stat-card" style="border-color: #dc3545;">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #dc3545, #c82333);">
                     <i class="bi bi-exclamation-circle"></i>
                 </div>
-                <div class="stat-number" id="overdueCount">{$testStats['overdueCount']}</div>
-                <div class="stat-label">Po splatnosti</div>
+                <div class="stat-content">
+                    <div class="stat-number" id="overdueCount" style="color: #dc3545;">{$testStats['overdueCount']}</div>
+                    <div class="stat-label">Po splatnosti</div>
+                </div>
+                <div class="stat-action">
+                    <a n:href="Invoices:default, filter => 'overdue'" class="btn btn-icon-dashboard" title="Zobrazit faktury po splatnosti">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

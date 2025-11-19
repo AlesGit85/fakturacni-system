@@ -903,7 +903,7 @@ class InvoicesPresenter extends BasePresenter
     {
         // Kontrola faktur po splatnosti - pouze pro účetní a admin
         if ($this->isAccountant()) {
-            $this->invoicesManager->checkOverdueDates();
+            $this->invoicesManager->checkInvoiceStatuses(); // místo checkOverdueDates()
         }
 
         // Příprava dotazu
@@ -911,7 +911,13 @@ class InvoicesPresenter extends BasePresenter
 
         // Aplikace filtru podle stavu
         if ($filter) {
-            $query->where('status', $filter);
+            if ($filter === 'unpaid') {
+                // Nezaplacené faktury (pouze ty označené pro vymáhání)
+                $query->where('status', 'unpaid');
+            } else {
+                // Ostatní filtry zůstávají stejné
+                $query->where('status', $filter);
+            }
         }
 
         // Aplikace filtru podle klienta
@@ -961,6 +967,21 @@ class InvoicesPresenter extends BasePresenter
 
         $this->invoicesManager->markAsCreated($id);
         $this->flashMessage('Faktura byla označena jako vystavená', 'success');
+        $this->redirect('this');
+    }
+
+    /**
+     * Ruční označení faktury jako nezaplacené (pro vymáhání)
+     */
+    public function handleMarkAsUnpaid(int $id): void
+    {
+        if (!$this->isAccountant()) {
+            $this->flashMessage('Nemáte oprávnění měnit stav faktur.', 'danger');
+            $this->redirect('this');
+        }
+
+        $this->invoicesManager->markAsUnpaid($id);
+        $this->flashMessage('Faktura byla označena jako nezaplacená a připravena k vymáhání', 'warning');
         $this->redirect('this');
     }
 

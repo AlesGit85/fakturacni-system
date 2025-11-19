@@ -45,7 +45,7 @@ return array (
     'App\\Model\\InvoicesManager' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Model\\InvoicesManager.php',
-      1 => 1759304250,
+      1 => 1763544395,
     ),
     'App\\Model\\MigrationService' => 
     array (
@@ -120,12 +120,12 @@ return array (
     'Modules\\Tenant12\\Financial_reports\\FinancialReportsService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\FinancialReportsService.php',
-      1 => 1763484062,
+      1 => 1763538427,
     ),
     'Modules\\Tenant12\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\Module.php',
-      1 => 1763484062,
+      1 => 1763538427,
     ),
     'Modules\\Tenant12\\InvoiceEmail\\InvoiceEmailPresenter' => 
     array (
@@ -175,7 +175,7 @@ return array (
     'App\\Presentation\\Invoices\\InvoicesPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\Invoices\\InvoicesPresenter.php',
-      1 => 1760191249,
+      1 => 1763544538,
     ),
     'App\\Presentation\\Migration\\MigrationPresenter' => 
     array (
@@ -266,10 +266,25 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\Sign\\SignInTemplate' => 3,
     'App\\Presentation\\Sign\\SignTemplate' => 3,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 2,
-    'App\\Presentation\\Home\\HomeTemplate' => 2,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
     'Modules\\Financial_reports\\FinancialReportsService' => 2,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 2,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
+    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
+    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 1,
+    'App\\Presentation\\Security\\SecurityTemplate' => 2,
+    'App\\Presentation\\Security\\SecurityDefaultTemplate' => 1,
+    'App\\Presentation\\Clients\\ClientsShowTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
+    'Modules\\Tenant1\\FinancialReports\\FinancialReportsPresenter' => 1,
+    'Modules\\Tenant1\\Notes\\NotesPresenter' => 1,
+    'Modules\\Tenant1\\TestModule\\TestModulePresenter' => 1,
+    'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 1,
   ),
   2 => 
   array (

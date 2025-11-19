@@ -435,3 +435,320 @@
 [2025-11-18 18-13-06] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
 [2025-11-18 18-13-06] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
 [2025-11-18 18-13-06] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-18 18-14-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-18 18-14-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=3pw3s&_fid=kff6 
+[2025-11-18 18-14-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-11-18 18-14-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=5qzy 
+[2025-11-18 18-14-36] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=5qzy 
+[2025-11-18 18-14-40] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-18 18-14-40] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-18 18-14-40] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-18 18-14-40] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/web/Modules/tenant_12/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-18 18-14-40] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_12/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-18 18-14-40] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-18 18-14-40] Šablona modulu financial_reports nalezena: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/financial_reports/templates/dashboard.latte  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-18 18-14-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
+[2025-11-18 18-14-41] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
+[2025-11-18 18-14-41] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
+[2025-11-18 18-14-41] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
+[2025-11-19 08-45-57] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-11-19 08-45-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=j2eer&_fid=gmhd 
+[2025-11-19 08-46-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-11-19 08-46-03] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=gi0j 
+[2025-11-19 08-46-03] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=gi0j 
+[2025-11-19 08-46-10] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-46-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-46-10] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-46-10] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-46-10] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-46-10] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-46-10] Šablona modulu financial_reports nalezena: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/templates/dashboard.latte  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-46-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 08-46-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 08-46-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 08-46-11] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 08-46-37] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=06pjy&_fid=d10a 
+[2025-11-19 08-46-38] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-11-19 08-46-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=8ore 
+[2025-11-19 08-46-39] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=8ore 
+[2025-11-19 08-46-42] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-46-42] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-46-42] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-46-42] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-46-42] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-46-42] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-46-42] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-46-42] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-46-42] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-46-42] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-46-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/default/financial_reports?do=toggleModule 
+[2025-11-19 08-46-46] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/default/financial_reports?do=toggleModule 
+[2025-11-19 08-46-46] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/default/financial_reports?do=toggleModule 
+[2025-11-19 08-46-46] Modul 'financial_reports' byl deaktivován pro uživatele 57  @  http://localhost:8000/moduleadmin/default/financial_reports?do=toggleModule 
+[2025-11-19 08-46-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=q63k 
+[2025-11-19 08-46-46] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=q63k 
+[2025-11-19 08-46-46] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=q63k 
+[2025-11-19 08-46-46] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=q63k 
+[2025-11-19 08-46-46] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=q63k 
+[2025-11-19 08-46-46] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=q63k 
+[2025-11-19 08-46-46] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=q63k 
+[2025-11-19 08-46-46] Statistiky modulů: Aktivní: 2, Neaktivní: 1, Celkem: 3  @  http://localhost:8000/moduleadmin/?_fid=q63k 
+[2025-11-19 08-46-46] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=q63k 
+[2025-11-19 08-46-46] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=q63k 
+[2025-11-19 08-46-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/default/financial_reports?do=uninstallModule 
+[2025-11-19 08-46-51] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/default/financial_reports?do=uninstallModule 
+[2025-11-19 08-46-51] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/default/financial_reports?do=uninstallModule 
+[2025-11-19 08-46-51] Fyzické soubory modulu 'financial_reports' byly smazány z tenant 12  @  http://localhost:8000/moduleadmin/default/financial_reports?do=uninstallModule 
+[2025-11-19 08-46-51] Modul 'financial_reports' byl odinstalován pro uživatele 57  @  http://localhost:8000/moduleadmin/default/financial_reports?do=uninstallModule 
+[2025-11-19 08-46-51] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=1qif 
+[2025-11-19 08-46-51] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=1qif 
+[2025-11-19 08-46-51] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=1qif 
+[2025-11-19 08-46-51] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=1qif 
+[2025-11-19 08-46-51] Načteno 2 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=1qif 
+[2025-11-19 08-46-51] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=1qif 
+[2025-11-19 08-46-51] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=1qif 
+[2025-11-19 08-46-51] Statistiky modulů: Aktivní: 2, Neaktivní: 0, Celkem: 2  @  http://localhost:8000/moduleadmin/?_fid=1qif 
+[2025-11-19 08-46-51] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=1qif 
+[2025-11-19 08-46-51] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=1qif 
+[2025-11-19 08-47-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] Začátek bezpečné instalace modulu: soubor=financial_reports-v2.2.1.zip, velikost=19.46 KB, uživatel=57, tenant=12  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] Validace module.json úspěšná: ID=financial_reports, název=Finanční přehledy, verze=2.2.1  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] === OPRAVA NAMESPACE v FinancialReportsService.php ===  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] Aktuální namespace: Modules\Financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] 🔧 Opravuji z starého formátu  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] ✅ ÚSPĚCH: Namespace opraven v FinancialReportsService.php  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] STARÝ: namespace Modules\Financial_reports;  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] NOVÝ:  namespace Modules\Tenant12\Financial_reports;  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] === OPRAVA NAMESPACE v Module.php ===  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] Aktuální namespace: Modules\Financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] 🔧 Opravuji z starého formátu  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] ✅ ÚSPĚCH: Namespace opraven v Module.php  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] STARÝ: namespace Modules\Financial_reports;  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] NOVÝ:  namespace Modules\Tenant12\Financial_reports;  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] Úspěšně aktualizován namespace pro modul financial_reports v 2 souborech  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] Namespace automaticky opraven pro modul financial_reports v tenant 12  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_12/financial_reports  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] Modul úspěšně nainstalován: Finanční přehledy (verze 2.2.1) pro uživatele 57  @  http://localhost:8000/moduleadmin/ 
+[2025-11-19 08-47-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/?_fid=riuy 
+[2025-11-19 08-47-07] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=riuy 
+[2025-11-19 08-47-07] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/?_fid=riuy 
+[2025-11-19 08-47-07] Správa modulů: Načítám VŠECHNY nainstalované moduly (aktivní i neaktivní) pro aktuálního uživatele  @  http://localhost:8000/moduleadmin/?_fid=riuy 
+[2025-11-19 08-47-07] Načteno 3 modulů pro zobrazení (aktivních i neaktivních)  @  http://localhost:8000/moduleadmin/?_fid=riuy 
+[2025-11-19 08-47-07] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=riuy 
+[2025-11-19 08-47-07] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=riuy 
+[2025-11-19 08-47-07] Statistiky modulů: Aktivní: 3, Neaktivní: 0, Celkem: 3  @  http://localhost:8000/moduleadmin/?_fid=riuy 
+[2025-11-19 08-47-07] PHP Upload limits - upload_max_filesize: 10 MB, post_max_size: 10 MB, memory_limit: 256 MB  @  http://localhost:8000/moduleadmin/?_fid=riuy 
+[2025-11-19 08-47-07] Výsledná maximální velikost souboru: 10 MB  @  http://localhost:8000/moduleadmin/?_fid=riuy 
+[2025-11-19 08-47-12] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-47-12] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-47-12] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-47-12] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/web/Modules/tenant_12/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-47-12] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_12/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-47-12] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-47-12] Šablona modulu financial_reports nalezena: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/financial_reports/templates/dashboard.latte  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 08-47-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
+[2025-11-19 08-47-13] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
+[2025-11-19 08-47-13] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
+[2025-11-19 08-47-13] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
+[2025-11-19 09-24-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-11-19 09-24-27] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=dwkmd&_fid=57t6 
+[2025-11-19 09-24-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 09-24-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=cmntj&_fid=ywok 
+[2025-11-19 09-24-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-11-19 09-24-29] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=5x46o&_fid=y56q 
+[2025-11-19 09-24-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-11-19 09-24-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=loms 
+[2025-11-19 09-24-31] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=loms 
+[2025-11-19 09-24-32] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-11-19 09-24-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-11-19 09-24-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-11-19 09-24-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-11-19 09-24-34] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-11-19 09-24-34] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-11-19 09-24-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-11-19 09-24-36] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-11-19 09-24-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 09-24-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 09-24-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/settings/ 
+[2025-11-19 09-24-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/settings/ 
+[2025-11-19 09-27-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/dashboard 
+[2025-11-19 09-27-13] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/dashboard 
+[2025-11-19 09-27-16] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/security/ 
+[2025-11-19 09-27-16] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/security/ 
+[2025-11-19 09-28-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-28-28] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-28-28] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-28-28] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-28-28] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-28-28] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-28-28] Šablona modulu financial_reports nalezena: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/templates/dashboard.latte  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-28-30] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-28-30] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-28-30] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-28-30] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-29-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/show/47 
+[2025-11-19 09-29-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/show/47 
+[2025-11-19 09-29-09] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/clients/ 
+[2025-11-19 09-29-09] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/clients/ 
+[2025-11-19 09-29-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 09-29-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 09-29-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/show/75 
+[2025-11-19 09-29-14] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/show/75 
+[2025-11-19 09-29-18] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 09-29-18] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 09-29-42] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/ 
+[2025-11-19 09-29-42] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/ 
+[2025-11-19 09-29-54] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=06pjy&_fid=d10a 
+[2025-11-19 09-29-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-11-19 09-29-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=kxvm 
+[2025-11-19 09-29-55] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=kxvm 
+[2025-11-19 09-34-02] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-34-02] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-34-02] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-34-03] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-34-03] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-34-03] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-34-03] Šablona modulu financial_reports nalezena: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/templates/dashboard.latte  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-34-04] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-34-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-34-04] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-34-04] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-39-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-39-07] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-39-07] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-39-07] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-39-07] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-39-07] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-39-07] Šablona modulu financial_reports nalezena: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/templates/dashboard.latte  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-39-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-39-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-39-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-39-08] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-39-53] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 09-39-53] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 09-39-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=paid 
+[2025-11-19 09-39-55] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=paid 
+[2025-11-19 09-39-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=overdue 
+[2025-11-19 09-39-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=overdue 
+[2025-11-19 09-39-59] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 09-39-59] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 09-40-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-40-24] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-40-24] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-40-24] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-40-24] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-40-24] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-40-24] Šablona modulu financial_reports nalezena: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/templates/dashboard.latte  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 09-40-25] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-40-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-40-25] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-40-25] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 09-41-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=paid 
+[2025-11-19 09-41-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=paid 
+[2025-11-19 09-41-33] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=overdue 
+[2025-11-19 09-41-33] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=overdue 
+[2025-11-19 10-09-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-09-06] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=oi26e&_fid=rkco 
+[2025-11-19 10-09-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-11-19 10-09-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=gp6i 
+[2025-11-19 10-09-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=gp6i 
+[2025-11-19 10-09-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-09-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-09-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-09-19] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-09-19] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-09-19] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-09-19] Šablona modulu financial_reports nalezena: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/templates/dashboard.latte  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-09-20] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 10-09-20] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 10-09-20] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 10-09-20] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 10-09-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-09-24] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-09-26] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=paid 
+[2025-11-19 10-09-26] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=paid 
+[2025-11-19 10-09-28] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-09-28] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-09-30] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=overdue 
+[2025-11-19 10-09-30] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=overdue 
+[2025-11-19 10-10-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-10-39] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-17-11] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-17-11] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-17-13] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-17-13] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-17-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=overdue 
+[2025-11-19 10-17-17] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=overdue 
+[2025-11-19 10-17-19] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-17-19] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-17-31] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-17-31] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-29-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-29-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-49-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-49-55] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=hw4lm&_fid=s9iu 
+[2025-11-19 10-49-56] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-11-19 10-49-57] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=xgbm 
+[2025-11-19 10-49-57] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/?_fid=xgbm 
+[2025-11-19 10-49-58] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-49-58] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-50-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/default/75?_csrf_token=30247cbed52c87f1f6079a113f040e71941da985218c6a3710f745149ecb312e&do=markAsUnpaid 
+[2025-11-19 10-50-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/default/75?_csrf_token=30247cbed52c87f1f6079a113f040e71941da985218c6a3710f745149ecb312e&do=markAsUnpaid 
+[2025-11-19 10-50-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?_fid=u7m6 
+[2025-11-19 10-50-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?_fid=u7m6 
+[2025-11-19 10-50-14] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-50-14] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-50-17] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-50-17] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-50-22] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/edit/75 
+[2025-11-19 10-50-22] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/edit/75 
+[2025-11-19 10-50-24] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-50-24] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-53-37] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-53-37] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-54-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/default/74?_csrf_token=30247cbed52c87f1f6079a113f040e71941da985218c6a3710f745149ecb312e&do=markAsUnpaid 
+[2025-11-19 10-54-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/default/74?_csrf_token=30247cbed52c87f1f6079a113f040e71941da985218c6a3710f745149ecb312e&do=markAsUnpaid 
+[2025-11-19 10-54-05] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?_fid=vv7m 
+[2025-11-19 10-54-05] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?_fid=vv7m 
+[2025-11-19 10-54-07] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-54-07] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-55-42] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-55-42] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/?filter=unpaid 
+[2025-11-19 10-55-49] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-55-49] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-56-08] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-56-08] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/invoices/ 
+[2025-11-19 10-56-45] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-56-45] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-56-45] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-56-45] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-56-45] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_1/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-56-45] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-56-45] Šablona modulu financial_reports nalezena: D:\_coding\nette\fakturacni-system\app/Modules/tenant_1/financial_reports/templates/dashboard.latte  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-56-46] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 10-56-46] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 10-56-46] ModuleManager: Nastaven user context - User ID: 1, Tenant ID: 1, Super Admin: yes  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 10-56-46] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData 
+[2025-11-19 10-57-35] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-57-36] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in?backlink=zwudh&_fid=ni2k 
+[2025-11-19 10-57-37] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/sign/in 
+[2025-11-19 10-57-37] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/?_fid=mft9 
+[2025-11-19 10-57-37] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/?_fid=mft9 
+[2025-11-19 10-57-39] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-57-39] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-57-39] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-57-39] Mažu existující assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system/web/Modules/tenant_12/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-57-39] Kopíruji nové assets modulu 'financial_reports' z: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/financial_reports/assets do: D:\_coding\nette\fakturacni-system/web/Modules/tenant_12/financial_reports  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-57-39] Assets modulu 'financial_reports' byly úspěšně aktualizovány  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-57-39] Šablona modulu financial_reports nalezena: D:\_coding\nette\fakturacni-system\app/Modules/tenant_12/financial_reports/templates/dashboard.latte  @  http://localhost:8000/moduleadmin/detail/financial_reports 
+[2025-11-19 10-57-41] ModuleManager byl inicializován s tenant-specific adresáři  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
+[2025-11-19 10-57-41] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
+[2025-11-19 10-57-41] ModuleManager: Nastaven user context - User ID: 57, Tenant ID: 12, Super Admin: no  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
+[2025-11-19 10-57-41] Připravuji závislosti pro modul  @  http://localhost:8000/moduleadmin/detail/financial_reports?do=moduleData&moduleId=financial_reports&action=getAllData&tenantId=12 
