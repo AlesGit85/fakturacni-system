@@ -14,7 +14,7 @@
 {* Meta tagy pro JavaScript - tenant kontext *}
 <meta name="tenant-id" content="{$currentTenantId|noescape}">
 <meta name="is-super-admin" content="{$isSuperAdmin ? 'true' : 'false'}">
-<meta name="current-user-id" content="{$user->getId()}">
+<meta name="current-user-id" content="{$user->identity->id}">
 {* NOVÉ: Předání kontextových informací do JS *}
 {if isset($contextLabel)}
 <meta name="context-label" content="{$contextLabel|noescape}">

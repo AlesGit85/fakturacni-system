@@ -258,9 +258,26 @@ class FinancialReportsService
      */
     public function checkVatLimits(): array
     {
+
+        // NOVĚ: Nastavíme user_id pro filtrování alertů
+        if (!isset($GLOBALS['current_user_id']) && !empty($_SESSION['user']['id'])) {
+            $GLOBALS['current_user_id'] = $_SESSION['user']['id'];
+            error_log("DEBUG checkVatLimits: Nastavuji user_id z SESSION: " . $GLOBALS['current_user_id']);
+        }
+
         $currentYear = date('Y');
 
-        error_log("FinancialReportsService: Kontrolujem DPH limity pro rok $currentYear, tenant: " . ($this->currentTenantId ?? 'všechny'));
+        // Nastavíme user_id z SESSION pokud není v GLOBALS
+        if (!isset($GLOBALS['current_user_id'])) {
+            if (isset($_SESSION['user']['id'])) {
+                $GLOBALS['current_user_id'] = $_SESSION['user']['id'];
+                \Tracy\Debugger::barDump("NASTAVENO z SESSION: " . $GLOBALS['current_user_id'], 'NOVĚ NASTAVENÉ user_id');
+            } else {
+                \Tracy\Debugger::barDump("NELZE NASTAVIT - SESSION['user']['id'] neexistuje", 'CHYBA');
+            }
+        }
+
+        error_log("FinancialReportsService: Kontroluji DPH limity pro rok $currentYear, tenant: " . ($this->currentTenantId ?? 'všechny'));
 
         // Celkový obrat za aktuální rok s tenant filtrem - ruční sčítání
         $yearlyTurnover = 0;
@@ -281,30 +298,28 @@ class FinancialReportsService
         // První limit: 2 000 000 Kč
         if ($yearlyTurnover >= 2000000 && $yearlyTurnover < 2536500) {
             $alerts[] = [
+                'alert_id' => 'vat_warning_2mil', // NOVÉ: Jedinečné ID
                 'type' => 'warning',
                 'title' => 'Stanete se plátcem DPH od 1. ledna následujícího roku',
                 'message' => 'Registrovat k DPH se musíte do 10 dnů.',
                 'amount' => $yearlyTurnover,
-                'limit' => 2000000
+                'limit' => 2000000,
+                'closable' => true // NOVÉ: Označení, že lze zavřít
             ];
         }
 
         // Druhý limit: 2 536 500 Kč
         if ($yearlyTurnover >= 2536500) {
             $alerts[] = [
+                'alert_id' => 'vat_danger_2_5mil', // NOVÉ: Jedinečné ID
                 'type' => 'danger',
                 'title' => 'Stáváte se ihned plátcem DPH',
                 'message' => 'Registrovat k DPH se musíte do 10 dnů.',
                 'amount' => $yearlyTurnover,
-                'limit' => 2536500
+                'limit' => 2536500,
+                'closable' => true // NOVÉ: Označení, že lze zavřít
             ];
         }
-
-        // Pokrok k dalšímu limitu
-        $nextLimit = $yearlyTurnover < 2000000 ? 2000000 : 2536500;
-        $progressToNextLimit = $yearlyTurnover < 2000000
-            ? ($yearlyTurnover / 2000000) * 100
-            : (($yearlyTurnover - 2000000) / 536500) * 100;
 
         // NOVÉ: Filtrování zavřených alertů
         $alerts = $this->filterClosedAlerts($alerts);
@@ -326,45 +341,43 @@ class FinancialReportsService
     }
 
     /**
-     * NOVÁ METODA: Filtruje alerty, které uživatel zavřel
-     */
-    private function filterClosedAlerts(array $alerts): array
-    {
-        // Pokud není nastaven tenant nebo není dostupná databáze, vracíme všechny alerty
-        if (!$this->currentTenantId || !isset($GLOBALS['current_user_id'])) {
-            return $alerts;
-        }
-
-        $userId = $GLOBALS['current_user_id'] ?? null;
-        if (!$userId) {
-            return $alerts;
-        }
-
-        $filteredAlerts = [];
-
-        foreach ($alerts as $alert) {
-            $alertId = $alert['alert_id'] ?? null;
-            if (!$alertId) {
-                $filteredAlerts[] = $alert;
-                continue;
-            }
-
-            // Kontrola, zda uživatel zavřel tento alert
-            $isClosedSetting = $this->database->table('user_module_settings')
-                ->where('user_id', $userId)
-                ->where('tenant_id', $this->currentTenantId)
-                ->where('module_id', 'financial_reports')
-                ->where('setting_key', "alert_closed_{$alertId}")
-                ->fetch();
-
-            if (!$isClosedSetting || $isClosedSetting->setting_value !== 'true') {
-                // Alert není zavřený, přidáme ho
-                $filteredAlerts[] = $alert;
-            }
-        }
-
-        return $filteredAlerts;
+ * Filtruje alerty, které uživatel zavřel
+ */
+private function filterClosedAlerts(array $alerts): array
+{
+    // Pokud není nastaven tenant nebo user_id, vracíme všechny alerty
+    if (!$this->currentTenantId || !isset($GLOBALS['current_user_id'])) {
+        return $alerts;
     }
+
+    $userId = $GLOBALS['current_user_id'];
+    $filteredAlerts = [];
+
+    foreach ($alerts as $alert) {
+        $alertId = $alert['alert_id'] ?? null;
+        
+        if (!$alertId) {
+            $filteredAlerts[] = $alert;
+            continue;
+        }
+
+        // Kontrola, zda uživatel zavřel tento alert
+        $isClosedSetting = $this->database->table('user_module_settings')
+            ->where('user_id', $userId)
+            ->where('tenant_id', $this->currentTenantId)
+            ->where('module_id', 'financial_reports')
+            ->where('setting_key', "alert_closed_{$alertId}")
+            ->fetch();
+
+        if (!$isClosedSetting || $isClosedSetting->setting_value !== 'true') {
+            // Alert není zavřený, přidáme ho
+            $filteredAlerts[] = $alert;
+        }
+        // Zavřené alerty se přeskakují (nezobrazují)
+    }
+
+    return $filteredAlerts;
+}
 
     /**
      * Získá data pro graf příjmů po měsících s tenant filtrováním
@@ -460,52 +473,75 @@ class FinancialReportsService
      */
     public function closeAlert(string $alertId): array
     {
+        error_log("DEBUG: closeAlert začíná s alertId='$alertId'");
+
         if (!$this->currentTenantId) {
+            error_log("DEBUG: Chyba - tenant kontext není nastaven");
             throw new \Exception('Tenant kontext není nastaven');
         }
 
         $userId = $GLOBALS['current_user_id'] ?? null;
+        error_log("DEBUG: userId z GLOBALS: " . ($userId ?? 'null'));
+
         if (!$userId) {
+            error_log("DEBUG: Chyba - uživatel není přihlášen");
             throw new \Exception('Uživatel není přihlášen');
         }
 
-        try {
-            // Uložíme nastavení o zavření alertu
-            $this->database->table('user_module_settings')
-                ->insert([
-                    'user_id' => $userId,
-                    'tenant_id' => $this->currentTenantId,
-                    'module_id' => 'financial_reports',
-                    'setting_key' => "alert_closed_{$alertId}",
-                    'setting_value' => 'true',
-                    'created_at' => new \DateTime(),
-                    'updated_at' => new \DateTime()
-                ]);
+        error_log("DEBUG: Budu ukládat do DB - user_id: $userId, tenant_id: {$this->currentTenantId}, alert_id: $alertId");
 
-            error_log("DPH alert '{$alertId}' zavřen pro uživatele {$userId}, tenant {$this->currentTenantId}");
+        try {
+            // Nejdříve zkusíme SELECT, zda už záznam existuje
+            error_log("DEBUG: Kontrolujem, zda už záznam existuje");
+            $existingSetting = $this->database->table('user_module_settings')
+                ->where('user_id', $userId)
+                ->where('tenant_id', $this->currentTenantId)
+                ->where('module_id', 'financial_reports')
+                ->where('setting_key', "alert_closed_{$alertId}")
+                ->fetch();
+
+            if ($existingSetting) {
+                error_log("DEBUG: Záznam už existuje, aktualizujem");
+                // Záznam existuje, aktualizujeme
+                $this->database->table('user_module_settings')
+                    ->where('user_id', $userId)
+                    ->where('tenant_id', $this->currentTenantId)
+                    ->where('module_id', 'financial_reports')
+                    ->where('setting_key', "alert_closed_{$alertId}")
+                    ->update([
+                        'setting_value' => 'true',
+                        'updated_at' => new \DateTime()
+                    ]);
+
+                error_log("DEBUG: Update úspěšný");
+            } else {
+                error_log("DEBUG: Záznam neexistuje, vytvářím nový");
+                // Nový záznam
+                $this->database->table('user_module_settings')
+                    ->insert([
+                        'user_id' => $userId,
+                        'tenant_id' => $this->currentTenantId,
+                        'module_id' => 'financial_reports',
+                        'setting_key' => "alert_closed_{$alertId}",
+                        'setting_value' => 'true',
+                        'created_at' => new \DateTime(),
+                        'updated_at' => new \DateTime()
+                    ]);
+
+                error_log("DEBUG: Insert úspěšný");
+            }
+
+            error_log("DEBUG: DPH alert '{$alertId}' zavřen pro uživatele {$userId}, tenant {$this->currentTenantId}");
 
             return [
                 'success' => true,
                 'message' => 'Alert byl úspěšně zavřen',
                 'alert_id' => $alertId
             ];
-        } catch (\Nette\Database\UniqueConstraintViolationException $e) {
-            // Alert už byl dříve zavřen - aktualizujeme
-            $this->database->table('user_module_settings')
-                ->where('user_id', $userId)
-                ->where('tenant_id', $this->currentTenantId)
-                ->where('module_id', 'financial_reports')
-                ->where('setting_key', "alert_closed_{$alertId}")
-                ->update([
-                    'setting_value' => 'true',
-                    'updated_at' => new \DateTime()
-                ]);
-
-            return [
-                'success' => true,
-                'message' => 'Alert byl aktualizován',
-                'alert_id' => $alertId
-            ];
+        } catch (\Throwable $e) {
+            error_log("DEBUG: Chyba při práci s databází: " . $e->getMessage());
+            error_log("DEBUG: Stack trace: " . $e->getTraceAsString());
+            throw new \Exception("Chyba při ukládání nastavení: " . $e->getMessage());
         }
     }
 }

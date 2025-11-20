@@ -255,8 +255,7 @@ class FinancialReportsModule {
                         'Cache-Control': 'no-cache',
                         'X-Tenant-Id': this.tenantId || '',
                         'X-Super-Admin': this.isSuperAdmin ? '1' : '0'
-                    },
-                    credentials: 'same-origin'
+                    }
                 });
 
                 this.log(`📥 Response status: ${response.status} ${response.statusText}`, 'debug');
@@ -265,69 +264,56 @@ class FinancialReportsModule {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
 
-                const text = await response.text();
-                this.log(`📄 Response preview: ${text.substring(0, 200)}...`, 'debug');
+                const data = await response.json();
+                this.log(`📄 Response preview: ${JSON.stringify(data).substring(0, 100)}...`, 'debug');
 
-                return this.parseJsonResponse(text);
+                return data;
 
             } catch (error) {
                 this.log(`❌ Attempt ${attempt + 1} failed: ${error.message}`, 'warn');
-
+                
                 if (attempt === retries) {
                     throw error;
                 }
-
+                
                 // Exponential backoff
-                await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+                await this.sleep(Math.pow(2, attempt) * 1000);
             }
         }
     }
 
     /**
-     * Parsování JSON odpovědi
+     * Pomocná metoda pro čekání
      */
-    parseJsonResponse(text) {
-        let jsonText = text.trim();
-
-        // Handling HTML wrapped responses
-        if (jsonText.startsWith('<!DOCTYPE') || jsonText.startsWith('<html')) {
-            const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
-            if (jsonMatch) {
-                jsonText = jsonMatch[0];
-            } else {
-                throw new Error('Server vrátil HTML místo JSON');
-            }
-        }
-
-        try {
-            return JSON.parse(jsonText);
-        } catch (e) {
-            this.log(`❌ JSON parse error: ${e.message}`, 'error');
-            this.log(`📄 Attempted to parse: ${jsonText.substring(0, 500)}`, 'error');
-            throw new Error('Nevalidní JSON odpověď od serveru');
-        }
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     /**
-     * Zpracování odpovědi serveru
+     * Zpracování AJAX odpovědi
      */
     async processResponse(data) {
-        this.log('📊 Zpracovávám data:', 'debug', data);
+        this.log('🔄 Zpracovávám odpověď serveru...', 'info');
 
-        if (!data.success) {
+        // Kontrola struktury odpovědi
+        if (!data || typeof data !== 'object') {
+            throw new Error('Neplatná odpověď serveru');
+        }
+
+        if (data.error) {
             throw new Error(data.error || data.message || 'Neznámá chyba serveru');
         }
 
         if (data.data && data.data.stats && data.data.vatLimits) {
             // Aktualizace statistik
             this.updateFinancialStats(data.data.stats);
-
+            
             // Aktualizace DPH statusu
             this.updateVatStatus(data.data.vatLimits);
-
+            
             // Aktualizace grafů (pokud existují)
             await this.updateCharts(data.data);
-
+            
         } else {
             throw new Error('Neočekávaná struktura dat od serveru');
         }
@@ -447,147 +433,178 @@ class FinancialReportsModule {
         }
 
         // Aktualizace alertů pro DPH
-        this.updateVatAlerts(vatLimits.alerts || [], status);
+        this.updateVatAlerts(vatLimits.alerts || []);
     }
 
     /**
- * Aktualizace DPH upozornění - ROZŠÍŘENÁ PŮVODNÍ verze
- */
+     * Aktualizace DPH alertů s podporou zavírání
+     */
     updateVatAlerts(alerts) {
         const alertContainer = document.getElementById('vatAlerts');
-        if (!alertContainer) return;
+        if (!alertContainer) {
+            this.log('⚠️ VAT alerts container nenalezen', 'warn');
+            return;
+        }
 
+        // Vyčistí existující alerty
         alertContainer.innerHTML = '';
 
         if (!alerts || alerts.length === 0) {
-            this.log('ℹ️ Žádné DPH alerty k zobrazení', 'info');
+            this.log('✅ Žádné DPH alerty k zobrazení', 'debug');
             return;
         }
 
         alerts.forEach(alert => {
             const alertElement = document.createElement('div');
-            alertElement.className = `alert-financial alert-${alert.type} d-flex align-items-center position-relative`;
+            alertElement.className = `alert-financial alert-${alert.type} d-flex align-items-start`;
+            alertElement.setAttribute('data-alert-id', alert.alert_id);
+            
+            const closeButton = alert.closable ? `
+                <button type="button" 
+                        class="btn-close-custom ms-auto" 
+                        data-alert-id="${alert.alert_id}"
+                        title="Zavřít upozornění"
+                        aria-label="Zavřít">
+                    ×
+                </button>
+            ` : '';
 
-            // PŮVODNÍ obsah + tlačítko zavření
             alertElement.innerHTML = `
-            <i class="bi bi-${alert.type === 'danger' ? 'exclamation-triangle-fill' : 'info-circle-fill'} me-2"></i>
-            <div class="flex-grow-1">
-                <strong>${alert.title}</strong><br>
-                <small>${alert.message}</small>
-            </div>
-            ${alert.alert_id ? `
-            <button type="button" 
-                    class="btn-close-custom ms-3" 
-                    data-alert-id="${alert.alert_id}"
-                    aria-label="Zavřít"
-                    title="Zavřít toto upozornění">×</button>
-            ` : ''}
-        `;
-
-            // Přidání event listeneru na zavírací tlačítko
-            const closeButton = alertElement.querySelector('.btn-close-custom');
-            if (closeButton) {
-                closeButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    this.closeAlert(alert.alert_id, alertElement);
-                });
-            }
+                <div class="me-3">
+                    <i class="bi bi-${alert.type === 'warning' ? 'exclamation-triangle' : 'x-circle'}-fill"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <strong>${alert.title}</strong><br>
+                    <span>${alert.message}</span>
+                    <div class="mt-2 small text-muted">
+                        Aktuální obrat: <strong>${this.formatAmount(alert.amount)}</strong> / 
+                        Limit: <strong>${this.formatAmount(alert.limit)}</strong>
+                    </div>
+                </div>
+                ${closeButton}
+            `;
 
             alertContainer.appendChild(alertElement);
+            
+            this.log(`📋 Alert ${alert.alert_id} přidán do UI`, 'debug');
         });
 
+        // Nastavení event listenerů na zavírací tlačítka
+        this.setupCloseAlertListeners();
+        
         this.log(`✅ Zobrazeno ${alerts.length} DPH alertů`, 'success');
     }
 
     /**
-     * NOVÁ METODA: Zavření alertu
+     * Nastavuje event listenery pro zavírání alertů
      */
-    async closeAlert(alertId, alertElement) {
-        if (!alertId) {
-            this.log('❌ Chybí ID alertu', 'error');
-            return;
-        }
+    setupCloseAlertListeners() {
+        const closeButtons = document.querySelectorAll('.btn-close-custom[data-alert-id]');
+        closeButtons.forEach(button => {
+            // Odebereme starý listener (pokud existuje) 
+            button.removeEventListener('click', this.handleCloseAlert);
+            
+            // Přidáme nový listener
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const alertId = e.currentTarget.getAttribute('data-alert-id');
+                if (alertId) {
+                    this.closeAlert(alertId);
+                }
+            });
+        });
+        
+        this.log(`🔧 Event listenery pro zavírání alertů nastaveny (${closeButtons.length} tlačítek)`, 'debug');
+    }
 
+    /**
+     * Zavře DPH alert
+     */
+    async closeAlert(alertId) {
+        this.log(`🔒 Zavírám alert: ${alertId}`, 'info');
+        
         try {
-            this.log(`🔄 Zavírám alert: ${alertId}`, 'info');
-
-            // Zobrazíme loading stav
-            const closeButton = alertElement.querySelector('.btn-close-custom');
-            if (closeButton) {
-                closeButton.disabled = true;
-                closeButton.innerHTML = '⟳';
-                closeButton.style.animation = 'spin 1s linear infinite';
+            const userId = document.querySelector('meta[name="current-user-id"]')?.content;
+            if (!userId) {
+                throw new Error('ID uživatele není k dispozici');
             }
 
-            // AJAX požadavek
+            // Sestavení URL pro closeAlert akci
             const ajaxUrl = this.buildAjaxUrl('closeAlert', {
-                alertId: alertId
+                alertId: alertId,
+                userId: userId
             });
+            
+            this.log(`🔗 Close Alert URL: ${ajaxUrl}`, 'debug');
 
-            const response = await fetch(ajaxUrl, {
-                method: 'POST',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json',
-                    'X-Tenant-Id': this.tenantId || '',
-                    'X-Super-Admin': this.isSuperAdmin ? '1' : '0'
-                },
-                body: JSON.stringify({
-                    alertId: alertId,
-                    userId: this.getCurrentUserId()
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+            // AJAX request
+            const response = await this.makeAjaxRequest(ajaxUrl);
+            
+            if (response.success) {
+                // Úspěšné zavření - okamžitě skryj alert z UI
+                this.hideAlert(alertId);
+                this.log(`✅ Alert ${alertId} úspěšně zavřen`, 'success');
+                
+                // Zobrazíme krátkou zprávu o úspěchu
+                this.showTemporaryMessage('Alert byl úspěšně zavřen', 'success');
+            } else {
+                throw new Error(response.message || 'Neznámá chyba při zavírání alertu');
             }
+            
+        } catch (error) {
+            this.log(`❌ Chyba při zavírání alertu ${alertId}: ${error.message}`, 'error');
+            this.showTemporaryMessage(`Nepodařilo se zavřít upozornění: ${error.message}`, 'error');
+        }
+    }
 
-            const data = await response.json();
-
-            if (!data.success) {
-                throw new Error(data.error || 'Chyba při zavírání alertu');
-            }
-
-            // Úspěšně zavřeno - animace
-            alertElement.style.transition = 'all 0.5s ease-out';
+    /**
+     * Skryje alert z UI
+     */
+    hideAlert(alertId) {
+        // Hledáme alert element podle data-alert-id atributu
+        const alertElement = document.querySelector(`[data-alert-id="${alertId}"]`);
+        if (alertElement) {
+            // Animace zmizení
+            alertElement.style.transition = 'opacity 0.3s ease';
             alertElement.style.opacity = '0';
-            alertElement.style.transform = 'translateX(100%)';
-
+            
             setTimeout(() => {
                 alertElement.remove();
-                this.log(`✅ Alert ${alertId} zavřen`, 'success');
-            }, 500);
-
-        } catch (error) {
-            this.log(`❌ Chyba při zavírání: ${error.message}`, 'error');
-
-            // Obnovíme tlačítko
-            const closeButton = alertElement.querySelector('.btn-close-custom');
-            if (closeButton) {
-                closeButton.disabled = false;
-                closeButton.innerHTML = '×';
-                closeButton.style.animation = '';
-            }
-
-            alert('Nepodařilo se zavřít upozornění: ' + error.message);
+                this.log(`🗑️ Alert ${alertId} odstraněn z UI`, 'debug');
+            }, 300);
+        } else {
+            this.log(`⚠️ Alert element s ID ${alertId} nenalezen pro odebrání`, 'warn');
         }
     }
 
     /**
-     * NOVÁ METODA: Získání ID aktuálního uživatele
+     * Zobrazí dočasnou zprávu
      */
-    getCurrentUserId() {
-        // Zkusíme získat z různých zdrojů
-        const userIdMeta = document.querySelector('meta[name="current-user-id"]');
-        if (userIdMeta) {
-            return userIdMeta.getAttribute('content');
-        }
-
-        return window.CURRENT_USER_ID || 1; // Fallback
+    showTemporaryMessage(message, type = 'info') {
+        const container = document.getElementById('vatAlerts');
+        if (!container) return;
+        
+        const messageElement = document.createElement('div');
+        messageElement.className = `alert-financial alert-${type === 'success' ? 'success' : 'danger'} d-flex align-items-center`;
+        messageElement.innerHTML = `
+            <i class="bi bi-${type === 'success' ? 'check-circle' : 'x-circle'}-fill me-2"></i>
+            <span>${message}</span>
+        `;
+        
+        container.prepend(messageElement);
+        
+        // Auto-remove po 3 sekundách
+        setTimeout(() => {
+            if (messageElement.parentNode) {
+                messageElement.style.transition = 'opacity 0.3s ease';
+                messageElement.style.opacity = '0';
+                setTimeout(() => messageElement.remove(), 300);
+            }
+        }, 3000);
     }
 
     /**
-     * Animované čítače pro čísla
+     * Animované čítače
      */
     animateCounters(elementIds) {
         elementIds.forEach(id => {
@@ -596,8 +613,8 @@ class FinancialReportsModule {
 
             const targetValue = parseInt(element.textContent) || 0;
             let currentValue = 0;
-            const increment = Math.ceil(targetValue / 20);
-
+            const increment = Math.ceil(targetValue / 30);
+            
             const animation = setInterval(() => {
                 currentValue += increment;
                 if (currentValue >= targetValue) {
@@ -670,9 +687,6 @@ class FinancialReportsModule {
         }
     }
 
-    /**
-     * Nastavení success stavu
-     */
     /**
      * Nastavení success stavu
      */

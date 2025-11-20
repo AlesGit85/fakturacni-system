@@ -59,6 +59,17 @@ class Module extends BaseModule
     {
         $this->log("Zpracovávám AJAX akci: $action pro tenant: " . ($this->currentTenantId ?? 'neznámý'));
 
+        // NOVĚ: Debug a přidání userId do dependencies pokud chybí
+        $this->log("DEBUG: parameters = " . json_encode($parameters));
+        $this->log("DEBUG: dependencies keys = " . json_encode(array_keys($dependencies)));
+
+        // Pokud userId není v dependencies, zkusíme ho získat z různých míst
+        if (!isset($dependencies['userId'])) {
+            $userId = $parameters['userId'] ?? $_GET['userId'] ?? $_SESSION['user']['id'] ?? 1;
+            $dependencies['userId'] = $userId;
+            $this->log("DEBUG: Přidán userId do dependencies: $userId");
+        }
+
         try {
             // Nastavíme tenant kontext z dependencies pokud není nastaven
             if (isset($dependencies['tenantId'])) {
@@ -100,6 +111,10 @@ class Module extends BaseModule
                 case 'getAllData':
                     $this->log("Volám getAllData (getBasicStats + getVatLimits) pro tenant: " . ($this->currentTenantId ?? 'all'));
 
+                    $userId = $dependencies['userId'] ?? $_SESSION['user']['id'] ?? 1; // fallback na 1 pro debug
+                    $GLOBALS['current_user_id'] = $userId;
+                    $this->log("getAllData: Nastaven user_id do GLOBALS: $userId");
+
                     $this->log("Načítám základní statistiky...");
                     $stats = $service->getBasicStats();
                     $this->log("Základní statistiky: " . json_encode($stats));
@@ -114,6 +129,39 @@ class Module extends BaseModule
                     ];
 
                     $this->log("getAllData kompletní výsledek: " . json_encode($result));
+                    return $result;
+
+                case 'closeAlert':
+                    // NOVÝ DEBUG - podívejme se, co přichází
+                    $this->log("DEBUG closeAlert: parameters = " . json_encode($parameters));
+                    $this->log("DEBUG closeAlert: dependencies = " . json_encode(array_keys($dependencies)));
+
+                    // Zkusíme číst parametry z různých míst
+                    $alertId = $parameters['alertId'] ?? '';
+                    if (!$alertId && isset($_GET['alertId'])) {
+                        $alertId = $_GET['alertId'];
+                        $this->log("DEBUG: alertId získáno z _GET: $alertId");
+                    }
+
+                    $userId = $parameters['userId'] ?? null;
+                    if (!$userId && isset($_GET['userId'])) {
+                        $userId = $_GET['userId'];
+                        $this->log("DEBUG: userId získáno z _GET: $userId");
+                    }
+
+                    $this->log("DEBUG closeAlert: finální alertId='$alertId', userId='$userId'");
+
+                    if (!$alertId) {
+                        throw new \Exception('Chybí ID alertu');
+                    }
+
+                    $this->log("Volám closeAlert pro alert: $alertId, tenant: " . ($this->currentTenantId ?? 'all'));
+
+                    // Nastavíme user_id do global proměnné pro službu  
+                    $GLOBALS['current_user_id'] = $userId;
+
+                    $result = $service->closeAlert($alertId);
+                    $this->log("closeAlert výsledek: " . json_encode($result));
                     return $result;
 
                 case 'getMonthlyStats':
@@ -149,21 +197,6 @@ class Module extends BaseModule
 
                     $this->log("getInvoicesOverview výsledek: " . count($invoicesArray) . " faktur");
                     return $invoicesArray;
-
-                case 'closeAlert':
-                    $alertId = $parameters['alertId'] ?? '';
-                    if (!$alertId) {
-                        throw new \Exception('Chybí ID alertu');
-                    }
-
-                    $this->log("Volám closeAlert pro alert: $alertId, tenant: " . ($this->currentTenantId ?? 'all'));
-
-                    // Nastavíme user_id do global proměnné pro službu
-                    $GLOBALS['current_user_id'] = $parameters['userId'] ?? null;
-
-                    $result = $service->closeAlert($alertId);
-                    $this->log("closeAlert výsledek: " . json_encode($result));
-                    return $result;
 
                 default:
                     throw new \Exception("Nepodporovaná akce: $action");
