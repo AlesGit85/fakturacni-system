@@ -11,12 +11,12 @@ class FinancialReportsModule {
         this.tenantId = null;
         this.isSuperAdmin = false;
         this.charts = {};
-        
+
         // Bind methods to preserve context
         this.loadRealData = this.loadRealData.bind(this);
         this.refreshData = this.refreshData.bind(this);
         this.handleError = this.handleError.bind(this);
-        
+
         this.log('🟢 FinancialReportsModule inicializován', 'info');
     }
 
@@ -25,21 +25,21 @@ class FinancialReportsModule {
      */
     init() {
         this.log('🟡 Spouštím inicializaci modulu...', 'info');
-        
+
         // Detekce tenant kontextu z DOM
         this.detectTenantContext();
-        
+
         // Nastavení event listenerů
         this.setupEventListeners();
-        
+
         // Inicializace UI komponent
         this.initializeComponents();
-        
+
         // Auto-loading pokud je tlačítko označené
         this.checkAutoLoad();
-        
+
         this.log('✅ Modul je připraven k použití', 'success');
-        
+
         return this;
     }
 
@@ -50,28 +50,28 @@ class FinancialReportsModule {
         // Hledáme tenant informace v meta tagu nebo data attributech
         const tenantMeta = document.querySelector('meta[name="tenant-id"]');
         const adminMeta = document.querySelector('meta[name="is-super-admin"]');
-        
+
         if (tenantMeta) {
             this.tenantId = parseInt(tenantMeta.content);
         }
-        
+
         if (adminMeta) {
             this.isSuperAdmin = adminMeta.content === 'true' || adminMeta.content === '1';
         }
-        
+
         // Backup: hledáme v container elementech
         const container = document.querySelector('[data-tenant-id]');
         if (container && !this.tenantId) {
             this.tenantId = parseInt(container.dataset.tenantId);
         }
-        
+
         const adminContainer = document.querySelector('[data-super-admin]');
         if (adminContainer && this.isSuperAdmin === false) {
             this.isSuperAdmin = adminContainer.dataset.superAdmin === 'true';
         }
-        
+
         this.log(`🔍 Tenant kontext: ID=${this.tenantId}, SuperAdmin=${this.isSuperAdmin}`, 'info');
-        
+
         // Zobrazíme tenant indikátor pokud existuje
         this.updateTenantIndicator();
     }
@@ -109,11 +109,11 @@ class FinancialReportsModule {
         // Filter změny
         const yearFilter = document.getElementById('yearFilter');
         const monthFilter = document.getElementById('monthFilter');
-        
+
         if (yearFilter) {
             yearFilter.addEventListener('change', () => this.handleFilterChange());
         }
-        
+
         if (monthFilter) {
             monthFilter.addEventListener('change', () => this.handleFilterChange());
         }
@@ -139,7 +139,7 @@ class FinancialReportsModule {
 
         // Nastavení progress barů
         this.initializeProgressBars();
-        
+
         // Příprava kontejnerů pro grafy
         this.prepareChartContainers();
     }
@@ -195,17 +195,17 @@ class FinancialReportsModule {
         try {
             // UI stav - loading
             this.setLoadingState(true);
-            
+
             // Vytvoření AJAX URL pro multitenancy systém
             const ajaxUrl = this.buildAjaxUrl('getAllData');
             this.log(`🔗 AJAX URL: ${ajaxUrl}`, 'debug');
 
             // AJAX request s error handling
             const response = await this.makeAjaxRequest(ajaxUrl);
-            
+
             // Zpracování odpovědi
             await this.processResponse(response);
-            
+
             // Úspěšné dokončení
             this.setSuccessState();
             this.log('✅ Data úspěšně načtena a zobrazena', 'success');
@@ -224,7 +224,7 @@ class FinancialReportsModule {
     buildAjaxUrl(action, params = {}) {
         const currentUrl = new URL(window.location);
         const baseUrl = `${currentUrl.origin}${currentUrl.pathname}`;
-        
+
         // Parametry pro ModuleAdmin presenter
         const ajaxParams = new URLSearchParams({
             do: 'moduleData',
@@ -272,11 +272,11 @@ class FinancialReportsModule {
 
             } catch (error) {
                 this.log(`❌ Attempt ${attempt + 1} failed: ${error.message}`, 'warn');
-                
+
                 if (attempt === retries) {
                     throw error;
                 }
-                
+
                 // Exponential backoff
                 await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
             }
@@ -288,7 +288,7 @@ class FinancialReportsModule {
      */
     parseJsonResponse(text) {
         let jsonText = text.trim();
-        
+
         // Handling HTML wrapped responses
         if (jsonText.startsWith('<!DOCTYPE') || jsonText.startsWith('<html')) {
             const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
@@ -321,13 +321,13 @@ class FinancialReportsModule {
         if (data.data && data.data.stats && data.data.vatLimits) {
             // Aktualizace statistik
             this.updateFinancialStats(data.data.stats);
-            
+
             // Aktualizace DPH statusu
             this.updateVatStatus(data.data.vatLimits);
-            
+
             // Aktualizace grafů (pokud existují)
             await this.updateCharts(data.data);
-            
+
         } else {
             throw new Error('Neočekávaná struktura dat od serveru');
         }
@@ -359,82 +359,147 @@ class FinancialReportsModule {
     }
 
     /**
-     * Aktualizace DPH statusu
+     * Aktualizace DPH statusu s vylepšeným zobrazením
      */
     updateVatStatus(vatLimits) {
-        this.log('💰 Aktualizuji DPH status:', 'debug', vatLimits);
+        this.log('📊 Aktualizuji DPH status', 'debug', vatLimits);
 
-        // Základní informace
-        this.updateElement('currentTurnover', this.formatAmount(vatLimits.currentTurnover));
-        this.updateElement('nextLimit', this.formatAmount(vatLimits.nextLimit));
-        this.updateElement('remainingToLimit', 
-            this.formatAmount(vatLimits.nextLimit - vatLimits.currentTurnover));
-
-        // Progress bar
-        this.updateProgressBar('vatProgress', 'vatProgressText', vatLimits.progressToNextLimit);
-
-        // Upozornění
-        this.updateVatAlerts(vatLimits.alerts);
-    }
-
-    /**
-     * Aktualizace progress baru s animací
-     */
-    updateProgressBar(progressId, textId, percentage) {
-        const progressBar = document.getElementById(progressId);
-        const progressText = document.getElementById(textId);
-
-        if (progressBar && progressText) {
-            const finalPercentage = Math.min(Math.max(percentage, 0), 100);
-            
-            // Animovaná aktualizace
-            let currentPercentage = 0;
-            const increment = finalPercentage / 30; // 30 kroků animace
-            
-            const animation = setInterval(() => {
-                currentPercentage += increment;
-                if (currentPercentage >= finalPercentage) {
-                    currentPercentage = finalPercentage;
-                    clearInterval(animation);
-                }
-                
-                progressBar.style.width = `${currentPercentage}%`;
-                progressText.textContent = `${currentPercentage.toFixed(1)}%`;
-                
-                // Změna barvy podle hodnoty
-                if (currentPercentage >= 95) {
-                    progressBar.className = 'progress-bar bg-danger';
-                } else if (currentPercentage >= 80) {
-                    progressBar.className = 'progress-bar bg-warning';
-                } else {
-                    progressBar.className = 'progress-bar bg-success';
-                }
-            }, 30);
+        const currentTurnover = vatLimits.currentTurnover || 0;
+        const nextLimit = vatLimits.nextLimit || 2000000;
+        const progressToNextLimit = vatLimits.progressToNextLimit || 0;
+        
+        // Určení stavu podle obratu
+        let status = 'normal';
+        let displayText = '';
+        let remainingAmount = nextLimit - currentTurnover;
+        
+        if (currentTurnover >= 2536500) {
+            status = 'exceeded';
+            displayText = 'PŘEKROČEN LIMIT!';
+        } else if (currentTurnover >= 2000000) {
+            status = 'reached';
+            displayText = 'DOSAŽEN LIMIT!';
+        } else if (progressToNextLimit >= 90) {
+            status = 'warning';
+            displayText = `${progressToNextLimit.toFixed(1)}%`;
+        } else {
+            status = 'normal';
+            displayText = `${progressToNextLimit.toFixed(1)}%`;
         }
+
+        // Aktualizace progress baru
+        const progressBar = document.getElementById('vatProgress');
+        const progressText = document.getElementById('vatProgressText');
+        const progressContainer = document.querySelector('.vat-progress');
+        
+        if (progressBar && progressText && progressContainer) {
+            // Nastavení šířky progress baru (maximálně 100%)
+            const displayProgress = Math.min(100, progressToNextLimit);
+            progressBar.style.width = displayProgress + '%';
+            
+            // Vyčištění předchozích stavových tříd
+            progressBar.classList.remove('limit-reached', 'limit-exceeded');
+            progressContainer.classList.remove('complete', 'exceeded');
+            
+            // Aplikování nových stavů
+            switch (status) {
+                case 'exceeded':
+                    progressBar.classList.add('limit-exceeded');
+                    progressContainer.classList.add('exceeded');
+                    progressBar.style.width = '100%';
+                    break;
+                case 'reached':
+                    progressBar.classList.add('limit-reached');
+                    progressContainer.classList.add('complete');
+                    progressBar.style.width = '100%';
+                    break;
+                case 'warning':
+                    // Žlutá pro blížící se limit
+                    progressBar.style.background = 'linear-gradient(90deg, #ffc107, #e0a800)';
+                    break;
+                default:
+                    // Normální zelená
+                    progressBar.style.background = 'linear-gradient(90deg, #B1D235, #95B11F)';
+            }
+            
+            progressText.textContent = displayText;
+        }
+
+        // Aktualizace číselných hodnot
+        this.updateElement('currentTurnover', this.formatAmount(currentTurnover));
+        this.updateElement('nextLimit', this.formatAmount(nextLimit));
+        
+        // Inteligentní zobrazení zbývající částky
+        const remainingElement = document.getElementById('remainingToLimit');
+        if (remainingElement) {
+            if (currentTurnover >= nextLimit) {
+                const exceeded = currentTurnover - nextLimit;
+                remainingElement.innerHTML = `<span class="text-danger">překročeno o ${this.formatAmount(exceeded)}</span>`;
+                
+                // Změníme i text nad tím
+                const remainingLabel = remainingElement.closest('small');
+                if (remainingLabel) {
+                    remainingLabel.innerHTML = remainingLabel.innerHTML.replace('zbývá:', 'překročeno o:');
+                }
+            } else {
+                remainingElement.innerHTML = this.formatAmount(remainingAmount);
+            }
+        }
+
+        // Aktualizace alertů pro DPH
+        this.updateVatAlerts(vatLimits.alerts || [], status);
     }
 
     /**
-     * Aktualizace DPH upozornění
+     * Aktualizace DPH upozornění s vylepšeným stylingem
      */
-    updateVatAlerts(alerts) {
-        const alertContainer = document.getElementById('vatAlerts');
-        if (!alertContainer) return;
+    updateVatAlerts(alerts, status) {
+        const alertsContainer = document.getElementById('vatAlerts');
+        if (!alertsContainer) return;
 
-        alertContainer.innerHTML = '';
+        alertsContainer.innerHTML = '';
 
-        alerts.forEach(alert => {
-            const alertElement = document.createElement('div');
-            alertElement.className = `alert-financial alert-${alert.type} d-flex align-items-center`;
-            alertElement.innerHTML = `
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                <div>
-                    <strong>${alert.title}</strong><br>
-                    <small>${alert.message}</small>
+        if (alerts.length === 0 && (status === 'reached' || status === 'exceeded')) {
+            // Přidáme vlastní alert pro dosažené/překročené limity
+            const alertClass = status === 'exceeded' ? 'vat-danger' : 'vat-warning';
+            const icon = status === 'exceeded' ? 'bi-exclamation-triangle-fill' : 'bi-exclamation-circle-fill';
+            const title = status === 'exceeded' ? 'KRITICKÉ: DPH limit překročen!' : 'POZOR: DPH limit dosažen!';
+            const message = status === 'exceeded' 
+                ? 'Musíte se okamžitě zaregistrovat k DPH a doplatit daň z předchozích měsíců.'
+                : 'Od příštího roku se stanete plátcem DPH. Registrace do 10 dnů.';
+
+            const alertHtml = `
+                <div class="${alertClass}">
+                    <div class="d-flex align-items-start">
+                        <i class="${icon} me-3 mt-1" style="font-size: 1.25rem;"></i>
+                        <div class="flex-grow-1">
+                            <strong>${title}</strong><br>
+                            <small>${message}</small>
+                        </div>
+                    </div>
                 </div>
             `;
-            
-            alertContainer.appendChild(alertElement);
-        });
+            alertsContainer.innerHTML = alertHtml;
+        } else if (alerts.length > 0) {
+            // Zobrazíme standardní alerty
+            alerts.forEach(alert => {
+                const alertClass = alert.type === 'danger' ? 'vat-danger' : 'vat-warning';
+                const icon = alert.type === 'danger' ? 'bi-exclamation-triangle-fill' : 'bi-exclamation-circle-fill';
+                
+                const alertHtml = `
+                    <div class="${alertClass}">
+                        <div class="d-flex align-items-start">
+                            <i class="${icon} me-3 mt-1" style="font-size: 1.25rem;"></i>
+                            <div class="flex-grow-1">
+                                <strong>${alert.title}</strong><br>
+                                <small>${alert.message}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                alertsContainer.innerHTML += alertHtml;
+            });
+        }
     }
 
     /**
@@ -482,9 +547,9 @@ class FinancialReportsModule {
     handleFilterChange() {
         const year = document.getElementById('yearFilter')?.value;
         const month = document.getElementById('monthFilter')?.value;
-        
+
         this.log(`🔍 Filter změna: rok=${year}, měsíc=${month}`, 'debug');
-        
+
         // Zde můžeme implementovat filtrované načítání dat
         // this.loadFilteredData(year, month);
     }
@@ -524,13 +589,26 @@ class FinancialReportsModule {
     /**
      * Nastavení success stavu
      */
+    /**
+     * Nastavení success stavu
+     */
     setSuccessState() {
         const loadButton = document.getElementById('loadRealData');
         const dataStatus = document.getElementById('dataStatus');
+        const loadingIndicator = document.getElementById('loadingIndicator');
 
         if (loadButton) {
             loadButton.innerHTML = '<i class="bi bi-check"></i> Data načtena z databáze';
             loadButton.className = 'btn btn-success';
+        }
+
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'block';
+            loadingIndicator.className = 'd-flex align-items-center text-success';
+            loadingIndicator.innerHTML = `
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span>Načteno</span>
+            `;
         }
 
         if (dataStatus) {
@@ -538,8 +616,7 @@ class FinancialReportsModule {
             dataStatus.style.display = 'block';
             dataStatus.innerHTML = `
                 <i class="bi bi-check-circle-fill me-2"></i>
-                Skutečná data byla úspěšně načtena z databáze!
-                <small class="d-block mt-1">Tenant: ${this.tenantId || 'všichni'}</small>
+                Data byla úspěšně načtena z databáze!
             `;
         }
     }
@@ -633,7 +710,7 @@ class FinancialReportsModule {
     log(message, level = 'info', data = null) {
         const timestamp = new Date().toLocaleTimeString();
         const prefix = `[${timestamp}] FinancialReports`;
-        
+
         switch (level) {
             case 'error':
                 console.error(`${prefix} ❌`, message, data || '');
@@ -679,16 +756,16 @@ class FinancialReportsModule {
 }
 
 // Automatická inicializace při načtení DOM
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('🟢 DOM načten, inicializuji FinancialReports modul...');
-    
+
     // Vytvoření a inicializace instance modulu
     const financialReports = new FinancialReportsModule();
     financialReports.init();
-    
+
     // Globální přístup pro backwards compatibility a debugging
     window.FinancialReports = financialReports;
-    
+
     console.log('🌟 FinancialReports modul je připraven:', window.FinancialReports.getInfo());
 });
 

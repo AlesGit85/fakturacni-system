@@ -55,6 +55,10 @@
                         {* ✅ BEZPEČNÉ: Statický text *}
                         <span class="text-danger">Po splatnosti</span>
                     </span>
+                {elseif $invoice->status == 'unpaid'}
+                    <span class="status-badge status-badge-warning">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i> Nezaplacené
+                    </span>
                 {/if}
             </div>
             <div class="invoice-amount">

@@ -1,7 +1,7 @@
 {
     "id": "financial_reports",
     "name": "Finanční přehledy",
-    "version": "2.2.1",
+    "version": "2.2.3",
     "description": "Komplexní přehled financí s podporou multitenancy - vydané, zaplacené a nezaplacené faktury s grafickými statistikami a sledováním DPH limitů. Aktualizovaná verze pro současný systém.",
     "author": "Allimedia.cz",
     "active": true,

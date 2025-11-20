@@ -114,17 +114,72 @@
 }
 
 /* === PROGRESS BARY === */
+/* === DPH PROGRESS BARY === */
 .vat-progress {
     background-color: rgba(177, 210, 53, 0.1);
     border-radius: 1rem;
     overflow: hidden;
-    height: 1rem;
+    height: 1.5rem;
+    position: relative;
+    border: 2px solid rgba(177, 210, 53, 0.2);
 }
 
 .vat-progress .progress-bar {
     background: linear-gradient(90deg, #B1D235, #95B11F);
-    transition: width 0.6s ease;
+    transition: all 0.6s ease;
     border-radius: 1rem;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #212529;
+    font-weight: 600;
+    font-size: 0.875rem;
+    min-width: 0;
+}
+
+/* Stav pro dosažený limit (100%+) */
+.vat-progress .progress-bar.limit-reached {
+    background: linear-gradient(90deg, #ffc107, #e0a800);
+    color: #212529;
+    animation: pulse-warning 2s ease-in-out infinite;
+}
+
+/* Stav pro překročený limit */
+.vat-progress .progress-bar.limit-exceeded {
+    background: linear-gradient(90deg, #dc3545, #c82333);
+    color: #ffffff;
+    animation: pulse-danger 2s ease-in-out infinite;
+}
+
+@keyframes pulse-warning {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(255, 193, 7, 0); }
+}
+
+@keyframes pulse-danger {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(220, 53, 69, 0); }
+}
+
+/* Text uvnitř progress baru */
+.vat-progress .progress-bar span {
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Vylepšené zobrazení pro kompletní stav */
+.vat-progress.complete {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.vat-progress.exceeded {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
 }
 
 /* === GRAF KONTEJNERY === */

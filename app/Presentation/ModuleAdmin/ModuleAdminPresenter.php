@@ -564,21 +564,41 @@ final class ModuleAdminPresenter extends BasePresenter
         // Zkopírování/aktualizace assets při každém zobrazení detailu
         $this->updateModuleAssets($id, $modulePath);
 
-        // OPRAVA: Používáme tenant-specific cestu pro assets
+        // OPRAVA: Používáme tenant-specific cestu pro assets s detekcí prostředí
         $tenantId = $moduleInfo['tenant_id'] ?? null;
         if ($tenantId) {
-            // CSS cesta
-            $cssPath = "/Modules/tenant_{$tenantId}/{$id}/assets/css/style.css";
-            $cssFullPath = WWW_DIR . '/web' . $cssPath;
-            if (file_exists($cssFullPath)) {
-                $this->template->moduleCss = $cssPath;
+            // Detekce prostředí pro kontrolu souborů
+            $webDir = WWW_DIR;
+            if (!str_ends_with($webDir, '/web') && !str_ends_with($webDir, '\web')) {
+                if (is_dir($webDir . '/web')) {
+                    $webDir .= '/web';
+                }
             }
 
-            // JS cesta
-            $jsPath = "/Modules/tenant_{$tenantId}/{$id}/assets/js/script.js";
-            $jsFullPath = WWW_DIR . '/web' . $jsPath;
+            // CSS cesta
+            $cssPath = "/Modules/tenant_{$tenantId}/{$id}/css/style.css";
+            $cssFullPath = $webDir . $cssPath;
+
+            $this->logger->log("Kontrolujem CSS soubor: $cssFullPath", ILogger::INFO);
+
+            if (file_exists($cssFullPath)) {
+                $this->template->moduleCss = $cssPath;
+                $this->logger->log("CSS soubor nalezen, nastavuji: $cssPath", ILogger::INFO);
+            } else {
+                $this->logger->log("CSS soubor nenalezen: $cssFullPath", ILogger::WARNING);
+            }
+
+            // JS cesta  
+            $jsPath = "/Modules/tenant_{$tenantId}/{$id}/js/script.js";
+            $jsFullPath = $webDir . $jsPath;
+
+            $this->logger->log("Kontrolujem JS soubor: $jsFullPath", ILogger::INFO);
+
             if (file_exists($jsFullPath)) {
                 $this->template->moduleJs = $jsPath;
+                $this->logger->log("JS soubor nalezen, nastavuji: $jsPath", ILogger::INFO);
+            } else {
+                $this->logger->log("JS soubor nenalezen: $jsFullPath", ILogger::WARNING);
             }
         }
 
@@ -601,7 +621,7 @@ final class ModuleAdminPresenter extends BasePresenter
     }
 
     /**
-     * OPRAVENÁ METODA: Aktualizuje assets modulu - pro tenant-specific cesty
+     * OPRAVENÁ METODA: Aktualizuje assets modulu - detekuje prostředí
      */
     private function updateModuleAssets(string $moduleId, string $modulePath): void
     {
@@ -617,7 +637,24 @@ final class ModuleAdminPresenter extends BasePresenter
             return;
         }
 
-        $wwwModuleDir = WWW_DIR . "/web/Modules/tenant_{$tenantId}/{$moduleId}";
+        // OPRAVA: Detekce správné WWW cesty podle prostředí
+        $webDir = WWW_DIR;
+
+        // Pokud WWW_DIR obsahuje /web na konci, používáme to
+        // Pokud ne a existuje web/ podadresář, přidáme /web
+        if (!str_ends_with($webDir, '/web') && !str_ends_with($webDir, '\web')) {
+            if (is_dir($webDir . '/web')) {
+                $webDir .= '/web';
+                $this->logger->log("Detekováno lokální prostředí - používám web/ podadresář: $webDir", ILogger::INFO);
+            }
+        }
+
+        $wwwModuleDir = $webDir . "/Modules/tenant_{$tenantId}/{$moduleId}";
+
+        $this->logger->log("=== ASSETS DEBUG ===", ILogger::INFO);
+        $this->logger->log("WWW_DIR: " . WWW_DIR, ILogger::INFO);
+        $this->logger->log("Upravené webDir: " . $webDir, ILogger::INFO);
+        $this->logger->log("wwwModuleDir: " . $wwwModuleDir, ILogger::INFO);
 
         // Pokud zdrojové assets neexistují, nic neděláme
         if (!is_dir($moduleAssetsDir)) {
@@ -635,13 +672,21 @@ final class ModuleAdminPresenter extends BasePresenter
             // Vytvoření základního adresáře
             if (!is_dir(dirname($wwwModuleDir))) {
                 mkdir(dirname($wwwModuleDir), 0755, true);
+                $this->logger->log("Vytvořil jsem nadřazený adresář: " . dirname($wwwModuleDir), ILogger::INFO);
             }
 
             // Zkopírování nových assets
             $this->logger->log("Kopíruji nové assets modulu '$moduleId' z: $moduleAssetsDir do: $wwwModuleDir", ILogger::INFO);
-            $this->copyDirectory($moduleAssetsDir, $wwwModuleDir . '/assets');
+            $this->copyDirectory($moduleAssetsDir, $wwwModuleDir);
+
+            // Ověření, že se soubory zkopírovaly
+            $cssFile = $wwwModuleDir . '/css/style.css';
+            $jsFile = $wwwModuleDir . '/js/script.js';
+            $this->logger->log("CSS soubor existuje: " . (file_exists($cssFile) ? 'YES' : 'NO') . " - $cssFile", ILogger::INFO);
+            $this->logger->log("JS soubor existuje: " . (file_exists($jsFile) ? 'YES' : 'NO') . " - $jsFile", ILogger::INFO);
 
             $this->logger->log("Assets modulu '$moduleId' byly úspěšně aktualizovány", ILogger::INFO);
+            $this->logger->log("=== ASSETS DEBUG KONEC ===", ILogger::INFO);
         } catch (\Exception $e) {
             $this->logger->log("Chyba při aktualizaci assets modulu '$moduleId': " . $e->getMessage(), ILogger::ERROR);
         }

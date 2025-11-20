@@ -87,15 +87,10 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1763201631,
     ),
-    'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
-      1 => 1763484117,
-    ),
     'Modules\\Tenant1\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
-      1 => 1763484118,
+      1 => 1763634221,
     ),
     'Modules\\Tenant1\\InvoiceEmail\\InvoiceEmailPresenter' => 
     array (
@@ -120,12 +115,12 @@ return array (
     'Modules\\Tenant12\\Financial_reports\\FinancialReportsService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\FinancialReportsService.php',
-      1 => 1763538427,
+      1 => 1763550089,
     ),
     'Modules\\Tenant12\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\Module.php',
-      1 => 1763538427,
+      1 => 1763550089,
     ),
     'Modules\\Tenant12\\InvoiceEmail\\InvoiceEmailPresenter' => 
     array (
@@ -190,7 +185,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1763483908,
+      1 => 1763640176,
     ),
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
@@ -257,34 +252,29 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SQLSecurityAudit.php',
       1 => 1755850678,
     ),
+    'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
+      1 => 1763640752,
+    ),
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 3,
-    'null' => 3,
+    'Nette\\Bridges\\Assets\\DIExtension' => 2,
+    'null' => 2,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 3,
-    'App\\Presentation\\Sign\\SignTemplate' => 3,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
-    'Modules\\Financial_reports\\FinancialReportsService' => 2,
-    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 2,
-    'App\\Presentation\\Settings\\SettingsTemplate' => 2,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsDefaultTemplate' => 3,
-    'App\\Presentation\\Clients\\ClientsTemplate' => 3,
-    'App\\Presentation\\Security\\SecurityDashboardTemplate' => 1,
-    'App\\Presentation\\Security\\SecurityTemplate' => 2,
-    'App\\Presentation\\Security\\SecurityDefaultTemplate' => 1,
-    'App\\Presentation\\Clients\\ClientsShowTemplate' => 1,
-    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 1,
-    'Modules\\Tenant1\\FinancialReports\\FinancialReportsPresenter' => 1,
-    'Modules\\Tenant1\\Notes\\NotesPresenter' => 1,
-    'Modules\\Tenant1\\TestModule\\TestModulePresenter' => 1,
-    'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 1,
+    'App\\Presentation\\Sign\\SignInTemplate' => 2,
+    'App\\Presentation\\Sign\\SignTemplate' => 2,
+    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 1,
+    'App\\Presentation\\Tenants\\TenantsTemplate' => 1,
+    'App\\Presentation\\Users\\UsersDefaultTemplate' => 1,
+    'App\\Presentation\\Users\\UsersTemplate' => 1,
   ),
   2 => 
   array (

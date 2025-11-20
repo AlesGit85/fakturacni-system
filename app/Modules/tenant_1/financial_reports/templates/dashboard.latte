@@ -15,6 +15,14 @@
 <meta name="tenant-id" content="{$currentTenantId|noescape}">
 <meta name="is-super-admin" content="{$isSuperAdmin ? 'true' : 'false'}">
 
+{if isset($moduleCss)}
+    <link rel="stylesheet" href="{$moduleCss}?v={time()}" type="text/css">
+{/if}
+
+{if isset($moduleJs)}
+    <script src="{$moduleJs}?v={time()}" type="text/javascript"></script>
+{/if}
+
 <div class="financial-reports-dashboard" data-tenant-id="{$currentTenantId}" data-super-admin="{$isSuperAdmin ? 'true' : 'false'}">
     
     {* Tenant kontext indikátor *}
@@ -412,15 +420,3 @@
     </div>
     {/if}
 </div>
-
-{* CSS animace pro highlight efekt *}
-<style>
-.highlight {
-    animation: highlight 1s ease-in-out;
-}
-
-@keyframes highlight {
-    0% { background-color: rgba(177, 210, 53, 0.3); }
-    100% { background-color: transparent; }
-}
-</style>
