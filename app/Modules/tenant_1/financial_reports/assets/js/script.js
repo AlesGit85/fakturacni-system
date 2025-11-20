@@ -367,12 +367,12 @@ class FinancialReportsModule {
         const currentTurnover = vatLimits.currentTurnover || 0;
         const nextLimit = vatLimits.nextLimit || 2000000;
         const progressToNextLimit = vatLimits.progressToNextLimit || 0;
-        
+
         // Určení stavu podle obratu
         let status = 'normal';
         let displayText = '';
         let remainingAmount = nextLimit - currentTurnover;
-        
+
         if (currentTurnover >= 2536500) {
             status = 'exceeded';
             displayText = 'PŘEKROČEN LIMIT!';
@@ -391,16 +391,16 @@ class FinancialReportsModule {
         const progressBar = document.getElementById('vatProgress');
         const progressText = document.getElementById('vatProgressText');
         const progressContainer = document.querySelector('.vat-progress');
-        
+
         if (progressBar && progressText && progressContainer) {
             // Nastavení šířky progress baru (maximálně 100%)
             const displayProgress = Math.min(100, progressToNextLimit);
             progressBar.style.width = displayProgress + '%';
-            
+
             // Vyčištění předchozích stavových tříd
             progressBar.classList.remove('limit-reached', 'limit-exceeded');
             progressContainer.classList.remove('complete', 'exceeded');
-            
+
             // Aplikování nových stavů
             switch (status) {
                 case 'exceeded':
@@ -421,21 +421,21 @@ class FinancialReportsModule {
                     // Normální zelená
                     progressBar.style.background = 'linear-gradient(90deg, #B1D235, #95B11F)';
             }
-            
+
             progressText.textContent = displayText;
         }
 
         // Aktualizace číselných hodnot
         this.updateElement('currentTurnover', this.formatAmount(currentTurnover));
         this.updateElement('nextLimit', this.formatAmount(nextLimit));
-        
+
         // Inteligentní zobrazení zbývající částky
         const remainingElement = document.getElementById('remainingToLimit');
         if (remainingElement) {
             if (currentTurnover >= nextLimit) {
                 const exceeded = currentTurnover - nextLimit;
                 remainingElement.innerHTML = `<span class="text-danger">překročeno o ${this.formatAmount(exceeded)}</span>`;
-                
+
                 // Změníme i text nad tím
                 const remainingLabel = remainingElement.closest('small');
                 if (remainingLabel) {
@@ -451,55 +451,139 @@ class FinancialReportsModule {
     }
 
     /**
-     * Aktualizace DPH upozornění s vylepšeným stylingem
-     */
-    updateVatAlerts(alerts, status) {
-        const alertsContainer = document.getElementById('vatAlerts');
-        if (!alertsContainer) return;
+ * Aktualizace DPH upozornění - ROZŠÍŘENÁ PŮVODNÍ verze
+ */
+    updateVatAlerts(alerts) {
+        const alertContainer = document.getElementById('vatAlerts');
+        if (!alertContainer) return;
 
-        alertsContainer.innerHTML = '';
+        alertContainer.innerHTML = '';
 
-        if (alerts.length === 0 && (status === 'reached' || status === 'exceeded')) {
-            // Přidáme vlastní alert pro dosažené/překročené limity
-            const alertClass = status === 'exceeded' ? 'vat-danger' : 'vat-warning';
-            const icon = status === 'exceeded' ? 'bi-exclamation-triangle-fill' : 'bi-exclamation-circle-fill';
-            const title = status === 'exceeded' ? 'KRITICKÉ: DPH limit překročen!' : 'POZOR: DPH limit dosažen!';
-            const message = status === 'exceeded' 
-                ? 'Musíte se okamžitě zaregistrovat k DPH a doplatit daň z předchozích měsíců.'
-                : 'Od příštího roku se stanete plátcem DPH. Registrace do 10 dnů.';
-
-            const alertHtml = `
-                <div class="${alertClass}">
-                    <div class="d-flex align-items-start">
-                        <i class="${icon} me-3 mt-1" style="font-size: 1.25rem;"></i>
-                        <div class="flex-grow-1">
-                            <strong>${title}</strong><br>
-                            <small>${message}</small>
-                        </div>
-                    </div>
-                </div>
-            `;
-            alertsContainer.innerHTML = alertHtml;
-        } else if (alerts.length > 0) {
-            // Zobrazíme standardní alerty
-            alerts.forEach(alert => {
-                const alertClass = alert.type === 'danger' ? 'vat-danger' : 'vat-warning';
-                const icon = alert.type === 'danger' ? 'bi-exclamation-triangle-fill' : 'bi-exclamation-circle-fill';
-                
-                const alertHtml = `
-                    <div class="${alertClass}">
-                        <div class="d-flex align-items-start">
-                            <i class="${icon} me-3 mt-1" style="font-size: 1.25rem;"></i>
-                            <div class="flex-grow-1">
-                                <strong>${alert.title}</strong><br>
-                                <small>${alert.message}</small>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                alertsContainer.innerHTML += alertHtml;
-            });
+        if (!alerts || alerts.length === 0) {
+            this.log('ℹ️ Žádné DPH alerty k zobrazení', 'info');
+            return;
         }
+
+        alerts.forEach(alert => {
+            const alertElement = document.createElement('div');
+            alertElement.className = `alert-financial alert-${alert.type} d-flex align-items-center position-relative`;
+
+            // PŮVODNÍ obsah + tlačítko zavření
+            alertElement.innerHTML = `
+            <i class="bi bi-${alert.type === 'danger' ? 'exclamation-triangle-fill' : 'info-circle-fill'} me-2"></i>
+            <div class="flex-grow-1">
+                <strong>${alert.title}</strong><br>
+                <small>${alert.message}</small>
+            </div>
+            ${alert.alert_id ? `
+            <button type="button" 
+                    class="btn-close-custom ms-3" 
+                    data-alert-id="${alert.alert_id}"
+                    aria-label="Zavřít"
+                    title="Zavřít toto upozornění">×</button>
+            ` : ''}
+        `;
+
+            // Přidání event listeneru na zavírací tlačítko
+            const closeButton = alertElement.querySelector('.btn-close-custom');
+            if (closeButton) {
+                closeButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.closeAlert(alert.alert_id, alertElement);
+                });
+            }
+
+            alertContainer.appendChild(alertElement);
+        });
+
+        this.log(`✅ Zobrazeno ${alerts.length} DPH alertů`, 'success');
+    }
+
+    /**
+     * NOVÁ METODA: Zavření alertu
+     */
+    async closeAlert(alertId, alertElement) {
+        if (!alertId) {
+            this.log('❌ Chybí ID alertu', 'error');
+            return;
+        }
+
+        try {
+            this.log(`🔄 Zavírám alert: ${alertId}`, 'info');
+
+            // Zobrazíme loading stav
+            const closeButton = alertElement.querySelector('.btn-close-custom');
+            if (closeButton) {
+                closeButton.disabled = true;
+                closeButton.innerHTML = '⟳';
+                closeButton.style.animation = 'spin 1s linear infinite';
+            }
+
+            // AJAX požadavek
+            const ajaxUrl = this.buildAjaxUrl('closeAlert', {
+                alertId: alertId
+            });
+
+            const response = await fetch(ajaxUrl, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-Tenant-Id': this.tenantId || '',
+                    'X-Super-Admin': this.isSuperAdmin ? '1' : '0'
+                },
+                body: JSON.stringify({
+                    alertId: alertId,
+                    userId: this.getCurrentUserId()
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error || 'Chyba při zavírání alertu');
+            }
+
+            // Úspěšně zavřeno - animace
+            alertElement.style.transition = 'all 0.5s ease-out';
+            alertElement.style.opacity = '0';
+            alertElement.style.transform = 'translateX(100%)';
+
+            setTimeout(() => {
+                alertElement.remove();
+                this.log(`✅ Alert ${alertId} zavřen`, 'success');
+            }, 500);
+
+        } catch (error) {
+            this.log(`❌ Chyba při zavírání: ${error.message}`, 'error');
+
+            // Obnovíme tlačítko
+            const closeButton = alertElement.querySelector('.btn-close-custom');
+            if (closeButton) {
+                closeButton.disabled = false;
+                closeButton.innerHTML = '×';
+                closeButton.style.animation = '';
+            }
+
+            alert('Nepodařilo se zavřít upozornění: ' + error.message);
+        }
+    }
+
+    /**
+     * NOVÁ METODA: Získání ID aktuálního uživatele
+     */
+    getCurrentUserId() {
+        // Zkusíme získat z různých zdrojů
+        const userIdMeta = document.querySelector('meta[name="current-user-id"]');
+        if (userIdMeta) {
+            return userIdMeta.getAttribute('content');
+        }
+
+        return window.CURRENT_USER_ID || 1; // Fallback
     }
 
     /**

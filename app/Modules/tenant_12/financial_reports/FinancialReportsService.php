@@ -17,10 +17,10 @@ class FinancialReportsService
 
     /** @var InvoicesManager */
     private $invoicesManager;
-    
+
     /** @var CompanyManager */
     private $companyManager;
-    
+
     /** @var Nette\Database\Explorer */
     private $database;
 
@@ -47,7 +47,7 @@ class FinancialReportsService
     {
         $this->currentTenantId = $tenantId;
         $this->isSuperAdmin = $isSuperAdmin;
-        
+
         error_log("FinancialReportsService: Nastaven tenant kontext - tenant_id: $tenantId, is_super_admin: " . ($isSuperAdmin ? 'yes' : 'no'));
     }
 
@@ -76,16 +76,16 @@ class FinancialReportsService
     public function getBasicStats(): array
     {
         $currentYear = date('Y');
-        
+
         error_log("FinancialReportsService: Načítám statistiky pro rok $currentYear, tenant: " . ($this->currentTenantId ?? 'všechny'));
-        
+
         // Základní dotaz na faktury aktuálního roku s tenant filtrem
         $baseQuery = $this->database->table('invoices')
             ->where('YEAR(issue_date) = ?', $currentYear);
-        
+
         // Aplikujeme tenant filtr
         $baseQuery = $this->applyTenantFilter($baseQuery);
-        
+
         // Debug: Zjistíme si všechny faktury pro kontrolu
         $allInvoicesArray = $baseQuery->fetchAll();
         $debugInfo = [];
@@ -100,34 +100,34 @@ class FinancialReportsService
             ];
         }
         error_log("DEBUG - Filtrované faktury pro rok $currentYear: " . json_encode($debugInfo));
-        
+
         // Celkový počet faktur
         $totalCount = $this->applyTenantFilter(
             $this->database->table('invoices')
                 ->where('YEAR(issue_date) = ?', $currentYear)
         )->count();
-        
+
         // Zaplacené faktury
         $paidCount = $this->applyTenantFilter(
             $this->database->table('invoices')
                 ->where('YEAR(issue_date) = ?', $currentYear)
                 ->where('status', 'paid')
         )->count();
-        
+
         // Nezaplacené faktury (created + overdue)
         $unpaidCount = $this->applyTenantFilter(
             $this->database->table('invoices')
                 ->where('YEAR(issue_date) = ?', $currentYear)
                 ->where('status != ?', 'paid')
         )->count();
-        
+
         // Po splatnosti
         $overdueCount = $this->applyTenantFilter(
             $this->database->table('invoices')
                 ->where('YEAR(issue_date) = ?', $currentYear)
                 ->where('status', 'overdue')
         )->count();
-        
+
         // Celkový obrat (všechny vystavené faktury)
         $totalTurnoverQuery = $this->applyTenantFilter(
             $this->database->table('invoices')
@@ -138,7 +138,7 @@ class FinancialReportsService
         foreach ($totalTurnoverQuery as $invoice) {
             $totalTurnover += (float)$invoice->total;
         }
-        
+
         // Zaplacené částky
         $paidAmountQuery = $this->applyTenantFilter(
             $this->database->table('invoices')
@@ -150,7 +150,7 @@ class FinancialReportsService
         foreach ($paidAmountQuery as $invoice) {
             $paidAmount += (float)$invoice->total;
         }
-        
+
         // Nezaplacené částky
         $unpaidAmountQuery = $this->applyTenantFilter(
             $this->database->table('invoices')
@@ -175,9 +175,9 @@ class FinancialReportsService
             'tenant_id' => $this->currentTenantId,
             'is_super_admin' => $this->isSuperAdmin
         ];
-        
+
         error_log("DEBUG - Výsledné statistiky s tenant filtrem: " . json_encode($result));
-        
+
         return $result;
     }
 
@@ -193,43 +193,43 @@ class FinancialReportsService
             $this->database->table('invoices')
                 ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month)
         )->count();
-        
+
         // Zaplacené faktury
         $paidCount = $this->applyTenantFilter(
             $this->database->table('invoices')
                 ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month)
                 ->where('status', 'paid')
         )->count();
-            
+
         // Nezaplacené faktury
         $unpaidCount = $this->applyTenantFilter(
             $this->database->table('invoices')
                 ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month)
                 ->where('status != ?', 'paid')
         )->count();
-            
+
         // Po splatnosti
         $overdueCount = $this->applyTenantFilter(
             $this->database->table('invoices')
                 ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month)
                 ->where('status', 'overdue')
         )->count();
-        
+
         // Ruční sčítání pro jistotu s tenant filtrem
         $totalTurnover = 0;
         $paidAmount = 0;
         $unpaidAmount = 0;
-        
+
         $allMonthInvoices = $this->applyTenantFilter(
             $this->database->table('invoices')
                 ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month)
         );
-        
+
         /** @var Nette\Database\Table\ActiveRow $invoice */
         foreach ($allMonthInvoices as $invoice) {
             $amount = (float)$invoice->total;
             $totalTurnover += $amount;
-            
+
             if ($invoice->status === 'paid') {
                 $paidAmount += $amount;
             } else {
@@ -259,25 +259,25 @@ class FinancialReportsService
     public function checkVatLimits(): array
     {
         $currentYear = date('Y');
-        
+
         error_log("FinancialReportsService: Kontrolujem DPH limity pro rok $currentYear, tenant: " . ($this->currentTenantId ?? 'všechny'));
-        
+
         // Celkový obrat za aktuální rok s tenant filtrem - ruční sčítání
         $yearlyTurnover = 0;
         $yearInvoices = $this->applyTenantFilter(
             $this->database->table('invoices')
                 ->where('YEAR(issue_date) = ?', $currentYear)
         );
-        
+
         /** @var Nette\Database\Table\ActiveRow $invoice */
         foreach ($yearInvoices as $invoice) {
             $yearlyTurnover += (float)$invoice->total;
         }
-        
+
         error_log("DEBUG - DPH obrat za rok $currentYear (tenant filtrované): $yearlyTurnover");
 
         $alerts = [];
-        
+
         // První limit: 2 000 000 Kč
         if ($yearlyTurnover >= 2000000 && $yearlyTurnover < 2536500) {
             $alerts[] = [
@@ -288,7 +288,7 @@ class FinancialReportsService
                 'limit' => 2000000
             ];
         }
-        
+
         // Druhý limit: 2 536 500 Kč
         if ($yearlyTurnover >= 2536500) {
             $alerts[] = [
@@ -302,8 +302,17 @@ class FinancialReportsService
 
         // Pokrok k dalšímu limitu
         $nextLimit = $yearlyTurnover < 2000000 ? 2000000 : 2536500;
-        $progressToNextLimit = $yearlyTurnover < 2000000 
-            ? ($yearlyTurnover / 2000000) * 100 
+        $progressToNextLimit = $yearlyTurnover < 2000000
+            ? ($yearlyTurnover / 2000000) * 100
+            : (($yearlyTurnover - 2000000) / 536500) * 100;
+
+        // NOVÉ: Filtrování zavřených alertů
+        $alerts = $this->filterClosedAlerts($alerts);
+
+        // Pokrok k dalšímu limitu
+        $nextLimit = $yearlyTurnover < 2000000 ? 2000000 : 2536500;
+        $progressToNextLimit = $yearlyTurnover < 2000000
+            ? ($yearlyTurnover / 2000000) * 100
             : (($yearlyTurnover - 2000000) / 536500) * 100;
 
         return [
@@ -317,6 +326,47 @@ class FinancialReportsService
     }
 
     /**
+     * NOVÁ METODA: Filtruje alerty, které uživatel zavřel
+     */
+    private function filterClosedAlerts(array $alerts): array
+    {
+        // Pokud není nastaven tenant nebo není dostupná databáze, vracíme všechny alerty
+        if (!$this->currentTenantId || !isset($GLOBALS['current_user_id'])) {
+            return $alerts;
+        }
+
+        $userId = $GLOBALS['current_user_id'] ?? null;
+        if (!$userId) {
+            return $alerts;
+        }
+
+        $filteredAlerts = [];
+
+        foreach ($alerts as $alert) {
+            $alertId = $alert['alert_id'] ?? null;
+            if (!$alertId) {
+                $filteredAlerts[] = $alert;
+                continue;
+            }
+
+            // Kontrola, zda uživatel zavřel tento alert
+            $isClosedSetting = $this->database->table('user_module_settings')
+                ->where('user_id', $userId)
+                ->where('tenant_id', $this->currentTenantId)
+                ->where('module_id', 'financial_reports')
+                ->where('setting_key', "alert_closed_{$alertId}")
+                ->fetch();
+
+            if (!$isClosedSetting || $isClosedSetting->setting_value !== 'true') {
+                // Alert není zavřený, přidáme ho
+                $filteredAlerts[] = $alert;
+            }
+        }
+
+        return $filteredAlerts;
+    }
+
+    /**
      * Získá data pro graf příjmů po měsících s tenant filtrováním
      */
     public function getMonthlyIncomeData(int $year): array
@@ -324,21 +374,21 @@ class FinancialReportsService
         error_log("FinancialReportsService: Načítám měsíční příjmy pro rok $year, tenant: " . ($this->currentTenantId ?? 'všechny'));
 
         $monthlyData = [];
-        
+
         for ($month = 1; $month <= 12; $month++) {
             $monthlyIncome = 0;
-            
+
             $monthInvoices = $this->applyTenantFilter(
                 $this->database->table('invoices')
                     ->where('YEAR(issue_date) = ? AND MONTH(issue_date) = ?', $year, $month)
                     ->where('status', 'paid')
             );
-            
+
             /** @var Nette\Database\Table\ActiveRow $invoice */
             foreach ($monthInvoices as $invoice) {
                 $monthlyIncome += (float)$invoice->total;
             }
-            
+
             $monthlyData[] = [
                 'month' => $month,
                 'monthName' => $this->getMonthName($month),
@@ -357,18 +407,18 @@ class FinancialReportsService
         error_log("FinancialReportsService: Načítám přehled faktur - rok: " . ($year ?? 'všechny') . ", měsíc: " . ($month ?? 'všechny') . ", tenant: " . ($this->currentTenantId ?? 'všechny'));
 
         $query = $this->database->table('invoices');
-        
+
         if ($year) {
             $query->where('YEAR(issue_date) = ?', $year);
         }
-        
+
         if ($month) {
             $query->where('MONTH(issue_date) = ?', $month);
         }
 
         // Aplikujeme tenant filtr
         $query = $this->applyTenantFilter($query);
-        
+
         return $query->order('issue_date DESC, number DESC')
             ->limit($limit)
             ->fetchAll();
@@ -380,11 +430,20 @@ class FinancialReportsService
     private function getMonthName(int $month): string
     {
         $months = [
-            1 => 'Leden', 2 => 'Únor', 3 => 'Březen', 4 => 'Duben',
-            5 => 'Květen', 6 => 'Červen', 7 => 'Červenec', 8 => 'Srpen',
-            9 => 'Září', 10 => 'Říjen', 11 => 'Listopad', 12 => 'Prosinec'
+            1 => 'Leden',
+            2 => 'Únor',
+            3 => 'Březen',
+            4 => 'Duben',
+            5 => 'Květen',
+            6 => 'Červen',
+            7 => 'Červenec',
+            8 => 'Srpen',
+            9 => 'Září',
+            10 => 'Říjen',
+            11 => 'Listopad',
+            12 => 'Prosinec'
         ];
-        
+
         return $months[$month] ?? 'Neznámý';
     }
 
@@ -394,5 +453,59 @@ class FinancialReportsService
     public function formatAmount(float $amount): string
     {
         return number_format($amount, 0, ',', ' ') . ' Kč';
+    }
+
+    /**
+     * NOVÁ METODA: Zavře DPH alert pro uživatele
+     */
+    public function closeAlert(string $alertId): array
+    {
+        if (!$this->currentTenantId) {
+            throw new \Exception('Tenant kontext není nastaven');
+        }
+
+        $userId = $GLOBALS['current_user_id'] ?? null;
+        if (!$userId) {
+            throw new \Exception('Uživatel není přihlášen');
+        }
+
+        try {
+            // Uložíme nastavení o zavření alertu
+            $this->database->table('user_module_settings')
+                ->insert([
+                    'user_id' => $userId,
+                    'tenant_id' => $this->currentTenantId,
+                    'module_id' => 'financial_reports',
+                    'setting_key' => "alert_closed_{$alertId}",
+                    'setting_value' => 'true',
+                    'created_at' => new \DateTime(),
+                    'updated_at' => new \DateTime()
+                ]);
+
+            error_log("DPH alert '{$alertId}' zavřen pro uživatele {$userId}, tenant {$this->currentTenantId}");
+
+            return [
+                'success' => true,
+                'message' => 'Alert byl úspěšně zavřen',
+                'alert_id' => $alertId
+            ];
+        } catch (\Nette\Database\UniqueConstraintViolationException $e) {
+            // Alert už byl dříve zavřen - aktualizujeme
+            $this->database->table('user_module_settings')
+                ->where('user_id', $userId)
+                ->where('tenant_id', $this->currentTenantId)
+                ->where('module_id', 'financial_reports')
+                ->where('setting_key', "alert_closed_{$alertId}")
+                ->update([
+                    'setting_value' => 'true',
+                    'updated_at' => new \DateTime()
+                ]);
+
+            return [
+                'success' => true,
+                'message' => 'Alert byl aktualizován',
+                'alert_id' => $alertId
+            ];
+        }
     }
 }

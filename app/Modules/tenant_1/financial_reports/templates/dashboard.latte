@@ -14,6 +14,12 @@
 {* Meta tagy pro JavaScript - tenant kontext *}
 <meta name="tenant-id" content="{$currentTenantId|noescape}">
 <meta name="is-super-admin" content="{$isSuperAdmin ? 'true' : 'false'}">
+<meta name="current-user-id" content="{$user->identity->id}">
+{* NOVÉ: Předání kontextových informací do JS *}
+{if isset($contextLabel)}
+<meta name="context-label" content="{$contextLabel|noescape}">
+<meta name="context-type" content="{$contextType|noescape}">
+{/if}
 
 {if isset($moduleCss)}
     <link rel="stylesheet" href="{$moduleCss}?v={time()}" type="text/css">
@@ -25,14 +31,27 @@
 
 <div class="financial-reports-dashboard" data-tenant-id="{$currentTenantId}" data-super-admin="{$isSuperAdmin ? 'true' : 'false'}">
     
-    {* Tenant kontext indikátor *}
+{* Kontext indikátor - upravený pro zobrazení firmy/tenanta *}
     <div class="row">
         <div class="col-12">
-            <div id="tenantIndicator" class="tenant-context" style="display: none;">
-                {* Bude naplněno JavaScriptem *}
-            </div>
+            <div id="contextIndicator" class="context-indicator mb-3">
+                {if isset($contextLabel)}
+                    <div class="context-badge">
+                        {if $contextType === 'company'}
+                        <i class="bi bi-building me-2"></i>
+                        <span>{$contextLabel}</span>
+                        {elseif $contextType === 'superadmin'}
+                        <i class="bi bi-shield-check me-2" style="color: #B1D235;"></i>
+                        <span style="color: #B1D235;">{$contextLabel}</span>
+                    {else}
+                        <i class="bi bi-server me-2"></i>
+                        <span>{$contextLabel}</span>
+                    {/if}
+                </div>
+            {/if}
         </div>
     </div>
+</div>
 
     {* Hlavní nadpis s informacemi o roku *}
     <div class="row">
@@ -70,7 +89,7 @@
     <div class="row mb-4">
         <div class="col-12">
             <div id="vatAlerts">
-                {* DPH upozornění budou načtena dynamicky *}
+                {* DPH upozornění budou načtena dynamicky s možností zavření *}
             </div>
         </div>
     </div>

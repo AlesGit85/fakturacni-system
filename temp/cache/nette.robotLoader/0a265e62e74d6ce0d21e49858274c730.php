@@ -87,10 +87,15 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\IModule.php',
       1 => 1763201631,
     ),
+    'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 
+    array (
+      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
+      1 => 1763645111,
+    ),
     'Modules\\Tenant1\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\Module.php',
-      1 => 1763634221,
+      1 => 1763645108,
     ),
     'Modules\\Tenant1\\InvoiceEmail\\InvoiceEmailPresenter' => 
     array (
@@ -115,12 +120,12 @@ return array (
     'Modules\\Tenant12\\Financial_reports\\FinancialReportsService' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\FinancialReportsService.php',
-      1 => 1763550089,
+      1 => 1763644998,
     ),
     'Modules\\Tenant12\\Financial_reports\\Module' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_12\\financial_reports\\Module.php',
-      1 => 1763550089,
+      1 => 1763644998,
     ),
     'Modules\\Tenant12\\InvoiceEmail\\InvoiceEmailPresenter' => 
     array (
@@ -185,7 +190,7 @@ return array (
     'App\\Presentation\\ModuleAdmin\\ModuleAdminPresenter' => 
     array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Presentation\\ModuleAdmin\\ModuleAdminPresenter.php',
-      1 => 1763640176,
+      1 => 1763642754,
     ),
     'App\\Presentation\\Security\\SecurityPresenter' => 
     array (
@@ -252,29 +257,30 @@ return array (
       0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Security\\SQLSecurityAudit.php',
       1 => 1755850678,
     ),
-    'Modules\\Tenant1\\Financial_reports\\FinancialReportsService' => 
-    array (
-      0 => 'D:\\_coding\\nette\\fakturacni-system\\app\\Modules\\tenant_1\\financial_reports\\FinancialReportsService.php',
-      1 => 1763640752,
-    ),
   ),
   1 => 
   array (
-    'Nette\\Bridges\\Assets\\DIExtension' => 2,
-    'null' => 2,
+    'Nette\\Bridges\\Assets\\DIExtension' => 3,
+    'null' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDetailTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminTemplate' => 3,
     'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
     'App\\Presentation\\Home\\HomeTemplate' => 3,
-    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 1,
-    'App\\Presentation\\Invoices\\InvoicesTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesDefaultTemplate' => 3,
+    'App\\Presentation\\Invoices\\InvoicesTemplate' => 3,
     'App\\Presentation\\ModuleAdmin\\ModuleAdminDefaultTemplate' => 3,
-    'App\\Presentation\\Sign\\SignInTemplate' => 2,
-    'App\\Presentation\\Sign\\SignTemplate' => 2,
-    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 1,
-    'App\\Presentation\\Tenants\\TenantsTemplate' => 1,
+    'App\\Presentation\\Sign\\SignInTemplate' => 3,
+    'App\\Presentation\\Sign\\SignTemplate' => 3,
+    'App\\Presentation\\Tenants\\TenantsDefaultTemplate' => 2,
+    'App\\Presentation\\Tenants\\TenantsTemplate' => 2,
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 1,
     'App\\Presentation\\Users\\UsersTemplate' => 1,
+    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
+    'Modules\\Tenant12\\FinancialReports\\FinancialReportsPresenter' => 3,
+    'Modules\\Tenant12\\Notes\\NotesPresenter' => 3,
+    'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 3,
+    'Modules\\Financial_reports\\FinancialReportsService' => 2,
   ),
   2 => 
   array (
