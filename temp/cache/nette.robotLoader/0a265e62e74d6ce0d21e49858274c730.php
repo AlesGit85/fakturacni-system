@@ -275,12 +275,15 @@ return array (
     'App\\Presentation\\Tenants\\TenantsTemplate' => 2,
     'App\\Presentation\\Users\\UsersDefaultTemplate' => 1,
     'App\\Presentation\\Users\\UsersTemplate' => 1,
-    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 2,
+    'App\\Presentation\\Invoices\\InvoicesAddTemplate' => 3,
     'App\\Presentation\\Invoices\\InvoicesShowTemplate' => 3,
     'Modules\\Tenant12\\FinancialReports\\FinancialReportsPresenter' => 3,
     'Modules\\Tenant12\\Notes\\NotesPresenter' => 3,
     'App\\Presentation\\Invoices\\InvoicesEditTemplate' => 3,
     'Modules\\Financial_reports\\FinancialReportsService' => 2,
+    'App\\Presentation\\Settings\\SettingsDefaultTemplate' => 1,
+    'App\\Presentation\\Settings\\SettingsTemplate' => 2,
+    'App\\Presentation\\Settings\\SettingsSessionTimeoutsTemplate' => 1,
   ),
   2 => 
   array (

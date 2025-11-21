@@ -697,7 +697,7 @@ class FinancialReportsModule {
 
         if (loadButton) {
             loadButton.innerHTML = '<i class="bi bi-check"></i> Data načtena z databáze';
-            loadButton.className = 'btn btn-success';
+            loadButton.className = 'btn btn-outline-primary';
         }
 
         if (loadingIndicator) {
